@@ -7,7 +7,7 @@ abstract class AbstractConcept extends MetamodelElement implements FeaturesConta
   allFeatures(): List<Feature>
 }
 
-class Annotation extends AbstractConcept implements NamespaceProvider {
+class Annotation extends AbstractConcept {
   platformSpecific: String?
 }
 
@@ -58,29 +58,39 @@ class Property extends Feature
 
 class Reference extends Link
 
+' primitive type: "String"
+
 class Typedef extends Datatype
+
+' primitive type: "boolean"
+
 
 
 ' relations:
 
-NamespacedEntity "*" -- "1" NamespaceProvider: container
+Annotation "*" -- "1" AbstractConcept: target
+
+Concept "*" -- "0..1" Concept: extends
+Concept "*" -- "*" ConceptInterface: implements
+
+ConceptInterface "*" -- "*" ConceptInterface: extends
+
+Containment "*" -- "0..1" Containment: specializes
+
+FeaturesContainer "1" o-- "*" Feature: features
+
+Link "*" -- "1" AbstractConcept: type
 
 Metamodel "1" o-- "*" MetamodelElement: elements
 Metamodel "*" -- "*" Metamodel: dependsOn
 
+NamespacedEntity "*" -- "1" NamespaceProvider: container
 
-Concept "*" -- "0..1" Concept: extends
-Concept "*" -- "*" ConceptInterface: implements
-ConceptInterface "*" -- "*" ConceptInterface: extends
-Annotation "*" -- "1" AbstractConcept: target
-FeaturesContainer "1" o-- "*" Feature: features
-
-Link "*" -- "1" AbstractConcept: type
-Reference "1" -- "*" Reference: specializes
 Property "*" -- "1" Datatype: type
 
-Containment "1" -- "*" Containment: specializes
+Reference "*" -- "0..1" Reference: specializes
 
 Typedef "*" -- "1" PrimitiveType: constraints
+
 
 @enduml

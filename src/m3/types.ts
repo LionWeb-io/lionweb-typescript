@@ -43,6 +43,10 @@ class Concept extends AbstractConcept {
         this.abstract = abstract
         this.extends = extends_
     }
+    implementing(...conceptInterfaces: ConceptInterface[]) {
+        this.implements.push(...conceptInterfaces)
+        return this
+    }
 }
 
 class ConceptInterface extends AbstractConcept {

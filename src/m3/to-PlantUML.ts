@@ -25,19 +25,22 @@ const indented = (lines: string[]) =>
     lines.map((line) => `\t${line}`).join("\n")
 
 
+const sortByName = (metamodelElements: MetamodelElement[]) =>
+    sortByStringKey(metamodelElements, (element) => element.name)
+
+
 const generateForMetamodel = ({qualifiedName, elements}: Metamodel) =>
 `@startuml
 
 ' qualified name: "${qualifiedName}"
 
 
-${sortByStringKey(elements, (element) => element.name).map(generateForMetamodelElement).join("\n")}
+${sortByName(elements).map(generateForMetamodelElement).join("\n")}
 
 
 ' relations:
 
-${elements.map((element) => generateForRelationsOf(element)).join("\n")}
-
+${sortByName(elements).map((element) => generateForRelationsOf(element)).join("")}
 @enduml
 `
 
@@ -100,10 +103,14 @@ const generateForMetamodelElement = (metamodelElement: MetamodelElement) => {
 }
 
 
-const generateForRelationsOf = (metamodelElement: MetamodelElement) =>
-    relationsOf(metamodelElement)
-        .map((relation) => generateForRelation(metamodelElement, relation))
-        .join("\n")
+const generateForRelationsOf = (metamodelElement: MetamodelElement) => {
+    const relations = relationsOf(metamodelElement)
+    return relations.length === 0
+        ? ``
+        : relations
+            .map((relation) => generateForRelation(metamodelElement, relation))
+            .join("\n") + "\n\n"
+}
 
 
 const generateForRelation = ({name: leftName}: MetamodelElement, relation: Link) => {

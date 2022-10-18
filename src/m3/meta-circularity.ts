@@ -20,18 +20,23 @@ const stringDatatype = new PrimitiveType("String")
 const booleanDatatype = new PrimitiveType("boolean")
 
 
-const namespaceProvider_namespaceQualifier = new Property("namespaceQualifier", Multiplicity.Single).isDerived().ofType(stringDatatype)
+const namespaceProvider_namespaceQualifier = new Property("namespaceQualifier", Multiplicity.Single)
+    .isDerived()
+    .ofType(stringDatatype)
 
 const namespaceProvider = new ConceptInterface("NamespaceProvider")
     .havingFeatures(namespaceProvider_namespaceQualifier)
 
 
-const namespacedEntity_simpleName = new Property("simpleName", Multiplicity.Single).ofType(stringDatatype)
+const namespacedEntity_simpleName = new Property("simpleName", Multiplicity.Single)
+    .ofType(stringDatatype)
 
-const namespacedEntity_qualifiedName = new Property("qualifiedName", Multiplicity.Single).isDerived().ofType(stringDatatype)
+const namespacedEntity_qualifiedName = new Property("qualifiedName", Multiplicity.Single)
+    .isDerived()
+    .ofType(stringDatatype)
 
 const namespacedEntity_container = new Reference("container", Multiplicity.Single)
-namespacedEntity_container.type = namespaceProvider
+    .ofType(namespaceProvider)
 
 const namespacedEntity = new ConceptInterface("NamespacedEntity")
     .havingFeatures(
@@ -41,7 +46,8 @@ const namespacedEntity = new ConceptInterface("NamespacedEntity")
     )
 
 
-const metamodel_qualifiedName = new Property("qualifiedName", Multiplicity.Single).ofType(stringDatatype)
+const metamodel_qualifiedName = new Property("qualifiedName", Multiplicity.Single)
+    .ofType(stringDatatype)
 
 const metamodel_elements = new Containment ("elements", Multiplicity.ZeroOrMore)
 
@@ -49,20 +55,22 @@ const metamodel_dependsOn = new Reference("dependsOn", Multiplicity.ZeroOrMore)
 
 const metamodel = new Concept("Metamodel", false)
     .havingFeatures(metamodel_qualifiedName, metamodel_elements, metamodel_dependsOn)
-metamodel.implements.push(namespaceProvider)
-metamodel_dependsOn.type = metamodel
+    .implementing(namespaceProvider)
+metamodel_dependsOn.ofType(metamodel)
 
 const metamodelElement = new Concept("MetamodelElement", true)
-metamodelElement.implements.push(namespacedEntity)
+    .implementing(namespacedEntity)
 
 
-const abstractConcept_allFeatures = new Reference("allFeatures", Multiplicity.ZeroOrMore).isDerived()
+const abstractConcept_allFeatures = new Reference("allFeatures", Multiplicity.ZeroOrMore)
+    .isDerived()
 
 const abstractConcept = new Concept("AbstractConcept", true, metamodelElement)
     .havingFeatures(abstractConcept_allFeatures)
-abstractConcept.implements.push(namespaceProvider)
+    .implementing(namespaceProvider)
 
-const concept_abstract = new Property("abstract", Multiplicity.Single).ofType(booleanDatatype)
+const concept_abstract = new Property("abstract", Multiplicity.Single)
+    .ofType(booleanDatatype)
 
 const concept_extends = new Reference("extends", Multiplicity.Optional)
 
@@ -74,7 +82,7 @@ const concept = new Concept("Concept", false, abstractConcept)
         concept_extends,
         concept_implements
     )
-concept_extends.type = concept
+concept_extends.ofType(concept)
 
 
 const conceptInterface_extends = new Reference("extends", Multiplicity.ZeroOrMore)
@@ -82,27 +90,28 @@ const conceptInterface_extends = new Reference("extends", Multiplicity.ZeroOrMor
 const conceptInterface = new Concept("ConceptInterface", false, abstractConcept)
     .havingFeatures(conceptInterface_extends)
 
-conceptInterface_extends.type = conceptInterface
-concept_implements.type = conceptInterface
+conceptInterface_extends.ofType(conceptInterface)
+concept_implements.ofType(conceptInterface)
 
 
-const annotation_platformSpecific = new Property("platformSpecific", Multiplicity.Optional).ofType(stringDatatype)
+const annotation_platformSpecific = new Property("platformSpecific", Multiplicity.Optional)
+    .ofType(stringDatatype)
 
-const annotation_target = new Reference("target", Multiplicity.Single).ofType(abstractConcept)
+const annotation_target = new Reference("target", Multiplicity.Single)
+    .ofType(abstractConcept)
 
 const annotation = new Concept("Annotation", false, abstractConcept)
     .havingFeatures(
         annotation_platformSpecific,
         annotation_target
     )
-annotation.implements.push(namespaceProvider)
 
 const featuresContainer_features = new Containment("features", Multiplicity.ZeroOrMore)
 
 const featuresContainer = new ConceptInterface("FeaturesContainer")
-featuresContainer.features.push(featuresContainer_features)
+    .havingFeatures(featuresContainer_features)
 
-abstractConcept.implements.push(featuresContainer)
+abstractConcept.implementing(featuresContainer)
 
 
 const multiplicity = new Enumeration("Multiplicity")
@@ -114,32 +123,35 @@ multiplicity.literals.push(
 )
 
 
-const feature_multiplicity = new Property("multiplicity", Multiplicity.Single).ofType(multiplicity)
+const feature_multiplicity = new Property("multiplicity", Multiplicity.Single)
+    .ofType(multiplicity)
 
-const feature_derived = new Property("derived", Multiplicity.Single).ofType(booleanDatatype)
+const feature_derived = new Property("derived", Multiplicity.Single)
+    .ofType(booleanDatatype)
 
 const feature = new Concept("Feature", true)
     .havingFeatures(
         feature_multiplicity,
         feature_derived
     )
-feature.implements.push(namespacedEntity)
+    .implementing(namespacedEntity)
 
 abstractConcept_allFeatures.type = feature
 featuresContainer_features.type = feature
 
 
-const link_type = new Reference("type", Multiplicity.Single).ofType(abstractConcept)
+const link_type = new Reference("type", Multiplicity.Single)
+    .ofType(abstractConcept)
 
 const link = new Concept("Link", true, feature)
     .havingFeatures(link_type)
 
 
-const reference_specializes = new Reference("specializes", Multiplicity.ZeroOrMore)
+const reference_specializes = new Reference("specializes", Multiplicity.Optional)
 
 const reference = new Concept("Reference", false, link)
     .havingFeatures(reference_specializes)
-reference_specializes.type = reference
+reference_specializes.ofType(reference)
 
 
 const property_type = new Reference("type", Multiplicity.Single)
@@ -149,29 +161,29 @@ const property = new Concept("Property", false, feature)
 
 
 const datatype = new Concept("Datatype", true, metamodelElement)
-property_type.type = datatype
+property_type.ofType(datatype)
 
-
-const primitiveType_constraints = new Containment("constraints", Multiplicity.ZeroOrMore)
 
 const primitiveType = new Concept("PrimitiveType", false, datatype)
-    .havingFeatures(primitiveType_constraints)
 
+
+const typedef_constraints = new Reference("constraints", Multiplicity.Single)
+typedef_constraints.ofType(primitiveType)
 
 const typedef = new Concept("Typedef", false, datatype)
+    .havingFeatures(typedef_constraints)
 
-primitiveType_constraints.type = typedef
 
-
-const containment_specializes = new Reference("specializes", Multiplicity.ZeroOrMore)
+const containment_specializes = new Reference("specializes", Multiplicity.Optional)
 
 const containment = new Concept("Containment", false, link)
     .havingFeatures(containment_specializes)
 
-containment_specializes.type = containment  // (ref#11)
+containment_specializes.ofType(containment)
 
 
-metamodel_elements.type = metamodelElement
+metamodel_elements.ofType(metamodelElement)
+
 
 export const lioncore = new Metamodel("lioncore")
     .havingElements(
