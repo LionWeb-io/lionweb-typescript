@@ -11,7 +11,6 @@ import {
     PrimitiveType,
     unresolved
 } from "./types.ts"
-import {lioncore} from "./meta-circularity.ts"
 import {
     isPlural,
     nonRelationalFeatures,
@@ -29,7 +28,7 @@ const sortByName = (metamodelElements: MetamodelElement[]) =>
     sortByStringKey(metamodelElements, (element) => element.name)
 
 
-const generateForMetamodel = ({qualifiedName, elements}: Metamodel) =>
+export const generateForMetamodel = ({qualifiedName, elements}: Metamodel) =>
 `@startuml
 
 ' qualified name: "${qualifiedName}"
@@ -83,6 +82,7 @@ const generateForNonRelationalFeature = (feature: Feature) => {
 const generateForPrimitiveType = ({name}: PrimitiveType) =>
 `' primitive type: "${name}"
 `
+// Note: No construct for PrimitiveType exists in PlantUML.
 
 
 const generateForMetamodelElement = (metamodelElement: MetamodelElement) => {
@@ -130,5 +130,8 @@ const generateForRelation = ({name: leftName}: MetamodelElement, relation: Link)
 }
 
 
-Deno.writeTextFileSync("plantUML/metametamodel-gen.puml", generateForMetamodel(lioncore))
+/*
+ Notes:
+    1. No construct for PrimitiveType in PlantUML.
+ */
 

@@ -1,0 +1,96 @@
+@startuml
+
+' qualified name: "lioncore"
+
+
+abstract class AbstractConcept extends MetamodelElement implements FeaturesContainer, NamespaceProvider  {
+	allFeatures(): List<Feature>
+}
+
+class Annotation extends AbstractConcept {
+	platformSpecific: String?
+}
+
+class Concept extends AbstractConcept {
+	abstract: boolean
+}
+
+class ConceptInterface extends AbstractConcept
+
+class Containment extends Link
+
+abstract class Datatype extends MetamodelElement
+
+abstract class Feature implements NamespacedEntity  {
+	multiplicity: Multiplicity
+	derived: boolean
+}
+
+interface FeaturesContainer
+
+abstract class Link extends Feature
+
+class Metamodel implements NamespaceProvider  {
+	qualifiedName: String
+}
+
+abstract class MetamodelElement implements NamespacedEntity 
+
+enum Multiplicity {
+	Optional
+	Single
+	ZeroOrMore
+	OneOrMore
+}
+
+interface NamespaceProvider {
+	namespaceQualifier(): String
+}
+
+interface NamespacedEntity {
+	simpleName: String
+	qualifiedName(): String
+}
+
+class PrimitiveType extends Datatype
+
+class Property extends Feature
+
+class Reference extends Link
+
+' primitive type: "String"
+
+class Typedef extends Datatype
+
+' primitive type: "boolean"
+
+
+
+' relations:
+
+Annotation "*" -- "1" AbstractConcept: target
+
+Concept "*" -- "0..1" Concept: extends
+Concept "*" -- "*" ConceptInterface: implements
+
+ConceptInterface "*" -- "*" ConceptInterface: extends
+
+Containment "*" -- "0..1" Containment: specializes
+
+FeaturesContainer "1" o-- "*" Feature: features
+
+Link "*" -- "1" AbstractConcept: type
+
+Metamodel "1" o-- "*" MetamodelElement: elements
+Metamodel "*" -- "*" Metamodel: dependsOn
+
+NamespacedEntity "*" -- "1" NamespaceProvider: container
+
+Property "*" -- "1" Datatype: type
+
+Reference "*" -- "0..1" Reference: specializes
+
+Typedef "*" -- "1" PrimitiveType: constraints
+
+
+@enduml

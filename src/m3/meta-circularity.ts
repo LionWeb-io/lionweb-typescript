@@ -105,6 +105,8 @@ const annotation = new Concept("Annotation", false, abstractConcept)
         annotation_platformSpecific,
         annotation_target
     )
+// Note: annotations can be defined on M2-level, and then instantiated on M1-level.
+
 
 const featuresContainer_features = new Containment("features", Multiplicity.ZeroOrMore)
 
