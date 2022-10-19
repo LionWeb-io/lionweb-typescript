@@ -1,4 +1,16 @@
+/**
+ * TypeScript type definitions for the `lioncore` M3 (=meta-meta) model.
+ */
+
+
+/**
+ * The `unresolved` symbol indicates a reference value which hasn't been resolved yet.
+ * It differs from an unset (`undefined`) value.
+ */
 const unresolved = Symbol("unresolved")
+/**
+ * A type definition for a reference value that can be unresolved.
+ */
 type SingleRef<T> = typeof unresolved | T
 
 
@@ -141,6 +153,21 @@ class EnumerationLiteral {
 }
 
 
+/**
+ * Sum type of all lioncore type definitions whose meta-type is a concrete Concept.
+ */
+type M3Concept =
+    | Metamodel
+    | Concept
+    | ConceptInterface
+    | Annotation
+    | Property
+    | Containment
+    | Reference
+    | PrimitiveType
+    | Typedef
+
+
 export {
     AbstractConcept,
     Annotation,
@@ -160,5 +187,9 @@ export {
     Typedef,
     unresolved
 }
-export type { FeaturesContainer, MetamodelElement }
+export type {
+    FeaturesContainer,
+    M3Concept,
+    MetamodelElement
+}
 
