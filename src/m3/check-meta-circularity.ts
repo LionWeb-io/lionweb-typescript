@@ -1,4 +1,6 @@
-import {assertEquals} from "https://deno.land/std@0.160.0/testing/asserts.ts"
+import {
+    assertEquals
+} from "https://deno.land/std@0.160.0/testing/asserts.ts"
 
 import {lioncore} from "./meta-circularity.ts"
 import {generateForMetamodel} from "./PlantUML-generator.ts"
@@ -27,7 +29,7 @@ Deno.test("meta-circularity", async (tctx) => {
  *
  *  0. [✓] rephrase as Deno tests
  *  1. [ ] check syntax
- *  2. […] check constraints
+ *  2. […] check (some) constraints
  *  3. [ ] generate types.ts? (then: sort type def.s alphabetically)
  */
 

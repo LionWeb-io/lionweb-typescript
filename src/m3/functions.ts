@@ -3,6 +3,8 @@ import {
     Datatype,
     Feature,
     Link,
+    M3Concept,
+    Metamodel,
     MetamodelElement,
     Multiplicity,
     Property,
@@ -47,4 +49,21 @@ export const stringyCompare = <T>(keyFunc: (t: T) => string): Comparer<T> =>
 
 export const sortByStringKey = <T>(ts: T[], keyFunc: (t: T) => string) =>
     [...ts].sort(stringyCompare(keyFunc))
+
+
+export const flatMap = <T>(metamodel: Metamodel, map: (t: M3Concept) => T[]): T[] => {
+    // (non-fancy, slightly non-FP-ish implementation of a depth-first tree traversal of a LIonCore instance)
+    const ts: T[] = []
+    const visit = (thing: M3Concept) => {
+        ts.push(...map(thing))
+        if (thing instanceof Metamodel) {
+            thing.elements.forEach(visit)
+        }
+        if (thing instanceof AbstractConcept) { // FIXME  FeaturesContainer is (right now) only implemented by AbstractConcept
+            thing.features.forEach(visit)
+        }
+    }
+    visit(metamodel)
+    return ts
+}
 
