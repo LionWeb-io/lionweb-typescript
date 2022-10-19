@@ -21,7 +21,7 @@ import {
 
 
 const indented = (lines: string[]) =>
-    lines.map((line) => `\t${line}`).join("\n")
+    lines.map((line) => `  ${line}`).join("\n")
 
 
 const sortByName = (metamodelElements: MetamodelElement[]) =>
@@ -50,21 +50,34 @@ ${indented(literals.map(({name}) => name))}
 }
 `
 
+
 const generateForConcept = ({name, features, abstract: abstract_, extends: extends_, implements: implements_}: Concept) => {
     const nonRelationalFeatures_ = nonRelationalFeatures(features)
-    const abstractFragment = abstract_ ? `abstract ` : ``
-    const extendsFragment = extends_ === undefined || extends_ === unresolved ? `` : ` extends ${extends_.name}`
-    const implementsFragment = implements_?.length > 0 ? ` implements ${implements_.map((conceptInterface) => conceptInterface.name).sort().join(", ")} ` : ``
-    return `${abstractFragment}class ${name}${extendsFragment}${implementsFragment}${nonRelationalFeatures_.length === 0 ? `` : ` {
+    const fragments: string[] = []
+    if (abstract_) {
+        fragments.push(`abstract`)
+    }
+    fragments.push(`class`, name)
+    if (extends_ !== undefined && extends_ !== unresolved) {
+        fragments.push(`extends`, extends_.name)
+    }
+    if (implements_.length > 0) {
+        fragments.push(`implements`, implements_.map((conceptInterface) => conceptInterface.name).sort().join(", "))
+    }
+    return `${fragments.join(" ")}${nonRelationalFeatures_.length === 0 ? `` : ` {
 ${indented(nonRelationalFeatures_.map(generateForNonRelationalFeature))}
 }`}
 `
 }
 
+
 const generateForConceptInterface = ({name, extends: extends_, features}: ConceptInterface) => {
     const nonRelationalFeatures_ = nonRelationalFeatures(features)
-    const extendsFragment = extends_.length > 0 ? ` extends ${extends_.map((superInterface) => superInterface.name).join(", ")}` : ``
-    return `interface ${name}${extendsFragment}${nonRelationalFeatures_.length === 0 ? `` : ` {
+    const fragments: string[] = [`interface`, name]
+    if (extends_.length > 0) {
+        fragments.push(`extends`, extends_.map((superInterface) => superInterface.name).join(", "))
+    }
+    return `${fragments.join(" ")}${nonRelationalFeatures_.length === 0 ? `` : ` {
 ${indented(nonRelationalFeatures_.map(generateForNonRelationalFeature))}
 }`}
 `

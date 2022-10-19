@@ -3,16 +3,16 @@
 ' qualified name: "lioncore"
 
 
-abstract class AbstractConcept extends MetamodelElement implements FeaturesContainer, NamespaceProvider  {
-	allFeatures(): List<Feature>
+abstract class AbstractConcept extends MetamodelElement implements FeaturesContainer, NamespaceProvider {
+  allFeatures(): List<Feature>
 }
 
 class Annotation extends AbstractConcept {
-	platformSpecific: String?
+  platformSpecific: String?
 }
 
 class Concept extends AbstractConcept {
-	abstract: boolean
+  abstract: boolean
 }
 
 class ConceptInterface extends AbstractConcept
@@ -21,35 +21,35 @@ class Containment extends Link
 
 abstract class Datatype extends MetamodelElement
 
-abstract class Feature implements NamespacedEntity  {
-	multiplicity: Multiplicity
-	derived: boolean
+abstract class Feature implements NamespacedEntity {
+  multiplicity: Multiplicity
+  derived: boolean
 }
 
 interface FeaturesContainer
 
 abstract class Link extends Feature
 
-class Metamodel implements NamespaceProvider  {
-	qualifiedName: String
+class Metamodel implements NamespaceProvider {
+  qualifiedName: String
 }
 
-abstract class MetamodelElement implements NamespacedEntity 
+abstract class MetamodelElement implements NamespacedEntity
 
 enum Multiplicity {
-	Optional
-	Single
-	ZeroOrMore
-	OneOrMore
+  Optional
+  Single
+  ZeroOrMore
+  OneOrMore
 }
 
 interface NamespaceProvider {
-	namespaceQualifier(): String
+  namespaceQualifier(): String
 }
 
 interface NamespacedEntity {
-	simpleName: String
-	qualifiedName(): String
+  simpleName: String
+  qualifiedName(): String
 }
 
 class PrimitiveType extends Datatype
