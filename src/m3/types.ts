@@ -13,8 +13,8 @@ abstract class NamespacedEntity {
     simpleName: string
     container: NamespaceProvider
     protected constructor(container: NamespaceProvider, simpleName: string) {
-        this.simpleName = simpleName
         this.container = container
+        this.simpleName = simpleName
     }
     qualifiedName() {
         return `${this.container.namespaceQualifier()}.${this.simpleName}`
@@ -144,14 +144,16 @@ class Typedef extends Datatype {
 class PrimitiveType extends Datatype {}
 
 // TODO  put in meta-circular definition of lioncore
-class Enumeration extends Datatype {    // TODO  should be NamespaceProvider
+class Enumeration extends Datatype implements NamespaceProvider {
     literals: EnumerationLiteral[] = [] // (containment)
+    namespaceQualifier(): string {
+        return `${this.container.namespaceQualifier()}.${this.simpleName}`
+    }
 }
 
-class EnumerationLiteral {  // TODO  should be NamespacedEntity
-    name: string    // FIXME  deviation from proposal!
-    constructor(name: string) {
-        this.name = name
+class EnumerationLiteral extends NamespacedEntity {
+    constructor(enumeration: Enumeration, simpleName: string) {
+        super(enumeration, simpleName)
     }
 }
 

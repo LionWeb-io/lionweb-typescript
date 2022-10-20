@@ -13,7 +13,7 @@ export const issuesMetamodel = (metamodel: Metamodel): Issue[] =>
         metamodel,
         (t) => {
             if (t instanceof ConceptInterface) {
-                const nonDerivedFeatures = t.features.filter(({derived}) => !derived)    // TODO  use allFeatures()
+                const nonDerivedFeatures = t.allFeatures().filter(({derived}) => !derived)
                 if (nonDerivedFeatures.length > 0) {
                     const isPlural = nonDerivedFeatures.length > 1
                     return [

@@ -128,10 +128,10 @@ annotation.havingFeatures(
 
 const multiplicity = new Enumeration(lioncore, "Multiplicity")
 multiplicity.literals.push(
-    new EnumerationLiteral("Optional"),
-    new EnumerationLiteral("Single"),
-    new EnumerationLiteral("ZeroOrMore"),
-    new EnumerationLiteral("OneOrMore")
+    new EnumerationLiteral(multiplicity, "Optional"),
+    new EnumerationLiteral(multiplicity, "Single"),
+    new EnumerationLiteral(multiplicity, "ZeroOrMore"),
+    new EnumerationLiteral(multiplicity, "OneOrMore")
 )
 
 

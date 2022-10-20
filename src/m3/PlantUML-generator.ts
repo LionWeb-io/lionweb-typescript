@@ -46,7 +46,7 @@ ${sortByName(elements).map((element) => generateForRelationsOf(element)).join(""
 
 const generateForEnumeration = ({simpleName, literals}: Enumeration) =>
 `enum ${simpleName} {
-${indented(literals.map(({name}) => name))}
+${indented(literals.map(({simpleName}) => simpleName))}
 }
 `
 
