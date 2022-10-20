@@ -2,16 +2,7 @@
  * TypeScript type definitions for the `lioncore` M3 (=meta-meta) model.
  */
 
-
-/**
- * The `unresolved` symbol indicates a reference value which hasn't been resolved yet.
- * It differs from an unset (`undefined`) value.
- */
-const unresolved = Symbol("unresolved")
-/**
- * A type definition for a reference value that can be unresolved.
- */
-type SingleRef<T> = typeof unresolved | T
+import {isRef, SingleRef, unresolved} from "../references.ts"
 
 
 class Metamodel {
@@ -33,7 +24,6 @@ interface MetamodelElement {
 abstract class FeaturesContainer implements MetamodelElement {
     name: string    // FIXME  deviation from proposal!
     features: Feature[] = []    // (containment)
-    // allFeatures: () => Feature[]
     protected constructor(name: string) {
         this.name = name
     }
@@ -41,6 +31,7 @@ abstract class FeaturesContainer implements MetamodelElement {
         this.features.push(...features)
         return this
     }
+    abstract allFeatures(): Feature[]
 }
 
 class Concept extends FeaturesContainer {
@@ -56,6 +47,13 @@ class Concept extends FeaturesContainer {
         this.implements.push(...conceptInterfaces)
         return this
     }
+    allFeatures(): Feature[] {
+        return [
+            ...this.features,
+            ...(isRef(this.extends) ? this.extends.allFeatures() : []),
+            ...this.implements.flatMap((conceptInterface) => conceptInterface.allFeatures())
+        ]
+    }
 }
 
 class ConceptInterface extends FeaturesContainer {
@@ -63,12 +61,18 @@ class ConceptInterface extends FeaturesContainer {
     constructor(name: string) {
         super(name)
     }
+    allFeatures(): Feature[] {
+        return this.extends.flatMap((conceptInterface) => conceptInterface.allFeatures())
+    }
 }
 
 class Annotation extends FeaturesContainer {
     platformSpecific?: string
     constructor(name: string) {
         super(name)
+    }
+    allFeatures(): Feature[] {
+        return this.features
     }
 }
 
