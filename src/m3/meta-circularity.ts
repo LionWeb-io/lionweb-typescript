@@ -38,7 +38,7 @@ const namespacedEntity_qualifiedName = new Property("qualifiedName", Multiplicit
 const namespacedEntity_container = new Reference("container", Multiplicity.Single)
     .ofType(namespaceProvider)
 
-const namespacedEntity = new ConceptInterface("NamespacedEntity")
+const namespacedEntity = new Concept("NamespacedEntity", true)
     .havingFeatures(
         namespacedEntity_simpleName,
         namespacedEntity_qualifiedName,
@@ -58,16 +58,21 @@ const metamodel = new Concept("Metamodel", false)
     .implementing(namespaceProvider)
 metamodel_dependsOn.ofType(metamodel)
 
-const metamodelElement = new Concept("MetamodelElement", true)
-    .implementing(namespacedEntity)
+const metamodelElement = new Concept("MetamodelElement", true, namespacedEntity)
 
 
-const abstractConcept_allFeatures = new Reference("allFeatures", Multiplicity.ZeroOrMore)
+const featuresContainer_features = new Containment("features", Multiplicity.ZeroOrMore)
+
+const featuresContainer_allFeatures = new Reference("allFeatures", Multiplicity.ZeroOrMore)
     .isDerived()
 
-const abstractConcept = new Concept("AbstractConcept", true, metamodelElement)
-    .havingFeatures(abstractConcept_allFeatures)
+const featuresContainer = new Concept("FeaturesContainer", true, metamodelElement)
+    .havingFeatures(
+        featuresContainer_features,
+        featuresContainer_allFeatures
+    )
     .implementing(namespaceProvider)
+
 
 const concept_abstract = new Property("abstract", Multiplicity.Single)
     .ofType(booleanDatatype)
@@ -76,7 +81,7 @@ const concept_extends = new Reference("extends", Multiplicity.Optional)
 
 const concept_implements = new Reference("implements", Multiplicity.ZeroOrMore)
 
-const concept = new Concept("Concept", false, abstractConcept)
+const concept = new Concept("Concept", false, featuresContainer)
     .havingFeatures(
         concept_abstract,
         concept_extends,
@@ -87,7 +92,7 @@ concept_extends.ofType(concept)
 
 const conceptInterface_extends = new Reference("extends", Multiplicity.ZeroOrMore)
 
-const conceptInterface = new Concept("ConceptInterface", false, abstractConcept)
+const conceptInterface = new Concept("ConceptInterface", false, featuresContainer)
     .havingFeatures(conceptInterface_extends)
 
 conceptInterface_extends.ofType(conceptInterface)
@@ -98,22 +103,14 @@ const annotation_platformSpecific = new Property("platformSpecific", Multiplicit
     .ofType(stringDatatype)
 
 const annotation_target = new Reference("target", Multiplicity.Single)
-    .ofType(abstractConcept)
+    .ofType(featuresContainer)
 
-const annotation = new Concept("Annotation", false, abstractConcept)
+const annotation = new Concept("Annotation", false, featuresContainer)
     .havingFeatures(
         annotation_platformSpecific,
         annotation_target
     )
 // Note: annotations can be defined on M2-level, and then instantiated on M1-level.
-
-
-const featuresContainer_features = new Containment("features", Multiplicity.ZeroOrMore)
-
-const featuresContainer = new ConceptInterface("FeaturesContainer")
-    .havingFeatures(featuresContainer_features)
-
-abstractConcept.implementing(featuresContainer)
 
 
 const multiplicity = new Enumeration("Multiplicity")
@@ -131,19 +128,18 @@ const feature_multiplicity = new Property("multiplicity", Multiplicity.Single)
 const feature_derived = new Property("derived", Multiplicity.Single)
     .ofType(booleanDatatype)
 
-const feature = new Concept("Feature", true)
+const feature = new Concept("Feature", true, namespacedEntity)
     .havingFeatures(
         feature_multiplicity,
         feature_derived
     )
-    .implementing(namespacedEntity)
 
-abstractConcept_allFeatures.type = feature
+featuresContainer_allFeatures.type = feature
 featuresContainer_features.type = feature
 
 
 const link_type = new Reference("type", Multiplicity.Single)
-    .ofType(abstractConcept)
+    .ofType(featuresContainer)
 
 const link = new Concept("Link", true, feature)
     .havingFeatures(link_type)
@@ -193,11 +189,10 @@ export const lioncore = new Metamodel("lioncore")
         namespaceProvider,
         metamodel,
         metamodelElement,
-        abstractConcept,
+        featuresContainer,
         concept,
         conceptInterface,
         annotation,
-        featuresContainer,
         feature,
         link,
         reference,
