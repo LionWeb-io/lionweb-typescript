@@ -85,10 +85,10 @@ ${indented(nonRelationalFeatures_.map(generateForNonRelationalFeature))}
 
 
 const generateForNonRelationalFeature = (feature: Feature) => {
-    const {name, multiplicity, derived} = feature
+    const {simpleName, multiplicity, derived} = feature
     const isListy = isPlural(multiplicity)
     const type_ = type(feature)
-    return `${name}${derived ? `()` : ``}: ${isListy ? `List<` : ``}${type_ === unresolved ? `???` : type_.simpleName}${isPlural(multiplicity) ? `>` : ``}${multiplicity === Multiplicity.Optional ? `?` : ``}`
+    return `${simpleName}${derived ? `()` : ``}: ${isListy ? `List<` : ``}${type_ === unresolved ? `???` : type_.simpleName}${isPlural(multiplicity) ? `>` : ``}${multiplicity === Multiplicity.Optional ? `?` : ``}`
 }
 
 
@@ -127,7 +127,7 @@ const generateForRelationsOf = (metamodelElement: MetamodelElement) => {
 
 
 const generateForRelation = ({simpleName: leftName}: MetamodelElement, relation: Link) => {
-    const {name, multiplicity, type} = relation
+    const {simpleName: relationName, multiplicity, type} = relation
     const rightName = type === unresolved ? `???` : type.simpleName
     const isContainment = relation instanceof Containment
     const leftMultiplicity = isContainment ? `1` : `*`
@@ -139,7 +139,7 @@ const generateForRelation = ({simpleName: leftName}: MetamodelElement, relation:
             case Multiplicity.ZeroOrMore: return "*"
         }
     })()
-    return `${leftName} "${leftMultiplicity}" ${isContainment ? `o` : ``}-- "${rightMultiplicity}" ${rightName}: ${name}`
+    return `${leftName} "${leftMultiplicity}" ${isContainment ? `o` : ``}-- "${rightMultiplicity}" ${rightName}: ${relationName}`
 }
 
 

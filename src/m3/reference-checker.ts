@@ -23,19 +23,16 @@ export const checkReferences = (metamodel: Metamodel): string[] =>
             }
 
             if (thing instanceof Concept) {
-                check(thing.extends, `<Concept>${thing.simpleName}#extends`)
+                check(thing.extends, `<Concept>${thing.qualifiedName()}#extends`)
             }
             if (thing instanceof Containment) {
-                check(thing.type, `<Containment>${thing.name}#type`)
-                    // TODO  add name of FeaturesContainer
+                check(thing.type, `<Containment>${thing.qualifiedName()}#type`)
             }
             if (thing instanceof Property) {
-                check(thing.type, `<Property>${thing.name}#type`)
-                    // TODO  add name of FeaturesContainer
+                check(thing.type, `<Property>${thing.qualifiedName()}#type`)
             }
             if (thing instanceof Reference) {
-                check(thing.type, `<Reference>${thing.name}#type`)
-                    // TODO  add name of FeaturesContainer
+                check(thing.type, `<Reference>${thing.qualifiedName()}#type`)
             }
 
             return locations

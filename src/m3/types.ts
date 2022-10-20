@@ -12,7 +12,7 @@ interface NamespaceProvider {
 abstract class NamespacedEntity {
     simpleName: string
     container: NamespaceProvider
-    constructor(container: NamespaceProvider, simpleName: string) {
+    protected constructor(container: NamespaceProvider, simpleName: string) {
         this.simpleName = simpleName
         this.container = container
     }
@@ -42,7 +42,7 @@ abstract class MetamodelElement extends NamespacedEntity {
     }
 }
 
-abstract class FeaturesContainer extends MetamodelElement {
+abstract class FeaturesContainer extends MetamodelElement implements NamespaceProvider {
     features: Feature[] = [] // (containment)
     protected constructor(metamodel: Metamodel, simpleName: string) {
         super(metamodel, simpleName)
@@ -52,6 +52,9 @@ abstract class FeaturesContainer extends MetamodelElement {
         return this
     }
     abstract allFeatures(): Feature[]
+    namespaceQualifier(): string {
+        return this.qualifiedName()
+    }
 }
 
 class Concept extends FeaturesContainer {
@@ -103,12 +106,11 @@ enum Multiplicity {
     OneOrMore
 }
 
-abstract class Feature {
-    name: string    // FIXME  deviation from proposal!
+abstract class Feature extends NamespacedEntity {
     multiplicity: Multiplicity
     derived /*: boolean */ = false
-    protected constructor(name: string, multiplicity: Multiplicity) {
-        this.name = name
+    protected constructor(featuresContainer: FeaturesContainer, simpleName: string, multiplicity: Multiplicity) {
+        super(featuresContainer, simpleName)
         this.multiplicity = multiplicity
     }
     isDerived() {
@@ -119,8 +121,8 @@ abstract class Feature {
 
 abstract class Link extends Feature {
     type: SingleRef<FeaturesContainer> = unresolved   // (reference)
-    constructor(simpleName: string, multiplicity: Multiplicity) {
-        super(simpleName, multiplicity)
+    constructor(featuresContainer: FeaturesContainer, simpleName: string, multiplicity: Multiplicity) {
+        super(featuresContainer, simpleName, multiplicity)
     }
     ofType(type: FeaturesContainer) {
         this.type = type
@@ -138,8 +140,8 @@ class Containment extends Link {
 
 class Property extends Feature {
     type: SingleRef<Datatype> = unresolved   // (reference)
-    constructor(name: string, multiplicity: Multiplicity) {
-        super(name, multiplicity)
+    constructor(featuresContainer: FeaturesContainer, simpleName: string, multiplicity: Multiplicity) {
+        super(featuresContainer, simpleName, multiplicity)
     }
     ofType(type: Datatype) {
         this.type = type
@@ -160,13 +162,12 @@ class Typedef extends Datatype {
 
 class PrimitiveType extends Datatype {}
 
-
 // TODO  put in meta-circular definition of lioncore
-class Enumeration extends Datatype {
+class Enumeration extends Datatype {    // TODO  should be NamespaceProvider
     literals: EnumerationLiteral[] = [] // (containment)
 }
 
-class EnumerationLiteral {
+class EnumerationLiteral {  // TODO  should be NamespacedEntity
     name: string    // FIXME  deviation from proposal!
     constructor(name: string) {
         this.name = name
@@ -187,7 +188,8 @@ type M3Concept =
     | Reference
     | PrimitiveType
     | Typedef
-    | Feature   // FIXME  not an instantiable concept, so should not be in here
+    // | Enumeration
+    | EnumerationLiteral
 
 
 export {
