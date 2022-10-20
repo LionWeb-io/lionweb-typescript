@@ -191,12 +191,10 @@ export {
     PrimitiveType,
     Property,
     Reference,
-    Typedef,
-    unresolved
+    Typedef
 }
 export type {
     M3Concept,
     MetamodelElement,
-    SingleRef
 }
 

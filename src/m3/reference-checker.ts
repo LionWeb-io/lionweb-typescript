@@ -3,11 +3,10 @@ import {
     Containment,
     Metamodel,
     Property,
-    Reference,
-    SingleRef,
-    unresolved
+    Reference
 } from "./types.ts"
 import {flatMap} from "./functions.ts"
+import {SingleRef, unresolved} from "../references.ts"
 
 
 export const checkReferences = (metamodel: Metamodel): string[] =>

@@ -8,9 +8,9 @@ import {
     Metamodel,
     MetamodelElement,
     Multiplicity,
-    Property,
-    unresolved
+    Property
 } from "./types.ts"
+import {unresolved} from "../references.ts"
 
 
 export const isPlural = (multiplicity: Multiplicity): boolean =>

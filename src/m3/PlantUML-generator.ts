@@ -8,8 +8,7 @@ import {
     Metamodel,
     MetamodelElement,
     Multiplicity,
-    PrimitiveType,
-    unresolved
+    PrimitiveType
 } from "./types.ts"
 import {
     isPlural,
@@ -18,6 +17,7 @@ import {
     sortByStringKey,
     type
 } from "./functions.ts"
+import {isRef, unresolved} from "../references.ts"
 
 
 const indented = (lines: string[]) =>
@@ -58,7 +58,7 @@ const generateForConcept = ({simpleName, features, abstract: abstract_, extends:
         fragments.push(`abstract`)
     }
     fragments.push(`class`, simpleName)
-    if (extends_ !== undefined && extends_ !== unresolved) {
+    if (isRef(extends_)) {
         fragments.push(`extends`, extends_.simpleName)
     }
     if (implements_.length > 0) {
