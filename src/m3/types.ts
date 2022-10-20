@@ -16,7 +16,7 @@ type SingleRef<T> = typeof unresolved | T
 
 class Metamodel {
     qualifiedName: string
-    elements: MetamodelElement[] = []
+    elements: MetamodelElement[] = []   // (containment)
     constructor(qualifiedName: string) {
         this.qualifiedName = qualifiedName
     }
@@ -26,15 +26,13 @@ class Metamodel {
     }
 }
 
-
 interface MetamodelElement {
     name: string    // FIXME  deviation from proposal!
 }
 
-
-abstract class AbstractConcept implements MetamodelElement, FeaturesContainer {
+abstract class FeaturesContainer implements MetamodelElement {
     name: string    // FIXME  deviation from proposal!
-    features: Feature[] = []
+    features: Feature[] = []    // (containment)
     // allFeatures: () => Feature[]
     protected constructor(name: string) {
         this.name = name
@@ -45,11 +43,10 @@ abstract class AbstractConcept implements MetamodelElement, FeaturesContainer {
     }
 }
 
-class Concept extends AbstractConcept {
+class Concept extends FeaturesContainer {
     abstract: boolean
     extends?: SingleRef<Concept>    // (reference)
     implements: ConceptInterface[] = []  // (reference)
-    features: Feature[] = [] // (containment)
     constructor(name: string, abstract: boolean, extends_?: SingleRef<Concept>) {
         super(name)
         this.abstract = abstract
@@ -61,14 +58,14 @@ class Concept extends AbstractConcept {
     }
 }
 
-class ConceptInterface extends AbstractConcept {
-    extends: ConceptInterface[] = []
+class ConceptInterface extends FeaturesContainer {
+    extends: ConceptInterface[] = []    // (reference)
     constructor(name: string) {
         super(name)
     }
 }
 
-class Annotation extends AbstractConcept {
+class Annotation extends FeaturesContainer {
     platformSpecific?: string
     constructor(name: string) {
         super(name)
@@ -76,17 +73,16 @@ class Annotation extends AbstractConcept {
 }
 
 enum Multiplicity {
-    Optional, Single, ZeroOrMore, OneOrMore
-}
-
-interface FeaturesContainer {
-    features: Feature[] // (containment)
+    Optional,
+    Single,
+    ZeroOrMore,
+    OneOrMore
 }
 
 abstract class Feature {
     name: string    // FIXME  deviation from proposal!
     multiplicity: Multiplicity
-    derived: boolean = false
+    derived /*: boolean */ = false
     protected constructor(name: string, multiplicity: Multiplicity) {
         this.name = name
         this.multiplicity = multiplicity
@@ -98,26 +94,26 @@ abstract class Feature {
 }
 
 abstract class Link extends Feature {
-    type: SingleRef<AbstractConcept> = unresolved
+    type: SingleRef<FeaturesContainer> = unresolved   // (reference)
     constructor(name: string, multiplicity: Multiplicity) {
         super(name, multiplicity)
     }
-    ofType(type: AbstractConcept) {
+    ofType(type: FeaturesContainer) {
         this.type = type
         return this
     }
 }
 
 class Reference extends Link {
-    specializes: Reference[] = []
+    specializes: Reference[] = []   // (reference)
 }
 
 class Containment extends Link {
-    specializes: Containment[] = []
+    specializes: Containment[] = [] // (reference)
 }
 
 class Property extends Feature {
-    type: SingleRef<Datatype> = unresolved
+    type: SingleRef<Datatype> = unresolved   // (reference)
     constructor(name: string, multiplicity: Multiplicity) {
         super(name, multiplicity)
     }
@@ -127,9 +123,8 @@ class Property extends Feature {
     }
 }
 
-
 abstract class Datatype implements MetamodelElement {
-    name: string
+    name: string    // FIXME  deviation from proposal!
     constructor(name: string) {
         this.name = name
     }
@@ -138,15 +133,15 @@ abstract class Datatype implements MetamodelElement {
 class Typedef extends Datatype {}
 
 class PrimitiveType extends Datatype {
-    constraints: Typedef[] = []
+    constraints: Typedef[] = [] // (reference)
 }
 
 class Enumeration extends Datatype {
-    literals: EnumerationLiteral[] = []
+    literals: EnumerationLiteral[] = [] // (containment)
 }
 
 class EnumerationLiteral {
-    name: string
+    name: string    // FIXME  deviation from proposal!
     constructor(name: string) {
         this.name = name
     }
@@ -169,7 +164,7 @@ type M3Concept =
 
 
 export {
-    AbstractConcept,
+    FeaturesContainer,
     Annotation,
     Concept,
     ConceptInterface,
@@ -188,7 +183,6 @@ export {
     unresolved
 }
 export type {
-    FeaturesContainer,
     M3Concept,
     MetamodelElement
 }

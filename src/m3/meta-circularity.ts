@@ -58,7 +58,11 @@ const metamodel = new Concept("Metamodel", false)
     .implementing(namespaceProvider)
 metamodel_dependsOn.ofType(metamodel)
 
+
 const metamodelElement = new Concept("MetamodelElement", true, namespacedEntity)
+
+
+metamodel_elements.ofType(metamodelElement)
 
 
 const featuresContainer_features = new Containment("features", Multiplicity.ZeroOrMore)
@@ -178,9 +182,6 @@ const containment = new Concept("Containment", false, link)
     .havingFeatures(containment_specializes)
 
 containment_specializes.ofType(containment)
-
-
-metamodel_elements.ofType(metamodelElement)
 
 
 export const lioncore = new Metamodel("lioncore")

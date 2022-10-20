@@ -1,7 +1,8 @@
 import {
-    AbstractConcept,
     Datatype,
+    Enumeration,
     Feature,
+    FeaturesContainer,
     Link,
     M3Concept,
     Metamodel,
@@ -19,7 +20,7 @@ export const isPlural = (multiplicity: Multiplicity): boolean =>
 
 type Typed = Link | Property
 
-export const type = (feature: Feature): AbstractConcept | Datatype | typeof unresolved =>
+export const type = (feature: Feature): FeaturesContainer | Datatype | typeof unresolved =>
     (feature as Typed).type
 
 
@@ -34,7 +35,7 @@ export const nonRelationalFeatures = (features: Feature[]): Feature[] =>
 
 
 export const relationsOf = (metamodelElement: MetamodelElement): Link[] =>
-    metamodelElement instanceof AbstractConcept
+    metamodelElement instanceof FeaturesContainer
         ? relations(metamodelElement.features)
         : []
 
@@ -56,11 +57,15 @@ export const flatMap = <T>(metamodel: Metamodel, map: (t: M3Concept) => T[]): T[
     const ts: T[] = []
     const visit = (thing: M3Concept) => {
         ts.push(...map(thing))
+        // recurse into all containments:
         if (thing instanceof Metamodel) {
             thing.elements.forEach(visit)
         }
-        if (thing instanceof AbstractConcept) { // FIXME  FeaturesContainer is (right now) only implemented by AbstractConcept
+        if (thing instanceof FeaturesContainer) {
             thing.features.forEach(visit)
+        }
+        if (thing instanceof Enumeration) {
+            thing.literals.forEach(visit)
         }
     }
     visit(metamodel)
