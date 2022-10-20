@@ -5,11 +5,30 @@
 import {isRef, SingleRef, unresolved} from "../references.ts"
 
 
-class Metamodel {
+interface NamespaceProvider {
+    namespaceQualifier(): string
+}
+
+abstract class NamespacedEntity {
+    simpleName: string
+    container: NamespaceProvider
+    constructor(container: NamespaceProvider, simpleName: string) {
+        this.simpleName = simpleName
+        this.container = container
+    }
+    qualifiedName() {
+        return `${this.container.namespaceQualifier()}.${this.simpleName}`
+    }
+}
+
+class Metamodel implements NamespaceProvider {
     qualifiedName: string
     elements: MetamodelElement[] = []   // (containment)
     constructor(qualifiedName: string) {
         this.qualifiedName = qualifiedName
+    }
+    namespaceQualifier(): string {
+        return this.qualifiedName
     }
     havingElements(...elements: MetamodelElement[]) {
         this.elements.push(...elements)
@@ -17,15 +36,16 @@ class Metamodel {
     }
 }
 
-interface MetamodelElement {
-    name: string    // FIXME  deviation from proposal!
+abstract class MetamodelElement extends NamespacedEntity {
+    protected constructor(metamodel: Metamodel, simpleName: string) {
+        super(metamodel, simpleName)
+    }
 }
 
-abstract class FeaturesContainer implements MetamodelElement {
-    name: string    // FIXME  deviation from proposal!
-    features: Feature[] = []    // (containment)
-    protected constructor(name: string) {
-        this.name = name
+abstract class FeaturesContainer extends MetamodelElement {
+    features: Feature[] = [] // (containment)
+    protected constructor(metamodel: Metamodel, simpleName: string) {
+        super(metamodel, simpleName)
     }
     havingFeatures(...features: Feature[]) {
         this.features.push(...features)
@@ -38,8 +58,8 @@ class Concept extends FeaturesContainer {
     abstract: boolean
     extends?: SingleRef<Concept>    // (reference)
     implements: ConceptInterface[] = []  // (reference)
-    constructor(name: string, abstract: boolean, extends_?: SingleRef<Concept>) {
-        super(name)
+    constructor(metamodel: Metamodel, simpleName: string, abstract: boolean, extends_?: SingleRef<Concept>) {
+        super(metamodel, simpleName)
         this.abstract = abstract
         this.extends = extends_
     }
@@ -58,8 +78,8 @@ class Concept extends FeaturesContainer {
 
 class ConceptInterface extends FeaturesContainer {
     extends: ConceptInterface[] = []    // (reference)
-    constructor(name: string) {
-        super(name)
+    constructor(metamodel: Metamodel, simpleName: string) {
+        super(metamodel, simpleName)
     }
     allFeatures(): Feature[] {
         return this.extends.flatMap((conceptInterface) => conceptInterface.allFeatures())
@@ -68,8 +88,8 @@ class ConceptInterface extends FeaturesContainer {
 
 class Annotation extends FeaturesContainer {
     platformSpecific?: string
-    constructor(name: string) {
-        super(name)
+    constructor(metamodel: Metamodel, simpleName: string) {
+        super(metamodel, simpleName)
     }
     allFeatures(): Feature[] {
         return this.features
@@ -99,8 +119,8 @@ abstract class Feature {
 
 abstract class Link extends Feature {
     type: SingleRef<FeaturesContainer> = unresolved   // (reference)
-    constructor(name: string, multiplicity: Multiplicity) {
-        super(name, multiplicity)
+    constructor(simpleName: string, multiplicity: Multiplicity) {
+        super(simpleName, multiplicity)
     }
     ofType(type: FeaturesContainer) {
         this.type = type
@@ -127,10 +147,9 @@ class Property extends Feature {
     }
 }
 
-abstract class Datatype implements MetamodelElement {
-    name: string    // FIXME  deviation from proposal!
-    constructor(name: string) {
-        this.name = name
+abstract class Datatype extends MetamodelElement {
+    constructor(metamodel: Metamodel, simpleName: string) {
+        super(metamodel, simpleName)
     }
 }
 
@@ -156,7 +175,7 @@ class EnumerationLiteral {
 
 
 /**
- * Sum type of all lioncore type definitions whose meta-type is a concrete Concept.
+ * Sum type of all lioncore type definitions whose meta-type is a concrete (thus: instantiable) Concept.
  */
 type M3Concept =
     | Metamodel
@@ -168,6 +187,7 @@ type M3Concept =
     | Reference
     | PrimitiveType
     | Typedef
+    | Feature   // FIXME  not an instantiable concept, so should not be in here
 
 
 export {

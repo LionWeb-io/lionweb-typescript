@@ -23,7 +23,7 @@ export const checkReferences = (metamodel: Metamodel): string[] =>
             }
 
             if (thing instanceof Concept) {
-                check(thing.extends, `<Concept>${thing.name}#extends`)
+                check(thing.extends, `<Concept>${thing.simpleName}#extends`)
             }
             if (thing instanceof Containment) {
                 check(thing.type, `<Containment>${thing.name}#type`)

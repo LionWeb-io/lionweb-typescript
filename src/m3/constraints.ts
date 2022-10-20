@@ -19,7 +19,7 @@ export const issuesMetamodel = (metamodel: Metamodel): Issue[] =>
                     return [
                         {
                             location: t,
-                            message: `The features of a ConceptInterface must all be derived, but the following feature${isPlural ? `s` : ``} of ${t.name} ${isPlural ? `are` : `is`} not: ${nonDerivedFeatures.map(({name}) => name).join(", ")}.`
+                            message: `The features of a ConceptInterface must all be derived, but the following feature${isPlural ? `s` : ``} of ${t.simpleName} ${isPlural ? `are` : `is`} not: ${nonDerivedFeatures.map(({name}) => name).join(", ")}.`
                         }
                     ]
                 }

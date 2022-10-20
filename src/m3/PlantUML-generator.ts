@@ -25,7 +25,7 @@ const indented = (lines: string[]) =>
 
 
 const sortByName = (metamodelElements: MetamodelElement[]) =>
-    sortByStringKey(metamodelElements, (element) => element.name)
+    sortByStringKey(metamodelElements, (element) => element.simpleName)
 
 
 export const generateForMetamodel = ({qualifiedName, elements}: Metamodel) =>
@@ -44,25 +44,25 @@ ${sortByName(elements).map((element) => generateForRelationsOf(element)).join(""
 `
 
 
-const generateForEnumeration = ({name, literals}: Enumeration) =>
-`enum ${name} {
+const generateForEnumeration = ({simpleName, literals}: Enumeration) =>
+`enum ${simpleName} {
 ${indented(literals.map(({name}) => name))}
 }
 `
 
 
-const generateForConcept = ({name, features, abstract: abstract_, extends: extends_, implements: implements_}: Concept) => {
+const generateForConcept = ({simpleName, features, abstract: abstract_, extends: extends_, implements: implements_}: Concept) => {
     const nonRelationalFeatures_ = nonRelationalFeatures(features)
     const fragments: string[] = []
     if (abstract_) {
         fragments.push(`abstract`)
     }
-    fragments.push(`class`, name)
+    fragments.push(`class`, simpleName)
     if (extends_ !== undefined && extends_ !== unresolved) {
-        fragments.push(`extends`, extends_.name)
+        fragments.push(`extends`, extends_.simpleName)
     }
     if (implements_.length > 0) {
-        fragments.push(`implements`, implements_.map((conceptInterface) => conceptInterface.name).sort().join(", "))
+        fragments.push(`implements`, implements_.map((conceptInterface) => conceptInterface.simpleName).sort().join(", "))
     }
     return `${fragments.join(" ")}${nonRelationalFeatures_.length === 0 ? `` : ` {
 ${indented(nonRelationalFeatures_.map(generateForNonRelationalFeature))}
@@ -71,11 +71,11 @@ ${indented(nonRelationalFeatures_.map(generateForNonRelationalFeature))}
 }
 
 
-const generateForConceptInterface = ({name, extends: extends_, features}: ConceptInterface) => {
+const generateForConceptInterface = ({simpleName, extends: extends_, features}: ConceptInterface) => {
     const nonRelationalFeatures_ = nonRelationalFeatures(features)
-    const fragments: string[] = [`interface`, name]
+    const fragments: string[] = [`interface`, simpleName]
     if (extends_.length > 0) {
-        fragments.push(`extends`, extends_.map((superInterface) => superInterface.name).join(", "))
+        fragments.push(`extends`, extends_.map((superInterface) => superInterface.simpleName).join(", "))
     }
     return `${fragments.join(" ")}${nonRelationalFeatures_.length === 0 ? `` : ` {
 ${indented(nonRelationalFeatures_.map(generateForNonRelationalFeature))}
@@ -88,12 +88,12 @@ const generateForNonRelationalFeature = (feature: Feature) => {
     const {name, multiplicity, derived} = feature
     const isListy = isPlural(multiplicity)
     const type_ = type(feature)
-    return `${name}${derived ? `()` : ``}: ${isListy ? `List<` : ``}${type_ === unresolved ? `???` : type_.name}${isPlural(multiplicity) ? `>` : ``}${multiplicity === Multiplicity.Optional ? `?` : ``}`
+    return `${name}${derived ? `()` : ``}: ${isListy ? `List<` : ``}${type_ === unresolved ? `???` : type_.simpleName}${isPlural(multiplicity) ? `>` : ``}${multiplicity === Multiplicity.Optional ? `?` : ``}`
 }
 
 
-const generateForPrimitiveType = ({name}: PrimitiveType) =>
-`' primitive type: "${name}"
+const generateForPrimitiveType = ({simpleName}: PrimitiveType) =>
+`' primitive type: "${simpleName}"
 `
 // Note: No construct for PrimitiveType exists in PlantUML.
 
@@ -111,7 +111,7 @@ const generateForMetamodelElement = (metamodelElement: MetamodelElement) => {
     if (metamodelElement instanceof PrimitiveType) {
         return generateForPrimitiveType(metamodelElement)
     }
-    return `' unhandled metamodel element: ${metamodelElement.name}
+    return `' unhandled metamodel element: ${metamodelElement.simpleName}
 `
 }
 
@@ -126,9 +126,9 @@ const generateForRelationsOf = (metamodelElement: MetamodelElement) => {
 }
 
 
-const generateForRelation = ({name: leftName}: MetamodelElement, relation: Link) => {
+const generateForRelation = ({simpleName: leftName}: MetamodelElement, relation: Link) => {
     const {name, multiplicity, type} = relation
-    const rightName = type === unresolved ? `???` : type.name
+    const rightName = type === unresolved ? `???` : type.simpleName
     const isContainment = relation instanceof Containment
     const leftMultiplicity = isContainment ? `1` : `*`
     const rightMultiplicity = (() => {

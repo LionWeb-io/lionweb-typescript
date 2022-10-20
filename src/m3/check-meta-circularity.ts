@@ -38,7 +38,7 @@ Deno.test("meta-circularity (lioncore)", async (tctx) => {
     })
 
     await tctx.step("derived feature FeaturesContainer#allFeatures on Annotation", async () => {
-        const annotation = lioncore.elements.find((element) => element.name === "Annotation") as Concept
+        const annotation = lioncore.elements.find((element) => element.simpleName === "Annotation") as Concept
         const allFeatures = annotation.allFeatures()
         assertEquals(
             allFeatures.map(({name}) => name).sort(),
