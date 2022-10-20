@@ -184,6 +184,7 @@ export {
 }
 export type {
     M3Concept,
-    MetamodelElement
+    MetamodelElement,
+    SingleRef
 }
 
