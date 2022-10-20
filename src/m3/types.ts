@@ -37,16 +37,13 @@ class Metamodel implements NamespaceProvider {
 }
 
 abstract class MetamodelElement extends NamespacedEntity {
-    protected constructor(metamodel: Metamodel, simpleName: string) {
+    constructor(metamodel: Metamodel, simpleName: string) {
         super(metamodel, simpleName)
     }
 }
 
 abstract class FeaturesContainer extends MetamodelElement implements NamespaceProvider {
     features: Feature[] = [] // (containment)
-    protected constructor(metamodel: Metamodel, simpleName: string) {
-        super(metamodel, simpleName)
-    }
     havingFeatures(...features: Feature[]) {
         this.features.push(...features)
         return this
@@ -81,9 +78,6 @@ class Concept extends FeaturesContainer {
 
 class ConceptInterface extends FeaturesContainer {
     extends: ConceptInterface[] = []    // (reference)
-    constructor(metamodel: Metamodel, simpleName: string) {
-        super(metamodel, simpleName)
-    }
     allFeatures(): Feature[] {
         return this.extends.flatMap((conceptInterface) => conceptInterface.allFeatures())
     }
@@ -91,9 +85,6 @@ class ConceptInterface extends FeaturesContainer {
 
 class Annotation extends FeaturesContainer {
     platformSpecific?: string
-    constructor(metamodel: Metamodel, simpleName: string) {
-        super(metamodel, simpleName)
-    }
     allFeatures(): Feature[] {
         return this.features
     }
@@ -109,7 +100,7 @@ enum Multiplicity {
 abstract class Feature extends NamespacedEntity {
     multiplicity: Multiplicity
     derived /*: boolean */ = false
-    protected constructor(featuresContainer: FeaturesContainer, simpleName: string, multiplicity: Multiplicity) {
+    constructor(featuresContainer: FeaturesContainer, simpleName: string, multiplicity: Multiplicity) {
         super(featuresContainer, simpleName)
         this.multiplicity = multiplicity
     }
@@ -121,9 +112,6 @@ abstract class Feature extends NamespacedEntity {
 
 abstract class Link extends Feature {
     type: SingleRef<FeaturesContainer> = unresolved   // (reference)
-    constructor(featuresContainer: FeaturesContainer, simpleName: string, multiplicity: Multiplicity) {
-        super(featuresContainer, simpleName, multiplicity)
-    }
     ofType(type: FeaturesContainer) {
         this.type = type
         return this
@@ -140,20 +128,13 @@ class Containment extends Link {
 
 class Property extends Feature {
     type: SingleRef<Datatype> = unresolved   // (reference)
-    constructor(featuresContainer: FeaturesContainer, simpleName: string, multiplicity: Multiplicity) {
-        super(featuresContainer, simpleName, multiplicity)
-    }
     ofType(type: Datatype) {
         this.type = type
         return this
     }
 }
 
-abstract class Datatype extends MetamodelElement {
-    constructor(metamodel: Metamodel, simpleName: string) {
-        super(metamodel, simpleName)
-    }
-}
+abstract class Datatype extends MetamodelElement {}
 
 // TODO  -> TypeDefinition, because it'd be the only shortened name
 class Typedef extends Datatype {
