@@ -130,12 +130,15 @@ abstract class Datatype implements MetamodelElement {
     }
 }
 
-class Typedef extends Datatype {}
-
-class PrimitiveType extends Datatype {
-    constraints: Typedef[] = [] // (reference)
+// TODO  -> TypeDefinition, because it'd be the only shortened name
+class Typedef extends Datatype {
+    constraints: PrimitiveType[] = [] // (reference)
 }
 
+class PrimitiveType extends Datatype {}
+
+
+// TODO  put in meta-circular definition of lioncore
 class Enumeration extends Datatype {
     literals: EnumerationLiteral[] = [] // (containment)
 }
