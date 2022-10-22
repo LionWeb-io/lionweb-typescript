@@ -42,7 +42,7 @@ Deno.test("meta-circularity (lioncore)", async (tctx) => {
         const allFeatures = annotation.allFeatures()
         assertEquals(
             allFeatures.map(({simpleName}) => simpleName).sort(),
-            ["allFeatures", "container", "features", "platformSpecific", "qualifiedName", "simpleName", "target"],
+            ["allFeatures", "container", "features", "namespaceQualifier", "platformSpecific", "qualifiedName", "simpleName", "target"],
             "allFeatures(Annotation)"
         )
     })
