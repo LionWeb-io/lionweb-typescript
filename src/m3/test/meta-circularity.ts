@@ -9,7 +9,7 @@ import {
     PrimitiveType,
     Property,
     Reference
-} from "./types.ts"
+} from "../types.ts"
 
 
 // Definition of LIonCore in terms of itself.

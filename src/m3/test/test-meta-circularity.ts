@@ -4,9 +4,9 @@ import {
 
 import {lioncore} from "./meta-circularity.ts"
 import {generateForMetamodel} from "./PlantUML-generator.ts"
-import {checkReferences} from "./reference-checker.ts"
-import {issuesMetamodel} from "./constraints.ts"
-import {Concept} from "./types.ts"
+import {checkReferences} from "../reference-checker.ts"
+import {issuesMetamodel} from "../constraints.ts"
+import {Concept} from "../types.ts"
 
 
 Deno.test("meta-circularity (lioncore)", async (tctx) => {

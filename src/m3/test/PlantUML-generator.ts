@@ -9,15 +9,15 @@ import {
     MetamodelElement,
     Multiplicity,
     PrimitiveType
-} from "./types.ts"
+} from "../types.ts"
 import {
     isPlural,
     nonRelationalFeatures,
     relationsOf,
     sortByStringKey,
     type
-} from "./functions.ts"
-import {isRef, unresolved} from "../references.ts"
+} from "../functions.ts"
+import {isRef, unresolved} from "../../references.ts"
 
 
 const indented = (lines: string[]) =>
