@@ -79,7 +79,10 @@ class Concept extends FeaturesContainer {
 class ConceptInterface extends FeaturesContainer {
     extends: ConceptInterface[] = []    // (reference)
     allFeatures(): Feature[] {
-        return this.extends.flatMap((conceptInterface) => conceptInterface.allFeatures())
+        return [
+            ...this.features,
+            ...this.extends.flatMap((conceptInterface) => conceptInterface.allFeatures())
+        ]
     }
 }
 
