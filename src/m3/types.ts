@@ -141,7 +141,6 @@ class Typedef extends Datatype {
 
 class PrimitiveType extends Datatype {}
 
-// TODO  put in meta-circular definition of lioncore
 class Enumeration extends Datatype implements NamespaceProvider {
     literals: EnumerationLiteral[] = [] // (containment)
     namespaceQualifier(): string {
@@ -169,7 +168,7 @@ type M3Concept =
     | Reference
     | PrimitiveType
     | Typedef
-    // | Enumeration
+    | Enumeration
     | EnumerationLiteral
 
 

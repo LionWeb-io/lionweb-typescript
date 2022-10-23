@@ -17,6 +17,8 @@ class Containment extends Link
 
 abstract class Datatype extends MetamodelElement
 
+class Enumeration extends Datatype implements NamespaceProvider
+
 abstract class Feature extends NamespacedEntity {
   multiplicity: Multiplicity
   derived: boolean
@@ -74,6 +76,8 @@ Concept "*" -- "*" ConceptInterface: implements
 ConceptInterface "*" -- "*" ConceptInterface: extends
 
 Containment "*" -- "0..1" Containment: specializes
+
+Enumeration "1" o-- "*" EnumerationLiteral: literals
 
 FeaturesContainer "1" o-- "*" Feature: features
 
