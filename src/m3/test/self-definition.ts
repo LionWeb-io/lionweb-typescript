@@ -198,6 +198,17 @@ const containment_specializes = new Reference(containment, "specializes", Multip
 containment.havingFeatures(containment_specializes)
 
 
+const enumeration = new Concept(lioncore, "Enumeration", false, datatype)
+    .implementing(namespaceProvider)
+
+const enumeration_literals = new Containment(enumeration, "literals", Multiplicity.ZeroOrMore)
+
+const enumerationLiteral = new Concept(lioncore, "EnumerationLiteral", false, namespacedEntity)
+
+enumeration_literals.ofType(enumerationLiteral)
+enumeration.havingFeatures(enumeration_literals)
+
+
 lioncore.havingElements(
     namespacedEntity,
     namespaceProvider,
@@ -216,6 +227,7 @@ lioncore.havingElements(
     typedef,
     containment,
     multiplicity,
+    enumeration,
     // built-ins:
     booleanDatatype,
     stringDatatype
