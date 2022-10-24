@@ -18,29 +18,26 @@ export const issuesMetamodel = (metamodel: Metamodel): Issue[] =>
     flatMap(
         metamodel,
         (t) => {
+            const issues: Issue[] = []
+            const issue = (message: string): void => {
+                issues.push({
+                    location: t,
+                    message
+                })
+            }
             if (t instanceof ConceptInterface) {
                 const nonDerivedFeatures = t.allFeatures().filter(({derived}) => !derived)
                 if (nonDerivedFeatures.length > 0) {
                     const isPlural = nonDerivedFeatures.length > 1
-                    return [
-                        {
-                            location: t as M3Concept,   // cast to coerce resulting signature of lambda
-                            message: `The features of a ConceptInterface must all be derived, but the following feature${isPlural ? `s` : ``} of ${t.qualifiedName()} ${isPlural ? `are` : `is`} not: ${nonDerivedFeatures.map(({simpleName}) => simpleName).join(", ")}.`
-                        }
-                    ]
+                    issue(`The features of a ConceptInterface must all be derived, but the following feature${isPlural ? `s` : ``} of ${t.qualifiedName()} ${isPlural ? `are` : `is`} not: ${nonDerivedFeatures.map(({simpleName}) => simpleName).join(", ")}.`)
                 }
             }
             if (t instanceof Link) {
                 if (t.type instanceof Annotation) {
-                    return [
-                        {
-                            location: t,
-                            message: `An Annotation can't be the type of a ${t.constructor.name}, but the type of ${t.qualifiedName()} is ${t.type.qualifiedName()}.`
-                        }
-                    ]
+                    issue(`An Annotation can't be the type of a ${t.constructor.name}, but the type of ${t.qualifiedName()} is ${t.type.qualifiedName()}.`)
                 }
             }
-            return []
+            return issues
         }
     )
 
