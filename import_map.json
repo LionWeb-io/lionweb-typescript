@@ -1,0 +1,5 @@
+{
+  "imports": {
+    "littoral-templates": "npm:littoral-templates@0.2.1"
+  }
+}

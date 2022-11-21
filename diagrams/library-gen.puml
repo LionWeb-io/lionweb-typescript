@@ -40,6 +40,10 @@ Book "*" -- "*" Writer: author
 Library "1" o-- "*" Book: books
 
 
+
+
+
+
 legend
   <#LightGray,#LightGray>| <#Orange>Disputed |
 end legend
