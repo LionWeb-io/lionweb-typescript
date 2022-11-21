@@ -1,3 +1,5 @@
+import {asString, indentWith} from "npm:littoral-templates"
+
 import {
     Concept,
     ConceptInterface,
@@ -19,35 +21,41 @@ import {
 import {isRef, unresolved} from "../../references.ts"
 
 
-const indented = (lines: string[]) =>
-    lines.map((line) => `  ${line}`).join("\n")
+const indented = indentWith(`  `)(1)
 
 
 export const generatePlantUmlForMetamodel = ({qualifiedName, elements}: Metamodel) =>
+    asString([
 `@startuml
 hide empty members
 
 ' qualified name: "${qualifiedName}"
 
 
-${elementsSortedByName(elements).map(generateForMetamodelElement).join("\n")}
-
+`,
+    elementsSortedByName(elements).map(generateForMetamodelElement),
+`
 
 ' relations:
 
-${elementsSortedByName(elements).map((element) => generateForRelationsOf(element)).join("")}
+`,
+    elementsSortedByName(elements).map(generateForRelationsOf),
+`
 legend
   <#LightGray,#LightGray>| <#Orange>Disputed |
 end legend
 @enduml
 `
-
+])
 
 const generateForEnumeration = ({simpleName, literals}: Enumeration) =>
-`enum ${simpleName} {
-${indented(literals.map(({simpleName}) => simpleName))}
-}
+    [
+`enum ${simpleName} {`,
+        indented(literals.map(({simpleName}) => simpleName)),
+`}
+
 `
+    ]
 
 
 const generateForConcept = ({simpleName, features, abstract: abstract_, extends: extends_, implements: implements_}: Concept) => {
@@ -63,10 +71,17 @@ const generateForConcept = ({simpleName, features, abstract: abstract_, extends:
     if (implements_.length > 0) {
         fragments.push(`implements`, implements_.map((conceptInterface) => conceptInterface.simpleName).sort().join(", "))
     }
-    return `${fragments.join(" ")}${nonRelationalFeatures_.length === 0 ? `` : ` {
-${indented(nonRelationalFeatures_.map(generateForNonRelationalFeature))}
-}`}
-`
+    return nonRelationalFeatures_.length === 0
+        ? [
+            `${fragments.join(" ")}`,
+            ``
+        ]
+        : [
+            `${fragments.join(" ")} {`,
+            indented(nonRelationalFeatures_.map(generateForNonRelationalFeature)),
+            `}`,
+            ``
+        ]
 }
 
 
@@ -76,10 +91,14 @@ const generateForConceptInterface = ({simpleName, extends: extends_, features}: 
     if (extends_.length > 0) {
         fragments.push(`extends`, extends_.map((superInterface) => superInterface.simpleName).join(", "))
     }
-    return `${fragments.join(" ")}${nonRelationalFeatures_.length === 0 ? `` : ` {
-${indented(nonRelationalFeatures_.map(generateForNonRelationalFeature))}
-}`}
-`
+    return nonRelationalFeatures_.length === 0
+        ? `${fragments.join(" ")}`
+        : [
+            `${fragments.join(" ")} {`,
+            indented(nonRelationalFeatures_.map(generateForNonRelationalFeature)),
+            `}`,
+            ``
+        ]
 }
 
 
@@ -93,6 +112,7 @@ const generateForNonRelationalFeature = (feature: Feature) => {
 
 const generateForPrimitiveType = ({simpleName}: PrimitiveType) =>
 `' primitive type: "${simpleName}"
+
 `
 // Note: No construct for PrimitiveType exists in PlantUML.
 
@@ -121,7 +141,6 @@ const generateForRelationsOf = (metamodelElement: MetamodelElement) => {
         ? ``
         : relations
             .map((relation) => generateForRelation(metamodelElement, relation))
-            .join("\n") + "\n\n"
 }
 
 
