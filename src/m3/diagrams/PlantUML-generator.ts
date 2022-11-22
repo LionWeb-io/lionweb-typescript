@@ -11,10 +11,10 @@ import {
     PrimitiveType
 } from "../types.ts"
 import {
+    elementsSortedByName,
     isPlural,
     nonRelationalFeatures,
     relationsOf,
-    sortByStringKey,
     type
 } from "../functions.ts"
 import {isRef, unresolved} from "../../references.ts"
@@ -24,22 +24,18 @@ const indented = (lines: string[]) =>
     lines.map((line) => `  ${line}`).join("\n")
 
 
-const sortByName = (metamodelElements: MetamodelElement[]) =>
-    sortByStringKey(metamodelElements, (element) => element.simpleName)
-
-
-export const generateForMetamodel = ({qualifiedName, elements}: Metamodel) =>
+export const generatePlantUmlForMetamodel = ({qualifiedName, elements}: Metamodel) =>
 `@startuml
 
 ' qualified name: "${qualifiedName}"
 
 
-${sortByName(elements).map(generateForMetamodelElement).join("\n")}
+${elementsSortedByName(elements).map(generateForMetamodelElement).join("\n")}
 
 
 ' relations:
 
-${sortByName(elements).map((element) => generateForRelationsOf(element)).join("")}
+${elementsSortedByName(elements).map((element) => generateForRelationsOf(element)).join("")}
 @enduml
 `
 

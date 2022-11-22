@@ -5,7 +5,7 @@ TypeScript implementation for LIonWeb standards - currently: the `lioncore` meta
 
 ## Building
 
-Run [`watch-check-meta-circularity.sh`](./watch-check-meta-circularity.sh) to generate a PlantUML file [`plantUML/metametamodel-gen.puml`](./plantUML/metametamodel-gen.puml) from the meta-circular definition of `lioncore` in [`src/m3/meta-circularity.ts`](./src/m3/meta-circularity.ts).
+Run [`watch-check-meta-circularity.sh`](./watch-check-meta-circularity.sh) to generate a PlantUML file [`diagrams/metametamodel-gen.puml`](./plantUML/metametamodel-gen.puml) from the meta-circular definition of `lioncore` in [`src/m3/test/self-definition.ts`](./src/m3/test/self-definition.ts).
 This generated PlantUML file can then be compared with [this one](https://github.com/LIonWeb-org/organization/blob/main/lioncore/metametamodel.puml): they should have exactly the same contents apart from some a couple of obvious differences.
 
 
