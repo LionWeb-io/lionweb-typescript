@@ -3,6 +3,7 @@ import {
 } from "https://deno.land/std@0.160.0/testing/asserts.ts"
 
 import {lioncore} from "../self-definition.ts"
+import {generateMermaidForMetamodel} from "../diagrams/Mermaid-generator.ts"
 import {
     generatePlantUmlForMetamodel
 } from "../diagrams/PlantUML-generator.ts"
@@ -21,8 +22,9 @@ import {schemaFor} from "../schema-generator.ts"
 
 Deno.test("meta-circularity (LIonCore)", async (tctx) => {
 
-    await tctx.step("generate PlantUML diagram (no assertions)", async () => {
+    await tctx.step("generate PlantUML and Mermaid diagrams (no assertions)", async () => {
         await Deno.writeTextFileSync("diagrams/metametamodel-gen.puml", generatePlantUmlForMetamodel(lioncore))
+        await Deno.writeTextFileSync("diagrams/metametamodel-gen.md", generateMermaidForMetamodel(lioncore))
     })
 
     await tctx.step("check for unresolved references", () => {

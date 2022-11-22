@@ -11,6 +11,9 @@ import {checkReferences} from "../../reference-checker.ts"
 import {
     generatePlantUmlForMetamodel
 } from "../../diagrams/PlantUML-generator.ts"
+import {
+    generateMermaidForMetamodel
+} from "../../diagrams/Mermaid-generator.ts"
 
 
 Deno.test("Ecore importer", async (tctx) => {
@@ -27,6 +30,7 @@ Deno.test("Ecore importer", async (tctx) => {
         const serialization = serializeMetamodel(metamodel)
         await writeJsonAsFile("models/library-imported-from-ecore.json", serialization)
         await Deno.writeTextFileSync("diagrams/library-imported-from-ecore-gen.puml", generatePlantUmlForMetamodel(metamodel))
+        await Deno.writeTextFileSync("diagrams/library-imported-from-ecore-gen.md", generateMermaidForMetamodel(metamodel))
     })
 
 })

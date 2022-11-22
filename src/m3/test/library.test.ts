@@ -6,6 +6,7 @@ import {libraryMetamodel} from "./library.ts"
 import {
     generatePlantUmlForMetamodel
 } from "../diagrams/PlantUML-generator.ts"
+import {generateMermaidForMetamodel} from "../diagrams/Mermaid-generator.ts"
 import {serializeMetamodel} from "../serializer.ts"
 import {readFileAsJson, writeJsonAsFile} from "../../utils/json.ts"
 
@@ -16,6 +17,12 @@ Deno.test("Library test model", async (tctx) => {
         const diagramText = generatePlantUmlForMetamodel(libraryMetamodel)
         await Deno.writeTextFileSync("diagrams/library-gen.puml", diagramText)
         assertEquals(diagramText, await Deno.readTextFile("diagrams/library-imported-from-ecore-gen.puml"))
+    })
+
+    await tctx.step("generate Mermaid diagram", async () => {
+        const diagramText = generateMermaidForMetamodel(libraryMetamodel)
+        await Deno.writeTextFileSync("diagrams/library-gen.md", diagramText)
+        assertEquals(diagramText, await Deno.readTextFile("diagrams/library-imported-from-ecore-gen.md"))
     })
 
     await tctx.step("serialize it", async () => {
