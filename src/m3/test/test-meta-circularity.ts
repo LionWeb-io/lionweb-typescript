@@ -2,8 +2,8 @@ import {
     assertEquals
 } from "https://deno.land/std@0.160.0/testing/asserts.ts"
 
-import {lioncore} from "./meta-circularity.ts"
-import {generateForMetamodel} from "./PlantUML-generator.ts"
+import {lioncore} from "./self-definition.ts"
+import {generatePlantUmlForMetamodel} from "../diagrams/PlantUML-generator.ts"
 import {checkReferences} from "../reference-checker.ts"
 import {issuesMetamodel} from "../constraints.ts"
 import {Concept} from "../types.ts"
@@ -11,8 +11,8 @@ import {Concept} from "../types.ts"
 
 Deno.test("meta-circularity (lioncore)", async (tctx) => {
 
-    await tctx.step("generate PlantUML (no assertions)", async () => {
-        await Deno.writeTextFileSync("plantUML/metametamodel-gen.puml", generateForMetamodel(lioncore))
+    await tctx.step("generate PlantUML diagram (no assertions)", async () => {
+        await Deno.writeTextFileSync("diagrams/metametamodel-gen.puml", generatePlantUmlForMetamodel(lioncore))
     })
 
     await tctx.step("check for unresolved references", async () => {

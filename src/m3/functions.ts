@@ -1,3 +1,8 @@
+/**
+ * Various functions on M3 models.
+ */
+
+
 import {
     Datatype,
     Enumeration,
@@ -11,6 +16,7 @@ import {
     Property
 } from "./types.ts"
 import {unresolved} from "../references.ts"
+import {sortByStringKey} from "../utils/sorting.ts"
 
 
 export const isPlural = (multiplicity: Multiplicity): boolean =>
@@ -40,18 +46,6 @@ export const relationsOf = (metamodelElement: MetamodelElement): Link[] =>
         : []
 
 
-export type Comparer<T> = (l: T, r: T) => number
-
-const stringCompare: Comparer<string> = (l, r): number =>
-    l === r ? 0 : (l > r ? 1 : -1)
-
-export const stringyCompare = <T>(keyFunc: (t: T) => string): Comparer<T> =>
-    (l: T, r: T) => stringCompare(keyFunc(l), keyFunc(r))
-
-export const sortByStringKey = <T>(ts: T[], keyFunc: (t: T) => string) =>
-    [...ts].sort(stringyCompare(keyFunc))
-
-
 export const flatMap = <T>(metamodel: Metamodel, map: (t: M3Concept) => T[]): T[] => {
     // (non-fancy, slightly non-FP-ish implementation of a depth-first tree traversal of a LIonCore instance)
     const ts: T[] = []
@@ -71,4 +65,8 @@ export const flatMap = <T>(metamodel: Metamodel, map: (t: M3Concept) => T[]): T[
     visit(metamodel)
     return ts
 }
+
+
+export const elementsSortedByName = (metamodelElements: MetamodelElement[]) =>
+    sortByStringKey(metamodelElements, (element) => element.simpleName)
 
