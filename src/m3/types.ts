@@ -1,8 +1,10 @@
 /**
  * TypeScript type definitions for the `lioncore` M3 (=meta-meta) model.
+ * A LIonWeb metamodel (at the M2 meta level) can be represented as an instance of the {@link Metamodel} type.
  */
 
 import {isRef, SingleRef, unresolved} from "../references.ts"
+import {allFeaturesOf} from "./functions.ts"
 
 
 interface NamespaceProvider {
@@ -68,21 +70,14 @@ class Concept extends FeaturesContainer {
         return this
     }
     allFeatures(): Feature[] {
-        return [
-            ...this.features,
-            ...(isRef(this.extends) ? this.extends.allFeatures() : []),
-            ...this.implements.flatMap((conceptInterface) => conceptInterface.allFeatures())
-        ]
+        return allFeaturesOf(this)
     }
 }
 
 class ConceptInterface extends FeaturesContainer {
     extends: ConceptInterface[] = []    // (reference)
     allFeatures(): Feature[] {
-        return [
-            ...this.features,
-            ...this.extends.flatMap((conceptInterface) => conceptInterface.allFeatures())
-        ]
+        return allFeaturesOf(this)
     }
 }
 
