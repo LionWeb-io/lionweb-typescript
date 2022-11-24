@@ -9,7 +9,8 @@ import {
     Containment,
     Metamodel,
     Multiplicity,
-    Property, Reference
+    Property,
+    Reference
 } from "../types.ts"
 import {issuesMetamodel} from "../constraints.ts"
 
@@ -22,8 +23,8 @@ Deno.test("constraints (lioncore)", async (tctx) => {
         metamodel.havingElements(conceptInterface)
         const property = new Property(conceptInterface, "property", Multiplicity.Single)
         conceptInterface.havingFeatures(property)
-        const issues = issuesMetamodel(metamodel)
 
+        const issues = issuesMetamodel(metamodel)
         assertEquals(issues.length, 1)
         const {location, message} = issues[0]
         assertEquals(location, conceptInterface)
@@ -38,8 +39,8 @@ Deno.test("constraints (lioncore)", async (tctx) => {
             .ofType(annotation)
         concept.havingFeatures(containment)
         metamodel.havingElements(annotation, concept)
-        const issues = issuesMetamodel(metamodel)
 
+        const issues = issuesMetamodel(metamodel)
         assertEquals(issues.length, 1)
         const {location, message} = issues[0]
         assertEquals(location, containment)
@@ -54,12 +55,39 @@ Deno.test("constraints (lioncore)", async (tctx) => {
             .ofType(annotation)
         concept.havingFeatures(reference)
         metamodel.havingElements(annotation, concept)
-        const issues = issuesMetamodel(metamodel)
 
+        const issues = issuesMetamodel(metamodel)
         assertEquals(issues.length, 1)
         const {location, message} = issues[0]
         assertEquals(location, reference)
         assertEquals(message, `An Annotation can't be the type of a Reference, but the type of metamodel.concept.reference is metamodel.@nnotation.`)
+    })
+
+    await tctx.step("check that inheritance cycles are detected", async () => {
+        const metamodel = new Metamodel("metamodel")
+        const cis = [0, 1, 2].map((i) => new ConceptInterface(metamodel, `conceptInterface ${i}`))
+        cis[2].extends.push(cis[1])
+        cis[1].extends.push(cis[0])
+        cis[0].extends.push(cis[2])
+        metamodel.elements.push(...cis)
+
+        const issues = issuesMetamodel(metamodel)
+        assertEquals(issues.length, 3)
+        const message1 = issues?.find(({location}) => location === cis[0])?.message
+        assertEquals(message1, `A ConceptInterface can't inherit (directly or indirectly) from itself, but metamodel.conceptInterface 0 does so through the following cycle: metamodel.conceptInterface 0 -> metamodel.conceptInterface 2 -> metamodel.conceptInterface 1 -> metamodel.conceptInterface 0`)
+    })
+
+    await tctx.step("check that trivial inheritance cycles are detected", async () => {
+        const metamodel = new Metamodel("metamodel")
+        const ci = new ConceptInterface(metamodel, `foo`)
+        ci.extends.push(ci)
+        metamodel.elements.push(ci)
+
+        const issues = issuesMetamodel(metamodel)
+        assertEquals(issues.length, 1)
+        const {location, message} = issues[0]
+        assertEquals(location, ci)
+        assertEquals(message, `A ConceptInterface can't inherit (directly or indirectly) from itself, but metamodel.foo does so through the following cycle: metamodel.foo -> metamodel.foo`)
     })
 
 })
