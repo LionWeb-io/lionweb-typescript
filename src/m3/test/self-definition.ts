@@ -23,6 +23,12 @@ const stringDatatype = new PrimitiveType(lioncore, "String")
 const booleanDatatype = new PrimitiveType(lioncore, "boolean")
 
 
+const intDatatype = new PrimitiveType(lioncore, "int")
+
+
+const jsonDatatype = new PrimitiveType(lioncore, "JSON")
+
+
 const namespaceProvider = new ConceptInterface(lioncore, "NamespaceProvider")
 
 const namespaceProvider_namespaceQualifier = new Property(namespaceProvider, "namespaceQualifier")
@@ -225,7 +231,9 @@ lioncore.havingElements(
     containment,
     enumeration,
     // built-ins:
+    stringDatatype,
     booleanDatatype,
-    stringDatatype
+    intDatatype,
+    jsonDatatype
 )
 
