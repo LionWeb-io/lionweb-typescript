@@ -8,7 +8,6 @@ import {
     ConceptInterface,
     Containment,
     Metamodel,
-    Multiplicity,
     Property,
     Reference
 } from "../types.ts"
@@ -21,7 +20,7 @@ Deno.test("constraints (lioncore)", async (tctx) => {
         const metamodel = new Metamodel("metamodel")
         const conceptInterface = new ConceptInterface(metamodel, "conceptInterface")
         metamodel.havingElements(conceptInterface)
-        const property = new Property(conceptInterface, "property", Multiplicity.Single)
+        const property = new Property(conceptInterface, "property")
         conceptInterface.havingFeatures(property)
 
         const issues = issuesMetamodel(metamodel)
@@ -35,7 +34,8 @@ Deno.test("constraints (lioncore)", async (tctx) => {
         const metamodel = new Metamodel("metamodel")
         const annotation = new Annotation(metamodel, "@nnotation")
         const concept = new Concept(metamodel, "concept", false)
-        const containment = new Containment(concept, "containment", Multiplicity.Optional)
+        const containment = new Containment(concept, "containment")
+            .isOptional()
             .ofType(annotation)
         concept.havingFeatures(containment)
         metamodel.havingElements(annotation, concept)
@@ -51,7 +51,8 @@ Deno.test("constraints (lioncore)", async (tctx) => {
         const metamodel = new Metamodel("metamodel")
         const annotation = new Annotation(metamodel, "@nnotation")
         const concept = new Concept(metamodel, "concept", false)
-        const reference = new Reference(concept, "reference", Multiplicity.Optional)
+        const reference = new Reference(concept, "reference")
+            .isOptional()
             .ofType(annotation)
         concept.havingFeatures(reference)
         metamodel.havingElements(annotation, concept)

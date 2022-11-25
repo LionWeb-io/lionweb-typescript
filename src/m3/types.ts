@@ -88,30 +88,31 @@ class Annotation extends FeaturesContainer {
     }
 }
 
-enum Multiplicity {
-    Optional,
-    Single,
-    ZeroOrMore,
-    OneOrMore
-}
-
 abstract class Feature extends NamespacedEntity {
-    multiplicity: Multiplicity
+    optional /*: boolean */ = false
     derived /*: boolean */ = false
-    constructor(featuresContainer: FeaturesContainer, simpleName: string, multiplicity: Multiplicity) {
+    constructor(featuresContainer: FeaturesContainer, simpleName: string) {
         super(featuresContainer, simpleName)
-        this.multiplicity = multiplicity
     }
     isDerived() {
         this.derived = true
         return this
     }
+    isOptional() {
+        this.optional = true
+        return this
+    }
 }
 
 abstract class Link extends Feature {
+    multiple /*: boolean */ = false
     type: SingleRef<FeaturesContainer> = unresolved   // (reference)
     ofType(type: FeaturesContainer) {
         this.type = type
+        return this
+    }
+    isMultiple() {
+        this.multiple = true
         return this
     }
 }
@@ -184,7 +185,6 @@ export {
     Feature,
     Link,
     Metamodel,
-    Multiplicity,
     PrimitiveType,
     Property,
     Reference,

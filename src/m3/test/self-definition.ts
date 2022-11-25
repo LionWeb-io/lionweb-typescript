@@ -5,7 +5,6 @@ import {
     Enumeration,
     EnumerationLiteral,
     Metamodel,
-    Multiplicity,
     PrimitiveType,
     Property,
     Reference
@@ -26,7 +25,7 @@ const booleanDatatype = new PrimitiveType(lioncore, "boolean")
 
 const namespaceProvider = new ConceptInterface(lioncore, "NamespaceProvider")
 
-const namespaceProvider_namespaceQualifier = new Property(namespaceProvider, "namespaceQualifier", Multiplicity.Single)
+const namespaceProvider_namespaceQualifier = new Property(namespaceProvider, "namespaceQualifier")
     .isDerived()
     .ofType(stringDatatype)
 
@@ -35,14 +34,14 @@ namespaceProvider.havingFeatures(namespaceProvider_namespaceQualifier)
 
 const namespacedEntity = new Concept(lioncore, "NamespacedEntity", true)
 
-const namespacedEntity_simpleName = new Property(namespacedEntity, "simpleName", Multiplicity.Single)
+const namespacedEntity_simpleName = new Property(namespacedEntity, "simpleName")
     .ofType(stringDatatype)
 
-const namespacedEntity_qualifiedName = new Property(namespacedEntity, "qualifiedName", Multiplicity.Single)
+const namespacedEntity_qualifiedName = new Property(namespacedEntity, "qualifiedName")
     .isDerived()
     .ofType(stringDatatype)
 
-const namespacedEntity_container = new Reference(namespacedEntity, "container", Multiplicity.Single)
+const namespacedEntity_container = new Reference(namespacedEntity, "container")
     .ofType(namespaceProvider)
 
 namespacedEntity.havingFeatures(
@@ -55,12 +54,16 @@ namespacedEntity.havingFeatures(
 const metamodel = new Concept(lioncore, "Metamodel", false)
     .implementing(namespaceProvider)
 
-const metamodel_qualifiedName = new Property(metamodel, "qualifiedName", Multiplicity.Single)
+const metamodel_qualifiedName = new Property(metamodel, "qualifiedName")
     .ofType(stringDatatype)
 
-const metamodel_elements = new Containment (metamodel, "elements", Multiplicity.ZeroOrMore)
+const metamodel_elements = new Containment (metamodel, "elements")
+    .isOptional()
+    .isMultiple()
 
-const metamodel_dependsOn = new Reference(metamodel, "dependsOn", Multiplicity.ZeroOrMore)
+const metamodel_dependsOn = new Reference(metamodel, "dependsOn")
+    .isOptional()
+    .isMultiple()
     .ofType(metamodel)
 
 metamodel.havingFeatures(metamodel_qualifiedName, metamodel_elements, metamodel_dependsOn)
@@ -74,9 +77,13 @@ metamodel_elements.ofType(metamodelElement)
 const featuresContainer = new Concept(lioncore, "FeaturesContainer", true, metamodelElement)
     .implementing(namespaceProvider)
 
-const featuresContainer_features = new Containment(featuresContainer, "features", Multiplicity.ZeroOrMore)
+const featuresContainer_features = new Containment(featuresContainer, "features")
+    .isOptional()
+    .isMultiple()
 
-const featuresContainer_allFeatures = new Reference(featuresContainer, "allFeatures", Multiplicity.ZeroOrMore)
+const featuresContainer_allFeatures = new Reference(featuresContainer, "allFeatures")
+    .isOptional()
+    .isMultiple()
     .isDerived()
 
 featuresContainer.havingFeatures(
@@ -87,13 +94,17 @@ featuresContainer.havingFeatures(
 
 const concept = new Concept(lioncore, "Concept", false, featuresContainer)
 
-const concept_abstract = new Property(concept, "abstract", Multiplicity.Single)
+const concept_abstract = new Property(concept, "abstract")
     .ofType(booleanDatatype)
 
-const concept_extends = new Reference(concept, "extends", Multiplicity.Optional)
+const concept_extends = new Reference(concept, "extends")
+    .isOptional()
     .ofType(concept)
 
-const concept_implements = new Reference(concept, "implements", Multiplicity.ZeroOrMore)
+const concept_implements = new Reference(concept, "implements")
+    .isOptional()
+    .isMultiple()
+
 
 concept.havingFeatures(
     concept_abstract,
@@ -104,7 +115,9 @@ concept.havingFeatures(
 
 const conceptInterface = new Concept(lioncore, "ConceptInterface", false, featuresContainer)
 
-const conceptInterface_extends = new Reference(conceptInterface, "extends", Multiplicity.ZeroOrMore)
+const conceptInterface_extends = new Reference(conceptInterface, "extends")
+    .isOptional()
+    .isMultiple()
     .ofType(conceptInterface)
 
 concept_implements.ofType(conceptInterface)
@@ -114,10 +127,11 @@ conceptInterface.havingFeatures(conceptInterface_extends)
 const annotation = new Concept(lioncore, "Annotation", false, featuresContainer)
 // Note: annotations can be defined on M2-level, and then instantiated on M1-level.
 
-const annotation_platformSpecific = new Property(annotation, "platformSpecific", Multiplicity.Optional)
+const annotation_platformSpecific = new Property(annotation, "platformSpecific")
+    .isOptional()
     .ofType(stringDatatype)
 
-const annotation_target = new Reference(annotation, "target", Multiplicity.Single)
+const annotation_target = new Reference(annotation, "target")
     .ofType(featuresContainer)
 
 annotation.havingFeatures(
@@ -126,25 +140,16 @@ annotation.havingFeatures(
 )
 
 
-const multiplicity = new Enumeration(lioncore, "Multiplicity")
-multiplicity.literals.push(
-    new EnumerationLiteral(multiplicity, "Optional"),
-    new EnumerationLiteral(multiplicity, "Single"),
-    new EnumerationLiteral(multiplicity, "ZeroOrMore"),
-    new EnumerationLiteral(multiplicity, "OneOrMore")
-)
-
-
 const feature = new Concept(lioncore, "Feature", true, namespacedEntity)
 
-const feature_multiplicity = new Property(feature, "multiplicity", Multiplicity.Single)
-    .ofType(multiplicity)
+const feature_optional = new Property(feature, "optional")
+    .ofType(booleanDatatype)
 
-const feature_derived = new Property(feature, "derived", Multiplicity.Single)
+const feature_derived = new Property(feature, "derived")
     .ofType(booleanDatatype)
 
 feature.havingFeatures(
-    feature_multiplicity,
+    feature_optional,
     feature_derived
 )
 
@@ -154,15 +159,22 @@ featuresContainer_features.type = feature
 
 const link = new Concept(lioncore, "Link", true, feature)
 
-const link_type = new Reference(link, "type", Multiplicity.Single)
+const link_multiple = new Property(link, "multiple")
+    .ofType(booleanDatatype)
+
+const link_type = new Reference(link, "type")
     .ofType(featuresContainer)
 
-link.havingFeatures(link_type)
+link.havingFeatures(
+    link_multiple,
+    link_type
+)
 
 
 const reference = new Concept(lioncore, "Reference", false, link)
 
-const reference_specializes = new Reference(reference, "specializes", Multiplicity.Optional)
+const reference_specializes = new Reference(reference, "specializes")
+    .isOptional()
     .ofType(reference)
 
 reference.havingFeatures(reference_specializes)
@@ -170,7 +182,7 @@ reference.havingFeatures(reference_specializes)
 
 const property = new Concept(lioncore, "Property", false, feature)
 
-const property_type = new Reference(property, "type", Multiplicity.Single)
+const property_type = new Reference(property, "type")
 
 property.havingFeatures(property_type)
 
@@ -184,7 +196,7 @@ const primitiveType = new Concept(lioncore, "PrimitiveType", false, datatype)
 
 const typedef = new Concept(lioncore, "Typedef", false, datatype)
 
-const typedef_constraints = new Reference(typedef, "constraints", Multiplicity.Single)
+const typedef_constraints = new Reference(typedef, "constraints")
     .ofType(primitiveType)
 
 typedef.havingFeatures(typedef_constraints)
@@ -192,7 +204,8 @@ typedef.havingFeatures(typedef_constraints)
 
 const containment = new Concept(lioncore, "Containment", false, link)
 
-const containment_specializes = new Reference(containment, "specializes", Multiplicity.Optional)
+const containment_specializes = new Reference(containment, "specializes")
+    .isOptional()
     .ofType(containment)
 
 containment.havingFeatures(containment_specializes)
@@ -201,7 +214,8 @@ containment.havingFeatures(containment_specializes)
 const enumeration = new Concept(lioncore, "Enumeration", false, datatype)
     .implementing(namespaceProvider)
 
-const enumeration_literals = new Containment(enumeration, "literals", Multiplicity.ZeroOrMore)
+const enumeration_literals = new Containment(enumeration, "literals")
+    .isMultiple()
 
 const enumerationLiteral = new Concept(lioncore, "EnumerationLiteral", false, namespacedEntity)
 
@@ -226,7 +240,6 @@ lioncore.havingElements(
     primitiveType,
     typedef,
     containment,
-    multiplicity,
     enumeration,
     // built-ins:
     booleanDatatype,

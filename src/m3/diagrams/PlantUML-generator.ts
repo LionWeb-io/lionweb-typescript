@@ -7,12 +7,10 @@ import {
     Link,
     Metamodel,
     MetamodelElement,
-    Multiplicity,
     PrimitiveType
 } from "../types.ts"
 import {
     elementsSortedByName,
-    isPlural,
     nonRelationalFeatures,
     relationsOf,
     type
@@ -81,10 +79,10 @@ ${indented(nonRelationalFeatures_.map(generateForNonRelationalFeature))}
 
 
 const generateForNonRelationalFeature = (feature: Feature) => {
-    const {simpleName, multiplicity, derived} = feature
-    const isListy = isPlural(multiplicity)
+    const {simpleName, optional, derived} = feature
+    const multiple = feature instanceof Link && feature.multiple
     const type_ = type(feature)
-    return `${simpleName}${derived ? `()` : ``}: ${isListy ? `List<` : ``}${type_ === unresolved ? `???` : type_.simpleName}${isPlural(multiplicity) ? `>` : ``}${multiplicity === Multiplicity.Optional ? `?` : ``}`
+    return `${simpleName}${derived ? `()` : ``}: ${multiple ? `List<` : ``}${type_ === unresolved ? `???` : type_.simpleName}${multiple ? `>` : ``}${(optional && !multiple) ? `?` : ``}`
 }
 
 
@@ -123,18 +121,11 @@ const generateForRelationsOf = (metamodelElement: MetamodelElement) => {
 
 
 const generateForRelation = ({simpleName: leftName}: MetamodelElement, relation: Link) => {
-    const {simpleName: relationName, multiplicity, type} = relation
+    const {simpleName: relationName, type, optional, multiple} = relation
     const rightName = type === unresolved ? `???` : type.simpleName
     const isContainment = relation instanceof Containment
     const leftMultiplicity = isContainment ? `1` : `*`
-    const rightMultiplicity = (() => {
-        switch (multiplicity) {
-            case Multiplicity.OneOrMore: return "*"
-            case Multiplicity.Optional: return "0..1"
-            case Multiplicity.Single: return "1"
-            case Multiplicity.ZeroOrMore: return "*"
-        }
-    })()
+    const rightMultiplicity = multiple ? "*" : (optional ? "0..1" : "1")
     return `${leftName} "${leftMultiplicity}" ${isContainment ? `o` : ``}-- "${rightMultiplicity}" ${rightName}: ${relationName}`
 }
 
