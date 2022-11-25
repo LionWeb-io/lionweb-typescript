@@ -81,13 +81,6 @@ class ConceptInterface extends FeaturesContainer {
     }
 }
 
-class Annotation extends FeaturesContainer {
-    platformSpecific?: string
-    allFeatures(): Feature[] {
-        return this.features
-    }
-}
-
 abstract class Feature extends NamespacedEntity {
     optional /*: boolean */ = false
     derived /*: boolean */ = false
@@ -163,7 +156,6 @@ type M3Concept =
     | Metamodel
     | Concept
     | ConceptInterface
-    | Annotation
     | Property
     | Containment
     | Reference
@@ -175,7 +167,6 @@ type M3Concept =
 
 export {
     FeaturesContainer,
-    Annotation,
     Concept,
     ConceptInterface,
     Containment,

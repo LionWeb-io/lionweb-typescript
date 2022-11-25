@@ -3,10 +3,6 @@
 ' qualified name: "lioncore"
 
 
-class Annotation extends FeaturesContainer {
-  platformSpecific: String?
-}
-
 class Concept extends FeaturesContainer {
   abstract: boolean
 }
@@ -62,8 +58,6 @@ class Typedef extends Datatype
 
 
 ' relations:
-
-Annotation "*" -- "1" FeaturesContainer: target
 
 Concept "*" -- "0..1" Concept: extends
 Concept "*" -- "*" ConceptInterface: implements
