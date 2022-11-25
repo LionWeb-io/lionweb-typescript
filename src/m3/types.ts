@@ -3,7 +3,7 @@
  * A LIonWeb metamodel (at the M2 meta level) can be represented as an instance of the {@link Metamodel} type.
  */
 
-import {isRef, SingleRef, unresolved} from "../references.ts"
+import {SingleRef, unresolved} from "../references.ts"
 import {allFeaturesOf} from "./functions.ts"
 
 

@@ -28,13 +28,11 @@ export const isPlural = (multiplicity: Multiplicity): boolean =>
     ||  multiplicity === Multiplicity.OneOrMore
 
 
-type Typed = Link | Property
-
 /**
  * @return The type of the given {@link Feature}
  */
 export const type = (feature: Feature): FeaturesContainer | Datatype | typeof unresolved =>
-    (feature as Typed).type
+    (feature as Link | Property).type
 
 
 const isRelational = (feature: Feature): feature is Link =>
@@ -53,6 +51,11 @@ export const relationsOf = (metamodelElement: MetamodelElement): Link[] =>
         : []
 
 
+/**
+ * @return The “things”, i.e. {@link M3Concept}s, contained by the given “thing”.
+ *  These can be: {@link MetamodelElement}s, {@link Feature}s, {@link EnumerationLiteral}
+ *  (and all their sub types).
+ */
 export const containeds = (thing: M3Concept): M3Concept[] => {
     if (thing instanceof Metamodel) {
         return thing.elements
