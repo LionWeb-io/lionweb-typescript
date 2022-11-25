@@ -14,18 +14,12 @@ import {
     M3Concept,
     Metamodel,
     MetamodelElement,
-    Multiplicity,
     Property
 } from "./types.ts"
 import {unresolved} from "../references.ts"
 import {sortByStringKey} from "../utils/sorting.ts"
 import {cycleWith} from "../utils/cycles.ts"
 import {flatmapNonCyclingFollowing} from "../utils/recursion.ts"
-
-
-export const isPlural = (multiplicity: Multiplicity): boolean =>
-        multiplicity === Multiplicity.ZeroOrMore
-    ||  multiplicity === Multiplicity.OneOrMore
 
 
 /**

@@ -20,7 +20,7 @@ abstract class Datatype extends MetamodelElement
 class Enumeration extends Datatype implements NamespaceProvider
 
 abstract class Feature extends NamespacedEntity {
-  multiplicity: Multiplicity
+  optional: boolean
   derived: boolean
 }
 
@@ -28,20 +28,15 @@ abstract class FeaturesContainer extends MetamodelElement implements NamespacePr
   allFeatures(): List<Feature>
 }
 
-abstract class Link extends Feature
+abstract class Link extends Feature {
+  multiple: boolean
+}
 
 class Metamodel implements NamespaceProvider {
   qualifiedName: String
 }
 
 abstract class MetamodelElement extends NamespacedEntity
-
-enum Multiplicity {
-  Optional
-  Single
-  ZeroOrMore
-  OneOrMore
-}
 
 interface NamespaceProvider {
   namespaceQualifier(): String
