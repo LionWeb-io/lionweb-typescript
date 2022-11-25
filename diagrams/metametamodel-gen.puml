@@ -24,6 +24,8 @@ abstract class FeaturesContainer extends MetamodelElement implements NamespacePr
   allFeatures(): List<Feature>
 }
 
+' primitive type: "JSON"
+
 abstract class Link extends Feature {
   multiple: boolean
 }
@@ -54,6 +56,8 @@ class Reference extends Link
 class Typedef extends Datatype
 
 ' primitive type: "boolean"
+
+' primitive type: "int"
 
 
 
