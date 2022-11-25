@@ -124,22 +124,6 @@ concept_implements.ofType(conceptInterface)
 conceptInterface.havingFeatures(conceptInterface_extends)
 
 
-const annotation = new Concept(lioncore, "Annotation", false, featuresContainer)
-// Note: annotations can be defined on M2-level, and then instantiated on M1-level.
-
-const annotation_platformSpecific = new Property(annotation, "platformSpecific")
-    .isOptional()
-    .ofType(stringDatatype)
-
-const annotation_target = new Reference(annotation, "target")
-    .ofType(featuresContainer)
-
-annotation.havingFeatures(
-    annotation_platformSpecific,
-    annotation_target
-)
-
-
 const feature = new Concept(lioncore, "Feature", true, namespacedEntity)
 
 const feature_optional = new Property(feature, "optional")
@@ -231,7 +215,6 @@ lioncore.havingElements(
     featuresContainer,
     concept,
     conceptInterface,
-    annotation,
     feature,
     link,
     reference,

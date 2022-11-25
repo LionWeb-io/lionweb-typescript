@@ -1,11 +1,4 @@
-import {
-    Annotation,
-    Concept,
-    ConceptInterface,
-    Link,
-    M3Concept,
-    Metamodel
-} from "./types.ts"
+import {Concept, ConceptInterface, M3Concept, Metamodel} from "./types.ts"
 import {flatMap, inheritedCycleWith} from "./functions.ts"
 
 
@@ -40,12 +33,6 @@ export const issuesMetamodel = (metamodel: Metamodel): Issue[] =>
                 if (nonDerivedFeatures.length > 0) {
                     const isPlural = nonDerivedFeatures.length > 1
                     issue(`The features of a ConceptInterface must all be derived, but the following feature${isPlural ? `s` : ``} of ${t.qualifiedName()} ${isPlural ? `are` : `is`} not: ${nonDerivedFeatures.map(({simpleName}) => simpleName).join(", ")}.`)
-                }
-            }
-
-            if (t instanceof Link) {
-                if (t.type instanceof Annotation) {
-                    issue(`An Annotation can't be the type of a ${t.constructor.name}, but the type of ${t.qualifiedName()} is ${t.type.qualifiedName()}.`)
                 }
             }
 
