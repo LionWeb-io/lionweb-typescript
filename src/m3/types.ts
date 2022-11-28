@@ -4,6 +4,7 @@
  */
 
 import {SingleRef, unresolved} from "../references.ts"
+import {Id, Node} from "../types.ts"
 import {allFeaturesOf} from "./functions.ts"
 
 
@@ -11,23 +12,27 @@ interface NamespaceProvider {
     namespaceQualifier(): string
 }
 
-abstract class NamespacedEntity {
+abstract class NamespacedEntity implements Node {
     simpleName: string
+    id: Id
     container: NamespaceProvider
-    protected constructor(container: NamespaceProvider, simpleName: string) {
+    protected constructor(container: NamespaceProvider, simpleName: string, id: Id) {
         this.container = container
         this.simpleName = simpleName
+        this.id = id
     }
     qualifiedName() {
         return `${this.container.namespaceQualifier()}.${this.simpleName}`
     }
 }
 
-class Metamodel implements NamespaceProvider {
+class Metamodel implements NamespaceProvider, Node {
     qualifiedName: string
+    id: Id
     elements: MetamodelElement[] = []   // (containment)
-    constructor(qualifiedName: string) {
+    constructor(qualifiedName: string, id: Id) {
         this.qualifiedName = qualifiedName
+        this.id = id
     }
     namespaceQualifier(): string {
         return this.qualifiedName
@@ -39,8 +44,8 @@ class Metamodel implements NamespaceProvider {
 }
 
 abstract class MetamodelElement extends NamespacedEntity {
-    constructor(metamodel: Metamodel, simpleName: string) {
-        super(metamodel, simpleName)
+    constructor(metamodel: Metamodel, simpleName: string, id: Id) {
+        super(metamodel, simpleName, id)
     }
 }
 
@@ -60,8 +65,8 @@ class Concept extends FeaturesContainer {
     abstract: boolean
     extends?: SingleRef<Concept>    // (reference)
     implements: ConceptInterface[] = []  // (reference)
-    constructor(metamodel: Metamodel, simpleName: string, abstract: boolean, extends_?: SingleRef<Concept>) {
-        super(metamodel, simpleName)
+    constructor(metamodel: Metamodel, simpleName: string, id: Id, abstract: boolean, extends_?: SingleRef<Concept>) {
+        super(metamodel, simpleName, id)
         this.abstract = abstract
         this.extends = extends_
     }
@@ -84,8 +89,8 @@ class ConceptInterface extends FeaturesContainer {
 abstract class Feature extends NamespacedEntity {
     optional /*: boolean */ = false
     derived /*: boolean */ = false
-    constructor(featuresContainer: FeaturesContainer, simpleName: string) {
-        super(featuresContainer, simpleName)
+    constructor(featuresContainer: FeaturesContainer, simpleName: string, id: Id) {
+        super(featuresContainer, simpleName, id)
     }
     isDerived() {
         this.derived = true
@@ -143,8 +148,8 @@ class Enumeration extends Datatype implements NamespaceProvider {
 }
 
 class EnumerationLiteral extends NamespacedEntity {
-    constructor(enumeration: Enumeration, simpleName: string) {
-        super(enumeration, simpleName)
+    constructor(enumeration: Enumeration, simpleName: string, id: Id) {
+        super(enumeration, simpleName, id)
     }
 }
 
