@@ -177,14 +177,14 @@ const property_type = new Reference(property, "type")
 property.havingFeatures(property_type)
 
 
-const datatype = new Concept(lioncore, "Datatype", true, metamodelElement)
-property_type.ofType(datatype)
+const dataType = new Concept(lioncore, "DataType", true, metamodelElement)
+property_type.ofType(dataType)
 
 
-const primitiveType = new Concept(lioncore, "PrimitiveType", false, datatype)
+const primitiveType = new Concept(lioncore, "PrimitiveType", false, dataType)
 
 
-const typedef = new Concept(lioncore, "Typedef", false, datatype)
+const typedef = new Concept(lioncore, "Typedef", false, dataType)
 
 const typedef_constraints = new Reference(typedef, "constraints")
     .ofType(primitiveType)
@@ -201,7 +201,7 @@ const containment_specializes = new Reference(containment, "specializes")
 containment.havingFeatures(containment_specializes)
 
 
-const enumeration = new Concept(lioncore, "Enumeration", false, datatype)
+const enumeration = new Concept(lioncore, "Enumeration", false, dataType)
     .implementing(namespaceProvider)
 
 const enumeration_literals = new Containment(enumeration, "literals")
@@ -225,7 +225,7 @@ lioncore.havingElements(
     link,
     reference,
     property,
-    datatype,
+    dataType,
     primitiveType,
     typedef,
     containment,
