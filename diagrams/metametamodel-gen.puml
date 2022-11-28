@@ -11,9 +11,9 @@ class ConceptInterface extends FeaturesContainer
 
 class Containment extends Link
 
-abstract class Datatype extends MetamodelElement
+abstract class DataType extends MetamodelElement
 
-class Enumeration extends Datatype implements NamespaceProvider
+class Enumeration extends DataType implements NamespaceProvider
 
 abstract class Feature extends NamespacedEntity {
   optional: boolean
@@ -45,7 +45,7 @@ abstract class NamespacedEntity {
   qualifiedName(): String
 }
 
-class PrimitiveType extends Datatype
+class PrimitiveType extends DataType
 
 class Property extends Feature
 
@@ -53,7 +53,7 @@ class Reference extends Link
 
 ' primitive type: "String"
 
-class Typedef extends Datatype
+class Typedef extends DataType
 
 ' primitive type: "boolean"
 
@@ -81,7 +81,7 @@ Metamodel "*" -- "*" Metamodel: dependsOn
 
 NamespacedEntity "*" -- "1" NamespaceProvider: container
 
-Property "*" -- "1" Datatype: type
+Property "*" -- "1" DataType: type
 
 Reference "*" -- "0..1" Reference: specializes
 
