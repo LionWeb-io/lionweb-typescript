@@ -184,14 +184,6 @@ property_type.ofType(dataType)
 const primitiveType = new Concept(lioncore, "PrimitiveType", false, dataType)
 
 
-const typedef = new Concept(lioncore, "Typedef", false, dataType)
-
-const typedef_constraints = new Reference(typedef, "constraints")
-    .ofType(primitiveType)
-
-typedef.havingFeatures(typedef_constraints)
-
-
 const containment = new Concept(lioncore, "Containment", false, link)
 
 const containment_specializes = new Reference(containment, "specializes")
@@ -227,7 +219,6 @@ lioncore.havingElements(
     property,
     dataType,
     primitiveType,
-    typedef,
     containment,
     enumeration,
     // built-ins:

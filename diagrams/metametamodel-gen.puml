@@ -53,8 +53,6 @@ class Reference extends Link
 
 ' primitive type: "String"
 
-class Typedef extends DataType
-
 ' primitive type: "boolean"
 
 ' primitive type: "int"
@@ -84,8 +82,6 @@ NamespacedEntity "*" -- "1" NamespaceProvider: container
 Property "*" -- "1" DataType: type
 
 Reference "*" -- "0..1" Reference: specializes
-
-Typedef "*" -- "1" PrimitiveType: constraints
 
 
 @enduml
