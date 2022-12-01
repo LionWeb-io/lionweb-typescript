@@ -8,6 +8,9 @@ import {
 } from "../diagrams/PlantUML-generator.ts"
 import {checkReferences} from "../reference-checker.ts"
 import {issuesMetamodel} from "../constraints.ts"
+import {serialize} from "../serializer.ts"
+import {deserialize} from "../deserializer.ts"
+import {asPrettyString} from "../../utils/json.ts"
 
 
 Deno.test("meta-circularity (lioncore)", async (tctx) => {
@@ -36,6 +39,15 @@ Deno.test("meta-circularity (lioncore)", async (tctx) => {
             })
         }
         assertEquals(issues.length, 0, "number of expected constraint violations -- see above for the issues")
+    })
+
+    await tctx.step("serialize and deserialize (no assertions)", async () => {
+        const serialization = serialize(lioncore)
+        await Deno.writeTextFileSync("tmp/lioncore.json", asPrettyString(serialization))
+        const deserialization = deserialize(serialization)
+        await Deno.writeTextFileSync("diagrams/metametamodel-deserred.puml", generatePlantUmlForMetamodel(deserialization))
+        const reserialization = serialize(deserialization)
+        await Deno.writeTextFileSync("tmp/lioncore-reserred.json", asPrettyString(serialization))
     })
 
 })
