@@ -66,8 +66,6 @@ Concept "*" -- "*" ConceptInterface: implements
 
 ConceptInterface "*" -- "*" ConceptInterface: extends
 
-Containment "*" -- "0..1" Containment: specializes
-
 Enumeration "1" o-- "*" EnumerationLiteral: literals
 
 FeaturesContainer "1" o-- "*" Feature: features
@@ -80,8 +78,6 @@ Metamodel "*" -- "*" Metamodel: dependsOn
 NamespacedEntity "*" -- "1" NamespaceProvider: container
 
 Property "*" -- "1" DataType: type
-
-Reference "*" -- "0..1" Reference: specializes
 
 
 @enduml

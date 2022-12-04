@@ -154,12 +154,6 @@ link.havingFeatures(
 
 const reference = factory.concept("Reference", false, link)
 
-const reference_specializes = factory.reference(reference, "specializes")
-    .isOptional()
-    .ofType(reference)
-
-reference.havingFeatures(reference_specializes)
-
 
 const property = factory.concept("Property", false, feature)
 
@@ -176,12 +170,6 @@ const primitiveType = factory.concept("PrimitiveType", false, dataType)
 
 
 const containment = factory.concept("Containment", false, link)
-
-const containment_specializes = factory.reference(containment, "specializes")
-    .isOptional()
-    .ofType(containment)
-
-containment.havingFeatures(containment_specializes)
 
 
 const enumeration = factory.concept("Enumeration", false, dataType)
