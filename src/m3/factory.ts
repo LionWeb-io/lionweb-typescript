@@ -10,8 +10,7 @@ import {
     Metamodel,
     PrimitiveType,
     Property,
-    Reference,
-    Typedef
+    Reference
 } from "./types.ts"
 import {SingleRef} from "../references.ts"
 
@@ -47,10 +46,6 @@ export class MetamodelFactory {
 
     primitiveType(simpleName: string) {
         return new PrimitiveType(this.metamodel, simpleName, id())
-    }
-
-    typedef(simpleName: string) {
-        return new Typedef(this.metamodel, simpleName, id())
     }
 
 

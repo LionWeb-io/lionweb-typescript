@@ -116,11 +116,9 @@ abstract class Link extends Feature {
 }
 
 class Reference extends Link {
-    specializes: Reference[] = []   // (reference)
 }
 
 class Containment extends Link {
-    specializes: Containment[] = [] // (reference)
 }
 
 class Property extends Feature {
@@ -133,10 +131,6 @@ class Property extends Feature {
 
 abstract class Datatype extends MetamodelElement {}
 
-// TODO  -> TypeDefinition, because it'd be the only shortened name
-class Typedef extends Datatype {
-    constraints: PrimitiveType[] = [] // (reference)
-}
 
 class PrimitiveType extends Datatype {}
 
@@ -165,7 +159,6 @@ type M3Concept =
     | Containment
     | Reference
     | PrimitiveType
-    | Typedef
     | Enumeration
     | EnumerationLiteral
 
@@ -183,8 +176,7 @@ export {
     Metamodel,
     PrimitiveType,
     Property,
-    Reference,
-    Typedef
+    Reference
 }
 export type {
     M3Concept,
