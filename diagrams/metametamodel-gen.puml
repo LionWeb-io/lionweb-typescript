@@ -1,4 +1,5 @@
 @startuml
+hide empty members
 
 ' qualified name: "lioncore"
 
@@ -17,7 +18,7 @@ class Enumeration extends DataType implements NamespaceProvider
 
 abstract class Feature extends NamespacedEntity {
   optional: boolean
-  derived: boolean
+  #Orange derived: boolean
 }
 
 abstract class FeaturesContainer extends MetamodelElement implements NamespaceProvider {
@@ -80,4 +81,7 @@ NamespacedEntity "*" -- "1" NamespaceProvider: container
 Property "*" -- "1" DataType: type
 
 
+legend
+  <#LightGray,#LightGray>| <#Orange>Disputed |
+end legend
 @enduml

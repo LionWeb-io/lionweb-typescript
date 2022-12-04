@@ -7,7 +7,8 @@ import {
     Link,
     Metamodel,
     MetamodelElement,
-    PrimitiveType
+    PrimitiveType,
+    Property
 } from "../types.ts"
 import {
     elementsSortedByName,
@@ -24,6 +25,7 @@ const indented = (lines: string[]) =>
 
 export const generatePlantUmlForMetamodel = ({qualifiedName, elements}: Metamodel) =>
 `@startuml
+hide empty members
 
 ' qualified name: "${qualifiedName}"
 
@@ -34,6 +36,9 @@ ${elementsSortedByName(elements).map(generateForMetamodelElement).join("\n")}
 ' relations:
 
 ${elementsSortedByName(elements).map((element) => generateForRelationsOf(element)).join("")}
+legend
+  <#LightGray,#LightGray>| <#Orange>Disputed |
+end legend
 @enduml
 `
 
@@ -82,7 +87,7 @@ const generateForNonRelationalFeature = (feature: Feature) => {
     const {simpleName, optional, derived} = feature
     const multiple = feature instanceof Link && feature.multiple
     const type_ = type(feature)
-    return `${simpleName}${derived ? `()` : ``}: ${multiple ? `List<` : ``}${type_ === unresolved ? `???` : type_.simpleName}${multiple ? `>` : ``}${(optional && !multiple) ? `?` : ``}`
+    return `${(feature instanceof Property && feature.disputed) ? "#Orange ": ""}${simpleName}${derived ? `()` : ``}: ${multiple ? `List<` : ``}${type_ === unresolved ? `???` : type_.simpleName}${multiple ? `>` : ``}${(optional && !multiple) ? `?` : ``}`
 }
 
 
