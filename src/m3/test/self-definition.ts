@@ -201,6 +201,7 @@ lioncore.havingElements(
     primitiveType,
     containment,
     enumeration,
+    enumerationLiteral,
     // built-ins:
     stringDatatype,
     booleanDatatype,
