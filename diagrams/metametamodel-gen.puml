@@ -16,6 +16,8 @@ abstract class DataType extends MetamodelElement
 
 class Enumeration extends DataType implements NamespaceProvider
 
+class EnumerationLiteral extends NamespacedEntity
+
 abstract class Feature extends NamespacedEntity {
   optional: boolean
   #Orange derived: boolean
