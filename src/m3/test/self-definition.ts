@@ -128,6 +128,7 @@ const feature_optional = factory.property(feature, "optional")
 
 const feature_derived = factory.property(feature, "derived")
     .ofType(booleanDatatype)
+    .isDisputed()
 
 feature.havingFeatures(
     feature_optional,
