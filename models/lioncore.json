@@ -1,0 +1,645 @@
+[
+  {
+    "type": "Metamodel",
+    "id": "1",
+    "properties": {
+      "qualifiedName": "LIonCore"
+    },
+    "children": {
+      "elements": [
+        "8",
+        "6",
+        "12",
+        "16",
+        "17",
+        "20",
+        "24",
+        "26",
+        "29",
+        "32",
+        "33",
+        "35",
+        "36",
+        "37",
+        "38",
+        "40",
+        "2",
+        "3",
+        "4",
+        "5"
+      ]
+    }
+  },
+  {
+    "type": "Concept",
+    "id": "8",
+    "properties": {
+      "simpleName": "NamespacedEntity",
+      "abstract": true
+    },
+    "children": {
+      "features": [
+        "9",
+        "10",
+        "11"
+      ]
+    },
+    "references": {
+      "extends": [],
+      "implements": []
+    }
+  },
+  {
+    "type": "Property",
+    "id": "9",
+    "properties": {
+      "simpleName": "simpleName",
+      "optional": false,
+      "derived": false,
+      "disputed": false
+    },
+    "references": {
+      "type": [
+        "2"
+      ]
+    }
+  },
+  {
+    "type": "Property",
+    "id": "10",
+    "properties": {
+      "simpleName": "qualifiedName",
+      "optional": false,
+      "derived": true,
+      "disputed": false
+    },
+    "references": {
+      "type": [
+        "2"
+      ]
+    }
+  },
+  {
+    "type": "Reference",
+    "id": "11",
+    "properties": {
+      "simpleName": "container",
+      "optional": false,
+      "derived": false,
+      "multiple": false
+    },
+    "references": {
+      "type": [
+        "6"
+      ]
+    }
+  },
+  {
+    "type": "ConceptInterface",
+    "id": "6",
+    "properties": {
+      "simpleName": "NamespaceProvider"
+    },
+    "children": {
+      "features": [
+        "7"
+      ]
+    },
+    "references": {
+      "extends": []
+    }
+  },
+  {
+    "type": "Property",
+    "id": "7",
+    "properties": {
+      "simpleName": "namespaceQualifier",
+      "optional": false,
+      "derived": true,
+      "disputed": false
+    },
+    "references": {
+      "type": [
+        "2"
+      ]
+    }
+  },
+  {
+    "type": "Concept",
+    "id": "12",
+    "properties": {
+      "simpleName": "Metamodel",
+      "abstract": false
+    },
+    "children": {
+      "features": [
+        "13",
+        "14",
+        "15"
+      ]
+    },
+    "references": {
+      "extends": [],
+      "implements": [
+        "6"
+      ]
+    }
+  },
+  {
+    "type": "Property",
+    "id": "13",
+    "properties": {
+      "simpleName": "qualifiedName",
+      "optional": false,
+      "derived": false,
+      "disputed": false
+    },
+    "references": {
+      "type": [
+        "2"
+      ]
+    }
+  },
+  {
+    "type": "Containment",
+    "id": "14",
+    "properties": {
+      "simpleName": "elements",
+      "optional": true,
+      "derived": false,
+      "multiple": true
+    },
+    "references": {
+      "type": [
+        "16"
+      ]
+    }
+  },
+  {
+    "type": "Reference",
+    "id": "15",
+    "properties": {
+      "simpleName": "dependsOn",
+      "optional": true,
+      "derived": false,
+      "multiple": true
+    },
+    "references": {
+      "type": [
+        "12"
+      ]
+    }
+  },
+  {
+    "type": "Concept",
+    "id": "16",
+    "properties": {
+      "simpleName": "MetamodelElement",
+      "abstract": true
+    },
+    "children": {
+      "features": []
+    },
+    "references": {
+      "extends": [
+        "8"
+      ],
+      "implements": []
+    }
+  },
+  {
+    "type": "Concept",
+    "id": "17",
+    "properties": {
+      "simpleName": "FeaturesContainer",
+      "abstract": true
+    },
+    "children": {
+      "features": [
+        "18",
+        "19"
+      ]
+    },
+    "references": {
+      "extends": [
+        "16"
+      ],
+      "implements": [
+        "6"
+      ]
+    }
+  },
+  {
+    "type": "Containment",
+    "id": "18",
+    "properties": {
+      "simpleName": "features",
+      "optional": true,
+      "derived": false,
+      "multiple": true
+    },
+    "references": {
+      "type": [
+        "26"
+      ]
+    }
+  },
+  {
+    "type": "Reference",
+    "id": "19",
+    "properties": {
+      "simpleName": "allFeatures",
+      "optional": true,
+      "derived": true,
+      "multiple": true
+    },
+    "references": {
+      "type": [
+        "26"
+      ]
+    }
+  },
+  {
+    "type": "Concept",
+    "id": "20",
+    "properties": {
+      "simpleName": "Concept",
+      "abstract": false
+    },
+    "children": {
+      "features": [
+        "21",
+        "22",
+        "23"
+      ]
+    },
+    "references": {
+      "extends": [
+        "17"
+      ],
+      "implements": []
+    }
+  },
+  {
+    "type": "Property",
+    "id": "21",
+    "properties": {
+      "simpleName": "abstract",
+      "optional": false,
+      "derived": false,
+      "disputed": false
+    },
+    "references": {
+      "type": [
+        "3"
+      ]
+    }
+  },
+  {
+    "type": "Reference",
+    "id": "22",
+    "properties": {
+      "simpleName": "extends",
+      "optional": true,
+      "derived": false,
+      "multiple": false
+    },
+    "references": {
+      "type": [
+        "20"
+      ]
+    }
+  },
+  {
+    "type": "Reference",
+    "id": "23",
+    "properties": {
+      "simpleName": "implements",
+      "optional": true,
+      "derived": false,
+      "multiple": true
+    },
+    "references": {
+      "type": [
+        "24"
+      ]
+    }
+  },
+  {
+    "type": "Concept",
+    "id": "24",
+    "properties": {
+      "simpleName": "ConceptInterface",
+      "abstract": false
+    },
+    "children": {
+      "features": [
+        "25"
+      ]
+    },
+    "references": {
+      "extends": [
+        "17"
+      ],
+      "implements": []
+    }
+  },
+  {
+    "type": "Reference",
+    "id": "25",
+    "properties": {
+      "simpleName": "extends",
+      "optional": true,
+      "derived": false,
+      "multiple": true
+    },
+    "references": {
+      "type": [
+        "24"
+      ]
+    }
+  },
+  {
+    "type": "Concept",
+    "id": "26",
+    "properties": {
+      "simpleName": "Feature",
+      "abstract": true
+    },
+    "children": {
+      "features": [
+        "27",
+        "28"
+      ]
+    },
+    "references": {
+      "extends": [
+        "8"
+      ],
+      "implements": []
+    }
+  },
+  {
+    "type": "Property",
+    "id": "27",
+    "properties": {
+      "simpleName": "optional",
+      "optional": false,
+      "derived": false,
+      "disputed": false
+    },
+    "references": {
+      "type": [
+        "3"
+      ]
+    }
+  },
+  {
+    "type": "Property",
+    "id": "28",
+    "properties": {
+      "simpleName": "derived",
+      "optional": false,
+      "derived": false,
+      "disputed": true
+    },
+    "references": {
+      "type": [
+        "3"
+      ]
+    }
+  },
+  {
+    "type": "Concept",
+    "id": "29",
+    "properties": {
+      "simpleName": "Link",
+      "abstract": true
+    },
+    "children": {
+      "features": [
+        "30",
+        "31"
+      ]
+    },
+    "references": {
+      "extends": [
+        "26"
+      ],
+      "implements": []
+    }
+  },
+  {
+    "type": "Property",
+    "id": "30",
+    "properties": {
+      "simpleName": "multiple",
+      "optional": false,
+      "derived": false,
+      "disputed": false
+    },
+    "references": {
+      "type": [
+        "3"
+      ]
+    }
+  },
+  {
+    "type": "Reference",
+    "id": "31",
+    "properties": {
+      "simpleName": "type",
+      "optional": false,
+      "derived": false,
+      "multiple": false
+    },
+    "references": {
+      "type": [
+        "17"
+      ]
+    }
+  },
+  {
+    "type": "Concept",
+    "id": "32",
+    "properties": {
+      "simpleName": "Reference",
+      "abstract": false
+    },
+    "children": {
+      "features": []
+    },
+    "references": {
+      "extends": [
+        "29"
+      ],
+      "implements": []
+    }
+  },
+  {
+    "type": "Concept",
+    "id": "33",
+    "properties": {
+      "simpleName": "Property",
+      "abstract": false
+    },
+    "children": {
+      "features": [
+        "34"
+      ]
+    },
+    "references": {
+      "extends": [
+        "26"
+      ],
+      "implements": []
+    }
+  },
+  {
+    "type": "Reference",
+    "id": "34",
+    "properties": {
+      "simpleName": "type",
+      "optional": false,
+      "derived": false,
+      "multiple": false
+    },
+    "references": {
+      "type": [
+        "35"
+      ]
+    }
+  },
+  {
+    "type": "Concept",
+    "id": "35",
+    "properties": {
+      "simpleName": "DataType",
+      "abstract": true
+    },
+    "children": {
+      "features": []
+    },
+    "references": {
+      "extends": [
+        "16"
+      ],
+      "implements": []
+    }
+  },
+  {
+    "type": "Concept",
+    "id": "36",
+    "properties": {
+      "simpleName": "PrimitiveType",
+      "abstract": false
+    },
+    "children": {
+      "features": []
+    },
+    "references": {
+      "extends": [
+        "35"
+      ],
+      "implements": []
+    }
+  },
+  {
+    "type": "Concept",
+    "id": "37",
+    "properties": {
+      "simpleName": "Containment",
+      "abstract": false
+    },
+    "children": {
+      "features": []
+    },
+    "references": {
+      "extends": [
+        "29"
+      ],
+      "implements": []
+    }
+  },
+  {
+    "type": "Concept",
+    "id": "38",
+    "properties": {
+      "simpleName": "Enumeration",
+      "abstract": false
+    },
+    "children": {
+      "features": [
+        "39"
+      ]
+    },
+    "references": {
+      "extends": [
+        "35"
+      ],
+      "implements": [
+        "6"
+      ]
+    }
+  },
+  {
+    "type": "Containment",
+    "id": "39",
+    "properties": {
+      "simpleName": "literals",
+      "optional": false,
+      "derived": false,
+      "multiple": true
+    },
+    "references": {
+      "type": [
+        "40"
+      ]
+    }
+  },
+  {
+    "type": "Concept",
+    "id": "40",
+    "properties": {
+      "simpleName": "EnumerationLiteral",
+      "abstract": false
+    },
+    "children": {
+      "features": []
+    },
+    "references": {
+      "extends": [
+        "8"
+      ],
+      "implements": []
+    }
+  },
+  {
+    "type": "PrimitiveType",
+    "id": "2",
+    "properties": {
+      "simpleName": "String"
+    }
+  },
+  {
+    "type": "PrimitiveType",
+    "id": "3",
+    "properties": {
+      "simpleName": "boolean"
+    }
+  },
+  {
+    "type": "PrimitiveType",
+    "id": "4",
+    "properties": {
+      "simpleName": "int"
+    }
+  },
+  {
+    "type": "PrimitiveType",
+    "id": "5",
+    "properties": {
+      "simpleName": "JSON"
+    }
+  }
+]

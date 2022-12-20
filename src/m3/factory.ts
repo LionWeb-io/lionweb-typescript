@@ -15,9 +15,7 @@ import {
 import {SingleRef} from "../references.ts"
 
 
-// (internal alias:)
-const id = nanoid
-
+export type IdGenerator = () => string
 
 /**
  * A factory that produces a {@link Metamodel} instance,
@@ -25,45 +23,47 @@ const id = nanoid
  */
 export class MetamodelFactory {
 
+    readonly id: IdGenerator
     readonly metamodel: Metamodel
 
-    constructor(qualifiedName: string) {
-        this.metamodel = new Metamodel(qualifiedName, id())
+    constructor(qualifiedName: string, id: IdGenerator = () => nanoid()) {
+        this.id = id
+        this.metamodel = new Metamodel(qualifiedName, this.id())
     }
 
 
     concept(simpleName: string, abstract: boolean, extends_?: SingleRef<Concept>) {
-        return new Concept(this.metamodel, simpleName, id(), abstract, extends_)
+        return new Concept(this.metamodel, simpleName, this.id(), abstract, extends_)
     }
 
     conceptInterface(simpleName: string) {
-        return new ConceptInterface(this.metamodel, simpleName, id())
+        return new ConceptInterface(this.metamodel, simpleName, this.id())
     }
 
     enumeration(simpleName: string) {
-        return new Enumeration(this.metamodel, simpleName, id())
+        return new Enumeration(this.metamodel, simpleName, this.id())
     }
 
     primitiveType(simpleName: string) {
-        return new PrimitiveType(this.metamodel, simpleName, id())
+        return new PrimitiveType(this.metamodel, simpleName, this.id())
     }
 
 
     containment(featuresContainer: FeaturesContainer, simpleName: string) {
-        return new Containment(featuresContainer, simpleName, id())
+        return new Containment(featuresContainer, simpleName, this.id())
     }
 
     property(featuresContainer: FeaturesContainer, simpleName: string) {
-        return new Property(featuresContainer, simpleName, id())
+        return new Property(featuresContainer, simpleName, this.id())
     }
 
     reference(featuresContainer: FeaturesContainer, simpleName: string) {
-        return new Reference(featuresContainer, simpleName, id())
+        return new Reference(featuresContainer, simpleName, this.id())
     }
 
 
     enumerationLiteral(enumeration: Enumeration, simpleName: string) {
-        return new EnumerationLiteral(enumeration, simpleName, id())
+        return new EnumerationLiteral(enumeration, simpleName, this.id())
     }
 
 }
