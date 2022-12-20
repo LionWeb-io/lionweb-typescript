@@ -4,7 +4,7 @@ import {MetamodelFactory} from "../factory.ts"
 // Definition of LIonCore in terms of itself.
 
 
-const factory = new MetamodelFactory("lioncore")
+const factory = new MetamodelFactory("LIonCore")
 export const lioncore = factory.metamodel
 
 

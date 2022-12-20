@@ -22,7 +22,7 @@ import {SerializedNode} from "./serializer.ts"
 export const deserialize = (serializedNodes: SerializedNode[]): Metamodel => {
     const metamodelSerNode = serializedNodes.find(({type}) => type === "Metamodel")
     if (metamodelSerNode === undefined) {
-        throw new Error(`could not deserialize: no instance of lioncore's Metamodel found in serialization`)
+        throw new Error(`could not deserialize: no instance of LIonCore's Metamodel found in serialization`)
     }
 
     const serializedNodeById: { [id: Id]: SerializedNode } = {}

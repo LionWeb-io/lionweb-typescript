@@ -13,7 +13,7 @@ import {deserialize} from "../deserializer.ts"
 import {asPrettyString} from "../../utils/json.ts"
 
 
-Deno.test("meta-circularity (lioncore)", async (tctx) => {
+Deno.test("meta-circularity (LIonCore)", async (tctx) => {
 
     await tctx.step("generate PlantUML diagram (no assertions)", async () => {
         await Deno.writeTextFileSync("diagrams/metametamodel-gen.puml", generatePlantUmlForMetamodel(lioncore))

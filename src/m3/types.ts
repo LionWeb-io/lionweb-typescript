@@ -1,5 +1,5 @@
 /**
- * TypeScript type definitions for the `lioncore` M3 (=meta-meta) model.
+ * TypeScript type definitions for the `LIonCore` M3 (=meta-meta) model.
  * A LIonWeb metamodel (at the M2 meta level) can be represented as an instance of the {@link Metamodel} type.
  */
 
@@ -159,7 +159,7 @@ class EnumerationLiteral extends NamespacedEntity {
 
 
 /**
- * Sum type of all lioncore type definitions whose meta-type is a concrete (thus: instantiable) Concept.
+ * Sum type of all LIonCore type definitions whose meta-type is a concrete (thus: instantiable) Concept.
  */
 type M3Concept =
     | Metamodel

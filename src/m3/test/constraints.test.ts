@@ -6,7 +6,7 @@ import {MetamodelFactory} from "../factory.ts"
 import {issuesMetamodel} from "../constraints.ts"
 
 
-Deno.test("constraints (lioncore)", async (tctx) => {
+Deno.test("constraints (LIonCore)", async (tctx) => {
 
     await tctx.step("check that a ConceptInterface only has derived features", async () => {
         const factory = new MetamodelFactory("metamodel")
