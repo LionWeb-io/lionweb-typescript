@@ -10,7 +10,9 @@ import {checkReferences} from "../reference-checker.ts"
 import {issuesMetamodel} from "../constraints.ts"
 import {serialize} from "../serializer.ts"
 import {deserialize} from "../deserializer.ts"
-import {asPrettyString} from "../../utils/json.ts"
+import {readFileAsJson, writeJsonAsFile} from "../../utils/json.ts"
+import {createJsonValidatorForSchema} from "./json-validator.ts"
+import {SerializedNode} from "../../serialization.ts"
 
 
 Deno.test("meta-circularity (LIonCore)", async (tctx) => {
@@ -44,13 +46,20 @@ Deno.test("meta-circularity (LIonCore)", async (tctx) => {
     const serializedLioncorePath = "models/lioncore.json"
     await tctx.step("serialize LIonCore (no assertions)", async () => {
         const serialization = serialize(lioncore)
-        await Deno.writeTextFileSync(serializedLioncorePath, asPrettyString(serialization))
+        await writeJsonAsFile(serializedLioncorePath, serialization)
     })
 
     await tctx.step("deserialize LIonCore", async () => {
-        const serialization = JSON.parse(Deno.readTextFileSync(serializedLioncorePath))
+        const serialization = await readFileAsJson(serializedLioncorePath) as SerializedNode[]
         const deserialization = deserialize(serialization)
         assertEquals(deserialization, lioncore)
+    })
+
+    await tctx.step("validate serialization of LIonCore", async () => {
+        const serialization = serialize(lioncore)
+        const validator = createJsonValidatorForSchema(await readFileAsJson("schemas/generic-serialization.schema.json"))
+        const errors = validator(serialization)
+        assertEquals(errors, [])
     })
 
     // TODO  write unit tests re: (de-)serialization
