@@ -164,8 +164,13 @@ const reference = factory.concept("Reference", false, link)
 const property = factory.concept("Property", false, feature)
 
 const property_type = factory.reference(property, "type")
+const property_disputed = factory.property(property, "disputed")
+    .ofType(booleanDatatype)
 
-property.havingFeatures(property_type)
+property.havingFeatures(
+    property_type,
+    property_disputed
+)
 
 
 const dataType = factory.concept("DataType", true, metamodelElement)

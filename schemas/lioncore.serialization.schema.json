@@ -1,0 +1,480 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "LIonCore-serialization",
+  "title": "Serialization format specific to LIonCore",
+  "type": "array",
+  "items": {
+    "$ref": "#/$defs/SerializedNode"
+  },
+  "$defs": {
+    "Id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "Ids": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Id"
+      }
+    },
+    "SerializedRefs": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "Metamodel": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "Metamodel"
+        },
+        "id": {
+          "$ref": "#/$defs/Id"
+        },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "qualifiedName": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "children": {
+          "type": "object",
+          "properties": {
+            "elements": {
+              "$ref": "#/$defs/Ids"
+            }
+          },
+          "additionalProperties": false
+        },
+        "references": {
+          "type": "object",
+          "properties": {
+            "dependsOn": {
+              "$ref": "#/$defs/SerializedRefs"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "type",
+        "id"
+      ],
+      "additionalProperties": false
+    },
+    "Concept": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "Concept"
+        },
+        "id": {
+          "$ref": "#/$defs/Id"
+        },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "abstract": {
+              "type": "boolean"
+            },
+            "simpleName": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "children": {
+          "type": "object",
+          "properties": {
+            "features": {
+              "$ref": "#/$defs/Ids"
+            }
+          },
+          "additionalProperties": false
+        },
+        "references": {
+          "type": "object",
+          "properties": {
+            "extends": {
+              "$ref": "#/$defs/SerializedRefs"
+            },
+            "implements": {
+              "$ref": "#/$defs/SerializedRefs"
+            },
+            "container": {
+              "$ref": "#/$defs/SerializedRefs"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "type",
+        "id"
+      ],
+      "additionalProperties": false
+    },
+    "ConceptInterface": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "ConceptInterface"
+        },
+        "id": {
+          "$ref": "#/$defs/Id"
+        },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "simpleName": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "children": {
+          "type": "object",
+          "properties": {
+            "features": {
+              "$ref": "#/$defs/Ids"
+            }
+          },
+          "additionalProperties": false
+        },
+        "references": {
+          "type": "object",
+          "properties": {
+            "extends": {
+              "$ref": "#/$defs/SerializedRefs"
+            },
+            "container": {
+              "$ref": "#/$defs/SerializedRefs"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "type",
+        "id"
+      ],
+      "additionalProperties": false
+    },
+    "Reference": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "Reference"
+        },
+        "id": {
+          "$ref": "#/$defs/Id"
+        },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "multiple": {
+              "type": "boolean"
+            },
+            "optional": {
+              "type": "boolean"
+            },
+            "derived": {
+              "type": "boolean"
+            },
+            "simpleName": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "children": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "references": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "$ref": "#/$defs/SerializedRefs"
+            },
+            "container": {
+              "$ref": "#/$defs/SerializedRefs"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "type",
+        "id"
+      ],
+      "additionalProperties": false
+    },
+    "Property": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "Property"
+        },
+        "id": {
+          "$ref": "#/$defs/Id"
+        },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "disputed": {
+              "type": "boolean"
+            },
+            "optional": {
+              "type": "boolean"
+            },
+            "derived": {
+              "type": "boolean"
+            },
+            "simpleName": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "children": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "references": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "$ref": "#/$defs/SerializedRefs"
+            },
+            "container": {
+              "$ref": "#/$defs/SerializedRefs"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "type",
+        "id"
+      ],
+      "additionalProperties": false
+    },
+    "PrimitiveType": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "PrimitiveType"
+        },
+        "id": {
+          "$ref": "#/$defs/Id"
+        },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "simpleName": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "children": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "references": {
+          "type": "object",
+          "properties": {
+            "container": {
+              "$ref": "#/$defs/SerializedRefs"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "type",
+        "id"
+      ],
+      "additionalProperties": false
+    },
+    "Containment": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "Containment"
+        },
+        "id": {
+          "$ref": "#/$defs/Id"
+        },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "multiple": {
+              "type": "boolean"
+            },
+            "optional": {
+              "type": "boolean"
+            },
+            "derived": {
+              "type": "boolean"
+            },
+            "simpleName": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "children": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "references": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "$ref": "#/$defs/SerializedRefs"
+            },
+            "container": {
+              "$ref": "#/$defs/SerializedRefs"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "type",
+        "id"
+      ],
+      "additionalProperties": false
+    },
+    "Enumeration": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "Enumeration"
+        },
+        "id": {
+          "$ref": "#/$defs/Id"
+        },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "simpleName": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "children": {
+          "type": "object",
+          "properties": {
+            "literals": {
+              "$ref": "#/$defs/Ids"
+            }
+          },
+          "additionalProperties": false
+        },
+        "references": {
+          "type": "object",
+          "properties": {
+            "container": {
+              "$ref": "#/$defs/SerializedRefs"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "type",
+        "id"
+      ],
+      "additionalProperties": false
+    },
+    "EnumerationLiteral": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "EnumerationLiteral"
+        },
+        "id": {
+          "$ref": "#/$defs/Id"
+        },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "simpleName": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "children": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "references": {
+          "type": "object",
+          "properties": {
+            "container": {
+              "$ref": "#/$defs/SerializedRefs"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "type",
+        "id"
+      ],
+      "additionalProperties": false
+    },
+    "SerializedNode": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/Metamodel"
+        },
+        {
+          "$ref": "#/$defs/Concept"
+        },
+        {
+          "$ref": "#/$defs/ConceptInterface"
+        },
+        {
+          "$ref": "#/$defs/Reference"
+        },
+        {
+          "$ref": "#/$defs/Property"
+        },
+        {
+          "$ref": "#/$defs/PrimitiveType"
+        },
+        {
+          "$ref": "#/$defs/Containment"
+        },
+        {
+          "$ref": "#/$defs/Enumeration"
+        },
+        {
+          "$ref": "#/$defs/EnumerationLiteral"
+        }
+      ]
+    }
+  }
+}

@@ -18,11 +18,11 @@
         "29",
         "32",
         "33",
-        "35",
         "36",
         "37",
         "38",
-        "40",
+        "39",
+        "41",
         "2",
         "3",
         "4",
@@ -485,7 +485,8 @@
     },
     "children": {
       "features": [
-        "34"
+        "34",
+        "35"
       ]
     },
     "references": {
@@ -506,13 +507,28 @@
     },
     "references": {
       "type": [
-        "35"
+        "36"
+      ]
+    }
+  },
+  {
+    "type": "Property",
+    "id": "35",
+    "properties": {
+      "simpleName": "disputed",
+      "optional": false,
+      "derived": false,
+      "disputed": false
+    },
+    "references": {
+      "type": [
+        "3"
       ]
     }
   },
   {
     "type": "Concept",
-    "id": "35",
+    "id": "36",
     "properties": {
       "simpleName": "DataType",
       "abstract": true
@@ -529,7 +545,7 @@
   },
   {
     "type": "Concept",
-    "id": "36",
+    "id": "37",
     "properties": {
       "simpleName": "PrimitiveType",
       "abstract": false
@@ -539,14 +555,14 @@
     },
     "references": {
       "extends": [
-        "35"
+        "36"
       ],
       "implements": []
     }
   },
   {
     "type": "Concept",
-    "id": "37",
+    "id": "38",
     "properties": {
       "simpleName": "Containment",
       "abstract": false
@@ -563,19 +579,19 @@
   },
   {
     "type": "Concept",
-    "id": "38",
+    "id": "39",
     "properties": {
       "simpleName": "Enumeration",
       "abstract": false
     },
     "children": {
       "features": [
-        "39"
+        "40"
       ]
     },
     "references": {
       "extends": [
-        "35"
+        "36"
       ],
       "implements": [
         "6"
@@ -584,7 +600,7 @@
   },
   {
     "type": "Containment",
-    "id": "39",
+    "id": "40",
     "properties": {
       "simpleName": "literals",
       "optional": false,
@@ -593,13 +609,13 @@
     },
     "references": {
       "type": [
-        "40"
+        "41"
       ]
     }
   },
   {
     "type": "Concept",
-    "id": "40",
+    "id": "41",
     "properties": {
       "simpleName": "EnumerationLiteral",
       "abstract": false

@@ -13,6 +13,7 @@ import {deserialize} from "../deserializer.ts"
 import {readFileAsJson, writeJsonAsFile} from "../../utils/json.ts"
 import {createJsonValidatorForSchema} from "./json-validator.ts"
 import {SerializedNode} from "../../serialization.ts"
+import {schemaFor} from "../schema-generator.ts"
 
 
 Deno.test("meta-circularity (LIonCore)", async (tctx) => {
@@ -58,6 +59,17 @@ Deno.test("meta-circularity (LIonCore)", async (tctx) => {
     await tctx.step("validate serialization of LIonCore", async () => {
         const serialization = serialize(lioncore)
         const validator = createJsonValidatorForSchema(await readFileAsJson("schemas/generic-serialization.schema.json"))
+        // TODO  validate schema itself
+        const errors = validator(serialization)
+        assertEquals(errors, [])
+    })
+
+    await tctx.step("generate JSON Schema for serialization format of LIonCore/M3 instances (no assertions)", async () => {
+        const schema = schemaFor(lioncore)
+        await writeJsonAsFile("schemas/lioncore.serialization.schema.json", schema)
+        // TODO  validate schema itself
+        const serialization = serialize(lioncore)
+        const validator = createJsonValidatorForSchema(schema)
         const errors = validator(serialization)
         assertEquals(errors, [])
     })

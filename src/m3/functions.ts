@@ -6,6 +6,7 @@
 import {
     Concept,
     ConceptInterface,
+    Containment,
     Datatype,
     Enumeration,
     Feature,
@@ -14,7 +15,8 @@ import {
     M3Concept,
     Metamodel,
     MetamodelElement,
-    Property
+    Property,
+    Reference
 } from "./types.ts"
 import {unresolved} from "../references.ts"
 import {sortByStringKey} from "../utils/sorting.ts"
@@ -26,7 +28,17 @@ import {flatmapNonCyclingFollowing} from "../utils/recursion.ts"
  * @return The type of the given {@link Feature}
  */
 export const type = (feature: Feature): FeaturesContainer | Datatype | typeof unresolved =>
-    (feature as Link | Property).type
+    (feature as (Link | Property)).type
+
+
+export const isRealProperty = (feature: Feature): feature is Property =>
+    feature instanceof Property && !feature.derived
+
+export const isRealContainment = (feature: Feature): feature is Containment =>
+    feature instanceof Containment && !feature.derived
+
+export const isRealReference = (feature: Feature): feature is Reference =>
+    feature instanceof Reference && !feature.derived
 
 
 const isRelational = (feature: Feature): feature is Link =>
@@ -77,6 +89,10 @@ export const elementsSortedByName = (metamodelElements: MetamodelElement[]) =>
 
 
 export type ConceptType = Concept | ConceptInterface
+
+export const isConcrete = (thing: MetamodelElement): thing is Concept =>
+    thing instanceof Concept && !thing.abstract
+
 const inheritsFrom = (conceptType: ConceptType): ConceptType[] => {
     if (conceptType instanceof Concept) {
         return [
@@ -89,6 +105,7 @@ const inheritsFrom = (conceptType: ConceptType): ConceptType[] => {
     }
     throw new Error(`concept type ${typeof conceptType} not handled`)
 }
+
 export const inheritedCycleWith = (conceptType: ConceptType) =>
     cycleWith(conceptType, inheritsFrom)
 
@@ -99,4 +116,8 @@ export const allSuperTypesOf = (conceptType: ConceptType): ConceptType[] =>
 
 export const allFeaturesOf = (conceptType: ConceptType): Feature[] =>
     flatmapNonCyclingFollowing((ci) => ci.features, inheritsFrom)(conceptType)
+
+
+export const isEnumeration = (metamodelElement: MetamodelElement): metamodelElement is Enumeration =>
+    metamodelElement instanceof Enumeration
 

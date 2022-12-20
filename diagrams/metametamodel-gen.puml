@@ -50,7 +50,9 @@ abstract class NamespacedEntity {
 
 class PrimitiveType extends DataType
 
-class Property extends Feature
+class Property extends Feature {
+  disputed: boolean
+}
 
 class Reference extends Link
 
