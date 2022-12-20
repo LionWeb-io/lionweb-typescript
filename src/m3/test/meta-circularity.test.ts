@@ -41,14 +41,19 @@ Deno.test("meta-circularity (LIonCore)", async (tctx) => {
         assertEquals(issues.length, 0, "number of expected constraint violations -- see above for the issues")
     })
 
-    await tctx.step("serialize and deserialize (no assertions)", async () => {
+    const serializedLioncorePath = "tmp/lioncore.json"
+    await tctx.step("serialize LIonCore (no assertions)", async () => {
         const serialization = serialize(lioncore)
-        await Deno.writeTextFileSync("tmp/lioncore.json", asPrettyString(serialization))
-        const deserialization = deserialize(serialization)
-        await Deno.writeTextFileSync("diagrams/metametamodel-deserred.puml", generatePlantUmlForMetamodel(deserialization))
-        const reserialization = serialize(deserialization)
-        await Deno.writeTextFileSync("tmp/lioncore-reserred.json", asPrettyString(serialization))
+        await Deno.writeTextFileSync(serializedLioncorePath, asPrettyString(serialization))
     })
+
+    await tctx.step("deserialize LIonCore", async () => {
+        const serialization = JSON.parse(Deno.readTextFileSync(serializedLioncorePath))
+        const deserialization = deserialize(serialization)
+        assertEquals(deserialization, lioncore)
+    })
+
+    // TODO  write unit tests re: (de-)serialization
 
 })
 

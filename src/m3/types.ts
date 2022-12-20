@@ -3,7 +3,7 @@
  * A LIonWeb metamodel (at the M2 meta level) can be represented as an instance of the {@link Metamodel} type.
  */
 
-import {SingleRef, unresolved} from "../references.ts"
+import {MultiRef, SingleRef, unresolved} from "../references.ts"
 import {Id, Node} from "../types.ts"
 import {allFeaturesOf} from "./functions.ts"
 
@@ -64,7 +64,7 @@ abstract class FeaturesContainer extends MetamodelElement implements NamespacePr
 class Concept extends FeaturesContainer {
     abstract: boolean
     extends?: SingleRef<Concept>    // (reference)
-    implements: ConceptInterface[] = []  // (reference)
+    implements: MultiRef<ConceptInterface> = []  // (reference)
     constructor(metamodel: Metamodel, simpleName: string, id: Id, abstract: boolean, extends_?: SingleRef<Concept>) {
         super(metamodel, simpleName, id)
         this.abstract = abstract
@@ -80,7 +80,7 @@ class Concept extends FeaturesContainer {
 }
 
 class ConceptInterface extends FeaturesContainer {
-    extends: ConceptInterface[] = []    // (reference)
+    extends: MultiRef<ConceptInterface> = []    // (reference)
     allFeatures(): Feature[] {
         return allFeaturesOf(this)
     }

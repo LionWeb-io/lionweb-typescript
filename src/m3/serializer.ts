@@ -10,30 +10,10 @@ import {
     Property,
     Reference
 } from "./types.ts"
-import {isRef, SingleRef, unresolved} from "../references.ts"
-import {Id, Node} from "../types.ts"
+import {asIds} from "../types.ts"
+import {asRefIds, SerializedNode} from "../serialization.ts"
 
 
-export type SerializedNode = {
-    type: string
-    id: string
-    properties?: { [featureName: string]: string | boolean }
-    children?: { [featureName: string]: Id[] }
-    references?: { [featureName: string]: (Id | typeof unresolved | undefined)[] }
-}
-
-
-const asIds = (nodes: Node[]): Id[] =>
-    nodes.map(({id}) => id)
-
-export type SerializedRef = Id | typeof unresolved | undefined
-const asRefId = <T extends Node>(ref?: SingleRef<T>): SerializedRef =>
-    isRef(ref)
-        ? ref.id
-        : ref
-
-
-// TODO  make generic, parametrized by a Metamodel instance or just reflective
 export const serialize = (metamodel: Metamodel): SerializedNode[] /* <=> JSON */ => {
     const json: SerializedNode[] = []
 
@@ -51,7 +31,7 @@ export const serialize = (metamodel: Metamodel): SerializedNode[] /* <=> JSON */
                     features: asIds(thing.features)
                 },
                 references: {
-                    extends: isRef(thing.extends) ? [thing.extends.id] : [],
+                    extends: asRefIds(thing.extends),
                     implements: asIds(thing.implements)
                 }
             })
@@ -86,7 +66,7 @@ export const serialize = (metamodel: Metamodel): SerializedNode[] /* <=> JSON */
                     multiple: thing.multiple
                 },
                 references: {
-                    type: [asRefId(thing.type)]
+                    type: asRefIds(thing.type)
                 }
             })
             return
@@ -150,7 +130,7 @@ export const serialize = (metamodel: Metamodel): SerializedNode[] /* <=> JSON */
                     disputed: thing.disputed
                 },
                 references: {
-                    type: [asRefId(thing.type)]
+                    type: asRefIds(thing.type)
                 }
             })
             return
@@ -166,14 +146,14 @@ export const serialize = (metamodel: Metamodel): SerializedNode[] /* <=> JSON */
                     multiple: thing.multiple
                 },
                 references: {
-                    type: [asRefId(thing.type)]
+                    type: asRefIds(thing.type)
                 }
             })
             return
         }
 
-        // the following line should produce (when uncommented) a compiler error when all types have been handled:
-        // console.warn(`node of type "${thing.constructor.name}" not yet handled`)
+        // the following line produces a compiler error mentioning all types that have not been handled:
+        const noThing: never = thing
     }
 
     visit(metamodel)

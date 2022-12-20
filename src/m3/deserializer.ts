@@ -15,16 +15,17 @@ import {
 } from "./types.ts"
 import {SingleRef} from "../references.ts"
 import {Id, Node} from "../types.ts"
-import {SerializedNode} from "./serializer.ts"
+import {SerializedNode} from "../serialization.ts"
 
 
-// TODO  make generic, parametrized by a Metamodel instance or just reflective
 export const deserialize = (serializedNodes: SerializedNode[]): Metamodel => {
+
     const metamodelSerNode = serializedNodes.find(({type}) => type === "Metamodel")
     if (metamodelSerNode === undefined) {
-        throw new Error(`could not deserialize: no instance of LIonCore's Metamodel found in serialization`)
+        throw new Error(`could not deserialize: no instance of LIonCore's Metamodel concept found in serialization`)
     }
 
+    // make a map id -> serialized node:
     const serializedNodeById: { [id: Id]: SerializedNode } = {}
     serializedNodes.forEach((node) => {
         serializedNodeById[node.id] = node
@@ -32,14 +33,15 @@ export const deserialize = (serializedNodes: SerializedNode[]): Metamodel => {
 
     const deserializedNodeById: { [id: Id]: Node } = {}
 
-    const deser = <T extends Node>(serNode: SerializedNode, parent?: M3Concept): T => {
+    const constructMemoised = (serNode: SerializedNode, parent?: M3Concept): M3Concept => {
         const node = construct(serNode, parent)
         deserializedNodeById[node.id] = node
-        return node as any as T
+        return node
     }
 
-    const mapDeser = <T extends Node>(parent: M3Concept) =>
-        (id: Id): T => deser(serializedNodeById[id], parent) as any as T
+    const mapConstructMemoised = <T extends Node>(parent: M3Concept) =>
+        (id: Id): T =>
+            constructMemoised(serializedNodeById[id], parent) as unknown as T
 
     const referencesToInstall: [node: Node, featureName: string, refId: Id][] = []
 
@@ -49,7 +51,7 @@ export const deserialize = (serializedNodes: SerializedNode[]): Metamodel => {
                 const {simpleName, abstract} = properties!
                 const node = new Concept(parent as Metamodel, simpleName as string, id, abstract as boolean)
                 const {features} = children!
-                node.havingFeatures(...features.map(mapDeser<Feature>(node)))
+                node.havingFeatures(...features.map(mapConstructMemoised<Feature>(node)))
                 const extends_ = references!["extends"]
                 if (extends_.length > 0 && typeof extends_[0] === "string") {
                     referencesToInstall.push([node, "extends", extends_[0]])
@@ -63,7 +65,7 @@ export const deserialize = (serializedNodes: SerializedNode[]): Metamodel => {
                 const {simpleName} = properties!
                 const node = new ConceptInterface(parent as Metamodel, simpleName as string, id)
                 const {features} = children!
-                node.havingFeatures(...features.map(mapDeser<Feature>(node)))
+                node.havingFeatures(...features.map(mapConstructMemoised<Feature>(node)))
                 references!["extends"].filter((serRef) => typeof serRef === "string").forEach((serRef) => {
                     referencesToInstall.push([node, "extends", serRef as Id])
                 })
@@ -83,7 +85,7 @@ export const deserialize = (serializedNodes: SerializedNode[]): Metamodel => {
                 const {qualifiedName} = properties!
                 const node = new Metamodel(qualifiedName as string, id)
                 const {elements} = children!
-                node.havingElements(...elements.map(mapDeser<MetamodelElement>(node)))
+                node.havingElements(...elements.map(mapConstructMemoised<MetamodelElement>(node)))
                 return node
             }
             case "PrimitiveType": {
@@ -115,8 +117,7 @@ export const deserialize = (serializedNodes: SerializedNode[]): Metamodel => {
         }
     }
 
-    const metamodel = deser(metamodelSerNode) as Metamodel
-    // TODO  debug referencesToInstall
+    const metamodel = constructMemoised(metamodelSerNode) as Metamodel
 
     referencesToInstall.forEach(([node, featureName, refId]) => {
         if (node instanceof Concept) {
