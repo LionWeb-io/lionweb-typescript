@@ -8,6 +8,10 @@ import {Id, Node} from "../types.ts"
 import {allFeaturesOf} from "./functions.ts"
 
 
+export const qualify = (...names: string[]): string =>
+    names.join(".")
+
+
 interface NamespaceProvider {
     namespaceQualifier(): string
 }
@@ -22,7 +26,7 @@ abstract class NamespacedEntity implements Node {
         this.id = id
     }
     qualifiedName() {
-        return `${this.container.namespaceQualifier()}.${this.simpleName}`
+        return qualify(this.container.namespaceQualifier(), this.simpleName)
     }
 }
 
@@ -147,7 +151,7 @@ class PrimitiveType extends Datatype {}
 class Enumeration extends Datatype implements NamespaceProvider {
     literals: EnumerationLiteral[] = [] // (containment)
     namespaceQualifier(): string {
-        return `${this.container.namespaceQualifier()}.${this.simpleName}`
+        return qualify(this.container.namespaceQualifier(), this.simpleName)
     }
 }
 

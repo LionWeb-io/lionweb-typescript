@@ -1,47 +1,47 @@
 [
   {
     "type": "Metamodel",
-    "id": "1",
+    "id": "f1934de2d78906e9f47ed1c61330fba5e9179d54ad6627a0d3268d8979bf8e2d",
     "properties": {
       "qualifiedName": "LIonCore"
     },
     "children": {
       "elements": [
-        "8",
-        "6",
-        "12",
-        "16",
-        "17",
-        "20",
-        "24",
-        "26",
-        "29",
-        "32",
-        "33",
-        "36",
-        "37",
-        "38",
-        "39",
-        "41",
-        "2",
-        "3",
-        "4",
-        "5"
+        "753ae9f3a6e141b88ae2c75de8a49afb80d261cea5c68142bf8052e7f93d2a31",
+        "e03fbf001c5792b7cee5a68b423a86987d6928086d0a91916eca81d2d3cb2954",
+        "2d3c01a849fad4d48be248637f9363c57b49c90d28bc6c60d83826857cbdbfaf",
+        "3da9be2e18d7ff3c41a622964b34e7e953c0b14192d983af84b3768bdac7dc2a",
+        "9a212461e52728e24342e2586a856f741f3ac75713df8c581ae8f7c220ef33d8",
+        "7fb359c52f21fc160dcec169989a2b882bc31cf34cfc5c7a7a9f734135bff0c1",
+        "9e100b68beb420e2bc2434851c2868324ade37e6051c55ea6ce5ca4f02fc4e14",
+        "9f9d2347c15bf2fd5d4e1cd6dbe3122a581fa640eab00c510e533cb32e1007e4",
+        "ed2d59f937386e71d1c1d8623249f7bd24150fae002b9e35faca2d5d6ec14a75",
+        "7eb9eff4b4971b04c73284f07df9f9df2e4a6354e0b3ef9f7248c65c42b814d6",
+        "2c9c0b0952e610df8ba25d65bcd322c2c802db75c5c8ba09e943c4a53b0ddfbe",
+        "567bb1b24ea4dc50d57f1932e29f10584d5d604531d3c89e345178bd8a7adf6e",
+        "585d94154bc5a331308afbbe5d837f74e8c9af8c587c9fe253a2e357b2225012",
+        "11a3b1b83a341c95800f3b8dcb87e3db6b38c9db8e463498598d62d11f06ddf4",
+        "cf7d299d2db6a3ba305d08611b2dfd6e62da01a0297e63ea64d531eb03a4471f",
+        "f4dafa8332be81751d6ba4e4d53db6ff826eb146235cf2831baaeffb5c27a736",
+        "ff8a35073872676c1e297f62ca29f6339490ece2ab2defc93da23ca8dd35bf86",
+        "eaba6407da695f1a2d46b7aec4560047e66f92b0062f02b756ff71d985489956",
+        "fb51dba81ae5ca06a0fb71eadfa84d32297795448b2c14abb351d7fc4b80d430",
+        "ee65779d925ce1af3e18b69c92e660383a6622d9f88715d90ee6227c0bf59136"
       ]
     }
   },
   {
     "type": "Concept",
-    "id": "8",
+    "id": "753ae9f3a6e141b88ae2c75de8a49afb80d261cea5c68142bf8052e7f93d2a31",
     "properties": {
       "simpleName": "NamespacedEntity",
       "abstract": true
     },
     "children": {
       "features": [
-        "9",
-        "10",
-        "11"
+        "5896b30809c3f30430812dfbbaee5de5f3e06187154e987f44faa461e78decab",
+        "054be0149e6bdb1f7cbabdd95c993ed2d522ea50e7fe6de961439f00f6b0ebc0",
+        "356ecbdede8e025bfbde3a9b6f521581b3c736a80ab6b91ece861fbbd2f8a740"
       ]
     },
     "references": {
@@ -51,7 +51,7 @@
   },
   {
     "type": "Property",
-    "id": "9",
+    "id": "5896b30809c3f30430812dfbbaee5de5f3e06187154e987f44faa461e78decab",
     "properties": {
       "simpleName": "simpleName",
       "optional": false,
@@ -60,13 +60,13 @@
     },
     "references": {
       "type": [
-        "2"
+        "ff8a35073872676c1e297f62ca29f6339490ece2ab2defc93da23ca8dd35bf86"
       ]
     }
   },
   {
     "type": "Property",
-    "id": "10",
+    "id": "054be0149e6bdb1f7cbabdd95c993ed2d522ea50e7fe6de961439f00f6b0ebc0",
     "properties": {
       "simpleName": "qualifiedName",
       "optional": false,
@@ -75,13 +75,13 @@
     },
     "references": {
       "type": [
-        "2"
+        "ff8a35073872676c1e297f62ca29f6339490ece2ab2defc93da23ca8dd35bf86"
       ]
     }
   },
   {
     "type": "Reference",
-    "id": "11",
+    "id": "356ecbdede8e025bfbde3a9b6f521581b3c736a80ab6b91ece861fbbd2f8a740",
     "properties": {
       "simpleName": "container",
       "optional": false,
@@ -90,19 +90,19 @@
     },
     "references": {
       "type": [
-        "6"
+        "e03fbf001c5792b7cee5a68b423a86987d6928086d0a91916eca81d2d3cb2954"
       ]
     }
   },
   {
     "type": "ConceptInterface",
-    "id": "6",
+    "id": "e03fbf001c5792b7cee5a68b423a86987d6928086d0a91916eca81d2d3cb2954",
     "properties": {
       "simpleName": "NamespaceProvider"
     },
     "children": {
       "features": [
-        "7"
+        "637d5339e97991a83c092eeaeadc8670ecbf46af6d3b15a0d622d0c9e2af1e50"
       ]
     },
     "references": {
@@ -111,7 +111,7 @@
   },
   {
     "type": "Property",
-    "id": "7",
+    "id": "637d5339e97991a83c092eeaeadc8670ecbf46af6d3b15a0d622d0c9e2af1e50",
     "properties": {
       "simpleName": "namespaceQualifier",
       "optional": false,
@@ -120,34 +120,34 @@
     },
     "references": {
       "type": [
-        "2"
+        "ff8a35073872676c1e297f62ca29f6339490ece2ab2defc93da23ca8dd35bf86"
       ]
     }
   },
   {
     "type": "Concept",
-    "id": "12",
+    "id": "2d3c01a849fad4d48be248637f9363c57b49c90d28bc6c60d83826857cbdbfaf",
     "properties": {
       "simpleName": "Metamodel",
       "abstract": false
     },
     "children": {
       "features": [
-        "13",
-        "14",
-        "15"
+        "11afa1ad7657bdb7fd7500ded047772e625d7c7534e6e916c515da8e11177372",
+        "9a35cd42c4e530af0fc477617cf38065204d314ce8c048998ac874e00f1340b7",
+        "c57abe355e1ba5fc1c18a912f577e7fd022c2af2a53a6fb7855e6ef1c9d2e2ad"
       ]
     },
     "references": {
       "extends": [],
       "implements": [
-        "6"
+        "e03fbf001c5792b7cee5a68b423a86987d6928086d0a91916eca81d2d3cb2954"
       ]
     }
   },
   {
     "type": "Property",
-    "id": "13",
+    "id": "11afa1ad7657bdb7fd7500ded047772e625d7c7534e6e916c515da8e11177372",
     "properties": {
       "simpleName": "qualifiedName",
       "optional": false,
@@ -156,13 +156,13 @@
     },
     "references": {
       "type": [
-        "2"
+        "ff8a35073872676c1e297f62ca29f6339490ece2ab2defc93da23ca8dd35bf86"
       ]
     }
   },
   {
     "type": "Containment",
-    "id": "14",
+    "id": "9a35cd42c4e530af0fc477617cf38065204d314ce8c048998ac874e00f1340b7",
     "properties": {
       "simpleName": "elements",
       "optional": true,
@@ -171,13 +171,13 @@
     },
     "references": {
       "type": [
-        "16"
+        "3da9be2e18d7ff3c41a622964b34e7e953c0b14192d983af84b3768bdac7dc2a"
       ]
     }
   },
   {
     "type": "Reference",
-    "id": "15",
+    "id": "c57abe355e1ba5fc1c18a912f577e7fd022c2af2a53a6fb7855e6ef1c9d2e2ad",
     "properties": {
       "simpleName": "dependsOn",
       "optional": true,
@@ -186,13 +186,13 @@
     },
     "references": {
       "type": [
-        "12"
+        "2d3c01a849fad4d48be248637f9363c57b49c90d28bc6c60d83826857cbdbfaf"
       ]
     }
   },
   {
     "type": "Concept",
-    "id": "16",
+    "id": "3da9be2e18d7ff3c41a622964b34e7e953c0b14192d983af84b3768bdac7dc2a",
     "properties": {
       "simpleName": "MetamodelElement",
       "abstract": true
@@ -202,36 +202,36 @@
     },
     "references": {
       "extends": [
-        "8"
+        "753ae9f3a6e141b88ae2c75de8a49afb80d261cea5c68142bf8052e7f93d2a31"
       ],
       "implements": []
     }
   },
   {
     "type": "Concept",
-    "id": "17",
+    "id": "9a212461e52728e24342e2586a856f741f3ac75713df8c581ae8f7c220ef33d8",
     "properties": {
       "simpleName": "FeaturesContainer",
       "abstract": true
     },
     "children": {
       "features": [
-        "18",
-        "19"
+        "54686d2f13cdf719dcc16cec726bbf22fa2b75acb04d0b8e324fb95def52918e",
+        "27ec299ffae8e7a30a212552605715b376575e311df7140520ace7bb5ba59228"
       ]
     },
     "references": {
       "extends": [
-        "16"
+        "3da9be2e18d7ff3c41a622964b34e7e953c0b14192d983af84b3768bdac7dc2a"
       ],
       "implements": [
-        "6"
+        "e03fbf001c5792b7cee5a68b423a86987d6928086d0a91916eca81d2d3cb2954"
       ]
     }
   },
   {
     "type": "Containment",
-    "id": "18",
+    "id": "54686d2f13cdf719dcc16cec726bbf22fa2b75acb04d0b8e324fb95def52918e",
     "properties": {
       "simpleName": "features",
       "optional": true,
@@ -240,13 +240,13 @@
     },
     "references": {
       "type": [
-        "26"
+        "9f9d2347c15bf2fd5d4e1cd6dbe3122a581fa640eab00c510e533cb32e1007e4"
       ]
     }
   },
   {
     "type": "Reference",
-    "id": "19",
+    "id": "27ec299ffae8e7a30a212552605715b376575e311df7140520ace7bb5ba59228",
     "properties": {
       "simpleName": "allFeatures",
       "optional": true,
@@ -255,34 +255,34 @@
     },
     "references": {
       "type": [
-        "26"
+        "9f9d2347c15bf2fd5d4e1cd6dbe3122a581fa640eab00c510e533cb32e1007e4"
       ]
     }
   },
   {
     "type": "Concept",
-    "id": "20",
+    "id": "7fb359c52f21fc160dcec169989a2b882bc31cf34cfc5c7a7a9f734135bff0c1",
     "properties": {
       "simpleName": "Concept",
       "abstract": false
     },
     "children": {
       "features": [
-        "21",
-        "22",
-        "23"
+        "de5b00a205a9b5b67fdea0e54d6748373e476c9d172f9d4be1c074fecbe37c7e",
+        "45dbd9c69974c70289dd53c05a7569d4b45901add8741e2da61f0b1b623918c9",
+        "196ba2078317f64038acc1fd56d96ba861adadeef3795b28def05cc730575b39"
       ]
     },
     "references": {
       "extends": [
-        "17"
+        "9a212461e52728e24342e2586a856f741f3ac75713df8c581ae8f7c220ef33d8"
       ],
       "implements": []
     }
   },
   {
     "type": "Property",
-    "id": "21",
+    "id": "de5b00a205a9b5b67fdea0e54d6748373e476c9d172f9d4be1c074fecbe37c7e",
     "properties": {
       "simpleName": "abstract",
       "optional": false,
@@ -291,13 +291,13 @@
     },
     "references": {
       "type": [
-        "3"
+        "eaba6407da695f1a2d46b7aec4560047e66f92b0062f02b756ff71d985489956"
       ]
     }
   },
   {
     "type": "Reference",
-    "id": "22",
+    "id": "45dbd9c69974c70289dd53c05a7569d4b45901add8741e2da61f0b1b623918c9",
     "properties": {
       "simpleName": "extends",
       "optional": true,
@@ -306,13 +306,13 @@
     },
     "references": {
       "type": [
-        "20"
+        "7fb359c52f21fc160dcec169989a2b882bc31cf34cfc5c7a7a9f734135bff0c1"
       ]
     }
   },
   {
     "type": "Reference",
-    "id": "23",
+    "id": "196ba2078317f64038acc1fd56d96ba861adadeef3795b28def05cc730575b39",
     "properties": {
       "simpleName": "implements",
       "optional": true,
@@ -321,32 +321,32 @@
     },
     "references": {
       "type": [
-        "24"
+        "9e100b68beb420e2bc2434851c2868324ade37e6051c55ea6ce5ca4f02fc4e14"
       ]
     }
   },
   {
     "type": "Concept",
-    "id": "24",
+    "id": "9e100b68beb420e2bc2434851c2868324ade37e6051c55ea6ce5ca4f02fc4e14",
     "properties": {
       "simpleName": "ConceptInterface",
       "abstract": false
     },
     "children": {
       "features": [
-        "25"
+        "2658ff1903e6ea2de227108fb5fdf535de4631f56f57c700654af73364b7d6ff"
       ]
     },
     "references": {
       "extends": [
-        "17"
+        "9a212461e52728e24342e2586a856f741f3ac75713df8c581ae8f7c220ef33d8"
       ],
       "implements": []
     }
   },
   {
     "type": "Reference",
-    "id": "25",
+    "id": "2658ff1903e6ea2de227108fb5fdf535de4631f56f57c700654af73364b7d6ff",
     "properties": {
       "simpleName": "extends",
       "optional": true,
@@ -355,33 +355,33 @@
     },
     "references": {
       "type": [
-        "24"
+        "9e100b68beb420e2bc2434851c2868324ade37e6051c55ea6ce5ca4f02fc4e14"
       ]
     }
   },
   {
     "type": "Concept",
-    "id": "26",
+    "id": "9f9d2347c15bf2fd5d4e1cd6dbe3122a581fa640eab00c510e533cb32e1007e4",
     "properties": {
       "simpleName": "Feature",
       "abstract": true
     },
     "children": {
       "features": [
-        "27",
-        "28"
+        "011566481d2c358eaeb2592cc8937c0c6cd364a1edab376a21ccd5d9231da009",
+        "6933a48953e26fee48794e86e8eac20c08bf91a3142de84d997f0180710acbda"
       ]
     },
     "references": {
       "extends": [
-        "8"
+        "753ae9f3a6e141b88ae2c75de8a49afb80d261cea5c68142bf8052e7f93d2a31"
       ],
       "implements": []
     }
   },
   {
     "type": "Property",
-    "id": "27",
+    "id": "011566481d2c358eaeb2592cc8937c0c6cd364a1edab376a21ccd5d9231da009",
     "properties": {
       "simpleName": "optional",
       "optional": false,
@@ -390,13 +390,13 @@
     },
     "references": {
       "type": [
-        "3"
+        "eaba6407da695f1a2d46b7aec4560047e66f92b0062f02b756ff71d985489956"
       ]
     }
   },
   {
     "type": "Property",
-    "id": "28",
+    "id": "6933a48953e26fee48794e86e8eac20c08bf91a3142de84d997f0180710acbda",
     "properties": {
       "simpleName": "derived",
       "optional": false,
@@ -405,33 +405,33 @@
     },
     "references": {
       "type": [
-        "3"
+        "eaba6407da695f1a2d46b7aec4560047e66f92b0062f02b756ff71d985489956"
       ]
     }
   },
   {
     "type": "Concept",
-    "id": "29",
+    "id": "ed2d59f937386e71d1c1d8623249f7bd24150fae002b9e35faca2d5d6ec14a75",
     "properties": {
       "simpleName": "Link",
       "abstract": true
     },
     "children": {
       "features": [
-        "30",
-        "31"
+        "38c8fda67a3bb81f22a92ffe880c5b90402f1035e80c5c37fed4adccc6f3376f",
+        "bbf4862997734cf7916a41129e3a72bb40c52def026832efec9947495c136e49"
       ]
     },
     "references": {
       "extends": [
-        "26"
+        "9f9d2347c15bf2fd5d4e1cd6dbe3122a581fa640eab00c510e533cb32e1007e4"
       ],
       "implements": []
     }
   },
   {
     "type": "Property",
-    "id": "30",
+    "id": "38c8fda67a3bb81f22a92ffe880c5b90402f1035e80c5c37fed4adccc6f3376f",
     "properties": {
       "simpleName": "multiple",
       "optional": false,
@@ -440,13 +440,13 @@
     },
     "references": {
       "type": [
-        "3"
+        "eaba6407da695f1a2d46b7aec4560047e66f92b0062f02b756ff71d985489956"
       ]
     }
   },
   {
     "type": "Reference",
-    "id": "31",
+    "id": "bbf4862997734cf7916a41129e3a72bb40c52def026832efec9947495c136e49",
     "properties": {
       "simpleName": "type",
       "optional": false,
@@ -455,13 +455,13 @@
     },
     "references": {
       "type": [
-        "17"
+        "9a212461e52728e24342e2586a856f741f3ac75713df8c581ae8f7c220ef33d8"
       ]
     }
   },
   {
     "type": "Concept",
-    "id": "32",
+    "id": "7eb9eff4b4971b04c73284f07df9f9df2e4a6354e0b3ef9f7248c65c42b814d6",
     "properties": {
       "simpleName": "Reference",
       "abstract": false
@@ -471,34 +471,34 @@
     },
     "references": {
       "extends": [
-        "29"
+        "ed2d59f937386e71d1c1d8623249f7bd24150fae002b9e35faca2d5d6ec14a75"
       ],
       "implements": []
     }
   },
   {
     "type": "Concept",
-    "id": "33",
+    "id": "2c9c0b0952e610df8ba25d65bcd322c2c802db75c5c8ba09e943c4a53b0ddfbe",
     "properties": {
       "simpleName": "Property",
       "abstract": false
     },
     "children": {
       "features": [
-        "34",
-        "35"
+        "044718ce261dc7812d6ef01b770cb70f3481099e7b04631e95caf1b9e6e45f11",
+        "ba6259e4f4cf1a81351862182db61d23184abde8d16a373df31490a508d9c43c"
       ]
     },
     "references": {
       "extends": [
-        "26"
+        "9f9d2347c15bf2fd5d4e1cd6dbe3122a581fa640eab00c510e533cb32e1007e4"
       ],
       "implements": []
     }
   },
   {
     "type": "Reference",
-    "id": "34",
+    "id": "044718ce261dc7812d6ef01b770cb70f3481099e7b04631e95caf1b9e6e45f11",
     "properties": {
       "simpleName": "type",
       "optional": false,
@@ -507,13 +507,13 @@
     },
     "references": {
       "type": [
-        "36"
+        "567bb1b24ea4dc50d57f1932e29f10584d5d604531d3c89e345178bd8a7adf6e"
       ]
     }
   },
   {
     "type": "Property",
-    "id": "35",
+    "id": "ba6259e4f4cf1a81351862182db61d23184abde8d16a373df31490a508d9c43c",
     "properties": {
       "simpleName": "disputed",
       "optional": false,
@@ -522,13 +522,13 @@
     },
     "references": {
       "type": [
-        "3"
+        "eaba6407da695f1a2d46b7aec4560047e66f92b0062f02b756ff71d985489956"
       ]
     }
   },
   {
     "type": "Concept",
-    "id": "36",
+    "id": "567bb1b24ea4dc50d57f1932e29f10584d5d604531d3c89e345178bd8a7adf6e",
     "properties": {
       "simpleName": "DataType",
       "abstract": true
@@ -538,14 +538,14 @@
     },
     "references": {
       "extends": [
-        "16"
+        "3da9be2e18d7ff3c41a622964b34e7e953c0b14192d983af84b3768bdac7dc2a"
       ],
       "implements": []
     }
   },
   {
     "type": "Concept",
-    "id": "37",
+    "id": "585d94154bc5a331308afbbe5d837f74e8c9af8c587c9fe253a2e357b2225012",
     "properties": {
       "simpleName": "PrimitiveType",
       "abstract": false
@@ -555,14 +555,14 @@
     },
     "references": {
       "extends": [
-        "36"
+        "567bb1b24ea4dc50d57f1932e29f10584d5d604531d3c89e345178bd8a7adf6e"
       ],
       "implements": []
     }
   },
   {
     "type": "Concept",
-    "id": "38",
+    "id": "11a3b1b83a341c95800f3b8dcb87e3db6b38c9db8e463498598d62d11f06ddf4",
     "properties": {
       "simpleName": "Containment",
       "abstract": false
@@ -572,35 +572,35 @@
     },
     "references": {
       "extends": [
-        "29"
+        "ed2d59f937386e71d1c1d8623249f7bd24150fae002b9e35faca2d5d6ec14a75"
       ],
       "implements": []
     }
   },
   {
     "type": "Concept",
-    "id": "39",
+    "id": "cf7d299d2db6a3ba305d08611b2dfd6e62da01a0297e63ea64d531eb03a4471f",
     "properties": {
       "simpleName": "Enumeration",
       "abstract": false
     },
     "children": {
       "features": [
-        "40"
+        "ba55f837fc97f191d19bb704247f4e010428c3ed7e2bbc2f0ef1f9c0dbbfa877"
       ]
     },
     "references": {
       "extends": [
-        "36"
+        "567bb1b24ea4dc50d57f1932e29f10584d5d604531d3c89e345178bd8a7adf6e"
       ],
       "implements": [
-        "6"
+        "e03fbf001c5792b7cee5a68b423a86987d6928086d0a91916eca81d2d3cb2954"
       ]
     }
   },
   {
     "type": "Containment",
-    "id": "40",
+    "id": "ba55f837fc97f191d19bb704247f4e010428c3ed7e2bbc2f0ef1f9c0dbbfa877",
     "properties": {
       "simpleName": "literals",
       "optional": false,
@@ -609,13 +609,13 @@
     },
     "references": {
       "type": [
-        "41"
+        "f4dafa8332be81751d6ba4e4d53db6ff826eb146235cf2831baaeffb5c27a736"
       ]
     }
   },
   {
     "type": "Concept",
-    "id": "41",
+    "id": "f4dafa8332be81751d6ba4e4d53db6ff826eb146235cf2831baaeffb5c27a736",
     "properties": {
       "simpleName": "EnumerationLiteral",
       "abstract": false
@@ -625,35 +625,35 @@
     },
     "references": {
       "extends": [
-        "8"
+        "753ae9f3a6e141b88ae2c75de8a49afb80d261cea5c68142bf8052e7f93d2a31"
       ],
       "implements": []
     }
   },
   {
     "type": "PrimitiveType",
-    "id": "2",
+    "id": "ff8a35073872676c1e297f62ca29f6339490ece2ab2defc93da23ca8dd35bf86",
     "properties": {
       "simpleName": "String"
     }
   },
   {
     "type": "PrimitiveType",
-    "id": "3",
+    "id": "eaba6407da695f1a2d46b7aec4560047e66f92b0062f02b756ff71d985489956",
     "properties": {
       "simpleName": "boolean"
     }
   },
   {
     "type": "PrimitiveType",
-    "id": "4",
+    "id": "fb51dba81ae5ca06a0fb71eadfa84d32297795448b2c14abb351d7fc4b80d430",
     "properties": {
       "simpleName": "int"
     }
   },
   {
     "type": "PrimitiveType",
-    "id": "5",
+    "id": "ee65779d925ce1af3e18b69c92e660383a6622d9f88715d90ee6227c0bf59136",
     "properties": {
       "simpleName": "JSON"
     }

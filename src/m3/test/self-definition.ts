@@ -1,15 +1,10 @@
-import {IdGenerator, MetamodelFactory} from "../factory.ts"
+import {MetamodelFactory} from "../factory.ts"
+import {sha256IdGen} from "../../id-generation.ts"
 
 
 // Definition of LIonCore in terms of itself.
 
-const sequentialIdGen = (): IdGenerator => {
-    let num = 0
-    return () => `${++num}`
-}
-
-
-const factory = new MetamodelFactory("LIonCore", sequentialIdGen())
+const factory = new MetamodelFactory("LIonCore", sha256IdGen())
 export const lioncore = factory.metamodel
 
 
