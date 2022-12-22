@@ -1,0 +1,46 @@
+@startuml
+hide empty members
+
+' qualified name: "library"
+
+
+class Book {
+  title: String
+  pages: int
+}
+
+class GuideBookWriter extends Writer {
+  countries: String
+}
+
+class Library {
+  name: String
+}
+
+class SpecialistBookWriter extends Writer {
+  subject: String
+}
+
+' primitive type: "String"
+
+class Writer {
+  name: String
+}
+
+' primitive type: "boolean"
+
+' primitive type: "int"
+
+
+
+' relations:
+
+Book "*" -- "*" Writer: author
+
+Library "1" o-- "*" Book: books
+
+
+legend
+  <#LightGray,#LightGray>| <#Orange>Disputed |
+end legend
+@enduml

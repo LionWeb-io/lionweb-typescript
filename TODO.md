@@ -12,7 +12,7 @@
 * &#10003; Validate serialization against JSON Schemas (in unit tests).
     * &#10003; Generically - just general structure.
     * &#10003; Specifically, with a JSON Schema generated from a LIonCore/M3 instance.
-* [ ] Implement the definition of the `library` metamodel from `lioncore-java`.
+* &#10003; Implement the definition of the `library` metamodel from `lioncore-java`.
 * &hellip; Implement an Ecore importer.
 * [ ] Implement a generic serializer and deserializer that's reflective in given types?
 * [ ] Implement a generic serializer and deserializer parametrized in a LIonCore/M3 instance.

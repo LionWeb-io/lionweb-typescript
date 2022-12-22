@@ -19,7 +19,7 @@ import {SerializedNode} from "../../serialization.ts"
 import {schemaFor} from "../schema-generator.ts"
 
 
-Deno.test("meta-circularity (LIonCore)", async (tctx) => {
+Deno.test("meta-circularity (LIonCore/M3)", async (tctx) => {
 
     await tctx.step("generate PlantUML diagram (no assertions)", async () => {
         await Deno.writeTextFileSync("diagrams/metametamodel-gen.puml", generatePlantUmlForMetamodel(lioncore))
