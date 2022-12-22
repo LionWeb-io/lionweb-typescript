@@ -5,16 +5,16 @@ import {
     Metamodel,
     MetamodelElement,
     PrimitiveType
-} from "./types.ts"
-import {MetamodelFactory} from "./factory.ts"
-import {sha256IdGen} from "../id-generation.ts"
+} from "../types.ts"
+import {MetamodelFactory} from "../factory.ts"
+import {sha256IdGen} from "../../id-generation.ts"
 import {
     asArray,
     EClassifier,
     EcoreXml,
     EStructuralFeature
-} from "./ecore-types.ts"
-import {ConceptType} from "./functions.ts"
+} from "./types.ts"
+import {ConceptType} from "../functions.ts"
 
 
 const refPrefix = "#//"

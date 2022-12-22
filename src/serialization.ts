@@ -3,7 +3,7 @@ import {SingleRef, unresolved} from "./references.ts"
 
 
 // Note: this type is serializable as JSON.
-export type SerializedRef = Id | typeof unresolved | undefined
+export type SerializedRef = Id | typeof unresolved
 
 
 /**

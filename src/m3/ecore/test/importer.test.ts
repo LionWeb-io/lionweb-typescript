@@ -2,15 +2,15 @@ import {
     assertEquals
 } from "https://deno.land/std@0.168.0/testing/asserts.ts"
 
-import {asLIonCoreMetamodel} from "../ecore-importer.ts"
-import {serializeMetamodel} from "../serializer.ts"
-import {writeJsonAsFile} from "../../utils/json.ts"
-import {textAsEcoreXml} from "../ecore-types.ts"
-import {issuesMetamodel} from "../constraints.ts"
-import {checkReferences} from "../reference-checker.ts"
+import {asLIonCoreMetamodel} from "../importer.ts"
+import {serializeMetamodel} from "../../serializer.ts"
+import {writeJsonAsFile} from "../../../utils/json.ts"
+import {textAsEcoreXml} from "../types.ts"
+import {issuesMetamodel} from "../../constraints.ts"
+import {checkReferences} from "../../reference-checker.ts"
 import {
     generatePlantUmlForMetamodel
-} from "../diagrams/PlantUML-generator.ts"
+} from "../../diagrams/PlantUML-generator.ts"
 
 
 Deno.test("Ecore importer", async (tctx) => {

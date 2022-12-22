@@ -7,16 +7,15 @@
 * &hellip; Implement constraints.
 * &#10003; Implement derived features.
 * &#10003; Implement a serializer and deserializer for LIonCore/M3 instances.
-    * Write unit tests.
-    * Check (and document) how unresolved references are (de-)serialized.
-      (Answer: as `null`s.)
-* Implement the definition of the `library` metamodel from `lioncore-java`.
-* &hellip; Validate serialization against JSON Schemas.
+    * &#10003; Check (and document) how unresolved references are (de-)serialized.
+    * [ ] Write unit tests.
+* &#10003; Validate serialization against JSON Schemas (in unit tests).
     * &#10003; Generically - just general structure.
-    * &hellip; Specifically, with a JSON Schema generated from a LIonCore/M3 instance.
+    * &#10003; Specifically, with a JSON Schema generated from a LIonCore/M3 instance.
+* [ ] Implement the definition of the `library` metamodel from `lioncore-java`.
 * &hellip; Implement an Ecore importer.
-* Implement a generic serializer and deserializer that's reflective in given types?
-* Implement a generic serializer and deserializer parametrized in a LIonCore/M3 instance.
+* [ ] Implement a generic serializer and deserializer that's reflective in given types?
+* [ ] Implement a generic serializer and deserializer parametrized in a LIonCore/M3 instance.
 * Generate type definitions from a LIonCore/M3 instance?
 * Think about how to improve API of M3 w.r.t. containment:
     * Is it necessary to have the “parallel hierarchy” due to containment + namespaces?
