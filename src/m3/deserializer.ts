@@ -18,7 +18,7 @@ import {Id, Node} from "../types.ts"
 import {SerializedNode} from "../serialization.ts"
 
 
-export const deserialize = (serializedNodes: SerializedNode[]): Metamodel => {
+export const deserializeMetamodel = (serializedNodes: SerializedNode[]): Metamodel => {
 
     const metamodelSerNode = serializedNodes.find(({type}) => type === "Metamodel")
     if (metamodelSerNode === undefined) {

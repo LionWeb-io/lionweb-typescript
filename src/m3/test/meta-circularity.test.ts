@@ -8,8 +8,8 @@ import {
 } from "../diagrams/PlantUML-generator.ts"
 import {checkReferences} from "../reference-checker.ts"
 import {issuesMetamodel} from "../constraints.ts"
-import {serialize} from "../serializer.ts"
-import {deserialize} from "../deserializer.ts"
+import {serializeMetamodel} from "../serializer.ts"
+import {deserializeMetamodel} from "../deserializer.ts"
 import {readFileAsJson, writeJsonAsFile} from "../../utils/json.ts"
 import {
     createJsonValidatorForSchema,
@@ -49,18 +49,18 @@ Deno.test("meta-circularity (LIonCore)", async (tctx) => {
 
     const serializedLioncorePath = "models/lioncore.json"
     await tctx.step("serialize LIonCore (no assertions)", async () => {
-        const serialization = serialize(lioncore)
+        const serialization = serializeMetamodel(lioncore)
         await writeJsonAsFile(serializedLioncorePath, serialization)
     })
 
     await tctx.step("deserialize LIonCore", async () => {
         const serialization = await readFileAsJson(serializedLioncorePath) as SerializedNode[]
-        const deserialization = deserialize(serialization)
+        const deserialization = deserializeMetamodel(serialization)
         assertEquals(deserialization, lioncore)
     })
 
     await tctx.step("validate serialization of LIonCore", async () => {
-        const serialization = serialize(lioncore)
+        const serialization = serializeMetamodel(lioncore)
         const schema = await readFileAsJson("schemas/generic-serialization.schema.json")
         const metaErrors = metaValidator(schema)
         assertEquals(metaErrors, [])
@@ -74,7 +74,7 @@ Deno.test("meta-circularity (LIonCore)", async (tctx) => {
         const metaErrors = metaValidator(schema)
         assertEquals(metaErrors, [])
         await writeJsonAsFile("schemas/lioncore.serialization.schema.json", schema)
-        const serialization = serialize(lioncore)
+        const serialization = serializeMetamodel(lioncore)
         const validator = createJsonValidatorForSchema(schema)
         const errors = validator(serialization)
         assertEquals(errors, [])

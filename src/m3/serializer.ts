@@ -14,7 +14,7 @@ import {asIds} from "../types.ts"
 import {asRefIds, SerializedNode} from "../serialization.ts"
 
 
-export const serialize = (metamodel: Metamodel): SerializedNode[] /* <=> JSON */ => {
+export const serializeMetamodel = (metamodel: Metamodel): SerializedNode[] /* <=> JSON */ => {
     const json: SerializedNode[] = []
 
     const visit = (thing: M3Concept) => {
