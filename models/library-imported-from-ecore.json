@@ -1,0 +1,254 @@
+[
+  {
+    "type": "Metamodel",
+    "id": "ahf8c1UL_OHEOjLcCabOTygJTh77ZgJuEahjqbiaYIU",
+    "properties": {
+      "qualifiedName": "library"
+    },
+    "children": {
+      "elements": [
+        "AlbxVgsRn0YGwTNP-XSXzpUJNobVm0o1i6OJGcqUZK0",
+        "WSZ8AOgGDX0X2hnxiYrmuKXF8x_3GSnm3CzcCasn4k0",
+        "6atksQZJoLuJLssBxvZPhwYEsojAeqqJENar9u5sECY",
+        "LWX7qN8q7gZ4PtP9vhI5EFAzK_I-kbDMOjFBfbCwvaM",
+        "Lwe8dXjx2qOZWa-LfgM9rq25kKa2saandLwqsWcwYcc",
+        "b_-4AziOkKhqc9ok0TOsYJUeV41O2CbENKesJlrDVXE",
+        "izTKVST0r7cLqbdYu7u_oxYXkDkEESmqhZTjuv1tKlM",
+        "lmlMiLM3CQEUPn3x0Mx3ETrAQhq13E8g2pCj39yIPN0"
+      ]
+    }
+  },
+  {
+    "type": "PrimitiveType",
+    "id": "AlbxVgsRn0YGwTNP-XSXzpUJNobVm0o1i6OJGcqUZK0",
+    "properties": {
+      "simpleName": "String"
+    }
+  },
+  {
+    "type": "PrimitiveType",
+    "id": "WSZ8AOgGDX0X2hnxiYrmuKXF8x_3GSnm3CzcCasn4k0",
+    "properties": {
+      "simpleName": "boolean"
+    }
+  },
+  {
+    "type": "PrimitiveType",
+    "id": "6atksQZJoLuJLssBxvZPhwYEsojAeqqJENar9u5sECY",
+    "properties": {
+      "simpleName": "int"
+    }
+  },
+  {
+    "type": "Concept",
+    "id": "LWX7qN8q7gZ4PtP9vhI5EFAzK_I-kbDMOjFBfbCwvaM",
+    "properties": {
+      "simpleName": "Book",
+      "abstract": false
+    },
+    "children": {
+      "features": [
+        "enWkEeqsQ2bjrnuFVNl-C0x6X0uw_3Z_t3xAbzLkQ9g",
+        "Xc_GADeTLAO4Ij-S_9AlMffO37f4lEENBNYDWG8N7Io",
+        "4AQRaGamWqLmz_5IrkSTOGfJEbABoctQDNmXCEVnLe8"
+      ]
+    },
+    "references": {
+      "extends": [],
+      "implements": []
+    }
+  },
+  {
+    "type": "Property",
+    "id": "enWkEeqsQ2bjrnuFVNl-C0x6X0uw_3Z_t3xAbzLkQ9g",
+    "properties": {
+      "simpleName": "title",
+      "optional": false,
+      "derived": false,
+      "disputed": false
+    },
+    "references": {
+      "type": [
+        "AlbxVgsRn0YGwTNP-XSXzpUJNobVm0o1i6OJGcqUZK0"
+      ]
+    }
+  },
+  {
+    "type": "Property",
+    "id": "Xc_GADeTLAO4Ij-S_9AlMffO37f4lEENBNYDWG8N7Io",
+    "properties": {
+      "simpleName": "pages",
+      "optional": false,
+      "derived": false,
+      "disputed": false
+    },
+    "references": {
+      "type": [
+        "6atksQZJoLuJLssBxvZPhwYEsojAeqqJENar9u5sECY"
+      ]
+    }
+  },
+  {
+    "type": "Reference",
+    "id": "4AQRaGamWqLmz_5IrkSTOGfJEbABoctQDNmXCEVnLe8",
+    "properties": {
+      "simpleName": "author",
+      "optional": false,
+      "derived": false,
+      "multiple": true
+    },
+    "references": {
+      "type": [
+        "b_-4AziOkKhqc9ok0TOsYJUeV41O2CbENKesJlrDVXE"
+      ]
+    }
+  },
+  {
+    "type": "Concept",
+    "id": "Lwe8dXjx2qOZWa-LfgM9rq25kKa2saandLwqsWcwYcc",
+    "properties": {
+      "simpleName": "Library",
+      "abstract": false
+    },
+    "children": {
+      "features": [
+        "BnkMqQb7GWKt2IA2J9Lf2sEEqqQeYZnh5mEGwSj3oto",
+        "y875YdiFWxbMFwqf0gWDsRZTrcK-oiJA80DW8yJ9up4"
+      ]
+    },
+    "references": {
+      "extends": [],
+      "implements": []
+    }
+  },
+  {
+    "type": "Property",
+    "id": "BnkMqQb7GWKt2IA2J9Lf2sEEqqQeYZnh5mEGwSj3oto",
+    "properties": {
+      "simpleName": "name",
+      "optional": false,
+      "derived": false,
+      "disputed": false
+    },
+    "references": {
+      "type": [
+        "AlbxVgsRn0YGwTNP-XSXzpUJNobVm0o1i6OJGcqUZK0"
+      ]
+    }
+  },
+  {
+    "type": "Containment",
+    "id": "y875YdiFWxbMFwqf0gWDsRZTrcK-oiJA80DW8yJ9up4",
+    "properties": {
+      "simpleName": "books",
+      "optional": false,
+      "derived": false,
+      "multiple": true
+    },
+    "references": {
+      "type": [
+        "LWX7qN8q7gZ4PtP9vhI5EFAzK_I-kbDMOjFBfbCwvaM"
+      ]
+    }
+  },
+  {
+    "type": "Concept",
+    "id": "b_-4AziOkKhqc9ok0TOsYJUeV41O2CbENKesJlrDVXE",
+    "properties": {
+      "simpleName": "Writer",
+      "abstract": false
+    },
+    "children": {
+      "features": [
+        "ezkbNFg_XPJo_EAkNzTxUVf2d4Sl95Um94LmuZCaWgg"
+      ]
+    },
+    "references": {
+      "extends": [],
+      "implements": []
+    }
+  },
+  {
+    "type": "Property",
+    "id": "ezkbNFg_XPJo_EAkNzTxUVf2d4Sl95Um94LmuZCaWgg",
+    "properties": {
+      "simpleName": "name",
+      "optional": false,
+      "derived": false,
+      "disputed": false
+    },
+    "references": {
+      "type": [
+        "AlbxVgsRn0YGwTNP-XSXzpUJNobVm0o1i6OJGcqUZK0"
+      ]
+    }
+  },
+  {
+    "type": "Concept",
+    "id": "izTKVST0r7cLqbdYu7u_oxYXkDkEESmqhZTjuv1tKlM",
+    "properties": {
+      "simpleName": "GuideBookWriter",
+      "abstract": false
+    },
+    "children": {
+      "features": [
+        "EjYco_ONp4fw7efRaoorHwlBuufswws87M6_0Lrvano"
+      ]
+    },
+    "references": {
+      "extends": [
+        "b_-4AziOkKhqc9ok0TOsYJUeV41O2CbENKesJlrDVXE"
+      ],
+      "implements": []
+    }
+  },
+  {
+    "type": "Property",
+    "id": "EjYco_ONp4fw7efRaoorHwlBuufswws87M6_0Lrvano",
+    "properties": {
+      "simpleName": "countries",
+      "optional": false,
+      "derived": false,
+      "disputed": false
+    },
+    "references": {
+      "type": [
+        "AlbxVgsRn0YGwTNP-XSXzpUJNobVm0o1i6OJGcqUZK0"
+      ]
+    }
+  },
+  {
+    "type": "Concept",
+    "id": "lmlMiLM3CQEUPn3x0Mx3ETrAQhq13E8g2pCj39yIPN0",
+    "properties": {
+      "simpleName": "SpecialistBookWriter",
+      "abstract": false
+    },
+    "children": {
+      "features": [
+        "PrdXbhN43t7Dj8EW00sTIU9v5had7U36xWubxsibcBs"
+      ]
+    },
+    "references": {
+      "extends": [
+        "b_-4AziOkKhqc9ok0TOsYJUeV41O2CbENKesJlrDVXE"
+      ],
+      "implements": []
+    }
+  },
+  {
+    "type": "Property",
+    "id": "PrdXbhN43t7Dj8EW00sTIU9v5had7U36xWubxsibcBs",
+    "properties": {
+      "simpleName": "subject",
+      "optional": false,
+      "derived": false,
+      "disputed": false
+    },
+    "references": {
+      "type": [
+        "AlbxVgsRn0YGwTNP-XSXzpUJNobVm0o1i6OJGcqUZK0"
+      ]
+    }
+  }
+]

@@ -14,9 +14,9 @@
 * &hellip; Validate serialization against JSON Schemas.
     * &#10003; Generically - just general structure.
     * &hellip; Specifically, with a JSON Schema generated from a LIonCore/M3 instance.
+* &hellip; Implement an Ecore importer.
 * Implement a generic serializer and deserializer that's reflective in given types?
 * Implement a generic serializer and deserializer parametrized in a LIonCore/M3 instance.
-* Implement an Ecore importer.
 * Generate type definitions from a LIonCore/M3 instance?
 * Think about how to improve API of M3 w.r.t. containment:
     * Is it necessary to have the “parallel hierarchy” due to containment + namespaces?
