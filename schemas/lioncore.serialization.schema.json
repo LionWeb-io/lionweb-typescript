@@ -46,6 +46,9 @@
               "type": "string"
             }
           },
+          "required": [
+            "qualifiedName"
+          ],
           "additionalProperties": false
         },
         "children": {
@@ -92,6 +95,10 @@
               "type": "string"
             }
           },
+          "required": [
+            "abstract",
+            "simpleName"
+          ],
           "additionalProperties": false
         },
         "children": {
@@ -141,6 +148,9 @@
               "type": "string"
             }
           },
+          "required": [
+            "simpleName"
+          ],
           "additionalProperties": false
         },
         "children": {
@@ -196,6 +206,12 @@
               "type": "string"
             }
           },
+          "required": [
+            "multiple",
+            "optional",
+            "derived",
+            "simpleName"
+          ],
           "additionalProperties": false
         },
         "children": {
@@ -247,6 +263,12 @@
               "type": "string"
             }
           },
+          "required": [
+            "disputed",
+            "optional",
+            "derived",
+            "simpleName"
+          ],
           "additionalProperties": false
         },
         "children": {
@@ -289,6 +311,9 @@
               "type": "string"
             }
           },
+          "required": [
+            "simpleName"
+          ],
           "additionalProperties": false
         },
         "children": {
@@ -337,6 +362,12 @@
               "type": "string"
             }
           },
+          "required": [
+            "multiple",
+            "optional",
+            "derived",
+            "simpleName"
+          ],
           "additionalProperties": false
         },
         "children": {
@@ -379,6 +410,9 @@
               "type": "string"
             }
           },
+          "required": [
+            "simpleName"
+          ],
           "additionalProperties": false
         },
         "children": {
@@ -388,6 +422,9 @@
               "$ref": "#/$defs/Ids"
             }
           },
+          "required": [
+            "literals"
+          ],
           "additionalProperties": false
         },
         "references": {
@@ -422,6 +459,9 @@
               "type": "string"
             }
           },
+          "required": [
+            "simpleName"
+          ],
           "additionalProperties": false
         },
         "children": {

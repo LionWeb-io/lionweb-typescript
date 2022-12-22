@@ -2,6 +2,7 @@ import {
     Concept,
     Datatype,
     Enumeration,
+    Feature,
     Metamodel,
     PrimitiveType,
     Property
@@ -18,11 +19,13 @@ import {isRef} from "../references.ts"
 // TODO  import types for JSON Schema
 
 
+const ref = (id: string): { $ref: string } =>
+    ({ $ref: `#/$defs/${id}` })
+
+
 const asJSONSchemaType = (dataType: Datatype): object => {
     if (dataType instanceof Enumeration) {
-        return {
-            $ref: `#/$defs/${dataType.simpleName}`
-        }
+        return ref(dataType.simpleName)
     }
     if (dataType instanceof PrimitiveType) {
         switch (dataType.simpleName) {
@@ -43,6 +46,24 @@ const schemaForProperty = (property: Property): unknown =>
         : {}    // "any"
 
 
+const schemaForProperties = <T extends Feature>(features: T[], mapFeature: (feature: T) => unknown, specifyRequireds: boolean) => {
+    const requireds = features.filter(({optional}) => !optional)
+    return {
+        type: "object",
+        properties: Object.fromEntries(
+            features
+                .map((feature) => [
+                    feature.simpleName,
+                    mapFeature(feature)
+                ])
+        ),
+        required: specifyRequireds && requireds.length > 0
+            ? requireds.map(({simpleName}) => simpleName)
+            : undefined,
+        additionalProperties: false
+    }
+}
+
 const schemaForConcept = (concept: Concept): unknown => {
     const allFeatures = allFeaturesOf(concept)
     return {
@@ -51,46 +72,12 @@ const schemaForConcept = (concept: Concept): unknown => {
             "type": {
                 const: concept.simpleName
             },
-            "id": {$ref: "#/$defs/Id"},
-            "properties": {
-                type: "object",
-                properties: Object.fromEntries(
-                    allFeatures
-                        .filter(isRealProperty)
-                        .map((property) => [
-                            property.simpleName,
-                            schemaForProperty(property)
-                        ])
-                ),
-                // TODO  required
-                additionalProperties: false
-            },
-            "children": {
-                type: "object",
-                properties: Object.fromEntries(
-                    allFeatures
-                        .filter(isRealContainment)
-                        .map(({simpleName}) => [
-                            simpleName,
-                            { $ref: "#/$defs/Ids" }
-                        ])
-                ),
+            "id": ref("Id"),
+            "properties": schemaForProperties(allFeatures.filter(isRealProperty), schemaForProperty, true),
+            "children": schemaForProperties(allFeatures.filter(isRealContainment), () => ref("Ids"), true),
                 // TODO  required (also with minLength=1 in property-def.)
-                additionalProperties: false
-            },
-            "references": {
-                type: "object",
-                properties: Object.fromEntries(
-                    allFeatures
-                        .filter(isRealReference)
-                        .map(({simpleName}) => [
-                            simpleName,
-                            { $ref: "#/$defs/SerializedRefs" }
-                        ])
-                ),
+            "references": schemaForProperties(allFeatures.filter(isRealReference), () => ref("SerializedRefs"), false),
                 // TODO  required (also with minLength=1 in property-def.)
-                additionalProperties: false
-            }
         },
         required: [
             "type", "id"
@@ -98,6 +85,12 @@ const schemaForConcept = (concept: Concept): unknown => {
         additionalProperties: false
     }
 }
+
+const schemaForEnumeration = ({literals}: Enumeration): unknown =>
+    ({
+        enum: literals.map(({simpleName}) => simpleName)
+    })
+
 
 export const schemaFor = (metamodel: Metamodel): unknown => {
     const concreteConcepts = metamodel.elements.filter(isConcrete)
@@ -107,19 +100,16 @@ export const schemaFor = (metamodel: Metamodel): unknown => {
         $id: `${metamodel.qualifiedName}-serialization`,    // TODO  let caller specify URL instead?
         title: `Serialization format specific to ${metamodel.qualifiedName}`,
         type: "array",
-        items: {
-            $ref: "#/$defs/SerializedNode"
-        },
+        items: ref("SerializedNode"),
         $defs: {
+            // TODO  consider putting these definitions in a separate, referred-to JSON Schema
             "Id": {
                 type: "string",
                 minLength: 1
             },
             "Ids": {
                 type: "array",
-                items: {
-                    $ref: "#/$defs/Id"
-                }
+                items: ref("Id")
             },
             "SerializedRefs": {
                 type: "array",
@@ -139,15 +129,13 @@ export const schemaFor = (metamodel: Metamodel): unknown => {
             ),
             "SerializedNode": {
                 oneOf: concreteConcepts
-                    .map(({simpleName}) => ({ $ref: `#/$defs/${simpleName}` }))
+                    .map(({simpleName}) => ref(simpleName))
             },
             ...Object.fromEntries(
                 enumerations
                     .map((enumeration) => [
                         enumeration.simpleName,
-                        {
-                            enum: enumeration.literals.map(({simpleName}) => simpleName)
-                        }
+                        schemaForEnumeration(enumeration)
                     ])
             )
         }
