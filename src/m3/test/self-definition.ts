@@ -4,7 +4,7 @@ import {sha256IdGen} from "../../id-generation.ts"
 
 // Definition of LIonCore in terms of itself.
 
-const factory = new MetamodelFactory("LIonCore", sha256IdGen())
+const factory = new MetamodelFactory("LIonCore", sha256IdGen({ salt: "LIonCore" }))
 export const lioncore = factory.metamodel
 
 
