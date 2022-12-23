@@ -15,7 +15,7 @@ Deno.test("Library test model", async (tctx) => {
     await tctx.step("generate PlantUML diagram (no assertions)", async () => {
         const diagramText = generatePlantUmlForMetamodel(libraryMetamodel)
         await Deno.writeTextFileSync("diagrams/library-gen.puml", diagramText)
-        assertEquals(diagramText, await Deno.readTextFileSync("diagrams/library-imported-from-ecore.puml"))
+        assertEquals(diagramText, await Deno.readTextFileSync("diagrams/library-imported-from-ecore-gen.puml"))
     })
 
     await tctx.step("serialize it (no assertions)", async () => {

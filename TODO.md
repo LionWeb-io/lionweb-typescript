@@ -8,14 +8,19 @@
 * &#10003; Implement derived features.
 * &#10003; Implement a serializer and deserializer for LIonCore/M3 instances.
     * &#10003; Check (and document) how unresolved references are (de-)serialized.
+    * [ ] Replace feature names with their IDs.
     * [ ] Write unit tests.
 * &#10003; Validate serialization against JSON Schemas (in unit tests).
     * &#10003; Generically - just general structure.
     * &#10003; Specifically, with a JSON Schema generated from a LIonCore/M3 instance.
 * &#10003; Implement the definition of the `library` metamodel from `lioncore-java`.
-* &hellip; Implement an Ecore importer.
-* [ ] Implement a generic serializer and deserializer that's reflective in given types?
+* &hellip; Finish the Ecore importer - the current implementation is quite partial.
+    * [ ] Test against more complicated Ecore models.
+* [ ] JSDoc all the things.
 * [ ] Implement a generic serializer and deserializer parametrized in a LIonCore/M3 instance.
+* [ ] Complete documentation of the serialization format, and move it to the `organization` repository, together with JSON Schemas.
+* [ ] Implement a converter for MPS structure models to LIonCore/M3 instances.
+* [ ] Implement a generic serializer and deserializer that's reflective in given types?
 * Generate type definitions from a LIonCore/M3 instance?
 * Think about how to improve API of M3 w.r.t. containment:
     * Is it necessary to have the “parallel hierarchy” due to containment + namespaces?

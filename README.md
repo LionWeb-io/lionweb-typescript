@@ -19,21 +19,21 @@ Run [`watch-tests.sh`](watch-tests.sh) to run all unit tests in watch mode.
 
 The following is a list of links to potential starting points:
 
-* Implementation of the LIonCore meta-metamodel (M3): see the [specific README](src/m3/README.md)
+* Implementation of the LIonCore meta-metamodel (M3): see the [specific README](src/m3/README.md).
 * Metamodel-generic/-aspecific code regarding:
-  * [TypeScript type definitions](src/types.ts)
-  * (representation of) [references](src/references.ts)
-  * [serialization](src/serialization.ts)
-  * [generation of IDs](src/id-generation.ts)
+  * [TypeScript type definitions](src/types.ts).
+  * Representation of [references](src/references.ts).
+  * [Serialization](src/serialization.ts).
+  * [Generation of IDs](src/id-generation.ts).
 
 
 ## Repository organization
 
 * [Diagrams](diagrams/) - various diagrams.
   The PlantUML file [`diagrams/metametamodel-gen.puml`](diagrams/metametamodel-gen.puml) is generated from the meta-circular definition of `lioncore` in [`src/m3/test/self-definition.ts`](src/m3/test/self-definition.ts)
-  This generated PlantUML file can then be compared with [this one](https://github.com/LIonWeb-org/organization/blob/main/lioncore/metametamodel.puml): they should have exactly the same contents apart from some a couple of obvious differences.
-* [Models](models/) - various models in their serialized formats (the LIonWeb JSON format, or Ecore XML).
-* [Schemas](schemas/) - various JSON Schema files for validating models serialized in the LIonWeb JSON format against.
+  This generated PlantUML file can then be compared with [this one](https://github.com/LIonWeb-org/organization/blob/main/lioncore/metametamodel.puml): they should have exactly the same contents apart from a couple of obvious differences.
+* [Models](models/) - various models in their serialized formats (the LIonWeb JSON format, or Ecore XML); see the [specific README](models/README.md).
+* [Schemas](schemas/) - various JSON Schema files for validating models serialized in the LIonWeb JSON format against; see the [specific README](schemas/README.md).
 * [Source](src/) - all TypeScript source.
   Tests are located in files with names ending with `.test.ts` which are located in sub directories named `test`.
 

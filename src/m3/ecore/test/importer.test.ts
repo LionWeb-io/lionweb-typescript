@@ -26,7 +26,7 @@ Deno.test("Ecore importer", async (tctx) => {
         assertEquals(issues, [])
         const serialization = serializeMetamodel(metamodel)
         await writeJsonAsFile("models/library-imported-from-ecore.json", serialization)
-        await Deno.writeTextFileSync("diagrams/library-imported-from-ecore.puml", generatePlantUmlForMetamodel(metamodel))
+        await Deno.writeTextFileSync("diagrams/library-imported-from-ecore-gen.puml", generatePlantUmlForMetamodel(metamodel))
     })
 
 })
