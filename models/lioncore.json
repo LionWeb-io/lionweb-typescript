@@ -1,12 +1,12 @@
 [
   {
-    "type": "Metamodel",
+    "type": "2RwKfEC_uO52_DD7EpH4yr2HFihpvOGX1RdJnpjTPt8",
     "id": "40OatauMODdLFbeBQrSO79ZibM9tBkweHdcVG9UYdR4",
     "properties": {
-      "qualifiedName": "LIonCore"
+      "b-RVLQ2Ds5DCltCdCTx6t9xF9-UiM-_4azlFhAtxsIE": "LIonCore"
     },
     "children": {
-      "elements": [
+      "WywzwrEjTcHoKhcmdgdAi2qtq1PNlvF9HAr-1P7v9_E": [
         "qsOrl3TbCSqC2Ivwx1NofcNRA7E0Rk3wI9C1_Z_BPgE",
         "vxqEp1_IGEBDJL8dr4DXF2u4iSpsiKx34-6893CVVW0",
         "2RwKfEC_uO52_DD7EpH4yr2HFihpvOGX1RdJnpjTPt8",
@@ -31,631 +31,631 @@
     }
   },
   {
-    "type": "Concept",
+    "type": "P5mA5UQ9K_oDW09__c_SySM82hiH7JpJR5v2mjRSOgI",
     "id": "qsOrl3TbCSqC2Ivwx1NofcNRA7E0Rk3wI9C1_Z_BPgE",
     "properties": {
-      "simpleName": "NamespacedEntity",
-      "abstract": true
+      "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": "NamespacedEntity",
+      "ZolE7R8XRuGTZlkUSI09PFg2qpCNL0scBHcgQN1ZXPs": true
     },
     "children": {
-      "features": [
+      "eBBhGgVwX2kX0QCoJR_PvmtuFNBESR3Bk_7bc8veqAw": [
         "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E",
         "4LbRsQsfNkvfQ1DCj4QJjsxxjZYRUzC0LO5mxMHSFaY",
         "MnrQCXXpbTgKXU6TEfKy2HE54IMo5MR8dgpNtJrwe_Y"
       ]
     },
     "references": {
-      "extends": [],
-      "implements": []
+      "q0M0W9qPaZMz8DwzN_hd4ZNH1NkGSnhisop9tFutJuA": [],
+      "nc_Df-KtPBxH2JLNSpLyV9vIMkYk8bUMjNlDjDyj7S8": []
     }
   },
   {
-    "type": "Property",
+    "type": "nlWrt3HzZaJ1ueFnSem9r-orIWch6Unu0-Wh6_P1otY",
     "id": "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E",
     "properties": {
-      "simpleName": "simpleName",
-      "optional": false,
-      "derived": false,
-      "disputed": false
+      "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": "simpleName",
+      "Do8aSOpkf-yFwmCVnrNmnA27iFuiThciYq7uC1EfF3Y": false,
+      "HNpYl3fS2-ckw0T1QNPkaiRJv4_CQKs-reUQZ2gBeGw": false,
+      "FkdlZwp3xBcc64xCaXIPR71JXxuhLO7PXInj36jUjIM": false
     },
     "references": {
-      "type": [
+      "27VExn6bl0TQMRnwnSUBoSJQK26vDT8NaiMM1c268s8": [
         "BCJRylkazZI-T0aiKMYFD22i2GidHyRDtaryiVFTDos"
       ]
     }
   },
   {
-    "type": "Property",
+    "type": "nlWrt3HzZaJ1ueFnSem9r-orIWch6Unu0-Wh6_P1otY",
     "id": "4LbRsQsfNkvfQ1DCj4QJjsxxjZYRUzC0LO5mxMHSFaY",
     "properties": {
-      "simpleName": "qualifiedName",
-      "optional": false,
-      "derived": true,
-      "disputed": false
+      "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": "qualifiedName",
+      "Do8aSOpkf-yFwmCVnrNmnA27iFuiThciYq7uC1EfF3Y": false,
+      "HNpYl3fS2-ckw0T1QNPkaiRJv4_CQKs-reUQZ2gBeGw": true,
+      "FkdlZwp3xBcc64xCaXIPR71JXxuhLO7PXInj36jUjIM": false
     },
     "references": {
-      "type": [
+      "27VExn6bl0TQMRnwnSUBoSJQK26vDT8NaiMM1c268s8": [
         "BCJRylkazZI-T0aiKMYFD22i2GidHyRDtaryiVFTDos"
       ]
     }
   },
   {
-    "type": "Reference",
+    "type": "TOwfAnlDaWWf_232Q2QPVabGLqUghPf3KOxmG4XhPf4",
     "id": "MnrQCXXpbTgKXU6TEfKy2HE54IMo5MR8dgpNtJrwe_Y",
     "properties": {
-      "simpleName": "container",
-      "optional": false,
-      "derived": false,
-      "multiple": false
+      "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": "container",
+      "Do8aSOpkf-yFwmCVnrNmnA27iFuiThciYq7uC1EfF3Y": false,
+      "HNpYl3fS2-ckw0T1QNPkaiRJv4_CQKs-reUQZ2gBeGw": false,
+      "f9Y0ZYySHPi4oHHJPDt8rLl_CmLwFQfgqVa7ZgMahDE": false
     },
     "references": {
-      "type": [
+      "Zd6J4u3fQVjIsHzIuiB73WQJz1YFRDRRGnJptgtMOLQ": [
         "vxqEp1_IGEBDJL8dr4DXF2u4iSpsiKx34-6893CVVW0"
       ]
     }
   },
   {
-    "type": "ConceptInterface",
+    "type": "IOVrJmIQm0dJ0GfjwSmS4MLqRdYUnqS4OPfAoGImTFQ",
     "id": "vxqEp1_IGEBDJL8dr4DXF2u4iSpsiKx34-6893CVVW0",
     "properties": {
-      "simpleName": "NamespaceProvider"
+      "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": "NamespaceProvider"
     },
     "children": {
-      "features": [
+      "eBBhGgVwX2kX0QCoJR_PvmtuFNBESR3Bk_7bc8veqAw": [
         "ALLR2-TjXVrXwtrEjOtIW39aG77HJcCRqxApGuhcxHI"
       ]
     },
     "references": {
-      "extends": []
+      "gjsVE5zN_6RqYncOWEmErIXj31EPLhXdkw3IXSEfEvM": []
     }
   },
   {
-    "type": "Property",
+    "type": "nlWrt3HzZaJ1ueFnSem9r-orIWch6Unu0-Wh6_P1otY",
     "id": "ALLR2-TjXVrXwtrEjOtIW39aG77HJcCRqxApGuhcxHI",
     "properties": {
-      "simpleName": "namespaceQualifier",
-      "optional": false,
-      "derived": true,
-      "disputed": false
+      "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": "namespaceQualifier",
+      "Do8aSOpkf-yFwmCVnrNmnA27iFuiThciYq7uC1EfF3Y": false,
+      "HNpYl3fS2-ckw0T1QNPkaiRJv4_CQKs-reUQZ2gBeGw": true,
+      "FkdlZwp3xBcc64xCaXIPR71JXxuhLO7PXInj36jUjIM": false
     },
     "references": {
-      "type": [
+      "27VExn6bl0TQMRnwnSUBoSJQK26vDT8NaiMM1c268s8": [
         "BCJRylkazZI-T0aiKMYFD22i2GidHyRDtaryiVFTDos"
       ]
     }
   },
   {
-    "type": "Concept",
+    "type": "P5mA5UQ9K_oDW09__c_SySM82hiH7JpJR5v2mjRSOgI",
     "id": "2RwKfEC_uO52_DD7EpH4yr2HFihpvOGX1RdJnpjTPt8",
     "properties": {
-      "simpleName": "Metamodel",
-      "abstract": false
+      "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": "Metamodel",
+      "ZolE7R8XRuGTZlkUSI09PFg2qpCNL0scBHcgQN1ZXPs": false
     },
     "children": {
-      "features": [
+      "eBBhGgVwX2kX0QCoJR_PvmtuFNBESR3Bk_7bc8veqAw": [
         "b-RVLQ2Ds5DCltCdCTx6t9xF9-UiM-_4azlFhAtxsIE",
         "WywzwrEjTcHoKhcmdgdAi2qtq1PNlvF9HAr-1P7v9_E",
         "XihxA4KPPzJCjOyOQCiUStJWuMkP1uKu905DZLGFLvg"
       ]
     },
     "references": {
-      "extends": [],
-      "implements": [
+      "q0M0W9qPaZMz8DwzN_hd4ZNH1NkGSnhisop9tFutJuA": [],
+      "nc_Df-KtPBxH2JLNSpLyV9vIMkYk8bUMjNlDjDyj7S8": [
         "vxqEp1_IGEBDJL8dr4DXF2u4iSpsiKx34-6893CVVW0"
       ]
     }
   },
   {
-    "type": "Property",
+    "type": "nlWrt3HzZaJ1ueFnSem9r-orIWch6Unu0-Wh6_P1otY",
     "id": "b-RVLQ2Ds5DCltCdCTx6t9xF9-UiM-_4azlFhAtxsIE",
     "properties": {
-      "simpleName": "qualifiedName",
-      "optional": false,
-      "derived": false,
-      "disputed": false
+      "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": "qualifiedName",
+      "Do8aSOpkf-yFwmCVnrNmnA27iFuiThciYq7uC1EfF3Y": false,
+      "HNpYl3fS2-ckw0T1QNPkaiRJv4_CQKs-reUQZ2gBeGw": false,
+      "FkdlZwp3xBcc64xCaXIPR71JXxuhLO7PXInj36jUjIM": false
     },
     "references": {
-      "type": [
+      "27VExn6bl0TQMRnwnSUBoSJQK26vDT8NaiMM1c268s8": [
         "BCJRylkazZI-T0aiKMYFD22i2GidHyRDtaryiVFTDos"
       ]
     }
   },
   {
-    "type": "Containment",
+    "type": "cwYnrw_2zWysBoa3lo60NM6CXl4PrARJu5RYKM6gfgI",
     "id": "WywzwrEjTcHoKhcmdgdAi2qtq1PNlvF9HAr-1P7v9_E",
     "properties": {
-      "simpleName": "elements",
-      "optional": true,
-      "derived": false,
-      "multiple": true
+      "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": "elements",
+      "Do8aSOpkf-yFwmCVnrNmnA27iFuiThciYq7uC1EfF3Y": true,
+      "HNpYl3fS2-ckw0T1QNPkaiRJv4_CQKs-reUQZ2gBeGw": false,
+      "f9Y0ZYySHPi4oHHJPDt8rLl_CmLwFQfgqVa7ZgMahDE": true
     },
     "references": {
-      "type": [
+      "Zd6J4u3fQVjIsHzIuiB73WQJz1YFRDRRGnJptgtMOLQ": [
         "I1LHzMGsSfnuv5P_H9ZhRHD3Y0vxvMNzU8PPDDrYW-U"
       ]
     }
   },
   {
-    "type": "Reference",
+    "type": "TOwfAnlDaWWf_232Q2QPVabGLqUghPf3KOxmG4XhPf4",
     "id": "XihxA4KPPzJCjOyOQCiUStJWuMkP1uKu905DZLGFLvg",
     "properties": {
-      "simpleName": "dependsOn",
-      "optional": true,
-      "derived": false,
-      "multiple": true
+      "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": "dependsOn",
+      "Do8aSOpkf-yFwmCVnrNmnA27iFuiThciYq7uC1EfF3Y": true,
+      "HNpYl3fS2-ckw0T1QNPkaiRJv4_CQKs-reUQZ2gBeGw": false,
+      "f9Y0ZYySHPi4oHHJPDt8rLl_CmLwFQfgqVa7ZgMahDE": true
     },
     "references": {
-      "type": [
+      "Zd6J4u3fQVjIsHzIuiB73WQJz1YFRDRRGnJptgtMOLQ": [
         "2RwKfEC_uO52_DD7EpH4yr2HFihpvOGX1RdJnpjTPt8"
       ]
     }
   },
   {
-    "type": "Concept",
+    "type": "P5mA5UQ9K_oDW09__c_SySM82hiH7JpJR5v2mjRSOgI",
     "id": "I1LHzMGsSfnuv5P_H9ZhRHD3Y0vxvMNzU8PPDDrYW-U",
     "properties": {
-      "simpleName": "MetamodelElement",
-      "abstract": true
+      "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": "MetamodelElement",
+      "ZolE7R8XRuGTZlkUSI09PFg2qpCNL0scBHcgQN1ZXPs": true
     },
     "children": {
-      "features": []
+      "eBBhGgVwX2kX0QCoJR_PvmtuFNBESR3Bk_7bc8veqAw": []
     },
     "references": {
-      "extends": [
+      "q0M0W9qPaZMz8DwzN_hd4ZNH1NkGSnhisop9tFutJuA": [
         "qsOrl3TbCSqC2Ivwx1NofcNRA7E0Rk3wI9C1_Z_BPgE"
       ],
-      "implements": []
+      "nc_Df-KtPBxH2JLNSpLyV9vIMkYk8bUMjNlDjDyj7S8": []
     }
   },
   {
-    "type": "Concept",
+    "type": "P5mA5UQ9K_oDW09__c_SySM82hiH7JpJR5v2mjRSOgI",
     "id": "RxYoFcBeKj0S95_wA2tdFDXiRT815CdcJDUXC8XJeLI",
     "properties": {
-      "simpleName": "FeaturesContainer",
-      "abstract": true
+      "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": "FeaturesContainer",
+      "ZolE7R8XRuGTZlkUSI09PFg2qpCNL0scBHcgQN1ZXPs": true
     },
     "children": {
-      "features": [
+      "eBBhGgVwX2kX0QCoJR_PvmtuFNBESR3Bk_7bc8veqAw": [
         "eBBhGgVwX2kX0QCoJR_PvmtuFNBESR3Bk_7bc8veqAw",
         "1DL7ItBbXm_nF11MSMZIHnBJeV4ntzbZIYdzrTRf0Wo"
       ]
     },
     "references": {
-      "extends": [
+      "q0M0W9qPaZMz8DwzN_hd4ZNH1NkGSnhisop9tFutJuA": [
         "I1LHzMGsSfnuv5P_H9ZhRHD3Y0vxvMNzU8PPDDrYW-U"
       ],
-      "implements": [
+      "nc_Df-KtPBxH2JLNSpLyV9vIMkYk8bUMjNlDjDyj7S8": [
         "vxqEp1_IGEBDJL8dr4DXF2u4iSpsiKx34-6893CVVW0"
       ]
     }
   },
   {
-    "type": "Containment",
+    "type": "cwYnrw_2zWysBoa3lo60NM6CXl4PrARJu5RYKM6gfgI",
     "id": "eBBhGgVwX2kX0QCoJR_PvmtuFNBESR3Bk_7bc8veqAw",
     "properties": {
-      "simpleName": "features",
-      "optional": true,
-      "derived": false,
-      "multiple": true
+      "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": "features",
+      "Do8aSOpkf-yFwmCVnrNmnA27iFuiThciYq7uC1EfF3Y": true,
+      "HNpYl3fS2-ckw0T1QNPkaiRJv4_CQKs-reUQZ2gBeGw": false,
+      "f9Y0ZYySHPi4oHHJPDt8rLl_CmLwFQfgqVa7ZgMahDE": true
     },
     "references": {
-      "type": [
+      "Zd6J4u3fQVjIsHzIuiB73WQJz1YFRDRRGnJptgtMOLQ": [
         "04lxDn6UjUoWbEx9ISy8fbtT-8Kn7dJBNMVgCVHWRyE"
       ]
     }
   },
   {
-    "type": "Reference",
+    "type": "TOwfAnlDaWWf_232Q2QPVabGLqUghPf3KOxmG4XhPf4",
     "id": "1DL7ItBbXm_nF11MSMZIHnBJeV4ntzbZIYdzrTRf0Wo",
     "properties": {
-      "simpleName": "allFeatures",
-      "optional": true,
-      "derived": true,
-      "multiple": true
+      "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": "allFeatures",
+      "Do8aSOpkf-yFwmCVnrNmnA27iFuiThciYq7uC1EfF3Y": true,
+      "HNpYl3fS2-ckw0T1QNPkaiRJv4_CQKs-reUQZ2gBeGw": true,
+      "f9Y0ZYySHPi4oHHJPDt8rLl_CmLwFQfgqVa7ZgMahDE": true
     },
     "references": {
-      "type": [
+      "Zd6J4u3fQVjIsHzIuiB73WQJz1YFRDRRGnJptgtMOLQ": [
         "04lxDn6UjUoWbEx9ISy8fbtT-8Kn7dJBNMVgCVHWRyE"
       ]
     }
   },
   {
-    "type": "Concept",
+    "type": "P5mA5UQ9K_oDW09__c_SySM82hiH7JpJR5v2mjRSOgI",
     "id": "P5mA5UQ9K_oDW09__c_SySM82hiH7JpJR5v2mjRSOgI",
     "properties": {
-      "simpleName": "Concept",
-      "abstract": false
+      "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": "Concept",
+      "ZolE7R8XRuGTZlkUSI09PFg2qpCNL0scBHcgQN1ZXPs": false
     },
     "children": {
-      "features": [
+      "eBBhGgVwX2kX0QCoJR_PvmtuFNBESR3Bk_7bc8veqAw": [
         "ZolE7R8XRuGTZlkUSI09PFg2qpCNL0scBHcgQN1ZXPs",
         "q0M0W9qPaZMz8DwzN_hd4ZNH1NkGSnhisop9tFutJuA",
         "nc_Df-KtPBxH2JLNSpLyV9vIMkYk8bUMjNlDjDyj7S8"
       ]
     },
     "references": {
-      "extends": [
+      "q0M0W9qPaZMz8DwzN_hd4ZNH1NkGSnhisop9tFutJuA": [
         "RxYoFcBeKj0S95_wA2tdFDXiRT815CdcJDUXC8XJeLI"
       ],
-      "implements": []
+      "nc_Df-KtPBxH2JLNSpLyV9vIMkYk8bUMjNlDjDyj7S8": []
     }
   },
   {
-    "type": "Property",
+    "type": "nlWrt3HzZaJ1ueFnSem9r-orIWch6Unu0-Wh6_P1otY",
     "id": "ZolE7R8XRuGTZlkUSI09PFg2qpCNL0scBHcgQN1ZXPs",
     "properties": {
-      "simpleName": "abstract",
-      "optional": false,
-      "derived": false,
-      "disputed": false
+      "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": "abstract",
+      "Do8aSOpkf-yFwmCVnrNmnA27iFuiThciYq7uC1EfF3Y": false,
+      "HNpYl3fS2-ckw0T1QNPkaiRJv4_CQKs-reUQZ2gBeGw": false,
+      "FkdlZwp3xBcc64xCaXIPR71JXxuhLO7PXInj36jUjIM": false
     },
     "references": {
-      "type": [
+      "27VExn6bl0TQMRnwnSUBoSJQK26vDT8NaiMM1c268s8": [
         "Q0YvrCRB62ticj8ODLwBDrkhD7SUmZ9XyqNQC8NpJXU"
       ]
     }
   },
   {
-    "type": "Reference",
+    "type": "TOwfAnlDaWWf_232Q2QPVabGLqUghPf3KOxmG4XhPf4",
     "id": "q0M0W9qPaZMz8DwzN_hd4ZNH1NkGSnhisop9tFutJuA",
     "properties": {
-      "simpleName": "extends",
-      "optional": true,
-      "derived": false,
-      "multiple": false
+      "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": "extends",
+      "Do8aSOpkf-yFwmCVnrNmnA27iFuiThciYq7uC1EfF3Y": true,
+      "HNpYl3fS2-ckw0T1QNPkaiRJv4_CQKs-reUQZ2gBeGw": false,
+      "f9Y0ZYySHPi4oHHJPDt8rLl_CmLwFQfgqVa7ZgMahDE": false
     },
     "references": {
-      "type": [
+      "Zd6J4u3fQVjIsHzIuiB73WQJz1YFRDRRGnJptgtMOLQ": [
         "P5mA5UQ9K_oDW09__c_SySM82hiH7JpJR5v2mjRSOgI"
       ]
     }
   },
   {
-    "type": "Reference",
+    "type": "TOwfAnlDaWWf_232Q2QPVabGLqUghPf3KOxmG4XhPf4",
     "id": "nc_Df-KtPBxH2JLNSpLyV9vIMkYk8bUMjNlDjDyj7S8",
     "properties": {
-      "simpleName": "implements",
-      "optional": true,
-      "derived": false,
-      "multiple": true
+      "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": "implements",
+      "Do8aSOpkf-yFwmCVnrNmnA27iFuiThciYq7uC1EfF3Y": true,
+      "HNpYl3fS2-ckw0T1QNPkaiRJv4_CQKs-reUQZ2gBeGw": false,
+      "f9Y0ZYySHPi4oHHJPDt8rLl_CmLwFQfgqVa7ZgMahDE": true
     },
     "references": {
-      "type": [
+      "Zd6J4u3fQVjIsHzIuiB73WQJz1YFRDRRGnJptgtMOLQ": [
         "IOVrJmIQm0dJ0GfjwSmS4MLqRdYUnqS4OPfAoGImTFQ"
       ]
     }
   },
   {
-    "type": "Concept",
+    "type": "P5mA5UQ9K_oDW09__c_SySM82hiH7JpJR5v2mjRSOgI",
     "id": "IOVrJmIQm0dJ0GfjwSmS4MLqRdYUnqS4OPfAoGImTFQ",
     "properties": {
-      "simpleName": "ConceptInterface",
-      "abstract": false
+      "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": "ConceptInterface",
+      "ZolE7R8XRuGTZlkUSI09PFg2qpCNL0scBHcgQN1ZXPs": false
     },
     "children": {
-      "features": [
+      "eBBhGgVwX2kX0QCoJR_PvmtuFNBESR3Bk_7bc8veqAw": [
         "gjsVE5zN_6RqYncOWEmErIXj31EPLhXdkw3IXSEfEvM"
       ]
     },
     "references": {
-      "extends": [
+      "q0M0W9qPaZMz8DwzN_hd4ZNH1NkGSnhisop9tFutJuA": [
         "RxYoFcBeKj0S95_wA2tdFDXiRT815CdcJDUXC8XJeLI"
       ],
-      "implements": []
+      "nc_Df-KtPBxH2JLNSpLyV9vIMkYk8bUMjNlDjDyj7S8": []
     }
   },
   {
-    "type": "Reference",
+    "type": "TOwfAnlDaWWf_232Q2QPVabGLqUghPf3KOxmG4XhPf4",
     "id": "gjsVE5zN_6RqYncOWEmErIXj31EPLhXdkw3IXSEfEvM",
     "properties": {
-      "simpleName": "extends",
-      "optional": true,
-      "derived": false,
-      "multiple": true
+      "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": "extends",
+      "Do8aSOpkf-yFwmCVnrNmnA27iFuiThciYq7uC1EfF3Y": true,
+      "HNpYl3fS2-ckw0T1QNPkaiRJv4_CQKs-reUQZ2gBeGw": false,
+      "f9Y0ZYySHPi4oHHJPDt8rLl_CmLwFQfgqVa7ZgMahDE": true
     },
     "references": {
-      "type": [
+      "Zd6J4u3fQVjIsHzIuiB73WQJz1YFRDRRGnJptgtMOLQ": [
         "IOVrJmIQm0dJ0GfjwSmS4MLqRdYUnqS4OPfAoGImTFQ"
       ]
     }
   },
   {
-    "type": "Concept",
+    "type": "P5mA5UQ9K_oDW09__c_SySM82hiH7JpJR5v2mjRSOgI",
     "id": "04lxDn6UjUoWbEx9ISy8fbtT-8Kn7dJBNMVgCVHWRyE",
     "properties": {
-      "simpleName": "Feature",
-      "abstract": true
+      "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": "Feature",
+      "ZolE7R8XRuGTZlkUSI09PFg2qpCNL0scBHcgQN1ZXPs": true
     },
     "children": {
-      "features": [
+      "eBBhGgVwX2kX0QCoJR_PvmtuFNBESR3Bk_7bc8veqAw": [
         "Do8aSOpkf-yFwmCVnrNmnA27iFuiThciYq7uC1EfF3Y",
         "HNpYl3fS2-ckw0T1QNPkaiRJv4_CQKs-reUQZ2gBeGw"
       ]
     },
     "references": {
-      "extends": [
+      "q0M0W9qPaZMz8DwzN_hd4ZNH1NkGSnhisop9tFutJuA": [
         "qsOrl3TbCSqC2Ivwx1NofcNRA7E0Rk3wI9C1_Z_BPgE"
       ],
-      "implements": []
+      "nc_Df-KtPBxH2JLNSpLyV9vIMkYk8bUMjNlDjDyj7S8": []
     }
   },
   {
-    "type": "Property",
+    "type": "nlWrt3HzZaJ1ueFnSem9r-orIWch6Unu0-Wh6_P1otY",
     "id": "Do8aSOpkf-yFwmCVnrNmnA27iFuiThciYq7uC1EfF3Y",
     "properties": {
-      "simpleName": "optional",
-      "optional": false,
-      "derived": false,
-      "disputed": false
+      "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": "optional",
+      "Do8aSOpkf-yFwmCVnrNmnA27iFuiThciYq7uC1EfF3Y": false,
+      "HNpYl3fS2-ckw0T1QNPkaiRJv4_CQKs-reUQZ2gBeGw": false,
+      "FkdlZwp3xBcc64xCaXIPR71JXxuhLO7PXInj36jUjIM": false
     },
     "references": {
-      "type": [
+      "27VExn6bl0TQMRnwnSUBoSJQK26vDT8NaiMM1c268s8": [
         "Q0YvrCRB62ticj8ODLwBDrkhD7SUmZ9XyqNQC8NpJXU"
       ]
     }
   },
   {
-    "type": "Property",
+    "type": "nlWrt3HzZaJ1ueFnSem9r-orIWch6Unu0-Wh6_P1otY",
     "id": "HNpYl3fS2-ckw0T1QNPkaiRJv4_CQKs-reUQZ2gBeGw",
     "properties": {
-      "simpleName": "derived",
-      "optional": false,
-      "derived": false,
-      "disputed": true
+      "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": "derived",
+      "Do8aSOpkf-yFwmCVnrNmnA27iFuiThciYq7uC1EfF3Y": false,
+      "HNpYl3fS2-ckw0T1QNPkaiRJv4_CQKs-reUQZ2gBeGw": false,
+      "FkdlZwp3xBcc64xCaXIPR71JXxuhLO7PXInj36jUjIM": true
     },
     "references": {
-      "type": [
+      "27VExn6bl0TQMRnwnSUBoSJQK26vDT8NaiMM1c268s8": [
         "Q0YvrCRB62ticj8ODLwBDrkhD7SUmZ9XyqNQC8NpJXU"
       ]
     }
   },
   {
-    "type": "Concept",
+    "type": "P5mA5UQ9K_oDW09__c_SySM82hiH7JpJR5v2mjRSOgI",
     "id": "mS8T1LI4nKoxWMKn25fawX3iDyIhhpIe0vfNdTBwrrI",
     "properties": {
-      "simpleName": "Link",
-      "abstract": true
+      "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": "Link",
+      "ZolE7R8XRuGTZlkUSI09PFg2qpCNL0scBHcgQN1ZXPs": true
     },
     "children": {
-      "features": [
+      "eBBhGgVwX2kX0QCoJR_PvmtuFNBESR3Bk_7bc8veqAw": [
         "f9Y0ZYySHPi4oHHJPDt8rLl_CmLwFQfgqVa7ZgMahDE",
         "Zd6J4u3fQVjIsHzIuiB73WQJz1YFRDRRGnJptgtMOLQ"
       ]
     },
     "references": {
-      "extends": [
+      "q0M0W9qPaZMz8DwzN_hd4ZNH1NkGSnhisop9tFutJuA": [
         "04lxDn6UjUoWbEx9ISy8fbtT-8Kn7dJBNMVgCVHWRyE"
       ],
-      "implements": []
+      "nc_Df-KtPBxH2JLNSpLyV9vIMkYk8bUMjNlDjDyj7S8": []
     }
   },
   {
-    "type": "Property",
+    "type": "nlWrt3HzZaJ1ueFnSem9r-orIWch6Unu0-Wh6_P1otY",
     "id": "f9Y0ZYySHPi4oHHJPDt8rLl_CmLwFQfgqVa7ZgMahDE",
     "properties": {
-      "simpleName": "multiple",
-      "optional": false,
-      "derived": false,
-      "disputed": false
+      "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": "multiple",
+      "Do8aSOpkf-yFwmCVnrNmnA27iFuiThciYq7uC1EfF3Y": false,
+      "HNpYl3fS2-ckw0T1QNPkaiRJv4_CQKs-reUQZ2gBeGw": false,
+      "FkdlZwp3xBcc64xCaXIPR71JXxuhLO7PXInj36jUjIM": false
     },
     "references": {
-      "type": [
+      "27VExn6bl0TQMRnwnSUBoSJQK26vDT8NaiMM1c268s8": [
         "Q0YvrCRB62ticj8ODLwBDrkhD7SUmZ9XyqNQC8NpJXU"
       ]
     }
   },
   {
-    "type": "Reference",
+    "type": "TOwfAnlDaWWf_232Q2QPVabGLqUghPf3KOxmG4XhPf4",
     "id": "Zd6J4u3fQVjIsHzIuiB73WQJz1YFRDRRGnJptgtMOLQ",
     "properties": {
-      "simpleName": "type",
-      "optional": false,
-      "derived": false,
-      "multiple": false
+      "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": "type",
+      "Do8aSOpkf-yFwmCVnrNmnA27iFuiThciYq7uC1EfF3Y": false,
+      "HNpYl3fS2-ckw0T1QNPkaiRJv4_CQKs-reUQZ2gBeGw": false,
+      "f9Y0ZYySHPi4oHHJPDt8rLl_CmLwFQfgqVa7ZgMahDE": false
     },
     "references": {
-      "type": [
+      "Zd6J4u3fQVjIsHzIuiB73WQJz1YFRDRRGnJptgtMOLQ": [
         "RxYoFcBeKj0S95_wA2tdFDXiRT815CdcJDUXC8XJeLI"
       ]
     }
   },
   {
-    "type": "Concept",
+    "type": "P5mA5UQ9K_oDW09__c_SySM82hiH7JpJR5v2mjRSOgI",
     "id": "TOwfAnlDaWWf_232Q2QPVabGLqUghPf3KOxmG4XhPf4",
     "properties": {
-      "simpleName": "Reference",
-      "abstract": false
+      "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": "Reference",
+      "ZolE7R8XRuGTZlkUSI09PFg2qpCNL0scBHcgQN1ZXPs": false
     },
     "children": {
-      "features": []
+      "eBBhGgVwX2kX0QCoJR_PvmtuFNBESR3Bk_7bc8veqAw": []
     },
     "references": {
-      "extends": [
+      "q0M0W9qPaZMz8DwzN_hd4ZNH1NkGSnhisop9tFutJuA": [
         "mS8T1LI4nKoxWMKn25fawX3iDyIhhpIe0vfNdTBwrrI"
       ],
-      "implements": []
+      "nc_Df-KtPBxH2JLNSpLyV9vIMkYk8bUMjNlDjDyj7S8": []
     }
   },
   {
-    "type": "Concept",
+    "type": "P5mA5UQ9K_oDW09__c_SySM82hiH7JpJR5v2mjRSOgI",
     "id": "nlWrt3HzZaJ1ueFnSem9r-orIWch6Unu0-Wh6_P1otY",
     "properties": {
-      "simpleName": "Property",
-      "abstract": false
+      "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": "Property",
+      "ZolE7R8XRuGTZlkUSI09PFg2qpCNL0scBHcgQN1ZXPs": false
     },
     "children": {
-      "features": [
+      "eBBhGgVwX2kX0QCoJR_PvmtuFNBESR3Bk_7bc8veqAw": [
         "27VExn6bl0TQMRnwnSUBoSJQK26vDT8NaiMM1c268s8",
         "FkdlZwp3xBcc64xCaXIPR71JXxuhLO7PXInj36jUjIM"
       ]
     },
     "references": {
-      "extends": [
+      "q0M0W9qPaZMz8DwzN_hd4ZNH1NkGSnhisop9tFutJuA": [
         "04lxDn6UjUoWbEx9ISy8fbtT-8Kn7dJBNMVgCVHWRyE"
       ],
-      "implements": []
+      "nc_Df-KtPBxH2JLNSpLyV9vIMkYk8bUMjNlDjDyj7S8": []
     }
   },
   {
-    "type": "Reference",
+    "type": "TOwfAnlDaWWf_232Q2QPVabGLqUghPf3KOxmG4XhPf4",
     "id": "27VExn6bl0TQMRnwnSUBoSJQK26vDT8NaiMM1c268s8",
     "properties": {
-      "simpleName": "type",
-      "optional": false,
-      "derived": false,
-      "multiple": false
+      "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": "type",
+      "Do8aSOpkf-yFwmCVnrNmnA27iFuiThciYq7uC1EfF3Y": false,
+      "HNpYl3fS2-ckw0T1QNPkaiRJv4_CQKs-reUQZ2gBeGw": false,
+      "f9Y0ZYySHPi4oHHJPDt8rLl_CmLwFQfgqVa7ZgMahDE": false
     },
     "references": {
-      "type": [
+      "Zd6J4u3fQVjIsHzIuiB73WQJz1YFRDRRGnJptgtMOLQ": [
         "JJsOh7MpGpi9yROYmrO8dBgTJO9sw-CSERrHGs19jQ8"
       ]
     }
   },
   {
-    "type": "Property",
+    "type": "nlWrt3HzZaJ1ueFnSem9r-orIWch6Unu0-Wh6_P1otY",
     "id": "FkdlZwp3xBcc64xCaXIPR71JXxuhLO7PXInj36jUjIM",
     "properties": {
-      "simpleName": "disputed",
-      "optional": false,
-      "derived": false,
-      "disputed": false
+      "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": "disputed",
+      "Do8aSOpkf-yFwmCVnrNmnA27iFuiThciYq7uC1EfF3Y": false,
+      "HNpYl3fS2-ckw0T1QNPkaiRJv4_CQKs-reUQZ2gBeGw": false,
+      "FkdlZwp3xBcc64xCaXIPR71JXxuhLO7PXInj36jUjIM": false
     },
     "references": {
-      "type": [
+      "27VExn6bl0TQMRnwnSUBoSJQK26vDT8NaiMM1c268s8": [
         "Q0YvrCRB62ticj8ODLwBDrkhD7SUmZ9XyqNQC8NpJXU"
       ]
     }
   },
   {
-    "type": "Concept",
+    "type": "P5mA5UQ9K_oDW09__c_SySM82hiH7JpJR5v2mjRSOgI",
     "id": "JJsOh7MpGpi9yROYmrO8dBgTJO9sw-CSERrHGs19jQ8",
     "properties": {
-      "simpleName": "DataType",
-      "abstract": true
+      "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": "DataType",
+      "ZolE7R8XRuGTZlkUSI09PFg2qpCNL0scBHcgQN1ZXPs": true
     },
     "children": {
-      "features": []
+      "eBBhGgVwX2kX0QCoJR_PvmtuFNBESR3Bk_7bc8veqAw": []
     },
     "references": {
-      "extends": [
+      "q0M0W9qPaZMz8DwzN_hd4ZNH1NkGSnhisop9tFutJuA": [
         "I1LHzMGsSfnuv5P_H9ZhRHD3Y0vxvMNzU8PPDDrYW-U"
       ],
-      "implements": []
+      "nc_Df-KtPBxH2JLNSpLyV9vIMkYk8bUMjNlDjDyj7S8": []
     }
   },
   {
-    "type": "Concept",
+    "type": "P5mA5UQ9K_oDW09__c_SySM82hiH7JpJR5v2mjRSOgI",
     "id": "a6kHNaFw2KZIlqTuaB4oXFT0mF3Bhx60BE9ICwVC5J4",
     "properties": {
-      "simpleName": "PrimitiveType",
-      "abstract": false
+      "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": "PrimitiveType",
+      "ZolE7R8XRuGTZlkUSI09PFg2qpCNL0scBHcgQN1ZXPs": false
     },
     "children": {
-      "features": []
+      "eBBhGgVwX2kX0QCoJR_PvmtuFNBESR3Bk_7bc8veqAw": []
     },
     "references": {
-      "extends": [
+      "q0M0W9qPaZMz8DwzN_hd4ZNH1NkGSnhisop9tFutJuA": [
         "JJsOh7MpGpi9yROYmrO8dBgTJO9sw-CSERrHGs19jQ8"
       ],
-      "implements": []
+      "nc_Df-KtPBxH2JLNSpLyV9vIMkYk8bUMjNlDjDyj7S8": []
     }
   },
   {
-    "type": "Concept",
+    "type": "P5mA5UQ9K_oDW09__c_SySM82hiH7JpJR5v2mjRSOgI",
     "id": "cwYnrw_2zWysBoa3lo60NM6CXl4PrARJu5RYKM6gfgI",
     "properties": {
-      "simpleName": "Containment",
-      "abstract": false
+      "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": "Containment",
+      "ZolE7R8XRuGTZlkUSI09PFg2qpCNL0scBHcgQN1ZXPs": false
     },
     "children": {
-      "features": []
+      "eBBhGgVwX2kX0QCoJR_PvmtuFNBESR3Bk_7bc8veqAw": []
     },
     "references": {
-      "extends": [
+      "q0M0W9qPaZMz8DwzN_hd4ZNH1NkGSnhisop9tFutJuA": [
         "mS8T1LI4nKoxWMKn25fawX3iDyIhhpIe0vfNdTBwrrI"
       ],
-      "implements": []
+      "nc_Df-KtPBxH2JLNSpLyV9vIMkYk8bUMjNlDjDyj7S8": []
     }
   },
   {
-    "type": "Concept",
+    "type": "P5mA5UQ9K_oDW09__c_SySM82hiH7JpJR5v2mjRSOgI",
     "id": "dR1alaMpOA8WF4ytsIlZ5gQsPQuGXs3Il-zuWBwMHhI",
     "properties": {
-      "simpleName": "Enumeration",
-      "abstract": false
+      "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": "Enumeration",
+      "ZolE7R8XRuGTZlkUSI09PFg2qpCNL0scBHcgQN1ZXPs": false
     },
     "children": {
-      "features": [
+      "eBBhGgVwX2kX0QCoJR_PvmtuFNBESR3Bk_7bc8veqAw": [
         "L9WAf3OLj3faarICDAsF62m5EZwiFgqxMcKVCiXCJs0"
       ]
     },
     "references": {
-      "extends": [
+      "q0M0W9qPaZMz8DwzN_hd4ZNH1NkGSnhisop9tFutJuA": [
         "JJsOh7MpGpi9yROYmrO8dBgTJO9sw-CSERrHGs19jQ8"
       ],
-      "implements": [
+      "nc_Df-KtPBxH2JLNSpLyV9vIMkYk8bUMjNlDjDyj7S8": [
         "vxqEp1_IGEBDJL8dr4DXF2u4iSpsiKx34-6893CVVW0"
       ]
     }
   },
   {
-    "type": "Containment",
+    "type": "cwYnrw_2zWysBoa3lo60NM6CXl4PrARJu5RYKM6gfgI",
     "id": "L9WAf3OLj3faarICDAsF62m5EZwiFgqxMcKVCiXCJs0",
     "properties": {
-      "simpleName": "literals",
-      "optional": false,
-      "derived": false,
-      "multiple": true
+      "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": "literals",
+      "Do8aSOpkf-yFwmCVnrNmnA27iFuiThciYq7uC1EfF3Y": false,
+      "HNpYl3fS2-ckw0T1QNPkaiRJv4_CQKs-reUQZ2gBeGw": false,
+      "f9Y0ZYySHPi4oHHJPDt8rLl_CmLwFQfgqVa7ZgMahDE": true
     },
     "references": {
-      "type": [
+      "Zd6J4u3fQVjIsHzIuiB73WQJz1YFRDRRGnJptgtMOLQ": [
         "BNZC2WqYyJurUmEQYQ0iF2WM5NKpcT_1Oo1pkSPOvjA"
       ]
     }
   },
   {
-    "type": "Concept",
+    "type": "P5mA5UQ9K_oDW09__c_SySM82hiH7JpJR5v2mjRSOgI",
     "id": "BNZC2WqYyJurUmEQYQ0iF2WM5NKpcT_1Oo1pkSPOvjA",
     "properties": {
-      "simpleName": "EnumerationLiteral",
-      "abstract": false
+      "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": "EnumerationLiteral",
+      "ZolE7R8XRuGTZlkUSI09PFg2qpCNL0scBHcgQN1ZXPs": false
     },
     "children": {
-      "features": []
+      "eBBhGgVwX2kX0QCoJR_PvmtuFNBESR3Bk_7bc8veqAw": []
     },
     "references": {
-      "extends": [
+      "q0M0W9qPaZMz8DwzN_hd4ZNH1NkGSnhisop9tFutJuA": [
         "qsOrl3TbCSqC2Ivwx1NofcNRA7E0Rk3wI9C1_Z_BPgE"
       ],
-      "implements": []
+      "nc_Df-KtPBxH2JLNSpLyV9vIMkYk8bUMjNlDjDyj7S8": []
     }
   },
   {
-    "type": "PrimitiveType",
+    "type": "a6kHNaFw2KZIlqTuaB4oXFT0mF3Bhx60BE9ICwVC5J4",
     "id": "BCJRylkazZI-T0aiKMYFD22i2GidHyRDtaryiVFTDos",
     "properties": {
-      "simpleName": "String"
+      "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": "String"
     }
   },
   {
-    "type": "PrimitiveType",
+    "type": "a6kHNaFw2KZIlqTuaB4oXFT0mF3Bhx60BE9ICwVC5J4",
     "id": "Q0YvrCRB62ticj8ODLwBDrkhD7SUmZ9XyqNQC8NpJXU",
     "properties": {
-      "simpleName": "boolean"
+      "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": "boolean"
     }
   },
   {
-    "type": "PrimitiveType",
+    "type": "a6kHNaFw2KZIlqTuaB4oXFT0mF3Bhx60BE9ICwVC5J4",
     "id": "WGbDfDnFmUyWbtpbV7n3RI3dTstf9wD-CCtN9vaVfLM",
     "properties": {
-      "simpleName": "int"
+      "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": "int"
     }
   },
   {
-    "type": "PrimitiveType",
+    "type": "a6kHNaFw2KZIlqTuaB4oXFT0mF3Bhx60BE9ICwVC5J4",
     "id": "a2QtlR48RrqZf5lnMvgtzEpxUl4X6_e0X99eGtkAxHc",
     "properties": {
-      "simpleName": "JSON"
+      "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": "JSON"
     }
   }
 ]

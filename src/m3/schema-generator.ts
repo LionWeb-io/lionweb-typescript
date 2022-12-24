@@ -25,7 +25,7 @@ const ref = (id: string): { $ref: string } =>
 
 const asJSONSchemaType = (dataType: Datatype): object => {
     if (dataType instanceof Enumeration) {
-        return ref(dataType.simpleName)
+        return ref(dataType.id)
     }
     if (dataType instanceof PrimitiveType) {
         switch (dataType.simpleName) {
@@ -53,12 +53,12 @@ const schemaForProperties = <T extends Feature>(features: T[], mapFeature: (feat
         properties: Object.fromEntries(
             features
                 .map((feature) => [
-                    feature.simpleName,
+                    feature.id,
                     mapFeature(feature)
                 ])
         ),
         required: specifyRequireds && requireds.length > 0
-            ? requireds.map(({simpleName}) => simpleName)
+            ? requireds.map(({id}) => id)
             : undefined,
         additionalProperties: false
     }
@@ -70,7 +70,7 @@ const schemaForConcept = (concept: Concept): unknown => {
         type: "object",
         properties: {
             "type": {
-                const: concept.simpleName
+                const: concept.id
             },
             "id": ref("Id"),
             "properties": schemaForProperties(allFeatures.filter(isRealProperty), schemaForProperty, true),
@@ -134,7 +134,7 @@ export const schemaFor = (metamodel: Metamodel): unknown => {
             ...Object.fromEntries(
                 enumerations
                     .map((enumeration) => [
-                        enumeration.simpleName,
+                        enumeration.id,
                         schemaForEnumeration(enumeration)
                     ])
             )

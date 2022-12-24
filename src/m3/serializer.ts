@@ -12,6 +12,32 @@ import {
 } from "./types.ts"
 import {asIds} from "../types.ts"
 import {asRefIds, SerializedNode} from "../serialization.ts"
+import {
+    concept,
+    concept_abstract,
+    concept_extends,
+    concept_implements,
+    conceptInterface,
+    conceptInterface_extends,
+    containment,
+    enumeration,
+    enumeration_literals,
+    enumerationLiteral,
+    feature_derived,
+    feature_optional,
+    featuresContainer_features,
+    link_multiple,
+    link_type,
+    metamodel as metametamodel,
+    metamodel_elements,
+    metamodel_qualifiedName,
+    namespacedEntity_simpleName,
+    primitiveType,
+    property,
+    property_disputed,
+    property_type,
+    reference
+} from "./self-definition.ts"
 
 
 export const serializeMetamodel = (metamodel: Metamodel): SerializedNode[] /* <=> JSON */ => {
@@ -21,18 +47,18 @@ export const serializeMetamodel = (metamodel: Metamodel): SerializedNode[] /* <=
 
         if (thing instanceof Concept) {
             json.push({
-                type: "Concept",
+                type: concept.id,
                 id: thing.id,
                 properties: {
-                    simpleName: thing.simpleName,
-                    abstract: thing.abstract
+                    [namespacedEntity_simpleName.id]: thing.simpleName,
+                    [concept_abstract.id]: thing.abstract
                 },
                 children: {
-                    features: asIds(thing.features)
+                    [featuresContainer_features.id]: asIds(thing.features)
                 },
                 references: {
-                    extends: asRefIds(thing.extends),
-                    implements: asIds(thing.implements)
+                    [concept_extends.id]: asRefIds(thing.extends),
+                    [concept_implements.id]: asIds(thing.implements)
                 }
             })
             thing.features.forEach(visit)
@@ -40,16 +66,16 @@ export const serializeMetamodel = (metamodel: Metamodel): SerializedNode[] /* <=
         }
         if (thing instanceof ConceptInterface) {
             json.push({
-                type: "ConceptInterface",
+                type: conceptInterface.id,
                 id: thing.id,
                 properties: {
-                    simpleName: thing.simpleName
+                    [namespacedEntity_simpleName.id]: thing.simpleName
                 },
                 children: {
-                    features: asIds(thing.features)
+                    [featuresContainer_features.id]: asIds(thing.features)
                 },
                 references: {
-                    extends: asIds(thing.extends)
+                    [conceptInterface_extends.id]: asIds(thing.extends)
                 }
             })
             thing.features.forEach(visit)
@@ -57,29 +83,29 @@ export const serializeMetamodel = (metamodel: Metamodel): SerializedNode[] /* <=
         }
         if (thing instanceof Containment) {
             json.push({
-                type: "Containment",
+                type: containment.id,
                 id: thing.id,
                 properties: {
-                    simpleName: thing.simpleName,
-                    optional: thing.optional,
-                    derived: thing.derived,
-                    multiple: thing.multiple
+                    [namespacedEntity_simpleName.id]: thing.simpleName,
+                    [feature_optional.id]: thing.optional,
+                    [feature_derived.id]: thing.derived,
+                    [link_multiple.id]: thing.multiple
                 },
                 references: {
-                    type: asRefIds(thing.type)
+                    [link_type.id]: asRefIds(thing.type)
                 }
             })
             return
         }
         if (thing instanceof Enumeration) {
             json.push({
-                type: "Enumeration",
+                type: enumeration.id,
                 id: thing.id,
                 properties: {
-                    simpleName: thing.simpleName
+                    [namespacedEntity_simpleName.id]: thing.simpleName
                 },
                 children: {
-                    literals: asIds(thing.literals)
+                    [enumeration_literals.id]: asIds(thing.literals)
                 }
             })
             thing.literals.forEach(visit)
@@ -87,23 +113,23 @@ export const serializeMetamodel = (metamodel: Metamodel): SerializedNode[] /* <=
         }
         if (thing instanceof EnumerationLiteral) {
             json.push({
-                type: "EnumerationLiteral",
+                type: enumerationLiteral.id,
                 id: thing.id,
                 properties: {
-                    simpleName: thing.simpleName
+                    [namespacedEntity_simpleName.id]: thing.simpleName
                 }
             })
             return
         }
         if (thing instanceof Metamodel) {
             json.push({
-                type: "Metamodel",
+                type: metametamodel.id,
                 id: thing.id,
                 properties: {
-                    qualifiedName: thing.qualifiedName
+                    [metamodel_qualifiedName.id]: thing.qualifiedName
                 },
                 children: {
-                    elements: asIds(thing.elements)
+                    [metamodel_elements.id]: asIds(thing.elements)
                 }
             })
             thing.elements.forEach(visit)
@@ -111,42 +137,42 @@ export const serializeMetamodel = (metamodel: Metamodel): SerializedNode[] /* <=
         }
         if (thing instanceof PrimitiveType) {
             json.push({
-                type: "PrimitiveType",
+                type: primitiveType.id,
                 id: thing.id,
                 properties: {
-                    simpleName: thing.simpleName
+                    [namespacedEntity_simpleName.id]: thing.simpleName
                 }
             })
             return
         }
         if (thing instanceof Property) {
             json.push({
-                type: "Property",
+                type: property.id,
                 id: thing.id,
                 properties: {
-                    simpleName: thing.simpleName,
-                    optional: thing.optional,
-                    derived: thing.derived,
-                    disputed: thing.disputed
+                    [namespacedEntity_simpleName.id]: thing.simpleName,
+                    [feature_optional.id]: thing.optional,
+                    [feature_derived.id]: thing.derived,
+                    [property_disputed.id]: thing.disputed
                 },
                 references: {
-                    type: asRefIds(thing.type)
+                    [property_type.id]: asRefIds(thing.type)
                 }
             })
             return
         }
         if (thing instanceof Reference) {
             json.push({
-                type: "Reference",
+                type: reference.id,
                 id: thing.id,
                 properties: {
-                    simpleName: thing.simpleName,
-                    optional: thing.optional,
-                    derived: thing.derived,
-                    multiple: thing.multiple
+                    [namespacedEntity_simpleName.id]: thing.simpleName,
+                    [feature_optional.id]: thing.optional,
+                    [feature_derived.id]: thing.derived,
+                    [link_multiple.id]: thing.multiple
                 },
                 references: {
-                    type: asRefIds(thing.type)
+                    [link_type.id]: asRefIds(thing.type)
                 }
             })
             return

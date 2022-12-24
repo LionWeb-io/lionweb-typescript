@@ -34,7 +34,7 @@
       "type": "object",
       "properties": {
         "type": {
-          "const": "Metamodel"
+          "const": "2RwKfEC_uO52_DD7EpH4yr2HFihpvOGX1RdJnpjTPt8"
         },
         "id": {
           "$ref": "#/$defs/Id"
@@ -42,19 +42,19 @@
         "properties": {
           "type": "object",
           "properties": {
-            "qualifiedName": {
+            "b-RVLQ2Ds5DCltCdCTx6t9xF9-UiM-_4azlFhAtxsIE": {
               "type": "string"
             }
           },
           "required": [
-            "qualifiedName"
+            "b-RVLQ2Ds5DCltCdCTx6t9xF9-UiM-_4azlFhAtxsIE"
           ],
           "additionalProperties": false
         },
         "children": {
           "type": "object",
           "properties": {
-            "elements": {
+            "WywzwrEjTcHoKhcmdgdAi2qtq1PNlvF9HAr-1P7v9_E": {
               "$ref": "#/$defs/Ids"
             }
           },
@@ -63,7 +63,7 @@
         "references": {
           "type": "object",
           "properties": {
-            "dependsOn": {
+            "XihxA4KPPzJCjOyOQCiUStJWuMkP1uKu905DZLGFLvg": {
               "$ref": "#/$defs/SerializedRefs"
             }
           },
@@ -80,7 +80,7 @@
       "type": "object",
       "properties": {
         "type": {
-          "const": "Concept"
+          "const": "P5mA5UQ9K_oDW09__c_SySM82hiH7JpJR5v2mjRSOgI"
         },
         "id": {
           "$ref": "#/$defs/Id"
@@ -88,23 +88,23 @@
         "properties": {
           "type": "object",
           "properties": {
-            "abstract": {
+            "ZolE7R8XRuGTZlkUSI09PFg2qpCNL0scBHcgQN1ZXPs": {
               "type": "boolean"
             },
-            "simpleName": {
+            "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": {
               "type": "string"
             }
           },
           "required": [
-            "abstract",
-            "simpleName"
+            "ZolE7R8XRuGTZlkUSI09PFg2qpCNL0scBHcgQN1ZXPs",
+            "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E"
           ],
           "additionalProperties": false
         },
         "children": {
           "type": "object",
           "properties": {
-            "features": {
+            "eBBhGgVwX2kX0QCoJR_PvmtuFNBESR3Bk_7bc8veqAw": {
               "$ref": "#/$defs/Ids"
             }
           },
@@ -113,13 +113,13 @@
         "references": {
           "type": "object",
           "properties": {
-            "extends": {
+            "q0M0W9qPaZMz8DwzN_hd4ZNH1NkGSnhisop9tFutJuA": {
               "$ref": "#/$defs/SerializedRefs"
             },
-            "implements": {
+            "nc_Df-KtPBxH2JLNSpLyV9vIMkYk8bUMjNlDjDyj7S8": {
               "$ref": "#/$defs/SerializedRefs"
             },
-            "container": {
+            "MnrQCXXpbTgKXU6TEfKy2HE54IMo5MR8dgpNtJrwe_Y": {
               "$ref": "#/$defs/SerializedRefs"
             }
           },
@@ -136,7 +136,7 @@
       "type": "object",
       "properties": {
         "type": {
-          "const": "ConceptInterface"
+          "const": "IOVrJmIQm0dJ0GfjwSmS4MLqRdYUnqS4OPfAoGImTFQ"
         },
         "id": {
           "$ref": "#/$defs/Id"
@@ -144,19 +144,19 @@
         "properties": {
           "type": "object",
           "properties": {
-            "simpleName": {
+            "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": {
               "type": "string"
             }
           },
           "required": [
-            "simpleName"
+            "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E"
           ],
           "additionalProperties": false
         },
         "children": {
           "type": "object",
           "properties": {
-            "features": {
+            "eBBhGgVwX2kX0QCoJR_PvmtuFNBESR3Bk_7bc8veqAw": {
               "$ref": "#/$defs/Ids"
             }
           },
@@ -165,10 +165,10 @@
         "references": {
           "type": "object",
           "properties": {
-            "extends": {
+            "gjsVE5zN_6RqYncOWEmErIXj31EPLhXdkw3IXSEfEvM": {
               "$ref": "#/$defs/SerializedRefs"
             },
-            "container": {
+            "MnrQCXXpbTgKXU6TEfKy2HE54IMo5MR8dgpNtJrwe_Y": {
               "$ref": "#/$defs/SerializedRefs"
             }
           },
@@ -185,7 +185,7 @@
       "type": "object",
       "properties": {
         "type": {
-          "const": "Reference"
+          "const": "TOwfAnlDaWWf_232Q2QPVabGLqUghPf3KOxmG4XhPf4"
         },
         "id": {
           "$ref": "#/$defs/Id"
@@ -193,24 +193,24 @@
         "properties": {
           "type": "object",
           "properties": {
-            "multiple": {
+            "f9Y0ZYySHPi4oHHJPDt8rLl_CmLwFQfgqVa7ZgMahDE": {
               "type": "boolean"
             },
-            "optional": {
+            "Do8aSOpkf-yFwmCVnrNmnA27iFuiThciYq7uC1EfF3Y": {
               "type": "boolean"
             },
-            "derived": {
+            "HNpYl3fS2-ckw0T1QNPkaiRJv4_CQKs-reUQZ2gBeGw": {
               "type": "boolean"
             },
-            "simpleName": {
+            "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": {
               "type": "string"
             }
           },
           "required": [
-            "multiple",
-            "optional",
-            "derived",
-            "simpleName"
+            "f9Y0ZYySHPi4oHHJPDt8rLl_CmLwFQfgqVa7ZgMahDE",
+            "Do8aSOpkf-yFwmCVnrNmnA27iFuiThciYq7uC1EfF3Y",
+            "HNpYl3fS2-ckw0T1QNPkaiRJv4_CQKs-reUQZ2gBeGw",
+            "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E"
           ],
           "additionalProperties": false
         },
@@ -222,10 +222,10 @@
         "references": {
           "type": "object",
           "properties": {
-            "type": {
+            "Zd6J4u3fQVjIsHzIuiB73WQJz1YFRDRRGnJptgtMOLQ": {
               "$ref": "#/$defs/SerializedRefs"
             },
-            "container": {
+            "MnrQCXXpbTgKXU6TEfKy2HE54IMo5MR8dgpNtJrwe_Y": {
               "$ref": "#/$defs/SerializedRefs"
             }
           },
@@ -242,7 +242,7 @@
       "type": "object",
       "properties": {
         "type": {
-          "const": "Property"
+          "const": "nlWrt3HzZaJ1ueFnSem9r-orIWch6Unu0-Wh6_P1otY"
         },
         "id": {
           "$ref": "#/$defs/Id"
@@ -250,24 +250,24 @@
         "properties": {
           "type": "object",
           "properties": {
-            "disputed": {
+            "FkdlZwp3xBcc64xCaXIPR71JXxuhLO7PXInj36jUjIM": {
               "type": "boolean"
             },
-            "optional": {
+            "Do8aSOpkf-yFwmCVnrNmnA27iFuiThciYq7uC1EfF3Y": {
               "type": "boolean"
             },
-            "derived": {
+            "HNpYl3fS2-ckw0T1QNPkaiRJv4_CQKs-reUQZ2gBeGw": {
               "type": "boolean"
             },
-            "simpleName": {
+            "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": {
               "type": "string"
             }
           },
           "required": [
-            "disputed",
-            "optional",
-            "derived",
-            "simpleName"
+            "FkdlZwp3xBcc64xCaXIPR71JXxuhLO7PXInj36jUjIM",
+            "Do8aSOpkf-yFwmCVnrNmnA27iFuiThciYq7uC1EfF3Y",
+            "HNpYl3fS2-ckw0T1QNPkaiRJv4_CQKs-reUQZ2gBeGw",
+            "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E"
           ],
           "additionalProperties": false
         },
@@ -279,10 +279,10 @@
         "references": {
           "type": "object",
           "properties": {
-            "type": {
+            "27VExn6bl0TQMRnwnSUBoSJQK26vDT8NaiMM1c268s8": {
               "$ref": "#/$defs/SerializedRefs"
             },
-            "container": {
+            "MnrQCXXpbTgKXU6TEfKy2HE54IMo5MR8dgpNtJrwe_Y": {
               "$ref": "#/$defs/SerializedRefs"
             }
           },
@@ -299,7 +299,7 @@
       "type": "object",
       "properties": {
         "type": {
-          "const": "PrimitiveType"
+          "const": "a6kHNaFw2KZIlqTuaB4oXFT0mF3Bhx60BE9ICwVC5J4"
         },
         "id": {
           "$ref": "#/$defs/Id"
@@ -307,12 +307,12 @@
         "properties": {
           "type": "object",
           "properties": {
-            "simpleName": {
+            "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": {
               "type": "string"
             }
           },
           "required": [
-            "simpleName"
+            "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E"
           ],
           "additionalProperties": false
         },
@@ -324,7 +324,7 @@
         "references": {
           "type": "object",
           "properties": {
-            "container": {
+            "MnrQCXXpbTgKXU6TEfKy2HE54IMo5MR8dgpNtJrwe_Y": {
               "$ref": "#/$defs/SerializedRefs"
             }
           },
@@ -341,7 +341,7 @@
       "type": "object",
       "properties": {
         "type": {
-          "const": "Containment"
+          "const": "cwYnrw_2zWysBoa3lo60NM6CXl4PrARJu5RYKM6gfgI"
         },
         "id": {
           "$ref": "#/$defs/Id"
@@ -349,24 +349,24 @@
         "properties": {
           "type": "object",
           "properties": {
-            "multiple": {
+            "f9Y0ZYySHPi4oHHJPDt8rLl_CmLwFQfgqVa7ZgMahDE": {
               "type": "boolean"
             },
-            "optional": {
+            "Do8aSOpkf-yFwmCVnrNmnA27iFuiThciYq7uC1EfF3Y": {
               "type": "boolean"
             },
-            "derived": {
+            "HNpYl3fS2-ckw0T1QNPkaiRJv4_CQKs-reUQZ2gBeGw": {
               "type": "boolean"
             },
-            "simpleName": {
+            "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": {
               "type": "string"
             }
           },
           "required": [
-            "multiple",
-            "optional",
-            "derived",
-            "simpleName"
+            "f9Y0ZYySHPi4oHHJPDt8rLl_CmLwFQfgqVa7ZgMahDE",
+            "Do8aSOpkf-yFwmCVnrNmnA27iFuiThciYq7uC1EfF3Y",
+            "HNpYl3fS2-ckw0T1QNPkaiRJv4_CQKs-reUQZ2gBeGw",
+            "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E"
           ],
           "additionalProperties": false
         },
@@ -378,10 +378,10 @@
         "references": {
           "type": "object",
           "properties": {
-            "type": {
+            "Zd6J4u3fQVjIsHzIuiB73WQJz1YFRDRRGnJptgtMOLQ": {
               "$ref": "#/$defs/SerializedRefs"
             },
-            "container": {
+            "MnrQCXXpbTgKXU6TEfKy2HE54IMo5MR8dgpNtJrwe_Y": {
               "$ref": "#/$defs/SerializedRefs"
             }
           },
@@ -398,7 +398,7 @@
       "type": "object",
       "properties": {
         "type": {
-          "const": "Enumeration"
+          "const": "dR1alaMpOA8WF4ytsIlZ5gQsPQuGXs3Il-zuWBwMHhI"
         },
         "id": {
           "$ref": "#/$defs/Id"
@@ -406,31 +406,31 @@
         "properties": {
           "type": "object",
           "properties": {
-            "simpleName": {
+            "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": {
               "type": "string"
             }
           },
           "required": [
-            "simpleName"
+            "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E"
           ],
           "additionalProperties": false
         },
         "children": {
           "type": "object",
           "properties": {
-            "literals": {
+            "L9WAf3OLj3faarICDAsF62m5EZwiFgqxMcKVCiXCJs0": {
               "$ref": "#/$defs/Ids"
             }
           },
           "required": [
-            "literals"
+            "L9WAf3OLj3faarICDAsF62m5EZwiFgqxMcKVCiXCJs0"
           ],
           "additionalProperties": false
         },
         "references": {
           "type": "object",
           "properties": {
-            "container": {
+            "MnrQCXXpbTgKXU6TEfKy2HE54IMo5MR8dgpNtJrwe_Y": {
               "$ref": "#/$defs/SerializedRefs"
             }
           },
@@ -447,7 +447,7 @@
       "type": "object",
       "properties": {
         "type": {
-          "const": "EnumerationLiteral"
+          "const": "BNZC2WqYyJurUmEQYQ0iF2WM5NKpcT_1Oo1pkSPOvjA"
         },
         "id": {
           "$ref": "#/$defs/Id"
@@ -455,12 +455,12 @@
         "properties": {
           "type": "object",
           "properties": {
-            "simpleName": {
+            "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E": {
               "type": "string"
             }
           },
           "required": [
-            "simpleName"
+            "8A4F2wsqQb2_CebnGHHveUlxV7VFWusLykveJjVkt5E"
           ],
           "additionalProperties": false
         },
@@ -472,7 +472,7 @@
         "references": {
           "type": "object",
           "properties": {
-            "container": {
+            "MnrQCXXpbTgKXU6TEfKy2HE54IMo5MR8dgpNtJrwe_Y": {
               "$ref": "#/$defs/SerializedRefs"
             }
           },

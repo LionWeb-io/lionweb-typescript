@@ -12,5 +12,5 @@
 * [PlantUML generator](./diagrams/PlantUML-generator.ts)
 * ([reference checker](./reference-checker.ts))
 
-An interesting place to start might be the [self-definition of LIonCore/M3](./test/self-definition.ts) using its own [TypeScript type definitions](./types.ts).
+An interesting place to start might be the [self-definition of LIonCore/M3](./self-definition.ts) using its own [TypeScript type definitions](./types.ts).
 

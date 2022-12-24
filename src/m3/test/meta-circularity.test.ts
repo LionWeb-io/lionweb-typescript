@@ -2,7 +2,7 @@ import {
     assertEquals
 } from "https://deno.land/std@0.160.0/testing/asserts.ts"
 
-import {lioncore} from "./self-definition.ts"
+import {lioncore} from "../self-definition.ts"
 import {
     generatePlantUmlForMetamodel
 } from "../diagrams/PlantUML-generator.ts"
@@ -69,7 +69,7 @@ Deno.test("meta-circularity (LIonCore/M3)", async (tctx) => {
         assertEquals(errors, [])
     })
 
-    await tctx.step("generate JSON Schema for serialization format of LIonCore/M3 instances (no assertions)", async () => {
+    await tctx.step("generate JSON Schema for serialization format of LIonCore/M3 instances", async () => {
         const schema = schemaFor(lioncore)
         const metaErrors = metaValidator(schema)
         assertEquals(metaErrors, [])

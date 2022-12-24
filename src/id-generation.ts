@@ -36,6 +36,8 @@ export const sha256IdGen = (options?: Sha256IdGenOptions): IdGenerator => {
             }
             datas.push(data)
         }
+        // TODO  configure algorithm (+ rename function and type)
+        // TODO  check whether hash is not duplicate (if feature flag is set)
         return createHash("sha256")
             .update((salt === undefined ? "" : salt) + data)
             .digest("base64url")

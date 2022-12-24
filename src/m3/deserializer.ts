@@ -16,11 +16,34 @@ import {
 import {SingleRef} from "../references.ts"
 import {Id, Node} from "../types.ts"
 import {SerializedNode} from "../serialization.ts"
+import {
+    concept,
+    concept_abstract,
+    concept_extends,
+    concept_implements,
+    conceptInterface,
+    conceptInterface_extends,
+    containment,
+    feature_derived,
+    feature_optional,
+    featuresContainer_features,
+    link_multiple,
+    link_type,
+    metamodel as metametamodel,
+    metamodel_elements,
+    metamodel_qualifiedName,
+    namespacedEntity_simpleName,
+    primitiveType,
+    property,
+    property_disputed,
+    property_type,
+    reference
+} from "./self-definition.ts"
 
 
 export const deserializeMetamodel = (serializedNodes: SerializedNode[]): Metamodel => {
 
-    const metamodelSerNode = serializedNodes.find(({type}) => type === "Metamodel")
+    const metamodelSerNode = serializedNodes.find(({type}) => type === metametamodel.id)
     if (metamodelSerNode === undefined) {
         throw new Error(`could not deserialize: no instance of LIonCore's Metamodel concept found in serialization`)
     }
@@ -47,69 +70,84 @@ export const deserializeMetamodel = (serializedNodes: SerializedNode[]): Metamod
 
     const construct = ({type, id, properties, children, references}: SerializedNode, parent?: M3Concept): M3Concept => {
         switch (type) {
-            case "Concept": {
-                const {simpleName, abstract} = properties!
+            case concept.id: {
+                const {[namespacedEntity_simpleName.id]: simpleName, [concept_abstract.id]: abstract} = properties!
                 const node = new Concept(parent as Metamodel, simpleName as string, id, abstract as boolean)
-                const {features} = children!
+                const {[featuresContainer_features.id]: features} = children!
                 node.havingFeatures(...features.map(mapConstructMemoised<Feature>(node)))
-                const extends_ = references!["extends"]
+                const extends_ = references![concept_extends.id]
                 if (extends_.length > 0 && typeof extends_[0] === "string") {
                     referencesToInstall.push([node, "extends", extends_[0]])
                 }
-                references!["implements"].filter((serRef) => typeof serRef === "string").forEach((serRef) => {
+                references![concept_implements.id].filter((serRef) => typeof serRef === "string").forEach((serRef) => {
                     referencesToInstall.push([node, "implements", serRef as Id])
                 })
                 return node
             }
-            case "ConceptInterface": {
-                const {simpleName} = properties!
+            case conceptInterface.id: {
+                const {[namespacedEntity_simpleName.id]: simpleName} = properties!
                 const node = new ConceptInterface(parent as Metamodel, simpleName as string, id)
-                const {features} = children!
+                const {[featuresContainer_features.id]: features} = children!
                 node.havingFeatures(...features.map(mapConstructMemoised<Feature>(node)))
-                references!["extends"].filter((serRef) => typeof serRef === "string").forEach((serRef) => {
+                references![conceptInterface_extends.id].filter((serRef) => typeof serRef === "string").forEach((serRef) => {
                     referencesToInstall.push([node, "extends", serRef as Id])
                 })
                 return node
             }
-            case "Containment": {
-                const {simpleName, derived, optional, multiple} = properties!
+            case containment.id: {
+                const {
+                    [namespacedEntity_simpleName.id]: simpleName,
+                    [feature_derived.id]: derived,
+                    [feature_optional.id]: optional,
+                    [link_multiple.id]: multiple
+                } = properties!
                 const node = new Containment(parent as FeaturesContainer, simpleName as string, id)
                 node.derived = derived as boolean
                 node.optional = optional as boolean
                 node.multiple = multiple as boolean
-                const {type} = references!
+                const {[link_type.id]: type} = references!
                 referencesToInstall.push([node, "type", type[0] as Id])
                 return node
             }
-            case "Metamodel": {
-                const {qualifiedName} = properties!
+            case metametamodel.id: {
+                const {[metamodel_qualifiedName.id]: qualifiedName} = properties!
                 const node = new Metamodel(qualifiedName as string, id)
-                const {elements} = children!
+                const {[metamodel_elements.id]: elements} = children!
                 node.havingElements(...elements.map(mapConstructMemoised<MetamodelElement>(node)))
                 return node
             }
-            case "PrimitiveType": {
-                const {simpleName} = properties!
+            case primitiveType.id: {
+                const {[namespacedEntity_simpleName.id]: simpleName} = properties!
                 const node = new PrimitiveType(parent as Metamodel, simpleName as string, id)
                 return node
             }
-            case "Property": {
-                const {simpleName, derived, optional, disputed} = properties!
+            case property.id: {
+                const {
+                    [namespacedEntity_simpleName.id]: simpleName,
+                    [feature_derived.id]: derived,
+                    [feature_optional.id]: optional,
+                    [property_disputed.id]: disputed
+                } = properties!
                 const node = new Property(parent as FeaturesContainer, simpleName as string, id)
                 node.derived = derived as boolean
                 node.optional = optional as boolean
                 node.disputed = disputed as boolean
-                const {type} = references!
+                const {[property_type.id]: type} = references!
                 referencesToInstall.push([node, "type", type[0] as string])
                 return node
             }
-            case "Reference": {
-                const {simpleName, derived, optional, multiple} = properties!
+            case reference.id: {
+                const {
+                    [namespacedEntity_simpleName.id]: simpleName,
+                    [feature_derived.id]: derived,
+                    [feature_optional.id]: optional,
+                    [link_multiple.id]: multiple
+                } = properties!
                 const node = new Reference(parent as FeaturesContainer, simpleName as string, id)
                 node.derived = derived as boolean
                 node.optional = optional as boolean
                 node.multiple = multiple as boolean
-                const {type} = references!
+                const {[link_type.id]: type} = references!
                 referencesToInstall.push([node, "type", type[0] as string])
                 return node
             }
