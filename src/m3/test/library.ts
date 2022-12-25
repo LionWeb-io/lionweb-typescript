@@ -1,8 +1,8 @@
 import {MetamodelFactory} from "../factory.ts"
-import {sha256IdGen} from "../../id-generation.ts"
+import {hashingIdGen} from "../../id-generation.ts"
 
 
-const factory = new MetamodelFactory("library", sha256IdGen())
+const factory = new MetamodelFactory("library", hashingIdGen())
 export const libraryMetamodel = factory.metamodel
 
 

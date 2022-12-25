@@ -17,31 +17,45 @@ export const sequentialIdGen = (): IdGenerator => {
 }
 
 
-export type Sha256IdGenOptions = {
+const defaultHashAlgorithm = "SHA256"
+
+export type IdGenOptions = {
+    doNotCheckForUniqueData?: boolean
+    algorithm?: typeof defaultHashAlgorithm | string
     salt?: string
-    doNotCheckForUniqueness?: boolean
+    checkForUniqueHash?: boolean
 }
 
-export const sha256IdGen = (options?: Sha256IdGenOptions): IdGenerator => {
-    const salt = options === undefined || options.salt
-    const doNotCheckForUniqueness = options === undefined || !!options.doNotCheckForUniqueness
+export const hashingIdGen = (options?: IdGenOptions): IdGenerator => {
+    const checkForUniqueData = !(options?.doNotCheckForUniqueData)
+    const algorithm = options?.algorithm ?? defaultHashAlgorithm
+    const salt = options?.salt ?? ""
+    const checkForUniqueHash = options?.checkForUniqueHash
+
     const datas: string[] = []
+    const hashes: string[] = []
+
     return (data?: string) => {
         if (data === undefined) {
             throw new Error(`expected data for hashing`)
         }
-        if (!doNotCheckForUniqueness) {
+        if (checkForUniqueData) {
             if (datas.indexOf(data) > -1) {
                 throw new Error(`duplicate data encountered: "${data}"`)
             }
             datas.push(data)
         }
-        // TODO  configure algorithm (+ rename function and type)
-        // TODO  check whether hash is not duplicate (if feature flag is set)
-        return createHash("sha256")
-            .update((salt === undefined ? "" : salt) + data)
+        const hash = createHash(algorithm)
+            .update(salt + data)
             .digest("base64url")
             .toString()
+        if (checkForUniqueHash) {
+            if (hashes.indexOf(hash) > -1) {
+                throw new Error(`duplicate hash generated: "${hash}"`)
+            }
+            hashes.push(hash)
+        }
+        return hash
     }
 }
 

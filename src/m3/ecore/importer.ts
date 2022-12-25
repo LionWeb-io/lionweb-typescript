@@ -7,7 +7,7 @@ import {
     PrimitiveType
 } from "../types.ts"
 import {MetamodelFactory} from "../factory.ts"
-import {sha256IdGen} from "../../id-generation.ts"
+import {hashingIdGen} from "../../id-generation.ts"
 import {
     asArray,
     EClassifier,
@@ -26,7 +26,7 @@ const deref = (typeDescriptor: string): string =>
 export const asLIonCoreMetamodel = (ecoreXml: EcoreXml): Metamodel => {
     const ePackage = ecoreXml["ecore:EPackage"]
     // TODO  an Ecore XML can contain multiple EPackage-s
-    const factory = new MetamodelFactory(ePackage["@name"], sha256IdGen())
+    const factory = new MetamodelFactory(ePackage["@name"], hashingIdGen({ checkForUniqueHash: true }))
 
     // TODO  obtain from a built-in, imported M3 instance
     const stringDatatype = factory.primitiveType("String")
