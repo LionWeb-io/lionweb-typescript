@@ -37,7 +37,7 @@ namespaceProvider.havingFeatures(namespaceProvider_namespaceQualifier)
 
 const namespacedEntity = factory.concept("NamespacedEntity", true)
 
-export const namespacedEntity_simpleName = factory.property(namespacedEntity, "simpleName")
+const namespacedEntity_simpleName = factory.property(namespacedEntity, "simpleName")
     .ofType(stringDatatype)
 
 const namespacedEntity_qualifiedName = factory.property(namespacedEntity, "qualifiedName")
@@ -54,13 +54,13 @@ namespacedEntity.havingFeatures(
     )
 
 
-export const metamodel = factory.concept("Metamodel", false)
+const metamodel = factory.concept("Metamodel", false)
     .implementing(namespaceProvider)
 
-export const metamodel_qualifiedName = factory.property(metamodel, "qualifiedName")
+const metamodel_qualifiedName = factory.property(metamodel, "qualifiedName")
     .ofType(stringDatatype)
 
-export const metamodel_elements = factory.containment(metamodel, "elements")
+const metamodel_elements = factory.containment(metamodel, "elements")
     .isOptional()
     .isMultiple()
 
@@ -80,7 +80,7 @@ metamodel_elements.ofType(metamodelElement)
 const featuresContainer = factory.concept("FeaturesContainer", true, metamodelElement)
     .implementing(namespaceProvider)
 
-export const featuresContainer_features = factory.containment(featuresContainer, "features")
+const featuresContainer_features = factory.containment(featuresContainer, "features")
     .isOptional()
     .isMultiple()
 
@@ -95,16 +95,16 @@ featuresContainer.havingFeatures(
 )
 
 
-export const concept = factory.concept("Concept", false, featuresContainer)
+const concept = factory.concept("Concept", false, featuresContainer)
 
-export const concept_abstract = factory.property(concept, "abstract")
+const concept_abstract = factory.property(concept, "abstract")
     .ofType(booleanDatatype)
 
-export const concept_extends = factory.reference(concept, "extends")
+const concept_extends = factory.reference(concept, "extends")
     .isOptional()
     .ofType(concept)
 
-export const concept_implements = factory.reference(concept, "implements")
+const concept_implements = factory.reference(concept, "implements")
     .isOptional()
     .isMultiple()
 
@@ -116,9 +116,9 @@ concept.havingFeatures(
 )
 
 
-export const conceptInterface = factory.concept("ConceptInterface", false, featuresContainer)
+const conceptInterface = factory.concept("ConceptInterface", false, featuresContainer)
 
-export const conceptInterface_extends = factory.reference(conceptInterface, "extends")
+const conceptInterface_extends = factory.reference(conceptInterface, "extends")
     .isOptional()
     .isMultiple()
     .ofType(conceptInterface)
@@ -129,10 +129,10 @@ conceptInterface.havingFeatures(conceptInterface_extends)
 
 const feature = factory.concept("Feature", true, namespacedEntity)
 
-export const feature_optional = factory.property(feature, "optional")
+const feature_optional = factory.property(feature, "optional")
     .ofType(booleanDatatype)
 
-export const feature_derived = factory.property(feature, "derived")
+const feature_derived = factory.property(feature, "derived")
     .ofType(booleanDatatype)
     .isDisputed()
 
@@ -147,10 +147,10 @@ featuresContainer_features.type = feature
 
 const link = factory.concept("Link", true, feature)
 
-export const link_multiple = factory.property(link, "multiple")
+const link_multiple = factory.property(link, "multiple")
     .ofType(booleanDatatype)
 
-export const link_type = factory.reference(link, "type")
+const link_type = factory.reference(link, "type")
     .ofType(featuresContainer)
 
 link.havingFeatures(
@@ -159,13 +159,13 @@ link.havingFeatures(
 )
 
 
-export const reference = factory.concept("Reference", false, link)
+const reference = factory.concept("Reference", false, link)
 
 
-export const property = factory.concept("Property", false, feature)
+const property = factory.concept("Property", false, feature)
 
-export const property_type = factory.reference(property, "type")
-export const property_disputed = factory.property(property, "disputed")
+const property_type = factory.reference(property, "type")
+const property_disputed = factory.property(property, "disputed")
     .ofType(booleanDatatype)
 
 property.havingFeatures(
@@ -178,19 +178,19 @@ const dataType = factory.concept("DataType", true, metamodelElement)
 property_type.ofType(dataType)
 
 
-export const primitiveType = factory.concept("PrimitiveType", false, dataType)
+const primitiveType = factory.concept("PrimitiveType", false, dataType)
 
 
-export const containment = factory.concept("Containment", false, link)
+const containment = factory.concept("Containment", false, link)
 
 
-export const enumeration = factory.concept("Enumeration", false, dataType)
+const enumeration = factory.concept("Enumeration", false, dataType)
     .implementing(namespaceProvider)
 
-export const enumeration_literals = factory.containment(enumeration, "literals")
+const enumeration_literals = factory.containment(enumeration, "literals")
     .isMultiple()
 
-export const enumerationLiteral = factory.concept("EnumerationLiteral", false, namespacedEntity)
+const enumerationLiteral = factory.concept("EnumerationLiteral", false, namespacedEntity)
 
 enumeration_literals.ofType(enumerationLiteral)
 enumeration.havingFeatures(enumeration_literals)
@@ -221,5 +221,33 @@ lioncore.havingElements(
 )
 
 
-// TODO  expose meta concepts separately
+export const metaConcepts = {
+    concept,
+    conceptInterface,
+    containment,
+    enumeration,
+    enumerationLiteral,
+    metamodel,
+    primitiveType,
+    property,
+    reference
+}
+
+export const metaFeatures = {
+    concept_abstract,
+    concept_extends,
+    concept_implements,
+    conceptInterface_extends,
+    enumeration_literals,
+    feature_derived,
+    feature_optional,
+    featuresContainer_features,
+    link_multiple,
+    link_type,
+    metamodel_elements,
+    metamodel_qualifiedName,
+    namespacedEntity_simpleName,
+    property_type,
+    property_disputed,
+}
 

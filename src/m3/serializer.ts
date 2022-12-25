@@ -12,32 +12,7 @@ import {
 } from "./types.ts"
 import {asIds} from "../types.ts"
 import {asRefIds, SerializedNode} from "../serialization.ts"
-import {
-    concept,
-    concept_abstract,
-    concept_extends,
-    concept_implements,
-    conceptInterface,
-    conceptInterface_extends,
-    containment,
-    enumeration,
-    enumeration_literals,
-    enumerationLiteral,
-    feature_derived,
-    feature_optional,
-    featuresContainer_features,
-    link_multiple,
-    link_type,
-    metamodel as metametamodel,
-    metamodel_elements,
-    metamodel_qualifiedName,
-    namespacedEntity_simpleName,
-    primitiveType,
-    property,
-    property_disputed,
-    property_type,
-    reference
-} from "./self-definition.ts"
+import {metaConcepts, metaFeatures} from "./self-definition.ts"
 
 
 export const serializeMetamodel = (metamodel: Metamodel): SerializedNode[] /* <=> JSON */ => {
@@ -47,18 +22,18 @@ export const serializeMetamodel = (metamodel: Metamodel): SerializedNode[] /* <=
 
         if (thing instanceof Concept) {
             json.push({
-                type: concept.id,
+                type: metaConcepts.concept.id,
                 id: thing.id,
                 properties: {
-                    [namespacedEntity_simpleName.id]: thing.simpleName,
-                    [concept_abstract.id]: thing.abstract
+                    [metaFeatures.namespacedEntity_simpleName.id]: thing.simpleName,
+                    [metaFeatures.concept_abstract.id]: thing.abstract
                 },
                 children: {
-                    [featuresContainer_features.id]: asIds(thing.features)
+                    [metaFeatures.featuresContainer_features.id]: asIds(thing.features)
                 },
                 references: {
-                    [concept_extends.id]: asRefIds(thing.extends),
-                    [concept_implements.id]: asIds(thing.implements)
+                    [metaFeatures.concept_extends.id]: asRefIds(thing.extends),
+                    [metaFeatures.concept_implements.id]: asIds(thing.implements)
                 }
             })
             thing.features.forEach(visit)
@@ -66,16 +41,16 @@ export const serializeMetamodel = (metamodel: Metamodel): SerializedNode[] /* <=
         }
         if (thing instanceof ConceptInterface) {
             json.push({
-                type: conceptInterface.id,
+                type: metaConcepts.conceptInterface.id,
                 id: thing.id,
                 properties: {
-                    [namespacedEntity_simpleName.id]: thing.simpleName
+                    [metaFeatures.namespacedEntity_simpleName.id]: thing.simpleName
                 },
                 children: {
-                    [featuresContainer_features.id]: asIds(thing.features)
+                    [metaFeatures.featuresContainer_features.id]: asIds(thing.features)
                 },
                 references: {
-                    [conceptInterface_extends.id]: asIds(thing.extends)
+                    [metaFeatures.conceptInterface_extends.id]: asIds(thing.extends)
                 }
             })
             thing.features.forEach(visit)
@@ -83,29 +58,29 @@ export const serializeMetamodel = (metamodel: Metamodel): SerializedNode[] /* <=
         }
         if (thing instanceof Containment) {
             json.push({
-                type: containment.id,
+                type: metaConcepts.containment.id,
                 id: thing.id,
                 properties: {
-                    [namespacedEntity_simpleName.id]: thing.simpleName,
-                    [feature_optional.id]: thing.optional,
-                    [feature_derived.id]: thing.derived,
-                    [link_multiple.id]: thing.multiple
+                    [metaFeatures.namespacedEntity_simpleName.id]: thing.simpleName,
+                    [metaFeatures.feature_optional.id]: thing.optional,
+                    [metaFeatures.feature_derived.id]: thing.derived,
+                    [metaFeatures.link_multiple.id]: thing.multiple
                 },
                 references: {
-                    [link_type.id]: asRefIds(thing.type)
+                    [metaFeatures.link_type.id]: asRefIds(thing.type)
                 }
             })
             return
         }
         if (thing instanceof Enumeration) {
             json.push({
-                type: enumeration.id,
+                type: metaConcepts.enumeration.id,
                 id: thing.id,
                 properties: {
-                    [namespacedEntity_simpleName.id]: thing.simpleName
+                    [metaFeatures.namespacedEntity_simpleName.id]: thing.simpleName
                 },
                 children: {
-                    [enumeration_literals.id]: asIds(thing.literals)
+                    [metaFeatures.enumeration_literals.id]: asIds(thing.literals)
                 }
             })
             thing.literals.forEach(visit)
@@ -113,23 +88,23 @@ export const serializeMetamodel = (metamodel: Metamodel): SerializedNode[] /* <=
         }
         if (thing instanceof EnumerationLiteral) {
             json.push({
-                type: enumerationLiteral.id,
+                type: metaConcepts.enumerationLiteral.id,
                 id: thing.id,
                 properties: {
-                    [namespacedEntity_simpleName.id]: thing.simpleName
+                    [metaFeatures.namespacedEntity_simpleName.id]: thing.simpleName
                 }
             })
             return
         }
         if (thing instanceof Metamodel) {
             json.push({
-                type: metametamodel.id,
+                type: metaConcepts.metamodel.id,
                 id: thing.id,
                 properties: {
-                    [metamodel_qualifiedName.id]: thing.qualifiedName
+                    [metaFeatures.metamodel_qualifiedName.id]: thing.qualifiedName
                 },
                 children: {
-                    [metamodel_elements.id]: asIds(thing.elements)
+                    [metaFeatures.metamodel_elements.id]: asIds(thing.elements)
                 }
             })
             thing.elements.forEach(visit)
@@ -137,42 +112,42 @@ export const serializeMetamodel = (metamodel: Metamodel): SerializedNode[] /* <=
         }
         if (thing instanceof PrimitiveType) {
             json.push({
-                type: primitiveType.id,
+                type: metaConcepts.primitiveType.id,
                 id: thing.id,
                 properties: {
-                    [namespacedEntity_simpleName.id]: thing.simpleName
+                    [metaFeatures.namespacedEntity_simpleName.id]: thing.simpleName
                 }
             })
             return
         }
         if (thing instanceof Property) {
             json.push({
-                type: property.id,
+                type: metaConcepts.property.id,
                 id: thing.id,
                 properties: {
-                    [namespacedEntity_simpleName.id]: thing.simpleName,
-                    [feature_optional.id]: thing.optional,
-                    [feature_derived.id]: thing.derived,
-                    [property_disputed.id]: thing.disputed
+                    [metaFeatures.namespacedEntity_simpleName.id]: thing.simpleName,
+                    [metaFeatures.feature_optional.id]: thing.optional,
+                    [metaFeatures.feature_derived.id]: thing.derived,
+                    [metaFeatures.property_disputed.id]: thing.disputed
                 },
                 references: {
-                    [property_type.id]: asRefIds(thing.type)
+                    [metaFeatures.property_type.id]: asRefIds(thing.type)
                 }
             })
             return
         }
         if (thing instanceof Reference) {
             json.push({
-                type: reference.id,
+                type: metaConcepts.reference.id,
                 id: thing.id,
                 properties: {
-                    [namespacedEntity_simpleName.id]: thing.simpleName,
-                    [feature_optional.id]: thing.optional,
-                    [feature_derived.id]: thing.derived,
-                    [link_multiple.id]: thing.multiple
+                    [metaFeatures.namespacedEntity_simpleName.id]: thing.simpleName,
+                    [metaFeatures.feature_optional.id]: thing.optional,
+                    [metaFeatures.feature_derived.id]: thing.derived,
+                    [metaFeatures.link_multiple.id]: thing.multiple
                 },
                 references: {
-                    [link_type.id]: asRefIds(thing.type)
+                    [metaFeatures.link_type.id]: asRefIds(thing.type)
                 }
             })
             return
