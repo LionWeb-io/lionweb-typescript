@@ -47,3 +47,15 @@ Each item in the array is either the ID of the target of the link, or `null` to 
 
 **TODO**  finish
 
+
+## Considerations
+
+The following are considerations or concerns that bubbled up during implementation, but are not solid enough to become proper TODOs:
+
+* Generate type definitions from a LIonCore/M3 instance?
+* Think about how to improve API of M3 w.r.t. containment:
+  * Is it necessary to have the “parallel hierarchy” due to containment + namespaces?
+  * Can't we have qualified names as a derived feature defined post-facto _on top_ of the LIonCore/M3?
+* What happens during deserialization if things don't match the provided M2?
+  Just error out, or return `(model', issues*)`?
+
