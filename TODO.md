@@ -8,7 +8,7 @@
 * &#10003; Implement derived features.
 * &#10003; Implement a serializer and deserializer for LIonCore/M3 instances.
     * &#10003; Check (and document) how unresolved references are (de-)serialized.
-    * [ ] Replace feature names with their IDs.
+    * &#10003; Replace feature names with their IDs.
     * [ ] Write unit tests.
 * &#10003; Validate serialization against JSON Schemas (in unit tests).
     * &#10003; Generically - just general structure.
