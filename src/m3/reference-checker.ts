@@ -16,7 +16,7 @@ export const checkReferences = (metamodel: Metamodel): string[] =>
         (thing) => {
 
             const locations: string[] = []
-            const check = (ref: SingleRef<any>, location: string) => {
+            const check = (ref: SingleRef<unknown>, location: string) => {
                 if (ref === unresolved) {
                     locations.push(location)
                 }

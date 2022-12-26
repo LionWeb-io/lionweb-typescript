@@ -23,7 +23,7 @@ const ref = (id: string): { $ref: string } =>
     ({ $ref: `#/$defs/${id}` })
 
 
-const asJSONSchemaType = (dataType: Datatype): object => {
+const asJSONSchemaType = (dataType: Datatype): unknown => {
     if (dataType instanceof Enumeration) {
         return ref(dataType.id)
     }

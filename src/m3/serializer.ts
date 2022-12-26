@@ -154,7 +154,7 @@ export const serializeMetamodel = (metamodel: Metamodel): SerializedNode[] /* <=
         }
 
         // the following line produces a compiler error mentioning all types that have not been handled:
-        const noThing: never = thing
+        const _noThing: never = thing
     }
 
     visit(metamodel)

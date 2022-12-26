@@ -25,7 +25,7 @@ Deno.test("meta-circularity (LIonCore)", async (tctx) => {
         await Deno.writeTextFileSync("diagrams/metametamodel-gen.puml", generatePlantUmlForMetamodel(lioncore))
     })
 
-    await tctx.step("check for unresolved references", async () => {
+    await tctx.step("check for unresolved references", () => {
         const unresolvedReferences = checkReferences(lioncore)
         if (unresolvedReferences.length > 0) {
             console.error(`unresolved references:`)
@@ -36,7 +36,7 @@ Deno.test("meta-circularity (LIonCore)", async (tctx) => {
         assertEquals(unresolvedReferences.length, 0, "number of expected unresolved references -- see above for the locations")
     })
 
-    await tctx.step("check constraints", async () => {
+    await tctx.step("check constraints", () => {
         const issues = issuesMetamodel(lioncore)
         if (issues.length > 0) {
             console.error(`constraint violations:`)

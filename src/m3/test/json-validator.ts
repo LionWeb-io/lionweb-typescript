@@ -13,6 +13,7 @@ addFormats(ajv)
 
 
 export const createJsonValidatorForSchema = (schema: unknown): (json: unknown) => ErrorObject[] => {
+    // deno-lint-ignore no-explicit-any
     const ajvSchemaValidator = ajv.compile(schema as any)
     return (json: unknown): ErrorObject[] => {
         const valid = ajvSchemaValidator(json)

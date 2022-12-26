@@ -1,11 +1,30 @@
 # README
 
-TypeScript implementation for LIonWeb standards - currently: the LIonCore meta-metamodel (M3) in [`src/m3/types.ts`](src/m3/types.ts).
+A TypeScript implementation for LIonWeb standards - currently: the LIonCore meta-metamodel (M3) in [`src/m3/types.ts`](src/m3/types.ts).
 
 
-## Building
+## Developing
 
-Run [`watch-tests.sh`](watch-tests.sh) to run all unit tests in watch mode.
+Run the following command to run all unit tests:
+
+```
+$ deno task run-tests
+```
+
+The same in watch mode:
+
+```
+$ deno task watch-tests
+```
+
+Run the following command to statically _style_-check the source code:
+
+```
+$ deno task lint
+```
+
+Note that this does not catch TypeScript compilation errors.
+See https://lint.deno.land/ for more details.
 
 
 ### Dev dependencies
