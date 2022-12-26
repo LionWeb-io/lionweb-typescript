@@ -2,7 +2,7 @@ import {
     assertEquals
 } from "https://deno.land/std@0.160.0/testing/asserts.ts"
 
-import {lioncore} from "./self-definition.ts"
+import {lioncore} from "../self-definition.ts"
 import {
     generatePlantUmlForMetamodel
 } from "../diagrams/PlantUML-generator.ts"

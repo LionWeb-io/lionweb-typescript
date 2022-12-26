@@ -1,10 +1,16 @@
-import {MetamodelFactory} from "../factory.ts"
+import {MetamodelFactory} from "./factory.ts"
+import {hashingIdGen} from "../id-generation.ts"
 
 
 // Definition of LIonCore in terms of itself.
 
-
-const factory = new MetamodelFactory("lioncore")
+const factory = new MetamodelFactory("LIonCore", hashingIdGen({
+    salt: "LIonCore",
+    algorithm: "MD5",
+        // Note: MD5 is not secure for cryptographic purposes, but it's OK for hashing,
+        // and it produces hashes of only 128 bits.
+    checkForUniqueHash: true
+}))
 export const lioncore = factory.metamodel
 
 
@@ -159,8 +165,13 @@ const reference = factory.concept("Reference", false, link)
 const property = factory.concept("Property", false, feature)
 
 const property_type = factory.reference(property, "type")
+const property_disputed = factory.property(property, "disputed")
+    .ofType(booleanDatatype)
 
-property.havingFeatures(property_type)
+property.havingFeatures(
+    property_type,
+    property_disputed
+)
 
 
 const dataType = factory.concept("DataType", true, metamodelElement)
