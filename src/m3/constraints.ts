@@ -36,6 +36,10 @@ export const issuesMetamodel = (metamodel: Metamodel): Issue[] =>
                 }
             }
 
+            // TODO  add constraints on names
+            // TODO  check uniqueness of IDs
+            // TODO  check whether references are resolved (?)
+
             return issues
         }
     )
