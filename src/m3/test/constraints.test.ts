@@ -8,7 +8,7 @@ import {issuesMetamodel} from "../constraints.ts"
 
 Deno.test("constraints (LIonCore)", async (tctx) => {
 
-    await tctx.step("check that a ConceptInterface only has derived features", async () => {
+    await tctx.step("check that a ConceptInterface only has derived features", () => {
         const factory = new MetamodelFactory("metamodel")
         const {metamodel} = factory
         const conceptInterface = factory.conceptInterface("conceptInterface")
@@ -23,7 +23,7 @@ Deno.test("constraints (LIonCore)", async (tctx) => {
         assertEquals(message, `The features of a ConceptInterface must all be derived, but the following feature of metamodel.conceptInterface is not: property.`)
     })
 
-    await tctx.step("check that inheritance cycles are detected", async () => {
+    await tctx.step("check that inheritance cycles are detected", () => {
         const factory = new MetamodelFactory("metamodel")
         const {metamodel} = factory
         const cis = [0, 1, 2].map((i) => factory.conceptInterface( `conceptInterface ${i}`))
@@ -38,7 +38,7 @@ Deno.test("constraints (LIonCore)", async (tctx) => {
         assertEquals(message1, `A ConceptInterface can't inherit (directly or indirectly) from itself, but metamodel.conceptInterface 0 does so through the following cycle: metamodel.conceptInterface 0 -> metamodel.conceptInterface 2 -> metamodel.conceptInterface 1 -> metamodel.conceptInterface 0`)
     })
 
-    await tctx.step("check that trivial inheritance cycles are detected", async () => {
+    await tctx.step("check that trivial inheritance cycles are detected", () => {
         const factory = new MetamodelFactory("metamodel")
         const {metamodel} = factory
         const ci = factory.conceptInterface(`foo`)

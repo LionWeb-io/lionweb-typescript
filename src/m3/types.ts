@@ -132,7 +132,7 @@ class Property extends Feature {
      * it's not in the agreed-on version of M3/LIonCore, but it's necessary
      * in order to be able to self-define LIonCore.
      */
-    disputed: boolean = false
+    disputed /*: boolean */ = false
     ofType(type: Datatype) {
         this.type = type
         return this

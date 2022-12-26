@@ -1,0 +1,8 @@
+// Deno configuration file
+{
+    "tasks": {
+        "run-tests": "deno test --allow-read --allow-write src/",
+        "watch-tests": "deno test --watch --allow-write --allow-read src/",
+        "lint": "deno lint src/",
+    }
+}
