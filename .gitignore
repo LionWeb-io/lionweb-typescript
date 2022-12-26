@@ -2,3 +2,5 @@
 /.idea
 /lioncore-typescript.iml
 
+/models/library.ecore.json
+

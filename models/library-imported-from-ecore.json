@@ -1,0 +1,254 @@
+[
+  {
+    "type": "jj0Y6KYlHt3_qyFDFAx4CA",
+    "id": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
+    "properties": {
+      "97hsg4Fg3ZitV5FaapRLVg": "library"
+    },
+    "children": {
+      "1CVT9BH6pWQYU-BZwhppIw": [
+        "INhBvWyXvxwNsePuX0rdNGB_J9hi85cTb1Q0APXCyJ0",
+        "uHmTCy63BV23cvXwFSumVwK1DOh4IZvIyAnRJjW9eQI",
+        "gVp8_QSmXE2k4pd-sQZgjYMoW95SLLaVIH4yMYqqbt4",
+        "OcDK2GESljInG-ApIqtkXUoA2UeviB97u0UuiZzM0Hs",
+        "Pk1NRJfHMt4eSja2kpXia7x8vj6Vzc6WQCUzT3aVeYY",
+        "DuBg-a_slgc_VOG0huySkSWi3rZQX1Q20EEd2f7lvLE",
+        "nNUEzZ7it7d2HoHPAtk5rGO4SsqVA3hAlBwkK1KP8QU",
+        "RDa_L8gbU8XgW9z46oMysBi1Hb7vjcS8O8LUgXlFpeU"
+      ]
+    }
+  },
+  {
+    "type": "-EGokr9qbz6C-K8qdK_PHA",
+    "id": "INhBvWyXvxwNsePuX0rdNGB_J9hi85cTb1Q0APXCyJ0",
+    "properties": {
+      "EvXCQydomgm9DUb1IwkgRg": "String"
+    }
+  },
+  {
+    "type": "-EGokr9qbz6C-K8qdK_PHA",
+    "id": "uHmTCy63BV23cvXwFSumVwK1DOh4IZvIyAnRJjW9eQI",
+    "properties": {
+      "EvXCQydomgm9DUb1IwkgRg": "boolean"
+    }
+  },
+  {
+    "type": "-EGokr9qbz6C-K8qdK_PHA",
+    "id": "gVp8_QSmXE2k4pd-sQZgjYMoW95SLLaVIH4yMYqqbt4",
+    "properties": {
+      "EvXCQydomgm9DUb1IwkgRg": "int"
+    }
+  },
+  {
+    "type": "jNyncSWEXyHd08N63CNBBA",
+    "id": "OcDK2GESljInG-ApIqtkXUoA2UeviB97u0UuiZzM0Hs",
+    "properties": {
+      "EvXCQydomgm9DUb1IwkgRg": "Book",
+      "j1tZfW_pl9Cu2NO3TUw4oA": false
+    },
+    "children": {
+      "fSSOzJzcuK14nt-E3K2WTg": [
+        "Ei9m_HbdmEYg_EwMLLVZ71ERRBZyXH8GHVyOVia8Sqg",
+        "OJhF8vB_qRMrA8A9a-H0LsByONdYtHGmQ-lk9rUHUc4",
+        "9ATCb8nXEuQAL3NOY-EUZwuThpIQnQ2C_2n97IRGA_g"
+      ]
+    },
+    "references": {
+      "noALNU7IxFfZDvrEL840Ig": [],
+      "wUjeOwaFMJPJX5IzUj6WWA": []
+    }
+  },
+  {
+    "type": "8zwB8soE_0a7rDVPgyxaRQ",
+    "id": "Ei9m_HbdmEYg_EwMLLVZ71ERRBZyXH8GHVyOVia8Sqg",
+    "properties": {
+      "EvXCQydomgm9DUb1IwkgRg": "title",
+      "dAp79oxccBi-9j6BrQcZLQ": false,
+      "EE8DYkLRyQzaqyxFqlbOAw": false,
+      "XzYEKJ6QzlZuqKPtMXK_kQ": false
+    },
+    "references": {
+      "kXkn4uq_4lecgXpK39x-1g": [
+        "INhBvWyXvxwNsePuX0rdNGB_J9hi85cTb1Q0APXCyJ0"
+      ]
+    }
+  },
+  {
+    "type": "8zwB8soE_0a7rDVPgyxaRQ",
+    "id": "OJhF8vB_qRMrA8A9a-H0LsByONdYtHGmQ-lk9rUHUc4",
+    "properties": {
+      "EvXCQydomgm9DUb1IwkgRg": "pages",
+      "dAp79oxccBi-9j6BrQcZLQ": false,
+      "EE8DYkLRyQzaqyxFqlbOAw": false,
+      "XzYEKJ6QzlZuqKPtMXK_kQ": false
+    },
+    "references": {
+      "kXkn4uq_4lecgXpK39x-1g": [
+        "gVp8_QSmXE2k4pd-sQZgjYMoW95SLLaVIH4yMYqqbt4"
+      ]
+    }
+  },
+  {
+    "type": "omtd90jug1c7NnEPjDeELA",
+    "id": "9ATCb8nXEuQAL3NOY-EUZwuThpIQnQ2C_2n97IRGA_g",
+    "properties": {
+      "EvXCQydomgm9DUb1IwkgRg": "author",
+      "dAp79oxccBi-9j6BrQcZLQ": false,
+      "EE8DYkLRyQzaqyxFqlbOAw": false,
+      "wDi78Hot03g0gUTGL0SpbA": true
+    },
+    "references": {
+      "4CbeSCKt9rktoT3iKk2wCg": [
+        "DuBg-a_slgc_VOG0huySkSWi3rZQX1Q20EEd2f7lvLE"
+      ]
+    }
+  },
+  {
+    "type": "jNyncSWEXyHd08N63CNBBA",
+    "id": "Pk1NRJfHMt4eSja2kpXia7x8vj6Vzc6WQCUzT3aVeYY",
+    "properties": {
+      "EvXCQydomgm9DUb1IwkgRg": "Library",
+      "j1tZfW_pl9Cu2NO3TUw4oA": false
+    },
+    "children": {
+      "fSSOzJzcuK14nt-E3K2WTg": [
+        "LdgCnVXNgZD7CLbBhBin2Rcdumx4qZUYz_jh2QnP5z8",
+        "TFS1ME6sEyRbkRchsr8zaZCcj_uF1LM0LXK24gbnxZM"
+      ]
+    },
+    "references": {
+      "noALNU7IxFfZDvrEL840Ig": [],
+      "wUjeOwaFMJPJX5IzUj6WWA": []
+    }
+  },
+  {
+    "type": "8zwB8soE_0a7rDVPgyxaRQ",
+    "id": "LdgCnVXNgZD7CLbBhBin2Rcdumx4qZUYz_jh2QnP5z8",
+    "properties": {
+      "EvXCQydomgm9DUb1IwkgRg": "name",
+      "dAp79oxccBi-9j6BrQcZLQ": false,
+      "EE8DYkLRyQzaqyxFqlbOAw": false,
+      "XzYEKJ6QzlZuqKPtMXK_kQ": false
+    },
+    "references": {
+      "kXkn4uq_4lecgXpK39x-1g": [
+        "INhBvWyXvxwNsePuX0rdNGB_J9hi85cTb1Q0APXCyJ0"
+      ]
+    }
+  },
+  {
+    "type": "DKh_5NU9dZ5DmwvDq5attg",
+    "id": "TFS1ME6sEyRbkRchsr8zaZCcj_uF1LM0LXK24gbnxZM",
+    "properties": {
+      "EvXCQydomgm9DUb1IwkgRg": "books",
+      "dAp79oxccBi-9j6BrQcZLQ": false,
+      "EE8DYkLRyQzaqyxFqlbOAw": false,
+      "wDi78Hot03g0gUTGL0SpbA": true
+    },
+    "references": {
+      "4CbeSCKt9rktoT3iKk2wCg": [
+        "OcDK2GESljInG-ApIqtkXUoA2UeviB97u0UuiZzM0Hs"
+      ]
+    }
+  },
+  {
+    "type": "jNyncSWEXyHd08N63CNBBA",
+    "id": "DuBg-a_slgc_VOG0huySkSWi3rZQX1Q20EEd2f7lvLE",
+    "properties": {
+      "EvXCQydomgm9DUb1IwkgRg": "Writer",
+      "j1tZfW_pl9Cu2NO3TUw4oA": false
+    },
+    "children": {
+      "fSSOzJzcuK14nt-E3K2WTg": [
+        "onRRrZaasiOtDU2qFJgyW8OVz8p5-hqQu0Vlc_7Aq6s"
+      ]
+    },
+    "references": {
+      "noALNU7IxFfZDvrEL840Ig": [],
+      "wUjeOwaFMJPJX5IzUj6WWA": []
+    }
+  },
+  {
+    "type": "8zwB8soE_0a7rDVPgyxaRQ",
+    "id": "onRRrZaasiOtDU2qFJgyW8OVz8p5-hqQu0Vlc_7Aq6s",
+    "properties": {
+      "EvXCQydomgm9DUb1IwkgRg": "name",
+      "dAp79oxccBi-9j6BrQcZLQ": false,
+      "EE8DYkLRyQzaqyxFqlbOAw": false,
+      "XzYEKJ6QzlZuqKPtMXK_kQ": false
+    },
+    "references": {
+      "kXkn4uq_4lecgXpK39x-1g": [
+        "INhBvWyXvxwNsePuX0rdNGB_J9hi85cTb1Q0APXCyJ0"
+      ]
+    }
+  },
+  {
+    "type": "jNyncSWEXyHd08N63CNBBA",
+    "id": "nNUEzZ7it7d2HoHPAtk5rGO4SsqVA3hAlBwkK1KP8QU",
+    "properties": {
+      "EvXCQydomgm9DUb1IwkgRg": "GuideBookWriter",
+      "j1tZfW_pl9Cu2NO3TUw4oA": false
+    },
+    "children": {
+      "fSSOzJzcuK14nt-E3K2WTg": [
+        "PoZyl6WXh-Cz5h2RspK1NL6zX9DdLwGpUUC-ygQmHMA"
+      ]
+    },
+    "references": {
+      "noALNU7IxFfZDvrEL840Ig": [
+        "DuBg-a_slgc_VOG0huySkSWi3rZQX1Q20EEd2f7lvLE"
+      ],
+      "wUjeOwaFMJPJX5IzUj6WWA": []
+    }
+  },
+  {
+    "type": "8zwB8soE_0a7rDVPgyxaRQ",
+    "id": "PoZyl6WXh-Cz5h2RspK1NL6zX9DdLwGpUUC-ygQmHMA",
+    "properties": {
+      "EvXCQydomgm9DUb1IwkgRg": "countries",
+      "dAp79oxccBi-9j6BrQcZLQ": false,
+      "EE8DYkLRyQzaqyxFqlbOAw": false,
+      "XzYEKJ6QzlZuqKPtMXK_kQ": false
+    },
+    "references": {
+      "kXkn4uq_4lecgXpK39x-1g": [
+        "INhBvWyXvxwNsePuX0rdNGB_J9hi85cTb1Q0APXCyJ0"
+      ]
+    }
+  },
+  {
+    "type": "jNyncSWEXyHd08N63CNBBA",
+    "id": "RDa_L8gbU8XgW9z46oMysBi1Hb7vjcS8O8LUgXlFpeU",
+    "properties": {
+      "EvXCQydomgm9DUb1IwkgRg": "SpecialistBookWriter",
+      "j1tZfW_pl9Cu2NO3TUw4oA": false
+    },
+    "children": {
+      "fSSOzJzcuK14nt-E3K2WTg": [
+        "DbVixG73dI8xIF9TAoq2GOZru4CRQfRD8gG7TkFCZuU"
+      ]
+    },
+    "references": {
+      "noALNU7IxFfZDvrEL840Ig": [
+        "DuBg-a_slgc_VOG0huySkSWi3rZQX1Q20EEd2f7lvLE"
+      ],
+      "wUjeOwaFMJPJX5IzUj6WWA": []
+    }
+  },
+  {
+    "type": "8zwB8soE_0a7rDVPgyxaRQ",
+    "id": "DbVixG73dI8xIF9TAoq2GOZru4CRQfRD8gG7TkFCZuU",
+    "properties": {
+      "EvXCQydomgm9DUb1IwkgRg": "subject",
+      "dAp79oxccBi-9j6BrQcZLQ": false,
+      "EE8DYkLRyQzaqyxFqlbOAw": false,
+      "XzYEKJ6QzlZuqKPtMXK_kQ": false
+    },
+    "references": {
+      "kXkn4uq_4lecgXpK39x-1g": [
+        "INhBvWyXvxwNsePuX0rdNGB_J9hi85cTb1Q0APXCyJ0"
+      ]
+    }
+  }
+]
