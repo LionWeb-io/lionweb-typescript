@@ -220,3 +220,34 @@ lioncore.havingElements(
     jsonDatatype
 )
 
+
+export const metaConcepts = {
+    concept,
+    conceptInterface,
+    containment,
+    enumeration,
+    enumerationLiteral,
+    metamodel,
+    primitiveType,
+    property,
+    reference
+}
+
+export const metaFeatures = {
+    concept_abstract,
+    concept_extends,
+    concept_implements,
+    conceptInterface_extends,
+    enumeration_literals,
+    feature_derived,
+    feature_optional,
+    featuresContainer_features,
+    link_multiple,
+    link_type,
+    metamodel_elements,
+    metamodel_qualifiedName,
+    namespacedEntity_simpleName,
+    property_type,
+    property_disputed,
+}
+

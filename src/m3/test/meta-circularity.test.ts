@@ -8,6 +8,10 @@ import {
 } from "../diagrams/PlantUML-generator.ts"
 import {checkReferences} from "../reference-checker.ts"
 import {issuesMetamodel} from "../constraints.ts"
+import {serializeMetamodel} from "../serializer.ts"
+import {deserializeMetamodel} from "../deserializer.ts"
+import {readFileAsJson, writeJsonAsFile} from "../../utils/json.ts"
+import {SerializedNode} from "../../serialization.ts"
 
 
 Deno.test("meta-circularity (LIonCore)", async (tctx) => {
@@ -37,6 +41,20 @@ Deno.test("meta-circularity (LIonCore)", async (tctx) => {
         }
         assertEquals(issues.length, 0, "number of expected constraint violations -- see above for the issues")
     })
+
+    const serializedLioncorePath = "models/lioncore.json"
+    await tctx.step("serialize LIonCore (no assertions)", async () => {
+        const serialization = serializeMetamodel(lioncore)
+        await writeJsonAsFile(serializedLioncorePath, serialization)
+    })
+
+    await tctx.step("deserialize LIonCore", async () => {
+        const serialization = await readFileAsJson(serializedLioncorePath) as SerializedNode[]
+        const deserialization = deserializeMetamodel(serialization)
+        assertEquals(deserialization, lioncore)
+    })
+
+    // TODO  write unit tests re: (de-)serialization
 
 })
 

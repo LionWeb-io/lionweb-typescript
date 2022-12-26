@@ -1,1 +1,1 @@
-deno test --watch --allow-write src/
+deno test --watch --allow-write --allow-read src/
