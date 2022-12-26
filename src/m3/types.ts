@@ -1,11 +1,15 @@
 /**
- * TypeScript type definitions for the `lioncore` M3 (=meta-meta) model.
+ * TypeScript type definitions for the `LIonCore` M3 (=meta-meta) model.
  * A LIonWeb metamodel (at the M2 meta level) can be represented as an instance of the {@link Metamodel} type.
  */
 
-import {SingleRef, unresolved} from "../references.ts"
+import {MultiRef, SingleRef, unresolved} from "../references.ts"
 import {Id, Node} from "../types.ts"
 import {allFeaturesOf} from "./functions.ts"
+
+
+export const qualify = (...names: string[]): string =>
+    names.join(".")
 
 
 interface NamespaceProvider {
@@ -22,7 +26,7 @@ abstract class NamespacedEntity implements Node {
         this.id = id
     }
     qualifiedName() {
-        return `${this.container.namespaceQualifier()}.${this.simpleName}`
+        return qualify(this.container.namespaceQualifier(), this.simpleName)
     }
 }
 
@@ -64,7 +68,7 @@ abstract class FeaturesContainer extends MetamodelElement implements NamespacePr
 class Concept extends FeaturesContainer {
     abstract: boolean
     extends?: SingleRef<Concept>    // (reference)
-    implements: ConceptInterface[] = []  // (reference)
+    implements: MultiRef<ConceptInterface> = []  // (reference)
     constructor(metamodel: Metamodel, simpleName: string, id: Id, abstract: boolean, extends_?: SingleRef<Concept>) {
         super(metamodel, simpleName, id)
         this.abstract = abstract
@@ -80,7 +84,7 @@ class Concept extends FeaturesContainer {
 }
 
 class ConceptInterface extends FeaturesContainer {
-    extends: ConceptInterface[] = []    // (reference)
+    extends: MultiRef<ConceptInterface> = []    // (reference)
     allFeatures(): Feature[] {
         return allFeaturesOf(this)
     }
@@ -147,7 +151,7 @@ class PrimitiveType extends Datatype {}
 class Enumeration extends Datatype implements NamespaceProvider {
     literals: EnumerationLiteral[] = [] // (containment)
     namespaceQualifier(): string {
-        return `${this.container.namespaceQualifier()}.${this.simpleName}`
+        return qualify(this.container.namespaceQualifier(), this.simpleName)
     }
 }
 
@@ -159,7 +163,7 @@ class EnumerationLiteral extends NamespacedEntity {
 
 
 /**
- * Sum type of all lioncore type definitions whose meta-type is a concrete (thus: instantiable) Concept.
+ * Sum type of all LIonCore type definitions whose meta-type is a concrete (thus: instantiable) Concept.
  */
 type M3Concept =
     | Metamodel
