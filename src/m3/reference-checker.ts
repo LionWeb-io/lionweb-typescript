@@ -9,6 +9,7 @@ import {flatMap} from "./functions.ts"
 import {SingleRef, unresolved} from "../references.ts"
 
 
+// TODO  make this generic, parametrized by a {@link Metamodel}
 export const checkReferences = (metamodel: Metamodel): string[] =>
     flatMap(
         metamodel,
