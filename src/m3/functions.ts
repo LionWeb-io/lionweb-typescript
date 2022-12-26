@@ -26,7 +26,7 @@ import {flatmapNonCyclingFollowing} from "../utils/recursion.ts"
  * @return The type of the given {@link Feature}
  */
 export const type = (feature: Feature): FeaturesContainer | Datatype | typeof unresolved =>
-    (feature as Link | Property).type
+    (feature as (Link | Property)).type
 
 
 const isRelational = (feature: Feature): feature is Link =>

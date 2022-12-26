@@ -127,7 +127,7 @@ const generateForRelationsOf = (metamodelElement: MetamodelElement) => {
 
 const generateForRelation = ({simpleName: leftName}: MetamodelElement, relation: Link) => {
     const {simpleName: relationName, type, optional, multiple} = relation
-    const rightName = type === unresolved ? `???` : type.simpleName
+    const rightName = isRef(type) ? type.simpleName : (type === unresolved ? `<unresolved>` : `<null>`)
     const isContainment = relation instanceof Containment
     const leftMultiplicity = isContainment ? `1` : `*`
     const rightMultiplicity = multiple ? "*" : (optional ? "0..1" : "1")

@@ -10,7 +10,7 @@ import {checkReferences} from "../reference-checker.ts"
 import {issuesMetamodel} from "../constraints.ts"
 
 
-Deno.test("meta-circularity (lioncore)", async (tctx) => {
+Deno.test("meta-circularity (LIonCore)", async (tctx) => {
 
     await tctx.step("generate PlantUML diagram (no assertions)", async () => {
         await Deno.writeTextFileSync("diagrams/metametamodel-gen.puml", generatePlantUmlForMetamodel(lioncore))
