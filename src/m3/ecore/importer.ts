@@ -23,6 +23,10 @@ const deref = (typeDescriptor: string): string =>
         ? typeDescriptor.substring(localRefPrefix.length)
         : typeDescriptor
 
+
+/**
+ * Converts a parsed Ecore XML metamodel (file) to a {@link Metamodel LIonCore/M3 instance}.
+ */
 export const asLIonCoreMetamodel = (ecoreXml: EcoreXml): Metamodel => {
 
     const ePackage = ecoreXml["ecore:EPackage"]

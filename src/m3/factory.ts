@@ -18,6 +18,8 @@ import {IdGenerator, nanoIdGen} from "../id-generation.ts"
 /**
  * A factory that produces a {@link Metamodel} instance,
  * as well as elements contained by that instance.
+ * The {@link https://zelark.github.io/nano-id-cc/ `nanoid`-based} ID generator
+ * is used, unless specified otherwise.
  */
 export class MetamodelFactory {
 

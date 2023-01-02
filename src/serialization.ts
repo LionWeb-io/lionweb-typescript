@@ -2,7 +2,9 @@ import {Id, Node} from "./types.ts"
 import {SingleRef, unresolved} from "./references.ts"
 
 
-// Note: this type is serializable as JSON.
+/**
+ * Type definition of a reference that's serialized as JSON.
+ */
 export type SerializedRef = Id | typeof unresolved
 
 
@@ -21,6 +23,9 @@ export const asRefIds = <T extends Node>(ref?: SingleRef<T>): SerializedRef[] =>
 }
 
 
+/**
+ * Type definition for an AST node serialized to JSON.
+ */
 export type SerializedNode = {
     type: string
     id: string

@@ -11,12 +11,12 @@ import {
     allFeaturesOf,
     isConcrete,
     isEnumeration,
-    isRealContainment,
-    isRealProperty,
-    isRealReference
+    isNonDerivedContainment,
+    isNonDerivedProperty,
+    isNonDerivedReference
 } from "./functions.ts"
 import {isRef} from "../references.ts"
-// TODO  import types for JSON Schema
+// TODO  import types for JSON Schema for added type-safety?
 
 
 const ref = (id: string): { $ref: string } =>
@@ -73,10 +73,10 @@ const schemaForConcept = (concept: Concept): unknown => {
                 const: concept.id
             },
             "id": ref("Id"),
-            "properties": schemaForProperties(allFeatures.filter(isRealProperty), schemaForProperty, true),
-            "children": schemaForProperties(allFeatures.filter(isRealContainment), () => ref("Ids"), true),
+            "properties": schemaForProperties(allFeatures.filter(isNonDerivedProperty), schemaForProperty, true),
+            "children": schemaForProperties(allFeatures.filter(isNonDerivedContainment), () => ref("Ids"), true),
                 // TODO  required (also with minLength=1 in property-def.)
-            "references": schemaForProperties(allFeatures.filter(isRealReference), () => ref("SerializedRefs"), false),
+            "references": schemaForProperties(allFeatures.filter(isNonDerivedReference), () => ref("SerializedRefs"), false),
                 // TODO  required (also with minLength=1 in property-def.)
         },
         required: [
@@ -92,7 +92,11 @@ const schemaForEnumeration = ({literals}: Enumeration): unknown =>
     })
 
 
-export const schemaFor = (metamodel: Metamodel): unknown => {
+/**
+ * Generates a JSON Schema for the LIonWeb-compliant serialization JSON format
+ * specific to the given metamodel.
+ */
+export const schemaFor = (metamodel: Metamodel): unknown /* <=> JSON Schema */ => {
     const concreteConcepts = metamodel.elements.filter(isConcrete)
     const enumerations = metamodel.elements.filter(isEnumeration)
     return {

@@ -2,8 +2,6 @@ import {MetamodelFactory} from "./factory.ts"
 import {hashingIdGen} from "../id-generation.ts"
 
 
-// Definition of LIonCore in terms of itself.
-
 const factory = new MetamodelFactory("LIonCore", hashingIdGen({
     salt: "LIonCore",
     algorithm: "MD5",
@@ -11,6 +9,10 @@ const factory = new MetamodelFactory("LIonCore", hashingIdGen({
         // and it produces hashes of only 128 bits.
     checkForUniqueHash: true
 }))
+
+/**
+ * Definition of LIonCore in terms of itself.
+ */
 export const lioncore = factory.metamodel
 
 

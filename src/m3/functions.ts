@@ -18,7 +18,7 @@ import {
     Property,
     Reference
 } from "./types.ts"
-import {unresolved} from "../references.ts"
+import {isRef, unresolved} from "../references.ts"
 import {sortByStringKey} from "../utils/sorting.ts"
 import {cycleWith} from "../utils/cycles.ts"
 import {flatmapNonCyclingFollowing} from "../utils/recursion.ts"
@@ -31,26 +31,39 @@ export const type = (feature: Feature): FeaturesContainer | Datatype | typeof un
     (feature as (Link | Property)).type
 
 
-export const isRealProperty = (feature: Feature): feature is Property =>
+export const isNonDerivedProperty = (feature: Feature): feature is Property =>
     feature instanceof Property && !feature.derived
 
-export const isRealContainment = (feature: Feature): feature is Containment =>
+export const isNonDerivedContainment = (feature: Feature): feature is Containment =>
     feature instanceof Containment && !feature.derived
 
-export const isRealReference = (feature: Feature): feature is Reference =>
+export const isNonDerivedReference = (feature: Feature): feature is Reference =>
     feature instanceof Reference && !feature.derived
 
 
+/**
+ * Determines whether a {@link Feature feature} is “relational“,
+ * i.e. it's a non-derived {@link Link containment or reference}.
+ */
 const isRelational = (feature: Feature): feature is Link =>
     feature instanceof Link && !feature.derived
 
+/**
+ * @return the relations among the given {@link Feature features}.
+ */
 export const relations = (features: Feature[]): Link[] =>
     features.filter(isRelational)
 
+/**
+ * @return the non-relations among the given {@link Feature features}.
+ */
 export const nonRelationalFeatures = (features: Feature[]): Feature[] =>
     features.filter((feature) => !isRelational(feature))
 
 
+/**
+ * @return the relations of the given {@link MetamodelElement metamodel element}.
+ */
 export const relationsOf = (metamodelElement: MetamodelElement): Link[] =>
     metamodelElement instanceof FeaturesContainer
         ? relations(metamodelElement.features)
@@ -84,19 +97,33 @@ export const flatMap = <T>(metamodel: Metamodel, map: (t: M3Concept) => T[]): T[
     flatmapNonCyclingFollowing(map, containeds)(metamodel)
 
 
+/**
+ * Sorts the given {@link MetamodelElement metamodel elements} by simple name.
+ */
 export const elementsSortedByName = (metamodelElements: MetamodelElement[]) =>
     sortByStringKey(metamodelElements, (element) => element.simpleName)
 
 
+/**
+ * A sum type of {@link Concept} and {@link ConceptInterface}.
+ */
 export type ConceptType = Concept | ConceptInterface
 
+/**
+ * Determines whether the given {@link MetamodelElement metamodel element} is
+ * *concrete*, i.e. is instantiable.
+ */
 export const isConcrete = (thing: MetamodelElement): thing is Concept =>
     thing instanceof Concept && !thing.abstract
 
 const inheritsFrom = (conceptType: ConceptType): ConceptType[] => {
     if (conceptType instanceof Concept) {
         return [
-            ...(conceptType.extends !== undefined && conceptType.extends !== unresolved ? [conceptType.extends as Concept] : []),
+            ...(
+                isRef(conceptType.extends)
+                    ? [conceptType.extends as Concept]
+                    : []
+            ),
             ...conceptType.implements
         ]
     }
@@ -106,18 +133,32 @@ const inheritsFrom = (conceptType: ConceptType): ConceptType[] => {
     throw new Error(`concept type ${typeof conceptType} not handled`)
 }
 
+/**
+ * @return an array that's either an inheritance cycle, or empty (meaning: no inheritance cycle).
+ */
 export const inheritedCycleWith = (conceptType: ConceptType) =>
     cycleWith(conceptType, inheritsFrom)
 
 
+/**
+ * @return *all* super types (through `extends` or `implements`) of the given
+ *  {@link Concept concept} or {@link ConceptInterface concept interface}.
+ */
 export const allSuperTypesOf = (conceptType: ConceptType): ConceptType[] =>
     flatmapNonCyclingFollowing(inheritsFrom, inheritsFrom)(conceptType)
 
 
+/**
+ * @return *all* {@link Feature features} of the given {@link Concept concept} or {@link ConceptInterface concept interface},
+ * including the inherited ones.
+ */
 export const allFeaturesOf = (conceptType: ConceptType): Feature[] =>
     flatmapNonCyclingFollowing((ci) => ci.features, inheritsFrom)(conceptType)
 
 
+/**
+ * Determines whether the given {@link MetamodelElement metamodel element} is an {@link Enumeration enumeration}.
+ */
 export const isEnumeration = (metamodelElement: MetamodelElement): metamodelElement is Enumeration =>
     metamodelElement instanceof Enumeration
 
