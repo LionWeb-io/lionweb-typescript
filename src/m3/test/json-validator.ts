@@ -12,6 +12,9 @@ const ajv = new Ajv({
 addFormats(ajv)
 
 
+/**
+ * Creates a JSON validator for the given JSON Schema.
+ */
 export const createJsonValidatorForSchema = (schema: unknown): (json: unknown) => ErrorObject[] => {
     // deno-lint-ignore no-explicit-any
     const ajvSchemaValidator = ajv.compile(schema as any)
@@ -29,6 +32,10 @@ const metaSchema = JSON.parse(Deno.readTextFileSync("src/m3/test/json.schema.jso
  *   - Select "Schema Draft v7" in left drop-down selector, copy the contents into a file.
  *   - Change top-level `$id` field to something other than "https://json-schema.org/draft/2020-12/schema".
  * TODO  download that file and tweak it automatically/programmatically
+ */
+
+/**
+ * A validator that validates given JSON as a JSON Schema.
  */
 export const metaValidator = createJsonValidatorForSchema(metaSchema)
 

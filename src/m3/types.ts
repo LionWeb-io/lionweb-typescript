@@ -8,6 +8,9 @@ import {Id, Node} from "../types.ts"
 import {allFeaturesOf} from "./functions.ts"
 
 
+/**
+ * Joins fragments of a qualified name using the `.` character.
+ */
 export const qualify = (...names: string[]): string =>
     names.join(".")
 

@@ -19,6 +19,10 @@ import {SerializedNode} from "../serialization.ts"
 import {metaConcepts, metaFeatures} from "./self-definition.ts"
 
 
+/**
+ * Deserializes a metamodel that's serialized into the LIonWeb serialization JSON forma
+ * as an instance of the LIonCore/M3 metametamodel, using {@link M3Concept these type definitions}.
+ */
 export const deserializeMetamodel = (serializedNodes: SerializedNode[]): Metamodel => {
 
     const metamodelSerNode = serializedNodes.find(({type}) => type === metaConcepts.metamodel.id)

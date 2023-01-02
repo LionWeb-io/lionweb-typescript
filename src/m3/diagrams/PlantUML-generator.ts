@@ -24,6 +24,10 @@ import {isRef, unresolved} from "../../references.ts"
 const indented = indentWith(`  `)(1)
 
 
+/**
+ * Generates a string with a PlantUML class diagram
+ * representing the given {@link Metamodel LIonCore/M3 instance}.
+ */
 export const generatePlantUmlForMetamodel = ({qualifiedName, elements}: Metamodel) =>
     asString([
 `@startuml

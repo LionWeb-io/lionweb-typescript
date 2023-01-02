@@ -2,12 +2,20 @@ import {Concept, ConceptInterface, M3Concept, Metamodel} from "./types.ts"
 import {flatMap, inheritedCycleWith} from "./functions.ts"
 
 
+/**
+ * Type definition for an issue corresponding
+ * to a violation of a contraint on a {@link M3Concept metamodel object}.
+ */
 export type Issue = {
     location: M3Concept
     message: string
 }
 
 
+/**
+ * Computes the {@link Issue issues} (i.e., constraint violations) for the given metamodel.
+ * (This computation is resilient against e.g. inheritance cycles.)
+ */
 export const issuesMetamodel = (metamodel: Metamodel): Issue[] =>
     flatMap(
         metamodel,

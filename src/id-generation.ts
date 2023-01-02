@@ -4,13 +4,24 @@ import {
 } from "https://deno.land/std@0.168.0/node/internal/crypto/hash.ts"
 
 
+/**
+ * Type definition for a function that generates a unique ID,
+ * possibly ingesting some data.
+ */
 export type IdGenerator = (data?: string) => string
 
 
+/**
+ * ID generator based on the {@link https://zelark.github.io/nano-id-cc/ `nanoid` NPM package}.
+ */
 export const nanoIdGen = (): IdGenerator =>
     () => nanoid()
 
 
+/**
+ * ID generator that produces sequential IDs:
+ * `"1"`, `"2"`, `"3"`, &hellip;
+ */
 export const sequentialIdGen = (): IdGenerator => {
     let num = 0
     return () => `${++num}`
@@ -19,18 +30,32 @@ export const sequentialIdGen = (): IdGenerator => {
 
 const defaultHashAlgorithm = "SHA256"
 
-export type IdGenOptions = {
+/**
+ * Type definition for objects that configure a
+ * {@link hashingIdGen hashing ID generator}.
+ */
+export type IdGenConfig = {
     doNotCheckForUniqueData?: boolean
     algorithm?: typeof defaultHashAlgorithm | string
     salt?: string
     checkForUniqueHash?: boolean
 }
 
-export const hashingIdGen = (options?: IdGenOptions): IdGenerator => {
-    const checkForUniqueData = !(options?.doNotCheckForUniqueData)
-    const algorithm = options?.algorithm ?? defaultHashAlgorithm
-    const salt = options?.salt ?? ""
-    const checkForUniqueHash = options?.checkForUniqueHash
+/**
+ * Creates a {@link IdGenerator hashing ID generator},
+ * optionally using a {@link IdGenConfig configuration object}.
+ * The default is:
+ *   - uses the *SHA256* hashing algorithm
+ *   - without salt prefix string
+ *   - while checking whether the data to hash is unique
+ *   - without checking whether the generated IDs are unique.
+ * Note that the created ID generator must be given data in the form of a string (`!== undefined`).
+ */
+export const hashingIdGen = (config?: IdGenConfig): IdGenerator => {
+    const checkForUniqueData = !(config?.doNotCheckForUniqueData)
+    const algorithm = config?.algorithm ?? defaultHashAlgorithm
+    const salt = config?.salt ?? ""
+    const checkForUniqueHash = config?.checkForUniqueHash
 
     const datas: string[] = []
     const hashes: string[] = []

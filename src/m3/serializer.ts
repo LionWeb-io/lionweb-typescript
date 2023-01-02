@@ -15,7 +15,12 @@ import {asRefIds, SerializedNode} from "../serialization.ts"
 import {metaConcepts, metaFeatures} from "./self-definition.ts"
 
 
-export const serializeMetamodel = (metamodel: Metamodel): SerializedNode[] /* <=> JSON */ => {
+/**
+ * Serializes a metamodel (i.e., an instance of the LIonCore/M3 metametamodel,
+ * using {@link M3Concept these type definitions})
+ * into the LIonWeb serialization JSON format.
+ */
+export const serializeMetamodel = (metamodel: Metamodel): SerializedNode[] => {
     const json: SerializedNode[] = []
 
     const visit = (thing: M3Concept) => {

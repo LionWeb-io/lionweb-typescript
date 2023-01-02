@@ -40,6 +40,10 @@ const withNewLine = (content: NestedString): NestedString =>
     ]
 
 
+/**
+ * Generates a string with a Mermaid class diagram
+ * representing the given {@link Metamodel LIonCore/M3 instance}.
+ */
 export const generateMermaidForMetamodel = ({elements}: Metamodel) =>
     asString([
         "```mermaid",
@@ -64,7 +68,7 @@ const generateForEnumeration = ({simpleName, literals}: Enumeration) =>
     ))
 
 
-const generateForConcept = ({simpleName, features, abstract: abstract_, extends: extends_, implements: implements_}: Concept) =>
+const generateForConcept = ({simpleName, features, abstract: abstract_, extends: extends_/*, implements: implements_*/}: Concept) =>
     [
         block(
             `class ${simpleName}`,
