@@ -34,18 +34,33 @@ export const deserializeMetamodel = (serializedNodes: SerializedNode[]): Metamod
 
     const deserializedNodeById: { [id: Id]: Node } = {}
 
+    /**
+     * Constructs (deserializes) a {@link Node} from the given {@link SerializedNode},
+     * and stores it under its ID so references to it can be resolved.
+     * For every serialized node, only one instance will ever be constructed (through memoisation).
+     */
     const constructMemoised = (serNode: SerializedNode, parent?: M3Concept): M3Concept => {
+        if (serNode.id in deserializedNodeById) {
+            return deserializedNodeById[serNode.id] as M3Concept
+        }
         const node = construct(serNode, parent)
         deserializedNodeById[node.id] = node
         return node
     }
 
+    /**
+     * Constructs a function that maps a {@link Node node's} ID to that node,
+     * deserializing the node from its serialization.
+     */
     const mapConstructMemoised = <T extends Node>(parent: M3Concept) =>
         (id: Id): T =>
             constructMemoised(serializedNodeById[id], parent) as unknown as T
 
     const referencesToInstall: [node: Node, featureName: string, refId: Id][] = []
 
+    /**
+     * Constructs a {@link Node} from its {@link SerializedNode serialization}.
+     */
     const construct = ({type, id, properties, children, references}: SerializedNode, parent?: M3Concept): M3Concept => {
         switch (type) {
             case metaConcepts.concept.id: {
@@ -62,9 +77,11 @@ export const deserializeMetamodel = (serializedNodes: SerializedNode[]): Metamod
                 if (extends_.length > 0 && typeof extends_[0] === "string") {
                     referencesToInstall.push([node, "extends", extends_[0]])
                 }
-                references![metaFeatures.concept_implements.id].filter((serRef) => typeof serRef === "string").forEach((serRef) => {
-                    referencesToInstall.push([node, "implements", serRef as Id])
-                })
+                references![metaFeatures.concept_implements.id]
+                    .filter((serRef) => typeof serRef === "string")
+                    .forEach((serRef) => {
+                        referencesToInstall.push([node, "implements", serRef as Id])
+                    })
                 return node
             }
             case metaConcepts.conceptInterface.id: {
@@ -76,9 +93,11 @@ export const deserializeMetamodel = (serializedNodes: SerializedNode[]): Metamod
                     [metaFeatures.featuresContainer_features.id]: features
                 } = children!
                 node.havingFeatures(...features.map(mapConstructMemoised<Feature>(node)))
-                references![metaFeatures.conceptInterface_extends.id].filter((serRef) => typeof serRef === "string").forEach((serRef) => {
-                    referencesToInstall.push([node, "extends", serRef as Id])
-                })
+                references![metaFeatures.conceptInterface_extends.id]
+                    .filter((serRef) => typeof serRef === "string")
+                    .forEach((serRef) => {
+                        referencesToInstall.push([node, "extends", serRef as Id])
+                    })
                 return node
             }
             case metaConcepts.containment.id: {
