@@ -17,16 +17,37 @@ import {
 import {ConceptType} from "../functions.ts"
 
 
-const refPrefix = "#//"
+const localRefPrefix = "#//"
 const deref = (typeDescriptor: string): string =>
-    typeDescriptor.startsWith(refPrefix)
-        ? typeDescriptor.substring(refPrefix.length)
+    typeDescriptor.startsWith(localRefPrefix)
+        ? typeDescriptor.substring(localRefPrefix.length)
         : typeDescriptor
 
 export const asLIonCoreMetamodel = (ecoreXml: EcoreXml): Metamodel => {
+
     const ePackage = ecoreXml["ecore:EPackage"]
     // TODO  an Ecore XML can contain multiple EPackage-s
     const factory = new MetamodelFactory(ePackage["@name"], hashingIdGen({ checkForUniqueHash: true }))
+
+
+    // phase 1: convert EClassifiers but without their EStructuralFeatures (in the case of EClasses)
+
+    const convertEClassifier = (eClassifier: EClassifier): ConceptType =>
+        factory.concept(eClassifier["@name"], false)
+    // TODO  ConceptInterface, Enumeration
+
+    const convertedEClassifiers: [eClassifier: EClassifier, metamodelElement: MetamodelElement][] =
+        ePackage["eClassifiers"]
+            .map((eClassifier) =>
+                [eClassifier, convertEClassifier(eClassifier)]
+            )
+
+    const eClassifierConversionFor = (eClassifierName: string): MetamodelElement =>
+        convertedEClassifiers
+            .find(([source, _]) => source["@name"] === eClassifierName)![1]
+
+
+    // phase 2: also convert features of EClasses
 
     // TODO  obtain from a built-in, imported M3 instance
     const stringDatatype = factory.primitiveType("String")
@@ -46,10 +67,6 @@ export const asLIonCoreMetamodel = (ecoreXml: EcoreXml): Metamodel => {
                 throw new Error(`don't know what to convert this EDataType ref. descriptor to: ${eDataType}`)
         }
     }
-
-    const convertEClassifier = (eClassifier: EClassifier): ConceptType =>
-        factory.concept(eClassifier["@name"], false)
-    // TODO  ConceptInterface, Enumeration
 
     const convertEStructuralFeature = (container: FeaturesContainer, feature: EStructuralFeature): Feature => {
         const metaType = feature["@xsi:type"]
@@ -79,19 +96,9 @@ export const asLIonCoreMetamodel = (ecoreXml: EcoreXml): Metamodel => {
                 return link
             }
             default:
-                    throw new Error(`feature of meta type ${metaType} not handled`)
+                throw new Error(`feature of meta type ${metaType} not handled`)
         }
     }
-
-    const convertedEClassifiers: [eClassifier: EClassifier, metamodelElement: MetamodelElement][] =
-        ePackage["eClassifiers"]
-            .map((eClassifier) =>
-                [eClassifier, convertEClassifier(eClassifier)]
-            )
-
-    const eClassifierConversionFor = (eClassifierName: string): MetamodelElement =>
-        convertedEClassifiers
-            .find(([source, _]) => source["@name"] === eClassifierName)![1]
 
     convertedEClassifiers.forEach(([source, target]) => {
         if (source["@xsi:type"] === "ecore:EClass") {
@@ -109,6 +116,9 @@ export const asLIonCoreMetamodel = (ecoreXml: EcoreXml): Metamodel => {
             }
         }
     })
+
+
+    // phase 3: put all converted things into the metamodel
 
     factory.metamodel
         .havingElements(stringDatatype, booleanDatatype, intDatatype)

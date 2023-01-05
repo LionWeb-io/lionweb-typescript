@@ -18,7 +18,7 @@ export type EClassifier = EClass
 export type EClass = ENamed & {
     "@xsi:type": "ecore:EClass"
     "@eSuperTypes"?: string
-    "eStructuralFeatures"?: UndefOrTOrTs<EStructuralFeature>
+    "eStructuralFeatures"?: AnyNumberOf<EStructuralFeature>
 }
 
 export type EStructuralFeature = EAttribute | EReference
@@ -41,9 +41,9 @@ export const textAsEcoreXml = (data: string): EcoreXml =>
     parse(data, {emptyToNull: false, reviveNumbers: false}) as unknown as EcoreXml
 
 
-export type UndefOrTOrTs<T> = undefined | T | T[]
+export type AnyNumberOf<T> = undefined | T | T[]
 
-export const asArray = <T>(thing: UndefOrTOrTs<T>): T[] => {
+export const asArray = <T>(thing: AnyNumberOf<T>): T[] => {
     if (thing === undefined) {
         return []
     }
