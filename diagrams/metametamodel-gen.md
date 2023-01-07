@@ -1,7 +1,4 @@
 ```mermaid
----
-title: LIonCore
----
 classDiagram
 
   class Concept {

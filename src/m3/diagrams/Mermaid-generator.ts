@@ -40,13 +40,10 @@ const withNewLine = (content: NestedString): NestedString =>
     ]
 
 
-export const generateMermaidForMetamodel = ({qualifiedName, elements}: Metamodel) =>
+export const generateMermaidForMetamodel = ({elements}: Metamodel) =>
     asString([
         "```mermaid",
-        `---
-title: ${qualifiedName}
----
-classDiagram
+        `classDiagram
 
 `,
         indented(elementsSortedByName(elements).map(generateForMetamodelElement)),

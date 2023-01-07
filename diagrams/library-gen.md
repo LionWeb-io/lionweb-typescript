@@ -1,7 +1,4 @@
 ```mermaid
----
-title: library
----
 classDiagram
 
   class Book {
