@@ -1,0 +1,27 @@
+@startuml
+hide empty members
+
+' qualified name: "LIonCore.stdlib"
+
+
+' primitive type: "JSON"
+
+' primitive type: "String"
+
+' primitive type: "boolean"
+
+' primitive type: "int"
+
+
+
+' relations:
+
+
+
+
+
+
+legend
+  <#LightGray,#LightGray>| <#Orange>Disputed |
+end legend
+@enduml

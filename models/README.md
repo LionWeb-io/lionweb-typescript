@@ -9,4 +9,5 @@ This directory contains serializations of models in various formats, m.n. the LI
 * [`library-imported-from-ecore.json`](./library-imported-from-ecore.json): serialization of the "library" metamodel as imported from the Ecore XML.
   This file should be identical to the previous one - this is asserted by a [test in this file](../src/m3/test/library.test.ts).
 * [`lioncore.json`](./lioncore.json): the serialization of the LIonCore/M3 metamodel from its [self-definition](../src/m3/self-definition.ts).
+* [`stdlib.json`](./stdlib.json): the serialization of the LIonCore/M3 standard library (`stdlib`) containing the built-in primitive types.
 

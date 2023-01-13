@@ -4,6 +4,7 @@
 ## Aspects
 
 * [TypeScript type definitions](./types.ts)
+* [standard library (`stdlib`) of LIonCore built-in primitive types](./stdlib.ts)
 * [constraints checker](./constraints.ts)
 * [factory](./factory.ts) for conveniently creating M3 instances
 * convenience/helper [functions](./functions.ts) defined on M3 concepts

@@ -1,21 +1,8 @@
 import {MetamodelFactory} from "./factory.ts"
-import {
-    checkDefinedData,
-    checkUniqueData,
-    checkUniqueId,
-    checkValidId,
-    wrapIdGen
-} from "../id-generation.ts"
+import {lioncoreIdGen} from "./id-generation.ts"
 
 
-const factory = new MetamodelFactory("LIonCore.M3", wrapIdGen(
-        (qualifiedName) => qualifiedName!.replaceAll(".", "_"),
-        checkDefinedData,
-        checkUniqueData,
-        checkValidId,
-        checkUniqueId
-    )
-)
+const factory = new MetamodelFactory("LIonCore.M3", lioncoreIdGen)
 
 
 /**
@@ -23,6 +10,8 @@ const factory = new MetamodelFactory("LIonCore.M3", wrapIdGen(
  */
 export const lioncore = factory.metamodel
 
+
+// TODO  use stdlib instead:
 
 const stringDatatype = factory.primitiveType("String")
 
