@@ -68,6 +68,9 @@
             }
           },
           "additionalProperties": false
+        },
+        "parent": {
+          "$ref": "#/$defs/Id"
         }
       },
       "required": [
@@ -121,6 +124,9 @@
             }
           },
           "additionalProperties": false
+        },
+        "parent": {
+          "$ref": "#/$defs/Id"
         }
       },
       "required": [
@@ -167,6 +173,9 @@
             }
           },
           "additionalProperties": false
+        },
+        "parent": {
+          "$ref": "#/$defs/Id"
         }
       },
       "required": [
@@ -221,6 +230,9 @@
             }
           },
           "additionalProperties": false
+        },
+        "parent": {
+          "$ref": "#/$defs/Id"
         }
       },
       "required": [
@@ -275,6 +287,9 @@
             }
           },
           "additionalProperties": false
+        },
+        "parent": {
+          "$ref": "#/$defs/Id"
         }
       },
       "required": [
@@ -313,6 +328,9 @@
           "type": "object",
           "properties": {},
           "additionalProperties": false
+        },
+        "parent": {
+          "$ref": "#/$defs/Id"
         }
       },
       "required": [
@@ -367,6 +385,9 @@
             }
           },
           "additionalProperties": false
+        },
+        "parent": {
+          "$ref": "#/$defs/Id"
         }
       },
       "required": [
@@ -412,6 +433,9 @@
           "type": "object",
           "properties": {},
           "additionalProperties": false
+        },
+        "parent": {
+          "$ref": "#/$defs/Id"
         }
       },
       "required": [
@@ -450,6 +474,9 @@
           "type": "object",
           "properties": {},
           "additionalProperties": false
+        },
+        "parent": {
+          "$ref": "#/$defs/Id"
         }
       },
       "required": [

@@ -78,6 +78,7 @@ const schemaForConcept = (concept: Concept): unknown => {
                 // TODO  required (also with minLength=1 in property-def.)
             "references": schemaForProperties(allFeatures.filter(isNonDerivedReference), () => ref("SerializedRefs"), false),
                 // TODO  required (also with minLength=1 in property-def.)
+            "parent": ref("Id")
         },
         required: [
             "type", "id"

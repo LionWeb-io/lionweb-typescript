@@ -46,7 +46,8 @@
     "references": {
       "LIonCore_M3_Concept_extends": [],
       "LIonCore_M3_Concept_implements": []
-    }
+    },
+    "parent": "LIonCore_M3"
   },
   {
     "type": "LIonCore_M3_Property",
@@ -61,7 +62,8 @@
       "LIonCore_M3_Property_type": [
         "LIonCore_M3_String"
       ]
-    }
+    },
+    "parent": "LIonCore_M3_NamespacedEntity"
   },
   {
     "type": "LIonCore_M3_Property",
@@ -76,7 +78,8 @@
       "LIonCore_M3_Property_type": [
         "LIonCore_M3_String"
       ]
-    }
+    },
+    "parent": "LIonCore_M3_NamespacedEntity"
   },
   {
     "type": "LIonCore_M3_ConceptInterface",
@@ -91,7 +94,8 @@
     },
     "references": {
       "LIonCore_M3_ConceptInterface_extends": []
-    }
+    },
+    "parent": "LIonCore_M3"
   },
   {
     "type": "LIonCore_M3_Property",
@@ -106,7 +110,8 @@
       "LIonCore_M3_Property_type": [
         "LIonCore_M3_String"
       ]
-    }
+    },
+    "parent": "LIonCore_M3_NamespaceProvider"
   },
   {
     "type": "LIonCore_M3_Concept",
@@ -127,7 +132,8 @@
       "LIonCore_M3_Concept_implements": [
         "LIonCore_M3_NamespaceProvider"
       ]
-    }
+    },
+    "parent": "LIonCore_M3"
   },
   {
     "type": "LIonCore_M3_Property",
@@ -142,7 +148,8 @@
       "LIonCore_M3_Property_type": [
         "LIonCore_M3_String"
       ]
-    }
+    },
+    "parent": "LIonCore_M3_Metamodel"
   },
   {
     "type": "LIonCore_M3_Containment",
@@ -157,7 +164,8 @@
       "LIonCore_M3_Link_type": [
         "LIonCore_M3_MetamodelElement"
       ]
-    }
+    },
+    "parent": "LIonCore_M3_Metamodel"
   },
   {
     "type": "LIonCore_M3_Reference",
@@ -172,7 +180,8 @@
       "LIonCore_M3_Link_type": [
         "LIonCore_M3_Metamodel"
       ]
-    }
+    },
+    "parent": "LIonCore_M3_Metamodel"
   },
   {
     "type": "LIonCore_M3_Concept",
@@ -189,7 +198,8 @@
         "LIonCore_M3_NamespacedEntity"
       ],
       "LIonCore_M3_Concept_implements": []
-    }
+    },
+    "parent": "LIonCore_M3"
   },
   {
     "type": "LIonCore_M3_Concept",
@@ -211,7 +221,8 @@
       "LIonCore_M3_Concept_implements": [
         "LIonCore_M3_NamespaceProvider"
       ]
-    }
+    },
+    "parent": "LIonCore_M3"
   },
   {
     "type": "LIonCore_M3_Containment",
@@ -226,7 +237,8 @@
       "LIonCore_M3_Link_type": [
         "LIonCore_M3_Feature"
       ]
-    }
+    },
+    "parent": "LIonCore_M3_FeaturesContainer"
   },
   {
     "type": "LIonCore_M3_Reference",
@@ -241,7 +253,8 @@
       "LIonCore_M3_Link_type": [
         "LIonCore_M3_Feature"
       ]
-    }
+    },
+    "parent": "LIonCore_M3_FeaturesContainer"
   },
   {
     "type": "LIonCore_M3_Concept",
@@ -262,7 +275,8 @@
         "LIonCore_M3_FeaturesContainer"
       ],
       "LIonCore_M3_Concept_implements": []
-    }
+    },
+    "parent": "LIonCore_M3"
   },
   {
     "type": "LIonCore_M3_Property",
@@ -277,7 +291,8 @@
       "LIonCore_M3_Property_type": [
         "LIonCore_M3_boolean"
       ]
-    }
+    },
+    "parent": "LIonCore_M3_Concept"
   },
   {
     "type": "LIonCore_M3_Reference",
@@ -292,7 +307,8 @@
       "LIonCore_M3_Link_type": [
         "LIonCore_M3_Concept"
       ]
-    }
+    },
+    "parent": "LIonCore_M3_Concept"
   },
   {
     "type": "LIonCore_M3_Reference",
@@ -307,7 +323,8 @@
       "LIonCore_M3_Link_type": [
         "LIonCore_M3_ConceptInterface"
       ]
-    }
+    },
+    "parent": "LIonCore_M3_Concept"
   },
   {
     "type": "LIonCore_M3_Concept",
@@ -326,7 +343,8 @@
         "LIonCore_M3_FeaturesContainer"
       ],
       "LIonCore_M3_Concept_implements": []
-    }
+    },
+    "parent": "LIonCore_M3"
   },
   {
     "type": "LIonCore_M3_Reference",
@@ -341,7 +359,8 @@
       "LIonCore_M3_Link_type": [
         "LIonCore_M3_ConceptInterface"
       ]
-    }
+    },
+    "parent": "LIonCore_M3_ConceptInterface"
   },
   {
     "type": "LIonCore_M3_Concept",
@@ -361,7 +380,8 @@
         "LIonCore_M3_NamespacedEntity"
       ],
       "LIonCore_M3_Concept_implements": []
-    }
+    },
+    "parent": "LIonCore_M3"
   },
   {
     "type": "LIonCore_M3_Property",
@@ -376,7 +396,8 @@
       "LIonCore_M3_Property_type": [
         "LIonCore_M3_boolean"
       ]
-    }
+    },
+    "parent": "LIonCore_M3_Feature"
   },
   {
     "type": "LIonCore_M3_Property",
@@ -391,7 +412,8 @@
       "LIonCore_M3_Property_type": [
         "LIonCore_M3_boolean"
       ]
-    }
+    },
+    "parent": "LIonCore_M3_Feature"
   },
   {
     "type": "LIonCore_M3_Concept",
@@ -411,7 +433,8 @@
         "LIonCore_M3_Feature"
       ],
       "LIonCore_M3_Concept_implements": []
-    }
+    },
+    "parent": "LIonCore_M3"
   },
   {
     "type": "LIonCore_M3_Property",
@@ -426,7 +449,8 @@
       "LIonCore_M3_Property_type": [
         "LIonCore_M3_boolean"
       ]
-    }
+    },
+    "parent": "LIonCore_M3_Link"
   },
   {
     "type": "LIonCore_M3_Reference",
@@ -441,7 +465,8 @@
       "LIonCore_M3_Link_type": [
         "LIonCore_M3_FeaturesContainer"
       ]
-    }
+    },
+    "parent": "LIonCore_M3_Link"
   },
   {
     "type": "LIonCore_M3_Concept",
@@ -458,7 +483,8 @@
         "LIonCore_M3_Link"
       ],
       "LIonCore_M3_Concept_implements": []
-    }
+    },
+    "parent": "LIonCore_M3"
   },
   {
     "type": "LIonCore_M3_Concept",
@@ -478,7 +504,8 @@
         "LIonCore_M3_Feature"
       ],
       "LIonCore_M3_Concept_implements": []
-    }
+    },
+    "parent": "LIonCore_M3"
   },
   {
     "type": "LIonCore_M3_Reference",
@@ -493,7 +520,8 @@
       "LIonCore_M3_Link_type": [
         "LIonCore_M3_DataType"
       ]
-    }
+    },
+    "parent": "LIonCore_M3_Property"
   },
   {
     "type": "LIonCore_M3_Property",
@@ -508,7 +536,8 @@
       "LIonCore_M3_Property_type": [
         "LIonCore_M3_boolean"
       ]
-    }
+    },
+    "parent": "LIonCore_M3_Property"
   },
   {
     "type": "LIonCore_M3_Concept",
@@ -525,7 +554,8 @@
         "LIonCore_M3_MetamodelElement"
       ],
       "LIonCore_M3_Concept_implements": []
-    }
+    },
+    "parent": "LIonCore_M3"
   },
   {
     "type": "LIonCore_M3_Concept",
@@ -542,7 +572,8 @@
         "LIonCore_M3_DataType"
       ],
       "LIonCore_M3_Concept_implements": []
-    }
+    },
+    "parent": "LIonCore_M3"
   },
   {
     "type": "LIonCore_M3_Concept",
@@ -559,7 +590,8 @@
         "LIonCore_M3_Link"
       ],
       "LIonCore_M3_Concept_implements": []
-    }
+    },
+    "parent": "LIonCore_M3"
   },
   {
     "type": "LIonCore_M3_Concept",
@@ -580,7 +612,8 @@
       "LIonCore_M3_Concept_implements": [
         "LIonCore_M3_NamespaceProvider"
       ]
-    }
+    },
+    "parent": "LIonCore_M3"
   },
   {
     "type": "LIonCore_M3_Containment",
@@ -595,7 +628,8 @@
       "LIonCore_M3_Link_type": [
         "LIonCore_M3_EnumerationLiteral"
       ]
-    }
+    },
+    "parent": "LIonCore_M3_Enumeration"
   },
   {
     "type": "LIonCore_M3_Concept",
@@ -612,34 +646,39 @@
         "LIonCore_M3_NamespacedEntity"
       ],
       "LIonCore_M3_Concept_implements": []
-    }
+    },
+    "parent": "LIonCore_M3"
   },
   {
     "type": "LIonCore_M3_PrimitiveType",
     "id": "LIonCore_M3_String",
     "properties": {
       "LIonCore_M3_NamespacedEntity_simpleName": "String"
-    }
+    },
+    "parent": "LIonCore_M3"
   },
   {
     "type": "LIonCore_M3_PrimitiveType",
     "id": "LIonCore_M3_boolean",
     "properties": {
       "LIonCore_M3_NamespacedEntity_simpleName": "boolean"
-    }
+    },
+    "parent": "LIonCore_M3"
   },
   {
     "type": "LIonCore_M3_PrimitiveType",
     "id": "LIonCore_M3_int",
     "properties": {
       "LIonCore_M3_NamespacedEntity_simpleName": "int"
-    }
+    },
+    "parent": "LIonCore_M3"
   },
   {
     "type": "LIonCore_M3_PrimitiveType",
     "id": "LIonCore_M3_JSON",
     "properties": {
       "LIonCore_M3_NamespacedEntity_simpleName": "JSON"
-    }
+    },
+    "parent": "LIonCore_M3"
   }
 ]

@@ -39,7 +39,8 @@ export const serializeMetamodel = (metamodel: Metamodel): SerializedNode[] => {
                 references: {
                     [metaFeatures.concept_extends.id]: asRefIds(thing.extends),
                     [metaFeatures.concept_implements.id]: asIds(thing.implements)
-                }
+                },
+                parent: thing.parent?.id
             })
             thing.features.forEach(visit)
             return
@@ -56,7 +57,8 @@ export const serializeMetamodel = (metamodel: Metamodel): SerializedNode[] => {
                 },
                 references: {
                     [metaFeatures.conceptInterface_extends.id]: asIds(thing.extends)
-                }
+                },
+                parent: thing.parent?.id
             })
             thing.features.forEach(visit)
             return
@@ -73,7 +75,8 @@ export const serializeMetamodel = (metamodel: Metamodel): SerializedNode[] => {
                 },
                 references: {
                     [metaFeatures.link_type.id]: asRefIds(thing.type)
-                }
+                },
+                parent: thing.parent?.id
             })
             return
         }
@@ -86,7 +89,8 @@ export const serializeMetamodel = (metamodel: Metamodel): SerializedNode[] => {
                 },
                 children: {
                     [metaFeatures.enumeration_literals.id]: asIds(thing.literals)
-                }
+                },
+                parent: thing.parent?.id
             })
             thing.literals.forEach(visit)
             return
@@ -97,7 +101,8 @@ export const serializeMetamodel = (metamodel: Metamodel): SerializedNode[] => {
                 id: thing.id,
                 properties: {
                     [metaFeatures.namespacedEntity_simpleName.id]: thing.simpleName
-                }
+                },
+                parent: thing.parent?.id
             })
             return
         }
@@ -121,7 +126,8 @@ export const serializeMetamodel = (metamodel: Metamodel): SerializedNode[] => {
                 id: thing.id,
                 properties: {
                     [metaFeatures.namespacedEntity_simpleName.id]: thing.simpleName
-                }
+                },
+                parent: thing.parent?.id
             })
             return
         }
@@ -137,7 +143,8 @@ export const serializeMetamodel = (metamodel: Metamodel): SerializedNode[] => {
                 },
                 references: {
                     [metaFeatures.property_type.id]: asRefIds(thing.type)
-                }
+                },
+                parent: thing.parent?.id
             })
             return
         }
@@ -153,7 +160,8 @@ export const serializeMetamodel = (metamodel: Metamodel): SerializedNode[] => {
                 },
                 references: {
                     [metaFeatures.link_type.id]: asRefIds(thing.type)
-                }
+                },
+                parent: thing.parent?.id
             })
             return
         }

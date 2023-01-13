@@ -32,5 +32,6 @@ export type SerializedNode = {
     properties?: { [featureName: string]: string | boolean }
     children?: { [featureName: string]: Id[] }
     references?: { [featureName: string]: SerializedRef[] }
+    parent?: Id
 }
 
