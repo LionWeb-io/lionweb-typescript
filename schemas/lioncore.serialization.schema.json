@@ -118,9 +118,6 @@
             },
             "LIonCore_M3_Concept_implements": {
               "$ref": "#/$defs/SerializedRefs"
-            },
-            "LIonCore_M3_NamespacedEntity_container": {
-              "$ref": "#/$defs/SerializedRefs"
             }
           },
           "additionalProperties": false
@@ -166,9 +163,6 @@
           "type": "object",
           "properties": {
             "LIonCore_M3_ConceptInterface_extends": {
-              "$ref": "#/$defs/SerializedRefs"
-            },
-            "LIonCore_M3_NamespacedEntity_container": {
               "$ref": "#/$defs/SerializedRefs"
             }
           },
@@ -224,9 +218,6 @@
           "properties": {
             "LIonCore_M3_Link_type": {
               "$ref": "#/$defs/SerializedRefs"
-            },
-            "LIonCore_M3_NamespacedEntity_container": {
-              "$ref": "#/$defs/SerializedRefs"
             }
           },
           "additionalProperties": false
@@ -281,9 +272,6 @@
           "properties": {
             "LIonCore_M3_Property_type": {
               "$ref": "#/$defs/SerializedRefs"
-            },
-            "LIonCore_M3_NamespacedEntity_container": {
-              "$ref": "#/$defs/SerializedRefs"
             }
           },
           "additionalProperties": false
@@ -323,11 +311,7 @@
         },
         "references": {
           "type": "object",
-          "properties": {
-            "LIonCore_M3_NamespacedEntity_container": {
-              "$ref": "#/$defs/SerializedRefs"
-            }
-          },
+          "properties": {},
           "additionalProperties": false
         }
       },
@@ -380,9 +364,6 @@
           "properties": {
             "LIonCore_M3_Link_type": {
               "$ref": "#/$defs/SerializedRefs"
-            },
-            "LIonCore_M3_NamespacedEntity_container": {
-              "$ref": "#/$defs/SerializedRefs"
             }
           },
           "additionalProperties": false
@@ -429,11 +410,7 @@
         },
         "references": {
           "type": "object",
-          "properties": {
-            "LIonCore_M3_NamespacedEntity_container": {
-              "$ref": "#/$defs/SerializedRefs"
-            }
-          },
+          "properties": {},
           "additionalProperties": false
         }
       },
@@ -471,11 +448,7 @@
         },
         "references": {
           "type": "object",
-          "properties": {
-            "LIonCore_M3_NamespacedEntity_container": {
-              "$ref": "#/$defs/SerializedRefs"
-            }
-          },
+          "properties": {},
           "additionalProperties": false
         }
       },

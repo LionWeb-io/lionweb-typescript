@@ -95,7 +95,7 @@ classDiagram
   Metamodel "*" -- "*" Metamodel: dependsOn
 
 
-  NamespacedEntity "*" -- "1" NamespaceProvider: container
+
 
   Property "*" -- "1" DataType: type
 
