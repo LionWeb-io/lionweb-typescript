@@ -4,42 +4,56 @@
  */
 
 import {MultiRef, SingleRef, unresolved} from "../references.ts"
-import {Id, Node} from "../types.ts"
+import {Id, Node as NodeInterface} from "../types.ts"
 import {allFeaturesOf} from "./functions.ts"
 
 
 /**
  * Joins fragments of a qualified name using the `.` character.
  */
-export const qualify = (...names: string[]): string =>
-    names.join(".")
+export const qualify = (...names: (string|undefined)[]): string =>
+    names
+        .filter((name) => typeof name === "string")
+        .join(".")
 
 
-interface NamespaceProvider {
+
+abstract class NodeClass implements NodeInterface {
+    parent?: NamespaceProvider  // every parent provides a namespace
+    id: Id
+    protected constructor(id: Id, parent?: NamespaceProvider) {
+        this.id = id
+        this.parent = parent
+    }
+}
+/*
+ * Note: this definition should be moved up to src/types.ts
+ * to express that all nodes except roots/unattached nodes have a parent
+ * (of a parametrized type).
+ */
+
+
+interface NamespaceProvider extends NodeInterface {
     namespaceQualifier(): string
 }
 
-abstract class NamespacedEntity implements Node {
+abstract class NamespacedEntity extends NodeClass {
     simpleName: string
-    id: Id
-    container: NamespaceProvider
-    protected constructor(container: NamespaceProvider, simpleName: string, id: Id) {
-        this.container = container
+    protected constructor(parent: NamespaceProvider, simpleName: string, id: Id) {
+        super(id, parent)
         this.simpleName = simpleName
-        this.id = id
     }
     qualifiedName() {
-        return qualify(this.container.namespaceQualifier(), this.simpleName)
+        return qualify(this.parent?.namespaceQualifier(), this.simpleName)
     }
 }
 
-class Metamodel implements NamespaceProvider, Node {
+class Metamodel extends NodeClass implements NamespaceProvider {
     qualifiedName: string
-    id: Id
     elements: MetamodelElement[] = []   // (containment)
     constructor(qualifiedName: string, id: Id) {
+        super(id)
         this.qualifiedName = qualifiedName
-        this.id = id
     }
     namespaceQualifier(): string {
         return this.qualifiedName
@@ -154,7 +168,7 @@ class PrimitiveType extends Datatype {}
 class Enumeration extends Datatype implements NamespaceProvider {
     literals: EnumerationLiteral[] = [] // (containment)
     namespaceQualifier(): string {
-        return qualify(this.container.namespaceQualifier(), this.simpleName)
+        return qualify(this.parent?.namespaceQualifier(), this.simpleName)
     }
 }
 
@@ -170,6 +184,7 @@ class EnumerationLiteral extends NamespacedEntity {
  */
 type M3Concept =
     | Metamodel
+    // all NamespacedEntity-s:
     | Concept
     | ConceptInterface
     | Property
