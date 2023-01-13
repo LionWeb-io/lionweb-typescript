@@ -54,13 +54,9 @@ const namespacedEntity_qualifiedName = factory.property(namespacedEntity, "quali
     .isDerived()
     .ofType(stringDatatype)
 
-const namespacedEntity_container = factory.reference(namespacedEntity, "container")
-    .ofType(namespaceProvider)
-
 namespacedEntity.havingFeatures(
         namespacedEntity_simpleName,
-        namespacedEntity_qualifiedName,
-        namespacedEntity_container
+        namespacedEntity_qualifiedName
     )
 
 
