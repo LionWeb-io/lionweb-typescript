@@ -58,7 +58,7 @@ export const textAsEcoreXml = (data: string): EcoreXml =>
 export type AnyNumberOf<T> = undefined | T | T[]
 
 /**
- * Turns a {@link UndefOrTOrTs feature's value} into an array of objects
+ * Turns a {@link AnyNumberOf feature's value} into an array of objects
  * (possibly empty), regardless of the feature's cardinality and how its
  * value happened to be parsed.
  */
@@ -71,5 +71,4 @@ export const asArray = <T>(thing: AnyNumberOf<T>): T[] => {
     }
     return [thing]
 }
-
 
