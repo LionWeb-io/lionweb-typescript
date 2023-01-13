@@ -1,14 +1,7 @@
 import {MetamodelFactory} from "./factory.ts"
-import {hashingIdGen} from "../id-generation.ts"
 
 
-const factory = new MetamodelFactory("LIonCore", hashingIdGen({
-    salt: "LIonCore",
-    algorithm: "MD5",
-        // Note: MD5 is not secure for cryptographic purposes, but it's OK for hashing,
-        // and it produces hashes of only 128 bits.
-    checkForUniqueHash: true
-}))
+const factory = new MetamodelFactory("LIonCore", (qualifiedName) => qualifiedName ?? "???")
 
 /**
  * Definition of LIonCore in terms of itself.
