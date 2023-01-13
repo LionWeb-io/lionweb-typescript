@@ -130,7 +130,7 @@ export const serializeMetamodel = (metamodel: Metamodel): SerializedNode[] => {
                     [metaFeatures.namespacedEntity_simpleName.id]: thing.simpleName,
                     [metaFeatures.feature_optional.id]: thing.optional,
                     [metaFeatures.feature_derived.id]: thing.derived,
-                    [metaFeatures.property_disputed.id]: thing.disputed
+                    [metaFeatures.property_programmatic.id]: thing.programmatic
                 },
                 references: {
                     [metaFeatures.property_type.id]: asRefIds(thing.type)

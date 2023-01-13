@@ -253,7 +253,7 @@
         "properties": {
           "type": "object",
           "properties": {
-            "LIonCore_M3_Property_disputed": {
+            "LIonCore_M3_Property_programmatic": {
               "type": "boolean"
             },
             "LIonCore_M3_Feature_optional": {
@@ -267,7 +267,7 @@
             }
           },
           "required": [
-            "LIonCore_M3_Property_disputed",
+            "LIonCore_M3_Property_programmatic",
             "LIonCore_M3_Feature_optional",
             "LIonCore_M3_Feature_derived",
             "LIonCore_M3_NamespacedEntity_simpleName"

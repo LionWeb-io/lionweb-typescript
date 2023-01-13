@@ -47,7 +47,7 @@
       "LIonCore_M3_NamespacedEntity_simpleName": "title",
       "LIonCore_M3_Feature_optional": false,
       "LIonCore_M3_Feature_derived": false,
-      "LIonCore_M3_Property_disputed": false
+      "LIonCore_M3_Property_programmatic": false
     },
     "references": {
       "LIonCore_M3_Property_type": [
@@ -63,7 +63,7 @@
       "LIonCore_M3_NamespacedEntity_simpleName": "pages",
       "LIonCore_M3_Feature_optional": false,
       "LIonCore_M3_Feature_derived": false,
-      "LIonCore_M3_Property_disputed": false
+      "LIonCore_M3_Property_programmatic": false
     },
     "references": {
       "LIonCore_M3_Property_type": [
@@ -114,7 +114,7 @@
       "LIonCore_M3_NamespacedEntity_simpleName": "name",
       "LIonCore_M3_Feature_optional": false,
       "LIonCore_M3_Feature_derived": false,
-      "LIonCore_M3_Property_disputed": false
+      "LIonCore_M3_Property_programmatic": false
     },
     "references": {
       "LIonCore_M3_Property_type": [
@@ -164,7 +164,7 @@
       "LIonCore_M3_NamespacedEntity_simpleName": "name",
       "LIonCore_M3_Feature_optional": false,
       "LIonCore_M3_Feature_derived": false,
-      "LIonCore_M3_Property_disputed": false
+      "LIonCore_M3_Property_programmatic": false
     },
     "references": {
       "LIonCore_M3_Property_type": [
@@ -200,7 +200,7 @@
       "LIonCore_M3_NamespacedEntity_simpleName": "countries",
       "LIonCore_M3_Feature_optional": false,
       "LIonCore_M3_Feature_derived": false,
-      "LIonCore_M3_Property_disputed": false
+      "LIonCore_M3_Property_programmatic": false
     },
     "references": {
       "LIonCore_M3_Property_type": [
@@ -236,7 +236,7 @@
       "LIonCore_M3_NamespacedEntity_simpleName": "subject",
       "LIonCore_M3_Feature_optional": false,
       "LIonCore_M3_Feature_derived": false,
-      "LIonCore_M3_Property_disputed": false
+      "LIonCore_M3_Property_programmatic": false
     },
     "references": {
       "LIonCore_M3_Property_type": [

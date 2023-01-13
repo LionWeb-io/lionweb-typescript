@@ -32,7 +32,7 @@ const byIdMap = <T extends { id: Id }>(ts: T[]): { [id: Id]: T } => {
 
 
 /**
- * Deserializes a metamodel that's serialized into the LIonWeb serialization JSON forma
+ * Deserializes a metamodel that's serialized into the LIonWeb serialization JSON format
  * as an instance of the LIonCore/M3 metametamodel, using {@link M3Concept these type definitions}.
  */
 export const deserializeMetamodel = (serializedNodes: SerializedNode[], ...dependentMetamodels: Metamodel[]): Metamodel => {
@@ -161,12 +161,12 @@ export const deserializeMetamodel = (serializedNodes: SerializedNode[], ...depen
                     [metaFeatures.namespacedEntity_simpleName.id]: simpleName,
                     [metaFeatures.feature_derived.id]: derived,
                     [metaFeatures.feature_optional.id]: optional,
-                    [metaFeatures.property_disputed.id]: disputed
+                    [metaFeatures.property_programmatic.id]: programmatic
                 } = properties!
                 const node = new Property(parent as FeaturesContainer, simpleName as string, id)
                 node.derived = derived as boolean
                 node.optional = optional as boolean
-                node.disputed = disputed as boolean
+                node.programmatic = programmatic as boolean
                 const {
                     [metaFeatures.property_type.id]: type
                 } = references!

@@ -46,7 +46,7 @@ hide empty members
     elementsSortedByName(elements).map(generateForRelationsOf),
 `
 legend
-  <#LightGray,#LightGray>| <#Orange>Disputed |
+  <#LightGray,#LightGray>| <#Orange>Programmatic |
 end legend
 @enduml
 `
@@ -110,7 +110,7 @@ const generateForNonRelationalFeature = (feature: Feature) => {
     const {simpleName, optional, derived} = feature
     const multiple = feature instanceof Link && feature.multiple
     const type_ = type(feature)
-    return `${(feature instanceof Property && feature.disputed) ? "#Orange ": ""}${simpleName}${derived ? `()` : ``}: ${multiple ? `List<` : ``}${type_ === unresolved ? `???` : type_.simpleName}${multiple ? `>` : ``}${(optional && !multiple) ? `?` : ``}`
+    return `${(feature instanceof Property && feature.programmatic) ? "#Orange ": ""}${simpleName}${derived ? `()` : ``}: ${multiple ? `List<` : ``}${type_ === unresolved ? `???` : type_.simpleName}${multiple ? `>` : ``}${(optional && !multiple) ? `?` : ``}`
 }
 
 

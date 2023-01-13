@@ -64,7 +64,7 @@ classDiagram
   DataType <|-- PrimitiveType
 
   class Property {
-    +Boolean disputed
+    +Boolean programmatic
   }
   Feature <|-- Property
 

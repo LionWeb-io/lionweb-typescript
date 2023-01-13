@@ -158,17 +158,16 @@ class Containment extends Link {
 class Property extends Feature {
     type: SingleRef<Datatype> = unresolved   // (reference)
     /**
-     * Indicates whether this property is "disputed" in the sense that
-     * it's not in the agreed-on version of M3/LIonCore, but it's necessary
-     * in order to be able to self-define LIonCore.
+     * Indicates whether this property targets the _programmatic_ aspect of
+     * the LIonCore/M3 instance.
      */
-    disputed /*: boolean */ = false
+    programmatic /*: boolean */ = false
     ofType(type: Datatype) {
         this.type = type
         return this
     }
-    isDisputed() {
-        this.disputed = true
+    isProgrammatic() {
+        this.programmatic = true
         return this
     }
 }

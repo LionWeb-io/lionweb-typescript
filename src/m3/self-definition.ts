@@ -117,7 +117,7 @@ const feature_optional = factory.property(feature, "optional")
 
 const feature_derived = factory.property(feature, "derived")
     .ofType(booleanDatatype)
-    .isDisputed()
+    .isProgrammatic()
 
 feature.havingFeatures(
     feature_optional,
@@ -148,12 +148,12 @@ const reference = factory.concept("Reference", false, link)
 const property = factory.concept("Property", false, feature)
 
 const property_type = factory.reference(property, "type")
-const property_disputed = factory.property(property, "disputed")
+const property_programmatic = factory.property(property, "programmatic")
     .ofType(booleanDatatype)
 
 property.havingFeatures(
     property_type,
-    property_disputed
+    property_programmatic
 )
 
 
@@ -227,6 +227,6 @@ export const metaFeatures = {
     metamodel_qualifiedName,
     namespacedEntity_simpleName,
     property_type,
-    property_disputed,
+    property_programmatic,
 }
 

@@ -49,7 +49,7 @@ abstract class NamespacedEntity {
 class PrimitiveType extends DataType
 
 class Property extends Feature {
-  disputed: Boolean
+  programmatic: Boolean
 }
 
 class Reference extends Link
@@ -78,6 +78,6 @@ Property "*" -- "1" DataType: type
 
 
 legend
-  <#LightGray,#LightGray>| <#Orange>Disputed |
+  <#LightGray,#LightGray>| <#Orange>Programmatic |
 end legend
 @enduml
