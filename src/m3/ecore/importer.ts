@@ -7,7 +7,11 @@ import {
     PrimitiveType
 } from "../types.ts"
 import {MetamodelFactory} from "../factory.ts"
-import {hashingIdGen} from "../../id-generation.ts"
+import {
+    checkUniqueData,
+    checkUniqueId,
+    hashingIdGen
+} from "../../id-generation.ts"
 import {
     asArray,
     EClassifier,
@@ -31,7 +35,7 @@ export const asLIonCoreMetamodel = (ecoreXml: EcoreXml): Metamodel => {
 
     const ePackage = ecoreXml["ecore:EPackage"]
     // TODO  an Ecore XML can contain multiple EPackage-s
-    const factory = new MetamodelFactory(ePackage["@name"], hashingIdGen({ checkForUniqueHash: true }))
+    const factory = new MetamodelFactory(ePackage["@name"], checkUniqueId(checkUniqueData(hashingIdGen())))
 
 
     // phase 1: convert EClassifiers but without their EStructuralFeatures (in the case of EClasses)

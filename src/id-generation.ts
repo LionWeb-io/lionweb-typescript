@@ -4,11 +4,13 @@ import {
 } from "https://deno.land/std@0.168.0/node/internal/crypto/hash.ts"
 
 
+type GenData = string | undefined
+
 /**
  * Type definition for a function that generates a unique ID,
  * possibly ingesting some data.
  */
-export type IdGenerator = (data?: string) => string
+export type IdGenerator = (data: GenData) => string
 
 
 /**
@@ -34,53 +36,66 @@ const defaultHashAlgorithm = "SHA256"
  * Type definition for objects that configure a
  * {@link hashingIdGen hashing ID generator}.
  */
-export type IdGenConfig = {
-    doNotCheckForUniqueData?: boolean
+export type HashingIdGenConfig = {
     algorithm?: typeof defaultHashAlgorithm | string
     salt?: string
-    checkForUniqueHash?: boolean
 }
 
 /**
  * Creates a {@link IdGenerator hashing ID generator},
- * optionally using a {@link IdGenConfig configuration object}.
+ * optionally using a {@link HashingIdGenConfig configuration object}.
  * The default is:
  *   - uses the *SHA256* hashing algorithm
  *   - without salt prefix string
- *   - while checking whether the data to hash is unique
- *   - without checking whether the generated IDs are unique.
  * Note that the created ID generator must be given data in the form of a string (`!== undefined`).
  */
-export const hashingIdGen = (config?: IdGenConfig): IdGenerator => {
-    const checkForUniqueData = !(config?.doNotCheckForUniqueData)
+export const hashingIdGen = (config?: HashingIdGenConfig): IdGenerator => {
     const algorithm = config?.algorithm ?? defaultHashAlgorithm
     const salt = config?.salt ?? ""
-    const checkForUniqueHash = config?.checkForUniqueHash
 
-    const datas: string[] = []
-    const hashes: string[] = []
-
-    return (data?: string) => {
+    return (data) => {
         if (data === undefined) {
             throw new Error(`expected data for hashing`)
         }
-        if (checkForUniqueData) {
-            if (datas.indexOf(data) > -1) {
-                throw new Error(`duplicate data encountered: "${data}"`)
-            }
-            datas.push(data)
-        }
-        const hash = createHash(algorithm)
+        return createHash(algorithm)
             .update(salt + data)
             .digest("base64url")
             .toString()
-        if (checkForUniqueHash) {
-            if (hashes.indexOf(hash) > -1) {
-                throw new Error(`duplicate hash generated: "${hash}"`)
-            }
-            hashes.push(hash)
+    }
+}
+
+
+/**
+ * Augments the given {@link IdGenerator ID generator} to check
+ * whether that returns unique IDs, throwing an error when not.
+ */
+export const checkUniqueId = (idGen: IdGenerator): IdGenerator => {
+    const ids: string[] = []
+
+    return (data) => {
+        const id = idGen(data)
+        if (ids.indexOf(id) > -1) {
+            throw new Error(`duplicate ID generated: "${id}"`)
         }
-        return hash
+        ids.push(id)
+        return id
+    }
+}
+
+
+/**
+ * Augments the given {@link IdGenerator ID generator} to check
+ * whether it's been given unique {@link GenData data},
+ * throwing an error when not.
+ */
+export const checkUniqueData = (idGen: IdGenerator): IdGenerator => {
+    const datas: GenData[] = []
+    return (data) => {
+        if (datas.indexOf(data) > -1) {
+            throw new Error(`duplicate data encountered: "${data}"`)
+        }
+        datas.push(data)
+        return idGen(data)
     }
 }
 
