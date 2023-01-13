@@ -1,12 +1,12 @@
 [
   {
-    "type": "jj0Y6KYlHt3_qyFDFAx4CA",
+    "type": "LIonCore.Metamodel",
     "id": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
     "properties": {
-      "97hsg4Fg3ZitV5FaapRLVg": "library"
+      "LIonCore.Metamodel.qualifiedName": "library"
     },
     "children": {
-      "1CVT9BH6pWQYU-BZwhppIw": [
+      "LIonCore.Metamodel.elements": [
         "INhBvWyXvxwNsePuX0rdNGB_J9hi85cTb1Q0APXCyJ0",
         "uHmTCy63BV23cvXwFSumVwK1DOh4IZvIyAnRJjW9eQI",
         "gVp8_QSmXE2k4pd-sQZgjYMoW95SLLaVIH4yMYqqbt4",
@@ -19,234 +19,234 @@
     }
   },
   {
-    "type": "-EGokr9qbz6C-K8qdK_PHA",
+    "type": "LIonCore.PrimitiveType",
     "id": "INhBvWyXvxwNsePuX0rdNGB_J9hi85cTb1Q0APXCyJ0",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "String"
+      "LIonCore.NamespacedEntity.simpleName": "String"
     }
   },
   {
-    "type": "-EGokr9qbz6C-K8qdK_PHA",
+    "type": "LIonCore.PrimitiveType",
     "id": "uHmTCy63BV23cvXwFSumVwK1DOh4IZvIyAnRJjW9eQI",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "boolean"
+      "LIonCore.NamespacedEntity.simpleName": "boolean"
     }
   },
   {
-    "type": "-EGokr9qbz6C-K8qdK_PHA",
+    "type": "LIonCore.PrimitiveType",
     "id": "gVp8_QSmXE2k4pd-sQZgjYMoW95SLLaVIH4yMYqqbt4",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "int"
+      "LIonCore.NamespacedEntity.simpleName": "int"
     }
   },
   {
-    "type": "jNyncSWEXyHd08N63CNBBA",
+    "type": "LIonCore.Concept",
     "id": "OcDK2GESljInG-ApIqtkXUoA2UeviB97u0UuiZzM0Hs",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "Book",
-      "j1tZfW_pl9Cu2NO3TUw4oA": false
+      "LIonCore.NamespacedEntity.simpleName": "Book",
+      "LIonCore.Concept.abstract": false
     },
     "children": {
-      "fSSOzJzcuK14nt-E3K2WTg": [
+      "LIonCore.FeaturesContainer.features": [
         "Ei9m_HbdmEYg_EwMLLVZ71ERRBZyXH8GHVyOVia8Sqg",
         "OJhF8vB_qRMrA8A9a-H0LsByONdYtHGmQ-lk9rUHUc4",
         "9ATCb8nXEuQAL3NOY-EUZwuThpIQnQ2C_2n97IRGA_g"
       ]
     },
     "references": {
-      "noALNU7IxFfZDvrEL840Ig": [],
-      "wUjeOwaFMJPJX5IzUj6WWA": []
+      "LIonCore.Concept.extends": [],
+      "LIonCore.Concept.implements": []
     }
   },
   {
-    "type": "8zwB8soE_0a7rDVPgyxaRQ",
+    "type": "LIonCore.Property",
     "id": "Ei9m_HbdmEYg_EwMLLVZ71ERRBZyXH8GHVyOVia8Sqg",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "title",
-      "dAp79oxccBi-9j6BrQcZLQ": false,
-      "EE8DYkLRyQzaqyxFqlbOAw": false,
-      "XzYEKJ6QzlZuqKPtMXK_kQ": false
+      "LIonCore.NamespacedEntity.simpleName": "title",
+      "LIonCore.Feature.optional": false,
+      "LIonCore.Feature.derived": false,
+      "LIonCore.Property.disputed": false
     },
     "references": {
-      "kXkn4uq_4lecgXpK39x-1g": [
+      "LIonCore.Property.type": [
         "INhBvWyXvxwNsePuX0rdNGB_J9hi85cTb1Q0APXCyJ0"
       ]
     }
   },
   {
-    "type": "8zwB8soE_0a7rDVPgyxaRQ",
+    "type": "LIonCore.Property",
     "id": "OJhF8vB_qRMrA8A9a-H0LsByONdYtHGmQ-lk9rUHUc4",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "pages",
-      "dAp79oxccBi-9j6BrQcZLQ": false,
-      "EE8DYkLRyQzaqyxFqlbOAw": false,
-      "XzYEKJ6QzlZuqKPtMXK_kQ": false
+      "LIonCore.NamespacedEntity.simpleName": "pages",
+      "LIonCore.Feature.optional": false,
+      "LIonCore.Feature.derived": false,
+      "LIonCore.Property.disputed": false
     },
     "references": {
-      "kXkn4uq_4lecgXpK39x-1g": [
+      "LIonCore.Property.type": [
         "gVp8_QSmXE2k4pd-sQZgjYMoW95SLLaVIH4yMYqqbt4"
       ]
     }
   },
   {
-    "type": "omtd90jug1c7NnEPjDeELA",
+    "type": "LIonCore.Reference",
     "id": "9ATCb8nXEuQAL3NOY-EUZwuThpIQnQ2C_2n97IRGA_g",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "author",
-      "dAp79oxccBi-9j6BrQcZLQ": false,
-      "EE8DYkLRyQzaqyxFqlbOAw": false,
-      "wDi78Hot03g0gUTGL0SpbA": true
+      "LIonCore.NamespacedEntity.simpleName": "author",
+      "LIonCore.Feature.optional": false,
+      "LIonCore.Feature.derived": false,
+      "LIonCore.Link.multiple": true
     },
     "references": {
-      "4CbeSCKt9rktoT3iKk2wCg": [
+      "LIonCore.Link.type": [
         "DuBg-a_slgc_VOG0huySkSWi3rZQX1Q20EEd2f7lvLE"
       ]
     }
   },
   {
-    "type": "jNyncSWEXyHd08N63CNBBA",
+    "type": "LIonCore.Concept",
     "id": "Pk1NRJfHMt4eSja2kpXia7x8vj6Vzc6WQCUzT3aVeYY",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "Library",
-      "j1tZfW_pl9Cu2NO3TUw4oA": false
+      "LIonCore.NamespacedEntity.simpleName": "Library",
+      "LIonCore.Concept.abstract": false
     },
     "children": {
-      "fSSOzJzcuK14nt-E3K2WTg": [
+      "LIonCore.FeaturesContainer.features": [
         "LdgCnVXNgZD7CLbBhBin2Rcdumx4qZUYz_jh2QnP5z8",
         "TFS1ME6sEyRbkRchsr8zaZCcj_uF1LM0LXK24gbnxZM"
       ]
     },
     "references": {
-      "noALNU7IxFfZDvrEL840Ig": [],
-      "wUjeOwaFMJPJX5IzUj6WWA": []
+      "LIonCore.Concept.extends": [],
+      "LIonCore.Concept.implements": []
     }
   },
   {
-    "type": "8zwB8soE_0a7rDVPgyxaRQ",
+    "type": "LIonCore.Property",
     "id": "LdgCnVXNgZD7CLbBhBin2Rcdumx4qZUYz_jh2QnP5z8",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "name",
-      "dAp79oxccBi-9j6BrQcZLQ": false,
-      "EE8DYkLRyQzaqyxFqlbOAw": false,
-      "XzYEKJ6QzlZuqKPtMXK_kQ": false
+      "LIonCore.NamespacedEntity.simpleName": "name",
+      "LIonCore.Feature.optional": false,
+      "LIonCore.Feature.derived": false,
+      "LIonCore.Property.disputed": false
     },
     "references": {
-      "kXkn4uq_4lecgXpK39x-1g": [
+      "LIonCore.Property.type": [
         "INhBvWyXvxwNsePuX0rdNGB_J9hi85cTb1Q0APXCyJ0"
       ]
     }
   },
   {
-    "type": "DKh_5NU9dZ5DmwvDq5attg",
+    "type": "LIonCore.Containment",
     "id": "TFS1ME6sEyRbkRchsr8zaZCcj_uF1LM0LXK24gbnxZM",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "books",
-      "dAp79oxccBi-9j6BrQcZLQ": false,
-      "EE8DYkLRyQzaqyxFqlbOAw": false,
-      "wDi78Hot03g0gUTGL0SpbA": true
+      "LIonCore.NamespacedEntity.simpleName": "books",
+      "LIonCore.Feature.optional": false,
+      "LIonCore.Feature.derived": false,
+      "LIonCore.Link.multiple": true
     },
     "references": {
-      "4CbeSCKt9rktoT3iKk2wCg": [
+      "LIonCore.Link.type": [
         "OcDK2GESljInG-ApIqtkXUoA2UeviB97u0UuiZzM0Hs"
       ]
     }
   },
   {
-    "type": "jNyncSWEXyHd08N63CNBBA",
+    "type": "LIonCore.Concept",
     "id": "DuBg-a_slgc_VOG0huySkSWi3rZQX1Q20EEd2f7lvLE",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "Writer",
-      "j1tZfW_pl9Cu2NO3TUw4oA": false
+      "LIonCore.NamespacedEntity.simpleName": "Writer",
+      "LIonCore.Concept.abstract": false
     },
     "children": {
-      "fSSOzJzcuK14nt-E3K2WTg": [
+      "LIonCore.FeaturesContainer.features": [
         "onRRrZaasiOtDU2qFJgyW8OVz8p5-hqQu0Vlc_7Aq6s"
       ]
     },
     "references": {
-      "noALNU7IxFfZDvrEL840Ig": [],
-      "wUjeOwaFMJPJX5IzUj6WWA": []
+      "LIonCore.Concept.extends": [],
+      "LIonCore.Concept.implements": []
     }
   },
   {
-    "type": "8zwB8soE_0a7rDVPgyxaRQ",
+    "type": "LIonCore.Property",
     "id": "onRRrZaasiOtDU2qFJgyW8OVz8p5-hqQu0Vlc_7Aq6s",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "name",
-      "dAp79oxccBi-9j6BrQcZLQ": false,
-      "EE8DYkLRyQzaqyxFqlbOAw": false,
-      "XzYEKJ6QzlZuqKPtMXK_kQ": false
+      "LIonCore.NamespacedEntity.simpleName": "name",
+      "LIonCore.Feature.optional": false,
+      "LIonCore.Feature.derived": false,
+      "LIonCore.Property.disputed": false
     },
     "references": {
-      "kXkn4uq_4lecgXpK39x-1g": [
+      "LIonCore.Property.type": [
         "INhBvWyXvxwNsePuX0rdNGB_J9hi85cTb1Q0APXCyJ0"
       ]
     }
   },
   {
-    "type": "jNyncSWEXyHd08N63CNBBA",
+    "type": "LIonCore.Concept",
     "id": "nNUEzZ7it7d2HoHPAtk5rGO4SsqVA3hAlBwkK1KP8QU",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "GuideBookWriter",
-      "j1tZfW_pl9Cu2NO3TUw4oA": false
+      "LIonCore.NamespacedEntity.simpleName": "GuideBookWriter",
+      "LIonCore.Concept.abstract": false
     },
     "children": {
-      "fSSOzJzcuK14nt-E3K2WTg": [
+      "LIonCore.FeaturesContainer.features": [
         "PoZyl6WXh-Cz5h2RspK1NL6zX9DdLwGpUUC-ygQmHMA"
       ]
     },
     "references": {
-      "noALNU7IxFfZDvrEL840Ig": [
+      "LIonCore.Concept.extends": [
         "DuBg-a_slgc_VOG0huySkSWi3rZQX1Q20EEd2f7lvLE"
       ],
-      "wUjeOwaFMJPJX5IzUj6WWA": []
+      "LIonCore.Concept.implements": []
     }
   },
   {
-    "type": "8zwB8soE_0a7rDVPgyxaRQ",
+    "type": "LIonCore.Property",
     "id": "PoZyl6WXh-Cz5h2RspK1NL6zX9DdLwGpUUC-ygQmHMA",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "countries",
-      "dAp79oxccBi-9j6BrQcZLQ": false,
-      "EE8DYkLRyQzaqyxFqlbOAw": false,
-      "XzYEKJ6QzlZuqKPtMXK_kQ": false
+      "LIonCore.NamespacedEntity.simpleName": "countries",
+      "LIonCore.Feature.optional": false,
+      "LIonCore.Feature.derived": false,
+      "LIonCore.Property.disputed": false
     },
     "references": {
-      "kXkn4uq_4lecgXpK39x-1g": [
+      "LIonCore.Property.type": [
         "INhBvWyXvxwNsePuX0rdNGB_J9hi85cTb1Q0APXCyJ0"
       ]
     }
   },
   {
-    "type": "jNyncSWEXyHd08N63CNBBA",
+    "type": "LIonCore.Concept",
     "id": "RDa_L8gbU8XgW9z46oMysBi1Hb7vjcS8O8LUgXlFpeU",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "SpecialistBookWriter",
-      "j1tZfW_pl9Cu2NO3TUw4oA": false
+      "LIonCore.NamespacedEntity.simpleName": "SpecialistBookWriter",
+      "LIonCore.Concept.abstract": false
     },
     "children": {
-      "fSSOzJzcuK14nt-E3K2WTg": [
+      "LIonCore.FeaturesContainer.features": [
         "DbVixG73dI8xIF9TAoq2GOZru4CRQfRD8gG7TkFCZuU"
       ]
     },
     "references": {
-      "noALNU7IxFfZDvrEL840Ig": [
+      "LIonCore.Concept.extends": [
         "DuBg-a_slgc_VOG0huySkSWi3rZQX1Q20EEd2f7lvLE"
       ],
-      "wUjeOwaFMJPJX5IzUj6WWA": []
+      "LIonCore.Concept.implements": []
     }
   },
   {
-    "type": "8zwB8soE_0a7rDVPgyxaRQ",
+    "type": "LIonCore.Property",
     "id": "DbVixG73dI8xIF9TAoq2GOZru4CRQfRD8gG7TkFCZuU",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "subject",
-      "dAp79oxccBi-9j6BrQcZLQ": false,
-      "EE8DYkLRyQzaqyxFqlbOAw": false,
-      "XzYEKJ6QzlZuqKPtMXK_kQ": false
+      "LIonCore.NamespacedEntity.simpleName": "subject",
+      "LIonCore.Feature.optional": false,
+      "LIonCore.Feature.derived": false,
+      "LIonCore.Property.disputed": false
     },
     "references": {
-      "kXkn4uq_4lecgXpK39x-1g": [
+      "LIonCore.Property.type": [
         "INhBvWyXvxwNsePuX0rdNGB_J9hi85cTb1Q0APXCyJ0"
       ]
     }

@@ -1,661 +1,661 @@
 [
   {
-    "type": "jj0Y6KYlHt3_qyFDFAx4CA",
-    "id": "31_xAp4rmNVj6Sdahgjeuw",
+    "type": "LIonCore.Metamodel",
+    "id": "LIonCore",
     "properties": {
-      "97hsg4Fg3ZitV5FaapRLVg": "LIonCore"
+      "LIonCore.Metamodel.qualifiedName": "LIonCore"
     },
     "children": {
-      "1CVT9BH6pWQYU-BZwhppIw": [
-        "yNnK5As--S0BU9Z5CRhqew",
-        "KWfgmX9puPLiNWvWt173Ow",
-        "jj0Y6KYlHt3_qyFDFAx4CA",
-        "FjVUqRRcRRVpZJ_kMQiv2A",
-        "sSN4rvZY6fmq_AqQDAWkWw",
-        "jNyncSWEXyHd08N63CNBBA",
-        "6yDwqIa_ff2-3uABS2hkdg",
-        "nmukD4wNFWVb8ydcjml0SQ",
-        "Bco7VDOeCNdpKX6NKjmXQw",
-        "omtd90jug1c7NnEPjDeELA",
-        "8zwB8soE_0a7rDVPgyxaRQ",
-        "0fOWUa0E9f_pcohEvCa0vw",
-        "-EGokr9qbz6C-K8qdK_PHA",
-        "DKh_5NU9dZ5DmwvDq5attg",
-        "eE2jWdhtKexIOmsTlHJw0A",
-        "vlj29UukiDdjShXmDo_NHw",
-        "PRBb11NZ0hUJ72Ka0RnKRA",
-        "FRb6vvEatAkTf-QU5s6kCA",
-        "EkfEtW80jz64ge2mNjSwRg",
-        "CbxGl35oEY2rF8CLnX2GpA"
+      "LIonCore.Metamodel.elements": [
+        "LIonCore.NamespacedEntity",
+        "LIonCore.NamespaceProvider",
+        "LIonCore.Metamodel",
+        "LIonCore.MetamodelElement",
+        "LIonCore.FeaturesContainer",
+        "LIonCore.Concept",
+        "LIonCore.ConceptInterface",
+        "LIonCore.Feature",
+        "LIonCore.Link",
+        "LIonCore.Reference",
+        "LIonCore.Property",
+        "LIonCore.DataType",
+        "LIonCore.PrimitiveType",
+        "LIonCore.Containment",
+        "LIonCore.Enumeration",
+        "LIonCore.EnumerationLiteral",
+        "LIonCore.String",
+        "LIonCore.boolean",
+        "LIonCore.int",
+        "LIonCore.JSON"
       ]
     }
   },
   {
-    "type": "jNyncSWEXyHd08N63CNBBA",
-    "id": "yNnK5As--S0BU9Z5CRhqew",
+    "type": "LIonCore.Concept",
+    "id": "LIonCore.NamespacedEntity",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "NamespacedEntity",
-      "j1tZfW_pl9Cu2NO3TUw4oA": true
+      "LIonCore.NamespacedEntity.simpleName": "NamespacedEntity",
+      "LIonCore.Concept.abstract": true
     },
     "children": {
-      "fSSOzJzcuK14nt-E3K2WTg": [
-        "EvXCQydomgm9DUb1IwkgRg",
-        "1nGRxGQ7owAMjLRgXCVzCA",
-        "YShLQYnrhxLmCOPBqp0oLw"
+      "LIonCore.FeaturesContainer.features": [
+        "LIonCore.NamespacedEntity.simpleName",
+        "LIonCore.NamespacedEntity.qualifiedName",
+        "LIonCore.NamespacedEntity.container"
       ]
     },
     "references": {
-      "noALNU7IxFfZDvrEL840Ig": [],
-      "wUjeOwaFMJPJX5IzUj6WWA": []
+      "LIonCore.Concept.extends": [],
+      "LIonCore.Concept.implements": []
     }
   },
   {
-    "type": "8zwB8soE_0a7rDVPgyxaRQ",
-    "id": "EvXCQydomgm9DUb1IwkgRg",
+    "type": "LIonCore.Property",
+    "id": "LIonCore.NamespacedEntity.simpleName",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "simpleName",
-      "dAp79oxccBi-9j6BrQcZLQ": false,
-      "EE8DYkLRyQzaqyxFqlbOAw": false,
-      "XzYEKJ6QzlZuqKPtMXK_kQ": false
+      "LIonCore.NamespacedEntity.simpleName": "simpleName",
+      "LIonCore.Feature.optional": false,
+      "LIonCore.Feature.derived": false,
+      "LIonCore.Property.disputed": false
     },
     "references": {
-      "kXkn4uq_4lecgXpK39x-1g": [
-        "PRBb11NZ0hUJ72Ka0RnKRA"
-      ]
-    }
-  },
-  {
-    "type": "8zwB8soE_0a7rDVPgyxaRQ",
-    "id": "1nGRxGQ7owAMjLRgXCVzCA",
-    "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "qualifiedName",
-      "dAp79oxccBi-9j6BrQcZLQ": false,
-      "EE8DYkLRyQzaqyxFqlbOAw": true,
-      "XzYEKJ6QzlZuqKPtMXK_kQ": false
-    },
-    "references": {
-      "kXkn4uq_4lecgXpK39x-1g": [
-        "PRBb11NZ0hUJ72Ka0RnKRA"
+      "LIonCore.Property.type": [
+        "LIonCore.String"
       ]
     }
   },
   {
-    "type": "omtd90jug1c7NnEPjDeELA",
-    "id": "YShLQYnrhxLmCOPBqp0oLw",
+    "type": "LIonCore.Property",
+    "id": "LIonCore.NamespacedEntity.qualifiedName",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "container",
-      "dAp79oxccBi-9j6BrQcZLQ": false,
-      "EE8DYkLRyQzaqyxFqlbOAw": false,
-      "wDi78Hot03g0gUTGL0SpbA": false
+      "LIonCore.NamespacedEntity.simpleName": "qualifiedName",
+      "LIonCore.Feature.optional": false,
+      "LIonCore.Feature.derived": true,
+      "LIonCore.Property.disputed": false
     },
     "references": {
-      "4CbeSCKt9rktoT3iKk2wCg": [
-        "KWfgmX9puPLiNWvWt173Ow"
+      "LIonCore.Property.type": [
+        "LIonCore.String"
       ]
     }
   },
   {
-    "type": "6yDwqIa_ff2-3uABS2hkdg",
-    "id": "KWfgmX9puPLiNWvWt173Ow",
+    "type": "LIonCore.Reference",
+    "id": "LIonCore.NamespacedEntity.container",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "NamespaceProvider"
+      "LIonCore.NamespacedEntity.simpleName": "container",
+      "LIonCore.Feature.optional": false,
+      "LIonCore.Feature.derived": false,
+      "LIonCore.Link.multiple": false
+    },
+    "references": {
+      "LIonCore.Link.type": [
+        "LIonCore.NamespaceProvider"
+      ]
+    }
+  },
+  {
+    "type": "LIonCore.ConceptInterface",
+    "id": "LIonCore.NamespaceProvider",
+    "properties": {
+      "LIonCore.NamespacedEntity.simpleName": "NamespaceProvider"
     },
     "children": {
-      "fSSOzJzcuK14nt-E3K2WTg": [
-        "Br9brCsqsDsGj2iOT_VOdA"
+      "LIonCore.FeaturesContainer.features": [
+        "LIonCore.NamespaceProvider.namespaceQualifier"
       ]
     },
     "references": {
-      "xnnIZG_O96E_MDUxqZLtlA": []
+      "LIonCore.ConceptInterface.extends": []
     }
   },
   {
-    "type": "8zwB8soE_0a7rDVPgyxaRQ",
-    "id": "Br9brCsqsDsGj2iOT_VOdA",
+    "type": "LIonCore.Property",
+    "id": "LIonCore.NamespaceProvider.namespaceQualifier",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "namespaceQualifier",
-      "dAp79oxccBi-9j6BrQcZLQ": false,
-      "EE8DYkLRyQzaqyxFqlbOAw": true,
-      "XzYEKJ6QzlZuqKPtMXK_kQ": false
+      "LIonCore.NamespacedEntity.simpleName": "namespaceQualifier",
+      "LIonCore.Feature.optional": false,
+      "LIonCore.Feature.derived": true,
+      "LIonCore.Property.disputed": false
     },
     "references": {
-      "kXkn4uq_4lecgXpK39x-1g": [
-        "PRBb11NZ0hUJ72Ka0RnKRA"
+      "LIonCore.Property.type": [
+        "LIonCore.String"
       ]
     }
   },
   {
-    "type": "jNyncSWEXyHd08N63CNBBA",
-    "id": "jj0Y6KYlHt3_qyFDFAx4CA",
+    "type": "LIonCore.Concept",
+    "id": "LIonCore.Metamodel",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "Metamodel",
-      "j1tZfW_pl9Cu2NO3TUw4oA": false
+      "LIonCore.NamespacedEntity.simpleName": "Metamodel",
+      "LIonCore.Concept.abstract": false
     },
     "children": {
-      "fSSOzJzcuK14nt-E3K2WTg": [
-        "97hsg4Fg3ZitV5FaapRLVg",
-        "1CVT9BH6pWQYU-BZwhppIw",
-        "0IY9jzrJdEH2J_ChttPbqQ"
+      "LIonCore.FeaturesContainer.features": [
+        "LIonCore.Metamodel.qualifiedName",
+        "LIonCore.Metamodel.elements",
+        "LIonCore.Metamodel.dependsOn"
       ]
     },
     "references": {
-      "noALNU7IxFfZDvrEL840Ig": [],
-      "wUjeOwaFMJPJX5IzUj6WWA": [
-        "KWfgmX9puPLiNWvWt173Ow"
+      "LIonCore.Concept.extends": [],
+      "LIonCore.Concept.implements": [
+        "LIonCore.NamespaceProvider"
       ]
     }
   },
   {
-    "type": "8zwB8soE_0a7rDVPgyxaRQ",
-    "id": "97hsg4Fg3ZitV5FaapRLVg",
+    "type": "LIonCore.Property",
+    "id": "LIonCore.Metamodel.qualifiedName",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "qualifiedName",
-      "dAp79oxccBi-9j6BrQcZLQ": false,
-      "EE8DYkLRyQzaqyxFqlbOAw": false,
-      "XzYEKJ6QzlZuqKPtMXK_kQ": false
+      "LIonCore.NamespacedEntity.simpleName": "qualifiedName",
+      "LIonCore.Feature.optional": false,
+      "LIonCore.Feature.derived": false,
+      "LIonCore.Property.disputed": false
     },
     "references": {
-      "kXkn4uq_4lecgXpK39x-1g": [
-        "PRBb11NZ0hUJ72Ka0RnKRA"
+      "LIonCore.Property.type": [
+        "LIonCore.String"
       ]
     }
   },
   {
-    "type": "DKh_5NU9dZ5DmwvDq5attg",
-    "id": "1CVT9BH6pWQYU-BZwhppIw",
+    "type": "LIonCore.Containment",
+    "id": "LIonCore.Metamodel.elements",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "elements",
-      "dAp79oxccBi-9j6BrQcZLQ": true,
-      "EE8DYkLRyQzaqyxFqlbOAw": false,
-      "wDi78Hot03g0gUTGL0SpbA": true
+      "LIonCore.NamespacedEntity.simpleName": "elements",
+      "LIonCore.Feature.optional": true,
+      "LIonCore.Feature.derived": false,
+      "LIonCore.Link.multiple": true
     },
     "references": {
-      "4CbeSCKt9rktoT3iKk2wCg": [
-        "FjVUqRRcRRVpZJ_kMQiv2A"
+      "LIonCore.Link.type": [
+        "LIonCore.MetamodelElement"
       ]
     }
   },
   {
-    "type": "omtd90jug1c7NnEPjDeELA",
-    "id": "0IY9jzrJdEH2J_ChttPbqQ",
+    "type": "LIonCore.Reference",
+    "id": "LIonCore.Metamodel.dependsOn",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "dependsOn",
-      "dAp79oxccBi-9j6BrQcZLQ": true,
-      "EE8DYkLRyQzaqyxFqlbOAw": false,
-      "wDi78Hot03g0gUTGL0SpbA": true
+      "LIonCore.NamespacedEntity.simpleName": "dependsOn",
+      "LIonCore.Feature.optional": true,
+      "LIonCore.Feature.derived": false,
+      "LIonCore.Link.multiple": true
     },
     "references": {
-      "4CbeSCKt9rktoT3iKk2wCg": [
-        "jj0Y6KYlHt3_qyFDFAx4CA"
+      "LIonCore.Link.type": [
+        "LIonCore.Metamodel"
       ]
     }
   },
   {
-    "type": "jNyncSWEXyHd08N63CNBBA",
-    "id": "FjVUqRRcRRVpZJ_kMQiv2A",
+    "type": "LIonCore.Concept",
+    "id": "LIonCore.MetamodelElement",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "MetamodelElement",
-      "j1tZfW_pl9Cu2NO3TUw4oA": true
+      "LIonCore.NamespacedEntity.simpleName": "MetamodelElement",
+      "LIonCore.Concept.abstract": true
     },
     "children": {
-      "fSSOzJzcuK14nt-E3K2WTg": []
+      "LIonCore.FeaturesContainer.features": []
     },
     "references": {
-      "noALNU7IxFfZDvrEL840Ig": [
-        "yNnK5As--S0BU9Z5CRhqew"
+      "LIonCore.Concept.extends": [
+        "LIonCore.NamespacedEntity"
       ],
-      "wUjeOwaFMJPJX5IzUj6WWA": []
+      "LIonCore.Concept.implements": []
     }
   },
   {
-    "type": "jNyncSWEXyHd08N63CNBBA",
-    "id": "sSN4rvZY6fmq_AqQDAWkWw",
+    "type": "LIonCore.Concept",
+    "id": "LIonCore.FeaturesContainer",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "FeaturesContainer",
-      "j1tZfW_pl9Cu2NO3TUw4oA": true
+      "LIonCore.NamespacedEntity.simpleName": "FeaturesContainer",
+      "LIonCore.Concept.abstract": true
     },
     "children": {
-      "fSSOzJzcuK14nt-E3K2WTg": [
-        "fSSOzJzcuK14nt-E3K2WTg",
-        "F4HpF4OZe75IlCLJBeAs6A"
+      "LIonCore.FeaturesContainer.features": [
+        "LIonCore.FeaturesContainer.features",
+        "LIonCore.FeaturesContainer.allFeatures"
       ]
     },
     "references": {
-      "noALNU7IxFfZDvrEL840Ig": [
-        "FjVUqRRcRRVpZJ_kMQiv2A"
+      "LIonCore.Concept.extends": [
+        "LIonCore.MetamodelElement"
       ],
-      "wUjeOwaFMJPJX5IzUj6WWA": [
-        "KWfgmX9puPLiNWvWt173Ow"
+      "LIonCore.Concept.implements": [
+        "LIonCore.NamespaceProvider"
       ]
     }
   },
   {
-    "type": "DKh_5NU9dZ5DmwvDq5attg",
-    "id": "fSSOzJzcuK14nt-E3K2WTg",
+    "type": "LIonCore.Containment",
+    "id": "LIonCore.FeaturesContainer.features",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "features",
-      "dAp79oxccBi-9j6BrQcZLQ": true,
-      "EE8DYkLRyQzaqyxFqlbOAw": false,
-      "wDi78Hot03g0gUTGL0SpbA": true
+      "LIonCore.NamespacedEntity.simpleName": "features",
+      "LIonCore.Feature.optional": true,
+      "LIonCore.Feature.derived": false,
+      "LIonCore.Link.multiple": true
     },
     "references": {
-      "4CbeSCKt9rktoT3iKk2wCg": [
-        "nmukD4wNFWVb8ydcjml0SQ"
+      "LIonCore.Link.type": [
+        "LIonCore.Feature"
       ]
     }
   },
   {
-    "type": "omtd90jug1c7NnEPjDeELA",
-    "id": "F4HpF4OZe75IlCLJBeAs6A",
+    "type": "LIonCore.Reference",
+    "id": "LIonCore.FeaturesContainer.allFeatures",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "allFeatures",
-      "dAp79oxccBi-9j6BrQcZLQ": true,
-      "EE8DYkLRyQzaqyxFqlbOAw": true,
-      "wDi78Hot03g0gUTGL0SpbA": true
+      "LIonCore.NamespacedEntity.simpleName": "allFeatures",
+      "LIonCore.Feature.optional": true,
+      "LIonCore.Feature.derived": true,
+      "LIonCore.Link.multiple": true
     },
     "references": {
-      "4CbeSCKt9rktoT3iKk2wCg": [
-        "nmukD4wNFWVb8ydcjml0SQ"
+      "LIonCore.Link.type": [
+        "LIonCore.Feature"
       ]
     }
   },
   {
-    "type": "jNyncSWEXyHd08N63CNBBA",
-    "id": "jNyncSWEXyHd08N63CNBBA",
+    "type": "LIonCore.Concept",
+    "id": "LIonCore.Concept",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "Concept",
-      "j1tZfW_pl9Cu2NO3TUw4oA": false
+      "LIonCore.NamespacedEntity.simpleName": "Concept",
+      "LIonCore.Concept.abstract": false
     },
     "children": {
-      "fSSOzJzcuK14nt-E3K2WTg": [
-        "j1tZfW_pl9Cu2NO3TUw4oA",
-        "noALNU7IxFfZDvrEL840Ig",
-        "wUjeOwaFMJPJX5IzUj6WWA"
+      "LIonCore.FeaturesContainer.features": [
+        "LIonCore.Concept.abstract",
+        "LIonCore.Concept.extends",
+        "LIonCore.Concept.implements"
       ]
     },
     "references": {
-      "noALNU7IxFfZDvrEL840Ig": [
-        "sSN4rvZY6fmq_AqQDAWkWw"
+      "LIonCore.Concept.extends": [
+        "LIonCore.FeaturesContainer"
       ],
-      "wUjeOwaFMJPJX5IzUj6WWA": []
+      "LIonCore.Concept.implements": []
     }
   },
   {
-    "type": "8zwB8soE_0a7rDVPgyxaRQ",
-    "id": "j1tZfW_pl9Cu2NO3TUw4oA",
+    "type": "LIonCore.Property",
+    "id": "LIonCore.Concept.abstract",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "abstract",
-      "dAp79oxccBi-9j6BrQcZLQ": false,
-      "EE8DYkLRyQzaqyxFqlbOAw": false,
-      "XzYEKJ6QzlZuqKPtMXK_kQ": false
+      "LIonCore.NamespacedEntity.simpleName": "abstract",
+      "LIonCore.Feature.optional": false,
+      "LIonCore.Feature.derived": false,
+      "LIonCore.Property.disputed": false
     },
     "references": {
-      "kXkn4uq_4lecgXpK39x-1g": [
-        "FRb6vvEatAkTf-QU5s6kCA"
+      "LIonCore.Property.type": [
+        "LIonCore.boolean"
       ]
     }
   },
   {
-    "type": "omtd90jug1c7NnEPjDeELA",
-    "id": "noALNU7IxFfZDvrEL840Ig",
+    "type": "LIonCore.Reference",
+    "id": "LIonCore.Concept.extends",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "extends",
-      "dAp79oxccBi-9j6BrQcZLQ": true,
-      "EE8DYkLRyQzaqyxFqlbOAw": false,
-      "wDi78Hot03g0gUTGL0SpbA": false
+      "LIonCore.NamespacedEntity.simpleName": "extends",
+      "LIonCore.Feature.optional": true,
+      "LIonCore.Feature.derived": false,
+      "LIonCore.Link.multiple": false
     },
     "references": {
-      "4CbeSCKt9rktoT3iKk2wCg": [
-        "jNyncSWEXyHd08N63CNBBA"
+      "LIonCore.Link.type": [
+        "LIonCore.Concept"
       ]
     }
   },
   {
-    "type": "omtd90jug1c7NnEPjDeELA",
-    "id": "wUjeOwaFMJPJX5IzUj6WWA",
+    "type": "LIonCore.Reference",
+    "id": "LIonCore.Concept.implements",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "implements",
-      "dAp79oxccBi-9j6BrQcZLQ": true,
-      "EE8DYkLRyQzaqyxFqlbOAw": false,
-      "wDi78Hot03g0gUTGL0SpbA": true
+      "LIonCore.NamespacedEntity.simpleName": "implements",
+      "LIonCore.Feature.optional": true,
+      "LIonCore.Feature.derived": false,
+      "LIonCore.Link.multiple": true
     },
     "references": {
-      "4CbeSCKt9rktoT3iKk2wCg": [
-        "6yDwqIa_ff2-3uABS2hkdg"
+      "LIonCore.Link.type": [
+        "LIonCore.ConceptInterface"
       ]
     }
   },
   {
-    "type": "jNyncSWEXyHd08N63CNBBA",
-    "id": "6yDwqIa_ff2-3uABS2hkdg",
+    "type": "LIonCore.Concept",
+    "id": "LIonCore.ConceptInterface",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "ConceptInterface",
-      "j1tZfW_pl9Cu2NO3TUw4oA": false
+      "LIonCore.NamespacedEntity.simpleName": "ConceptInterface",
+      "LIonCore.Concept.abstract": false
     },
     "children": {
-      "fSSOzJzcuK14nt-E3K2WTg": [
-        "xnnIZG_O96E_MDUxqZLtlA"
+      "LIonCore.FeaturesContainer.features": [
+        "LIonCore.ConceptInterface.extends"
       ]
     },
     "references": {
-      "noALNU7IxFfZDvrEL840Ig": [
-        "sSN4rvZY6fmq_AqQDAWkWw"
+      "LIonCore.Concept.extends": [
+        "LIonCore.FeaturesContainer"
       ],
-      "wUjeOwaFMJPJX5IzUj6WWA": []
+      "LIonCore.Concept.implements": []
     }
   },
   {
-    "type": "omtd90jug1c7NnEPjDeELA",
-    "id": "xnnIZG_O96E_MDUxqZLtlA",
+    "type": "LIonCore.Reference",
+    "id": "LIonCore.ConceptInterface.extends",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "extends",
-      "dAp79oxccBi-9j6BrQcZLQ": true,
-      "EE8DYkLRyQzaqyxFqlbOAw": false,
-      "wDi78Hot03g0gUTGL0SpbA": true
+      "LIonCore.NamespacedEntity.simpleName": "extends",
+      "LIonCore.Feature.optional": true,
+      "LIonCore.Feature.derived": false,
+      "LIonCore.Link.multiple": true
     },
     "references": {
-      "4CbeSCKt9rktoT3iKk2wCg": [
-        "6yDwqIa_ff2-3uABS2hkdg"
+      "LIonCore.Link.type": [
+        "LIonCore.ConceptInterface"
       ]
     }
   },
   {
-    "type": "jNyncSWEXyHd08N63CNBBA",
-    "id": "nmukD4wNFWVb8ydcjml0SQ",
+    "type": "LIonCore.Concept",
+    "id": "LIonCore.Feature",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "Feature",
-      "j1tZfW_pl9Cu2NO3TUw4oA": true
+      "LIonCore.NamespacedEntity.simpleName": "Feature",
+      "LIonCore.Concept.abstract": true
     },
     "children": {
-      "fSSOzJzcuK14nt-E3K2WTg": [
-        "dAp79oxccBi-9j6BrQcZLQ",
-        "EE8DYkLRyQzaqyxFqlbOAw"
+      "LIonCore.FeaturesContainer.features": [
+        "LIonCore.Feature.optional",
+        "LIonCore.Feature.derived"
       ]
     },
     "references": {
-      "noALNU7IxFfZDvrEL840Ig": [
-        "yNnK5As--S0BU9Z5CRhqew"
+      "LIonCore.Concept.extends": [
+        "LIonCore.NamespacedEntity"
       ],
-      "wUjeOwaFMJPJX5IzUj6WWA": []
+      "LIonCore.Concept.implements": []
     }
   },
   {
-    "type": "8zwB8soE_0a7rDVPgyxaRQ",
-    "id": "dAp79oxccBi-9j6BrQcZLQ",
+    "type": "LIonCore.Property",
+    "id": "LIonCore.Feature.optional",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "optional",
-      "dAp79oxccBi-9j6BrQcZLQ": false,
-      "EE8DYkLRyQzaqyxFqlbOAw": false,
-      "XzYEKJ6QzlZuqKPtMXK_kQ": false
+      "LIonCore.NamespacedEntity.simpleName": "optional",
+      "LIonCore.Feature.optional": false,
+      "LIonCore.Feature.derived": false,
+      "LIonCore.Property.disputed": false
     },
     "references": {
-      "kXkn4uq_4lecgXpK39x-1g": [
-        "FRb6vvEatAkTf-QU5s6kCA"
+      "LIonCore.Property.type": [
+        "LIonCore.boolean"
       ]
     }
   },
   {
-    "type": "8zwB8soE_0a7rDVPgyxaRQ",
-    "id": "EE8DYkLRyQzaqyxFqlbOAw",
+    "type": "LIonCore.Property",
+    "id": "LIonCore.Feature.derived",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "derived",
-      "dAp79oxccBi-9j6BrQcZLQ": false,
-      "EE8DYkLRyQzaqyxFqlbOAw": false,
-      "XzYEKJ6QzlZuqKPtMXK_kQ": true
+      "LIonCore.NamespacedEntity.simpleName": "derived",
+      "LIonCore.Feature.optional": false,
+      "LIonCore.Feature.derived": false,
+      "LIonCore.Property.disputed": true
     },
     "references": {
-      "kXkn4uq_4lecgXpK39x-1g": [
-        "FRb6vvEatAkTf-QU5s6kCA"
+      "LIonCore.Property.type": [
+        "LIonCore.boolean"
       ]
     }
   },
   {
-    "type": "jNyncSWEXyHd08N63CNBBA",
-    "id": "Bco7VDOeCNdpKX6NKjmXQw",
+    "type": "LIonCore.Concept",
+    "id": "LIonCore.Link",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "Link",
-      "j1tZfW_pl9Cu2NO3TUw4oA": true
+      "LIonCore.NamespacedEntity.simpleName": "Link",
+      "LIonCore.Concept.abstract": true
     },
     "children": {
-      "fSSOzJzcuK14nt-E3K2WTg": [
-        "wDi78Hot03g0gUTGL0SpbA",
-        "4CbeSCKt9rktoT3iKk2wCg"
+      "LIonCore.FeaturesContainer.features": [
+        "LIonCore.Link.multiple",
+        "LIonCore.Link.type"
       ]
     },
     "references": {
-      "noALNU7IxFfZDvrEL840Ig": [
-        "nmukD4wNFWVb8ydcjml0SQ"
+      "LIonCore.Concept.extends": [
+        "LIonCore.Feature"
       ],
-      "wUjeOwaFMJPJX5IzUj6WWA": []
+      "LIonCore.Concept.implements": []
     }
   },
   {
-    "type": "8zwB8soE_0a7rDVPgyxaRQ",
-    "id": "wDi78Hot03g0gUTGL0SpbA",
+    "type": "LIonCore.Property",
+    "id": "LIonCore.Link.multiple",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "multiple",
-      "dAp79oxccBi-9j6BrQcZLQ": false,
-      "EE8DYkLRyQzaqyxFqlbOAw": false,
-      "XzYEKJ6QzlZuqKPtMXK_kQ": false
+      "LIonCore.NamespacedEntity.simpleName": "multiple",
+      "LIonCore.Feature.optional": false,
+      "LIonCore.Feature.derived": false,
+      "LIonCore.Property.disputed": false
     },
     "references": {
-      "kXkn4uq_4lecgXpK39x-1g": [
-        "FRb6vvEatAkTf-QU5s6kCA"
+      "LIonCore.Property.type": [
+        "LIonCore.boolean"
       ]
     }
   },
   {
-    "type": "omtd90jug1c7NnEPjDeELA",
-    "id": "4CbeSCKt9rktoT3iKk2wCg",
+    "type": "LIonCore.Reference",
+    "id": "LIonCore.Link.type",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "type",
-      "dAp79oxccBi-9j6BrQcZLQ": false,
-      "EE8DYkLRyQzaqyxFqlbOAw": false,
-      "wDi78Hot03g0gUTGL0SpbA": false
+      "LIonCore.NamespacedEntity.simpleName": "type",
+      "LIonCore.Feature.optional": false,
+      "LIonCore.Feature.derived": false,
+      "LIonCore.Link.multiple": false
     },
     "references": {
-      "4CbeSCKt9rktoT3iKk2wCg": [
-        "sSN4rvZY6fmq_AqQDAWkWw"
+      "LIonCore.Link.type": [
+        "LIonCore.FeaturesContainer"
       ]
     }
   },
   {
-    "type": "jNyncSWEXyHd08N63CNBBA",
-    "id": "omtd90jug1c7NnEPjDeELA",
+    "type": "LIonCore.Concept",
+    "id": "LIonCore.Reference",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "Reference",
-      "j1tZfW_pl9Cu2NO3TUw4oA": false
+      "LIonCore.NamespacedEntity.simpleName": "Reference",
+      "LIonCore.Concept.abstract": false
     },
     "children": {
-      "fSSOzJzcuK14nt-E3K2WTg": []
+      "LIonCore.FeaturesContainer.features": []
     },
     "references": {
-      "noALNU7IxFfZDvrEL840Ig": [
-        "Bco7VDOeCNdpKX6NKjmXQw"
+      "LIonCore.Concept.extends": [
+        "LIonCore.Link"
       ],
-      "wUjeOwaFMJPJX5IzUj6WWA": []
+      "LIonCore.Concept.implements": []
     }
   },
   {
-    "type": "jNyncSWEXyHd08N63CNBBA",
-    "id": "8zwB8soE_0a7rDVPgyxaRQ",
+    "type": "LIonCore.Concept",
+    "id": "LIonCore.Property",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "Property",
-      "j1tZfW_pl9Cu2NO3TUw4oA": false
+      "LIonCore.NamespacedEntity.simpleName": "Property",
+      "LIonCore.Concept.abstract": false
     },
     "children": {
-      "fSSOzJzcuK14nt-E3K2WTg": [
-        "kXkn4uq_4lecgXpK39x-1g",
-        "XzYEKJ6QzlZuqKPtMXK_kQ"
+      "LIonCore.FeaturesContainer.features": [
+        "LIonCore.Property.type",
+        "LIonCore.Property.disputed"
       ]
     },
     "references": {
-      "noALNU7IxFfZDvrEL840Ig": [
-        "nmukD4wNFWVb8ydcjml0SQ"
+      "LIonCore.Concept.extends": [
+        "LIonCore.Feature"
       ],
-      "wUjeOwaFMJPJX5IzUj6WWA": []
+      "LIonCore.Concept.implements": []
     }
   },
   {
-    "type": "omtd90jug1c7NnEPjDeELA",
-    "id": "kXkn4uq_4lecgXpK39x-1g",
+    "type": "LIonCore.Reference",
+    "id": "LIonCore.Property.type",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "type",
-      "dAp79oxccBi-9j6BrQcZLQ": false,
-      "EE8DYkLRyQzaqyxFqlbOAw": false,
-      "wDi78Hot03g0gUTGL0SpbA": false
+      "LIonCore.NamespacedEntity.simpleName": "type",
+      "LIonCore.Feature.optional": false,
+      "LIonCore.Feature.derived": false,
+      "LIonCore.Link.multiple": false
     },
     "references": {
-      "4CbeSCKt9rktoT3iKk2wCg": [
-        "0fOWUa0E9f_pcohEvCa0vw"
-      ]
-    }
-  },
-  {
-    "type": "8zwB8soE_0a7rDVPgyxaRQ",
-    "id": "XzYEKJ6QzlZuqKPtMXK_kQ",
-    "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "disputed",
-      "dAp79oxccBi-9j6BrQcZLQ": false,
-      "EE8DYkLRyQzaqyxFqlbOAw": false,
-      "XzYEKJ6QzlZuqKPtMXK_kQ": false
-    },
-    "references": {
-      "kXkn4uq_4lecgXpK39x-1g": [
-        "FRb6vvEatAkTf-QU5s6kCA"
+      "LIonCore.Link.type": [
+        "LIonCore.DataType"
       ]
     }
   },
   {
-    "type": "jNyncSWEXyHd08N63CNBBA",
-    "id": "0fOWUa0E9f_pcohEvCa0vw",
+    "type": "LIonCore.Property",
+    "id": "LIonCore.Property.disputed",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "DataType",
-      "j1tZfW_pl9Cu2NO3TUw4oA": true
-    },
-    "children": {
-      "fSSOzJzcuK14nt-E3K2WTg": []
+      "LIonCore.NamespacedEntity.simpleName": "disputed",
+      "LIonCore.Feature.optional": false,
+      "LIonCore.Feature.derived": false,
+      "LIonCore.Property.disputed": false
     },
     "references": {
-      "noALNU7IxFfZDvrEL840Ig": [
-        "FjVUqRRcRRVpZJ_kMQiv2A"
-      ],
-      "wUjeOwaFMJPJX5IzUj6WWA": []
-    }
-  },
-  {
-    "type": "jNyncSWEXyHd08N63CNBBA",
-    "id": "-EGokr9qbz6C-K8qdK_PHA",
-    "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "PrimitiveType",
-      "j1tZfW_pl9Cu2NO3TUw4oA": false
-    },
-    "children": {
-      "fSSOzJzcuK14nt-E3K2WTg": []
-    },
-    "references": {
-      "noALNU7IxFfZDvrEL840Ig": [
-        "0fOWUa0E9f_pcohEvCa0vw"
-      ],
-      "wUjeOwaFMJPJX5IzUj6WWA": []
-    }
-  },
-  {
-    "type": "jNyncSWEXyHd08N63CNBBA",
-    "id": "DKh_5NU9dZ5DmwvDq5attg",
-    "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "Containment",
-      "j1tZfW_pl9Cu2NO3TUw4oA": false
-    },
-    "children": {
-      "fSSOzJzcuK14nt-E3K2WTg": []
-    },
-    "references": {
-      "noALNU7IxFfZDvrEL840Ig": [
-        "Bco7VDOeCNdpKX6NKjmXQw"
-      ],
-      "wUjeOwaFMJPJX5IzUj6WWA": []
-    }
-  },
-  {
-    "type": "jNyncSWEXyHd08N63CNBBA",
-    "id": "eE2jWdhtKexIOmsTlHJw0A",
-    "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "Enumeration",
-      "j1tZfW_pl9Cu2NO3TUw4oA": false
-    },
-    "children": {
-      "fSSOzJzcuK14nt-E3K2WTg": [
-        "dDbzSiDtphcwQf0m2-rOHQ"
-      ]
-    },
-    "references": {
-      "noALNU7IxFfZDvrEL840Ig": [
-        "0fOWUa0E9f_pcohEvCa0vw"
-      ],
-      "wUjeOwaFMJPJX5IzUj6WWA": [
-        "KWfgmX9puPLiNWvWt173Ow"
+      "LIonCore.Property.type": [
+        "LIonCore.boolean"
       ]
     }
   },
   {
-    "type": "DKh_5NU9dZ5DmwvDq5attg",
-    "id": "dDbzSiDtphcwQf0m2-rOHQ",
+    "type": "LIonCore.Concept",
+    "id": "LIonCore.DataType",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "literals",
-      "dAp79oxccBi-9j6BrQcZLQ": false,
-      "EE8DYkLRyQzaqyxFqlbOAw": false,
-      "wDi78Hot03g0gUTGL0SpbA": true
+      "LIonCore.NamespacedEntity.simpleName": "DataType",
+      "LIonCore.Concept.abstract": true
+    },
+    "children": {
+      "LIonCore.FeaturesContainer.features": []
     },
     "references": {
-      "4CbeSCKt9rktoT3iKk2wCg": [
-        "vlj29UukiDdjShXmDo_NHw"
+      "LIonCore.Concept.extends": [
+        "LIonCore.MetamodelElement"
+      ],
+      "LIonCore.Concept.implements": []
+    }
+  },
+  {
+    "type": "LIonCore.Concept",
+    "id": "LIonCore.PrimitiveType",
+    "properties": {
+      "LIonCore.NamespacedEntity.simpleName": "PrimitiveType",
+      "LIonCore.Concept.abstract": false
+    },
+    "children": {
+      "LIonCore.FeaturesContainer.features": []
+    },
+    "references": {
+      "LIonCore.Concept.extends": [
+        "LIonCore.DataType"
+      ],
+      "LIonCore.Concept.implements": []
+    }
+  },
+  {
+    "type": "LIonCore.Concept",
+    "id": "LIonCore.Containment",
+    "properties": {
+      "LIonCore.NamespacedEntity.simpleName": "Containment",
+      "LIonCore.Concept.abstract": false
+    },
+    "children": {
+      "LIonCore.FeaturesContainer.features": []
+    },
+    "references": {
+      "LIonCore.Concept.extends": [
+        "LIonCore.Link"
+      ],
+      "LIonCore.Concept.implements": []
+    }
+  },
+  {
+    "type": "LIonCore.Concept",
+    "id": "LIonCore.Enumeration",
+    "properties": {
+      "LIonCore.NamespacedEntity.simpleName": "Enumeration",
+      "LIonCore.Concept.abstract": false
+    },
+    "children": {
+      "LIonCore.FeaturesContainer.features": [
+        "LIonCore.Enumeration.literals"
+      ]
+    },
+    "references": {
+      "LIonCore.Concept.extends": [
+        "LIonCore.DataType"
+      ],
+      "LIonCore.Concept.implements": [
+        "LIonCore.NamespaceProvider"
       ]
     }
   },
   {
-    "type": "jNyncSWEXyHd08N63CNBBA",
-    "id": "vlj29UukiDdjShXmDo_NHw",
+    "type": "LIonCore.Containment",
+    "id": "LIonCore.Enumeration.literals",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "EnumerationLiteral",
-      "j1tZfW_pl9Cu2NO3TUw4oA": false
-    },
-    "children": {
-      "fSSOzJzcuK14nt-E3K2WTg": []
+      "LIonCore.NamespacedEntity.simpleName": "literals",
+      "LIonCore.Feature.optional": false,
+      "LIonCore.Feature.derived": false,
+      "LIonCore.Link.multiple": true
     },
     "references": {
-      "noALNU7IxFfZDvrEL840Ig": [
-        "yNnK5As--S0BU9Z5CRhqew"
+      "LIonCore.Link.type": [
+        "LIonCore.EnumerationLiteral"
+      ]
+    }
+  },
+  {
+    "type": "LIonCore.Concept",
+    "id": "LIonCore.EnumerationLiteral",
+    "properties": {
+      "LIonCore.NamespacedEntity.simpleName": "EnumerationLiteral",
+      "LIonCore.Concept.abstract": false
+    },
+    "children": {
+      "LIonCore.FeaturesContainer.features": []
+    },
+    "references": {
+      "LIonCore.Concept.extends": [
+        "LIonCore.NamespacedEntity"
       ],
-      "wUjeOwaFMJPJX5IzUj6WWA": []
+      "LIonCore.Concept.implements": []
     }
   },
   {
-    "type": "-EGokr9qbz6C-K8qdK_PHA",
-    "id": "PRBb11NZ0hUJ72Ka0RnKRA",
+    "type": "LIonCore.PrimitiveType",
+    "id": "LIonCore.String",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "String"
+      "LIonCore.NamespacedEntity.simpleName": "String"
     }
   },
   {
-    "type": "-EGokr9qbz6C-K8qdK_PHA",
-    "id": "FRb6vvEatAkTf-QU5s6kCA",
+    "type": "LIonCore.PrimitiveType",
+    "id": "LIonCore.boolean",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "boolean"
+      "LIonCore.NamespacedEntity.simpleName": "boolean"
     }
   },
   {
-    "type": "-EGokr9qbz6C-K8qdK_PHA",
-    "id": "EkfEtW80jz64ge2mNjSwRg",
+    "type": "LIonCore.PrimitiveType",
+    "id": "LIonCore.int",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "int"
+      "LIonCore.NamespacedEntity.simpleName": "int"
     }
   },
   {
-    "type": "-EGokr9qbz6C-K8qdK_PHA",
-    "id": "CbxGl35oEY2rF8CLnX2GpA",
+    "type": "LIonCore.PrimitiveType",
+    "id": "LIonCore.JSON",
     "properties": {
-      "EvXCQydomgm9DUb1IwkgRg": "JSON"
+      "LIonCore.NamespacedEntity.simpleName": "JSON"
     }
   }
 ]
