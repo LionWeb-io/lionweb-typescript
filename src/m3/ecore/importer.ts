@@ -8,9 +8,12 @@ import {
 } from "../types.ts"
 import {MetamodelFactory} from "../factory.ts"
 import {
+    checkDefinedData,
     checkUniqueData,
     checkUniqueId,
-    hashingIdGen
+    checkValidId,
+    hashingIdGen,
+    wrapIdGen
 } from "../../id-generation.ts"
 import {
     asArray,
@@ -35,7 +38,14 @@ export const asLIonCoreMetamodel = (ecoreXml: EcoreXml): Metamodel => {
 
     const ePackage = ecoreXml["ecore:EPackage"]
     // TODO  an Ecore XML can contain multiple EPackage-s
-    const factory = new MetamodelFactory(ePackage["@name"], checkUniqueId(checkUniqueData(hashingIdGen())))
+    const factory = new MetamodelFactory(ePackage["@name"], wrapIdGen(
+            hashingIdGen(),
+            checkDefinedData,
+            checkUniqueData,
+            checkValidId,
+            checkUniqueId
+        )
+    )
 
 
     // phase 1: convert EClassifiers but without their EStructuralFeatures (in the case of EClasses)

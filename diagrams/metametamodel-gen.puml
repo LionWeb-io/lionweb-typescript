@@ -1,7 +1,7 @@
 @startuml
 hide empty members
 
-' qualified name: "LIonCore"
+' qualified name: "LIonCore.M3"
 
 
 class Concept extends FeaturesContainer {
