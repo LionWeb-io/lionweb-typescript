@@ -1,8 +1,22 @@
 import {MetamodelFactory} from "./factory.ts"
-import {checkUniqueId} from "../id-generation.ts"
+import {
+    checkDefinedData,
+    checkUniqueData,
+    checkUniqueId,
+    checkValidId,
+    wrapIdGen
+} from "../id-generation.ts"
 
 
-const factory = new MetamodelFactory("LIonCore", checkUniqueId((qualifiedName) => qualifiedName ?? "???"))
+const factory = new MetamodelFactory("LIonCore.M3", wrapIdGen(
+        (qualifiedName) => qualifiedName!.replaceAll(".", "_"),
+        checkDefinedData,
+        checkUniqueData,
+        checkValidId,
+        checkUniqueId
+    )
+)
+
 
 /**
  * Definition of LIonCore in terms of itself.

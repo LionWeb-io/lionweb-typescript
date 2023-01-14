@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "LIonCore-serialization",
-  "title": "Serialization format specific to LIonCore",
+  "$id": "LIonCore.M3-serialization",
+  "title": "Serialization format specific to LIonCore.M3",
   "type": "array",
   "items": {
     "$ref": "#/$defs/SerializedNode"
@@ -34,7 +34,7 @@
       "type": "object",
       "properties": {
         "type": {
-          "const": "LIonCore.Metamodel"
+          "const": "LIonCore_M3_Metamodel"
         },
         "id": {
           "$ref": "#/$defs/Id"
@@ -42,19 +42,19 @@
         "properties": {
           "type": "object",
           "properties": {
-            "LIonCore.Metamodel.qualifiedName": {
+            "LIonCore_M3_Metamodel_qualifiedName": {
               "type": "string"
             }
           },
           "required": [
-            "LIonCore.Metamodel.qualifiedName"
+            "LIonCore_M3_Metamodel_qualifiedName"
           ],
           "additionalProperties": false
         },
         "children": {
           "type": "object",
           "properties": {
-            "LIonCore.Metamodel.elements": {
+            "LIonCore_M3_Metamodel_elements": {
               "$ref": "#/$defs/Ids"
             }
           },
@@ -63,7 +63,7 @@
         "references": {
           "type": "object",
           "properties": {
-            "LIonCore.Metamodel.dependsOn": {
+            "LIonCore_M3_Metamodel_dependsOn": {
               "$ref": "#/$defs/SerializedRefs"
             }
           },
@@ -80,7 +80,7 @@
       "type": "object",
       "properties": {
         "type": {
-          "const": "LIonCore.Concept"
+          "const": "LIonCore_M3_Concept"
         },
         "id": {
           "$ref": "#/$defs/Id"
@@ -88,23 +88,23 @@
         "properties": {
           "type": "object",
           "properties": {
-            "LIonCore.Concept.abstract": {
+            "LIonCore_M3_Concept_abstract": {
               "type": "boolean"
             },
-            "LIonCore.NamespacedEntity.simpleName": {
+            "LIonCore_M3_NamespacedEntity_simpleName": {
               "type": "string"
             }
           },
           "required": [
-            "LIonCore.Concept.abstract",
-            "LIonCore.NamespacedEntity.simpleName"
+            "LIonCore_M3_Concept_abstract",
+            "LIonCore_M3_NamespacedEntity_simpleName"
           ],
           "additionalProperties": false
         },
         "children": {
           "type": "object",
           "properties": {
-            "LIonCore.FeaturesContainer.features": {
+            "LIonCore_M3_FeaturesContainer_features": {
               "$ref": "#/$defs/Ids"
             }
           },
@@ -113,13 +113,13 @@
         "references": {
           "type": "object",
           "properties": {
-            "LIonCore.Concept.extends": {
+            "LIonCore_M3_Concept_extends": {
               "$ref": "#/$defs/SerializedRefs"
             },
-            "LIonCore.Concept.implements": {
+            "LIonCore_M3_Concept_implements": {
               "$ref": "#/$defs/SerializedRefs"
             },
-            "LIonCore.NamespacedEntity.container": {
+            "LIonCore_M3_NamespacedEntity_container": {
               "$ref": "#/$defs/SerializedRefs"
             }
           },
@@ -136,7 +136,7 @@
       "type": "object",
       "properties": {
         "type": {
-          "const": "LIonCore.ConceptInterface"
+          "const": "LIonCore_M3_ConceptInterface"
         },
         "id": {
           "$ref": "#/$defs/Id"
@@ -144,19 +144,19 @@
         "properties": {
           "type": "object",
           "properties": {
-            "LIonCore.NamespacedEntity.simpleName": {
+            "LIonCore_M3_NamespacedEntity_simpleName": {
               "type": "string"
             }
           },
           "required": [
-            "LIonCore.NamespacedEntity.simpleName"
+            "LIonCore_M3_NamespacedEntity_simpleName"
           ],
           "additionalProperties": false
         },
         "children": {
           "type": "object",
           "properties": {
-            "LIonCore.FeaturesContainer.features": {
+            "LIonCore_M3_FeaturesContainer_features": {
               "$ref": "#/$defs/Ids"
             }
           },
@@ -165,10 +165,10 @@
         "references": {
           "type": "object",
           "properties": {
-            "LIonCore.ConceptInterface.extends": {
+            "LIonCore_M3_ConceptInterface_extends": {
               "$ref": "#/$defs/SerializedRefs"
             },
-            "LIonCore.NamespacedEntity.container": {
+            "LIonCore_M3_NamespacedEntity_container": {
               "$ref": "#/$defs/SerializedRefs"
             }
           },
@@ -185,7 +185,7 @@
       "type": "object",
       "properties": {
         "type": {
-          "const": "LIonCore.Reference"
+          "const": "LIonCore_M3_Reference"
         },
         "id": {
           "$ref": "#/$defs/Id"
@@ -193,24 +193,24 @@
         "properties": {
           "type": "object",
           "properties": {
-            "LIonCore.Link.multiple": {
+            "LIonCore_M3_Link_multiple": {
               "type": "boolean"
             },
-            "LIonCore.Feature.optional": {
+            "LIonCore_M3_Feature_optional": {
               "type": "boolean"
             },
-            "LIonCore.Feature.derived": {
+            "LIonCore_M3_Feature_derived": {
               "type": "boolean"
             },
-            "LIonCore.NamespacedEntity.simpleName": {
+            "LIonCore_M3_NamespacedEntity_simpleName": {
               "type": "string"
             }
           },
           "required": [
-            "LIonCore.Link.multiple",
-            "LIonCore.Feature.optional",
-            "LIonCore.Feature.derived",
-            "LIonCore.NamespacedEntity.simpleName"
+            "LIonCore_M3_Link_multiple",
+            "LIonCore_M3_Feature_optional",
+            "LIonCore_M3_Feature_derived",
+            "LIonCore_M3_NamespacedEntity_simpleName"
           ],
           "additionalProperties": false
         },
@@ -222,10 +222,10 @@
         "references": {
           "type": "object",
           "properties": {
-            "LIonCore.Link.type": {
+            "LIonCore_M3_Link_type": {
               "$ref": "#/$defs/SerializedRefs"
             },
-            "LIonCore.NamespacedEntity.container": {
+            "LIonCore_M3_NamespacedEntity_container": {
               "$ref": "#/$defs/SerializedRefs"
             }
           },
@@ -242,7 +242,7 @@
       "type": "object",
       "properties": {
         "type": {
-          "const": "LIonCore.Property"
+          "const": "LIonCore_M3_Property"
         },
         "id": {
           "$ref": "#/$defs/Id"
@@ -250,24 +250,24 @@
         "properties": {
           "type": "object",
           "properties": {
-            "LIonCore.Property.disputed": {
+            "LIonCore_M3_Property_disputed": {
               "type": "boolean"
             },
-            "LIonCore.Feature.optional": {
+            "LIonCore_M3_Feature_optional": {
               "type": "boolean"
             },
-            "LIonCore.Feature.derived": {
+            "LIonCore_M3_Feature_derived": {
               "type": "boolean"
             },
-            "LIonCore.NamespacedEntity.simpleName": {
+            "LIonCore_M3_NamespacedEntity_simpleName": {
               "type": "string"
             }
           },
           "required": [
-            "LIonCore.Property.disputed",
-            "LIonCore.Feature.optional",
-            "LIonCore.Feature.derived",
-            "LIonCore.NamespacedEntity.simpleName"
+            "LIonCore_M3_Property_disputed",
+            "LIonCore_M3_Feature_optional",
+            "LIonCore_M3_Feature_derived",
+            "LIonCore_M3_NamespacedEntity_simpleName"
           ],
           "additionalProperties": false
         },
@@ -279,10 +279,10 @@
         "references": {
           "type": "object",
           "properties": {
-            "LIonCore.Property.type": {
+            "LIonCore_M3_Property_type": {
               "$ref": "#/$defs/SerializedRefs"
             },
-            "LIonCore.NamespacedEntity.container": {
+            "LIonCore_M3_NamespacedEntity_container": {
               "$ref": "#/$defs/SerializedRefs"
             }
           },
@@ -299,7 +299,7 @@
       "type": "object",
       "properties": {
         "type": {
-          "const": "LIonCore.PrimitiveType"
+          "const": "LIonCore_M3_PrimitiveType"
         },
         "id": {
           "$ref": "#/$defs/Id"
@@ -307,12 +307,12 @@
         "properties": {
           "type": "object",
           "properties": {
-            "LIonCore.NamespacedEntity.simpleName": {
+            "LIonCore_M3_NamespacedEntity_simpleName": {
               "type": "string"
             }
           },
           "required": [
-            "LIonCore.NamespacedEntity.simpleName"
+            "LIonCore_M3_NamespacedEntity_simpleName"
           ],
           "additionalProperties": false
         },
@@ -324,7 +324,7 @@
         "references": {
           "type": "object",
           "properties": {
-            "LIonCore.NamespacedEntity.container": {
+            "LIonCore_M3_NamespacedEntity_container": {
               "$ref": "#/$defs/SerializedRefs"
             }
           },
@@ -341,7 +341,7 @@
       "type": "object",
       "properties": {
         "type": {
-          "const": "LIonCore.Containment"
+          "const": "LIonCore_M3_Containment"
         },
         "id": {
           "$ref": "#/$defs/Id"
@@ -349,24 +349,24 @@
         "properties": {
           "type": "object",
           "properties": {
-            "LIonCore.Link.multiple": {
+            "LIonCore_M3_Link_multiple": {
               "type": "boolean"
             },
-            "LIonCore.Feature.optional": {
+            "LIonCore_M3_Feature_optional": {
               "type": "boolean"
             },
-            "LIonCore.Feature.derived": {
+            "LIonCore_M3_Feature_derived": {
               "type": "boolean"
             },
-            "LIonCore.NamespacedEntity.simpleName": {
+            "LIonCore_M3_NamespacedEntity_simpleName": {
               "type": "string"
             }
           },
           "required": [
-            "LIonCore.Link.multiple",
-            "LIonCore.Feature.optional",
-            "LIonCore.Feature.derived",
-            "LIonCore.NamespacedEntity.simpleName"
+            "LIonCore_M3_Link_multiple",
+            "LIonCore_M3_Feature_optional",
+            "LIonCore_M3_Feature_derived",
+            "LIonCore_M3_NamespacedEntity_simpleName"
           ],
           "additionalProperties": false
         },
@@ -378,10 +378,10 @@
         "references": {
           "type": "object",
           "properties": {
-            "LIonCore.Link.type": {
+            "LIonCore_M3_Link_type": {
               "$ref": "#/$defs/SerializedRefs"
             },
-            "LIonCore.NamespacedEntity.container": {
+            "LIonCore_M3_NamespacedEntity_container": {
               "$ref": "#/$defs/SerializedRefs"
             }
           },
@@ -398,7 +398,7 @@
       "type": "object",
       "properties": {
         "type": {
-          "const": "LIonCore.Enumeration"
+          "const": "LIonCore_M3_Enumeration"
         },
         "id": {
           "$ref": "#/$defs/Id"
@@ -406,31 +406,31 @@
         "properties": {
           "type": "object",
           "properties": {
-            "LIonCore.NamespacedEntity.simpleName": {
+            "LIonCore_M3_NamespacedEntity_simpleName": {
               "type": "string"
             }
           },
           "required": [
-            "LIonCore.NamespacedEntity.simpleName"
+            "LIonCore_M3_NamespacedEntity_simpleName"
           ],
           "additionalProperties": false
         },
         "children": {
           "type": "object",
           "properties": {
-            "LIonCore.Enumeration.literals": {
+            "LIonCore_M3_Enumeration_literals": {
               "$ref": "#/$defs/Ids"
             }
           },
           "required": [
-            "LIonCore.Enumeration.literals"
+            "LIonCore_M3_Enumeration_literals"
           ],
           "additionalProperties": false
         },
         "references": {
           "type": "object",
           "properties": {
-            "LIonCore.NamespacedEntity.container": {
+            "LIonCore_M3_NamespacedEntity_container": {
               "$ref": "#/$defs/SerializedRefs"
             }
           },
@@ -447,7 +447,7 @@
       "type": "object",
       "properties": {
         "type": {
-          "const": "LIonCore.EnumerationLiteral"
+          "const": "LIonCore_M3_EnumerationLiteral"
         },
         "id": {
           "$ref": "#/$defs/Id"
@@ -455,12 +455,12 @@
         "properties": {
           "type": "object",
           "properties": {
-            "LIonCore.NamespacedEntity.simpleName": {
+            "LIonCore_M3_NamespacedEntity_simpleName": {
               "type": "string"
             }
           },
           "required": [
-            "LIonCore.NamespacedEntity.simpleName"
+            "LIonCore_M3_NamespacedEntity_simpleName"
           ],
           "additionalProperties": false
         },
@@ -472,7 +472,7 @@
         "references": {
           "type": "object",
           "properties": {
-            "LIonCore.NamespacedEntity.container": {
+            "LIonCore_M3_NamespacedEntity_container": {
               "$ref": "#/$defs/SerializedRefs"
             }
           },
