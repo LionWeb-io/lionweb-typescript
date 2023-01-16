@@ -4,7 +4,7 @@
  */
 
 import {MultiRef, SingleRef, unresolved} from "../references.ts"
-import {Id, Node as NodeInterface} from "../types.ts"
+import {Id, Node} from "../types.ts"
 import {allFeaturesOf} from "./functions.ts"
 
 
@@ -17,9 +17,16 @@ export const qualify = (...names: (string|undefined)[]): string =>
         .join(".")
 
 
-
-abstract class NodeClass implements NodeInterface {
-    parent?: NamespaceProvider  // every parent provides a namespace
+/**
+ * Abstract base class for nodes in an LIonCore/M3-instance,
+ * providing an ID and the containment hierarchy.
+ */
+abstract class M3Node implements Node {
+    parent?: NamespaceProvider
+        /*
+         * Note: every parent in an M2 (i.e., a Metamodel, Concept, ConceptInterface, Enumeration) also happens to be a namespace.
+         * This is why we can give `parent` the narrower type `NamespaceProvider` instead of `NodeClass`.
+         */
     id: Id
     protected constructor(id: Id, parent?: NamespaceProvider) {
         this.id = id
@@ -33,11 +40,11 @@ abstract class NodeClass implements NodeInterface {
  */
 
 
-interface NamespaceProvider extends NodeInterface {
+interface NamespaceProvider extends Node {
     namespaceQualifier(): string
 }
 
-abstract class NamespacedEntity extends NodeClass {
+abstract class NamespacedEntity extends M3Node {
     simpleName: string
     protected constructor(parent: NamespaceProvider, simpleName: string, id: Id) {
         super(id, parent)
@@ -48,7 +55,7 @@ abstract class NamespacedEntity extends NodeClass {
     }
 }
 
-class Metamodel extends NodeClass implements NamespaceProvider {
+class Metamodel extends M3Node implements NamespaceProvider {
     qualifiedName: string
     elements: MetamodelElement[] = []   // (containment)
     constructor(qualifiedName: string, id: Id) {
@@ -162,7 +169,6 @@ class Property extends Feature {
 
 abstract class Datatype extends MetamodelElement {}
 
-
 class PrimitiveType extends Datatype {}
 
 class Enumeration extends Datatype implements NamespaceProvider {
@@ -184,19 +190,19 @@ class EnumerationLiteral extends NamespacedEntity {
  */
 type M3Concept =
     | Metamodel
-    // all NamespacedEntity-s:
+    // ▼▼▼ all NamespacedEntity-s
     | Concept
     | ConceptInterface
-    | Property
-    | Containment
-    | Reference
-    | PrimitiveType
     | Enumeration
+    // ▲▲▲ all NamespaceProvider-s
     | EnumerationLiteral
+    | PrimitiveType
+    | Containment
+    | Property
+    | Reference
 
 
 export {
-    FeaturesContainer,
     Concept,
     ConceptInterface,
     Containment,
@@ -204,14 +210,15 @@ export {
     Enumeration,
     EnumerationLiteral,
     Feature,
+    FeaturesContainer,
     Link,
     Metamodel,
+    MetamodelElement,
     PrimitiveType,
     Property,
     Reference
 }
 export type {
-    M3Concept,
-    MetamodelElement,
+    M3Concept
 }
 
