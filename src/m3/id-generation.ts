@@ -3,7 +3,6 @@ import {
     checkUniqueData,
     checkUniqueId,
     checkValidId,
-    IdGenerator,
     wrapIdGen
 } from "../id-generation.ts"
 
