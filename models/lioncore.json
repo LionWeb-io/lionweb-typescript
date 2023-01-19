@@ -22,11 +22,12 @@
         "LIonCore_M3_PrimitiveType",
         "LIonCore_M3_Containment",
         "LIonCore_M3_Enumeration",
-        "LIonCore_M3_EnumerationLiteral",
-        "LIonCore_M3_String",
-        "LIonCore_M3_boolean",
-        "LIonCore_M3_int",
-        "LIonCore_M3_JSON"
+        "LIonCore_M3_EnumerationLiteral"
+      ]
+    },
+    "references": {
+      "LIonCore_M3_Metamodel_dependsOn": [
+        "LIonCore_stdlib"
       ]
     }
   },
@@ -60,7 +61,7 @@
     },
     "references": {
       "LIonCore_M3_Property_type": [
-        "LIonCore_M3_String"
+        "LIonCore_stdlib_String"
       ]
     },
     "parent": "LIonCore_M3_NamespacedEntity"
@@ -76,7 +77,7 @@
     },
     "references": {
       "LIonCore_M3_Property_type": [
-        "LIonCore_M3_String"
+        "LIonCore_stdlib_String"
       ]
     },
     "parent": "LIonCore_M3_NamespacedEntity"
@@ -108,7 +109,7 @@
     },
     "references": {
       "LIonCore_M3_Property_type": [
-        "LIonCore_M3_String"
+        "LIonCore_stdlib_String"
       ]
     },
     "parent": "LIonCore_M3_NamespaceProvider"
@@ -146,7 +147,7 @@
     },
     "references": {
       "LIonCore_M3_Property_type": [
-        "LIonCore_M3_String"
+        "LIonCore_stdlib_String"
       ]
     },
     "parent": "LIonCore_M3_Metamodel"
@@ -289,7 +290,7 @@
     },
     "references": {
       "LIonCore_M3_Property_type": [
-        "LIonCore_M3_boolean"
+        "LIonCore_stdlib_boolean"
       ]
     },
     "parent": "LIonCore_M3_Concept"
@@ -394,7 +395,7 @@
     },
     "references": {
       "LIonCore_M3_Property_type": [
-        "LIonCore_M3_boolean"
+        "LIonCore_stdlib_boolean"
       ]
     },
     "parent": "LIonCore_M3_Feature"
@@ -410,7 +411,7 @@
     },
     "references": {
       "LIonCore_M3_Property_type": [
-        "LIonCore_M3_boolean"
+        "LIonCore_stdlib_boolean"
       ]
     },
     "parent": "LIonCore_M3_Feature"
@@ -447,7 +448,7 @@
     },
     "references": {
       "LIonCore_M3_Property_type": [
-        "LIonCore_M3_boolean"
+        "LIonCore_stdlib_boolean"
       ]
     },
     "parent": "LIonCore_M3_Link"
@@ -534,7 +535,7 @@
     },
     "references": {
       "LIonCore_M3_Property_type": [
-        "LIonCore_M3_boolean"
+        "LIonCore_stdlib_boolean"
       ]
     },
     "parent": "LIonCore_M3_Property"
@@ -646,38 +647,6 @@
         "LIonCore_M3_NamespacedEntity"
       ],
       "LIonCore_M3_Concept_implements": []
-    },
-    "parent": "LIonCore_M3"
-  },
-  {
-    "type": "LIonCore_M3_PrimitiveType",
-    "id": "LIonCore_M3_String",
-    "properties": {
-      "LIonCore_M3_NamespacedEntity_simpleName": "String"
-    },
-    "parent": "LIonCore_M3"
-  },
-  {
-    "type": "LIonCore_M3_PrimitiveType",
-    "id": "LIonCore_M3_boolean",
-    "properties": {
-      "LIonCore_M3_NamespacedEntity_simpleName": "boolean"
-    },
-    "parent": "LIonCore_M3"
-  },
-  {
-    "type": "LIonCore_M3_PrimitiveType",
-    "id": "LIonCore_M3_int",
-    "properties": {
-      "LIonCore_M3_NamespacedEntity_simpleName": "int"
-    },
-    "parent": "LIonCore_M3"
-  },
-  {
-    "type": "LIonCore_M3_PrimitiveType",
-    "id": "LIonCore_M3_JSON",
-    "properties": {
-      "LIonCore_M3_NamespacedEntity_simpleName": "JSON"
     },
     "parent": "LIonCore_M3"
   }

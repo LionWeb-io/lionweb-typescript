@@ -58,6 +58,8 @@ abstract class NamespacedEntity extends M3Node {
 class Metamodel extends M3Node implements NamespaceProvider {
     qualifiedName: string
     elements: MetamodelElement[] = []   // (containment)
+    dependsOn: MultiRef<Metamodel> = []  // special (!) reference
+        // (!) special because deserializer needs to be aware of where to get the instance from
     constructor(qualifiedName: string, id: Id) {
         super(id)
         this.qualifiedName = qualifiedName
@@ -67,6 +69,10 @@ class Metamodel extends M3Node implements NamespaceProvider {
     }
     havingElements(...elements: MetamodelElement[]) {
         this.elements.push(...elements)
+        return this
+    }
+    dependingOn(...metamodels: Metamodel[]) {
+        this.dependsOn.push(...metamodels)
         return this
     }
 }

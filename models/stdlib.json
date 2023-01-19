@@ -12,6 +12,9 @@
         "LIonCore_stdlib_int",
         "LIonCore_stdlib_JSON"
       ]
+    },
+    "references": {
+      "LIonCore_M3_Metamodel_dependsOn": []
     }
   },
   {

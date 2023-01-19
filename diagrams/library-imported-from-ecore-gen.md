@@ -20,23 +20,14 @@ classDiagram
   }
   Writer <|-- SpecialistBookWriter
 
-  %% primitive type: "String"
-
   class Writer {
     +String name
   }
-
-  %% primitive type: "boolean"
-
-  %% primitive type: "int"
 
 
   Book "*" -- "*" Writer: author
 
   Library "1" o-- "*" Book: books
-
-
-
 
 
 

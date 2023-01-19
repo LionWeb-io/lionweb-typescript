@@ -21,15 +21,9 @@ class SpecialistBookWriter extends Writer {
   subject: String
 }
 
-' primitive type: "String"
-
 class Writer {
   name: String
 }
-
-' primitive type: "boolean"
-
-' primitive type: "int"
 
 
 
@@ -38,9 +32,6 @@ class Writer {
 Book "*" -- "*" Writer: author
 
 Library "1" o-- "*" Book: books
-
-
-
 
 
 

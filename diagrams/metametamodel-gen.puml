@@ -27,8 +27,6 @@ abstract class FeaturesContainer extends MetamodelElement implements NamespacePr
   allFeatures(): List<Feature>
 }
 
-' primitive type: "JSON"
-
 abstract class Link extends Feature {
   multiple: boolean
 }
@@ -56,12 +54,6 @@ class Property extends Feature {
 
 class Reference extends Link
 
-' primitive type: "String"
-
-' primitive type: "boolean"
-
-' primitive type: "int"
-
 
 
 ' relations:
@@ -75,7 +67,6 @@ Enumeration "1" o-- "*" EnumerationLiteral: literals
 
 
 FeaturesContainer "1" o-- "*" Feature: features
-
 Link "*" -- "1" FeaturesContainer: type
 Metamodel "1" o-- "*" MetamodelElement: elements
 Metamodel "*" -- "*" Metamodel: dependsOn
@@ -84,9 +75,6 @@ Metamodel "*" -- "*" Metamodel: dependsOn
 
 
 Property "*" -- "1" DataType: type
-
-
-
 
 
 legend

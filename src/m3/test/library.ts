@@ -1,14 +1,12 @@
 import {MetamodelFactory} from "../factory.ts"
 import {hashingIdGen} from "../../id-generation.ts"
+import {intDatatype, lioncoreStdlib, stringDatatype} from "../stdlib.ts"
 
 
 const factory = new MetamodelFactory("library", hashingIdGen())
 export const libraryMetamodel = factory.metamodel
+    .dependingOn(lioncoreStdlib)
 
-
-const stringDatatype = factory.primitiveType("String")
-const booleanDatatype = factory.primitiveType("boolean")
-const intDatatype = factory.primitiveType("int")
 
 const library = factory.concept("Library", false)
 const book = factory.concept("Book", false)
@@ -36,9 +34,6 @@ specialistBookWriter.havingFeatures(specialistBookWriter_subject)
 
 
 libraryMetamodel.havingElements(
-    stringDatatype,
-    booleanDatatype,
-    intDatatype,
     book,
     library,
     writer,

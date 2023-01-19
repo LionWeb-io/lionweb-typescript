@@ -35,8 +35,6 @@ classDiagram
   <<Abstract>> FeaturesContainer
   MetamodelElement <|-- FeaturesContainer
 
-  %% primitive type: "JSON"
-
   class Link {
     +boolean multiple
   }
@@ -73,12 +71,6 @@ classDiagram
   class Reference
   Link <|-- Reference
 
-  %% primitive type: "String"
-
-  %% primitive type: "boolean"
-
-  %% primitive type: "int"
-
 
   Concept "*" -- "0..1" Concept: extends
   Concept "*" -- "*" ConceptInterface: implements
@@ -89,7 +81,6 @@ classDiagram
 
 
   FeaturesContainer "1" o-- "*" Feature: features
-
   Link "*" -- "1" FeaturesContainer: type
   Metamodel "1" o-- "*" MetamodelElement: elements
   Metamodel "*" -- "*" Metamodel: dependsOn
@@ -98,9 +89,6 @@ classDiagram
 
 
   Property "*" -- "1" DataType: type
-
-
-
 
 
 ```

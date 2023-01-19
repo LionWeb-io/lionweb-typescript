@@ -1,5 +1,6 @@
 import {MetamodelFactory} from "./factory.ts"
 import {lioncoreIdGen} from "./id-generation.ts"
+import {booleanDatatype, lioncoreStdlib, stringDatatype} from "./stdlib.ts"
 
 
 const factory = new MetamodelFactory("LIonCore.M3", lioncoreIdGen)
@@ -9,20 +10,7 @@ const factory = new MetamodelFactory("LIonCore.M3", lioncoreIdGen)
  * Definition of LIonCore in terms of itself.
  */
 export const lioncore = factory.metamodel
-
-
-// TODO  use stdlib instead:
-
-const stringDatatype = factory.primitiveType("String")
-
-
-const booleanDatatype = factory.primitiveType("boolean")
-
-
-const intDatatype = factory.primitiveType("int")
-
-
-const jsonDatatype = factory.primitiveType("JSON")
+    .dependingOn(lioncoreStdlib)
 
 
 const namespaceProvider = factory.conceptInterface("NamespaceProvider")
@@ -207,12 +195,7 @@ lioncore.havingElements(
     primitiveType,
     containment,
     enumeration,
-    enumerationLiteral,
-    // built-ins:
-    stringDatatype,
-    booleanDatatype,
-    intDatatype,
-    jsonDatatype
+    enumerationLiteral
 )
 
 
@@ -239,6 +222,7 @@ export const metaFeatures = {
     featuresContainer_features,
     link_multiple,
     link_type,
+    metamodel_dependsOn,
     metamodel_elements,
     metamodel_qualifiedName,
     namespacedEntity_simpleName,
