@@ -42,7 +42,7 @@ export const isNonDerivedReference = (feature: Feature): feature is Reference =>
 
 
 /**
- * Determines whether a {@link Feature feature} is “relational“,
+ * Determines whether a {@link Feature feature} is “relational”,
  * i.e. it's a non-derived {@link Link containment or reference}.
  */
 const isRelational = (feature: Feature): feature is Link =>

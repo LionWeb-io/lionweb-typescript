@@ -25,10 +25,18 @@ export const serializeMetamodel = (metamodel: Metamodel): SerializedNode[] => {
 
     const visit = (thing: M3Concept) => {
 
-        if (thing instanceof Concept) {
-            json.push({
-                type: metaConcepts.concept.id,
+        const serializeNode = (metaConcept: Concept, settings: Pick<SerializedNode, "properties" | "children" | "references">) => {
+            const serializedNode = {
+                type: metaConcept.id,
                 id: thing.id,
+                ...settings,
+                parent: thing.parent?.id
+            }
+            json.push(serializedNode)
+            return serializedNode
+        }
+        if (thing instanceof Concept) {
+            serializeNode(metaConcepts.concept, {
                 properties: {
                     [metaFeatures.namespacedEntity_simpleName.id]: thing.simpleName,
                     [metaFeatures.concept_abstract.id]: thing.abstract
@@ -39,16 +47,13 @@ export const serializeMetamodel = (metamodel: Metamodel): SerializedNode[] => {
                 references: {
                     [metaFeatures.concept_extends.id]: asRefIds(thing.extends),
                     [metaFeatures.concept_implements.id]: asIds(thing.implements)
-                },
-                parent: thing.parent?.id
+                }
             })
             thing.features.forEach(visit)
             return
         }
         if (thing instanceof ConceptInterface) {
-            json.push({
-                type: metaConcepts.conceptInterface.id,
-                id: thing.id,
+            serializeNode(metaConcepts.conceptInterface, {
                 properties: {
                     [metaFeatures.namespacedEntity_simpleName.id]: thing.simpleName
                 },
@@ -57,16 +62,13 @@ export const serializeMetamodel = (metamodel: Metamodel): SerializedNode[] => {
                 },
                 references: {
                     [metaFeatures.conceptInterface_extends.id]: asIds(thing.extends)
-                },
-                parent: thing.parent?.id
+                }
             })
             thing.features.forEach(visit)
             return
         }
         if (thing instanceof Containment) {
-            json.push({
-                type: metaConcepts.containment.id,
-                id: thing.id,
+            serializeNode(metaConcepts.containment, {
                 properties: {
                     [metaFeatures.namespacedEntity_simpleName.id]: thing.simpleName,
                     [metaFeatures.feature_optional.id]: thing.optional,
@@ -75,41 +77,32 @@ export const serializeMetamodel = (metamodel: Metamodel): SerializedNode[] => {
                 },
                 references: {
                     [metaFeatures.link_type.id]: asRefIds(thing.type)
-                },
-                parent: thing.parent?.id
+                }
             })
             return
         }
         if (thing instanceof Enumeration) {
-            json.push({
-                type: metaConcepts.enumeration.id,
-                id: thing.id,
+            serializeNode(metaConcepts.enumeration, {
                 properties: {
                     [metaFeatures.namespacedEntity_simpleName.id]: thing.simpleName
                 },
                 children: {
                     [metaFeatures.enumeration_literals.id]: asIds(thing.literals)
-                },
-                parent: thing.parent?.id
+                }
             })
             thing.literals.forEach(visit)
             return
         }
         if (thing instanceof EnumerationLiteral) {
-            json.push({
-                type: metaConcepts.enumerationLiteral.id,
-                id: thing.id,
+            serializeNode(metaConcepts.enumerationLiteral, {
                 properties: {
                     [metaFeatures.namespacedEntity_simpleName.id]: thing.simpleName
-                },
-                parent: thing.parent?.id
+                }
             })
             return
         }
         if (thing instanceof Metamodel) {
-            json.push({
-                type: metaConcepts.metamodel.id,
-                id: thing.id,
+            const root = serializeNode(metaConcepts.metamodel, {
                 properties: {
                     [metaFeatures.metamodel_qualifiedName.id]: thing.qualifiedName
                 },
@@ -117,24 +110,21 @@ export const serializeMetamodel = (metamodel: Metamodel): SerializedNode[] => {
                     [metaFeatures.metamodel_elements.id]: asIds(thing.elements)
                 }
             })
+            // (necessary because [parent: undefined] gives a difference prior to physical serialization in unit tests:)
+            delete root.parent
             thing.elements.forEach(visit)
             return
         }
         if (thing instanceof PrimitiveType) {
-            json.push({
-                type: metaConcepts.primitiveType.id,
-                id: thing.id,
+            serializeNode(metaConcepts.primitiveType, {
                 properties: {
                     [metaFeatures.namespacedEntity_simpleName.id]: thing.simpleName
-                },
-                parent: thing.parent?.id
+                }
             })
             return
         }
         if (thing instanceof Property) {
-            json.push({
-                type: metaConcepts.property.id,
-                id: thing.id,
+            serializeNode(metaConcepts.property, {
                 properties: {
                     [metaFeatures.namespacedEntity_simpleName.id]: thing.simpleName,
                     [metaFeatures.feature_optional.id]: thing.optional,
@@ -143,15 +133,12 @@ export const serializeMetamodel = (metamodel: Metamodel): SerializedNode[] => {
                 },
                 references: {
                     [metaFeatures.property_type.id]: asRefIds(thing.type)
-                },
-                parent: thing.parent?.id
+                }
             })
             return
         }
         if (thing instanceof Reference) {
-            json.push({
-                type: metaConcepts.reference.id,
-                id: thing.id,
+            serializeNode(metaConcepts.reference, {
                 properties: {
                     [metaFeatures.namespacedEntity_simpleName.id]: thing.simpleName,
                     [metaFeatures.feature_optional.id]: thing.optional,
@@ -160,8 +147,7 @@ export const serializeMetamodel = (metamodel: Metamodel): SerializedNode[] => {
                 },
                 references: {
                     [metaFeatures.link_type.id]: asRefIds(thing.type)
-                },
-                parent: thing.parent?.id
+                }
             })
             return
         }
