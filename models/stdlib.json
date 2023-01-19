@@ -8,8 +8,8 @@
     "children": {
       "LIonCore_M3_Metamodel_elements": [
         "LIonCore_stdlib_String",
-        "LIonCore_stdlib_boolean",
-        "LIonCore_stdlib_int",
+        "LIonCore_stdlib_Boolean",
+        "LIonCore_stdlib_Integer",
         "LIonCore_stdlib_JSON"
       ]
     },
@@ -27,17 +27,17 @@
   },
   {
     "type": "LIonCore_M3_PrimitiveType",
-    "id": "LIonCore_stdlib_boolean",
+    "id": "LIonCore_stdlib_Boolean",
     "properties": {
-      "LIonCore_M3_NamespacedEntity_simpleName": "boolean"
+      "LIonCore_M3_NamespacedEntity_simpleName": "Boolean"
     },
     "parent": "LIonCore_stdlib"
   },
   {
     "type": "LIonCore_M3_PrimitiveType",
-    "id": "LIonCore_stdlib_int",
+    "id": "LIonCore_stdlib_Integer",
     "properties": {
-      "LIonCore_M3_NamespacedEntity_simpleName": "int"
+      "LIonCore_M3_NamespacedEntity_simpleName": "Integer"
     },
     "parent": "LIonCore_stdlib"
   },

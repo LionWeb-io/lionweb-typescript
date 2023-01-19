@@ -3,7 +3,7 @@ classDiagram
 
   class Book {
     +String title
-    +int pages
+    +Integer pages
   }
 
   class GuideBookWriter {

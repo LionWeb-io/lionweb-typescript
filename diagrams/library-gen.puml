@@ -6,7 +6,7 @@ hide empty members
 
 class Book {
   title: String
-  pages: int
+  pages: Integer
 }
 
 class GuideBookWriter extends Writer {

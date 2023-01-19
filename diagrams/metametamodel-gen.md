@@ -2,7 +2,7 @@
 classDiagram
 
   class Concept {
-    +boolean abstract
+    +Boolean abstract
   }
   FeaturesContainer <|-- Concept
 
@@ -23,8 +23,8 @@ classDiagram
   NamespacedEntity <|-- EnumerationLiteral
 
   class Feature {
-    +boolean optional
-    +boolean derived
+    +Boolean optional
+    +Boolean derived
   }
   <<Abstract>> Feature
   NamespacedEntity <|-- Feature
@@ -36,7 +36,7 @@ classDiagram
   MetamodelElement <|-- FeaturesContainer
 
   class Link {
-    +boolean multiple
+    +Boolean multiple
   }
   <<Abstract>> Link
   Feature <|-- Link
@@ -64,7 +64,7 @@ classDiagram
   DataType <|-- PrimitiveType
 
   class Property {
-    +boolean disputed
+    +Boolean disputed
   }
   Feature <|-- Property
 

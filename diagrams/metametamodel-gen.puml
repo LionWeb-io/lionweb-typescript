@@ -5,7 +5,7 @@ hide empty members
 
 
 class Concept extends FeaturesContainer {
-  abstract: boolean
+  abstract: Boolean
 }
 
 class ConceptInterface extends FeaturesContainer
@@ -19,8 +19,8 @@ class Enumeration extends DataType implements NamespaceProvider
 class EnumerationLiteral extends NamespacedEntity
 
 abstract class Feature extends NamespacedEntity {
-  optional: boolean
-  #Orange derived: boolean
+  optional: Boolean
+  #Orange derived: Boolean
 }
 
 abstract class FeaturesContainer extends MetamodelElement implements NamespaceProvider {
@@ -28,7 +28,7 @@ abstract class FeaturesContainer extends MetamodelElement implements NamespacePr
 }
 
 abstract class Link extends Feature {
-  multiple: boolean
+  multiple: Boolean
 }
 
 class Metamodel implements NamespaceProvider {
@@ -49,7 +49,7 @@ abstract class NamespacedEntity {
 class PrimitiveType extends DataType
 
 class Property extends Feature {
-  disputed: boolean
+  disputed: Boolean
 }
 
 class Reference extends Link

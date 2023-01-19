@@ -10,8 +10,8 @@ const factory = new MetamodelFactory("LIonCore.stdlib", lioncoreIdGen)
 export const lioncoreStdlib = factory.metamodel
 
 export const stringDatatype = factory.primitiveType("String")
-export const booleanDatatype = factory.primitiveType("boolean")
-export const intDatatype = factory.primitiveType("int")
+export const booleanDatatype = factory.primitiveType("Boolean")
+export const intDatatype = factory.primitiveType("Integer")
 export const jsonDatatype = factory.primitiveType("JSON")
 
 lioncoreStdlib.havingElements(
