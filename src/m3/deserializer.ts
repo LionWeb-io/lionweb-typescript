@@ -47,33 +47,33 @@ export const deserializeMetamodel = (serializedNodes: SerializedNode[], ...depen
     const deserializedNodeById: { [id: Id]: Node } = {}
 
     /**
-     * Constructs (deserializes) a {@link Node} from the given {@link SerializedNode},
+     * Instantiates a {@link Node} from the given {@link SerializedNode},
      * and stores it under its ID so references to it can be resolved.
      * For every serialized node, only one instance will ever be constructed (through memoisation).
      */
-    const constructMemoised = (serNode: SerializedNode, parent?: M3Concept): M3Concept => {
+    const instantiateMemoised = (serNode: SerializedNode, parent?: M3Concept): M3Concept => {
         if (serNode.id in deserializedNodeById) {
             return deserializedNodeById[serNode.id] as M3Concept
         }
-        const node = construct(serNode, parent)
+        const node = instantiate(serNode, parent)
         deserializedNodeById[node.id] = node
         return node
     }
 
     /**
-     * Constructs a function that maps a {@link Node node's} ID to that node,
+     * @return a function that maps a {@link Node node's} ID to that node,
      * deserializing the node from its serialization.
      */
-    const mapConstructMemoised = <T extends Node>(parent: M3Concept) =>
+    const mapInstantiateMemoised = <T extends Node>(parent: M3Concept) =>
         (id: Id): T =>
-            constructMemoised(serializedNodeById[id], parent) as unknown as T
+            instantiateMemoised(serializedNodeById[id], parent) as unknown as T
 
     const referencesToInstall: [node: Node, featureName: string, refId: Id][] = []
 
     /**
-     * Constructs a {@link Node} from its {@link SerializedNode serialization}.
+     * Instantiates a {@link Node} from its {@link SerializedNode serialization}.
      */
-    const construct = ({type, id, properties, children, references}: SerializedNode, parent?: M3Concept): M3Concept => {
+    const instantiate = ({type, id, properties, children, references}: SerializedNode, parent?: M3Concept): M3Concept => {
         switch (type) {
             case metaConcepts.concept.id: {
                 const {
@@ -84,7 +84,7 @@ export const deserializeMetamodel = (serializedNodes: SerializedNode[], ...depen
                 const {
                     [metaFeatures.featuresContainer_features.id]: features
                 } = children!
-                node.havingFeatures(...features.map(mapConstructMemoised<Feature>(node)))
+                node.havingFeatures(...features.map(mapInstantiateMemoised<Feature>(node)))
                 const extends_ = references![metaFeatures.concept_extends.id]
                 if (extends_.length > 0 && typeof extends_[0] === "string") {
                     referencesToInstall.push([node, "extends", extends_[0]])
@@ -104,7 +104,7 @@ export const deserializeMetamodel = (serializedNodes: SerializedNode[], ...depen
                 const {
                     [metaFeatures.featuresContainer_features.id]: features
                 } = children!
-                node.havingFeatures(...features.map(mapConstructMemoised<Feature>(node)))
+                node.havingFeatures(...features.map(mapInstantiateMemoised<Feature>(node)))
                 references![metaFeatures.conceptInterface_extends.id]
                     .filter((serRef) => typeof serRef === "string")
                     .forEach((serRef) => {
@@ -140,7 +140,7 @@ export const deserializeMetamodel = (serializedNodes: SerializedNode[], ...depen
                 const {
                     [metaFeatures.metamodel_dependsOn.id]: dependingOn
                 } = references!
-                node.havingElements(...elements.map(mapConstructMemoised<MetamodelElement>(node)))
+                node.havingElements(...elements.map(mapInstantiateMemoised<MetamodelElement>(node)))
                     .dependingOn(
                         ...dependentMetamodels.filter((dependency) =>
                             dependingOn.some((dependsOn) => dependsOn as Id === dependency.id)
@@ -194,7 +194,7 @@ export const deserializeMetamodel = (serializedNodes: SerializedNode[], ...depen
         }
     }
 
-    const metamodel = constructMemoised(metamodelSerNode) as Metamodel
+    const metamodel = instantiateMemoised(metamodelSerNode) as Metamodel
 
     const dependentMetamodelElementsById = byIdMap(dependentMetamodels.flatMap(({elements}) => elements))
 
