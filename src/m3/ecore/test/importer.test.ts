@@ -4,7 +4,6 @@ import {
 
 import {asLIonCoreMetamodel} from "../importer.ts"
 import {serializeMetamodel} from "../../serializer.ts"
-import {writeJsonAsFile} from "../../../utils/json.ts"
 import {textAsEcoreXml} from "../types.ts"
 import {issuesMetamodel} from "../../constraints.ts"
 import {checkReferences} from "../../reference-checker.ts"
@@ -14,6 +13,12 @@ import {
 import {
     generateMermaidForMetamodel
 } from "../../diagrams/Mermaid-generator.ts"
+import {
+    logIssues,
+    logUnresolvedReferences,
+    undefinedValuesDeletedFrom
+} from "../../test/test-helpers.ts"
+import {libraryMetamodel} from "../../test/library.ts"
 
 
 Deno.test("Ecore importer", async (tctx) => {
@@ -21,16 +26,17 @@ Deno.test("Ecore importer", async (tctx) => {
     await tctx.step("import 'library' Ecore XML", async () => {
         const data = Deno.readTextFileSync("models/library.ecore")
         const ecoreXml = textAsEcoreXml(data)
-        await writeJsonAsFile("models/library.ecore.json", ecoreXml)    // for debugging purposes -- file is Git-ignored
         const metamodel = asLIonCoreMetamodel(ecoreXml)
-        const unresolvedRefs = checkReferences(metamodel)
-        assertEquals(unresolvedRefs, [])
+        const unresolvedReferences = checkReferences(metamodel)
+        logUnresolvedReferences(unresolvedReferences)
+        assertEquals(unresolvedReferences, [])
         const issues = issuesMetamodel(metamodel)
+        logIssues(issues)
         assertEquals(issues, [])
         const serialization = serializeMetamodel(metamodel)
-        await writeJsonAsFile("models/library-imported-from-ecore.json", serialization)
-        await Deno.writeTextFileSync("diagrams/library-imported-from-ecore-gen.puml", generatePlantUmlForMetamodel(metamodel))
-        await Deno.writeTextFileSync("diagrams/library-imported-from-ecore-gen.md", generateMermaidForMetamodel(metamodel))
+        assertEquals(undefinedValuesDeletedFrom(serialization), undefinedValuesDeletedFrom(serializeMetamodel(libraryMetamodel)))
+        assertEquals(generatePlantUmlForMetamodel(metamodel), generatePlantUmlForMetamodel(libraryMetamodel))
+        assertEquals(generateMermaidForMetamodel(metamodel), generateMermaidForMetamodel(libraryMetamodel))
     })
 
 })

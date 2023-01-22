@@ -1,0 +1,281 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "library-serialization",
+  "title": "Serialization format specific to library",
+  "type": "array",
+  "items": {
+    "$ref": "#/$defs/SerializedNode"
+  },
+  "$defs": {
+    "Id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "Ids": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Id"
+      }
+    },
+    "SerializedRefs": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "Book": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "OcDK2GESljInG-ApIqtkXUoA2UeviB97u0UuiZzM0Hs"
+        },
+        "id": {
+          "$ref": "#/$defs/Id"
+        },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "Ei9m_HbdmEYg_EwMLLVZ71ERRBZyXH8GHVyOVia8Sqg": {
+              "type": "string"
+            },
+            "OJhF8vB_qRMrA8A9a-H0LsByONdYtHGmQ-lk9rUHUc4": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "Ei9m_HbdmEYg_EwMLLVZ71ERRBZyXH8GHVyOVia8Sqg",
+            "OJhF8vB_qRMrA8A9a-H0LsByONdYtHGmQ-lk9rUHUc4"
+          ],
+          "additionalProperties": false
+        },
+        "children": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "references": {
+          "type": "object",
+          "properties": {
+            "9ATCb8nXEuQAL3NOY-EUZwuThpIQnQ2C_2n97IRGA_g": {
+              "$ref": "#/$defs/SerializedRefs"
+            }
+          },
+          "additionalProperties": false
+        },
+        "parent": {
+          "$ref": "#/$defs/Id"
+        }
+      },
+      "required": [
+        "type",
+        "id"
+      ],
+      "additionalProperties": false
+    },
+    "Library": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "Pk1NRJfHMt4eSja2kpXia7x8vj6Vzc6WQCUzT3aVeYY"
+        },
+        "id": {
+          "$ref": "#/$defs/Id"
+        },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "LdgCnVXNgZD7CLbBhBin2Rcdumx4qZUYz_jh2QnP5z8": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "LdgCnVXNgZD7CLbBhBin2Rcdumx4qZUYz_jh2QnP5z8"
+          ],
+          "additionalProperties": false
+        },
+        "children": {
+          "type": "object",
+          "properties": {
+            "TFS1ME6sEyRbkRchsr8zaZCcj_uF1LM0LXK24gbnxZM": {
+              "$ref": "#/$defs/Ids"
+            }
+          },
+          "required": [
+            "TFS1ME6sEyRbkRchsr8zaZCcj_uF1LM0LXK24gbnxZM"
+          ],
+          "additionalProperties": false
+        },
+        "references": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "parent": {
+          "$ref": "#/$defs/Id"
+        }
+      },
+      "required": [
+        "type",
+        "id"
+      ],
+      "additionalProperties": false
+    },
+    "Writer": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "DuBg-a_slgc_VOG0huySkSWi3rZQX1Q20EEd2f7lvLE"
+        },
+        "id": {
+          "$ref": "#/$defs/Id"
+        },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "onRRrZaasiOtDU2qFJgyW8OVz8p5-hqQu0Vlc_7Aq6s": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "onRRrZaasiOtDU2qFJgyW8OVz8p5-hqQu0Vlc_7Aq6s"
+          ],
+          "additionalProperties": false
+        },
+        "children": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "references": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "parent": {
+          "$ref": "#/$defs/Id"
+        }
+      },
+      "required": [
+        "type",
+        "id"
+      ],
+      "additionalProperties": false
+    },
+    "GuideBookWriter": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "nNUEzZ7it7d2HoHPAtk5rGO4SsqVA3hAlBwkK1KP8QU"
+        },
+        "id": {
+          "$ref": "#/$defs/Id"
+        },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "PoZyl6WXh-Cz5h2RspK1NL6zX9DdLwGpUUC-ygQmHMA": {
+              "type": "string"
+            },
+            "onRRrZaasiOtDU2qFJgyW8OVz8p5-hqQu0Vlc_7Aq6s": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "PoZyl6WXh-Cz5h2RspK1NL6zX9DdLwGpUUC-ygQmHMA",
+            "onRRrZaasiOtDU2qFJgyW8OVz8p5-hqQu0Vlc_7Aq6s"
+          ],
+          "additionalProperties": false
+        },
+        "children": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "references": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "parent": {
+          "$ref": "#/$defs/Id"
+        }
+      },
+      "required": [
+        "type",
+        "id"
+      ],
+      "additionalProperties": false
+    },
+    "SpecialistBookWriter": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "RDa_L8gbU8XgW9z46oMysBi1Hb7vjcS8O8LUgXlFpeU"
+        },
+        "id": {
+          "$ref": "#/$defs/Id"
+        },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "DbVixG73dI8xIF9TAoq2GOZru4CRQfRD8gG7TkFCZuU": {
+              "type": "string"
+            },
+            "onRRrZaasiOtDU2qFJgyW8OVz8p5-hqQu0Vlc_7Aq6s": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "DbVixG73dI8xIF9TAoq2GOZru4CRQfRD8gG7TkFCZuU",
+            "onRRrZaasiOtDU2qFJgyW8OVz8p5-hqQu0Vlc_7Aq6s"
+          ],
+          "additionalProperties": false
+        },
+        "children": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "references": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "parent": {
+          "$ref": "#/$defs/Id"
+        }
+      },
+      "required": [
+        "type",
+        "id"
+      ],
+      "additionalProperties": false
+    },
+    "SerializedNode": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/Book"
+        },
+        {
+          "$ref": "#/$defs/Library"
+        },
+        {
+          "$ref": "#/$defs/Writer"
+        },
+        {
+          "$ref": "#/$defs/GuideBookWriter"
+        },
+        {
+          "$ref": "#/$defs/SpecialistBookWriter"
+        }
+      ]
+    }
+  }
+}

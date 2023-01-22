@@ -7,6 +7,7 @@ import {serializeMetamodel} from "../serializer.ts"
 import {checkReferences} from "../reference-checker.ts"
 import {issuesMetamodel} from "../constraints.ts"
 import {writeJsonAsFile} from "../../utils/json.ts"
+import {logIssues, logUnresolvedReferences} from "./test-helpers.ts"
 
 
 Deno.test("primitive types built-in to LIonCore", async (tctx) => {
@@ -17,28 +18,16 @@ Deno.test("primitive types built-in to LIonCore", async (tctx) => {
     })
 
 
-    // TODO  find good way to DRY w.r.t. meta-circularity.test.ts:
-
     await tctx.step("check for unresolved references", () => {
         const unresolvedReferences = checkReferences(lioncoreBuiltins)
-        if (unresolvedReferences.length > 0) {
-            console.error(`unresolved references:`)
-            unresolvedReferences.forEach((location) => {
-                console.error(`\t${location}`)
-            })
-        }
-        assertEquals(unresolvedReferences.length, 0, "number of expected unresolved references -- see above for the locations")
+        logUnresolvedReferences(unresolvedReferences)
+        assertEquals(unresolvedReferences, [], "number of expected unresolved references -- see above for the locations")
     })
 
     await tctx.step("check constraints", () => {
         const issues = issuesMetamodel(lioncoreBuiltins)
-        if (issues.length > 0) {
-            console.error(`constraint violations:`)
-            issues.forEach(({message}) => {
-                console.error(`\t${message}`)
-            })
-        }
-        assertEquals(issues.length, 0, "number of expected constraint violations -- see above for the issues")
+        logIssues(issues)
+        assertEquals(issues, [], "number of expected constraint violations -- see above for the issues")
     })
 
 })

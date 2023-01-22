@@ -113,8 +113,6 @@ export const serializeMetamodel = (metamodel: Metamodel): SerializedNode[] => {
                     [metaFeatures.metamodel_dependsOn.id]: asIds(thing.dependsOn)
                 }
             })
-            // (necessary because [parent: undefined] gives a difference prior to physical serialization in unit tests:)
-            delete root.parent
             thing.elements.forEach(visit)
             return
         }

@@ -19,6 +19,11 @@ import {
 } from "./json-validator.ts"
 import {SerializedNode} from "../../serialization.ts"
 import {schemaFor} from "../schema-generator.ts"
+import {
+    logIssues,
+    logUnresolvedReferences,
+    undefinedValuesDeletedFrom
+} from "./test-helpers.ts"
 
 
 Deno.test("meta-circularity (LIonCore)", async (tctx) => {
@@ -30,24 +35,14 @@ Deno.test("meta-circularity (LIonCore)", async (tctx) => {
 
     await tctx.step("check for unresolved references", () => {
         const unresolvedReferences = checkReferences(lioncore)
-        if (unresolvedReferences.length > 0) {
-            console.error(`unresolved references:`)
-            unresolvedReferences.forEach((location) => {
-                console.error(`\t${location}`)
-            })
-        }
-        assertEquals(unresolvedReferences.length, 0, "number of expected unresolved references -- see above for the locations")
+        logUnresolvedReferences(unresolvedReferences)
+        assertEquals(unresolvedReferences, [], "number of expected unresolved references -- see above for the locations")
     })
 
     await tctx.step("check constraints", () => {
         const issues = issuesMetamodel(lioncore)
-        if (issues.length > 0) {
-            console.error(`constraint violations:`)
-            issues.forEach(({message}) => {
-                console.error(`\t${message}`)
-            })
-        }
-        assertEquals(issues.length, 0, "number of expected constraint violations -- see above for the issues")
+        logIssues(issues)
+        assertEquals(issues, [], "number of expected constraint violations -- see above for the issues")
     })
 
     const serializedLioncorePath = "models/lioncore.json"
@@ -58,7 +53,7 @@ Deno.test("meta-circularity (LIonCore)", async (tctx) => {
 
     await tctx.step("deserialize LIonCore", async () => {
         const serialization = await readFileAsJson(serializedLioncorePath) as SerializedNode[]
-        const deserialization = deserializeMetamodel(serialization, lioncoreBuiltins)
+        const deserialization = deserializeMetamodel(undefinedValuesDeletedFrom(serialization), lioncoreBuiltins)
         assertEquals(deserialization, lioncore)
     })
 
