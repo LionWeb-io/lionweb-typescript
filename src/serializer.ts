@@ -5,7 +5,7 @@ import {
     Property,
     Reference
 } from "./m3/types.ts"
-import {SerializedNode} from "./serialization.ts"
+import {SerializedModel, SerializedNode} from "./serialization.ts"
 import {asIds, Node} from "./types.ts"
 import {allFeaturesOf} from "./m3/functions.ts"
 import {asArray} from "./m3/ecore/types.ts"
@@ -21,8 +21,8 @@ export type ConceptDeducer = (node: Node) => Concept
  * Serializes a model (i.e., an array of {@link Node nodes} - the first argument) to the LIonWeb serialization JSON format.
  * The {@link ConceptDeducer concept deducer function} given as second argument is used to map nodes to their concepts.
  */
-export const serializeModel = (model: Node[], conceptOf: ConceptDeducer): SerializedNode[] /* <=> JSON */ => {
-    const json: SerializedNode[] = []
+export const serializeModel = (model: Node[], conceptOf: ConceptDeducer): SerializedModel /* <=> JSON */ => {
+    const nodes: SerializedNode[] = []
 
     const visit = (node: Node, parent?: Node) => {
         const concept = conceptOf(node)
@@ -30,7 +30,7 @@ export const serializeModel = (model: Node[], conceptOf: ConceptDeducer): Serial
             type: concept.id,
             id: node.id
         }
-        json.push(serializedNode)
+        nodes.push(serializedNode)
         allFeaturesOf(concept).forEach((feature) => {
             const name = feature.simpleName
             if (feature.derived || !(name in node)) {
@@ -69,7 +69,10 @@ export const serializeModel = (model: Node[], conceptOf: ConceptDeducer): Serial
 
     model.forEach((node) => visit(node, undefined))
 
-    return json
+    return {
+        serializationFormatVersion: 1,
+        nodes
+    }
 }
 
 

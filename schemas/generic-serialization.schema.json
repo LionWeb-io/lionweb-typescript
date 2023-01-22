@@ -2,10 +2,22 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://lionweb.org/generic-serialization.schema.json",
   "title": "Generic serialization format",
-  "type": "array",
-  "items": {
-    "$ref": "#/$defs/SerializedNode"
+  "type": "object",
+  "properties": {
+    "serializationFormatVersion": {
+      "const": 1
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/SerializedNode"
+      }
+    }
   },
+  "required": [
+    "serializationFormatVersion",
+    "nodes"
+  ],
   "$defs": {
     "Id": {
       "type": "string",

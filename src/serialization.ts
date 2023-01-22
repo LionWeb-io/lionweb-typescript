@@ -35,3 +35,12 @@ export type SerializedNode = {
     parent?: Id
 }
 
+
+/**
+ * Type definition for a serialization of a whole model to JSON.
+ */
+export type SerializedModel = {
+    serializationFormatVersion: number,
+    nodes: SerializedNode[]
+}
+

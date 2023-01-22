@@ -2,10 +2,22 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "library-serialization",
   "title": "Serialization format specific to library",
-  "type": "array",
-  "items": {
-    "$ref": "#/$defs/SerializedNode"
+  "type": "object",
+  "properties": {
+    "serializationFormatVersion": {
+      "const": 1
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/SerializedNode"
+      }
+    }
   },
+  "required": [
+    "serializationFormatVersion",
+    "nodes"
+  ],
   "$defs": {
     "Id": {
       "type": "string",

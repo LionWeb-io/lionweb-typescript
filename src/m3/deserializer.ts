@@ -15,7 +15,7 @@ import {
 } from "./types.ts"
 import {SingleRef} from "../references.ts"
 import {Id, Node} from "../types.ts"
-import {SerializedNode} from "../serialization.ts"
+import {SerializedModel, SerializedNode} from "../serialization.ts"
 import {metaConcepts, metaFeatures} from "./self-definition.ts"
 
 
@@ -35,7 +35,13 @@ const byIdMap = <T extends { id: Id }>(ts: T[]): { [id: Id]: T } => {
  * Deserializes a metamodel that's serialized into the LIonWeb serialization JSON format
  * as an instance of the LIonCore/M3 metametamodel, using {@link M3Concept these type definitions}.
  */
-export const deserializeMetamodel = (serializedNodes: SerializedNode[], ...dependentMetamodels: Metamodel[]): Metamodel => {
+export const deserializeMetamodel = (serializedModel: SerializedModel, ...dependentMetamodels: Metamodel[]): Metamodel => {
+
+    if (serializedModel.serializationFormatVersion !== 1) {
+        throw new Error(`can't deserialize from format other than version 1`)
+    }
+
+    const { nodes: serializedNodes } = serializedModel
 
     const metamodelSerNode = serializedNodes.find(({type}) => type === metaConcepts.metamodel.id)
     if (metamodelSerNode === undefined) {

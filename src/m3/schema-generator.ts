@@ -105,8 +105,20 @@ export const schemaFor = (metamodel: Metamodel): unknown /* <=> JSON Schema */ =
         $schema: "https://json-schema.org/draft/2020-12/schema",
         $id: `${metamodel.qualifiedName}-serialization`,    // TODO  let caller specify URL instead?
         title: `Serialization format specific to ${metamodel.qualifiedName}`,
-        type: "array",
-        items: ref("SerializedNode"),
+        type: "object",
+        properties: {
+            serializationFormatVersion: {
+                "const": 1
+            },
+            nodes: {
+                type: "array",
+                items: ref("SerializedNode")
+            }
+        },
+        required: [
+            "serializationFormatVersion",
+            "nodes"
+        ],
         $defs: {
             // TODO  consider putting these definitions in a separate, referred-to JSON Schema
             "Id": {

@@ -2,10 +2,22 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "LIonCore.M3-serialization",
   "title": "Serialization format specific to LIonCore.M3",
-  "type": "array",
-  "items": {
-    "$ref": "#/$defs/SerializedNode"
+  "type": "object",
+  "properties": {
+    "serializationFormatVersion": {
+      "const": 1
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/SerializedNode"
+      }
+    }
   },
+  "required": [
+    "serializationFormatVersion",
+    "nodes"
+  ],
   "$defs": {
     "Id": {
       "type": "string",

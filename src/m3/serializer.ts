@@ -1,5 +1,5 @@
 import {M3Concept, Metamodel} from "./types.ts"
-import {SerializedNode} from "../serialization.ts"
+import {SerializedModel} from "../serialization.ts"
 import {lioncore} from "./self-definition.ts"
 import {classBasedConceptDeducerFor, serializeModel} from "../serializer.ts"
 
@@ -9,7 +9,6 @@ import {classBasedConceptDeducerFor, serializeModel} from "../serializer.ts"
  * using {@link M3Concept these type definitions})
  * into the LIonWeb serialization JSON format.
  */
-
-export const serializeMetamodel = (metamodel: Metamodel): SerializedNode[] =>
+export const serializeMetamodel = (metamodel: Metamodel): SerializedModel =>
     serializeModel([metamodel], classBasedConceptDeducerFor(lioncore))
 
