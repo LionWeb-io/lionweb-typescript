@@ -42,7 +42,7 @@ export const isNonDerivedReference = (feature: Feature): feature is Reference =>
 
 
 /**
- * Determines whether a {@link Feature feature} is “relational”,
+ * Determines whether a {@link Feature feature} is "relational",
  * i.e. it's a non-derived {@link Link containment or reference}.
  */
 const isRelational = (feature: Feature): feature is Link =>
@@ -71,7 +71,7 @@ export const relationsOf = (metamodelElement: MetamodelElement): Link[] =>
 
 
 /**
- * @return The “things”, i.e. {@link M3Concept}s, contained by the given “thing”.
+ * @return The "things", i.e. {@link M3Concept}s, contained by the given "thing".
  *  These can be: {@link MetamodelElement}s, {@link Feature}s, {@link EnumerationLiteral}
  *  (and all their sub types).
  */

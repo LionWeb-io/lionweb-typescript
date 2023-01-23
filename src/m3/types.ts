@@ -158,7 +158,7 @@ class Containment extends Link {
 class Property extends Feature {
     type: SingleRef<Datatype> = unresolved   // (reference)
     /**
-     * Indicates whether this property is “disputed” in the sense that
+     * Indicates whether this property is "disputed" in the sense that
      * it's not in the agreed-on version of M3/LIonCore, but it's necessary
      * in order to be able to self-define LIonCore.
      */
