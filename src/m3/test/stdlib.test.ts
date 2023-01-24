@@ -3,10 +3,6 @@ import {
 } from "https://deno.land/std@0.160.0/testing/asserts.ts"
 
 import {lioncoreStdlib} from "../stdlib.ts"
-import {
-    generatePlantUmlForMetamodel
-} from "../diagrams/PlantUML-generator.ts"
-import {generateMermaidForMetamodel} from "../diagrams/Mermaid-generator.ts"
 import {serializeMetamodel} from "../serializer.ts"
 import {checkReferences} from "../reference-checker.ts"
 import {issuesMetamodel} from "../constraints.ts"
@@ -14,11 +10,6 @@ import {writeJsonAsFile} from "../../utils/json.ts"
 
 
 Deno.test("stdlib (standard library) of built-in primitive types", async (tctx) => {
-
-    await tctx.step("generate diagrams (no assertions)", async () => {
-        await Deno.writeTextFileSync("diagrams/stdlib-gen.puml", generatePlantUmlForMetamodel(lioncoreStdlib))
-        await Deno.writeTextFileSync("diagrams/stdlib-gen.md", generateMermaidForMetamodel(lioncoreStdlib))
-    })
 
     await tctx.step("serialize it (no assertions)", async () => {
         const serialization = serializeMetamodel(lioncoreStdlib)
