@@ -78,8 +78,6 @@ Deno.test("meta-circularity (LIonCore)", async (tctx) => {
         assertEquals(errors, [])
     })
 
-    // TODO  write unit tests re: (de-)serialization
-
 })
 
 
