@@ -7,10 +7,10 @@ import {Issue} from "../constraints.ts"
  * because:
 <pre>!assertEquals({ foo: undefined }, {})</pre>
  */
-export const undefinedValuesDeletedFrom = (root: any) => {
-    const visited: object[] = []
+export const undefinedValuesDeletedFrom = <T>(root: T): T => {
+    const visited: Record<string, unknown>[] = []
 
-    const visit = (val: any) => {
+    const visit = (val: unknown) => {
         if (Array.isArray(val)) {
             val.forEach(visit)
         }
@@ -19,7 +19,7 @@ export const undefinedValuesDeletedFrom = (root: any) => {
             return
         }
 
-        const obj = val as object
+        const obj = val as Record<string, unknown>
 
         if (visited.indexOf(obj) > -1) {
             return obj
@@ -28,7 +28,7 @@ export const undefinedValuesDeletedFrom = (root: any) => {
 
         Object.entries(obj).forEach(([key, value]) => {
             if (value === undefined) {
-                delete val[key]
+                delete obj[key]
             } else {
                 visit(value)
             }

@@ -23,7 +23,7 @@ import {libraryMetamodel} from "../../test/library.ts"
 
 Deno.test("Ecore importer", async (tctx) => {
 
-    await tctx.step("import 'library' Ecore XML", async () => {
+    await tctx.step("import 'library' Ecore XML", () => {
         const data = Deno.readTextFileSync("models/library.ecore")
         const ecoreXml = textAsEcoreXml(data)
         const metamodel = asLIonCoreMetamodel(ecoreXml)

@@ -102,7 +102,7 @@ export const serializeMetamodel = (metamodel: Metamodel): SerializedNode[] => {
             return
         }
         if (thing instanceof Metamodel) {
-            const root = serializeNode(metaConcepts.metamodel, {
+            serializeNode(metaConcepts.metamodel, {
                 properties: {
                     [metaFeatures.metamodel_qualifiedName.id]: thing.qualifiedName
                 },
