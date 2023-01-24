@@ -16,7 +16,7 @@
     },
     "references": {
       "LIonCore_M3_Metamodel_dependsOn": [
-        "LIonCore_stdlib"
+        "LIonCore_builtins"
       ]
     }
   },
@@ -51,7 +51,7 @@
     },
     "references": {
       "LIonCore_M3_Property_type": [
-        "LIonCore_stdlib_String"
+        "LIonCore_builtins_String"
       ]
     },
     "parent": "OcDK2GESljInG-ApIqtkXUoA2UeviB97u0UuiZzM0Hs"
@@ -67,7 +67,7 @@
     },
     "references": {
       "LIonCore_M3_Property_type": [
-        "LIonCore_stdlib_Integer"
+        "LIonCore_builtins_Integer"
       ]
     },
     "parent": "OcDK2GESljInG-ApIqtkXUoA2UeviB97u0UuiZzM0Hs"
@@ -118,7 +118,7 @@
     },
     "references": {
       "LIonCore_M3_Property_type": [
-        "LIonCore_stdlib_String"
+        "LIonCore_builtins_String"
       ]
     },
     "parent": "Pk1NRJfHMt4eSja2kpXia7x8vj6Vzc6WQCUzT3aVeYY"
@@ -168,7 +168,7 @@
     },
     "references": {
       "LIonCore_M3_Property_type": [
-        "LIonCore_stdlib_String"
+        "LIonCore_builtins_String"
       ]
     },
     "parent": "DuBg-a_slgc_VOG0huySkSWi3rZQX1Q20EEd2f7lvLE"
@@ -204,7 +204,7 @@
     },
     "references": {
       "LIonCore_M3_Property_type": [
-        "LIonCore_stdlib_String"
+        "LIonCore_builtins_String"
       ]
     },
     "parent": "nNUEzZ7it7d2HoHPAtk5rGO4SsqVA3hAlBwkK1KP8QU"
@@ -240,7 +240,7 @@
     },
     "references": {
       "LIonCore_M3_Property_type": [
-        "LIonCore_stdlib_String"
+        "LIonCore_builtins_String"
       ]
     },
     "parent": "RDa_L8gbU8XgW9z46oMysBi1Hb7vjcS8O8LUgXlFpeU"

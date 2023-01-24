@@ -28,7 +28,7 @@ const asJSONSchemaType = (dataType: Datatype): unknown => {
         return ref(dataType.id)
     }
     if (dataType instanceof PrimitiveType) {
-        // (TODO  use equality on the level of PrimitiveType instances (but stdlib is not a singleton))
+        // (TODO  use equality on the level of PrimitiveType instances (but builtins is not a singleton))
         switch (dataType.simpleName) {
             case "String": return { type: "string" }
             case "Boolean": return { type: "boolean" }

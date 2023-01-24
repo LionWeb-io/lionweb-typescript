@@ -9,7 +9,7 @@ import {
 import {generateMermaidForMetamodel} from "../diagrams/Mermaid-generator.ts"
 import {serializeMetamodel} from "../serializer.ts"
 import {deserializeMetamodel} from "../deserializer.ts"
-import {lioncoreStdlib} from "../stdlib.ts"
+import {lioncoreBuiltins} from "../builtins.ts"
 import {readFileAsJson, writeJsonAsFile} from "../../utils/json.ts"
 
 
@@ -31,7 +31,7 @@ Deno.test("Library test model", async (tctx) => {
         const serialization = serializeMetamodel(libraryMetamodel)
         await writeJsonAsFile("models/library.json", serialization)
         assertEquals(serialization, await readFileAsJson("models/library-imported-from-ecore.json"))
-        const deserialization = deserializeMetamodel(serialization, lioncoreStdlib)
+        const deserialization = deserializeMetamodel(serialization, lioncoreBuiltins)
         assertEquals(deserialization, libraryMetamodel)
     })
 

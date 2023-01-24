@@ -27,7 +27,7 @@
     },
     "references": {
       "LIonCore_M3_Metamodel_dependsOn": [
-        "LIonCore_stdlib"
+        "LIonCore_builtins"
       ]
     }
   },
@@ -61,7 +61,7 @@
     },
     "references": {
       "LIonCore_M3_Property_type": [
-        "LIonCore_stdlib_String"
+        "LIonCore_builtins_String"
       ]
     },
     "parent": "LIonCore_M3_NamespacedEntity"
@@ -77,7 +77,7 @@
     },
     "references": {
       "LIonCore_M3_Property_type": [
-        "LIonCore_stdlib_String"
+        "LIonCore_builtins_String"
       ]
     },
     "parent": "LIonCore_M3_NamespacedEntity"
@@ -109,7 +109,7 @@
     },
     "references": {
       "LIonCore_M3_Property_type": [
-        "LIonCore_stdlib_String"
+        "LIonCore_builtins_String"
       ]
     },
     "parent": "LIonCore_M3_NamespaceProvider"
@@ -147,7 +147,7 @@
     },
     "references": {
       "LIonCore_M3_Property_type": [
-        "LIonCore_stdlib_String"
+        "LIonCore_builtins_String"
       ]
     },
     "parent": "LIonCore_M3_Metamodel"
@@ -290,7 +290,7 @@
     },
     "references": {
       "LIonCore_M3_Property_type": [
-        "LIonCore_stdlib_Boolean"
+        "LIonCore_builtins_Boolean"
       ]
     },
     "parent": "LIonCore_M3_Concept"
@@ -395,7 +395,7 @@
     },
     "references": {
       "LIonCore_M3_Property_type": [
-        "LIonCore_stdlib_Boolean"
+        "LIonCore_builtins_Boolean"
       ]
     },
     "parent": "LIonCore_M3_Feature"
@@ -411,7 +411,7 @@
     },
     "references": {
       "LIonCore_M3_Property_type": [
-        "LIonCore_stdlib_Boolean"
+        "LIonCore_builtins_Boolean"
       ]
     },
     "parent": "LIonCore_M3_Feature"
@@ -448,7 +448,7 @@
     },
     "references": {
       "LIonCore_M3_Property_type": [
-        "LIonCore_stdlib_Boolean"
+        "LIonCore_builtins_Boolean"
       ]
     },
     "parent": "LIonCore_M3_Link"
@@ -535,7 +535,7 @@
     },
     "references": {
       "LIonCore_M3_Property_type": [
-        "LIonCore_stdlib_Boolean"
+        "LIonCore_builtins_Boolean"
       ]
     },
     "parent": "LIonCore_M3_Property"
