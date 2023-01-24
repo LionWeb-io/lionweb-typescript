@@ -1,6 +1,11 @@
 export type FlatMapper<T, R> = (t: T) => R[]
-export const flatmapNonCyclingFollowing = <T, R>(mapper: FlatMapper<T, R>, nexts: (t: T) => T[]): FlatMapper<T, R> =>
-    (start: T): R[] => {
+
+/**
+ * Performs a "flatMap" on a graph that's specified as a start vertex and a function that computes (outgoing) edges.
+ * The "flatMap" is performed depth-first, and doesn't loop on cycles.
+ */
+export const flatMapNonCyclingFollowing = <T, R>(mapper: FlatMapper<T, R>, edges: (t: T) => T[]): FlatMapper<T, R> =>
+    (startVertex: T): R[] => {
         const visited: T[] = []
         const rs: R[] = []
         const recurse = (t: T) => {
@@ -9,9 +14,12 @@ export const flatmapNonCyclingFollowing = <T, R>(mapper: FlatMapper<T, R>, nexts
             }
             visited.push(t)
             rs.push(...mapper(t))
-            nexts(t).forEach(recurse)
+            edges(t).forEach(recurse)
         }
-        recurse(start)
+        recurse(startVertex)
         return rs
     }
+
+
+export const trivialFlatMapper = <T>(t: T) => [t]
 

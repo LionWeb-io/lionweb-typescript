@@ -1,7 +1,7 @@
 import {Metamodel} from "./types.ts"
 import {SerializedModel} from "../serialization.ts"
-import {lioncore} from "./self-definition.ts"
-import {classBasedConceptDeducerFor, serializeModel} from "../serializer.ts"
+import {serializeModel} from "../serializer.ts"
+import {lioncoreAPI} from "./api.ts"
 
 
 /**
@@ -10,5 +10,5 @@ import {classBasedConceptDeducerFor, serializeModel} from "../serializer.ts"
  * into the LIonWeb serialization JSON format.
  */
 export const serializeMetamodel = (metamodel: Metamodel): SerializedModel =>
-    serializeModel([metamodel], classBasedConceptDeducerFor(lioncore))
+    serializeModel([metamodel], lioncoreAPI)
 

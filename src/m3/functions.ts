@@ -21,7 +21,9 @@ import {
 import {isRef, unresolved} from "../references.ts"
 import {sortByStringKey} from "../utils/sorting.ts"
 import {cycleWith} from "../utils/cycles.ts"
-import {flatmapNonCyclingFollowing} from "../utils/recursion.ts"
+import {flatMapNonCyclingFollowing} from "../utils/recursion.ts"
+import {Node} from "../types.ts"
+import {ConceptDeducer} from "../api.ts"
 
 
 /**
@@ -94,7 +96,7 @@ export const containeds = (thing: M3Concept): M3Concept[] => {
  * It avoids visiting nodes twice (to avoid potential infinite loops), but doesn't report cycles.
  */
 export const flatMap = <T>(metamodel: Metamodel, map: (t: M3Concept) => T[]): T[] =>
-    flatmapNonCyclingFollowing(map, containeds)(metamodel)
+    flatMapNonCyclingFollowing(map, containeds)(metamodel)
 
 
 /**
@@ -145,7 +147,7 @@ export const inheritedCycleWith = (conceptType: ConceptType) =>
  *  {@link Concept concept} or {@link ConceptInterface concept interface}.
  */
 export const allSuperTypesOf = (conceptType: ConceptType): ConceptType[] =>
-    flatmapNonCyclingFollowing(inheritsFrom, inheritsFrom)(conceptType)
+    flatMapNonCyclingFollowing(inheritsFrom, inheritsFrom)(conceptType)
 
 
 /**
@@ -153,7 +155,7 @@ export const allSuperTypesOf = (conceptType: ConceptType): ConceptType[] =>
  * including the inherited ones.
  */
 export const allFeaturesOf = (conceptType: ConceptType): Feature[] =>
-    flatmapNonCyclingFollowing((ci) => ci.features, inheritsFrom)(conceptType)
+    flatMapNonCyclingFollowing((ci) => ci.features, inheritsFrom)(conceptType)
 
 
 /**
@@ -161,4 +163,20 @@ export const allFeaturesOf = (conceptType: ConceptType): Feature[] =>
  */
 export const isEnumeration = (metamodelElement: MetamodelElement): metamodelElement is Enumeration =>
     metamodelElement instanceof Enumeration
+
+
+/**
+ * @return all nodes in the given {@link Metamodel metamodel} that make sense to refer to.
+ */
+export const allReferablesOf = (metamodel: Metamodel): (Metamodel | MetamodelElement)[] =>
+    [metamodel, ...metamodel.elements]
+
+
+/**
+ * @return a {@link ConceptDeducer concept deducer} that deduces the concept of nodes by looking up
+ * the concept in the given {@link Metamodel metamodel} by matching the node object's class name to the concept's simple name.
+ */
+export const classBasedConceptDeducerFor = <NT extends Node>(metamodel: Metamodel): ConceptDeducer<NT> =>
+    (node: NT) =>
+        metamodel.elements.find((element) => element.simpleName === node.constructor.name) as Concept
 

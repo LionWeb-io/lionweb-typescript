@@ -27,4 +27,5 @@ export type SerializedModel = {
     serializationFormatVersion: number,
     nodes: SerializedNode[]
 }
+// TODO  rename -> Serialization?
 

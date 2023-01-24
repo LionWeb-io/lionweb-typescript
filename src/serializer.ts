@@ -1,36 +1,20 @@
-import {
-    Concept,
-    Containment,
-    Metamodel,
-    Property,
-    Reference
-} from "./m3/types.ts"
+import {Containment, Property, Reference} from "./m3/types.ts"
 import {SerializedModel, SerializedNode} from "./serialization.ts"
 import {asIds, Node} from "./types.ts"
 import {allFeaturesOf} from "./m3/functions.ts"
 import {asArray} from "./m3/ecore/types.ts"
+import {ConceptDeducer as _ConceptDeducer, ModelAPI} from "./api.ts"
 
-
-/**
- * Type definition for a function that deduces which {@link Concept concept} a given {@link Node model node} conforms to.
- */
-export type ConceptDeducer = (node: Node) => Concept
-
-
-/*
- * Note that the parametrization with a ConceptDeducer implies that the serialization will conform to a Metamodel (or a number of them).
- * This implies that models that _don't_ conform to a (set of) Metamodel(s) can't be serialized truthfully!
- */
 
 /**
  * Serializes a model (i.e., an array of {@link Node nodes} - the first argument) to the LIonWeb serialization JSON format.
- * The {@link ConceptDeducer concept deducer function} given as second argument is used to map nodes to their concepts.
+ * The {@link ModelAPI model API} given as second argument is used for its {@link _ConceptDeducer 'conceptFor' function}.
  */
-export const serializeModel = (model: Node[], conceptOf: ConceptDeducer): SerializedModel /* <=> JSON */ => {
+export const serializeModel = <NT extends Node>(model: NT[], modelAPI: ModelAPI<NT>): SerializedModel /* <=> JSON */ => {
     const nodes: SerializedNode[] = []
 
-    const visit = (node: Node, parent?: Node) => {
-        const concept = conceptOf(node)
+    const visit = (node: NT, parent?: Node) => {
+        const concept = modelAPI.conceptOf(node)
         const serializedNode: SerializedNode = {
             concept: concept.id,
             id: node.id
@@ -80,12 +64,8 @@ export const serializeModel = (model: Node[], conceptOf: ConceptDeducer): Serial
     }
 }
 
-
-/**
- * @return a {@link ConceptDeducer concept deducer} that deduces the concept of nodes by looking up
- * the concept in the given {@link Metamodel metamodel} by matching the node object's class name to the concept's simple name.
+/*
+ * Note that the parametrization with a ConceptDeducer implies that the serialization will conform to a Metamodel (or a number of them).
+ * This implies that models that _don't_ conform to a (set of) Metamodel(s) can't be serialized truthfully!
  */
-export const classBasedConceptDeducerFor = (metamodel: Metamodel): ConceptDeducer =>
-    (node: Node) =>
-        metamodel.elements.find((element) => element.simpleName === node.constructor.name) as Concept
 
