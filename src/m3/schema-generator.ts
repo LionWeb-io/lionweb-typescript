@@ -28,10 +28,11 @@ const asJSONSchemaType = (dataType: Datatype): unknown => {
         return ref(dataType.id)
     }
     if (dataType instanceof PrimitiveType) {
+        // (TODO  use equality on the level of PrimitiveType instances (but builtins is not a singleton))
         switch (dataType.simpleName) {
             case "String": return { type: "string" }
-            case "boolean": return { type: "boolean" }
-            case "int": return { type: "integer" }
+            case "Boolean": return { type: "boolean" }
+            case "Integer": return { type: "integer" }
             case "JSON": return {}
             default:
                 throw new Error(`can't deal with PrimitiveType "${dataType.simpleName}"`)

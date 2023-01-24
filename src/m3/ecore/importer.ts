@@ -22,6 +22,12 @@ import {
     EStructuralFeature
 } from "./types.ts"
 import {ConceptType} from "../functions.ts"
+import {
+    booleanDatatype,
+    intDatatype,
+    lioncoreBuiltins,
+    stringDatatype
+} from "../builtins.ts"
 
 
 const localRefPrefix = "#//"
@@ -66,11 +72,6 @@ export const asLIonCoreMetamodel = (ecoreXml: EcoreXml): Metamodel => {
 
 
     // phase 2: also convert features of EClasses
-
-    // TODO  obtain from a built-in, imported M3 instance
-    const stringDatatype = factory.primitiveType("String")
-    const booleanDatatype = factory.primitiveType("boolean")
-    const intDatatype = factory.primitiveType("int")
 
     const convertEDataType = (eDataType: string): PrimitiveType => {
         switch (eDataType) {
@@ -139,7 +140,7 @@ export const asLIonCoreMetamodel = (ecoreXml: EcoreXml): Metamodel => {
     // phase 3: put all converted things into the metamodel
 
     factory.metamodel
-        .havingElements(stringDatatype, booleanDatatype, intDatatype)
+        .dependingOn(lioncoreBuiltins)
         .havingElements(...convertedEClassifiers.map(([_, mmElement]) => mmElement))
 
     return factory.metamodel

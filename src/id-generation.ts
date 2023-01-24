@@ -136,7 +136,7 @@ export const checkValidId = (idGen: IdGenerator): IdGenerator =>
 export type IdGenTransformer = (idGen: IdGenerator) => IdGenerator
 
 /**
- * Wraps the given (“initial”) {@link IdGenerator ID generator}
+ * Wraps the given ("initial") {@link IdGenerator ID generator}
  * with the given {@link IdGenTransformer ID generator transformers}.
  * In other words:
  *

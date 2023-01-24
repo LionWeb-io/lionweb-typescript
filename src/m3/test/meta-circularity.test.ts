@@ -11,6 +11,7 @@ import {checkReferences} from "../reference-checker.ts"
 import {issuesMetamodel} from "../constraints.ts"
 import {serializeMetamodel} from "../serializer.ts"
 import {deserializeMetamodel} from "../deserializer.ts"
+import {lioncoreBuiltins} from "../builtins.ts"
 import {readFileAsJson, writeJsonAsFile} from "../../utils/json.ts"
 import {
     createJsonValidatorForSchema,
@@ -57,7 +58,7 @@ Deno.test("meta-circularity (LIonCore)", async (tctx) => {
 
     await tctx.step("deserialize LIonCore", async () => {
         const serialization = await readFileAsJson(serializedLioncorePath) as SerializedNode[]
-        const deserialization = deserializeMetamodel(serialization)
+        const deserialization = deserializeMetamodel(serialization, lioncoreBuiltins)
         assertEquals(deserialization, lioncore)
     })
 

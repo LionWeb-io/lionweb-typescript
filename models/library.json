@@ -7,40 +7,18 @@
     },
     "children": {
       "LIonCore_M3_Metamodel_elements": [
-        "INhBvWyXvxwNsePuX0rdNGB_J9hi85cTb1Q0APXCyJ0",
-        "uHmTCy63BV23cvXwFSumVwK1DOh4IZvIyAnRJjW9eQI",
-        "gVp8_QSmXE2k4pd-sQZgjYMoW95SLLaVIH4yMYqqbt4",
         "OcDK2GESljInG-ApIqtkXUoA2UeviB97u0UuiZzM0Hs",
         "Pk1NRJfHMt4eSja2kpXia7x8vj6Vzc6WQCUzT3aVeYY",
         "DuBg-a_slgc_VOG0huySkSWi3rZQX1Q20EEd2f7lvLE",
         "nNUEzZ7it7d2HoHPAtk5rGO4SsqVA3hAlBwkK1KP8QU",
         "RDa_L8gbU8XgW9z46oMysBi1Hb7vjcS8O8LUgXlFpeU"
       ]
+    },
+    "references": {
+      "LIonCore_M3_Metamodel_dependsOn": [
+        "LIonCore_builtins"
+      ]
     }
-  },
-  {
-    "type": "LIonCore_M3_PrimitiveType",
-    "id": "INhBvWyXvxwNsePuX0rdNGB_J9hi85cTb1Q0APXCyJ0",
-    "properties": {
-      "LIonCore_M3_NamespacedEntity_simpleName": "String"
-    },
-    "parent": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow"
-  },
-  {
-    "type": "LIonCore_M3_PrimitiveType",
-    "id": "uHmTCy63BV23cvXwFSumVwK1DOh4IZvIyAnRJjW9eQI",
-    "properties": {
-      "LIonCore_M3_NamespacedEntity_simpleName": "boolean"
-    },
-    "parent": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow"
-  },
-  {
-    "type": "LIonCore_M3_PrimitiveType",
-    "id": "gVp8_QSmXE2k4pd-sQZgjYMoW95SLLaVIH4yMYqqbt4",
-    "properties": {
-      "LIonCore_M3_NamespacedEntity_simpleName": "int"
-    },
-    "parent": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow"
   },
   {
     "type": "LIonCore_M3_Concept",
@@ -73,7 +51,7 @@
     },
     "references": {
       "LIonCore_M3_Property_type": [
-        "INhBvWyXvxwNsePuX0rdNGB_J9hi85cTb1Q0APXCyJ0"
+        "LIonCore_builtins_String"
       ]
     },
     "parent": "OcDK2GESljInG-ApIqtkXUoA2UeviB97u0UuiZzM0Hs"
@@ -89,7 +67,7 @@
     },
     "references": {
       "LIonCore_M3_Property_type": [
-        "gVp8_QSmXE2k4pd-sQZgjYMoW95SLLaVIH4yMYqqbt4"
+        "LIonCore_builtins_Integer"
       ]
     },
     "parent": "OcDK2GESljInG-ApIqtkXUoA2UeviB97u0UuiZzM0Hs"
@@ -140,7 +118,7 @@
     },
     "references": {
       "LIonCore_M3_Property_type": [
-        "INhBvWyXvxwNsePuX0rdNGB_J9hi85cTb1Q0APXCyJ0"
+        "LIonCore_builtins_String"
       ]
     },
     "parent": "Pk1NRJfHMt4eSja2kpXia7x8vj6Vzc6WQCUzT3aVeYY"
@@ -190,7 +168,7 @@
     },
     "references": {
       "LIonCore_M3_Property_type": [
-        "INhBvWyXvxwNsePuX0rdNGB_J9hi85cTb1Q0APXCyJ0"
+        "LIonCore_builtins_String"
       ]
     },
     "parent": "DuBg-a_slgc_VOG0huySkSWi3rZQX1Q20EEd2f7lvLE"
@@ -226,7 +204,7 @@
     },
     "references": {
       "LIonCore_M3_Property_type": [
-        "INhBvWyXvxwNsePuX0rdNGB_J9hi85cTb1Q0APXCyJ0"
+        "LIonCore_builtins_String"
       ]
     },
     "parent": "nNUEzZ7it7d2HoHPAtk5rGO4SsqVA3hAlBwkK1KP8QU"
@@ -262,7 +240,7 @@
     },
     "references": {
       "LIonCore_M3_Property_type": [
-        "INhBvWyXvxwNsePuX0rdNGB_J9hi85cTb1Q0APXCyJ0"
+        "LIonCore_builtins_String"
       ]
     },
     "parent": "RDa_L8gbU8XgW9z46oMysBi1Hb7vjcS8O8LUgXlFpeU"

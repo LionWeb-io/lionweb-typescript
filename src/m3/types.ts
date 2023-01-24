@@ -58,6 +58,8 @@ abstract class NamespacedEntity extends M3Node {
 class Metamodel extends M3Node implements NamespaceProvider {
     qualifiedName: string
     elements: MetamodelElement[] = []   // (containment)
+    dependsOn: MultiRef<Metamodel> = []  // special (!) reference
+        // (!) special because deserializer needs to be aware of where to get the instance from
     constructor(qualifiedName: string, id: Id) {
         super(id)
         this.qualifiedName = qualifiedName
@@ -67,6 +69,10 @@ class Metamodel extends M3Node implements NamespaceProvider {
     }
     havingElements(...elements: MetamodelElement[]) {
         this.elements.push(...elements)
+        return this
+    }
+    dependingOn(...metamodels: Metamodel[]) {
+        this.dependsOn.push(...metamodels)
         return this
     }
 }
@@ -152,7 +158,7 @@ class Containment extends Link {
 class Property extends Feature {
     type: SingleRef<Datatype> = unresolved   // (reference)
     /**
-     * Indicates whether this property is “disputed” in the sense that
+     * Indicates whether this property is "disputed" in the sense that
      * it's not in the agreed-on version of M3/LIonCore, but it's necessary
      * in order to be able to self-define LIonCore.
      */

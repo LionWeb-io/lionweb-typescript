@@ -20,52 +20,60 @@ import {metaConcepts, metaFeatures} from "./self-definition.ts"
 
 
 /**
+ * @return a map id -> thing with id.
+ */
+const byIdMap = <T extends { id: Id }>(ts: T[]): { [id: Id]: T } => {
+    const map: { [id: Id]: T } = {}
+    ts.forEach((t) => {
+        map[t.id] = t
+    })
+    return map
+}
+
+
+/**
  * Deserializes a metamodel that's serialized into the LIonWeb serialization JSON forma
  * as an instance of the LIonCore/M3 metametamodel, using {@link M3Concept these type definitions}.
  */
-export const deserializeMetamodel = (serializedNodes: SerializedNode[]): Metamodel => {
+export const deserializeMetamodel = (serializedNodes: SerializedNode[], ...dependentMetamodels: Metamodel[]): Metamodel => {
 
     const metamodelSerNode = serializedNodes.find(({type}) => type === metaConcepts.metamodel.id)
     if (metamodelSerNode === undefined) {
         throw new Error(`could not deserialize: no instance of LIonCore's Metamodel concept found in serialization`)
     }
 
-    // make a map id -> serialized node:
-    const serializedNodeById: { [id: Id]: SerializedNode } = {}
-    serializedNodes.forEach((node) => {
-        serializedNodeById[node.id] = node
-    })
+    const serializedNodeById = byIdMap(serializedNodes)
 
     const deserializedNodeById: { [id: Id]: Node } = {}
 
     /**
-     * Constructs (deserializes) a {@link Node} from the given {@link SerializedNode},
+     * Instantiates a {@link Node} from the given {@link SerializedNode},
      * and stores it under its ID so references to it can be resolved.
      * For every serialized node, only one instance will ever be constructed (through memoisation).
      */
-    const constructMemoised = (serNode: SerializedNode, parent?: M3Concept): M3Concept => {
+    const instantiateMemoised = (serNode: SerializedNode, parent?: M3Concept): M3Concept => {
         if (serNode.id in deserializedNodeById) {
             return deserializedNodeById[serNode.id] as M3Concept
         }
-        const node = construct(serNode, parent)
+        const node = instantiate(serNode, parent)
         deserializedNodeById[node.id] = node
         return node
     }
 
     /**
-     * Constructs a function that maps a {@link Node node's} ID to that node,
+     * @return a function that maps a {@link Node node's} ID to that node,
      * deserializing the node from its serialization.
      */
-    const mapConstructMemoised = <T extends Node>(parent: M3Concept) =>
+    const mapInstantiateMemoised = <T extends Node>(parent: M3Concept) =>
         (id: Id): T =>
-            constructMemoised(serializedNodeById[id], parent) as unknown as T
+            instantiateMemoised(serializedNodeById[id], parent) as unknown as T
 
     const referencesToInstall: [node: Node, featureName: string, refId: Id][] = []
 
     /**
-     * Constructs a {@link Node} from its {@link SerializedNode serialization}.
+     * Instantiates a {@link Node} from its {@link SerializedNode serialization}.
      */
-    const construct = ({type, id, properties, children, references}: SerializedNode, parent?: M3Concept): M3Concept => {
+    const instantiate = ({type, id, properties, children, references}: SerializedNode, parent?: M3Concept): M3Concept => {
         switch (type) {
             case metaConcepts.concept.id: {
                 const {
@@ -76,7 +84,7 @@ export const deserializeMetamodel = (serializedNodes: SerializedNode[]): Metamod
                 const {
                     [metaFeatures.featuresContainer_features.id]: features
                 } = children!
-                node.havingFeatures(...features.map(mapConstructMemoised<Feature>(node)))
+                node.havingFeatures(...features.map(mapInstantiateMemoised<Feature>(node)))
                 const extends_ = references![metaFeatures.concept_extends.id]
                 if (extends_.length > 0 && typeof extends_[0] === "string") {
                     referencesToInstall.push([node, "extends", extends_[0]])
@@ -96,7 +104,7 @@ export const deserializeMetamodel = (serializedNodes: SerializedNode[]): Metamod
                 const {
                     [metaFeatures.featuresContainer_features.id]: features
                 } = children!
-                node.havingFeatures(...features.map(mapConstructMemoised<Feature>(node)))
+                node.havingFeatures(...features.map(mapInstantiateMemoised<Feature>(node)))
                 references![metaFeatures.conceptInterface_extends.id]
                     .filter((serRef) => typeof serRef === "string")
                     .forEach((serRef) => {
@@ -129,13 +137,22 @@ export const deserializeMetamodel = (serializedNodes: SerializedNode[]): Metamod
                 const {
                     [metaFeatures.metamodel_elements.id]: elements
                 } = children!
-                node.havingElements(...elements.map(mapConstructMemoised<MetamodelElement>(node)))
+                const {
+                    [metaFeatures.metamodel_dependsOn.id]: dependingOn
+                } = references!
+                node.havingElements(...elements.map(mapInstantiateMemoised<MetamodelElement>(node)))
+                    .dependingOn(
+                        ...dependentMetamodels.filter((dependency) =>
+                            dependingOn.some((dependsOn) => dependsOn as Id === dependency.id)
+                        )
+                    )
                 return node
             }
             case metaConcepts.primitiveType.id: {
                 const {
                     [metaFeatures.namespacedEntity_simpleName.id]: simpleName
                 } = properties!
+                // (ignore warning -- want to stick to the code pattern:)
                 const node = new PrimitiveType(parent as Metamodel, simpleName as string, id)
                 return node
             }
@@ -177,17 +194,27 @@ export const deserializeMetamodel = (serializedNodes: SerializedNode[]): Metamod
         }
     }
 
-    const metamodel = constructMemoised(metamodelSerNode) as Metamodel
+    const metamodel = instantiateMemoised(metamodelSerNode) as Metamodel
+
+    const dependentMetamodelElementsById = byIdMap(dependentMetamodels.flatMap(({elements}) => elements))
 
     referencesToInstall.forEach(([node, featureName, refId]) => {
+        const lookUpById = () => {
+            const target = deserializedNodeById[refId] ?? dependentMetamodelElementsById[refId]
+            if (target === undefined) {
+                const metaTypeMessage = "type" in node ? ` and (meta-)type ${node.type}` : ""
+                throw new Error(`couldn't find the target with id "${refId}" of a "${featureName}" reference on the node with id "${node.id}"${metaTypeMessage}`)
+            }
+            return target
+        }
         if (node instanceof Concept) {
             switch (featureName) {
                 case "extends": {
-                    node.extends = deserializedNodeById[refId] as SingleRef<Concept>
+                    node.extends = lookUpById() as SingleRef<Concept>
                     break
                 }
                 case "implements": {
-                    node.implements.push(deserializedNodeById[refId] as ConceptInterface)
+                    node.implements.push(lookUpById() as ConceptInterface)
                     break
                 }
             }
@@ -195,7 +222,7 @@ export const deserializeMetamodel = (serializedNodes: SerializedNode[]): Metamod
         if (node instanceof ConceptInterface) {
             switch (featureName) {
                 case "extends": {
-                    node.extends.push(deserializedNodeById[refId] as ConceptInterface)
+                    node.extends.push(lookUpById() as ConceptInterface)
                     break
                 }
             }
@@ -203,7 +230,7 @@ export const deserializeMetamodel = (serializedNodes: SerializedNode[]): Metamod
         if (node instanceof Link) {
             switch (featureName) {
                 case "type": {
-                    node.type = deserializedNodeById[refId] as SingleRef<FeaturesContainer>
+                    node.type = lookUpById() as SingleRef<FeaturesContainer>
                     break
                 }
             }
@@ -211,7 +238,7 @@ export const deserializeMetamodel = (serializedNodes: SerializedNode[]): Metamod
         if (node instanceof Property) {
             switch (featureName) {
                 case "type": {
-                    node.type = deserializedNodeById[refId] as SingleRef<Datatype>
+                    node.type = lookUpById() as SingleRef<Datatype>
                     break
                 }
             }

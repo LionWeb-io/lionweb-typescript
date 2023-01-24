@@ -6,3 +6,5 @@ This directory contains generated PlantUML UML class diagrams which represent ce
 * [`library-imported-from-ecore-gen.puml`](./library-imported-from-ecore-gen.puml): the "library" metamodel, as imported from Ecore.
 * [`metametamodel-gen.puml`](./metametamodel-gen.puml): the (self-defined) LIonCore/M3 meta-metamodel.
 
+All of these diagrams also have a corresponding MarkDown document with an embedded [Mermaid diagram](https://mermaid.js.org/).
+

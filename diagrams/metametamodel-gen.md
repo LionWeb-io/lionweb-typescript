@@ -2,7 +2,7 @@
 classDiagram
 
   class Concept {
-    +boolean abstract
+    +Boolean abstract
   }
   FeaturesContainer <|-- Concept
 
@@ -23,8 +23,8 @@ classDiagram
   NamespacedEntity <|-- EnumerationLiteral
 
   class Feature {
-    +boolean optional
-    +boolean derived
+    +Boolean optional
+    +Boolean derived
   }
   <<Abstract>> Feature
   NamespacedEntity <|-- Feature
@@ -35,10 +35,8 @@ classDiagram
   <<Abstract>> FeaturesContainer
   MetamodelElement <|-- FeaturesContainer
 
-  %% primitive type: "JSON"
-
   class Link {
-    +boolean multiple
+    +Boolean multiple
   }
   <<Abstract>> Link
   Feature <|-- Link
@@ -66,18 +64,12 @@ classDiagram
   DataType <|-- PrimitiveType
 
   class Property {
-    +boolean disputed
+    +Boolean disputed
   }
   Feature <|-- Property
 
   class Reference
   Link <|-- Reference
-
-  %% primitive type: "String"
-
-  %% primitive type: "boolean"
-
-  %% primitive type: "int"
 
 
   Concept "*" -- "0..1" Concept: extends
@@ -89,7 +81,6 @@ classDiagram
 
 
   FeaturesContainer "1" o-- "*" Feature: features
-
   Link "*" -- "1" FeaturesContainer: type
   Metamodel "1" o-- "*" MetamodelElement: elements
   Metamodel "*" -- "*" Metamodel: dependsOn
@@ -98,9 +89,6 @@ classDiagram
 
 
   Property "*" -- "1" DataType: type
-
-
-
 
 
 ```
