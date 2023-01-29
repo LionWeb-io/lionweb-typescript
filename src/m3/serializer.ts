@@ -1,4 +1,4 @@
-import {M3Concept, Metamodel} from "./types.ts"
+import {Metamodel} from "./types.ts"
 import {SerializedModel} from "../serialization.ts"
 import {lioncore} from "./self-definition.ts"
 import {classBasedConceptDeducerFor, serializeModel} from "../serializer.ts"

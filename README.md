@@ -29,7 +29,7 @@ See https://lint.deno.land/ for more details.
 
 ### Dev dependencies
 
-* [Deno](https://deno.land/): {Java|Type}Script runtime
+* [Deno](https://deno.land/): {Java|Type}Script runtime, version (at least) 1.30.0
 * (optional) [PlantUML](https://plantuml.com/).
   An IDE plugin such as the one [for IntelliJ IDEA](https://plugins.jetbrains.com/plugin/7017-plantuml-integration) also does the trick.
 

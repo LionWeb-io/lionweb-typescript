@@ -17,6 +17,11 @@ import {asArray} from "./m3/ecore/types.ts"
 export type ConceptDeducer = (node: Node) => Concept
 
 
+/*
+ * Note that the parametrization with a ConceptDeducer implies that the serialization will conform to a Metamodel (or a number of them).
+ * This implies that models that _don't_ conform to a (set of) Metamodel(s) can't be serialized truthfully!
+ */
+
 /**
  * Serializes a model (i.e., an array of {@link Node nodes} - the first argument) to the LIonWeb serialization JSON format.
  * The {@link ConceptDeducer concept deducer function} given as second argument is used to map nodes to their concepts.
