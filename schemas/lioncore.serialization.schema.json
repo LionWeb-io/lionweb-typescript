@@ -27,20 +27,8 @@
       "type": "array",
       "items": {
         "$ref": "#/$defs/Id"
-      }
-    },
-    "SerializedRefs": {
-      "type": "array",
-      "items": {
-        "oneOf": [
-          {
-            "type": "string"
-          },
-          {
-            "type": "null"
-          }
-        ]
-      }
+      },
+      "minItems": 1
     },
     "Metamodel": {
       "type": "object",
@@ -76,7 +64,7 @@
           "type": "object",
           "properties": {
             "LIonCore_M3_Metamodel_dependsOn": {
-              "$ref": "#/$defs/SerializedRefs"
+              "$ref": "#/$defs/Ids"
             }
           },
           "additionalProperties": false
@@ -87,7 +75,10 @@
       },
       "required": [
         "concept",
-        "id"
+        "id",
+        "properties",
+        "children",
+        "references"
       ],
       "additionalProperties": false
     },
@@ -129,10 +120,10 @@
           "type": "object",
           "properties": {
             "LIonCore_M3_Concept_extends": {
-              "$ref": "#/$defs/SerializedRefs"
+              "$ref": "#/$defs/Ids"
             },
             "LIonCore_M3_Concept_implements": {
-              "$ref": "#/$defs/SerializedRefs"
+              "$ref": "#/$defs/Ids"
             }
           },
           "additionalProperties": false
@@ -143,7 +134,10 @@
       },
       "required": [
         "concept",
-        "id"
+        "id",
+        "properties",
+        "children",
+        "references"
       ],
       "additionalProperties": false
     },
@@ -181,7 +175,7 @@
           "type": "object",
           "properties": {
             "LIonCore_M3_ConceptInterface_extends": {
-              "$ref": "#/$defs/SerializedRefs"
+              "$ref": "#/$defs/Ids"
             }
           },
           "additionalProperties": false
@@ -192,7 +186,10 @@
       },
       "required": [
         "concept",
-        "id"
+        "id",
+        "properties",
+        "children",
+        "references"
       ],
       "additionalProperties": false
     },
@@ -238,7 +235,7 @@
           "type": "object",
           "properties": {
             "LIonCore_M3_Link_type": {
-              "$ref": "#/$defs/SerializedRefs"
+              "$ref": "#/$defs/Ids"
             }
           },
           "additionalProperties": false
@@ -249,7 +246,10 @@
       },
       "required": [
         "concept",
-        "id"
+        "id",
+        "properties",
+        "children",
+        "references"
       ],
       "additionalProperties": false
     },
@@ -295,7 +295,7 @@
           "type": "object",
           "properties": {
             "LIonCore_M3_Property_type": {
-              "$ref": "#/$defs/SerializedRefs"
+              "$ref": "#/$defs/Ids"
             }
           },
           "additionalProperties": false
@@ -306,7 +306,10 @@
       },
       "required": [
         "concept",
-        "id"
+        "id",
+        "properties",
+        "children",
+        "references"
       ],
       "additionalProperties": false
     },
@@ -347,7 +350,10 @@
       },
       "required": [
         "concept",
-        "id"
+        "id",
+        "properties",
+        "children",
+        "references"
       ],
       "additionalProperties": false
     },
@@ -393,7 +399,7 @@
           "type": "object",
           "properties": {
             "LIonCore_M3_Link_type": {
-              "$ref": "#/$defs/SerializedRefs"
+              "$ref": "#/$defs/Ids"
             }
           },
           "additionalProperties": false
@@ -404,7 +410,10 @@
       },
       "required": [
         "concept",
-        "id"
+        "id",
+        "properties",
+        "children",
+        "references"
       ],
       "additionalProperties": false
     },
@@ -452,7 +461,10 @@
       },
       "required": [
         "concept",
-        "id"
+        "id",
+        "properties",
+        "children",
+        "references"
       ],
       "additionalProperties": false
     },
@@ -493,7 +505,10 @@
       },
       "required": [
         "concept",
-        "id"
+        "id",
+        "properties",
+        "children",
+        "references"
       ],
       "additionalProperties": false
     },

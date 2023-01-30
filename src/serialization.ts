@@ -2,10 +2,8 @@ import {Id} from "./types.ts"
 import {unresolved} from "./references.ts"
 
 
-/**
- * Type definition of a reference that's serialized as JSON.
- */
-export type SerializedRef = Id | typeof unresolved
+export type Ids = Id[]
+
 
 /**
  * Type definition for an AST node serialized to JSON.
@@ -13,9 +11,9 @@ export type SerializedRef = Id | typeof unresolved
 export type SerializedNode = {
     concept: string
     id: string
-    properties?: { [featureName: string]: string }
-    children?: { [featureName: string]: Id[] }
-    references?: { [featureName: string]: SerializedRef[] }
+    properties: { [featureName: string]: string }
+    children: { [featureName: string]: Ids }
+    references: { [featureName: string]: Ids }
     parent?: Id
 }
 
@@ -24,7 +22,7 @@ export type SerializedNode = {
  * Type definition for a serialization of a whole model to JSON.
  */
 export type SerializedModel = {
-    serializationFormatVersion: number,
+    serializationFormatVersion: number
     nodes: SerializedNode[]
 }
 // TODO  rename -> Serialization?

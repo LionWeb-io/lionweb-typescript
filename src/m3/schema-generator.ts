@@ -41,13 +41,8 @@ const asJSONSchemaType = (dataType: Datatype): unknown => {
     throw new Error(`can't handle Datatype instance: ${dataType}`)
 }
 
-const schemaForProperty = (property: Property): unknown =>
-    isRef(property.type)
-        ? asJSONSchemaType(property.type)
-        : {}    // "any"
 
-
-const schemaForProperties = <T extends Feature>(features: T[], mapFeature: (feature: T) => unknown, specifyRequireds: boolean) => {
+const schemaForFeatures = <T extends Feature>(features: T[], mapFeature: (feature: T) => unknown, specifyRequireds: boolean) => {
     const requireds = features.filter(({optional}) => !optional)
     return {
         type: "object",
@@ -65,6 +60,11 @@ const schemaForProperties = <T extends Feature>(features: T[], mapFeature: (feat
     }
 }
 
+const schemaForProperty = (property: Property): unknown =>
+    isRef(property.type)
+        ? asJSONSchemaType(property.type)
+        : {}    // "any"
+
 const schemaForConcept = (concept: Concept): unknown => {
     const allFeatures = allFeaturesOf(concept)
     return {
@@ -74,15 +74,17 @@ const schemaForConcept = (concept: Concept): unknown => {
                 const: concept.id
             },
             id: ref("Id"),
-            properties: schemaForProperties(allFeatures.filter(isNonDerivedProperty), schemaForProperty, true),
-            children: schemaForProperties(allFeatures.filter(isNonDerivedContainment), () => ref("Ids"), true),
-                // TODO (#33)  required (also with minLength=1 in property-def.)
-            references: schemaForProperties(allFeatures.filter(isNonDerivedReference), () => ref("SerializedRefs"), false),
-                // TODO (#33)  required (also with minLength=1 in property-def.)
+            properties: schemaForFeatures(allFeatures.filter(isNonDerivedProperty), schemaForProperty, true),
+            children: schemaForFeatures(allFeatures.filter(isNonDerivedContainment), (_) => ref("Ids"), true),
+            references: schemaForFeatures(allFeatures.filter(isNonDerivedReference), (_) => ref("Ids"), false),
             parent: ref("Id")
         },
         required: [
-            "concept", "id"
+            "concept",
+            "id",
+            "properties",
+            "children",
+            "references"
         ],
         additionalProperties: false
     }
@@ -108,7 +110,7 @@ export const schemaFor = (metamodel: Metamodel): unknown /* <=> JSON Schema */ =
         type: "object",
         properties: {
             serializationFormatVersion: {
-                "const": 1
+                const: 1
             },
             nodes: {
                 type: "array",
@@ -127,16 +129,8 @@ export const schemaFor = (metamodel: Metamodel): unknown /* <=> JSON Schema */ =
             },
             "Ids": {
                 type: "array",
-                items: ref("Id")
-            },
-            "SerializedRefs": {
-                type: "array",
-                items: {
-                    oneOf: [
-                        { type: "string" },
-                        { type: "null" }    // could also be: { const: null }
-                    ]
-                }
+                items: ref("Id"),
+                minItems: 1 // because empties are not allowed
             },
             ...Object.fromEntries(
                 concreteConcepts
@@ -159,6 +153,4 @@ export const schemaFor = (metamodel: Metamodel): unknown /* <=> JSON Schema */ =
         }
     }
 }
-
-// TODO  propagate decision that all primitive values are serialized as strings
 

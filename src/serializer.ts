@@ -18,7 +18,10 @@ export const serializeModel = <NT extends Node>(model: NT[], modelAPI: ModelAPI<
         const concept = modelAPI.conceptOf(node)
         const serializedNode: SerializedNode = {
             concept: concept.id,
-            id: node.id
+            id: node.id,
+            properties: {},
+            children: {},
+            references: {}
         }
         nodes.push(serializedNode)
         allFeaturesOf(concept).forEach((feature) => {
@@ -28,33 +31,22 @@ export const serializeModel = <NT extends Node>(model: NT[], modelAPI: ModelAPI<
             }
             const value = (node as any)[name]
             if (feature instanceof Property && value !== undefined) {
-                if (serializedNode.properties === undefined) {
-                    serializedNode.properties = {}
-                }
                 serializedNode.properties[feature.id] = serializeBuiltin(value)
                 return
             }
-            if (feature instanceof Containment) {   // TODO (#33)  && asArray(value).length > 0 or similar
-                if (!("children" in serializedNode)) {
-                    serializedNode.children = {}
-                }
+            if (feature instanceof Containment && asArray(value).length > 0) {
                 const children = asArray(value)
-                serializedNode.children![feature.id] = asIds(children)
+                serializedNode.children[feature.id] = asIds(children)
                 children.forEach((child) => visit(child, node))
                 return
             }
-            if (feature instanceof Reference) {   // TODO (#33)  && asArray(value).length > 0 or similar
-                if (!("references" in serializedNode)) {
-                    serializedNode.references = {}
-                }
+            if (feature instanceof Reference && asArray(value).length) {
                 const targets = asArray(value)
-                serializedNode.references![feature.id] = asIds(targets)
+                serializedNode.references[feature.id] = asIds(targets)
                 return
             }
         })
-        if (parent !== undefined) {
-            serializedNode.parent = parent.id
-        }
+        serializedNode.parent = parent?.id
     }
 
     model.forEach((node) => visit(node, undefined))

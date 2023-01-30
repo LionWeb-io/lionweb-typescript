@@ -15,9 +15,7 @@
           "LIonCore_builtins_JSON"
         ]
       },
-      "references": {
-        "LIonCore_M3_Metamodel_dependsOn": []
-      }
+      "references": {}
     },
     {
       "concept": "LIonCore_M3_PrimitiveType",
@@ -25,6 +23,8 @@
       "properties": {
         "LIonCore_M3_NamespacedEntity_simpleName": "String"
       },
+      "children": {},
+      "references": {},
       "parent": "LIonCore_builtins"
     },
     {
@@ -33,6 +33,8 @@
       "properties": {
         "LIonCore_M3_NamespacedEntity_simpleName": "Boolean"
       },
+      "children": {},
+      "references": {},
       "parent": "LIonCore_builtins"
     },
     {
@@ -41,6 +43,8 @@
       "properties": {
         "LIonCore_M3_NamespacedEntity_simpleName": "Integer"
       },
+      "children": {},
+      "references": {},
       "parent": "LIonCore_builtins"
     },
     {
@@ -49,6 +53,8 @@
       "properties": {
         "LIonCore_M3_NamespacedEntity_simpleName": "JSON"
       },
+      "children": {},
+      "references": {},
       "parent": "LIonCore_builtins"
     }
   ]

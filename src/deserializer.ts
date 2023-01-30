@@ -107,16 +107,19 @@ export const deserializeModel = <NT extends Node>(
                 if (feature instanceof Property && properties !== undefined && feature.id in properties) {
                     modelAPI.setFeatureValue(node, feature, deserializeBuiltin(properties[feature.id], feature))
                 } else if (feature instanceof Containment && children !== undefined && feature.id in children) {
+                    const childIds = children[feature.id] as Id[]
                     if (feature.multiple) {
-                        (children![feature.id])
+                        childIds
                             .forEach((id) => {
                                 modelAPI.setFeatureValue(node, feature, instantiateMemoised(serializedNodeById[id], node))
                             })
                     } else {
-                        modelAPI.setFeatureValue(node, feature, instantiateMemoised(serializedNodeById[children![feature.id][0]], node))
+                        if (childIds.length > 0) {
+                            modelAPI.setFeatureValue(node, feature, instantiateMemoised(serializedNodeById[childIds[0]], node))
+                        }
                     }
-                } else if (feature instanceof Reference) {
-                    const serRefs = references![feature.id] ?? []
+                } else if (feature instanceof Reference && references !== undefined && feature.id in references) {
+                    const serRefs = references[feature.id] ?? []
                     referencesToInstall.push(...(
                         (
                             serRefs
