@@ -11,7 +11,7 @@ export type SerializedRef = Id | typeof unresolved
  * Type definition for an AST node serialized to JSON.
  */
 export type SerializedNode = {
-    type: string
+    concept: string
     id: string
     properties?: { [featureName: string]: string | boolean }
     children?: { [featureName: string]: Id[] }
