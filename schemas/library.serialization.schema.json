@@ -45,7 +45,7 @@
     "Book": {
       "type": "object",
       "properties": {
-        "type": {
+        "concept": {
           "const": "OcDK2GESljInG-ApIqtkXUoA2UeviB97u0UuiZzM0Hs"
         },
         "id": {
@@ -86,7 +86,7 @@
         }
       },
       "required": [
-        "type",
+        "concept",
         "id"
       ],
       "additionalProperties": false
@@ -94,7 +94,7 @@
     "Library": {
       "type": "object",
       "properties": {
-        "type": {
+        "concept": {
           "const": "Pk1NRJfHMt4eSja2kpXia7x8vj6Vzc6WQCUzT3aVeYY"
         },
         "id": {
@@ -134,7 +134,7 @@
         }
       },
       "required": [
-        "type",
+        "concept",
         "id"
       ],
       "additionalProperties": false
@@ -142,7 +142,7 @@
     "Writer": {
       "type": "object",
       "properties": {
-        "type": {
+        "concept": {
           "const": "DuBg-a_slgc_VOG0huySkSWi3rZQX1Q20EEd2f7lvLE"
         },
         "id": {
@@ -175,7 +175,7 @@
         }
       },
       "required": [
-        "type",
+        "concept",
         "id"
       ],
       "additionalProperties": false
@@ -183,7 +183,7 @@
     "GuideBookWriter": {
       "type": "object",
       "properties": {
-        "type": {
+        "concept": {
           "const": "nNUEzZ7it7d2HoHPAtk5rGO4SsqVA3hAlBwkK1KP8QU"
         },
         "id": {
@@ -220,7 +220,7 @@
         }
       },
       "required": [
-        "type",
+        "concept",
         "id"
       ],
       "additionalProperties": false
@@ -228,7 +228,7 @@
     "SpecialistBookWriter": {
       "type": "object",
       "properties": {
-        "type": {
+        "concept": {
           "const": "RDa_L8gbU8XgW9z46oMysBi1Hb7vjcS8O8LUgXlFpeU"
         },
         "id": {
@@ -265,7 +265,7 @@
         }
       },
       "required": [
-        "type",
+        "concept",
         "id"
       ],
       "additionalProperties": false

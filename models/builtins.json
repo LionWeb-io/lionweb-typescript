@@ -2,7 +2,7 @@
   "serializationFormatVersion": 1,
   "nodes": [
     {
-      "type": "LIonCore_M3_Metamodel",
+      "concept": "LIonCore_M3_Metamodel",
       "id": "LIonCore_builtins",
       "properties": {
         "LIonCore_M3_Metamodel_qualifiedName": "LIonCore.builtins"
@@ -20,7 +20,7 @@
       }
     },
     {
-      "type": "LIonCore_M3_PrimitiveType",
+      "concept": "LIonCore_M3_PrimitiveType",
       "id": "LIonCore_builtins_String",
       "properties": {
         "LIonCore_M3_NamespacedEntity_simpleName": "String"
@@ -28,7 +28,7 @@
       "parent": "LIonCore_builtins"
     },
     {
-      "type": "LIonCore_M3_PrimitiveType",
+      "concept": "LIonCore_M3_PrimitiveType",
       "id": "LIonCore_builtins_Boolean",
       "properties": {
         "LIonCore_M3_NamespacedEntity_simpleName": "Boolean"
@@ -36,7 +36,7 @@
       "parent": "LIonCore_builtins"
     },
     {
-      "type": "LIonCore_M3_PrimitiveType",
+      "concept": "LIonCore_M3_PrimitiveType",
       "id": "LIonCore_builtins_Integer",
       "properties": {
         "LIonCore_M3_NamespacedEntity_simpleName": "Integer"
@@ -44,7 +44,7 @@
       "parent": "LIonCore_builtins"
     },
     {
-      "type": "LIonCore_M3_PrimitiveType",
+      "concept": "LIonCore_M3_PrimitiveType",
       "id": "LIonCore_builtins_JSON",
       "properties": {
         "LIonCore_M3_NamespacedEntity_simpleName": "JSON"

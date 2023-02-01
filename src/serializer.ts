@@ -32,7 +32,7 @@ export const serializeModel = (model: Node[], conceptOf: ConceptDeducer): Serial
     const visit = (node: Node, parent?: Node) => {
         const concept = conceptOf(node)
         const serializedNode: SerializedNode = {
-            type: concept.id,
+            concept: concept.id,
             id: node.id
         }
         nodes.push(serializedNode)

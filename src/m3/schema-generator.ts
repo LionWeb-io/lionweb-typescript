@@ -70,7 +70,7 @@ const schemaForConcept = (concept: Concept): unknown => {
     return {
         type: "object",
         properties: {
-            "type": {
+            "concept": {
                 const: concept.id
             },
             "id": ref("Id"),
@@ -82,7 +82,7 @@ const schemaForConcept = (concept: Concept): unknown => {
             "parent": ref("Id")
         },
         required: [
-            "type", "id"
+            "concept", "id"
         ],
         additionalProperties: false
     }

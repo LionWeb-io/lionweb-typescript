@@ -45,7 +45,7 @@
     "Metamodel": {
       "type": "object",
       "properties": {
-        "type": {
+        "concept": {
           "const": "LIonCore_M3_Metamodel"
         },
         "id": {
@@ -86,7 +86,7 @@
         }
       },
       "required": [
-        "type",
+        "concept",
         "id"
       ],
       "additionalProperties": false
@@ -94,7 +94,7 @@
     "Concept": {
       "type": "object",
       "properties": {
-        "type": {
+        "concept": {
           "const": "LIonCore_M3_Concept"
         },
         "id": {
@@ -142,7 +142,7 @@
         }
       },
       "required": [
-        "type",
+        "concept",
         "id"
       ],
       "additionalProperties": false
@@ -150,7 +150,7 @@
     "ConceptInterface": {
       "type": "object",
       "properties": {
-        "type": {
+        "concept": {
           "const": "LIonCore_M3_ConceptInterface"
         },
         "id": {
@@ -191,7 +191,7 @@
         }
       },
       "required": [
-        "type",
+        "concept",
         "id"
       ],
       "additionalProperties": false
@@ -199,7 +199,7 @@
     "Reference": {
       "type": "object",
       "properties": {
-        "type": {
+        "concept": {
           "const": "LIonCore_M3_Reference"
         },
         "id": {
@@ -248,7 +248,7 @@
         }
       },
       "required": [
-        "type",
+        "concept",
         "id"
       ],
       "additionalProperties": false
@@ -256,7 +256,7 @@
     "Property": {
       "type": "object",
       "properties": {
-        "type": {
+        "concept": {
           "const": "LIonCore_M3_Property"
         },
         "id": {
@@ -305,7 +305,7 @@
         }
       },
       "required": [
-        "type",
+        "concept",
         "id"
       ],
       "additionalProperties": false
@@ -313,7 +313,7 @@
     "PrimitiveType": {
       "type": "object",
       "properties": {
-        "type": {
+        "concept": {
           "const": "LIonCore_M3_PrimitiveType"
         },
         "id": {
@@ -346,7 +346,7 @@
         }
       },
       "required": [
-        "type",
+        "concept",
         "id"
       ],
       "additionalProperties": false
@@ -354,7 +354,7 @@
     "Containment": {
       "type": "object",
       "properties": {
-        "type": {
+        "concept": {
           "const": "LIonCore_M3_Containment"
         },
         "id": {
@@ -403,7 +403,7 @@
         }
       },
       "required": [
-        "type",
+        "concept",
         "id"
       ],
       "additionalProperties": false
@@ -411,7 +411,7 @@
     "Enumeration": {
       "type": "object",
       "properties": {
-        "type": {
+        "concept": {
           "const": "LIonCore_M3_Enumeration"
         },
         "id": {
@@ -451,7 +451,7 @@
         }
       },
       "required": [
-        "type",
+        "concept",
         "id"
       ],
       "additionalProperties": false
@@ -459,7 +459,7 @@
     "EnumerationLiteral": {
       "type": "object",
       "properties": {
-        "type": {
+        "concept": {
           "const": "LIonCore_M3_EnumerationLiteral"
         },
         "id": {
@@ -492,7 +492,7 @@
         }
       },
       "required": [
-        "type",
+        "concept",
         "id"
       ],
       "additionalProperties": false

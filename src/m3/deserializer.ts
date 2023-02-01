@@ -43,7 +43,7 @@ export const deserializeMetamodel = (serializedModel: SerializedModel, ...depend
 
     const { nodes: serializedNodes } = serializedModel
 
-    const metamodelSerNode = serializedNodes.find(({type}) => type === metaConcepts.metamodel.id)
+    const metamodelSerNode = serializedNodes.find(({concept}) => concept === metaConcepts.metamodel.id)
     if (metamodelSerNode === undefined) {
         throw new Error(`could not deserialize: no instance of LIonCore's Metamodel concept found in serialization`)
     }
@@ -79,8 +79,8 @@ export const deserializeMetamodel = (serializedModel: SerializedModel, ...depend
     /**
      * Instantiates a {@link Node} from its {@link SerializedNode serialization}.
      */
-    const instantiate = ({type, id, properties, children, references}: SerializedNode, parent?: M3Concept): M3Concept => {
-        switch (type) {
+    const instantiate = ({concept, id, properties, children, references}: SerializedNode, parent?: M3Concept): M3Concept => {
+        switch (concept) {
             case metaConcepts.concept.id: {
                 const {
                     [metaFeatures.namespacedEntity_simpleName.id]: simpleName,
@@ -196,7 +196,7 @@ export const deserializeMetamodel = (serializedModel: SerializedModel, ...depend
                 referencesToInstall.push([node, "type", type[0] as string])
                 return node
             }
-            default: throw new Error(`can't deserialize a node of type "${type}"`)
+            default: throw new Error(`can't deserialize a node of type "${concept}"`)
         }
     }
 
@@ -208,7 +208,7 @@ export const deserializeMetamodel = (serializedModel: SerializedModel, ...depend
         const lookUpById = () => {
             const target = deserializedNodeById[refId] ?? dependentMetamodelElementsById[refId]
             if (target === undefined) {
-                const metaTypeMessage = "type" in node ? ` and (meta-)type ${node.type}` : ""
+                const metaTypeMessage = "concept" in node ? ` and (meta-)type ${node.concept}` : ""
                 throw new Error(`couldn't find the target with id "${refId}" of a "${featureName}" reference on the node with id "${node.id}"${metaTypeMessage}`)
             }
             return target
