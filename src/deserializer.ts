@@ -52,7 +52,7 @@ export const deserializeModel = <NT extends Node>(
 
     const serializedNodeById = byIdMap(serializedNodes)
 
-    const deserializedNodeById: { [id: Id]: Node } = {}
+    const deserializedNodeById: { [id: Id]: NT } = {}
 
     /**
      * Instantiates a {@link Node} from the given {@link SerializedNode},
@@ -61,22 +61,12 @@ export const deserializeModel = <NT extends Node>(
      */
     const instantiateMemoised = (serNode: SerializedNode, parent?: NT): NT => {
         if (serNode.id in deserializedNodeById) {
-            return deserializedNodeById[serNode.id] as NT
+            return deserializedNodeById[serNode.id]
         }
         const node = instantiate(serNode, parent)
         deserializedNodeById[node.id] = node
         return node
     }
-
-    /**
-     * @return a function that maps a {@link Node node's} ID to that node,
-     * deserializing the node from its serialization.
-     */
-    const mapInstantiateMemoised = <T extends Node>(parent: NT) =>
-        (id: Id): T =>
-            instantiateMemoised(serializedNodeById[id], parent) as unknown as T
-
-    // Can't install children after the fact separately, because instantiation typically requires the parent!
 
     type ReferenceToInstall = [node: NT, feature: Reference, refId: Id]
     const referencesToInstall: ReferenceToInstall[] = []
@@ -104,7 +94,7 @@ export const deserializeModel = <NT extends Node>(
                 settings[property.id] = properties![property.id]
             })
 
-        const node = modelAPI.nodeFor(parent, conceptId, id, settings)
+        const node = modelAPI.nodeFor(parent, concept, id, settings)
 
         allFeatures
             .filter((feature) => !feature.derived)
@@ -114,9 +104,8 @@ export const deserializeModel = <NT extends Node>(
                 } else if (feature instanceof Containment) {
                     if (feature.multiple) {
                         (children![feature.id])
-                            .map(mapInstantiateMemoised<NT>(node))
-                            .forEach((item) => {
-                                modelAPI.setFeatureValue(node, feature, item)
+                            .forEach((id) => {
+                                modelAPI.setFeatureValue(node, feature, instantiateMemoised(serializedNodeById[id], node))
                             })
                     } else {
                         modelAPI.setFeatureValue(node, feature, instantiateMemoised(serializedNodeById[children![feature.id][0]], node))

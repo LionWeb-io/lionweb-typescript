@@ -166,13 +166,6 @@ export const isEnumeration = (metamodelElement: MetamodelElement): metamodelElem
 
 
 /**
- * @return all nodes in the given {@link Metamodel metamodel} that make sense to refer to.
- */
-export const allReferablesOf = (metamodel: Metamodel): (Metamodel | MetamodelElement)[] =>
-    [metamodel, ...metamodel.elements]
-
-
-/**
  * @return a {@link ConceptDeducer concept deducer} that deduces the concept of nodes by looking up
  * the concept in the given {@link Metamodel metamodel} by matching the node object's class name to the concept's simple name.
  */

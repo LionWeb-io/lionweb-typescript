@@ -22,8 +22,8 @@ import {classBasedConceptDeducerFor} from "./functions.ts"
  */
 export const lioncoreAPI: ModelAPI<M3Concept> = ({
     conceptOf: classBasedConceptDeducerFor(lioncore),
-    nodeFor: (parent, conceptId, id, settings) => {
-        switch (conceptId) {
+    nodeFor: (parent, concept, id, settings) => {
+        switch (concept.id) {
             case metaConcepts.concept.id:
                 return new Concept(parent as Metamodel, settings[metaFeatures.namespacedEntity_simpleName.id] as string, id, settings[metaFeatures.concept_abstract.id] as boolean)
             case metaConcepts.conceptInterface.id:
@@ -43,7 +43,7 @@ export const lioncoreAPI: ModelAPI<M3Concept> = ({
             case metaConcepts.reference.id:
                 return new Reference(parent as FeaturesContainer, settings[metaFeatures.namespacedEntity_simpleName.id] as string, id)
             default:
-                throw new Error(`can't deserialize a node of concept with ID "${conceptId}"`)
+                throw new Error(`can't deserialize a node of concept "${concept.qualifiedName()}" with ID "${concept.id}"`)
         }
     },
     setFeatureValue: (node, feature, value) => {
