@@ -43,7 +43,7 @@ const deref = (typeDescriptor: string): string =>
 export const asLIonCoreMetamodel = (ecoreXml: EcoreXml): Metamodel => {
 
     const ePackage = ecoreXml["ecore:EPackage"]
-    // TODO  an Ecore XML can contain multiple EPackage-s
+    // TODO (#10)  an Ecore XML can contain multiple EPackage-s
     const factory = new MetamodelFactory(ePackage["@name"], wrapIdGen(
             hashingIdGen(),
             checkDefinedData,
@@ -58,7 +58,7 @@ export const asLIonCoreMetamodel = (ecoreXml: EcoreXml): Metamodel => {
 
     const convertEClassifier = (eClassifier: EClassifier): ConceptType =>
         factory.concept(eClassifier["@name"], false)
-    // TODO  ConceptInterface, Enumeration
+    // TODO (#10)  ConceptInterface, Enumeration
 
     const convertedEClassifiers: [eClassifier: EClassifier, metamodelElement: MetamodelElement][] =
         ePackage["eClassifiers"]

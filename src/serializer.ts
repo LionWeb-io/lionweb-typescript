@@ -33,7 +33,7 @@ export const serializeModel = <NT extends Node>(model: NT[], modelAPI: ModelAPI<
                 serializedNode.properties![feature.id] = value
                 return
             }
-            if (feature instanceof Containment) {   // TODO  && asArray(value).length > 0 or similar
+            if (feature instanceof Containment) {   // TODO (#33)  && asArray(value).length > 0 or similar
                 if (!("children" in serializedNode)) {
                     serializedNode.children = {}
                 }
@@ -42,7 +42,7 @@ export const serializeModel = <NT extends Node>(model: NT[], modelAPI: ModelAPI<
                 children.forEach((child) => visit(child, node))
                 return
             }
-            if (feature instanceof Reference) {   // TODO  && asArray(value).length > 0 or similar
+            if (feature instanceof Reference) {   // TODO (#33)  && asArray(value).length > 0 or similar
                 if (!("references" in serializedNode)) {
                     serializedNode.references = {}
                 }

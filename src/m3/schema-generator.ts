@@ -76,9 +76,9 @@ const schemaForConcept = (concept: Concept): unknown => {
             "id": ref("Id"),
             "properties": schemaForProperties(allFeatures.filter(isNonDerivedProperty), schemaForProperty, true),
             "children": schemaForProperties(allFeatures.filter(isNonDerivedContainment), () => ref("Ids"), true),
-                // TODO  required (also with minLength=1 in property-def.)
+                // TODO (#33)  required (also with minLength=1 in property-def.)
             "references": schemaForProperties(allFeatures.filter(isNonDerivedReference), () => ref("SerializedRefs"), false),
-                // TODO  required (also with minLength=1 in property-def.)
+                // TODO (#33)  required (also with minLength=1 in property-def.)
             "parent": ref("Id")
         },
         required: [
@@ -120,7 +120,7 @@ export const schemaFor = (metamodel: Metamodel): unknown /* <=> JSON Schema */ =
             "nodes"
         ],
         $defs: {
-            // TODO  consider putting these definitions in a separate, referred-to JSON Schema
+            // TODO (#34)  put these definitions in a separate, referred-to JSON Schema
             "Id": {
                 type: "string",
                 minLength: 1

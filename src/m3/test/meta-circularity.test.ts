@@ -80,13 +80,3 @@ Deno.test("meta-circularity (LIonCore)", async (tctx) => {
 
 })
 
-
-/*
- * TODOs:
- *
- *  0. [✓] rephrase as Deno tests
- *  1. [✓] check references - only single-valued references can be unresolved
- *  2. […] check (some) constraints
- *  3. [ ] generate types.ts? (then: sort type def.s alphabetically)
- */
-

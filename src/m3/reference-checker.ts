@@ -40,5 +40,5 @@ export const checkReferences = (metamodel: Metamodel): string[] =>
             return locations
         }
     )
-// TODO  make this generic, parametrized by a {@link Metamodel}
+// TODO (#8)  make this generic, parametrized by a {@link Metamodel}
 

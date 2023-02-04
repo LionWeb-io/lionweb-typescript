@@ -36,6 +36,7 @@ export const deserializeModel = <NT extends Node>(
     modelAPI: ModelAPI<NT>,
     metamodel: Metamodel,
     dependentNodes: Node[]
+    // TODO (#13)  see if you can turn this into [nodes: Node[], api: ModelAPI<Node>][] after all
 ): NT[] => {
 
     if (serializedModel.serializationFormatVersion !== 1) {
