@@ -18,6 +18,13 @@ export const qualify = (...names: (string|undefined)[]): string =>
 
 
 /**
+ * The qualified name of the LIonCore metamodel containing the built-in {@link PrimitiveType primitive types}.
+ * (It's defined here because its knowledge intrinsic to all LIonCore M3 instances.
+ */
+export const lioncoreBuiltinsQName = "LIonCore.builtins"
+
+
+/**
  * Abstract base class for nodes in an LIonCore/M3-instance,
  * providing an ID and the containment hierarchy.
  */
@@ -72,7 +79,10 @@ class Metamodel extends M3Node implements NamespaceProvider {
         return this
     }
     dependingOn(...metamodels: Metamodel[]) {
-        this.dependsOn.push(...metamodels)
+        this.dependsOn.push(
+            ...metamodels
+                .filter((metamodel) => metamodel.qualifiedName !== lioncoreBuiltinsQName)
+        )
         return this
     }
 }

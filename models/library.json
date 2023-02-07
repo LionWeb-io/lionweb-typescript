@@ -17,9 +17,7 @@
         ]
       },
       "references": {
-        "LIonCore_M3_Metamodel_dependsOn": [
-          "LIonCore_builtins"
-        ]
+        "LIonCore_M3_Metamodel_dependsOn": []
       }
     },
     {

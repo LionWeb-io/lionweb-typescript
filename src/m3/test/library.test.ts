@@ -18,6 +18,11 @@ import {undefinedValuesDeletedFrom} from "./test-helpers.ts"
 
 Deno.test("Library test model", async (tctx) => {
 
+    await tctx.step("LIonCore built-in primitive types are implicit", () => {
+        libraryMetamodel.dependingOn(lioncoreBuiltins)
+        assertEquals(libraryMetamodel.dependsOn, [])
+    })
+
     await tctx.step("generate diagrams (no assertions)", async () => {
         const plantUmldiagramText = generatePlantUmlForMetamodel(libraryMetamodel)
         await Deno.writeTextFileSync("diagrams/library-gen.puml", plantUmldiagramText)
@@ -28,7 +33,7 @@ Deno.test("Library test model", async (tctx) => {
     await tctx.step("serialize it", async () => {
         const serialization = serializeMetamodel(libraryMetamodel)
         await writeJsonAsFile("models/library.json", serialization)
-        const deserialization = deserializeMetamodel(undefinedValuesDeletedFrom(serialization), lioncoreBuiltins)
+        const deserialization = deserializeMetamodel(undefinedValuesDeletedFrom(serialization))
         assertEquals(deserialization, libraryMetamodel)
     })
 

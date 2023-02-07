@@ -1,11 +1,10 @@
 import {MetamodelFactory} from "../factory.ts"
 import {hashingIdGen} from "../../id-generation.ts"
-import {intDatatype, lioncoreBuiltins, stringDatatype} from "../builtins.ts"
+import {intDatatype, stringDatatype} from "../builtins.ts"
 
 
 const factory = new MetamodelFactory("library", hashingIdGen())
 export const libraryMetamodel = factory.metamodel
-    .dependingOn(lioncoreBuiltins)
 
 
 const library = factory.concept("Library", false)
