@@ -4,6 +4,7 @@ import {asIds, Node} from "./types.ts"
 import {allFeaturesOf} from "./m3/functions.ts"
 import {asArray} from "./m3/ecore/types.ts"
 import {ConceptDeducer as _ConceptDeducer, ModelAPI} from "./api.ts"
+import {serializeBuiltin} from "./m3/builtins.ts"
 
 
 /**
@@ -26,11 +27,11 @@ export const serializeModel = <NT extends Node>(model: NT[], modelAPI: ModelAPI<
                 return
             }
             const value = (node as any)[name]
-            if (feature instanceof Property) {
-                if (!("properties" in serializedNode)) {
+            if (feature instanceof Property && value !== undefined) {
+                if (serializedNode.properties === undefined) {
                     serializedNode.properties = {}
                 }
-                serializedNode.properties![feature.id] = value
+                serializedNode.properties[feature.id] = serializeBuiltin(value)
                 return
             }
             if (feature instanceof Containment) {   // TODO (#33)  && asArray(value).length > 0 or similar

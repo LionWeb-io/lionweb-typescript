@@ -104,7 +104,7 @@
           "type": "object",
           "properties": {
             "LIonCore_M3_Concept_abstract": {
-              "type": "boolean"
+              "type": "string"
             },
             "LIonCore_M3_NamespacedEntity_simpleName": {
               "type": "string"
@@ -209,13 +209,13 @@
           "type": "object",
           "properties": {
             "LIonCore_M3_Link_multiple": {
-              "type": "boolean"
+              "type": "string"
             },
             "LIonCore_M3_Feature_optional": {
-              "type": "boolean"
+              "type": "string"
             },
             "LIonCore_M3_Feature_derived": {
-              "type": "boolean"
+              "type": "string"
             },
             "LIonCore_M3_NamespacedEntity_simpleName": {
               "type": "string"
@@ -266,13 +266,13 @@
           "type": "object",
           "properties": {
             "LIonCore_M3_Property_programmatic": {
-              "type": "boolean"
+              "type": "string"
             },
             "LIonCore_M3_Feature_optional": {
-              "type": "boolean"
+              "type": "string"
             },
             "LIonCore_M3_Feature_derived": {
-              "type": "boolean"
+              "type": "string"
             },
             "LIonCore_M3_NamespacedEntity_simpleName": {
               "type": "string"
@@ -364,13 +364,13 @@
           "type": "object",
           "properties": {
             "LIonCore_M3_Link_multiple": {
-              "type": "boolean"
+              "type": "string"
             },
             "LIonCore_M3_Feature_optional": {
-              "type": "boolean"
+              "type": "string"
             },
             "LIonCore_M3_Feature_derived": {
-              "type": "boolean"
+              "type": "string"
             },
             "LIonCore_M3_NamespacedEntity_simpleName": {
               "type": "string"

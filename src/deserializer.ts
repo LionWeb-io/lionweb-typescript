@@ -9,6 +9,7 @@ import {
     Reference
 } from "./m3/types.ts"
 import {allFeaturesOf} from "./m3/functions.ts"
+import {deserializeBuiltin} from "./m3/builtins.ts"
 
 
 /**
@@ -87,21 +88,25 @@ export const deserializeModel = <NT extends Node>(
 
         const allFeatures = allFeaturesOf(concept)
 
-        const settings: { [propertyId: string]: any } = {}
-        allFeatures
-            .filter((feature) => feature instanceof Property)
-            .forEach((property) => {
-                settings[property.id] = properties![property.id]
-            })
+        const settings: { [propertyId: string]: unknown } = {}
+        if (properties !== undefined) {
+            allFeatures
+                .filter((feature) => feature instanceof Property)
+                .forEach((property) => {
+                    if (property.id in properties) {
+                        settings[property.id] = deserializeBuiltin(properties[property.id], property as Property)
+                    }
+                })
+        }
 
         const node = modelAPI.nodeFor(parent, concept, id, settings)
 
         allFeatures
             .filter((feature) => !feature.derived)
             .forEach((feature) => {
-                if (feature instanceof Property) {
-                    modelAPI.setFeatureValue(node, feature, properties![feature.id])
-                } else if (feature instanceof Containment) {
+                if (feature instanceof Property && properties !== undefined && feature.id in properties) {
+                    modelAPI.setFeatureValue(node, feature, deserializeBuiltin(properties[feature.id], feature))
+                } else if (feature instanceof Containment && children !== undefined && feature.id in children) {
                     if (feature.multiple) {
                         (children![feature.id])
                             .forEach((id) => {

@@ -58,7 +58,7 @@
               "type": "string"
             },
             "OJhF8vB_qRMrA8A9a-H0LsByONdYtHGmQ-lk9rUHUc4": {
-              "type": "integer"
+              "type": "string"
             }
           },
           "required": [

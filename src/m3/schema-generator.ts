@@ -30,10 +30,10 @@ const asJSONSchemaType = (dataType: Datatype): unknown => {
     if (dataType instanceof PrimitiveType) {
         // (TODO  use equality on the level of PrimitiveType instances (but builtins is not a singleton))
         switch (dataType.simpleName) {
-            case "String": return { type: "string" }
-            case "Boolean": return { type: "boolean" }
-            case "Integer": return { type: "integer" }
-            case "JSON": return {}
+            case "String":
+            case "Boolean":
+            case "Integer":
+            case "JSON": return { type: "string" }
             default:
                 throw new Error(`can't deal with PrimitiveType "${dataType.simpleName}"`)
         }
@@ -70,16 +70,16 @@ const schemaForConcept = (concept: Concept): unknown => {
     return {
         type: "object",
         properties: {
-            "concept": {
+            concept: {
                 const: concept.id
             },
-            "id": ref("Id"),
-            "properties": schemaForProperties(allFeatures.filter(isNonDerivedProperty), schemaForProperty, true),
-            "children": schemaForProperties(allFeatures.filter(isNonDerivedContainment), () => ref("Ids"), true),
+            id: ref("Id"),
+            properties: schemaForProperties(allFeatures.filter(isNonDerivedProperty), schemaForProperty, true),
+            children: schemaForProperties(allFeatures.filter(isNonDerivedContainment), () => ref("Ids"), true),
                 // TODO (#33)  required (also with minLength=1 in property-def.)
-            "references": schemaForProperties(allFeatures.filter(isNonDerivedReference), () => ref("SerializedRefs"), false),
+            references: schemaForProperties(allFeatures.filter(isNonDerivedReference), () => ref("SerializedRefs"), false),
                 // TODO (#33)  required (also with minLength=1 in property-def.)
-            "parent": ref("Id")
+            parent: ref("Id")
         },
         required: [
             "concept", "id"
@@ -159,4 +159,6 @@ export const schemaFor = (metamodel: Metamodel): unknown /* <=> JSON Schema */ =
         }
     }
 }
+
+// TODO  propagate decision that all primitive values are serialized as strings
 

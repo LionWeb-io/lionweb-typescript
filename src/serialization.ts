@@ -13,7 +13,7 @@ export type SerializedRef = Id | typeof unresolved
 export type SerializedNode = {
     concept: string
     id: string
-    properties?: { [featureName: string]: string | boolean }
+    properties?: { [featureName: string]: string }
     children?: { [featureName: string]: Id[] }
     references?: { [featureName: string]: SerializedRef[] }
     parent?: Id

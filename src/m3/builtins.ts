@@ -1,6 +1,6 @@
 import {MetamodelFactory} from "./factory.ts"
 import {lioncoreIdGen} from "./id-generation.ts"
-import {lioncoreBuiltinsQName} from "./types.ts"
+import {lioncoreBuiltinsQName, Property} from "./types.ts"
 
 
 const factory = new MetamodelFactory(lioncoreBuiltinsQName, lioncoreIdGen)
@@ -21,4 +21,40 @@ lioncoreBuiltins.havingElements(
     intDatatype,
     jsonDatatype
 )
+
+
+export const serializeBuiltin = (value: string | boolean | number | object): string => {
+    switch (typeof value) {
+        case "string": return value
+        case "boolean": return `${value}`
+        case "number": return `${value}`    // TODO  check whether integer?
+        case "object": {
+            try {
+                return JSON.stringify(value, null)
+            } catch (e) {
+                // pass-through
+            }
+        }
+    }
+    throw new Error(`can't serialize value of built-in primitive type: ${value}`)
+}
+
+
+export const deserializeBuiltin = (value: string | undefined, property: Property) => {
+    if (value === undefined) {
+        if (property.optional) {
+            return undefined
+        }
+        throw new Error(`can't deserialize undefined as the value of a required property`)
+    }
+    const {type} = property
+    switch (type!.simpleName) {
+        case "String": return value
+        case "Boolean": return JSON.parse(value)
+        case "Integer": return Number(value)
+        case "JSON": return JSON.parse(value as string)
+        default:
+            throw new Error(`can't deserialize value of type "${type!.simpleName}": ${value}`)
+    }
+}
 
