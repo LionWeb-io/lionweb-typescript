@@ -1,5 +1,4 @@
 import {Id} from "./types.ts"
-import {unresolved} from "./references.ts"
 
 
 export type Ids = Id[]

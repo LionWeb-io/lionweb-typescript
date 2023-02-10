@@ -23,7 +23,9 @@ lioncoreBuiltins.havingElements(
 )
 
 
-export const serializeBuiltin = (value: string | boolean | number | object): string => {
+export type BuiltinPrimitive = string | boolean | number | Record<string, unknown>
+
+export const serializeBuiltin = (value: BuiltinPrimitive): string => {
     switch (typeof value) {
         case "string": return value
         case "boolean": return `${value}`
@@ -31,7 +33,7 @@ export const serializeBuiltin = (value: string | boolean | number | object): str
         case "object": {
             try {
                 return JSON.stringify(value, null)
-            } catch (e) {
+            } catch (_) {
                 // pass-through
             }
         }
@@ -40,7 +42,7 @@ export const serializeBuiltin = (value: string | boolean | number | object): str
 }
 
 
-export const deserializeBuiltin = (value: string | undefined, property: Property) => {
+export const deserializeBuiltin = (value: string | undefined, property: Property): BuiltinPrimitive | undefined => {
     if (value === undefined) {
         if (property.optional) {
             return undefined

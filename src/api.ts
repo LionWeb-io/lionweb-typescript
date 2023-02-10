@@ -13,7 +13,7 @@ export type ConceptDeducer<NT extends Node> = (node: NT) => Concept
  * Instances/implementations of this interface parametrize generic (de-)serialization.
  * Implementations of ModelAPI {w|c}ould be:
  *  - specific to LIoncore (so to match m3/types.ts)
- *  - generic just to deserialize into Node & { settings: { [featureName: string]: any } } -- á la Federico
+ *  - generic just to deserialize into Node & { settings: { [featureName: string]: unknown } } -- á la Federico
  */
 export interface ModelAPI<NT extends Node> {
 
