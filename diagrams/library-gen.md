@@ -25,7 +25,7 @@ classDiagram
   }
 
 
-  Book "*" -- "*" Writer: author
+  Book "*" -- "1" Writer: author
 
   Library "1" o-- "*" Book: books
 

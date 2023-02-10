@@ -73,7 +73,7 @@
       "concept": "LIonCore_M3_Reference",
       "id": "9ATCb8nXEuQAL3NOY-EUZwuThpIQnQ2C_2n97IRGA_g",
       "properties": {
-        "LIonCore_M3_Link_multiple": "true",
+        "LIonCore_M3_Link_multiple": "false",
         "LIonCore_M3_Feature_optional": "false",
         "LIonCore_M3_Feature_derived": "false",
         "LIonCore_M3_NamespacedEntity_simpleName": "author"

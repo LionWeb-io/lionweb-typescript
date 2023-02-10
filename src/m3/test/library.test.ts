@@ -16,7 +16,7 @@ import {metaValidator} from "./json-validator.ts"
 import {undefinedValuesDeletedFrom} from "./test-helpers.ts"
 
 
-Deno.test("Library test model", async (tctx) => {
+Deno.test("Library test metamodel", async (tctx) => {
 
     await tctx.step("LIonCore built-in primitive types are implicit", () => {
         libraryMetamodel.dependingOn(lioncoreBuiltins)

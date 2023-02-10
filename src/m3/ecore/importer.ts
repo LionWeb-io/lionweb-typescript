@@ -104,7 +104,7 @@ export const asLIonCoreMetamodel = (ecoreXml: EcoreXml): Metamodel => {
                 if (feature["@lowerBound"] === "0") {
                     link.isOptional()
                 }
-                if (feature["@upperBound"] !== "1") {
+                if (feature["@upperBound"] === "-1") {
                     link.isMultiple()
                 }
                 return link
