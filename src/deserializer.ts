@@ -81,6 +81,7 @@ export const deserializeModel = <NT extends Node>(
             .find((element) =>
                 element instanceof Concept && element.id === conceptId
             ) as (Concept | undefined)
+        // TODO  replace with idBasedConceptDeducer as soon as that can return undefined (without throwing an Error)
 
         if (concept === undefined) {
             throw new Error(`can't deserialize a node having concept with ID "${conceptId}"`)

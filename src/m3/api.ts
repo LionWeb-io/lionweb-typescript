@@ -1,4 +1,4 @@
-import {ModelAPI} from "../api.ts"
+import {ModelAPI, updateSettings} from "../api.ts"
 import {
     Concept,
     ConceptInterface,
@@ -6,7 +6,6 @@ import {
     Enumeration,
     EnumerationLiteral,
     FeaturesContainer,
-    Link,
     M3Concept,
     Metamodel,
     PrimitiveType,
@@ -22,6 +21,8 @@ import {classBasedConceptDeducerFor} from "./functions.ts"
  */
 export const lioncoreAPI: ModelAPI<M3Concept> = ({
     conceptOf: classBasedConceptDeducerFor(lioncore),
+    getFeatureValue: (node, feature) =>
+        (node as any)[feature.simpleName],
     nodeFor: (parent, concept, id, settings) => {
         switch (concept.id) {
             case metaConcepts.concept.id:
@@ -47,27 +48,7 @@ export const lioncoreAPI: ModelAPI<M3Concept> = ({
         }
     },
     setFeatureValue: (node, feature, value) => {
-        if (feature instanceof Property) {
-            (node as any)[feature.simpleName] = value
-        } else if (feature instanceof Link) {
-            if (feature.multiple) {
-                (node as any)[feature.simpleName].push(value)
-            } else {
-                (node as any)[feature.simpleName] = value
-            }
-        }
-    },
-    childrenOf: (node: M3Concept): M3Concept[] => {
-        if (node instanceof Metamodel) {
-            return node.elements
-        }
-        if (node instanceof FeaturesContainer) {
-            return node.features
-        }
-        if (node instanceof Enumeration) {
-            return node.literals
-        }
-        return []
+        updateSettings(node as unknown as Record<string, unknown>, feature, value)
     }
 })
 

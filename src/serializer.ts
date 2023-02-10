@@ -4,14 +4,14 @@ import {asIds, Node} from "./types.ts"
 import {allFeaturesOf} from "./m3/functions.ts"
 import {asArray} from "./m3/ecore/types.ts"
 import {ConceptDeducer as _ConceptDeducer, ModelAPI} from "./api.ts"
-import {serializeBuiltin} from "./m3/builtins.ts"
+import {BuiltinPrimitive, serializeBuiltin} from "./m3/builtins.ts"
 
 
 /**
  * Serializes a model (i.e., an array of {@link Node nodes} - the first argument) to the LIonWeb serialization JSON format.
- * The {@link ModelAPI model API} given as second argument is used for its {@link _ConceptDeducer 'conceptFor' function}.
+ * The {@link ModelAPI model API} given as second argument is used for its {@link _ConceptDeducer 'conceptOf' function}.
  */
-export const serializeModel = <NT extends Node>(model: NT[], modelAPI: ModelAPI<NT>): SerializedModel /* <=> JSON */ => {
+export const serializeModel = <NT extends Node>(model: NT[], api: ModelAPI<NT>): SerializedModel /* <=> JSON */ => {
     const nodes: SerializedNode[] = []  // keep nodes as much as possible "in order"
     const ids: { [id: string]: boolean } = {}   // maintain a simple map to keep track of IDs of nodes that have been serialized
 
@@ -20,7 +20,7 @@ export const serializeModel = <NT extends Node>(model: NT[], modelAPI: ModelAPI<
             return
         }
 
-        const concept = modelAPI.conceptOf(node)
+        const concept = api.conceptOf(node)
         const serializedNode: SerializedNode = {
             concept: concept.id,
             id: node.id,
@@ -29,25 +29,25 @@ export const serializeModel = <NT extends Node>(model: NT[], modelAPI: ModelAPI<
             references: {}
         }
         nodes.push(serializedNode)
+        ids[node.id] = true
         allFeaturesOf(concept).forEach((feature) => {
-            const name = feature.simpleName
-            if (feature.derived || !(name in node)) {
+            if (feature.derived) {
                 return
             }
-            const value = (node as any)[name]
+            const value = api.getFeatureValue(node, feature)
             if (feature instanceof Property && value !== undefined) {
-                serializedNode.properties[feature.id] = serializeBuiltin(value)
+                serializedNode.properties[feature.id] = serializeBuiltin(value as BuiltinPrimitive)
                 return
             }
             if (feature instanceof Containment && asArray(value).length > 0) {
-                const children = asArray(value)
+                const children = asArray(value) as NT[]
                 serializedNode.children[feature.id] = asIds(children)
                 children.forEach((child) => visit(child, node))
                 return
             }
             if (feature instanceof Reference && asArray(value).length) {
                 const targets = asArray(value)
-                serializedNode.references[feature.id] = asIds(targets)
+                serializedNode.references[feature.id] = asIds(targets as NT[])
                 return
             }
         })

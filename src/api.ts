@@ -1,9 +1,10 @@
 import {Node} from "./types.ts"
-import {Concept, Feature} from "./m3/types.ts"
+import {Concept, Feature, Link} from "./m3/types.ts"
 import {
     flatMapNonCyclingFollowing,
     trivialFlatMapper
 } from "./utils/recursion.ts"
+import {allFeaturesOf, isNonDerivedContainment} from "./m3/functions.ts"
 
 
 export type ConceptDeducer<NT extends Node> = (node: NT) => Concept
@@ -23,6 +24,12 @@ export interface ModelAPI<NT extends Node> {
     conceptOf: ConceptDeducer<NT>
 
     /**
+     * @return the value of the given {@link Feature feature} on the given node.
+     */
+    getFeatureValue: (node: NT, feature: Feature) => unknown
+
+
+    /**
      * @return an instance of the concept, given through its ID, also given its parent (or {@link undefined} for root nodes), and the values of the node's properties ("settings")
      * (The latter may be required as arguments for the constructor of a class, whose instances represent nodes.)
      */
@@ -34,18 +41,40 @@ export interface ModelAPI<NT extends Node> {
      */
     setFeatureValue: (node: NT, feature: Feature, value: unknown) => void
 
-    /**
-     * @return the children of the given node
-     */
-    childrenOf: (node: NT) => NT[]
-
 }
 // TODO  could separate this in write- and read-only parts
 
 
 /**
- * @return a function that extracts *all* nodes from a model given as a start node (presumably a root node)
+ * @return a function that extracts the children from a given node
+ */
+export const childrenExtractorUsing = <NT extends Node>(api: ModelAPI<NT>) =>
+    (node: NT): NT[] =>
+        allFeaturesOf(api.conceptOf(node))
+            .filter(isNonDerivedContainment)
+            .flatMap((containment) => api.getFeatureValue(node, containment) as NT[])
+
+
+/**
+ * @return a function that extracts *all* nodes from a given start node - usually a root node
  */
 export const nodesExtractorUsing = <NT extends Node>(modelAPI: ModelAPI<NT>) =>
-    flatMapNonCyclingFollowing(trivialFlatMapper, modelAPI.childrenOf)
+    flatMapNonCyclingFollowing(trivialFlatMapper, childrenExtractorUsing<NT>(modelAPI))
+
+
+/**
+ * Updates the value of the given {@link Feature feature} on the given "settings" object
+ *  - either a {@link Node node} or a sub object of it.
+ */
+export const updateSettings = (settings: Record<string, unknown>, feature: Feature, value: unknown) => {
+    const fName = feature.simpleName
+    if (feature instanceof Link && feature.multiple) {
+        if (!Array.isArray(settings[fName])) {
+            settings[fName] = []
+        }
+        (settings[fName] as Array<unknown>).push(value)
+    } else {
+        settings[fName] = value
+    }
+}
 
