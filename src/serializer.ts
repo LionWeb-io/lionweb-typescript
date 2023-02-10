@@ -12,9 +12,14 @@ import {serializeBuiltin} from "./m3/builtins.ts"
  * The {@link ModelAPI model API} given as second argument is used for its {@link _ConceptDeducer 'conceptFor' function}.
  */
 export const serializeModel = <NT extends Node>(model: NT[], modelAPI: ModelAPI<NT>): SerializedModel /* <=> JSON */ => {
-    const nodes: SerializedNode[] = []
+    const nodes: SerializedNode[] = []  // keep nodes as much as possible "in order"
+    const ids: { [id: string]: boolean } = {}   // maintain a simple map to keep track of IDs of nodes that have been serialized
 
-    const visit = (node: NT, parent?: Node) => {
+    const visit = (node: NT, parent?: NT) => {
+        if (ids[node.id]) {
+            return
+        }
+
         const concept = modelAPI.conceptOf(node)
         const serializedNode: SerializedNode = {
             concept: concept.id,
