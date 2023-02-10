@@ -44,7 +44,7 @@ Deno.test("meta-circularity (LIonCore)", async (tctx) => {
         assertEquals(issues, [], "number of expected constraint violations -- see above for the issues")
     })
 
-    const serializedLioncorePath = "models/lioncore.json"
+    const serializedLioncorePath = "models/meta/lioncore.json"
     await tctx.step("serialize LIonCore (no assertions)", async () => {
         const serialization = serializeMetamodel(lioncore)
         await writeJsonAsFile(serializedLioncorePath, serialization)

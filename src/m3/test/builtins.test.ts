@@ -14,7 +14,7 @@ Deno.test("primitive types built-in to LIonCore", async (tctx) => {
 
     await tctx.step("serialize it (no assertions)", async () => {
         const serialization = serializeMetamodel(lioncoreBuiltins)
-        await writeJsonAsFile("models/builtins.json", serialization)
+        await writeJsonAsFile("models/meta/builtins.json", serialization)
     })
 
 

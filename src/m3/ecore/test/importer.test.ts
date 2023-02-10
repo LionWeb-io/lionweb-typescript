@@ -18,13 +18,13 @@ import {
     logUnresolvedReferences,
     undefinedValuesDeletedFrom
 } from "../../test/test-helpers.ts"
-import {libraryMetamodel} from "../../test/library.ts"
+import {libraryMetamodel} from "../../test/library-meta.ts"
 
 
 Deno.test("Ecore importer", async (tctx) => {
 
     await tctx.step("import 'library' Ecore XML", () => {
-        const data = Deno.readTextFileSync("models/library.ecore")
+        const data = Deno.readTextFileSync("src/m3/ecore/test/library.ecore")
         const ecoreXml = textAsEcoreXml(data)
         const metamodel = asLIonCoreMetamodel(ecoreXml)
         const unresolvedReferences = checkReferences(metamodel)

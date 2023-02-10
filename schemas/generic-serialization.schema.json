@@ -44,7 +44,10 @@
       },
       "required": [
         "concept",
-        "id"
+        "id",
+        "properties",
+        "children",
+        "references"
       ]
     }
   }
