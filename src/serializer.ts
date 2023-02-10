@@ -10,6 +10,8 @@ import {BuiltinPrimitive, serializeBuiltin} from "./m3/builtins.ts"
 /**
  * Serializes a model (i.e., an array of {@link Node nodes} - the first argument) to the LIonWeb serialization JSON format.
  * The {@link ModelAPI model API} given as second argument is used for its {@link _ConceptDeducer 'conceptOf' function}.
+ * This usage implies that the serialization will conform to a particular {@link Metamodel metamodel},
+ * which means that models that _don't_ conform to a (given) metamodel can't be serialized truthfully!
  */
 export const serializeModel = <NT extends Node>(model: NT[], api: ModelAPI<NT>): SerializedModel /* <=> JSON */ => {
     const nodes: SerializedNode[] = []  // keep nodes as much as possible "in order"
@@ -61,9 +63,4 @@ export const serializeModel = <NT extends Node>(model: NT[], api: ModelAPI<NT>):
         nodes
     }
 }
-
-/*
- * Note that the parametrization with a ConceptDeducer implies that the serialization will conform to a Metamodel (or a number of them).
- * This implies that models that _don't_ conform to a (set of) Metamodel(s) can't be serialized truthfully!
- */
 

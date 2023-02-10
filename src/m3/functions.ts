@@ -22,7 +22,7 @@ import {isRef, unresolved} from "../references.ts"
 import {sortByStringKey} from "../utils/sorting.ts"
 import {cycleWith} from "../utils/cycles.ts"
 import {flatMapNonCyclingFollowing} from "../utils/recursion.ts"
-import {Node} from "../types.ts"
+import {Id, Node} from "../types.ts"
 import {ConceptDeducer} from "../api.ts"
 
 
@@ -166,10 +166,26 @@ export const isEnumeration = (metamodelElement: MetamodelElement): metamodelElem
 
 
 /**
+ * @return a function that looks up a concept from the given {@link Metamodel metamodel} by its ID.
+ */
+export const idBasedConceptDeducerFor = (metamodel: Metamodel) =>
+    (id: Id) =>
+        metamodel.elements.find((element) => element instanceof Concept && element.id === id) as Concept
+
+/**
+ * @return a function that looks up a concept from the given {@link Metamodel metamodel} by its simple name.
+ */
+export const simpleNameBasedConceptDeducerFor = (metamodel: Metamodel) =>
+    (simpleName: string) =>
+        metamodel.elements.find((element) => element instanceof Concept && element.simpleName === simpleName) as Concept
+
+
+/**
  * @return a {@link ConceptDeducer concept deducer} that deduces the concept of nodes by looking up
  * the concept in the given {@link Metamodel metamodel} by matching the node object's class name to the concept's simple name.
  */
-export const classBasedConceptDeducerFor = <NT extends Node>(metamodel: Metamodel): ConceptDeducer<NT> =>
-    (node: NT) =>
-        metamodel.elements.find((element) => element.simpleName === node.constructor.name) as Concept
+export const classBasedConceptDeducerFor = <NT extends Node>(metamodel: Metamodel): ConceptDeducer<NT> => {
+    const simpleDeducer = simpleNameBasedConceptDeducerFor(metamodel)
+    return (node: NT) => simpleDeducer(node.constructor.name)
+}
 

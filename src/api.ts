@@ -72,7 +72,7 @@ export const updateSettings = (settings: Record<string, unknown>, feature: Featu
         if (!Array.isArray(settings[fName])) {
             settings[fName] = []
         }
-        (settings[fName] as Array<unknown>).push(value)
+        (settings[fName] as unknown[]).push(value)
     } else {
         settings[fName] = value
     }
