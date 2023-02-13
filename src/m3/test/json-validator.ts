@@ -1,5 +1,5 @@
-import Ajv, {ErrorObject} from "https://esm.sh/ajv@8.11.2"
-import addFormats from "https://esm.sh/ajv-formats@2.1.1"
+import Ajv, {ErrorObject} from "https://esm.sh/v106/ajv@8.12.0"
+import addFormats from "https://esm.sh/v106/ajv-formats@2.1.0"
 
 
 const ajv = new Ajv({
