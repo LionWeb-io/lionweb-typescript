@@ -39,7 +39,7 @@ namespacedEntity.havingFeatures(
 const metamodel = factory.concept("Metamodel", false)
     .implementing(namespaceProvider)
 
-const metamodel_qualifiedName = factory.property(metamodel, "qualifiedName")
+const metamodel_name = factory.property(metamodel, "name")
     .ofType(stringDatatype)
 
 const metamodel_elements = factory.containment(metamodel, "elements")
@@ -51,7 +51,7 @@ const metamodel_dependsOn = factory.reference(metamodel, "dependsOn")
     .isMultiple()
     .ofType(metamodel)
 
-metamodel.havingFeatures(metamodel_qualifiedName, metamodel_elements, metamodel_dependsOn)
+metamodel.havingFeatures(metamodel_name, metamodel_elements, metamodel_dependsOn)
 
 
 const metamodelElement = factory.concept("MetamodelElement", true, namespacedEntity)
@@ -223,7 +223,7 @@ export const metaFeatures = {
     link_type,
     metamodel_dependsOn,
     metamodel_elements,
-    metamodel_qualifiedName,
+    metamodel_qualifiedName: metamodel_name,
     namespacedEntity_simpleName,
     property_type,
     property_programmatic,

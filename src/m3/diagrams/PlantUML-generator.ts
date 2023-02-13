@@ -27,12 +27,12 @@ const indented = indentWith(`  `)(1)
  * Generates a string with a PlantUML class diagram
  * representing the given {@link Metamodel LIonCore/M3 instance}.
  */
-export const generatePlantUmlForMetamodel = ({qualifiedName, elements}: Metamodel) =>
+export const generatePlantUmlForMetamodel = ({name, elements}: Metamodel) =>
     asString([
 `@startuml
 hide empty members
 
-' qualified name: "${qualifiedName}"
+' qualified name: "${name}"
 
 
 `,

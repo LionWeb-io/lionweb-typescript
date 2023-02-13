@@ -5,7 +5,7 @@
       "concept": "LIonCore_M3_Metamodel",
       "id": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
       "properties": {
-        "LIonCore_M3_Metamodel_qualifiedName": "library"
+        "LIonCore_M3_Metamodel_name": "library"
       },
       "children": {
         "LIonCore_M3_Metamodel_elements": [

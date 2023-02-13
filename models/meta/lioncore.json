@@ -5,7 +5,7 @@
       "concept": "LIonCore_M3_Metamodel",
       "id": "LIonCore_M3",
       "properties": {
-        "LIonCore_M3_Metamodel_qualifiedName": "LIonCore.M3"
+        "LIonCore_M3_Metamodel_name": "LIonCore.M3"
       },
       "children": {
         "LIonCore_M3_Metamodel_elements": [
@@ -119,7 +119,7 @@
       },
       "children": {
         "LIonCore_M3_FeaturesContainer_features": [
-          "LIonCore_M3_Metamodel_qualifiedName",
+          "LIonCore_M3_Metamodel_name",
           "LIonCore_M3_Metamodel_elements",
           "LIonCore_M3_Metamodel_dependsOn"
         ]
@@ -133,12 +133,12 @@
     },
     {
       "concept": "LIonCore_M3_Property",
-      "id": "LIonCore_M3_Metamodel_qualifiedName",
+      "id": "LIonCore_M3_Metamodel_name",
       "properties": {
         "LIonCore_M3_Property_programmatic": "false",
         "LIonCore_M3_Feature_optional": "false",
         "LIonCore_M3_Feature_derived": "false",
-        "LIonCore_M3_NamespacedEntity_simpleName": "qualifiedName"
+        "LIonCore_M3_NamespacedEntity_simpleName": "name"
       },
       "children": {},
       "references": {

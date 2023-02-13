@@ -42,7 +42,7 @@ classDiagram
   Feature <|-- Link
 
   class Metamodel {
-    +String qualifiedName
+    +String name
   }
 
   class MetamodelElement

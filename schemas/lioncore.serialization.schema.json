@@ -42,12 +42,12 @@
         "properties": {
           "type": "object",
           "properties": {
-            "LIonCore_M3_Metamodel_qualifiedName": {
+            "LIonCore_M3_Metamodel_name": {
               "type": "string"
             }
           },
           "required": [
-            "LIonCore_M3_Metamodel_qualifiedName"
+            "LIonCore_M3_Metamodel_name"
           ],
           "additionalProperties": false
         },
