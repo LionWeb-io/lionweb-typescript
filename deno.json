@@ -2,7 +2,8 @@
     "tasks": {
         "run-tests": "deno test --allow-read --allow-write src/",
         "watch-tests": "deno test --watch --allow-write --allow-read src/",
-        "lint": "deno lint src/"
+        "lint": "deno lint src/",
+        "lock-deps": "deno cache --reload --lock=deno.lock --lock-write src/deps.ts"
     },
     "imports": {
         "littoral-templates": "npm:littoral-templates@0.2.1"

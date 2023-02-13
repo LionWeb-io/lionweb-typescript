@@ -1,7 +1,4 @@
-import {nanoid} from "npm:nanoid@4.0.0"
-import {
-    createHash
-} from "https://deno.land/std@0.168.0/node/internal/crypto/hash.ts"
+import {createHash, nanoid} from "./deps.ts"
 
 
 type GenData = string | undefined

@@ -1,7 +1,4 @@
-import {
-    assertEquals
-} from "https://deno.land/std@0.168.0/testing/asserts.ts"
-
+import {assertEquals} from "../deps.ts"
 import {writeJsonAsFile} from "../utils/json.ts"
 import {undefinedValuesDeletedFrom} from "../m3/test/test-helpers.ts"
 import {serializeModel} from "../serializer.ts"

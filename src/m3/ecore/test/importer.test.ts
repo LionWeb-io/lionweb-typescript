@@ -1,7 +1,4 @@
-import {
-    assertEquals
-} from "https://deno.land/std@0.168.0/testing/asserts.ts"
-
+import {assertEquals} from "../../../deps.ts"
 import {asLIonCoreMetamodel} from "../importer.ts"
 import {serializeMetamodel} from "../../serializer.ts"
 import {textAsEcoreXml} from "../types.ts"

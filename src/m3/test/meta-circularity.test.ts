@@ -1,7 +1,4 @@
-import {
-    assertEquals
-} from "https://deno.land/std@0.160.0/testing/asserts.ts"
-
+import {assertEquals} from "../../deps.ts"
 import {lioncore} from "../self-definition.ts"
 import {generateMermaidForMetamodel} from "../diagrams/Mermaid-generator.ts"
 import {

@@ -1,4 +1,5 @@
-import {parse} from "https://deno.land/x/xml@2.1.0/mod.ts"
+import {mod_parse as parse} from "../../deps.ts"
+
 
 /**
  * Type definitions that correspond to an Ecore XML metamodel (file),

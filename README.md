@@ -29,9 +29,18 @@ See https://lint.deno.land/ for more details.
 
 ### Dev dependencies
 
-* [Deno](https://deno.land/): {Java|Type}Script runtime, version (at least) 1.30.0
+* [Deno](https://deno.land/): {Java|Type}Script runtime, version (at least) 1.30.3
 * (optional) [PlantUML](https://plantuml.com/).
   An IDE plugin such as the one [for IntelliJ IDEA](https://plugins.jetbrains.com/plugin/7017-plantuml-integration) also does the trick.
+
+All of the dependencies of code in this codebase on external code (pulled in by Deno through `import {&hellip;} from "https://..."`), are listed explicitly in the file [`src/deps.ts`](./src/deps.ts).
+The [Deno lockfile](./deno.lock) can be re-derived by running:
+
+```
+$ deno task lock-deps
+```
+
+This also reloads the cache.
 
 
 ## Getting started
@@ -73,7 +82,6 @@ The following are considerations or concerns that bubbled up during implementati
 
 * Generate type definitions from a LIonCore/M3 instance?
 * Think about how to improve API of M3 w.r.t. containment:
-  * Is it necessary to have the “parallel hierarchy” due to containment + namespaces?
   * Can't we have qualified names as a derived feature defined post-facto _on top_ of the LIonCore/M3?
 * What happens during deserialization if things don't match the provided M2?
   Just error out, or return `(model', issues*)`?

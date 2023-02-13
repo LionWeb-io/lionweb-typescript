@@ -1,5 +1,4 @@
-import {asString, indentWith, NestedString} from "npm:littoral-templates"
-
+import {asString, indentWith, NestedString} from "../../deps.ts"
 import {
     Concept,
     ConceptInterface,
