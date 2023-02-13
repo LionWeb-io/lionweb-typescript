@@ -105,8 +105,8 @@ export const schemaFor = (metamodel: Metamodel): unknown /* <=> JSON Schema */ =
     const enumerations = metamodel.elements.filter(isEnumeration)
     return {
         $schema: "https://json-schema.org/draft/2020-12/schema",
-        $id: `${metamodel.qualifiedName}-serialization`,    // TODO  let caller specify URL instead?
-        title: `Serialization format specific to ${metamodel.qualifiedName}`,
+        $id: `${metamodel.name}-serialization`,    // TODO  let caller specify URL instead?
+        title: `Serialization format specific to ${metamodel.name}`,
         type: "object",
         properties: {
             serializationFormatVersion: {

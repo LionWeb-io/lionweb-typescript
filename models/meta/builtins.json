@@ -5,7 +5,7 @@
       "concept": "LIonCore_M3_Metamodel",
       "id": "LIonCore_builtins",
       "properties": {
-        "LIonCore_M3_Metamodel_qualifiedName": "LIonCore.builtins"
+        "LIonCore_M3_Metamodel_name": "LIonCore.builtins"
       },
       "children": {
         "LIonCore_M3_Metamodel_elements": [

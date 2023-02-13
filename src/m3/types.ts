@@ -63,16 +63,16 @@ abstract class NamespacedEntity extends M3Node {
 }
 
 class Metamodel extends M3Node implements NamespaceProvider {
-    qualifiedName: string
+    name: string
     elements: MetamodelElement[] = []   // (containment)
     dependsOn: MultiRef<Metamodel> = []  // special (!) reference
         // (!) special because deserializer needs to be aware of where to get the instance from
-    constructor(qualifiedName: string, id: Id) {
+    constructor(name: string, id: Id) {
         super(id)
-        this.qualifiedName = qualifiedName
+        this.name = name
     }
     namespaceQualifier(): string {
-        return this.qualifiedName
+        return this.name
     }
     havingElements(...elements: MetamodelElement[]) {
         this.elements.push(...elements)
@@ -81,7 +81,7 @@ class Metamodel extends M3Node implements NamespaceProvider {
     dependingOn(...metamodels: Metamodel[]) {
         this.dependsOn.push(
             ...metamodels
-                .filter((metamodel) => metamodel.qualifiedName !== lioncoreBuiltinsQName)
+                .filter((metamodel) => metamodel.name !== lioncoreBuiltinsQName)
         )
         return this
     }

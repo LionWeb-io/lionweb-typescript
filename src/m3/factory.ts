@@ -33,19 +33,19 @@ export class MetamodelFactory {
 
 
     concept(simpleName: string, abstract: boolean, extends_?: SingleRef<Concept>) {
-        return new Concept(this.metamodel, simpleName, this.id(qualify(this.metamodel.qualifiedName, simpleName)), abstract, extends_)
+        return new Concept(this.metamodel, simpleName, this.id(qualify(this.metamodel.name, simpleName)), abstract, extends_)
     }
 
     conceptInterface(simpleName: string) {
-        return new ConceptInterface(this.metamodel, simpleName, this.id(qualify(this.metamodel.qualifiedName, simpleName)))
+        return new ConceptInterface(this.metamodel, simpleName, this.id(qualify(this.metamodel.name, simpleName)))
     }
 
     enumeration(simpleName: string) {
-        return new Enumeration(this.metamodel, simpleName, this.id(qualify(this.metamodel.qualifiedName, simpleName)))
+        return new Enumeration(this.metamodel, simpleName, this.id(qualify(this.metamodel.name, simpleName)))
     }
 
     primitiveType(simpleName: string) {
-        return new PrimitiveType(this.metamodel, simpleName, this.id(qualify(this.metamodel.qualifiedName, simpleName)))
+        return new PrimitiveType(this.metamodel, simpleName, this.id(qualify(this.metamodel.name, simpleName)))
     }
 
 

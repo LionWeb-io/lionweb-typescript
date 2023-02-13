@@ -32,7 +32,7 @@ abstract class Link extends Feature {
 }
 
 class Metamodel implements NamespaceProvider {
-  qualifiedName: String
+  name: String
 }
 
 abstract class MetamodelElement extends NamespacedEntity
