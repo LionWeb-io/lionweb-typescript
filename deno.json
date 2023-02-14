@@ -5,9 +5,6 @@
         "lint": "deno lint src/",
         "lock-deps": "deno cache --reload --lock=deno.lock --lock-write src/deps.ts"
     },
-    "imports": {
-        "littoral-templates": "npm:littoral-templates@0.2.1"
-    },
     "lint": {
         "files": {
             "include": ["src/"]

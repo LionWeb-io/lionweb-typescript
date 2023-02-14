@@ -23,6 +23,9 @@ import {
     NestedString
 } from "npm:littoral-templates@0.2.2"
 
+// for src/utils/local-files.ts:
+import * as path from "https://deno.land/std@0.177.0/path/mod.ts"
+
 
 export {
     parse as mod_parse,
@@ -32,7 +35,8 @@ export {
     createHash,
     nanoid,
     asString,
-    indentWith
+    indentWith,
+    path
 }
 
 export type {
