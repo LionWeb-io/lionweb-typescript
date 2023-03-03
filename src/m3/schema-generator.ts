@@ -29,13 +29,13 @@ const asJSONSchemaType = (dataType: Datatype): unknown => {
     }
     if (dataType instanceof PrimitiveType) {
         // (TODO  use equality on the level of PrimitiveType instances (but builtins is not a singleton))
-        switch (dataType.simpleName) {
+        switch (dataType.name) {
             case "String":
             case "Boolean":
             case "Integer":
             case "JSON": return { type: "string" }
             default:
-                throw new Error(`can't deal with PrimitiveType "${dataType.simpleName}"`)
+                throw new Error(`can't deal with PrimitiveType "${dataType.name}"`)
         }
     }
     throw new Error(`can't handle Datatype instance: ${dataType}`)
@@ -92,7 +92,7 @@ const schemaForConcept = (concept: Concept): unknown => {
 
 const schemaForEnumeration = ({literals}: Enumeration): unknown =>
     ({
-        enum: literals.map(({simpleName}) => simpleName)
+        enum: literals.map(({name}) => name)
     })
 
 
@@ -135,13 +135,13 @@ export const schemaFor = (metamodel: Metamodel): unknown /* <=> JSON Schema */ =
             ...Object.fromEntries(
                 concreteConcepts
                     .map((element) => [
-                        element.simpleName,
+                        element.name,
                         schemaForConcept(element)
                     ])
             ),
             "SerializedNode": {
                 oneOf: concreteConcepts
-                    .map(({simpleName}) => ref(simpleName))
+                    .map(({name}) => ref(name))
             },
             ...Object.fromEntries(
                 enumerations

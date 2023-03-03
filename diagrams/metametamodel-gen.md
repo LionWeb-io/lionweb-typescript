@@ -55,7 +55,7 @@ classDiagram
   <<Interface>> NamespaceProvider
 
   class NamespacedEntity {
-    +String simpleName
+    +String name
     +qualifiedName() : String
   }
   <<Abstract>> NamespacedEntity

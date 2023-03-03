@@ -50,13 +50,13 @@ export const deserializeBuiltin = (value: string | undefined, property: Property
         throw new Error(`can't deserialize undefined as the value of a required property`)
     }
     const {type} = property
-    switch (type!.simpleName) {
+    switch (type!.name) {
         case "String": return value
         case "Boolean": return JSON.parse(value)
         case "Integer": return Number(value)
         case "JSON": return JSON.parse(value as string)
         default:
-            throw new Error(`can't deserialize value of type "${type!.simpleName}": ${value}`)
+            throw new Error(`can't deserialize value of type "${type!.name}": ${value}`)
     }
 }
 

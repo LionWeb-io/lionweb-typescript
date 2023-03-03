@@ -57,53 +57,53 @@ export const generateMermaidForMetamodel = ({elements}: Metamodel) =>
     ])
 
 
-const generateForEnumeration = ({simpleName, literals}: Enumeration) =>
+const generateForEnumeration = ({name, literals}: Enumeration) =>
     withNewLine(block(
-        `class ${simpleName}`,
+        `class ${name}`,
         [
             `<<enumeration>>`,
-            literals.map(({simpleName}) => simpleName)
+            literals.map(({name}) => name)
         ]
     ))
 
 
-const generateForConcept = ({simpleName, features, abstract: abstract_, extends: extends_/*, implements: implements_*/}: Concept) =>
+const generateForConcept = ({name, features, abstract: abstract_, extends: extends_/*, implements: implements_*/}: Concept) =>
     [
         block(
-            `class ${simpleName}`,
+            `class ${name}`,
             nonRelationalFeatures(features).map(generateForNonRelationalFeature)
         ),
-        abstract_ ? `<<Abstract>> ${simpleName}` : [],
-        isRef(extends_) ? `${extends_.simpleName} <|-- ${simpleName}` : [],
+        abstract_ ? `<<Abstract>> ${name}` : [],
+        isRef(extends_) ? `${extends_.name} <|-- ${name}` : [],
         ``
     ]
 
 
-const generateForConceptInterface = ({simpleName, features, extends: extends_}: ConceptInterface) =>
+const generateForConceptInterface = ({name, features, extends: extends_}: ConceptInterface) =>
     [
         block(
-            `class ${simpleName}`,
+            `class ${name}`,
             nonRelationalFeatures(features).map(generateForNonRelationalFeature)
         ),
-        `<<Interface>> ${simpleName}`,
-        extends_.map(({simpleName: extendsName}) => `${extendsName} <|-- ${simpleName}`),
+        `<<Interface>> ${name}`,
+        extends_.map(({name: extendsName}) => `${extendsName} <|-- ${name}`),
         ``
     ]
 
 
 const generateForNonRelationalFeature = (feature: Feature) => {
-    const {simpleName, optional, derived} = feature
+    const {name, optional, derived} = feature
     const multiple = feature instanceof Link && feature.multiple
     const type_ = type(feature)
-    const typeText = `${multiple ? `List~` : ``}${type_ === unresolved ? `???` : type_.simpleName}${multiple ? `~` : ``}${optional ? `?` : ``}`
+    const typeText = `${multiple ? `List~` : ``}${type_ === unresolved ? `???` : type_.name}${multiple ? `~` : ``}${optional ? `?` : ``}`
     return derived
-        ? `+${simpleName}() : ${typeText}`
-        : `+${typeText} ${simpleName}`
+        ? `+${name}() : ${typeText}`
+        : `+${typeText} ${name}`
 }
 
 
-const generateForPrimitiveType = ({simpleName}: PrimitiveType) =>
-`%% primitive type: "${simpleName}"
+const generateForPrimitiveType = ({name}: PrimitiveType) =>
+`%% primitive type: "${name}"
 
 `
 // Note: No construct for PrimitiveType exists in PlantUML.
@@ -122,7 +122,7 @@ const generateForMetamodelElement = (metamodelElement: MetamodelElement) => {
     if (metamodelElement instanceof PrimitiveType) {
         return generateForPrimitiveType(metamodelElement)
     }
-    return ``   // unhandled metamodel element: ${metamodelElement.simpleName}
+    return `// unhandled metamodel element: ${metamodelElement.name}`
 }
 
 
@@ -135,9 +135,9 @@ const generateForRelationsOf = (metamodelElement: MetamodelElement) => {
 }
 
 
-const generateForRelation = ({simpleName: leftName}: MetamodelElement, relation: Link) => {
-    const {simpleName: relationName, optional, multiple, type} = relation
-    const rightName = isRef(type) ? type.simpleName : (type === unresolved ? `<unresolved>` : `<null>`)
+const generateForRelation = ({name: leftName}: MetamodelElement, relation: Link) => {
+    const {name: relationName, optional, multiple, type} = relation
+    const rightName = isRef(type) ? type.name : (type === unresolved ? `<unresolved>` : `<null>`)
     const isContainment = relation instanceof Containment
     const leftMultiplicity = isContainment ? `1` : `*`
     const rightMultiplicity = (() => {

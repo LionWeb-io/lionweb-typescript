@@ -52,13 +52,13 @@ interface NamespaceProvider extends Node {
 }
 
 abstract class NamespacedEntity extends M3Node {
-    simpleName: string
-    protected constructor(parent: NamespaceProvider, simpleName: string, id: Id) {
+    name: string
+    protected constructor(parent: NamespaceProvider, name: string, id: Id) {
         super(id, parent)
-        this.simpleName = simpleName
+        this.name = name
     }
     qualifiedName() {
-        return qualify(this.parent?.namespaceQualifier(), this.simpleName)
+        return qualify(this.parent?.namespaceQualifier(), this.name)
     }
 }
 
@@ -88,8 +88,8 @@ class Metamodel extends M3Node implements NamespaceProvider {
 }
 
 abstract class MetamodelElement extends NamespacedEntity {
-    constructor(metamodel: Metamodel, simpleName: string, id: Id) {
-        super(metamodel, simpleName, id)
+    constructor(metamodel: Metamodel, name: string, id: Id) {
+        super(metamodel, name, id)
     }
 }
 
@@ -109,8 +109,8 @@ class Concept extends FeaturesContainer {
     abstract: boolean
     extends?: SingleRef<Concept>    // (reference)
     implements: MultiRef<ConceptInterface> = []  // (reference)
-    constructor(metamodel: Metamodel, simpleName: string, id: Id, abstract: boolean, extends_?: SingleRef<Concept>) {
-        super(metamodel, simpleName, id)
+    constructor(metamodel: Metamodel, name: string, id: Id, abstract: boolean, extends_?: SingleRef<Concept>) {
+        super(metamodel, name, id)
         this.abstract = abstract
         this.extends = extends_
     }
@@ -133,8 +133,8 @@ class ConceptInterface extends FeaturesContainer {
 abstract class Feature extends NamespacedEntity {
     optional /*: boolean */ = false
     derived /*: boolean */ = false
-    constructor(featuresContainer: FeaturesContainer, simpleName: string, id: Id) {
-        super(featuresContainer, simpleName, id)
+    constructor(featuresContainer: FeaturesContainer, name: string, id: Id) {
+        super(featuresContainer, name, id)
     }
     isDerived() {
         this.derived = true
@@ -189,13 +189,13 @@ class PrimitiveType extends Datatype {}
 class Enumeration extends Datatype implements NamespaceProvider {
     literals: EnumerationLiteral[] = [] // (containment)
     namespaceQualifier(): string {
-        return qualify(this.parent?.namespaceQualifier(), this.simpleName)
+        return qualify(this.parent?.namespaceQualifier(), this.name)
     }
 }
 
 class EnumerationLiteral extends NamespacedEntity {
-    constructor(enumeration: Enumeration, simpleName: string, id: Id) {
-        super(enumeration, simpleName, id)
+    constructor(enumeration: Enumeration, name: string, id: Id) {
+        super(enumeration, name, id)
     }
 }
 

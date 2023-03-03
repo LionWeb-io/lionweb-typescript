@@ -100,10 +100,10 @@ export const flatMap = <T>(metamodel: Metamodel, map: (t: M3Concept) => T[]): T[
 
 
 /**
- * Sorts the given {@link MetamodelElement metamodel elements} by simple name.
+ * Sorts the given {@link MetamodelElement metamodel elements} by name.
  */
 export const elementsSortedByName = (metamodelElements: MetamodelElement[]) =>
-    sortByStringKey(metamodelElements, (element) => element.simpleName)
+    sortByStringKey(metamodelElements, (element) => element.name)
 
 
 /**
@@ -173,19 +173,19 @@ export const idBasedConceptDeducerFor = (metamodel: Metamodel) =>
         metamodel.elements.find((element) => element instanceof Concept && element.id === id) as Concept
 
 /**
- * @return a function that looks up a concept from the given {@link Metamodel metamodel} by its simple name.
+ * @return a function that looks up a concept from the given {@link Metamodel metamodel} by its name.
  */
-export const simpleNameBasedConceptDeducerFor = (metamodel: Metamodel) =>
-    (simpleName: string) =>
-        metamodel.elements.find((element) => element instanceof Concept && element.simpleName === simpleName) as Concept
+export const nameBasedConceptDeducerFor = (metamodel: Metamodel) =>
+    (name: string) =>
+        metamodel.elements.find((element) => element instanceof Concept && element.name === name) as Concept
 
 
 /**
  * @return a {@link ConceptDeducer concept deducer} that deduces the concept of nodes by looking up
- * the concept in the given {@link Metamodel metamodel} by matching the node object's class name to the concept's simple name.
+ * the concept in the given {@link Metamodel metamodel} by matching the node object's class name to the concept's name.
  */
 export const classBasedConceptDeducerFor = <NT extends Node>(metamodel: Metamodel): ConceptDeducer<NT> => {
-    const simpleDeducer = simpleNameBasedConceptDeducerFor(metamodel)
-    return (node: NT) => simpleDeducer(node.constructor.name)
+    const deducer = nameBasedConceptDeducerFor(metamodel)
+    return (node: NT) => deducer(node.constructor.name)
 }
 

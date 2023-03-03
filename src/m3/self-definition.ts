@@ -23,7 +23,7 @@ namespaceProvider.havingFeatures(namespaceProvider_namespaceQualifier)
 
 const namespacedEntity = factory.concept("NamespacedEntity", true)
 
-const namespacedEntity_simpleName = factory.property(namespacedEntity, "simpleName")
+const namespacedEntity_name = factory.property(namespacedEntity, "name")
     .ofType(stringDatatype)
 
 const namespacedEntity_qualifiedName = factory.property(namespacedEntity, "qualifiedName")
@@ -31,7 +31,7 @@ const namespacedEntity_qualifiedName = factory.property(namespacedEntity, "quali
     .ofType(stringDatatype)
 
 namespacedEntity.havingFeatures(
-        namespacedEntity_simpleName,
+        namespacedEntity_name,
         namespacedEntity_qualifiedName
     )
 
@@ -223,8 +223,8 @@ export const metaFeatures = {
     link_type,
     metamodel_dependsOn,
     metamodel_elements,
-    metamodel_qualifiedName: metamodel_name,
-    namespacedEntity_simpleName,
+    metamodel_name,
+    namespacedEntity_name,
     property_type,
     property_programmatic,
 }

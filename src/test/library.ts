@@ -1,7 +1,7 @@
 import {Node} from "../types.ts"
 import {hashingIdGen} from "../id-generation.ts"
 import {ModelAPI, updateSettings} from "../api.ts"
-import {simpleNameBasedConceptDeducerFor} from "../m3/functions.ts"
+import {nameBasedConceptDeducerFor} from "../m3/functions.ts"
 import {libraryMetamodel} from "../m3/test/library-meta.ts"
 
 
@@ -38,11 +38,11 @@ export type SpecialistBookWriter = Writer & BaseNode & {
 
 
 export const libraryModelApi: ModelAPI<BaseNode> = {
-    conceptOf: (node) => simpleNameBasedConceptDeducerFor(libraryMetamodel)(node.concept),
-    getFeatureValue: (node, feature) => (node as any)[feature.simpleName],
+    conceptOf: (node) => nameBasedConceptDeducerFor(libraryMetamodel)(node.concept),
+    getFeatureValue: (node, feature) => (node as any)[feature.name],
     nodeFor: (_parent, concept, id, _settings) => ({
         id,
-        concept: concept.simpleName
+        concept: concept.name
     }),
     setFeatureValue: updateSettings
 }

@@ -144,7 +144,7 @@ export const deserializeModel = <NT extends Node>(
             const target = deserializedNodeById[refId] ?? nodesOfDependentModelsById[refId]
             if (target === undefined) {
                 const metaTypeMessage = "concept" in node ? ` and (meta-)type ${node.concept}` : ""
-                throw new Error(`couldn't find the target with id "${refId}" of a "${reference.simpleName}" reference on the node with id "${node.id}"${metaTypeMessage}`)
+                throw new Error(`couldn't find the target with id "${refId}" of a "${reference.name}" reference on the node with id "${node.id}"${metaTypeMessage}`)
             }
             return target
         }

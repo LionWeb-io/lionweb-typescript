@@ -15,7 +15,7 @@ import {BuiltinPrimitive, serializeBuiltin} from "./m3/builtins.ts"
  */
 export const serializeModel = <NT extends Node>(model: NT[], api: ModelAPI<NT>): SerializedModel /* <=> JSON */ => {
     const nodes: SerializedNode[] = []  // keep nodes as much as possible "in order"
-    const ids: { [id: string]: boolean } = {}   // maintain a simple map to keep track of IDs of nodes that have been serialized
+    const ids: { [id: string]: boolean } = {}   // maintain a map to keep track of IDs of nodes that have been serialized
 
     const visit = (node: NT, parent?: NT) => {
         if (ids[node.id]) {

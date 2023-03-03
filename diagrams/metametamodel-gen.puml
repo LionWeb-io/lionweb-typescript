@@ -42,7 +42,7 @@ interface NamespaceProvider {
 }
 
 abstract class NamespacedEntity {
-  simpleName: String
+  name: String
   qualifiedName(): String
 }
 

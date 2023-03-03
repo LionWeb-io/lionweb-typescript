@@ -18,7 +18,7 @@ export type DynamicNode = Node & {
 export const dynamicModelAPI: ModelAPI<DynamicNode> = ({
     conceptOf: (node) => node.concept,
     getFeatureValue: (node, feature) =>
-        (node.settings as any)[feature.simpleName],
+        (node.settings as any)[feature.name],
     nodeFor: (_parent, concept, id, _settings) => ({
         id,
         concept,

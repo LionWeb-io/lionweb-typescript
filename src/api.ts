@@ -67,7 +67,7 @@ export const nodesExtractorUsing = <NT extends Node>(modelAPI: ModelAPI<NT>) =>
  *  - either a {@link Node node} or a sub object of it.
  */
 export const updateSettings = (settings: Record<string, unknown>, feature: Feature, value: unknown) => {
-    const fName = feature.simpleName
+    const fName = feature.name
     if (feature instanceof Link && feature.multiple) {
         if (!Array.isArray(settings[fName])) {
             settings[fName] = []

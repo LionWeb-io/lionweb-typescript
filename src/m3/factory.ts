@@ -26,44 +26,44 @@ export class MetamodelFactory {
     readonly id: IdGenerator
     readonly metamodel: Metamodel
 
-    constructor(qualifiedName: string, id: IdGenerator = nanoIdGen()) {
+    constructor(name: string, id: IdGenerator = nanoIdGen()) {
         this.id = id
-        this.metamodel = new Metamodel(qualifiedName, this.id(qualifiedName))
+        this.metamodel = new Metamodel(name, this.id(name))
     }
 
 
-    concept(simpleName: string, abstract: boolean, extends_?: SingleRef<Concept>) {
-        return new Concept(this.metamodel, simpleName, this.id(qualify(this.metamodel.name, simpleName)), abstract, extends_)
+    concept(name: string, abstract: boolean, extends_?: SingleRef<Concept>) {
+        return new Concept(this.metamodel, name, this.id(qualify(this.metamodel.name, name)), abstract, extends_)
     }
 
-    conceptInterface(simpleName: string) {
-        return new ConceptInterface(this.metamodel, simpleName, this.id(qualify(this.metamodel.name, simpleName)))
+    conceptInterface(name: string) {
+        return new ConceptInterface(this.metamodel, name, this.id(qualify(this.metamodel.name, name)))
     }
 
-    enumeration(simpleName: string) {
-        return new Enumeration(this.metamodel, simpleName, this.id(qualify(this.metamodel.name, simpleName)))
+    enumeration(name: string) {
+        return new Enumeration(this.metamodel, name, this.id(qualify(this.metamodel.name, name)))
     }
 
-    primitiveType(simpleName: string) {
-        return new PrimitiveType(this.metamodel, simpleName, this.id(qualify(this.metamodel.name, simpleName)))
-    }
-
-
-    containment(featuresContainer: FeaturesContainer, simpleName: string) {
-        return new Containment(featuresContainer, simpleName, this.id(qualify(featuresContainer.qualifiedName(), simpleName)))
-    }
-
-    property(featuresContainer: FeaturesContainer, simpleName: string) {
-        return new Property(featuresContainer, simpleName, this.id(qualify(featuresContainer.qualifiedName(), simpleName)))
-    }
-
-    reference(featuresContainer: FeaturesContainer, simpleName: string) {
-        return new Reference(featuresContainer, simpleName, this.id(qualify(featuresContainer.qualifiedName(), simpleName)))
+    primitiveType(name: string) {
+        return new PrimitiveType(this.metamodel, name, this.id(qualify(this.metamodel.name, name)))
     }
 
 
-    enumerationLiteral(enumeration: Enumeration, simpleName: string) {
-        return new EnumerationLiteral(enumeration, simpleName, this.id(qualify(enumeration.qualifiedName(), simpleName)))
+    containment(featuresContainer: FeaturesContainer, name: string) {
+        return new Containment(featuresContainer, name, this.id(qualify(featuresContainer.qualifiedName(), name)))
+    }
+
+    property(featuresContainer: FeaturesContainer, name: string) {
+        return new Property(featuresContainer, name, this.id(qualify(featuresContainer.qualifiedName(), name)))
+    }
+
+    reference(featuresContainer: FeaturesContainer, name: string) {
+        return new Reference(featuresContainer, name, this.id(qualify(featuresContainer.qualifiedName(), name)))
+    }
+
+
+    enumerationLiteral(enumeration: Enumeration, name: string) {
+        return new EnumerationLiteral(enumeration, name, this.id(qualify(enumeration.qualifiedName(), name)))
     }
 
 }

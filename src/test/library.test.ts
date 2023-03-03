@@ -4,7 +4,7 @@ import {undefinedValuesDeletedFrom} from "../m3/test/test-helpers.ts"
 import {serializeModel} from "../serializer.ts"
 import {deserializeModel} from "../deserializer.ts"
 import {dynamicModelAPI, DynamicNode} from "../dynamic-api.ts"
-import {simpleNameBasedConceptDeducerFor} from "../m3/functions.ts"
+import {nameBasedConceptDeducerFor} from "../m3/functions.ts"
 import {libraryModel, libraryModelApi} from "./library.ts"
 import {libraryMetamodel} from "../m3/test/library-meta.ts"
 
@@ -23,7 +23,7 @@ Deno.test("Library test model", async (tctx) => {
         const dynamification = deserializeModel(undefinedValuesDeletedFrom(serialization), dynamicModelAPI, libraryMetamodel, [])
 
         assertEquals(dynamification.length, 2)
-        const lookup = simpleNameBasedConceptDeducerFor(libraryMetamodel)
+        const lookup = nameBasedConceptDeducerFor(libraryMetamodel)
         assertEquals(dynamification[0].concept, lookup("Library"))
         assertEquals(dynamification[1].concept, lookup("GuideBookWriter"))
         const [library, writer] = dynamification

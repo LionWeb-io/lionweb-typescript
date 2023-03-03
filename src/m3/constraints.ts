@@ -40,7 +40,7 @@ export const issuesMetamodel = (metamodel: Metamodel): Issue[] =>
                 const nonDerivedFeatures = t.allFeatures().filter(({derived}) => !derived)
                 if (nonDerivedFeatures.length > 0) {
                     const isPlural = nonDerivedFeatures.length > 1
-                    issue(`The features of a ConceptInterface must all be derived, but the following feature${isPlural ? `s` : ``} of ${t.qualifiedName()} ${isPlural ? `are` : `is`} not: ${nonDerivedFeatures.map(({simpleName}) => simpleName).join(", ")}.`)
+                    issue(`The features of a ConceptInterface must all be derived, but the following feature${isPlural ? `s` : ``} of ${t.qualifiedName()} ${isPlural ? `are` : `is`} not: ${nonDerivedFeatures.map(({name}) => name).join(", ")}.`)
                 }
             }
 
