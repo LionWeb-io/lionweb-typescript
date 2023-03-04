@@ -110,7 +110,7 @@ export const schemaFor = (metamodel: Metamodel): unknown /* <=> JSON Schema */ =
         type: "object",
         properties: {
             serializationFormatVersion: {
-                const: 1
+                const: "1"
             },
             nodes: {
                 type: "array",

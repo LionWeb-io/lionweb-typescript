@@ -21,7 +21,7 @@ export type SerializedNode = {
  * Type definition for a serialization of a whole model to JSON.
  */
 export type SerializedModel = {
-    serializationFormatVersion: number
+    serializationFormatVersion: string
     nodes: SerializedNode[]
 }
 // TODO  rename -> Serialization?
