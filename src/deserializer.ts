@@ -40,8 +40,8 @@ export const deserializeModel = <NT extends Node>(
     // TODO (#13)  see if you can turn this into [nodes: Node[], api: ModelAPI<Node>][] after all
 ): NT[] => {
 
-    if (serializedModel.serializationFormatVersion !== 1) {
-        throw new Error(`can't deserialize from format other than version 1`)
+    if (serializedModel.serializationFormatVersion !== "1") {
+        throw new Error(`can't deserialize from serialization format other than version 1`)
     }
 
     const { nodes: serializedNodes } = serializedModel

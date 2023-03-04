@@ -59,7 +59,7 @@ export const serializeModel = <NT extends Node>(model: NT[], api: ModelAPI<NT>):
     model.forEach((node) => visit(node, undefined))
 
     return {
-        serializationFormatVersion: 1,
+        serializationFormatVersion: "1",
         nodes
     }
 }
