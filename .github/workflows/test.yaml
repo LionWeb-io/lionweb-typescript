@@ -9,6 +9,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: denoland/setup-deno@v1.1.1
         with:
-          deno-version: v1.x # Run with latest stable Deno.
-      - run: deno test --allow-read --allow-write src/
+          deno-version: v1.x  # run with the latest stable version of Deno
+      - name: Run Deno tests
+        run: deno task run-tests
 
