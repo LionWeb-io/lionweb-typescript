@@ -86,3 +86,34 @@ The following are considerations or concerns that bubbled up during implementati
 * What happens during deserialization if things don't match the provided M2?
   Just error out, or return `(model', issues*)`?
 
+## Building an NPM Package
+
+Run
+
+```shell
+deno run -A scripts/build_npm.ts x.y.z
+```
+
+where x.y.z is the version of the package we're building. This will create a package in the `npm` directory.
+
+Then, we can build an archive with
+
+```shell
+pushd npm; npm pack; popd
+```
+
+We can use the compressed package as a dependency of local projects, for testing, with e.g.
+
+```json
+"dependencies": {
+    ...
+    "lioncore": "file:///Users/alessio/projects/lioncore-typescript/npm/lioncore-0.2.0.tgz"
+    ...
+},
+```
+
+Or, we can publish the package to the NPM registry with
+
+```shell
+pushd npm; npm publish; popd
+```

@@ -11,9 +11,7 @@ import Ajv, {ErrorObject} from "https://esm.sh/v106/ajv@8.12.0"
 import addFormats from "https://esm.sh/v106/ajv-formats@2.1.0"
 
 // for src/m3/id-generation.ts:
-import {
-    createHash
-} from "https://deno.land/std@0.168.0/node/internal/crypto/hash.ts"
+import { createHash } from "https://deno.land/std@0.168.0/node/crypto.ts";
 import {nanoid} from "npm:nanoid@4.0.0"
 
 // for src/m3/diagrams/*-generator.ts:
