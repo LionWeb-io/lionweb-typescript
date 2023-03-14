@@ -25,7 +25,7 @@ export const createJsonValidatorForSchema = (schema: unknown): (json: unknown) =
 }
 
 
-const metaSchema = JSON.parse(Deno.readTextFileSync(`${__dirname(import.meta)}/json.schema.json`))
+const metaSchema = JSON.parse(Deno.readTextFileSync(`src/m3/test/json.schema.json`))
 /*
  * Note: this meta-schema was downloaded from https://www.jsonschemavalidator.net/.
  * Steps:
