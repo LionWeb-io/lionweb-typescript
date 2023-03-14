@@ -296,11 +296,16 @@
   "npm": {
     "specifiers": {
       "littoral-templates@0.2.2": "littoral-templates@0.2.2",
+      "nanoid@3.3.4": "nanoid@3.3.4",
       "nanoid@3.3.4": "nanoid@3.3.4"
     },
     "packages": {
       "littoral-templates@0.2.2": {
         "integrity": "sha512-zap1WAedVwSaQh8Ak1al3BBByvR1XmZ5QSQrpVq5XKvMw113ng36SlYX3KRRChaccDCbLM5BugDu7DNaUuBgtg==",
+        "dependencies": {}
+      },
+      "nanoid@3.3.4": {
+        "integrity": "sha512-MqBkQh/OHTS2egovRtLk45wEyNXwF+cokD+1YPf9u5VfJiRdAiRwB2froX5Co9Rh20xs4siNPm8naNotSD6RBw==",
         "dependencies": {}
       },
       "nanoid@3.3.4": {
