@@ -20,7 +20,7 @@ await copy("src/m3/test/json.schema.json", "npm/esm/src/m3/test/json.schema.json
 await copy("src/m3/test/json.schema.json", "npm/script/src/m3/test/json.schema.json", { overwrite: true });
 
 await build({
-    entryPoints: ["./src/m3/types.ts"],
+    entryPoints: ["./src/mod.ts"],
     outDir: "./npm",
     shims: {
         // see JS docs for overview and more options
