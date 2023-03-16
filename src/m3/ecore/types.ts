@@ -1,9 +1,16 @@
-import {mod_parse as parse} from "../../deps.ts"
-
-
 /**
  * Type definitions that correspond to an Ecore XML metamodel (file),
- * parsed using the XML parser built-in to Deno.
+ * parsed using the XML parser built-in to Deno (see {@link https://deno.land/x/xml@2.1.0/mod.ts}),
+ * or with a parser exactly compatible with that.
+ *
+ * For completeness' sake, the required code could look as follows:
+ * ```ts
+ * import {parse} from "https://deno.land/x/xml@2.1.0/mod.ts"
+ *
+ * const textAsEcoreXml = (data: string): EcoreXml =>
+ *     parse(data, {emptyToNull: false, reviveNumbers: false}) as unknown as EcoreXml
+ * ```
+ * (It's assumed that {@link EcoreXml} is already imported.)
  */
 
 export type ENamed = {
@@ -41,13 +48,6 @@ export type EReference = ENamed & {
     "@eType": string    // `#//${targetType.name}`
     "@containment": boolean
 }
-
-
-/**
- * Parse the given string as Ecore XML into objects matching the type definitions above.
- */
-export const textAsEcoreXml = (data: string): EcoreXml =>
-    parse(data, {emptyToNull: false, reviveNumbers: false}) as unknown as EcoreXml
 
 
 /**

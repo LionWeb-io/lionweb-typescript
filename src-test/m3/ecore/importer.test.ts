@@ -1,7 +1,7 @@
-import {assertEquals} from "../../deps.ts"
+import {assertEquals, parse} from "../../deps.ts"
 import {asLIonCoreMetamodel} from "../../../src/m3/ecore/importer.ts"
 import {serializeMetamodel} from "../../../src/m3/serializer.ts"
-import {textAsEcoreXml} from "../../../src/m3/ecore/types.ts"
+import {EcoreXml} from "../../../src/m3/ecore/types.ts"
 import {issuesMetamodel} from "../../../src/m3/constraints.ts"
 import {checkReferences} from "../../../src/m3/reference-checker.ts"
 import {
@@ -16,6 +16,13 @@ import {
     undefinedValuesDeletedFrom
 } from "../test-helpers.ts"
 import {libraryMetamodel} from "../library-meta.ts"
+
+
+/**
+ * Parse the given string as Ecore XML into objects matching the {@link EcoreXml the Ecore type definition}.
+ */
+const textAsEcoreXml = (data: string): EcoreXml =>
+    parse(data, {emptyToNull: false, reviveNumbers: false}) as unknown as EcoreXml
 
 
 Deno.test("Ecore importer", async (tctx) => {
