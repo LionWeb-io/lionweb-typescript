@@ -1,8 +1,8 @@
-import {Node} from "../types.ts"
-import {hashingIdGen} from "../id-generation.ts"
-import {ModelAPI, updateSettings} from "../api.ts"
-import {nameBasedConceptDeducerFor} from "../m3/functions.ts"
-import {libraryMetamodel} from "../m3/test/library-meta.ts"
+import {Node} from "../src/types.ts"
+import {hashingIdGen} from "../src/id-generation.ts"
+import {ModelAPI, updateSettings} from "../src/api.ts"
+import {nameBasedConceptDeducerFor} from "../src/m3/functions.ts"
+import {libraryMetamodel} from "./m3/library-meta.ts"
 
 
 export type BaseNode = Node & {

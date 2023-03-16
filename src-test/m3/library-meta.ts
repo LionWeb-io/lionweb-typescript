@@ -1,6 +1,6 @@
-import {MetamodelFactory} from "../factory.ts"
-import {hashingIdGen} from "../../id-generation.ts"
-import {intDatatype, stringDatatype} from "../builtins.ts"
+import {MetamodelFactory} from "../../src/m3/factory.ts"
+import {hashingIdGen} from "../../src/id-generation.ts"
+import {intDatatype, stringDatatype} from "../../src/m3/builtins.ts"
 
 
 const factory = new MetamodelFactory("library", hashingIdGen())

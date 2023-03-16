@@ -1,6 +1,6 @@
-import {assertEquals} from "../../deps.ts"
-import {MetamodelFactory} from "../factory.ts"
-import {issuesMetamodel} from "../constraints.ts"
+import {assertEquals} from "../../src/deps.ts"
+import {MetamodelFactory} from "../../src/m3/factory.ts"
+import {issuesMetamodel} from "../../src/m3/constraints.ts"
 
 
 Deno.test("constraints (LIonCore)", async (tctx) => {

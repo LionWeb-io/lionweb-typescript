@@ -1,9 +1,9 @@
-import {assertEquals} from "../../deps.ts"
-import {lioncoreBuiltins} from "../builtins.ts"
-import {serializeMetamodel} from "../serializer.ts"
-import {checkReferences} from "../reference-checker.ts"
-import {issuesMetamodel} from "../constraints.ts"
-import {writeJsonAsFile} from "../../utils/json.ts"
+import {assertEquals} from "../../src/deps.ts"
+import {lioncoreBuiltins} from "../../src/m3/builtins.ts"
+import {serializeMetamodel} from "../../src/m3/serializer.ts"
+import {checkReferences} from "../../src/m3/reference-checker.ts"
+import {issuesMetamodel} from "../../src/m3/constraints.ts"
+import {writeJsonAsFile} from "../utils/json.ts"
 import {logIssues, logUnresolvedReferences} from "./test-helpers.ts"
 
 

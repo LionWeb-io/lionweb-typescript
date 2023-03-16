@@ -1,14 +1,14 @@
-import {assertEquals} from "../../deps.ts"
+import {assertEquals} from "../../src/deps.ts"
 import {libraryMetamodel} from "./library-meta.ts"
 import {
     generatePlantUmlForMetamodel
-} from "../diagrams/PlantUML-generator.ts"
-import {generateMermaidForMetamodel} from "../diagrams/Mermaid-generator.ts"
-import {serializeMetamodel} from "../serializer.ts"
-import {deserializeMetamodel} from "../deserializer.ts"
-import {lioncoreBuiltins} from "../builtins.ts"
-import {writeJsonAsFile} from "../../utils/json.ts"
-import {schemaFor} from "../schema-generator.ts"
+} from "../../src/m3/diagrams/PlantUML-generator.ts"
+import {generateMermaidForMetamodel} from "../../src/m3/diagrams/Mermaid-generator.ts"
+import {serializeMetamodel} from "../../src/m3/serializer.ts"
+import {deserializeMetamodel} from "../../src/m3/deserializer.ts"
+import {lioncoreBuiltins} from "../../src/m3/builtins.ts"
+import {writeJsonAsFile} from "../utils/json.ts"
+import {schemaFor} from "../../src/m3/schema-generator.ts"
 import {metaValidator} from "./json-validator.ts"
 import {undefinedValuesDeletedFrom} from "./test-helpers.ts"
 

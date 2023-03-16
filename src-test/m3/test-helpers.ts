@@ -1,4 +1,4 @@
-import {Issue} from "../constraints.ts"
+import {Issue} from "../../src/m3/constraints.ts"
 
 
 /**

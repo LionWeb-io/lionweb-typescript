@@ -1,7 +1,7 @@
 {
     "tasks": {
-        "run-tests": "deno test --allow-read --allow-write src/",
-        "watch-tests": "deno test --watch --allow-write --allow-read src/",
+        "run-tests": "deno test --allow-read --allow-write src-test/",
+        "watch-tests": "deno test --watch --allow-write --allow-read src-test/",
         "lint": "deno lint src/",
         "lock-deps": "deno cache --reload --lock=deno.lock --lock-write src/deps.ts"
     },

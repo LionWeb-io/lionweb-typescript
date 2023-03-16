@@ -1,20 +1,20 @@
-import {assertEquals} from "../../deps.ts"
-import {lioncore} from "../self-definition.ts"
-import {generateMermaidForMetamodel} from "../diagrams/Mermaid-generator.ts"
+import {assertEquals} from "../../src/deps.ts"
+import {lioncore} from "../../src/m3/self-definition.ts"
+import {generateMermaidForMetamodel} from "../../src/m3/diagrams/Mermaid-generator.ts"
 import {
     generatePlantUmlForMetamodel
-} from "../diagrams/PlantUML-generator.ts"
-import {checkReferences} from "../reference-checker.ts"
-import {issuesMetamodel} from "../constraints.ts"
-import {serializeMetamodel} from "../serializer.ts"
-import {deserializeMetamodel} from "../deserializer.ts"
-import {readFileAsJson, writeJsonAsFile} from "../../utils/json.ts"
+} from "../../src/m3/diagrams/PlantUML-generator.ts"
+import {checkReferences} from "../../src/m3/reference-checker.ts"
+import {issuesMetamodel} from "../../src/m3/constraints.ts"
+import {serializeMetamodel} from "../../src/m3/serializer.ts"
+import {deserializeMetamodel} from "../../src/m3/deserializer.ts"
+import {readFileAsJson, writeJsonAsFile} from "../utils/json.ts"
 import {
     createJsonValidatorForSchema,
     metaValidator
 } from "./json-validator.ts"
-import {SerializedModel} from "../../serialization.ts"
-import {schemaFor} from "../schema-generator.ts"
+import {SerializedModel} from "../../src/serialization.ts"
+import {schemaFor} from "../../src/m3/schema-generator.ts"
 import {
     logIssues,
     logUnresolvedReferences,
