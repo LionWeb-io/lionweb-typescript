@@ -1,4 +1,4 @@
-import {assertEquals} from "../../src/deps.ts"
+import {assertEquals} from "../deps.ts"
 import {lioncore} from "../../src/m3/self-definition.ts"
 import {generateMermaidForMetamodel} from "../../src/m3/diagrams/Mermaid-generator.ts"
 import {

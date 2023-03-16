@@ -33,8 +33,8 @@ See https://lint.deno.land/ for more details.
 * (optional) [PlantUML](https://plantuml.com/).
   An IDE plugin such as the one [for IntelliJ IDEA](https://plugins.jetbrains.com/plugin/7017-plantuml-integration) also does the trick.
 
-All of the dependencies of code in this codebase on external code (pulled in by Deno through `import {&hellip;} from "https://..."`), are listed explicitly in the file [`src/deps.ts`](./src/deps.ts).
-The [Deno lockfile](./deno.lock) can be re-derived by running:
+All of the dependencies of code in this codebase on external code (pulled in by Deno through `import {&hellip;} from "https://..."`), are listed explicitly in the file [`src/deps.ts`](src/deps.ts).
+The [Deno lockfile](deno.lock) can be re-derived by running:
 
 ```
 $ deno task lock-deps
@@ -63,8 +63,10 @@ The following is a list of links to potential starting points:
 * [Models](models/) - various models in their serialized formats (the LIonWeb JSON format, or Ecore XML); see the [specific README](models/README.md).
 * [Schemas](schemas/) - various JSON Schema files for validating models serialized in the LIonWeb JSON format against; see the [specific README](schemas/README.md).
 * [Scripts](scripts) - a `build_npm.ts` Deno script to package the source as an NPM package using [`dnt`](https://github.com/denoland/dnt).
-* [Source](src/) - all TypeScript source.
-  Tests are located in files with names ending with `.test.ts` which are located in sub directories named `test`.
+* [Source](src/) - all TypeScript source to be exported as part of the NPM/Deno package.
+* [Test sources](src-test/) - all TypeScript sources with/for (unit) tests.
+  Tests are located in files with names ending with `.test.ts`.
+  Any such file tests the file under the same path in `src/` that has the same name minus the `.test` part.
 
 **TODO**  elaborate
 

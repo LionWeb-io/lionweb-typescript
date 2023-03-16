@@ -1,4 +1,4 @@
-import {assertEquals} from "../../src/deps.ts"
+import {assertEquals} from "../deps.ts"
 import {libraryMetamodel} from "./library-meta.ts"
 import {
     generatePlantUmlForMetamodel

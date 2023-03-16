@@ -1,4 +1,4 @@
-import {assertEquals} from "../../src/deps.ts"
+import {assertEquals} from "../deps.ts"
 import {MetamodelFactory} from "../../src/m3/factory.ts"
 import {issuesMetamodel} from "../../src/m3/constraints.ts"
 

@@ -1,4 +1,4 @@
-import {assertEquals} from "../../src/deps.ts"
+import {assertEquals} from "../deps.ts"
 import {lioncoreBuiltins} from "../../src/m3/builtins.ts"
 import {serializeMetamodel} from "../../src/m3/serializer.ts"
 import {checkReferences} from "../../src/m3/reference-checker.ts"

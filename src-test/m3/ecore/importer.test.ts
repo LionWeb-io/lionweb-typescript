@@ -1,4 +1,4 @@
-import {assertEquals} from "../../../src/deps.ts"
+import {assertEquals} from "../../deps.ts"
 import {asLIonCoreMetamodel} from "../../../src/m3/ecore/importer.ts"
 import {serializeMetamodel} from "../../../src/m3/serializer.ts"
 import {textAsEcoreXml} from "../../../src/m3/ecore/types.ts"

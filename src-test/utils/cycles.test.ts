@@ -1,4 +1,4 @@
-import {assertEquals} from "../../src/deps.ts"
+import {assertEquals} from "../deps.ts"
 import {cycleWith} from "../../src/utils/cycles.ts"
 
 

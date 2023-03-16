@@ -1,4 +1,4 @@
-import {assertEquals} from "../src/deps.ts"
+import {assertEquals} from "./deps.ts"
 import {writeJsonAsFile} from "./utils/json.ts"
 import {undefinedValuesDeletedFrom} from "./m3/test-helpers.ts"
 import {serializeModel} from "../src/serializer.ts"

@@ -1,4 +1,4 @@
-import {Ajv, ErrorObject, addFormats} from "../../src/deps.ts"
+import {Ajv, ErrorObject, addFormats} from "../deps.ts"
 
 
 const ajv = new Ajv({
