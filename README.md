@@ -62,8 +62,8 @@ The following is a list of links to potential starting points:
   This generated PlantUML file can then be compared with [this one](https://github.com/LIonWeb-org/organization/blob/main/lioncore/metametamodel.puml): they should have exactly the same contents apart from a couple of obvious differences.
 * [Models](models/) - various models in their serialized formats (the LIonWeb JSON format, or Ecore XML); see the [specific README](models/README.md).
 * [Schemas](schemas/) - various JSON Schema files for validating models serialized in the LIonWeb JSON format against; see the [specific README](schemas/README.md).
-* [Scripts](scripts) - a `build_npm.ts` Deno script to package the source as an NPM package using [`dnt`](https://github.com/denoland/dnt).
 * [Source](src/) - all TypeScript source to be exported as part of the NPM/Deno package.
+* [Scripts](src-build) - a `build-npm.ts` Deno script to package the source as an NPM package using [`dnt`](https://github.com/denoland/dnt).
 * [Test sources](src-test/) - all TypeScript sources with/for (unit) tests.
   Tests are located in files with names ending with `.test.ts`.
   Any such file tests the file under the same path in `src/` that has the same name minus the `.test` part.
@@ -94,7 +94,7 @@ The following are considerations or concerns that bubbled up during implementati
 Run
 
 ```shell
-deno run -A scripts/build_npm.ts x.y.z
+deno run -A src-build/build-npm.ts x.y.z
 ```
 
 where x.y.z is the version of the package we're building. This will create a package in the `npm` directory.

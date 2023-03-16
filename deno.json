@@ -3,7 +3,7 @@
         "run-tests": "deno test --allow-read --allow-write src-test/",
         "watch-tests": "deno test --watch --allow-write --allow-read src-test/",
         "lint": "deno lint src/ src-test/",
-        "lock-deps": "deno cache --reload --lock=deno.lock --lock-write src/deps.ts src-test/deps.ts"
+        "lock-deps": "deno cache --reload --lock=deno.lock --lock-write src/deps.ts src-build/build-npm.ts src-test/deps.ts"
     },
     "lint": {
         "files": {
