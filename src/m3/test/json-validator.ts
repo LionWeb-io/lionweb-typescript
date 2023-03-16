@@ -1,5 +1,4 @@
 import {Ajv, ErrorObject, addFormats} from "../../deps.ts"
-import {__dirname} from "../../utils/local-files.ts"
 
 
 const ajv = new Ajv({
@@ -24,8 +23,7 @@ export const createJsonValidatorForSchema = (schema: unknown): (json: unknown) =
     }
 }
 
-
-const metaSchema = JSON.parse(Deno.readTextFileSync(`src/m3/test/json.schema.json`))
+import metaSchema from "./json.schema.json" assert { type: "json" }
 /*
  * Note: this meta-schema was downloaded from https://www.jsonschemavalidator.net/.
  * Steps:
