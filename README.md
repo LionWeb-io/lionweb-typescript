@@ -94,7 +94,7 @@ The following are considerations or concerns that bubbled up during implementati
 Run
 
 ```shell
-deno run -A src-build/build_npm.ts x.y.z
+deno run -A src-build/build-npm.ts x.y.z
 ```
 
 where x.y.z is the version of the package we're building. This will create a package in the `npm` directory.
