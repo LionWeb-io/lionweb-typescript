@@ -134,12 +134,12 @@ class ConceptInterface extends FeaturesContainer {
 
 abstract class Feature extends NamespacedEntity {
     optional /*: boolean */ = false
-    derived /*: boolean */ = false
+    computed /*: boolean */ = false
     constructor(featuresContainer: FeaturesContainer, name: string, id: Id) {
         super(featuresContainer, name, id)
     }
-    isDerived() {
-        this.derived = true
+    isComputed() {
+        this.computed = true
         return this
     }
     isOptional() {

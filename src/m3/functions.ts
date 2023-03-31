@@ -33,22 +33,22 @@ export const type = (feature: Feature): FeaturesContainer | Datatype | typeof un
     (feature as (Link | Property)).type
 
 
-export const isNonDerivedProperty = (feature: Feature): feature is Property =>
-    feature instanceof Property && !feature.derived
+export const isNonComputedProperty = (feature: Feature): feature is Property =>
+    feature instanceof Property && !feature.computed
 
-export const isNonDerivedContainment = (feature: Feature): feature is Containment =>
-    feature instanceof Containment && !feature.derived
+export const isNonComputedContainment = (feature: Feature): feature is Containment =>
+    feature instanceof Containment && !feature.computed
 
-export const isNonDerivedReference = (feature: Feature): feature is Reference =>
-    feature instanceof Reference && !feature.derived
+export const isNonComputedReference = (feature: Feature): feature is Reference =>
+    feature instanceof Reference && !feature.computed
 
 
 /**
  * Determines whether a {@link Feature feature} is "relational",
- * i.e. it's a non-derived {@link Link containment or reference}.
+ * i.e. it's a non-computed {@link Link containment or reference}.
  */
 const isRelational = (feature: Feature): feature is Link =>
-    feature instanceof Link && !feature.derived
+    feature instanceof Link && !feature.computed
 
 /**
  * @return the relations among the given {@link Feature features}.

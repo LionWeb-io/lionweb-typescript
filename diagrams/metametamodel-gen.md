@@ -24,7 +24,7 @@ classDiagram
 
   class Feature {
     +Boolean optional
-    +Boolean derived
+    +Boolean computed
   }
   <<Abstract>> Feature
   NamespacedEntity <|-- Feature

@@ -106,10 +106,10 @@ const generateForConceptInterface = ({name, extends: extends_, features}: Concep
 
 
 const generateForNonRelationalFeature = (feature: Feature) => {
-    const {name, optional, derived} = feature
+    const {name, optional, computed} = feature
     const multiple = feature instanceof Link && feature.multiple
     const type_ = type(feature)
-    return `${(feature instanceof Property && feature.programmatic) ? "#Orange ": ""}${name}${derived ? `()` : ``}: ${multiple ? `List<` : ``}${type_ === unresolved ? `???` : type_.name}${multiple ? `>` : ``}${(optional && !multiple) ? `?` : ``}`
+    return `${(feature instanceof Property && feature.programmatic) ? "#Orange ": ""}${name}${computed ? `()` : ``}: ${multiple ? `List<` : ``}${type_ === unresolved ? `???` : type_.name}${multiple ? `>` : ``}${(optional && !multiple) ? `?` : ``}`
 }
 
 

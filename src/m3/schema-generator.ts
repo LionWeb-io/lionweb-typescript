@@ -11,9 +11,9 @@ import {
     allFeaturesOf,
     isConcrete,
     isEnumeration,
-    isNonDerivedContainment,
-    isNonDerivedProperty,
-    isNonDerivedReference
+    isNonComputedContainment,
+    isNonComputedProperty,
+    isNonComputedReference
 } from "./functions.ts"
 import {isRef} from "../references.ts"
 // TODO  import types for JSON Schema for added type-safety?
@@ -74,9 +74,9 @@ const schemaForConcept = (concept: Concept): unknown => {
                 const: concept.id
             },
             id: ref("Id"),
-            properties: schemaForFeatures(allFeatures.filter(isNonDerivedProperty), schemaForProperty, true),
-            children: schemaForFeatures(allFeatures.filter(isNonDerivedContainment), (_) => ref("Ids"), true),
-            references: schemaForFeatures(allFeatures.filter(isNonDerivedReference), (_) => ref("Ids"), false),
+            properties: schemaForFeatures(allFeatures.filter(isNonComputedProperty), schemaForProperty, true),
+            children: schemaForFeatures(allFeatures.filter(isNonComputedContainment), (_) => ref("Ids"), true),
+            references: schemaForFeatures(allFeatures.filter(isNonComputedReference), (_) => ref("Ids"), false),
             parent: ref("Id")
         },
         required: [

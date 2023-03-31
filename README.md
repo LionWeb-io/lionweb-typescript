@@ -85,7 +85,7 @@ The following are considerations or concerns that bubbled up during implementati
 
 * Generate type definitions from a LIonCore/M3 instance?
 * Think about how to improve API of M3 w.r.t. containment:
-  * Can't we have qualified names as a derived feature defined post-facto _on top_ of the LIonCore/M3?
+  * Can't we have qualified names as a computed feature defined post-facto _on top_ of the LIonCore/M3?
 * What happens during deserialization if things don't match the provided M2?
   Just error out, or return `(model', issues*)`?
 

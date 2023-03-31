@@ -5,7 +5,7 @@ import {issuesLanguage} from "../../src/m3/constraints.ts"
 
 Deno.test("constraints (LIonCore)", async (tctx) => {
 
-    await tctx.step("check that a ConceptInterface only has derived features", () => {
+    await tctx.step("check that a ConceptInterface only has computed features", () => {
         const factory = new LanguageFactory("metamodel", "1")
         const {language} = factory
         const conceptInterface = factory.conceptInterface("conceptInterface")
@@ -17,7 +17,7 @@ Deno.test("constraints (LIonCore)", async (tctx) => {
         assertEquals(issues.length, 1)
         const {location, message} = issues[0]
         assertEquals(location, conceptInterface)
-        assertEquals(message, `The features of a ConceptInterface must all be derived, but the following feature of metamodel.conceptInterface is not: property.`)
+        assertEquals(message, `The features of a ConceptInterface must all be computed, but the following feature of metamodel.conceptInterface is not: property.`)
     })
 
     await tctx.step("check that inheritance cycles are detected", () => {

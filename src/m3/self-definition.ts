@@ -15,7 +15,7 @@ export const lioncore = factory.language
 const namespaceProvider = factory.conceptInterface("NamespaceProvider")
 
 const namespaceProvider_namespaceQualifier = factory.property(namespaceProvider, "namespaceQualifier")
-    .isDerived()
+    .isComputed()
     .ofType(stringDatatype)
 
 namespaceProvider.havingFeatures(namespaceProvider_namespaceQualifier)
@@ -27,7 +27,7 @@ const namespacedEntity_name = factory.property(namespacedEntity, "name")
     .ofType(stringDatatype)
 
 const namespacedEntity_qualifiedName = factory.property(namespacedEntity, "qualifiedName")
-    .isDerived()
+    .isComputed()
     .ofType(stringDatatype)
 
 namespacedEntity.havingFeatures(
@@ -72,7 +72,7 @@ const featuresContainer_features = factory.containment(featuresContainer, "featu
 const featuresContainer_allFeatures = factory.reference(featuresContainer, "allFeatures")
     .isOptional()
     .isMultiple()
-    .isDerived()
+    .isComputed()
 
 featuresContainer.havingFeatures(
     featuresContainer_features,
@@ -117,13 +117,13 @@ const feature = factory.concept("Feature", true, namespacedEntity)
 const feature_optional = factory.property(feature, "optional")
     .ofType(booleanDatatype)
 
-const feature_derived = factory.property(feature, "derived")
+const feature_computed = factory.property(feature, "computed")
     .ofType(booleanDatatype)
     .isProgrammatic()
 
 feature.havingFeatures(
     feature_optional,
-    feature_derived
+    feature_computed
 )
 
 featuresContainer_allFeatures.type = feature
@@ -219,7 +219,7 @@ export const metaFeatures = {
     concept_implements,
     conceptInterface_extends,
     enumeration_literals,
-    feature_derived,
+    feature_computed,
     feature_optional,
     featuresContainer_features,
     link_multiple,

@@ -42,7 +42,7 @@
       "properties": {
         "LIonCore_M3_Property_programmatic": "false",
         "LIonCore_M3_Feature_optional": "false",
-        "LIonCore_M3_Feature_derived": "false",
+        "LIonCore_M3_Feature_computed": "false",
         "LIonCore_M3_NamespacedEntity_name": "title"
       },
       "children": {},
@@ -59,7 +59,7 @@
       "properties": {
         "LIonCore_M3_Property_programmatic": "false",
         "LIonCore_M3_Feature_optional": "false",
-        "LIonCore_M3_Feature_derived": "false",
+        "LIonCore_M3_Feature_computed": "false",
         "LIonCore_M3_NamespacedEntity_name": "pages"
       },
       "children": {},
@@ -76,7 +76,7 @@
       "properties": {
         "LIonCore_M3_Link_multiple": "false",
         "LIonCore_M3_Feature_optional": "false",
-        "LIonCore_M3_Feature_derived": "false",
+        "LIonCore_M3_Feature_computed": "false",
         "LIonCore_M3_NamespacedEntity_name": "author"
       },
       "children": {},
@@ -109,7 +109,7 @@
       "properties": {
         "LIonCore_M3_Property_programmatic": "false",
         "LIonCore_M3_Feature_optional": "false",
-        "LIonCore_M3_Feature_derived": "false",
+        "LIonCore_M3_Feature_computed": "false",
         "LIonCore_M3_NamespacedEntity_name": "name"
       },
       "children": {},
@@ -126,7 +126,7 @@
       "properties": {
         "LIonCore_M3_Link_multiple": "true",
         "LIonCore_M3_Feature_optional": "false",
-        "LIonCore_M3_Feature_derived": "false",
+        "LIonCore_M3_Feature_computed": "false",
         "LIonCore_M3_NamespacedEntity_name": "books"
       },
       "children": {},
@@ -158,7 +158,7 @@
       "properties": {
         "LIonCore_M3_Property_programmatic": "false",
         "LIonCore_M3_Feature_optional": "false",
-        "LIonCore_M3_Feature_derived": "false",
+        "LIonCore_M3_Feature_computed": "false",
         "LIonCore_M3_NamespacedEntity_name": "name"
       },
       "children": {},
@@ -194,7 +194,7 @@
       "properties": {
         "LIonCore_M3_Property_programmatic": "false",
         "LIonCore_M3_Feature_optional": "false",
-        "LIonCore_M3_Feature_derived": "false",
+        "LIonCore_M3_Feature_computed": "false",
         "LIonCore_M3_NamespacedEntity_name": "countries"
       },
       "children": {},
@@ -230,7 +230,7 @@
       "properties": {
         "LIonCore_M3_Property_programmatic": "false",
         "LIonCore_M3_Feature_optional": "false",
-        "LIonCore_M3_Feature_derived": "false",
+        "LIonCore_M3_Feature_computed": "false",
         "LIonCore_M3_NamespacedEntity_name": "subject"
       },
       "children": {},

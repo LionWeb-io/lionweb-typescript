@@ -20,7 +20,7 @@ class EnumerationLiteral extends NamespacedEntity
 
 abstract class Feature extends NamespacedEntity {
   optional: Boolean
-  #Orange derived: Boolean
+  #Orange computed: Boolean
 }
 
 abstract class FeaturesContainer extends LanguageElement implements NamespaceProvider {
