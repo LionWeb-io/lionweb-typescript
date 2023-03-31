@@ -3,7 +3,7 @@ import {
     Feature,
     FeaturesContainer,
     Language,
-    MetamodelElement,
+    LanguageElement,
     PrimitiveType
 } from "../types.ts"
 import {LanguageFactory} from "../factory.ts"
@@ -55,13 +55,13 @@ export const asLIonCoreMetamodel = (ecoreXml: EcoreXml): Language => {
         factory.concept(eClassifier["@name"], false)
     // TODO (#10)  ConceptInterface, Enumeration
 
-    const convertedEClassifiers: [eClassifier: EClassifier, metamodelElement: MetamodelElement][] =
+    const convertedEClassifiers: [eClassifier: EClassifier, element: LanguageElement][] =
         ePackage["eClassifiers"]
             .map((eClassifier) =>
                 [eClassifier, convertEClassifier(eClassifier)]
             )
 
-    const eClassifierConversionFor = (eClassifierName: string): MetamodelElement =>
+    const eClassifierConversionFor = (eClassifierName: string): LanguageElement =>
         convertedEClassifiers
             .find(([source, _]) => source["@name"] === eClassifierName)![1]
 

@@ -6,8 +6,8 @@ import {
     Enumeration,
     Feature,
     Language,
+    LanguageElement,
     Link,
-    MetamodelElement,
     PrimitiveType,
     Property
 } from "../types.ts"
@@ -36,7 +36,7 @@ hide empty members
 
 
 `,
-    elementsSortedByName(elements).map(generateForMetamodelElement),
+    elementsSortedByName(elements).map(generateForElement),
 `
 
 ' relations:
@@ -120,7 +120,7 @@ const generateForPrimitiveType = ({name}: PrimitiveType) =>
 // Note: No construct for PrimitiveType exists in PlantUML.
 
 
-const generateForMetamodelElement = (element: MetamodelElement) => {
+const generateForElement = (element: LanguageElement) => {
     if (element instanceof Enumeration) {
         return generateForEnumeration(element)
     }
@@ -138,7 +138,7 @@ const generateForMetamodelElement = (element: MetamodelElement) => {
 }
 
 
-const generateForRelationsOf = (element: MetamodelElement) => {
+const generateForRelationsOf = (element: LanguageElement) => {
     const relations = relationsOf(element)
     return relations.length === 0
         ? ``
@@ -147,7 +147,7 @@ const generateForRelationsOf = (element: MetamodelElement) => {
 }
 
 
-const generateForRelation = ({name: leftName}: MetamodelElement, relation: Link) => {
+const generateForRelation = ({name: leftName}: LanguageElement, relation: Link) => {
     const {name: relationName, type, optional, multiple} = relation
     const rightName = isRef(type) ? type.name : (type === unresolved ? `<unresolved>` : `<null>`)
     const isContainment = relation instanceof Containment

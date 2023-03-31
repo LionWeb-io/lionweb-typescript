@@ -64,7 +64,7 @@ abstract class NamespacedEntity extends M3Node {
 
 class Language extends M3Node implements NamespaceProvider {
     name: string
-    elements: MetamodelElement[] = []   // (containment)
+    elements: LanguageElement[] = []   // (containment)
     dependsOn: MultiRef<Language> = []  // special (!) reference
         // (!) special because deserializer needs to be aware of where to get the instance from
     constructor(name: string, id: Id) {
@@ -74,7 +74,7 @@ class Language extends M3Node implements NamespaceProvider {
     namespaceQualifier(): string {
         return this.name
     }
-    havingElements(...elements: MetamodelElement[]) {
+    havingElements(...elements: LanguageElement[]) {
         this.elements.push(...elements)
         return this
     }
@@ -87,13 +87,13 @@ class Language extends M3Node implements NamespaceProvider {
     }
 }
 
-abstract class MetamodelElement extends NamespacedEntity {
+abstract class LanguageElement extends NamespacedEntity {
     constructor(language: Language, name: string, id: Id) {
         super(language, name, id)
     }
 }
 
-abstract class FeaturesContainer extends MetamodelElement implements NamespaceProvider {
+abstract class FeaturesContainer extends LanguageElement implements NamespaceProvider {
     features: Feature[] = [] // (containment)
     havingFeatures(...features: Feature[]) {
         this.features.push(...features)
@@ -182,7 +182,7 @@ class Property extends Feature {
     }
 }
 
-abstract class Datatype extends MetamodelElement {}
+abstract class Datatype extends LanguageElement {}
 
 class PrimitiveType extends Datatype {}
 
@@ -227,8 +227,8 @@ export {
     Feature,
     FeaturesContainer,
     Language,
+    LanguageElement,
     Link,
-    MetamodelElement,
     PrimitiveType,
     Property,
     Reference

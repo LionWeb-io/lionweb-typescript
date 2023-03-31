@@ -14,7 +14,7 @@ classDiagram
 
   class DataType
   <<Abstract>> DataType
-  MetamodelElement <|-- DataType
+  LanguageElement <|-- DataType
 
   class Enumeration
   DataType <|-- Enumeration
@@ -33,21 +33,21 @@ classDiagram
     +allFeatures() : List~Feature~?
   }
   <<Abstract>> FeaturesContainer
-  MetamodelElement <|-- FeaturesContainer
+  LanguageElement <|-- FeaturesContainer
 
   class Language {
     +String name
   }
+
+  class LanguageElement
+  <<Abstract>> LanguageElement
+  NamespacedEntity <|-- LanguageElement
 
   class Link {
     +Boolean multiple
   }
   <<Abstract>> Link
   Feature <|-- Link
-
-  class MetamodelElement
-  <<Abstract>> MetamodelElement
-  NamespacedEntity <|-- MetamodelElement
 
   class NamespaceProvider {
     +namespaceQualifier() : String
@@ -81,10 +81,10 @@ classDiagram
 
 
   FeaturesContainer "1" o-- "*" Feature: features
-  Language "1" o-- "*" MetamodelElement: elements
+  Language "1" o-- "*" LanguageElement: elements
   Language "*" -- "*" Language: dependsOn
-  Link "*" -- "1" FeaturesContainer: type
 
+  Link "*" -- "1" FeaturesContainer: type
 
 
 

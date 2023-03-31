@@ -12,9 +12,9 @@ import {
     Feature,
     FeaturesContainer,
     Language,
+    LanguageElement,
     Link,
     M3Concept,
-    MetamodelElement,
     Property,
     Reference
 } from "./types.ts"
@@ -64,9 +64,9 @@ export const nonRelationalFeatures = (features: Feature[]): Feature[] =>
 
 
 /**
- * @return the relations of the given {@link MetamodelElement metamodel element}.
+ * @return the relations of the given {@link LanguageElement language element}.
  */
-export const relationsOf = (element: MetamodelElement): Link[] =>
+export const relationsOf = (element: LanguageElement): Link[] =>
     element instanceof FeaturesContainer
         ? relations(element.features)
         : []
@@ -74,7 +74,7 @@ export const relationsOf = (element: MetamodelElement): Link[] =>
 
 /**
  * @return The "things", i.e. {@link M3Concept}s, contained by the given "thing".
- *  These can be: {@link MetamodelElement}s, {@link Feature}s, {@link EnumerationLiteral}
+ *  These can be: {@link LanguageElement}s, {@link Feature}s, {@link EnumerationLiteral}
  *  (and all their sub types).
  */
 export const containeds = (thing: M3Concept): M3Concept[] => {
@@ -100,9 +100,9 @@ export const flatMap = <T>(language: Language, map: (t: M3Concept) => T[]): T[] 
 
 
 /**
- * Sorts the given {@link MetamodelElement metamodel elements} by name.
+ * Sorts the given {@link LanguageElement metamodel elements} by name.
  */
-export const elementsSortedByName = (elements: MetamodelElement[]) =>
+export const elementsSortedByName = (elements: LanguageElement[]) =>
     sortByStringKey(elements, (element) => element.name)
 
 
@@ -112,10 +112,10 @@ export const elementsSortedByName = (elements: MetamodelElement[]) =>
 export type ConceptType = Concept | ConceptInterface
 
 /**
- * Determines whether the given {@link MetamodelElement metamodel element} is
+ * Determines whether the given {@link LanguageElement metamodel element} is
  * *concrete*, i.e. is instantiable.
  */
-export const isConcrete = (thing: MetamodelElement): thing is Concept =>
+export const isConcrete = (thing: LanguageElement): thing is Concept =>
     thing instanceof Concept && !thing.abstract
 
 const inheritsFrom = (conceptType: ConceptType): ConceptType[] => {
@@ -159,9 +159,9 @@ export const allFeaturesOf = (conceptType: ConceptType): Feature[] =>
 
 
 /**
- * Determines whether the given {@link MetamodelElement metamodel element} is an {@link Enumeration enumeration}.
+ * Determines whether the given {@link LanguageElement language element} is an {@link Enumeration enumeration}.
  */
-export const isEnumeration = (element: MetamodelElement): element is Enumeration =>
+export const isEnumeration = (element: LanguageElement): element is Enumeration =>
     element instanceof Enumeration
 
 

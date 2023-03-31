@@ -6,8 +6,8 @@ import {
     Enumeration,
     Feature,
     Language,
+    LanguageElement,
     Link,
-    MetamodelElement,
     PrimitiveType
 } from "../types.ts"
 import {
@@ -49,7 +49,7 @@ export const generateMermaidForMetamodel = ({elements}: Language) =>
         `classDiagram
 
 `,
-        indented(elementsSortedByName(elements).map(generateForMetamodelElement)),
+        indented(elementsSortedByName(elements).map(generateForElement)),
         ``,
         indented(elementsSortedByName(elements).map(generateForRelationsOf)),
         ``,
@@ -109,7 +109,7 @@ const generateForPrimitiveType = ({name}: PrimitiveType) =>
 // Note: No construct for PrimitiveType exists in PlantUML.
 
 
-const generateForMetamodelElement = (element: MetamodelElement) => {
+const generateForElement = (element: LanguageElement) => {
     if (element instanceof Concept) {
         return generateForConcept(element)
     }
@@ -126,7 +126,7 @@ const generateForMetamodelElement = (element: MetamodelElement) => {
 }
 
 
-const generateForRelationsOf = (element: MetamodelElement) => {
+const generateForRelationsOf = (element: LanguageElement) => {
     const relations = relationsOf(element)
     return relations.length === 0
         ? ``
@@ -135,7 +135,7 @@ const generateForRelationsOf = (element: MetamodelElement) => {
 }
 
 
-const generateForRelation = ({name: leftName}: MetamodelElement, relation: Link) => {
+const generateForRelation = ({name: leftName}: LanguageElement, relation: Link) => {
     const {name: relationName, optional, multiple, type} = relation
     const rightName = isRef(type) ? type.name : (type === unresolved ? `<unresolved>` : `<null>`)
     const isContainment = relation instanceof Containment

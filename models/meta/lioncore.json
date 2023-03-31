@@ -12,7 +12,7 @@
           "LIonCore_M3_NamespacedEntity",
           "LIonCore_M3_NamespaceProvider",
           "LIonCore_M3_Language",
-          "LIonCore_M3_MetamodelElement",
+          "LIonCore_M3_LanguageElement",
           "LIonCore_M3_FeaturesContainer",
           "LIonCore_M3_Concept",
           "LIonCore_M3_ConceptInterface",
@@ -160,7 +160,7 @@
       "children": {},
       "references": {
         "LIonCore_M3_Link_type": [
-          "LIonCore_M3_MetamodelElement"
+          "LIonCore_M3_LanguageElement"
         ]
       },
       "parent": "LIonCore_M3_Language"
@@ -184,10 +184,10 @@
     },
     {
       "concept": "LIonCore_M3_Concept",
-      "id": "LIonCore_M3_MetamodelElement",
+      "id": "LIonCore_M3_LanguageElement",
       "properties": {
         "LIonCore_M3_Concept_abstract": "true",
-        "LIonCore_M3_NamespacedEntity_name": "MetamodelElement"
+        "LIonCore_M3_NamespacedEntity_name": "LanguageElement"
       },
       "children": {},
       "references": {
@@ -212,7 +212,7 @@
       },
       "references": {
         "LIonCore_M3_Concept_extends": [
-          "LIonCore_M3_MetamodelElement"
+          "LIonCore_M3_LanguageElement"
         ],
         "LIonCore_M3_Concept_implements": [
           "LIonCore_M3_NamespaceProvider"
@@ -549,7 +549,7 @@
       "children": {},
       "references": {
         "LIonCore_M3_Concept_extends": [
-          "LIonCore_M3_MetamodelElement"
+          "LIonCore_M3_LanguageElement"
         ]
       },
       "parent": "LIonCore_M3"

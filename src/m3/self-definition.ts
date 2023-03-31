@@ -54,12 +54,12 @@ const language_dependsOn = factory.reference(language, "dependsOn")
 language.havingFeatures(language_name, language_elements, language_dependsOn)
 
 
-const metamodelElement = factory.concept("MetamodelElement", true, namespacedEntity)
+const languageElement = factory.concept("LanguageElement", true, namespacedEntity)
 
-language_elements.ofType(metamodelElement)
+language_elements.ofType(languageElement)
 
 
-const featuresContainer = factory.concept("FeaturesContainer", true, metamodelElement)
+const featuresContainer = factory.concept("FeaturesContainer", true, languageElement)
     .implementing(namespaceProvider)
 
 const featuresContainer_features = factory.containment(featuresContainer, "features")
@@ -156,7 +156,7 @@ property.havingFeatures(
 )
 
 
-const dataType = factory.concept("DataType", true, metamodelElement)
+const dataType = factory.concept("DataType", true, languageElement)
 property_type.ofType(dataType)
 
 
@@ -182,7 +182,7 @@ lioncore.havingElements(
     namespacedEntity,
     namespaceProvider,
     language,
-    metamodelElement,
+    languageElement,
     featuresContainer,
     concept,
     conceptInterface,
