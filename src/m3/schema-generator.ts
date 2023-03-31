@@ -3,7 +3,7 @@ import {
     Datatype,
     Enumeration,
     Feature,
-    Metamodel,
+    Language,
     PrimitiveType,
     Property
 } from "./types.ts"
@@ -98,15 +98,15 @@ const schemaForEnumeration = ({literals}: Enumeration): unknown =>
 
 /**
  * Generates a JSON Schema for the LIonWeb-compliant serialization JSON format
- * specific to the given metamodel.
+ * specific to the (metamodel in/of the) given language.
  */
-export const schemaFor = (metamodel: Metamodel): unknown /* <=> JSON Schema */ => {
-    const concreteConcepts = metamodel.elements.filter(isConcrete)
-    const enumerations = metamodel.elements.filter(isEnumeration)
+export const schemaFor = (language: Language): unknown /* <=> JSON Schema */ => {
+    const concreteConcepts = language.elements.filter(isConcrete)
+    const enumerations = language.elements.filter(isEnumeration)
     return {
         $schema: "https://json-schema.org/draft/2020-12/schema",
-        $id: `${metamodel.name}-serialization`,    // TODO  let caller specify URL instead?
-        title: `Serialization format specific to ${metamodel.name}`,
+        $id: `${language.name}-serialization`,    // TODO  let caller specify URL instead?
+        title: `Serialization format specific to ${language.name}`,
         type: "object",
         properties: {
             serializationFormatVersion: {

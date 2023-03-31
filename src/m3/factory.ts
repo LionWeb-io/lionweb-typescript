@@ -5,7 +5,7 @@ import {
     Enumeration,
     EnumerationLiteral,
     FeaturesContainer,
-    Metamodel,
+    Language,
     PrimitiveType,
     Property,
     qualify,
@@ -16,36 +16,36 @@ import {IdGenerator, nanoIdGen} from "../id-generation.ts"
 
 
 /**
- * A factory that produces a {@link Metamodel} instance,
+ * A factory that produces a {@link Language} instance,
  * as well as elements contained by that instance.
  * The {@link https://zelark.github.io/nano-id-cc/ `nanoid`-based} ID generator
  * is used, unless specified otherwise.
  */
-export class MetamodelFactory {
+export class LanguageFactory {
 
     readonly id: IdGenerator
-    readonly metamodel: Metamodel
+    readonly language: Language
 
     constructor(name: string, id: IdGenerator = nanoIdGen()) {
         this.id = id
-        this.metamodel = new Metamodel(name, this.id(name))
+        this.language = new Language(name, this.id(name))
     }
 
 
     concept(name: string, abstract: boolean, extends_?: SingleRef<Concept>) {
-        return new Concept(this.metamodel, name, this.id(qualify(this.metamodel.name, name)), abstract, extends_)
+        return new Concept(this.language, name, this.id(qualify(this.language.name, name)), abstract, extends_)
     }
 
     conceptInterface(name: string) {
-        return new ConceptInterface(this.metamodel, name, this.id(qualify(this.metamodel.name, name)))
+        return new ConceptInterface(this.language, name, this.id(qualify(this.language.name, name)))
     }
 
     enumeration(name: string) {
-        return new Enumeration(this.metamodel, name, this.id(qualify(this.metamodel.name, name)))
+        return new Enumeration(this.language, name, this.id(qualify(this.language.name, name)))
     }
 
     primitiveType(name: string) {
-        return new PrimitiveType(this.metamodel, name, this.id(qualify(this.metamodel.name, name)))
+        return new PrimitiveType(this.language, name, this.id(qualify(this.language.name, name)))
     }
 
 

@@ -1,15 +1,15 @@
-import {MetamodelFactory} from "./factory.ts"
+import {LanguageFactory} from "./factory.ts"
 import {lioncoreIdGen} from "./id-generation.ts"
 import {booleanDatatype, stringDatatype} from "./builtins.ts"
 
 
-const factory = new MetamodelFactory("LIonCore.M3", lioncoreIdGen)
+const factory = new LanguageFactory("LIonCore.M3", lioncoreIdGen)
 
 
 /**
  * Definition of LIonCore in terms of itself.
  */
-export const lioncore = factory.metamodel
+export const lioncore = factory.language
 
 
 const namespaceProvider = factory.conceptInterface("NamespaceProvider")
@@ -36,27 +36,27 @@ namespacedEntity.havingFeatures(
     )
 
 
-const metamodel = factory.concept("Metamodel", false)
+const language = factory.concept("Language", false)
     .implementing(namespaceProvider)
 
-const metamodel_name = factory.property(metamodel, "name")
+const language_name = factory.property(language, "name")
     .ofType(stringDatatype)
 
-const metamodel_elements = factory.containment(metamodel, "elements")
+const language_elements = factory.containment(language, "elements")
     .isOptional()
     .isMultiple()
 
-const metamodel_dependsOn = factory.reference(metamodel, "dependsOn")
+const language_dependsOn = factory.reference(language, "dependsOn")
     .isOptional()
     .isMultiple()
-    .ofType(metamodel)
+    .ofType(language)
 
-metamodel.havingFeatures(metamodel_name, metamodel_elements, metamodel_dependsOn)
+language.havingFeatures(language_name, language_elements, language_dependsOn)
 
 
 const metamodelElement = factory.concept("MetamodelElement", true, namespacedEntity)
 
-metamodel_elements.ofType(metamodelElement)
+language_elements.ofType(metamodelElement)
 
 
 const featuresContainer = factory.concept("FeaturesContainer", true, metamodelElement)
@@ -181,7 +181,7 @@ enumeration.havingFeatures(enumeration_literals)
 lioncore.havingElements(
     namespacedEntity,
     namespaceProvider,
-    metamodel,
+    language,
     metamodelElement,
     featuresContainer,
     concept,
@@ -204,7 +204,7 @@ export const metaConcepts = {
     containment,
     enumeration,
     enumerationLiteral,
-    metamodel,
+    metamodel: language,
     primitiveType,
     property,
     reference
@@ -221,9 +221,9 @@ export const metaFeatures = {
     featuresContainer_features,
     link_multiple,
     link_type,
-    metamodel_dependsOn,
-    metamodel_elements,
-    metamodel_name,
+    language_dependsOn,
+    language_elements,
+    language_name,
     namespacedEntity_name,
     property_type,
     property_programmatic,

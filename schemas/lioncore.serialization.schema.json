@@ -30,11 +30,11 @@
       },
       "minItems": 1
     },
-    "Metamodel": {
+    "Language": {
       "type": "object",
       "properties": {
         "concept": {
-          "const": "LIonCore_M3_Metamodel"
+          "const": "LIonCore_M3_Language"
         },
         "id": {
           "$ref": "#/$defs/Id"
@@ -42,19 +42,19 @@
         "properties": {
           "type": "object",
           "properties": {
-            "LIonCore_M3_Metamodel_name": {
+            "LIonCore_M3_Language_name": {
               "type": "string"
             }
           },
           "required": [
-            "LIonCore_M3_Metamodel_name"
+            "LIonCore_M3_Language_name"
           ],
           "additionalProperties": false
         },
         "children": {
           "type": "object",
           "properties": {
-            "LIonCore_M3_Metamodel_elements": {
+            "LIonCore_M3_Language_elements": {
               "$ref": "#/$defs/Ids"
             }
           },
@@ -63,7 +63,7 @@
         "references": {
           "type": "object",
           "properties": {
-            "LIonCore_M3_Metamodel_dependsOn": {
+            "LIonCore_M3_Language_dependsOn": {
               "$ref": "#/$defs/Ids"
             }
           },
@@ -515,7 +515,7 @@
     "SerializedNode": {
       "oneOf": [
         {
-          "$ref": "#/$defs/Metamodel"
+          "$ref": "#/$defs/Language"
         },
         {
           "$ref": "#/$defs/Concept"

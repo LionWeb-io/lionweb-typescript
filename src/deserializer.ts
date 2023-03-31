@@ -4,7 +4,7 @@ import {ModelAPI} from "./api.ts"
 import {
     Concept,
     Containment,
-    Metamodel,
+    Language,
     Property,
     Reference
 } from "./m3/types.ts"
@@ -29,13 +29,13 @@ const byIdMap = <T extends { id: Id }>(ts: T[]): { [id: Id]: T } => {
  *
  * @param serializedModel - a {@link SerializedModel model} from its LIonWeb serialization JSON format
  * @param modelAPI - a {@link ModelAPI model API} that is used to instantiate nodes and set values on them
- * @param metamodel - a {@link Metamodel metamodel} that the serialized model is expected to conform to
+ * @param language - a {@link Language language} that the serialized model is expected to conform to
  * @param dependentNodes - a collection of nodes from dependent models against which all references in the serialized model are supposed to resolve against
  */
 export const deserializeModel = <NT extends Node>(
     serializedModel: SerializedModel,
     modelAPI: ModelAPI<NT>,
-    metamodel: Metamodel,
+    language: Language,
     dependentNodes: Node[]
     // TODO (#13)  see if you can turn this into [nodes: Node[], api: ModelAPI<Node>][] after all
 ): NT[] => {
@@ -77,7 +77,7 @@ export const deserializeModel = <NT extends Node>(
      */
     const instantiate = ({concept: conceptId, id, properties, children, references}: SerializedNode, parent?: NT): NT => {
 
-        const concept = metamodel.elements
+        const concept = language.elements
             .find((element) =>
                 element instanceof Concept && element.id === conceptId
             ) as (Concept | undefined)

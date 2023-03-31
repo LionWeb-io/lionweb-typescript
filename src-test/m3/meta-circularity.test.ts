@@ -5,9 +5,9 @@ import {
     generatePlantUmlForMetamodel
 } from "../../src/m3/diagrams/PlantUML-generator.ts"
 import {checkReferences} from "../../src/m3/reference-checker.ts"
-import {issuesMetamodel} from "../../src/m3/constraints.ts"
-import {serializeMetamodel} from "../../src/m3/serializer.ts"
-import {deserializeMetamodel} from "../../src/m3/deserializer.ts"
+import {issuesLanguage} from "../../src/m3/constraints.ts"
+import {serializeLanguage} from "../../src/m3/serializer.ts"
+import {deserializeLanguage} from "../../src/m3/deserializer.ts"
 import {readFileAsJson, writeJsonAsFile} from "../utils/json.ts"
 import {
     createJsonValidatorForSchema,
@@ -36,25 +36,25 @@ Deno.test("meta-circularity (LIonCore)", async (tctx) => {
     })
 
     await tctx.step("check constraints", () => {
-        const issues = issuesMetamodel(lioncore)
+        const issues = issuesLanguage(lioncore)
         logIssues(issues)
         assertEquals(issues, [], "number of expected constraint violations -- see above for the issues")
     })
 
     const serializedLioncorePath = "models/meta/lioncore.json"
     await tctx.step("serialize LIonCore (no assertions)", async () => {
-        const serialization = serializeMetamodel(lioncore)
+        const serialization = serializeLanguage(lioncore)
         await writeJsonAsFile(serializedLioncorePath, serialization)
     })
 
     await tctx.step("deserialize LIonCore", async () => {
         const serialization = await readFileAsJson(serializedLioncorePath) as SerializedModel
-        const deserialization = deserializeMetamodel(undefinedValuesDeletedFrom(serialization))
+        const deserialization = deserializeLanguage(undefinedValuesDeletedFrom(serialization))
         assertEquals(deserialization, lioncore)
     })
 
     await tctx.step("validate serialization of LIonCore", async () => {
-        const serialization = serializeMetamodel(lioncore)
+        const serialization = serializeLanguage(lioncore)
         const schema = await readFileAsJson("schemas/generic-serialization.schema.json")
         const metaErrors = metaValidator(schema)
         assertEquals(metaErrors, [])
@@ -68,7 +68,7 @@ Deno.test("meta-circularity (LIonCore)", async (tctx) => {
         const metaErrors = metaValidator(schema)
         assertEquals(metaErrors, [])
         await writeJsonAsFile("schemas/lioncore.serialization.schema.json", schema)
-        const serialization = serializeMetamodel(lioncore)
+        const serialization = serializeLanguage(lioncore)
         const validator = createJsonValidatorForSchema(schema)
         const errors = validator(serialization)
         assertEquals(errors, [])

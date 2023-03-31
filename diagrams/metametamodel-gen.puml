@@ -27,12 +27,12 @@ abstract class FeaturesContainer extends MetamodelElement implements NamespacePr
   allFeatures(): List<Feature>
 }
 
-abstract class Link extends Feature {
-  multiple: Boolean
+class Language implements NamespaceProvider {
+  name: String
 }
 
-class Metamodel implements NamespaceProvider {
-  name: String
+abstract class Link extends Feature {
+  multiple: Boolean
 }
 
 abstract class MetamodelElement extends NamespacedEntity
@@ -67,9 +67,9 @@ Enumeration "1" o-- "*" EnumerationLiteral: literals
 
 
 FeaturesContainer "1" o-- "*" Feature: features
+Language "1" o-- "*" MetamodelElement: elements
+Language "*" -- "*" Language: dependsOn
 Link "*" -- "1" FeaturesContainer: type
-Metamodel "1" o-- "*" MetamodelElement: elements
-Metamodel "*" -- "*" Metamodel: dependsOn
 
 
 

@@ -1,10 +1,10 @@
-import {Concept, ConceptInterface, M3Concept, Metamodel} from "./types.ts"
+import {Concept, ConceptInterface, Language, M3Concept} from "./types.ts"
 import {flatMap, inheritedCycleWith} from "./functions.ts"
 
 
 /**
  * Type definition for an issue corresponding
- * to a violation of a contraint on a {@link M3Concept metamodel object}.
+ * to a violation of a contraint on a {@link M3Concept language object}.
  */
 export type Issue = {
     location: M3Concept
@@ -13,12 +13,12 @@ export type Issue = {
 
 
 /**
- * Computes the {@link Issue issues} (i.e., constraint violations) for the given metamodel.
+ * Computes the {@link Issue issues} (i.e., constraint violations) for the given language.
  * (This computation is resilient against e.g. inheritance cycles.)
  */
-export const issuesMetamodel = (metamodel: Metamodel): Issue[] =>
+export const issuesLanguage = (language: Language): Issue[] =>
     flatMap(
-        metamodel,
+        language,
         (t) => {
 
             const issues: Issue[] = []

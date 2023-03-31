@@ -1,10 +1,10 @@
-import {MetamodelFactory} from "../../src/m3/factory.ts"
+import {LanguageFactory} from "../../src/m3/factory.ts"
 import {hashingIdGen} from "../../src/id-generation.ts"
 import {intDatatype, stringDatatype} from "../../src/m3/builtins.ts"
 
 
-const factory = new MetamodelFactory("library", hashingIdGen())
-export const libraryMetamodel = factory.metamodel
+const factory = new LanguageFactory("library", hashingIdGen())
+export const libraryMetamodel = factory.language
 
 
 const library = factory.concept("Library", false)

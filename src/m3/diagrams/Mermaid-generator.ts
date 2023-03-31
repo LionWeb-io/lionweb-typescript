@@ -5,8 +5,8 @@ import {
     Containment,
     Enumeration,
     Feature,
+    Language,
     Link,
-    Metamodel,
     MetamodelElement,
     PrimitiveType
 } from "../types.ts"
@@ -41,9 +41,9 @@ const withNewLine = (content: NestedString): NestedString =>
 
 /**
  * Generates a string with a Mermaid class diagram
- * representing the given {@link Metamodel LIonCore/M3 instance}.
+ * representing the given {@link Language LIonCore/M3 instance}.
  */
-export const generateMermaidForMetamodel = ({elements}: Metamodel) =>
+export const generateMermaidForMetamodel = ({elements}: Language) =>
     asString([
         "```mermaid",
         `classDiagram
@@ -109,29 +109,29 @@ const generateForPrimitiveType = ({name}: PrimitiveType) =>
 // Note: No construct for PrimitiveType exists in PlantUML.
 
 
-const generateForMetamodelElement = (metamodelElement: MetamodelElement) => {
-    if (metamodelElement instanceof Concept) {
-        return generateForConcept(metamodelElement)
+const generateForMetamodelElement = (element: MetamodelElement) => {
+    if (element instanceof Concept) {
+        return generateForConcept(element)
     }
-    if (metamodelElement instanceof ConceptInterface) {
-        return generateForConceptInterface(metamodelElement)
+    if (element instanceof ConceptInterface) {
+        return generateForConceptInterface(element)
     }
-    if (metamodelElement instanceof Enumeration) {
-        return generateForEnumeration(metamodelElement)
+    if (element instanceof Enumeration) {
+        return generateForEnumeration(element)
     }
-    if (metamodelElement instanceof PrimitiveType) {
-        return generateForPrimitiveType(metamodelElement)
+    if (element instanceof PrimitiveType) {
+        return generateForPrimitiveType(element)
     }
-    return `// unhandled metamodel element: ${metamodelElement.name}`
+    return `// unhandled metamodel element: ${element.name}`
 }
 
 
-const generateForRelationsOf = (metamodelElement: MetamodelElement) => {
-    const relations = relationsOf(metamodelElement)
+const generateForRelationsOf = (element: MetamodelElement) => {
+    const relations = relationsOf(element)
     return relations.length === 0
         ? ``
         : relations
-            .map((relation) => generateForRelation(metamodelElement, relation))
+            .map((relation) => generateForRelation(element, relation))
 }
 
 

@@ -1,6 +1,6 @@
 /**
  * TypeScript type definitions for the `LIonCore` M3 (=meta-meta) model.
- * A LIonWeb metamodel (at the M2 meta level) can be represented as an instance of the {@link Metamodel} type.
+ * A LIonWeb language (at the M2 meta level) can be represented as an instance of the {@link Language} type.
  */
 
 import {MultiRef, SingleRef, unresolved} from "../references.ts"
@@ -18,7 +18,7 @@ export const qualify = (...names: (string|undefined)[]): string =>
 
 
 /**
- * The qualified name of the LIonCore metamodel containing the built-in {@link PrimitiveType primitive types}.
+ * The qualified name of the LIonCore language containing the built-in {@link PrimitiveType primitive types}.
  * (It's defined here because its knowledge intrinsic to all LIonCore M3 instances.
  */
 export const lioncoreBuiltinsQName = "LIonCore.builtins"
@@ -62,10 +62,10 @@ abstract class NamespacedEntity extends M3Node {
     }
 }
 
-class Metamodel extends M3Node implements NamespaceProvider {
+class Language extends M3Node implements NamespaceProvider {
     name: string
     elements: MetamodelElement[] = []   // (containment)
-    dependsOn: MultiRef<Metamodel> = []  // special (!) reference
+    dependsOn: MultiRef<Language> = []  // special (!) reference
         // (!) special because deserializer needs to be aware of where to get the instance from
     constructor(name: string, id: Id) {
         super(id)
@@ -78,7 +78,7 @@ class Metamodel extends M3Node implements NamespaceProvider {
         this.elements.push(...elements)
         return this
     }
-    dependingOn(...metamodels: Metamodel[]) {
+    dependingOn(...metamodels: Language[]) {
         this.dependsOn.push(
             ...metamodels
                 .filter((metamodel) => metamodel.name !== lioncoreBuiltinsQName)
@@ -88,8 +88,8 @@ class Metamodel extends M3Node implements NamespaceProvider {
 }
 
 abstract class MetamodelElement extends NamespacedEntity {
-    constructor(metamodel: Metamodel, name: string, id: Id) {
-        super(metamodel, name, id)
+    constructor(language: Language, name: string, id: Id) {
+        super(language, name, id)
     }
 }
 
@@ -109,8 +109,8 @@ class Concept extends FeaturesContainer {
     abstract: boolean
     extends?: SingleRef<Concept>    // (reference)
     implements: MultiRef<ConceptInterface> = []  // (reference)
-    constructor(metamodel: Metamodel, name: string, id: Id, abstract: boolean, extends_?: SingleRef<Concept>) {
-        super(metamodel, name, id)
+    constructor(language: Language, name: string, id: Id, abstract: boolean, extends_?: SingleRef<Concept>) {
+        super(language, name, id)
         this.abstract = abstract
         this.extends = extends_
     }
@@ -204,7 +204,7 @@ class EnumerationLiteral extends NamespacedEntity {
  * Sum type of all LIonCore type definitions whose meta-type is a concrete (thus: instantiable) Concept.
  */
 type M3Concept =
-    | Metamodel
+    | Language
     // ▼▼▼ all NamespacedEntity-s
     | Concept
     | ConceptInterface
@@ -226,8 +226,8 @@ export {
     EnumerationLiteral,
     Feature,
     FeaturesContainer,
+    Language,
     Link,
-    Metamodel,
     MetamodelElement,
     PrimitiveType,
     Property,

@@ -2,13 +2,13 @@
   "serializationFormatVersion": "1",
   "nodes": [
     {
-      "concept": "LIonCore_M3_Metamodel",
+      "concept": "LIonCore_M3_Language",
       "id": "LIonCore_builtins",
       "properties": {
-        "LIonCore_M3_Metamodel_name": "LIonCore.builtins"
+        "LIonCore_M3_Language_name": "LIonCore.builtins"
       },
       "children": {
-        "LIonCore_M3_Metamodel_elements": [
+        "LIonCore_M3_Language_elements": [
           "LIonCore_builtins_String",
           "LIonCore_builtins_Boolean",
           "LIonCore_builtins_Integer",

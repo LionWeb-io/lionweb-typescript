@@ -4,8 +4,8 @@ import {
     generatePlantUmlForMetamodel
 } from "../../src/m3/diagrams/PlantUML-generator.ts"
 import {generateMermaidForMetamodel} from "../../src/m3/diagrams/Mermaid-generator.ts"
-import {serializeMetamodel} from "../../src/m3/serializer.ts"
-import {deserializeMetamodel} from "../../src/m3/deserializer.ts"
+import {serializeLanguage} from "../../src/m3/serializer.ts"
+import {deserializeLanguage} from "../../src/m3/deserializer.ts"
 import {lioncoreBuiltins} from "../../src/m3/builtins.ts"
 import {writeJsonAsFile} from "../utils/json.ts"
 import {schemaFor} from "../../src/m3/schema-generator.ts"
@@ -28,9 +28,9 @@ Deno.test("Library test metamodel", async (tctx) => {
     })
 
     await tctx.step("serialize it", async () => {
-        const serialization = serializeMetamodel(libraryMetamodel)
+        const serialization = serializeLanguage(libraryMetamodel)
         await writeJsonAsFile("models/meta/library.json", serialization)
-        const deserialization = deserializeMetamodel(undefinedValuesDeletedFrom(serialization))
+        const deserialization = deserializeLanguage(undefinedValuesDeletedFrom(serialization))
         assertEquals(deserialization, libraryMetamodel)
     })
 

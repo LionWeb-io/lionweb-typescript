@@ -35,15 +35,15 @@ classDiagram
   <<Abstract>> FeaturesContainer
   MetamodelElement <|-- FeaturesContainer
 
+  class Language {
+    +String name
+  }
+
   class Link {
     +Boolean multiple
   }
   <<Abstract>> Link
   Feature <|-- Link
-
-  class Metamodel {
-    +String name
-  }
 
   class MetamodelElement
   <<Abstract>> MetamodelElement
@@ -81,9 +81,9 @@ classDiagram
 
 
   FeaturesContainer "1" o-- "*" Feature: features
+  Language "1" o-- "*" MetamodelElement: elements
+  Language "*" -- "*" Language: dependsOn
   Link "*" -- "1" FeaturesContainer: type
-  Metamodel "1" o-- "*" MetamodelElement: elements
-  Metamodel "*" -- "*" Metamodel: dependsOn
 
 
 

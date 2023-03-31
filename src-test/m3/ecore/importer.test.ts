@@ -1,8 +1,8 @@
 import {assertEquals, parse} from "../../deps.ts"
 import {asLIonCoreMetamodel} from "../../../src/m3/ecore/importer.ts"
-import {serializeMetamodel} from "../../../src/m3/serializer.ts"
+import {serializeLanguage} from "../../../src/m3/serializer.ts"
 import {EcoreXml} from "../../../src/m3/ecore/types.ts"
-import {issuesMetamodel} from "../../../src/m3/constraints.ts"
+import {issuesLanguage} from "../../../src/m3/constraints.ts"
 import {checkReferences} from "../../../src/m3/reference-checker.ts"
 import {
     generatePlantUmlForMetamodel
@@ -35,11 +35,11 @@ Deno.test("Ecore importer", async (tctx) => {
         const unresolvedReferences = checkReferences(metamodel)
         logUnresolvedReferences(unresolvedReferences)
         assertEquals(unresolvedReferences, [])
-        const issues = issuesMetamodel(metamodel)
+        const issues = issuesLanguage(metamodel)
         logIssues(issues)
         assertEquals(issues, [])
-        const serialization = serializeMetamodel(metamodel)
-        assertEquals(undefinedValuesDeletedFrom(serialization), undefinedValuesDeletedFrom(serializeMetamodel(libraryMetamodel)))
+        const serialization = serializeLanguage(metamodel)
+        assertEquals(undefinedValuesDeletedFrom(serialization), undefinedValuesDeletedFrom(serializeLanguage(libraryMetamodel)))
         assertEquals(generatePlantUmlForMetamodel(metamodel), generatePlantUmlForMetamodel(libraryMetamodel))
         assertEquals(generateMermaidForMetamodel(metamodel), generateMermaidForMetamodel(libraryMetamodel))
     })

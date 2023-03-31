@@ -10,9 +10,9 @@
 * persistence: [serializer](./serializer.ts) and [deserializer](./deserializer.ts)
 * [constraints checker](./constraints.ts)
 * convenience/helper [functions](./functions.ts) defined on M3 concepts
-* [JSON Schema generator](./schema-generator.ts) that generates a JSON Schema for the serialization format specific to the given metamodel
+* [JSON Schema generator](./schema-generator.ts) that generates a JSON Schema for the serialization format specific to the (the metamodel of the) given language
 * [Ecore importer](./ecore/importer.ts) that converts an Ecore XML file to a M3 instance
-* [PlantUML generator](./diagrams/PlantUML-generator.ts) that generates a PlantUML class diagram from a given metamodel
+* [PlantUML generator](./diagrams/PlantUML-generator.ts) that generates a PlantUML class diagram from (the metamodel of the) a given language
 * ([reference checker](./reference-checker.ts))
 
 An interesting place to start might be the [self-definition of LIonCore/M3](./self-definition.ts) using its own [TypeScript type definitions](./types.ts).

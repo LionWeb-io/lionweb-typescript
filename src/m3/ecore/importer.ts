@@ -2,11 +2,11 @@ import {
     Concept,
     Feature,
     FeaturesContainer,
-    Metamodel,
+    Language,
     MetamodelElement,
     PrimitiveType
 } from "../types.ts"
-import {MetamodelFactory} from "../factory.ts"
+import {LanguageFactory} from "../factory.ts"
 import {
     checkDefinedData,
     checkUniqueData,
@@ -33,13 +33,13 @@ const deref = (typeDescriptor: string): string =>
 
 
 /**
- * Converts a parsed Ecore XML metamodel (file) to a {@link Metamodel LIonCore/M3 instance}.
+ * Converts a parsed Ecore XML metamodel (file) to a {@link Language LIonCore/M3 instance}.
  */
-export const asLIonCoreMetamodel = (ecoreXml: EcoreXml): Metamodel => {
+export const asLIonCoreMetamodel = (ecoreXml: EcoreXml): Language => {
 
     const ePackage = ecoreXml["ecore:EPackage"]
     // TODO (#10)  an Ecore XML can contain multiple EPackage-s
-    const factory = new MetamodelFactory(ePackage["@name"], wrapIdGen(
+    const factory = new LanguageFactory(ePackage["@name"], wrapIdGen(
             hashingIdGen(),
             checkDefinedData,
             checkUniqueData,
@@ -134,9 +134,9 @@ export const asLIonCoreMetamodel = (ecoreXml: EcoreXml): Metamodel => {
 
     // phase 3: put all converted things into the metamodel
 
-    factory.metamodel
+    factory.language
         .havingElements(...convertedEClassifiers.map(([_, mmElement]) => mmElement))
 
-    return factory.metamodel
+    return factory.language
 }
 

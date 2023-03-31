@@ -11,9 +11,9 @@ import {
     Enumeration,
     Feature,
     FeaturesContainer,
+    Language,
     Link,
     M3Concept,
-    Metamodel,
     MetamodelElement,
     Property,
     Reference
@@ -66,9 +66,9 @@ export const nonRelationalFeatures = (features: Feature[]): Feature[] =>
 /**
  * @return the relations of the given {@link MetamodelElement metamodel element}.
  */
-export const relationsOf = (metamodelElement: MetamodelElement): Link[] =>
-    metamodelElement instanceof FeaturesContainer
-        ? relations(metamodelElement.features)
+export const relationsOf = (element: MetamodelElement): Link[] =>
+    element instanceof FeaturesContainer
+        ? relations(element.features)
         : []
 
 
@@ -78,7 +78,7 @@ export const relationsOf = (metamodelElement: MetamodelElement): Link[] =>
  *  (and all their sub types).
  */
 export const containeds = (thing: M3Concept): M3Concept[] => {
-    if (thing instanceof Metamodel) {
+    if (thing instanceof Language) {
         return thing.elements
     }
     if (thing instanceof FeaturesContainer) {
@@ -92,18 +92,18 @@ export const containeds = (thing: M3Concept): M3Concept[] => {
 
 
 /**
- * Performs a depth-first tree traversal of a metamodel, "flatMapping" the `map` function on every node.
+ * Performs a depth-first tree traversal of a language, "flatMapping" the `map` function on every node.
  * It avoids visiting nodes twice (to avoid potential infinite loops), but doesn't report cycles.
  */
-export const flatMap = <T>(metamodel: Metamodel, map: (t: M3Concept) => T[]): T[] =>
-    flatMapNonCyclingFollowing(map, containeds)(metamodel)
+export const flatMap = <T>(language: Language, map: (t: M3Concept) => T[]): T[] =>
+    flatMapNonCyclingFollowing(map, containeds)(language)
 
 
 /**
  * Sorts the given {@link MetamodelElement metamodel elements} by name.
  */
-export const elementsSortedByName = (metamodelElements: MetamodelElement[]) =>
-    sortByStringKey(metamodelElements, (element) => element.name)
+export const elementsSortedByName = (elements: MetamodelElement[]) =>
+    sortByStringKey(elements, (element) => element.name)
 
 
 /**
@@ -161,31 +161,31 @@ export const allFeaturesOf = (conceptType: ConceptType): Feature[] =>
 /**
  * Determines whether the given {@link MetamodelElement metamodel element} is an {@link Enumeration enumeration}.
  */
-export const isEnumeration = (metamodelElement: MetamodelElement): metamodelElement is Enumeration =>
-    metamodelElement instanceof Enumeration
+export const isEnumeration = (element: MetamodelElement): element is Enumeration =>
+    element instanceof Enumeration
 
 
 /**
- * @return a function that looks up a concept from the given {@link Metamodel metamodel} by its ID.
+ * @return a function that looks up a concept from the given {@link Language language} by its ID.
  */
-export const idBasedConceptDeducerFor = (metamodel: Metamodel) =>
+export const idBasedConceptDeducerFor = (language: Language) =>
     (id: Id) =>
-        metamodel.elements.find((element) => element instanceof Concept && element.id === id) as Concept
+        language.elements.find((element) => element instanceof Concept && element.id === id) as Concept
 
 /**
- * @return a function that looks up a concept from the given {@link Metamodel metamodel} by its name.
+ * @return a function that looks up a concept from the given {@link Language language} by its name.
  */
-export const nameBasedConceptDeducerFor = (metamodel: Metamodel) =>
+export const nameBasedConceptDeducerFor = (language: Language) =>
     (name: string) =>
-        metamodel.elements.find((element) => element instanceof Concept && element.name === name) as Concept
+        language.elements.find((element) => element instanceof Concept && element.name === name) as Concept
 
 
 /**
  * @return a {@link ConceptDeducer concept deducer} that deduces the concept of nodes by looking up
- * the concept in the given {@link Metamodel metamodel} by matching the node object's class name to the concept's name.
+ * the concept in the given {@link Language language} by matching the node object's class name to the concept's name.
  */
-export const classBasedConceptDeducerFor = <NT extends Node>(metamodel: Metamodel): ConceptDeducer<NT> => {
-    const deducer = nameBasedConceptDeducerFor(metamodel)
+export const classBasedConceptDeducerFor = <NT extends Node>(language: Language): ConceptDeducer<NT> => {
+    const deducer = nameBasedConceptDeducerFor(language)
     return (node: NT) => deducer(node.constructor.name)
 }
 

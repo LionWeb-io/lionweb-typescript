@@ -2,13 +2,13 @@
   "serializationFormatVersion": "1",
   "nodes": [
     {
-      "concept": "LIonCore_M3_Metamodel",
+      "concept": "LIonCore_M3_Language",
       "id": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
       "properties": {
-        "LIonCore_M3_Metamodel_name": "library"
+        "LIonCore_M3_Language_name": "library"
       },
       "children": {
-        "LIonCore_M3_Metamodel_elements": [
+        "LIonCore_M3_Language_elements": [
           "OcDK2GESljInG-ApIqtkXUoA2UeviB97u0UuiZzM0Hs",
           "Pk1NRJfHMt4eSja2kpXia7x8vj6Vzc6WQCUzT3aVeYY",
           "DuBg-a_slgc_VOG0huySkSWi3rZQX1Q20EEd2f7lvLE",
