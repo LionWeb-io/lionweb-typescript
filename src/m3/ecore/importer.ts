@@ -35,11 +35,14 @@ const deref = (typeDescriptor: string): string =>
 /**
  * Converts a parsed Ecore XML metamodel (file) to a {@link Language LIonCore/M3 instance}.
  */
-export const asLIonCoreMetamodel = (ecoreXml: EcoreXml): Language => {
+export const asLIonCoreMetamodel = (ecoreXml: EcoreXml, version: string): Language => {
 
     const ePackage = ecoreXml["ecore:EPackage"]
     // TODO (#10)  an Ecore XML can contain multiple EPackage-s
-    const factory = new LanguageFactory(ePackage["@name"], wrapIdGen(
+    const factory = new LanguageFactory(
+        ePackage["@name"],
+        version,
+        wrapIdGen(
             hashingIdGen(),
             checkDefinedData,
             checkUniqueData,

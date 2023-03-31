@@ -35,8 +35,8 @@ export const lioncoreAPI: ModelAPI<M3Concept> = ({
                 return new Enumeration(parent as Language, settings[metaFeatures.namespacedEntity_name.id] as string, id)
             case metaConcepts.enumerationLiteral.id:
                 return new EnumerationLiteral(parent as Enumeration, settings[metaFeatures.language_elements.id] as string, id)
-            case metaConcepts.metamodel.id:
-                return new Language(settings[metaFeatures.language_elements.id] as string, id)
+            case metaConcepts.language.id:
+                return new Language(settings[metaFeatures.language_elements.id] as string, settings[metaFeatures.language_version.id] as string, id)
             case metaConcepts.primitiveType.id:
                 return new PrimitiveType(parent as Language, settings[metaFeatures.namespacedEntity_name.id] as string, id)
             case metaConcepts.property.id:

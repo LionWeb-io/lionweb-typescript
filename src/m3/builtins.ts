@@ -3,7 +3,7 @@ import {lioncoreIdGen} from "./id-generation.ts"
 import {lioncoreBuiltinsQName, Property} from "./types.ts"
 
 
-const factory = new LanguageFactory(lioncoreBuiltinsQName, lioncoreIdGen)
+const factory = new LanguageFactory(lioncoreBuiltinsQName, "1", lioncoreIdGen)
 
 /**
  * Definition of a LIonCore language that serves as a standard library of built-in primitive types.

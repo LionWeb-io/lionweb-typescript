@@ -3,7 +3,7 @@ import {lioncoreIdGen} from "./id-generation.ts"
 import {booleanDatatype, stringDatatype} from "./builtins.ts"
 
 
-const factory = new LanguageFactory("LIonCore.M3", lioncoreIdGen)
+const factory = new LanguageFactory("LIonCore.M3", "1", lioncoreIdGen)
 
 
 /**
@@ -42,6 +42,9 @@ const language = factory.concept("Language", false)
 const language_name = factory.property(language, "name")
     .ofType(stringDatatype)
 
+const language_version = factory.property(language, "version")
+    .ofType(stringDatatype)
+
 const language_elements = factory.containment(language, "elements")
     .isOptional()
     .isMultiple()
@@ -51,7 +54,7 @@ const language_dependsOn = factory.reference(language, "dependsOn")
     .isMultiple()
     .ofType(language)
 
-language.havingFeatures(language_name, language_elements, language_dependsOn)
+language.havingFeatures(language_name, language_version, language_elements, language_dependsOn)
 
 
 const languageElement = factory.concept("LanguageElement", true, namespacedEntity)
@@ -204,7 +207,7 @@ export const metaConcepts = {
     containment,
     enumeration,
     enumerationLiteral,
-    metamodel: language,
+    language,
     primitiveType,
     property,
     reference
@@ -224,6 +227,7 @@ export const metaFeatures = {
     language_dependsOn,
     language_elements,
     language_name,
+    language_version,
     namespacedEntity_name,
     property_type,
     property_programmatic,

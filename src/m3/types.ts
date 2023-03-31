@@ -64,12 +64,14 @@ abstract class NamespacedEntity extends M3Node {
 
 class Language extends M3Node implements NamespaceProvider {
     name: string
+    version: string
     elements: LanguageElement[] = []   // (containment)
     dependsOn: MultiRef<Language> = []  // special (!) reference
         // (!) special because deserializer needs to be aware of where to get the instance from
-    constructor(name: string, id: Id) {
+    constructor(name: string, version: string, id: Id) {
         super(id)
         this.name = name
+        this.version = version
     }
     namespaceQualifier(): string {
         return this.name

@@ -26,9 +26,9 @@ export class LanguageFactory {
     readonly id: IdGenerator
     readonly language: Language
 
-    constructor(name: string, id: IdGenerator = nanoIdGen()) {
+    constructor(name: string, version: string, id: IdGenerator = nanoIdGen()) {
         this.id = id
-        this.language = new Language(name, this.id(name))
+        this.language = new Language(name, version, this.id(name))
     }
 
 

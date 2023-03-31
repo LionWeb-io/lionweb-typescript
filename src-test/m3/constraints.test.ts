@@ -6,7 +6,7 @@ import {issuesLanguage} from "../../src/m3/constraints.ts"
 Deno.test("constraints (LIonCore)", async (tctx) => {
 
     await tctx.step("check that a ConceptInterface only has derived features", () => {
-        const factory = new LanguageFactory("metamodel")
+        const factory = new LanguageFactory("metamodel", "1")
         const {language} = factory
         const conceptInterface = factory.conceptInterface("conceptInterface")
         language.havingElements(conceptInterface)
@@ -21,7 +21,7 @@ Deno.test("constraints (LIonCore)", async (tctx) => {
     })
 
     await tctx.step("check that inheritance cycles are detected", () => {
-        const factory = new LanguageFactory("metamodel")
+        const factory = new LanguageFactory("metamodel", "1")
         const {language} = factory
         const cis = [0, 1, 2].map((i) => factory.conceptInterface( `conceptInterface ${i}`))
         cis[2].extends.push(cis[1])
@@ -36,7 +36,7 @@ Deno.test("constraints (LIonCore)", async (tctx) => {
     })
 
     await tctx.step("check that trivial inheritance cycles are detected", () => {
-        const factory = new LanguageFactory("metamodel")
+        const factory = new LanguageFactory("metamodel", "1")
         const {language} = factory
         const ci = factory.conceptInterface(`foo`)
         ci.extends.push(ci)

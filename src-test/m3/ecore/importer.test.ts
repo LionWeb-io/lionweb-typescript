@@ -31,7 +31,7 @@ Deno.test("Ecore importer", async (tctx) => {
         const data = Deno.readTextFileSync("src-test/m3/ecore/library.ecore")
             // Note: can't use Deno's import for this, as it's XML.
         const ecoreXml = textAsEcoreXml(data)
-        const metamodel = asLIonCoreMetamodel(ecoreXml)
+        const metamodel = asLIonCoreMetamodel(ecoreXml, "1")
         const unresolvedReferences = checkReferences(metamodel)
         logUnresolvedReferences(unresolvedReferences)
         assertEquals(unresolvedReferences, [])

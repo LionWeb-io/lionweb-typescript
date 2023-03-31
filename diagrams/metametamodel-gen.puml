@@ -29,6 +29,7 @@ abstract class FeaturesContainer extends LanguageElement implements NamespacePro
 
 class Language implements NamespaceProvider {
   name: String
+  version: String
 }
 
 abstract class LanguageElement extends NamespacedEntity

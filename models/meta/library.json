@@ -5,7 +5,8 @@
       "concept": "LIonCore_M3_Language",
       "id": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
       "properties": {
-        "LIonCore_M3_Language_name": "library"
+        "LIonCore_M3_Language_name": "library",
+        "LIonCore_M3_Language_version": "1"
       },
       "children": {
         "LIonCore_M3_Language_elements": [

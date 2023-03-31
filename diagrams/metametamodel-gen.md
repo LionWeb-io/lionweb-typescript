@@ -37,6 +37,7 @@ classDiagram
 
   class Language {
     +String name
+    +String version
   }
 
   class LanguageElement

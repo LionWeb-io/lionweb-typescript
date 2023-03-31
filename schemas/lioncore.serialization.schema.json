@@ -44,10 +44,14 @@
           "properties": {
             "LIonCore_M3_Language_name": {
               "type": "string"
+            },
+            "LIonCore_M3_Language_version": {
+              "type": "string"
             }
           },
           "required": [
-            "LIonCore_M3_Language_name"
+            "LIonCore_M3_Language_name",
+            "LIonCore_M3_Language_version"
           ],
           "additionalProperties": false
         },
