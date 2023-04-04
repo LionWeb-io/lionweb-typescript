@@ -11,7 +11,7 @@ import {allFeaturesOf} from "./functions.ts"
 /**
  * Joins fragments of a qualified name using the `.` character.
  */
-export const qualify = (...names: (string|undefined)[]): string =>
+const qualify = (...names: (string|undefined)[]): string =>
     names
         .filter((name) => typeof name === "string")
         .join(".")
@@ -21,7 +21,7 @@ export const qualify = (...names: (string|undefined)[]): string =>
  * The qualified name of the LIonCore language containing the built-in {@link PrimitiveType primitive types}.
  * (It's defined here because its knowledge intrinsic to all LIonCore M3 instances.
  */
-export const lioncoreBuiltinsQName = "LIonCore.builtins"
+const lioncoreBuiltinsQName = "LIonCore.builtins"
 
 
 /**
@@ -233,7 +233,9 @@ export {
     Link,
     PrimitiveType,
     Property,
-    Reference
+    Reference,
+    lioncoreBuiltinsQName,
+    qualify
 }
 export type {
     M3Concept
