@@ -32,19 +32,17 @@ abstract class M3Node implements Node {
     parent?: NamespaceProvider
         /*
          * Note: every parent in an M2 (i.e., a Metamodel, Concept, ConceptInterface, Enumeration) also happens to be a namespace.
-         * This is why we can give `parent` the narrower type `NamespaceProvider` instead of `NodeClass`.
+         * This is why we can give `parent` the narrower type `NamespaceProvider` instead of `M3Node`.
          */
-    id: Id
-    protected constructor(id: Id, parent?: NamespaceProvider) {
+    readonly id: Id
+    key: string // TODO  make this a specific type?
+    protected constructor(id: Id, key: string, parent?: NamespaceProvider) {
         this.id = id
+        this.key = key
         this.parent = parent
     }
 }
-/*
- * Note: this definition should be moved up to src/types.ts
- * to express that all nodes except roots/unattached nodes have a parent
- * (of a parametrized type).
- */
+// TODO  inline into NamespacedEntity?
 
 
 interface NamespaceProvider extends Node {
@@ -54,7 +52,8 @@ interface NamespaceProvider extends Node {
 abstract class NamespacedEntity extends M3Node {
     name: string
     protected constructor(parent: NamespaceProvider, name: string, id: Id) {
-        super(id, parent)
+        super(id, name, parent)
+            // Note: key = name by default
         this.name = name
     }
     qualifiedName() {
@@ -62,14 +61,15 @@ abstract class NamespacedEntity extends M3Node {
     }
 }
 
-class Language extends M3Node implements NamespaceProvider {
+class Language implements NamespaceProvider, Node {
+    readonly id: string
     name: string
     version: string
     elements: LanguageElement[] = []   // (containment)
     dependsOn: MultiRef<Language> = []  // special (!) reference
         // (!) special because deserializer needs to be aware of where to get the instance from
     constructor(name: string, version: string, id: Id) {
-        super(id)
+        this.id = id
         this.name = name
         this.version = version
     }
@@ -231,6 +231,7 @@ export {
     Language,
     LanguageElement,
     Link,
+    NamespacedEntity,
     PrimitiveType,
     Property,
     Reference,

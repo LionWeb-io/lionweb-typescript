@@ -26,12 +26,16 @@ const namespacedEntity = factory.concept("NamespacedEntity", true)
 const namespacedEntity_name = factory.property(namespacedEntity, "name")
     .ofType(stringDatatype)
 
+const namespacedEntity_key = factory.property(namespacedEntity, "key")
+    .ofType(stringDatatype)
+
 const namespacedEntity_qualifiedName = factory.property(namespacedEntity, "qualifiedName")
     .isComputed()
     .ofType(stringDatatype)
 
 namespacedEntity.havingFeatures(
         namespacedEntity_name,
+        namespacedEntity_key,
         namespacedEntity_qualifiedName
     )
 

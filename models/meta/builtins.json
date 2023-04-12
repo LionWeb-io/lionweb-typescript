@@ -22,7 +22,8 @@
       "concept": "LIonCore_M3_PrimitiveType",
       "id": "LIonCore_builtins_String",
       "properties": {
-        "LIonCore_M3_NamespacedEntity_name": "String"
+        "LIonCore_M3_NamespacedEntity_name": "String",
+        "LIonCore_M3_NamespacedEntity_key": "String"
       },
       "children": {},
       "references": {},
@@ -32,7 +33,8 @@
       "concept": "LIonCore_M3_PrimitiveType",
       "id": "LIonCore_builtins_Boolean",
       "properties": {
-        "LIonCore_M3_NamespacedEntity_name": "Boolean"
+        "LIonCore_M3_NamespacedEntity_name": "Boolean",
+        "LIonCore_M3_NamespacedEntity_key": "Boolean"
       },
       "children": {},
       "references": {},
@@ -42,7 +44,8 @@
       "concept": "LIonCore_M3_PrimitiveType",
       "id": "LIonCore_builtins_Integer",
       "properties": {
-        "LIonCore_M3_NamespacedEntity_name": "Integer"
+        "LIonCore_M3_NamespacedEntity_name": "Integer",
+        "LIonCore_M3_NamespacedEntity_key": "Integer"
       },
       "children": {},
       "references": {},
@@ -52,7 +55,8 @@
       "concept": "LIonCore_M3_PrimitiveType",
       "id": "LIonCore_builtins_JSON",
       "properties": {
-        "LIonCore_M3_NamespacedEntity_name": "JSON"
+        "LIonCore_M3_NamespacedEntity_name": "JSON",
+        "LIonCore_M3_NamespacedEntity_key": "JSON"
       },
       "children": {},
       "references": {},

@@ -57,6 +57,7 @@ classDiagram
 
   class NamespacedEntity {
     +String name
+    +String key
     +qualifiedName() : String
   }
   <<Abstract>> NamespacedEntity
