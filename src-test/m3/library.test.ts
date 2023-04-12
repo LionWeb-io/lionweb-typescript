@@ -10,7 +10,7 @@ import {lioncoreBuiltins} from "../../src/m3/builtins.ts"
 import {writeJsonAsFile} from "../utils/json.ts"
 import {schemaFor} from "../../src/m3/schema-generator.ts"
 import {metaValidator} from "./json-validator.ts"
-import {undefinedValuesDeletedFrom} from "./test-helpers.ts"
+import {undefinedValuesDeletedFrom} from "../utils/test-helpers.ts"
 
 
 Deno.test("Library test metamodel", async (tctx) => {

@@ -4,7 +4,7 @@ import {serializeLanguage} from "../../src/m3/serializer.ts"
 import {checkReferences} from "../../src/m3/reference-checker.ts"
 import {issuesLanguage} from "../../src/m3/constraints.ts"
 import {writeJsonAsFile} from "../utils/json.ts"
-import {logIssues, logUnresolvedReferences} from "./test-helpers.ts"
+import {logIssues, logUnresolvedReferences} from "../utils/test-helpers.ts"
 
 
 Deno.test("primitive types built-in to LIonCore", async (tctx) => {

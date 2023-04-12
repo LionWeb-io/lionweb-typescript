@@ -14,7 +14,7 @@ import {
     logIssues,
     logUnresolvedReferences,
     undefinedValuesDeletedFrom
-} from "../test-helpers.ts"
+} from "../../utils/test-helpers.ts"
 import {libraryMetamodel} from "../library-meta.ts"
 
 

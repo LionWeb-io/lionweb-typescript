@@ -1,6 +1,6 @@
 import {assertEquals} from "./deps.ts"
 import {writeJsonAsFile} from "./utils/json.ts"
-import {undefinedValuesDeletedFrom} from "./m3/test-helpers.ts"
+import {undefinedValuesDeletedFrom} from "./utils/test-helpers.ts"
 import {serializeModel} from "../src/serializer.ts"
 import {deserializeModel} from "../src/deserializer.ts"
 import {dynamicModelAPI, DynamicNode} from "../src/dynamic-api.ts"

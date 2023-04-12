@@ -19,7 +19,7 @@ import {
     logIssues,
     logUnresolvedReferences,
     undefinedValuesDeletedFrom
-} from "./test-helpers.ts"
+} from "../utils/test-helpers.ts"
 
 
 Deno.test("meta-circularity (LIonCore)", async (tctx) => {
