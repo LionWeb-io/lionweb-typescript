@@ -1,6 +1,6 @@
 import {assertEquals} from "../deps.ts"
-import {LanguageFactory} from "../../src/m3/factory.ts"
 import {issuesLanguage} from "../../src/m3/constraints.ts"
+import {LanguageFactory} from "../../src/m3/factory.ts"
 
 
 Deno.test("constraints (LIonCore)", async (tctx) => {
@@ -23,7 +23,7 @@ Deno.test("constraints (LIonCore)", async (tctx) => {
     await tctx.step("check that inheritance cycles are detected", () => {
         const factory = new LanguageFactory("metamodel", "1")
         const {language} = factory
-        const cis = [0, 1, 2].map((i) => factory.conceptInterface( `conceptInterface ${i}`))
+        const cis = [0, 1, 2].map((i) => factory.conceptInterface(`conceptInterface ${i}`))
         cis[2].extends.push(cis[1])
         cis[1].extends.push(cis[0])
         cis[0].extends.push(cis[2])
