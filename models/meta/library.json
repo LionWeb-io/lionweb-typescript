@@ -116,7 +116,7 @@
         "LIonCore_M3_Feature_optional": "false",
         "LIonCore_M3_Feature_computed": "false",
         "LIonCore_M3_NamespacedEntity_name": "name",
-        "LIonCore_M3_NamespacedEntity_key": "name"
+        "LIonCore_M3_NamespacedEntity_key": "library_Library_name"
       },
       "children": {},
       "references": {
@@ -168,7 +168,7 @@
         "LIonCore_M3_Feature_optional": "false",
         "LIonCore_M3_Feature_computed": "false",
         "LIonCore_M3_NamespacedEntity_name": "name",
-        "LIonCore_M3_NamespacedEntity_key": "name"
+        "LIonCore_M3_NamespacedEntity_key": "library_Writer_name"
       },
       "children": {},
       "references": {

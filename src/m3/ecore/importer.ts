@@ -21,8 +21,9 @@ import {
     EcoreXml,
     EStructuralFeature
 } from "./types.ts"
-import {ConceptType} from "../functions.ts"
+import {ConceptType, keyOf, namedsOf} from "../functions.ts"
 import {booleanDatatype, intDatatype, stringDatatype} from "../builtins.ts"
+import {duplicatesAmong} from "../../utils/grouping.ts"
 
 
 const localRefPrefix = "#//"
@@ -35,7 +36,7 @@ const deref = (typeDescriptor: string): string =>
 /**
  * Converts a parsed Ecore XML metamodel (file) to a {@link Language LIonCore/M3 instance}.
  */
-export const asLIonCoreMetamodel = (ecoreXml: EcoreXml, version: string): Language => {
+export const asLIonCoreLanguage = (ecoreXml: EcoreXml, version: string): Language => {
 
     const ePackage = ecoreXml["ecore:EPackage"]
     // TODO (#10)  an Ecore XML can contain multiple EPackage-s
@@ -139,6 +140,13 @@ export const asLIonCoreMetamodel = (ecoreXml: EcoreXml, version: string): Langua
 
     factory.language
         .havingElements(...convertedEClassifiers.map(([_, mmElement]) => mmElement))
+
+    // phase 4: dedup keys (crudely, using the qualified name) where necessary
+
+    Object.entries(duplicatesAmong(namedsOf(factory.language), keyOf))
+        .forEach(([_, mmElements]) => {
+            mmElements.forEach((mmElement) => mmElement.havingKey(mmElement.qualifiedName().replaceAll(/\./g, "_")))
+        })
 
     return factory.language
 }
