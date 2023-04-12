@@ -1,4 +1,5 @@
 import {Issue} from "../../src/m3/constraints.ts"
+import {asIds} from "../../src/types.ts"
 
 
 /**
@@ -54,8 +55,11 @@ export const logUnresolvedReferences = (unresolvedReferences: string[]) => {
 export const logIssues = (issues: Issue[]) => {
     if (issues.length > 0) {
         console.error(`constraint violations:`)
-        issues.forEach(({message}) => {
+        issues.forEach(({message, secondaries}) => {
             console.error(`\t${message}`)
+            if (secondaries.length > 0 ) {
+                console.error(`\t\tIDs of secondary locations: ${asIds(secondaries).join(", ")}`)
+            }
         })
     }
 }

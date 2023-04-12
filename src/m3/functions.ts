@@ -15,6 +15,7 @@ import {
     LanguageElement,
     Link,
     M3Concept,
+    NamespacedEntity,
     Property,
     Reference
 } from "./types.ts"
@@ -100,10 +101,45 @@ export const flatMap = <T>(language: Language, map: (t: M3Concept) => T[]): T[] 
 
 
 /**
+ * @return the name of the given {@link NamespacedEntity named thing}.
+ */
+export const nameOf = <T extends NamespacedEntity>({name}: T): string =>
+    name
+
+/**
+ * @return the qualified name of the given {@link NamespacedEntity named thing}.
+ */
+export const qualifiedNameOf = <T extends NamespacedEntity>(t: T): string =>
+    t.qualifiedName()
+
+
+/**
+ * @return the {@link NamespacedEntity named things} in this {@link Language language}
+ *  (excluding the language itself)
+ */
+export const namedsOf = (language: Language): NamespacedEntity[] =>
+    flatMap(language, (t) => t instanceof NamespacedEntity ? [t] : [])
+
+
+/**
+ * @return the key of the given {@link NamespacedEntity named thing}.
+ */
+export const keyOf = <T extends NamespacedEntity>({key}: T): string =>
+    key
+
+
+/**
+ * @return the id of the given {@link M3Concept}.
+ */
+export const idOf = <T extends M3Concept>({id}: T): string =>
+    id
+
+
+/**
  * Sorts the given {@link LanguageElement metamodel elements} by name.
  */
 export const elementsSortedByName = (elements: LanguageElement[]) =>
-    sortByStringKey(elements, (element) => element.name)
+    sortByStringKey(elements, nameOf)
 
 
 /**

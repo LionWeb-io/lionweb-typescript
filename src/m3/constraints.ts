@@ -1,5 +1,18 @@
-import {Concept, ConceptInterface, Language, M3Concept} from "./types.ts"
-import {flatMap, inheritedCycleWith} from "./functions.ts"
+import {
+    Concept,
+    ConceptInterface,
+    Language,
+    M3Concept,
+    NamespacedEntity
+} from "./types.ts"
+import {
+    flatMap,
+    inheritedCycleWith,
+    keyOf,
+    namedsOf,
+    qualifiedNameOf
+} from "./functions.ts"
+import {duplicatesAmong} from "../utils/grouping.ts"
 
 
 /**
@@ -9,7 +22,9 @@ import {flatMap, inheritedCycleWith} from "./functions.ts"
 export type Issue = {
     location: M3Concept
     message: string
+    secondaries: M3Concept[]
 }
+// TODO  back this type with an M2
 
 
 /**
@@ -17,38 +32,61 @@ export type Issue = {
  * (This computation is resilient against e.g. inheritance cycles.)
  */
 export const issuesLanguage = (language: Language): Issue[] =>
-    flatMap(
-        language,
-        (t) => {
+    [
+        ...flatMap(
+            language,
+            (t) => {
 
-            const issues: Issue[] = []
-            const issue = (message: string): void => {
-                issues.push({
-                    location: t,
-                    message
-                })
-            }
-
-            if (t instanceof Concept || t instanceof ConceptInterface) {
-                const cycle = inheritedCycleWith(t)
-                if (cycle.length > 0) {
-                    issue(`A ${t.constructor.name} can't inherit (directly or indirectly) from itself, but ${t.qualifiedName()} does so through the following cycle: ${cycle.map((t) => t.qualifiedName()).join(" -> ")}`)
+                const issues: Issue[] = []
+                const issue = (message: string, secondaries?: M3Concept[]): void => {
+                    issues.push({
+                        location: t,
+                        message,
+                        secondaries: secondaries ?? []
+                    })
                 }
-            }
 
-            if (t instanceof ConceptInterface) {
-                const nonComputedFeatures = t.allFeatures().filter(({computed}) => !computed)
-                if (nonComputedFeatures.length > 0) {
-                    const isPlural = nonComputedFeatures.length > 1
-                    issue(`The features of a ConceptInterface must all be computed, but the following feature${isPlural ? `s` : ``} of ${t.qualifiedName()} ${isPlural ? `are` : `is`} not: ${nonComputedFeatures.map(({name}) => name).join(", ")}.`)
+                if (t instanceof Concept || t instanceof ConceptInterface) {
+                    const cycle = inheritedCycleWith(t)
+                    if (cycle.length > 0) {
+                        issue(`A ${t.constructor.name} can't inherit (directly or indirectly) from itself, but ${t.qualifiedName()} does so through the following cycle: ${cycle.map((t) => t.qualifiedName()).join(" -> ")}`)
+                    }
                 }
+
+                if (t instanceof ConceptInterface) {
+                    const nonComputedFeatures = t.allFeatures().filter(({computed}) => !computed)
+                    if (nonComputedFeatures.length > 0) {
+                        const isPlural = nonComputedFeatures.length > 1
+                        issue(`The features of a ConceptInterface must all be computed, but the following feature${isPlural ? `s` : ``} of ${t.qualifiedName()} ${isPlural ? `are` : `is`} not: ${nonComputedFeatures.map(({name}) => name).join(", ")}.`)
+                    }
+                }
+
+                if (t instanceof Language || t instanceof NamespacedEntity) {
+                    if (t.name.trim().length === 0) {
+                        issue(`A ${t.constructor.name} must have a non-whitespace name`)
+                    }
+                }
+
+                return issues
             }
+        ),
+        ...Object.entries(duplicatesAmong(namedsOf(language), keyOf))
+            .flatMap(
+                ([key, ts]) => ts.map(
+                    (t) => ({ location: t, message: `Multiple (nested) language elements with the same key "${key}" exist in this language`, secondaries: ts.filter((otherT) => t !== otherT) })
+                )
+            ),
+        ...Object.entries(duplicatesAmong(namedsOf(language), qualifiedNameOf))
+            .flatMap(
+                ([key, ts]) => ts.map(
+                    (t) => ({ location: t, message: `Multiple (nested) language elements with the same key "${key}" exist in this language`, secondaries: ts.filter((otherT) => t !== otherT) })
+                )
+            )
 
-            // TODO (#8)  add constraints on names
-            // TODO (#8)  check uniqueness of IDs
-            // TODO (#8)  check whether references are resolved (?)
+    ]
 
-            return issues
-        }
-    )
+
+// not here: duplicate IDs and unresolved references are a problem on a lower level
+// TODO (#8)  check uniqueness of IDs
+// TODO (#8)  check whether references are resolved
 

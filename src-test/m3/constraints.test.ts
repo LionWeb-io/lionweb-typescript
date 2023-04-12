@@ -1,6 +1,7 @@
 import {assertEquals} from "../deps.ts"
 import {issuesLanguage} from "../../src/m3/constraints.ts"
 import {LanguageFactory} from "../../src/m3/factory.ts"
+import {Concept, Language} from "../../src/m3/types.ts"
 
 
 Deno.test("constraints (LIonCore)", async (tctx) => {
@@ -47,6 +48,24 @@ Deno.test("constraints (LIonCore)", async (tctx) => {
         const {location, message} = issues[0]
         assertEquals(location, ci)
         assertEquals(message, `A ConceptInterface can't inherit (directly or indirectly) from itself, but metamodel.foo does so through the following cycle: metamodel.foo -> metamodel.foo`)
+    })
+
+    await tctx.step("check that things have names", () => {
+        const language = new Language("", "x", "x")
+        const concept = new Concept(language, "   ", "y", false)
+        language.havingElements(concept)
+        const issues = issuesLanguage(language)
+        assertEquals(issues.length, 2)
+        assertEquals(issues[0], {
+            location: language,
+            message: "A Language must have a non-whitespace name",
+            secondaries: []
+        })
+        assertEquals(issues[1], {
+            location: concept,
+            message: "A Concept must have a non-whitespace name",
+            secondaries: []
+        })
     })
 
 })
