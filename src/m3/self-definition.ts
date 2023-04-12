@@ -25,9 +25,11 @@ const namespacedEntity = factory.concept("NamespacedEntity", true)
 
 const namespacedEntity_name = factory.property(namespacedEntity, "name")
     .ofType(stringDatatype)
+    .havingKey("NamespacedEntity_name")
 
 const namespacedEntity_key = factory.property(namespacedEntity, "key")
     .ofType(stringDatatype)
+    .havingKey("NamespacedEntity_key")
 
 const namespacedEntity_qualifiedName = factory.property(namespacedEntity, "qualifiedName")
     .isComputed()
@@ -45,6 +47,7 @@ const language = factory.concept("Language", false)
 
 const language_name = factory.property(language, "name")
     .ofType(stringDatatype)
+    .havingKey("Language_name")
 
 const language_version = factory.property(language, "version")
     .ofType(stringDatatype)
@@ -92,6 +95,7 @@ const concept_abstract = factory.property(concept, "abstract")
 const concept_extends = factory.reference(concept, "extends")
     .isOptional()
     .ofType(concept)
+    .havingKey("Concept_extends")
 
 const concept_implements = factory.reference(concept, "implements")
     .isOptional()
@@ -111,6 +115,7 @@ const conceptInterface_extends = factory.reference(conceptInterface, "extends")
     .isOptional()
     .isMultiple()
     .ofType(conceptInterface)
+    .havingKey("ConceptInterface_extends")
 
 concept_implements.ofType(conceptInterface)
 conceptInterface.havingFeatures(conceptInterface_extends)
@@ -141,6 +146,7 @@ const link_multiple = factory.property(link, "multiple")
 
 const link_type = factory.reference(link, "type")
     .ofType(featuresContainer)
+    .havingKey("Link_type")
 
 link.havingFeatures(
     link_multiple,
@@ -156,6 +162,7 @@ const property = factory.concept("Property", false, feature)
 const property_type = factory.reference(property, "type")
 const property_programmatic = factory.property(property, "programmatic")
     .ofType(booleanDatatype)
+    .havingKey("Property_type")
 
 property.havingFeatures(
     property_type,

@@ -41,6 +41,10 @@ abstract class M3Node implements Node {
         this.key = key
         this.parent = parent
     }
+    havingKey(key: string) {
+        this.key = key
+        return this
+    }
 }
 // TODO  inline into NamespacedEntity?
 
