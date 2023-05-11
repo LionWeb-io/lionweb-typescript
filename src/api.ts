@@ -33,7 +33,7 @@ export interface ModelAPI<NT extends Node> {
      * @return an instance of the concept, given through its ID, also given its parent (or {@link undefined} for root nodes), and the values of the node's properties ("settings")
      * (The latter may be required as arguments for the constructor of a class, whose instances represent nodes.)
      */
-    nodeFor: (parent: NT | undefined, concept: Concept, id: string, settings: { [propertyId: string]: unknown }) => NT
+    nodeFor: (parent: NT | undefined, concept: Concept, id: string, settings: { [propertyKey: string]: unknown }) => NT
 
     /**
      * Sets the *single* given value of the indicated {@link Feature} on the given node.

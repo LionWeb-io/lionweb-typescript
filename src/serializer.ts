@@ -22,31 +22,62 @@ export const serializeModel = <NT extends Node>(model: NT[], api: ModelAPI<NT>):
             return
         }
 
+        // TODO  get actual metamodel and version infos
+
         const concept = api.conceptOf(node)
         const serializedNode: SerializedNode = {
-            concept: concept.id,
             id: node.id,
-            properties: {},
-            children: {},
-            references: {}
+            concept: {
+                metamodel: "LIonCore_M3",
+                version: "1",
+                key: concept.key
+            },
+            properties: [],
+            children: [],
+            references: []
         }
         nodes.push(serializedNode)
         ids[node.id] = true
         allFeaturesOf(concept).forEach((feature) => {
             const value = api.getFeatureValue(node, feature)
             if (feature instanceof Property && value !== undefined) {
-                serializedNode.properties[feature.id] = serializeBuiltin(value as BuiltinPrimitive)
+                serializedNode.properties.push({
+                    property: {
+                        // FIXME  proper metamodel+version
+                        metamodel: "LIonCore_M3",
+                        version: "1",
+                        key: feature.key
+                    },
+                    value: serializeBuiltin(value as BuiltinPrimitive)
+                })
                 return
             }
             if (feature instanceof Containment && asArray(value).length > 0) {
                 const children = asArray(value) as NT[]
-                serializedNode.children[feature.id] = asIds(children)
+                serializedNode.children.push({
+                    containment: {
+                        // FIXME  proper metamodel+version
+                        metamodel: "LIonCore_M3",
+                        version: "1",
+                        key: feature.key
+                    },
+                    children: asIds(children)
+                })
                 children.forEach((child) => visit(child, node))
                 return
             }
-            if (feature instanceof Reference && asArray(value).length) {
+            if (feature instanceof Reference && asArray(value).length > 0) {
                 const targets = asArray(value)
-                serializedNode.references[feature.id] = asIds(targets as NT[])
+                serializedNode.references.push({
+                    reference: {
+                        // FIXME  proper metamodel+version
+                        metamodel: "LIonCore_M3",
+                        version: "1",
+                        key: feature.key
+                    },
+                    targets: (targets as NT[]).map((t) => ({ reference: t.id }))
+                        // TODO  also provide resolveInfo
+                })
                 return
             }
         })
@@ -57,6 +88,8 @@ export const serializeModel = <NT extends Node>(model: NT[], api: ModelAPI<NT>):
 
     return {
         serializationFormatVersion: "1",
+        // FIXME  proper metamodels
+        metamodels: [],
         nodes
     }
 }

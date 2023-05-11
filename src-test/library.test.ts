@@ -7,6 +7,8 @@ import {dynamicModelAPI, DynamicNode} from "../src/dynamic-api.ts"
 import {nameBasedConceptDeducerFor} from "../src/m3/functions.ts"
 import {libraryModel, libraryModelApi} from "./library.ts"
 import {libraryLanguage} from "./m3/library-meta.ts"
+import {schemaFor} from "../src/m3/schema-generator.ts"
+import {assertJsonValidates} from "./utils/json-validator.ts"
 
 
 Deno.test("Library test model", async (tctx) => {
@@ -16,6 +18,9 @@ Deno.test("Library test model", async (tctx) => {
         await writeJsonAsFile("models/instance/library.json", serialization)
         const deserialization = deserializeModel(undefinedValuesDeletedFrom(serialization), libraryModelApi, libraryLanguage, [])
         assertEquals(deserialization, libraryModel)
+
+        const schema = schemaFor(libraryLanguage)
+        await assertJsonValidates(serialization, schema, "models/instance/library.specific-serialization.errors.json")
     })
 
     await tctx.step(`"dynamify" example library through serialization and deserialization using the Dynamic Model API`, () => {

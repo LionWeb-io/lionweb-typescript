@@ -2,23 +2,31 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "library-serialization",
   "title": "Serialization format specific to library",
-  "type": "object",
-  "properties": {
-    "serializationFormatVersion": {
-      "const": "1"
-    },
-    "nodes": {
-      "type": "array",
-      "items": {
-        "$ref": "#/$defs/SerializedNode"
-      }
-    }
-  },
-  "required": [
-    "serializationFormatVersion",
-    "nodes"
-  ],
+  "$ref": "#/$defs/SerializedModel",
   "$defs": {
+    "SerializedModel": {
+      "type": "object",
+      "properties": {
+        "serializationFormatVersion": {
+          "const": "1"
+        },
+        "metamodels": {
+          "const": []
+        },
+        "nodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SerializedNode"
+          }
+        }
+      },
+      "required": [
+        "serializationFormatVersion",
+        "metamodels",
+        "nodes"
+      ],
+      "additionalProperties": false
+    },
     "Id": {
       "type": "string",
       "minLength": 1
@@ -30,40 +38,67 @@
       },
       "minItems": 1
     },
+    "MetaPointer": {
+      "type": "object",
+      "properties": {
+        "metamodel": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "key": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "metamodel",
+        "version",
+        "key"
+      ],
+      "additionalProperties": false
+    },
     "Book": {
       "type": "object",
       "properties": {
-        "concept": {
-          "const": "OcDK2GESljInG-ApIqtkXUoA2UeviB97u0UuiZzM0Hs"
-        },
         "id": {
           "$ref": "#/$defs/Id"
         },
+        "concept": {
+          "const": {
+            "metamodel": "LIonCore_M3",
+            "version": "1",
+            "key": "Book"
+          }
+        },
         "properties": {
-          "type": "object",
+          "type": "array",
+          "items": {},
           "properties": {
-            "Ei9m_HbdmEYg_EwMLLVZ71ERRBZyXH8GHVyOVia8Sqg": {
+            "title": {
               "type": "string"
             },
-            "OJhF8vB_qRMrA8A9a-H0LsByONdYtHGmQ-lk9rUHUc4": {
+            "pages": {
               "type": "string"
             }
           },
           "required": [
-            "Ei9m_HbdmEYg_EwMLLVZ71ERRBZyXH8GHVyOVia8Sqg",
-            "OJhF8vB_qRMrA8A9a-H0LsByONdYtHGmQ-lk9rUHUc4"
+            "title",
+            "pages"
           ],
           "additionalProperties": false
         },
         "children": {
-          "type": "object",
+          "type": "array",
+          "items": {},
           "properties": {},
           "additionalProperties": false
         },
         "references": {
-          "type": "object",
+          "type": "array",
+          "items": {},
           "properties": {
-            "9ATCb8nXEuQAL3NOY-EUZwuThpIQnQ2C_2n97IRGA_g": {
+            "author": {
               "$ref": "#/$defs/Ids"
             }
           },
@@ -74,8 +109,8 @@
         }
       },
       "required": [
-        "concept",
         "id",
+        "concept",
         "properties",
         "children",
         "references"
@@ -85,38 +120,45 @@
     "Library": {
       "type": "object",
       "properties": {
-        "concept": {
-          "const": "Pk1NRJfHMt4eSja2kpXia7x8vj6Vzc6WQCUzT3aVeYY"
-        },
         "id": {
           "$ref": "#/$defs/Id"
         },
+        "concept": {
+          "const": {
+            "metamodel": "LIonCore_M3",
+            "version": "1",
+            "key": "Library"
+          }
+        },
         "properties": {
-          "type": "object",
+          "type": "array",
+          "items": {},
           "properties": {
-            "LdgCnVXNgZD7CLbBhBin2Rcdumx4qZUYz_jh2QnP5z8": {
+            "library_Library_name": {
               "type": "string"
             }
           },
           "required": [
-            "LdgCnVXNgZD7CLbBhBin2Rcdumx4qZUYz_jh2QnP5z8"
+            "library_Library_name"
           ],
           "additionalProperties": false
         },
         "children": {
-          "type": "object",
+          "type": "array",
+          "items": {},
           "properties": {
-            "TFS1ME6sEyRbkRchsr8zaZCcj_uF1LM0LXK24gbnxZM": {
+            "books": {
               "$ref": "#/$defs/Ids"
             }
           },
           "required": [
-            "TFS1ME6sEyRbkRchsr8zaZCcj_uF1LM0LXK24gbnxZM"
+            "books"
           ],
           "additionalProperties": false
         },
         "references": {
-          "type": "object",
+          "type": "array",
+          "items": {},
           "properties": {},
           "additionalProperties": false
         },
@@ -125,8 +167,8 @@
         }
       },
       "required": [
-        "concept",
         "id",
+        "concept",
         "properties",
         "children",
         "references"
@@ -136,31 +178,38 @@
     "Writer": {
       "type": "object",
       "properties": {
-        "concept": {
-          "const": "DuBg-a_slgc_VOG0huySkSWi3rZQX1Q20EEd2f7lvLE"
-        },
         "id": {
           "$ref": "#/$defs/Id"
         },
+        "concept": {
+          "const": {
+            "metamodel": "LIonCore_M3",
+            "version": "1",
+            "key": "Writer"
+          }
+        },
         "properties": {
-          "type": "object",
+          "type": "array",
+          "items": {},
           "properties": {
-            "onRRrZaasiOtDU2qFJgyW8OVz8p5-hqQu0Vlc_7Aq6s": {
+            "library_Writer_name": {
               "type": "string"
             }
           },
           "required": [
-            "onRRrZaasiOtDU2qFJgyW8OVz8p5-hqQu0Vlc_7Aq6s"
+            "library_Writer_name"
           ],
           "additionalProperties": false
         },
         "children": {
-          "type": "object",
+          "type": "array",
+          "items": {},
           "properties": {},
           "additionalProperties": false
         },
         "references": {
-          "type": "object",
+          "type": "array",
+          "items": {},
           "properties": {},
           "additionalProperties": false
         },
@@ -169,8 +218,8 @@
         }
       },
       "required": [
-        "concept",
         "id",
+        "concept",
         "properties",
         "children",
         "references"
@@ -180,35 +229,42 @@
     "GuideBookWriter": {
       "type": "object",
       "properties": {
-        "concept": {
-          "const": "nNUEzZ7it7d2HoHPAtk5rGO4SsqVA3hAlBwkK1KP8QU"
-        },
         "id": {
           "$ref": "#/$defs/Id"
         },
+        "concept": {
+          "const": {
+            "metamodel": "LIonCore_M3",
+            "version": "1",
+            "key": "GuideBookWriter"
+          }
+        },
         "properties": {
-          "type": "object",
+          "type": "array",
+          "items": {},
           "properties": {
-            "PoZyl6WXh-Cz5h2RspK1NL6zX9DdLwGpUUC-ygQmHMA": {
+            "countries": {
               "type": "string"
             },
-            "onRRrZaasiOtDU2qFJgyW8OVz8p5-hqQu0Vlc_7Aq6s": {
+            "library_Writer_name": {
               "type": "string"
             }
           },
           "required": [
-            "PoZyl6WXh-Cz5h2RspK1NL6zX9DdLwGpUUC-ygQmHMA",
-            "onRRrZaasiOtDU2qFJgyW8OVz8p5-hqQu0Vlc_7Aq6s"
+            "countries",
+            "library_Writer_name"
           ],
           "additionalProperties": false
         },
         "children": {
-          "type": "object",
+          "type": "array",
+          "items": {},
           "properties": {},
           "additionalProperties": false
         },
         "references": {
-          "type": "object",
+          "type": "array",
+          "items": {},
           "properties": {},
           "additionalProperties": false
         },
@@ -217,8 +273,8 @@
         }
       },
       "required": [
-        "concept",
         "id",
+        "concept",
         "properties",
         "children",
         "references"
@@ -228,35 +284,42 @@
     "SpecialistBookWriter": {
       "type": "object",
       "properties": {
-        "concept": {
-          "const": "RDa_L8gbU8XgW9z46oMysBi1Hb7vjcS8O8LUgXlFpeU"
-        },
         "id": {
           "$ref": "#/$defs/Id"
         },
+        "concept": {
+          "const": {
+            "metamodel": "LIonCore_M3",
+            "version": "1",
+            "key": "SpecialistBookWriter"
+          }
+        },
         "properties": {
-          "type": "object",
+          "type": "array",
+          "items": {},
           "properties": {
-            "DbVixG73dI8xIF9TAoq2GOZru4CRQfRD8gG7TkFCZuU": {
+            "subject": {
               "type": "string"
             },
-            "onRRrZaasiOtDU2qFJgyW8OVz8p5-hqQu0Vlc_7Aq6s": {
+            "library_Writer_name": {
               "type": "string"
             }
           },
           "required": [
-            "DbVixG73dI8xIF9TAoq2GOZru4CRQfRD8gG7TkFCZuU",
-            "onRRrZaasiOtDU2qFJgyW8OVz8p5-hqQu0Vlc_7Aq6s"
+            "subject",
+            "library_Writer_name"
           ],
           "additionalProperties": false
         },
         "children": {
-          "type": "object",
+          "type": "array",
+          "items": {},
           "properties": {},
           "additionalProperties": false
         },
         "references": {
-          "type": "object",
+          "type": "array",
+          "items": {},
           "properties": {},
           "additionalProperties": false
         },
@@ -265,8 +328,8 @@
         }
       },
       "required": [
-        "concept",
         "id",
+        "concept",
         "properties",
         "children",
         "references"

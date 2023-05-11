@@ -5,6 +5,8 @@ import {writeJsonAsFile} from "./json.ts"
 const ajv = new Ajv({
     allErrors: true,        // don't stop after 1st error
     strict: true,
+    // FIXME  make next line unnecessary/do nothing
+    strictTypes: false,
     allowUnionTypes: true,  // necessary for validating against the meta-schema
     validateSchema: false   // prevent that Ajv throws with 'no schema with key or ref "https://json-schema.org/draft/2020-12/schema"'
     // It seems weird that Ajv can't validate the schemas themselves (against a meta-schema) but you have to tweak things to do that yourself...

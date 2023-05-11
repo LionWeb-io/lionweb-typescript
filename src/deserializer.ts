@@ -10,6 +10,7 @@ import {
 } from "./m3/types.ts"
 import {allFeaturesOf} from "./m3/functions.ts"
 import {deserializeBuiltin} from "./m3/builtins.ts"
+import {groupBy} from "./utils/grouping.ts"
 
 
 /**
@@ -75,39 +76,47 @@ export const deserializeModel = <NT extends Node>(
     /**
      * Instantiates a {@link Node} from its {@link SerializedNode serialization}.
      */
-    const instantiate = ({concept: conceptId, id, properties, children, references}: SerializedNode, parent?: NT): NT => {
+    const instantiate = ({concept: conceptMetaPointer, id, properties, children, references}: SerializedNode, parent?: NT): NT => {
 
         const concept = language.elements
             .find((element) =>
-                element instanceof Concept && element.id === conceptId
+                element instanceof Concept && element.key === conceptMetaPointer.key
             ) as (Concept | undefined)
         // TODO  replace with idBasedConceptDeducer as soon as that can return undefined (without throwing an Error)
 
         if (concept === undefined) {
-            throw new Error(`can't deserialize a node having concept with ID "${conceptId}"`)
+            throw new Error(`can't deserialize a node having concept with ID "${conceptMetaPointer.key}"`)
         }
 
         const allFeatures = allFeaturesOf(concept)
 
-        const settings: { [propertyId: string]: unknown } = {}
+        const settings: { [propertyKey: string]: unknown } = {}
+
+        const serializedPropertiesPerKey =
+            properties === undefined ? {} : groupBy(properties, (sp) => sp.property.key)
         if (properties !== undefined) {
             allFeatures
                 .filter((feature) => feature instanceof Property)
                 .forEach((property) => {
-                    if (property.id in properties) {
-                        settings[property.id] = deserializeBuiltin(properties[property.id], property as Property)
+                    if (property.key in serializedPropertiesPerKey) {
+                        settings[property.key] = deserializeBuiltin(serializedPropertiesPerKey[property.key][0].value, property as Property)
                     }
                 })
         }
 
         const node = modelAPI.nodeFor(parent, concept, id, settings)
 
+        const serializedChildrenPerKey =
+            children === undefined ? {} : groupBy(children, (sp) => sp.containment.key)
+        const serializedReferencesPerKey =
+            references === undefined ? {} : groupBy(references, (sp) => sp.reference.key)
+
         allFeatures
             .forEach((feature) => {
-                if (feature instanceof Property && properties !== undefined && feature.id in properties) {
-                    modelAPI.setFeatureValue(node, feature, deserializeBuiltin(properties[feature.id], feature))
-                } else if (feature instanceof Containment && children !== undefined && feature.id in children) {
-                    const childIds = children[feature.id] as Id[]
+                if (feature instanceof Property && properties !== undefined && feature.key in serializedPropertiesPerKey) {
+                    modelAPI.setFeatureValue(node, feature, settings[feature.key])
+                } else if (feature instanceof Containment && children !== undefined && feature.key in serializedChildrenPerKey) {
+                    const childIds = serializedChildrenPerKey[feature.key].flatMap((serChildren) => serChildren.children) as Id[]
                     if (feature.multiple) {
                         childIds
                             .forEach((id) => {
@@ -118,8 +127,11 @@ export const deserializeModel = <NT extends Node>(
                             modelAPI.setFeatureValue(node, feature, instantiateMemoised(serializedNodeById[childIds[0]], node))
                         }
                     }
-                } else if (feature instanceof Reference && references !== undefined && feature.id in references) {
-                    const serRefs = references[feature.id] ?? []
+                } else if (feature instanceof Reference && references !== undefined && feature.key in serializedReferencesPerKey) {
+                    const serRefs = (serializedReferencesPerKey[feature.key] ?? []).flatMap(
+                        (serReferences) => serReferences.targets.map(
+                            (t) => t.reference)
+                    )
                     referencesToInstall.push(...(
                         (
                             serRefs

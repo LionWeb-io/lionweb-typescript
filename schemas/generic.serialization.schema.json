@@ -7,6 +7,9 @@
     "serializationFormatVersion": {
       "const": "1"
     },
+    "metamodels": {
+      "type": "array"
+    },
     "nodes": {
       "type": "array",
       "items": {
@@ -16,35 +19,122 @@
   },
   "required": [
     "serializationFormatVersion",
+    "metamodels",
     "nodes"
   ],
+  "additionalProperties": false,
   "$defs": {
     "Id": {
       "type": "string",
       "minLength": 1
     },
-    "SerializedNode": {
+    "MetaPointer": {
       "type": "object",
       "properties": {
-        "concept": {
+        "metamodel": {
           "type": "string"
         },
-        "id": {
-          "$ref": "#/$defs/Id"
+        "version": {
+          "type": "string"
         },
-        "properties": {
-          "type": "object"
-        },
-        "children": {
-          "type": "object"
-        },
-        "references": {
-          "type": "object"
+        "key": {
+          "type": "string"
         }
       },
       "required": [
-        "concept",
+        "metamodel",
+        "version",
+        "key"
+      ],
+      "additionalProperties": false
+    },
+    "SerializedProperty": {
+      "type": "object",
+      "properties": {
+        "property": {
+          "$ref": "#/$defs/MetaPointer"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "property",
+        "value"
+      ]
+    },
+    "SerializedContainment": {
+      "type": "object",
+      "properties": {
+        "containment": {
+          "$ref": "#/$defs/MetaPointer"
+        },
+        "children": {
+          "$ref": "#/$defs/Ids"
+        }
+      },
+      "required": [
+        "containment",
+        "children"
+      ]
+    },
+    "SerializedReference": {
+      "type": "object",
+      "properties": {
+        "reference": {
+          "$ref": "#/$defs/MetaPointer"
+        },
+        "targets": {
+          "$ref": "#/$defs/SerializedReferenceTarget"
+        }
+      },
+      "required": [
+        "reference",
+        "targets"
+      ]
+    },
+    "SerializedReferenceTarget": {
+      "type": "object",
+      "properties": {
+        "resolveInfo": {
+          "type": "string"
+        },
+        "reference": {
+          "$ref": "#/$defs/Id"
+        }
+      },
+      "required": [
+        "reference"
+      ]
+    },
+    "SerializedNode": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/Id"
+        },
+        "concept": {
+          "$ref": "#/$defs/MetaPointer"
+        },
+        "properties": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SerializedProperty"
+          }
+        },
+        "children": {
+          "type": "array"
+        },
+        "references": {
+          "type": "array"
+        },
+        "parent": {
+          "$ref": "#/$defs/Id"
+        }
+      },
+      "required": [
         "id",
+        "concept",
         "properties",
         "children",
         "references"

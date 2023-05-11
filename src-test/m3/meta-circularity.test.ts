@@ -52,18 +52,18 @@ Deno.test("meta-circularity (LIonCore)", async (tctx) => {
         assertEquals(deserialization, lioncore)
     })
 
-    await tctx.step("validate serialization of LIonCore", async () => {
+    await tctx.step("validate serialization of LIonCore against generic JSON Schema for the serialization format", async () => {
         const schema = await readFileAsJson("schemas/generic.serialization.schema.json")
-        await assertJsonValidates(schema, metaSchema, "schemas/generic.serialization.schema.errors.json", "JSON Schema for generic serialization format")
+        await assertJsonValidates(schema, metaSchema, "schemas/generic.serialization.schema.errors.json")
 
         const serialization = serializeLanguage(lioncore)
         await assertJsonValidates(serialization, schema, "models/meta/lioncore.generic-serialization.errors.json")
     })
 
-    await tctx.step("generate JSON Schema for serialization format of LIonCore/M3 instances", async () => {
+    await tctx.step("validate serialization of LIonCore against generated, language-specific JSON Schema for the serialization format", async () => {
         const schema = schemaFor(lioncore)
         const serialization = serializeLanguage(lioncore)
-        await assertJsonValidates(serialization, schema, "models/meta/lioncore.specific-serialization.errors.json", "serialization of LIonCore self-def.")
+        await assertJsonValidates(serialization, schema, "models/meta/lioncore.specific-serialization.errors.json")
     })
 
 })

@@ -4,15 +4,41 @@ import {Id} from "./types.ts"
 export type Ids = Id[]
 
 
+export type MetaPointer = {
+    metamodel: string
+    version: string
+    key: string
+}
+
+export type SerializedProperty = {
+    property: MetaPointer
+    value: string
+}
+
+export type SerializedContainment = {
+    containment: MetaPointer
+    children: Ids
+}
+
+export type SerializedReferenceTarget = {
+    resolveInfo?: string
+    reference: Id
+}
+
+export type SerializedReference = {
+    reference: MetaPointer
+    targets: SerializedReferenceTarget[]
+}
+
 /**
  * Type definition for an AST node serialized to JSON.
  */
 export type SerializedNode = {
-    concept: string
+    concept: MetaPointer
     id: string
-    properties: { [featureName: string]: string }
-    children: { [featureName: string]: Ids }
-    references: { [featureName: string]: Ids }
+    properties: SerializedProperty[]
+    children: SerializedContainment[]
+    references: SerializedReference[]
     parent?: Id
 }
 
@@ -22,6 +48,7 @@ export type SerializedNode = {
  */
 export type SerializedModel = {
     serializationFormatVersion: string
+    metamodels: []
     nodes: SerializedNode[]
 }
 // TODO  rename -> Serialization?
