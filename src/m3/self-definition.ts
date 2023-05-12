@@ -14,12 +14,6 @@ export const lioncore = factory.language
 
 const namespaceProvider = factory.conceptInterface("NamespaceProvider")
 
-const namespaceProvider_namespaceQualifier = factory.property(namespaceProvider, "namespaceQualifier")
-    .isComputed()
-    .ofType(stringDatatype)
-
-namespaceProvider.havingFeatures(namespaceProvider_namespaceQualifier)
-
 
 const namespacedEntity = factory.concept("NamespacedEntity", true)
 
@@ -31,14 +25,9 @@ const namespacedEntity_key = factory.property(namespacedEntity, "key")
     .ofType(stringDatatype)
     .havingKey("NamespacedEntity_key")
 
-const namespacedEntity_qualifiedName = factory.property(namespacedEntity, "qualifiedName")
-    .isComputed()
-    .ofType(stringDatatype)
-
 namespacedEntity.havingFeatures(
         namespacedEntity_name,
-        namespacedEntity_key,
-        namespacedEntity_qualifiedName
+        namespacedEntity_key
     )
 
 
@@ -76,14 +65,8 @@ const featuresContainer_features = factory.containment(featuresContainer, "featu
     .isOptional()
     .isMultiple()
 
-const featuresContainer_allFeatures = factory.reference(featuresContainer, "allFeatures")
-    .isOptional()
-    .isMultiple()
-    .isComputed()
-
 featuresContainer.havingFeatures(
-    featuresContainer_features,
-    featuresContainer_allFeatures
+    featuresContainer_features
 )
 
 
@@ -126,16 +109,10 @@ const feature = factory.concept("Feature", true, namespacedEntity)
 const feature_optional = factory.property(feature, "optional")
     .ofType(booleanDatatype)
 
-const feature_computed = factory.property(feature, "computed")
-    .ofType(booleanDatatype)
-    .isProgrammatic()
-
 feature.havingFeatures(
-    feature_optional,
-    feature_computed
+    feature_optional
 )
 
-featuresContainer_allFeatures.type = feature
 featuresContainer_features.type = feature
 
 
@@ -160,13 +137,9 @@ const reference = factory.concept("Reference", false, link)
 const property = factory.concept("Property", false, feature)
 
 const property_type = factory.reference(property, "type")
-const property_programmatic = factory.property(property, "programmatic")
-    .ofType(booleanDatatype)
-    .havingKey("Property_type")
 
 property.havingFeatures(
-    property_type,
-    property_programmatic
+    property_type
 )
 
 
@@ -230,7 +203,6 @@ export const metaFeatures = {
     concept_implements,
     conceptInterface_extends,
     enumeration_literals,
-    feature_computed,
     feature_optional,
     featuresContainer_features,
     link_multiple,
@@ -240,7 +212,6 @@ export const metaFeatures = {
     language_name,
     language_version,
     namespacedEntity_name,
-    property_type,
-    property_programmatic,
+    property_type
 }
 

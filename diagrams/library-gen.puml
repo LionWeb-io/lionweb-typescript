@@ -35,7 +35,4 @@ Library "1" o-- "*" Book: books
 
 
 
-legend
-  <#LightGray,#LightGray>| <#Orange>Programmatic |
-end legend
 @enduml

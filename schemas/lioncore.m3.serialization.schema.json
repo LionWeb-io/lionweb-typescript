@@ -223,9 +223,6 @@
             "LIonCore_M3_Feature_optional": {
               "type": "string"
             },
-            "LIonCore_M3_Feature_computed": {
-              "type": "string"
-            },
             "LIonCore_M3_NamespacedEntity_name": {
               "type": "string"
             },
@@ -236,7 +233,6 @@
           "required": [
             "LIonCore_M3_Link_multiple",
             "LIonCore_M3_Feature_optional",
-            "LIonCore_M3_Feature_computed",
             "LIonCore_M3_NamespacedEntity_name",
             "LIonCore_M3_NamespacedEntity_key"
           ],
@@ -281,13 +277,7 @@
         "properties": {
           "type": "object",
           "properties": {
-            "LIonCore_M3_Property_programmatic": {
-              "type": "string"
-            },
             "LIonCore_M3_Feature_optional": {
-              "type": "string"
-            },
-            "LIonCore_M3_Feature_computed": {
               "type": "string"
             },
             "LIonCore_M3_NamespacedEntity_name": {
@@ -298,9 +288,7 @@
             }
           },
           "required": [
-            "LIonCore_M3_Property_programmatic",
             "LIonCore_M3_Feature_optional",
-            "LIonCore_M3_Feature_computed",
             "LIonCore_M3_NamespacedEntity_name",
             "LIonCore_M3_NamespacedEntity_key"
           ],
@@ -399,9 +387,6 @@
             "LIonCore_M3_Feature_optional": {
               "type": "string"
             },
-            "LIonCore_M3_Feature_computed": {
-              "type": "string"
-            },
             "LIonCore_M3_NamespacedEntity_name": {
               "type": "string"
             },
@@ -412,7 +397,6 @@
           "required": [
             "LIonCore_M3_Link_multiple",
             "LIonCore_M3_Feature_optional",
-            "LIonCore_M3_Feature_computed",
             "LIonCore_M3_NamespacedEntity_name",
             "LIonCore_M3_NamespacedEntity_key"
           ],

@@ -24,14 +24,11 @@ classDiagram
 
   class Feature {
     +Boolean optional
-    +Boolean computed
   }
   <<Abstract>> Feature
   NamespacedEntity <|-- Feature
 
-  class FeaturesContainer {
-    +allFeatures() : List~Feature~?
-  }
+  class FeaturesContainer
   <<Abstract>> FeaturesContainer
   LanguageElement <|-- FeaturesContainer
 
@@ -50,24 +47,19 @@ classDiagram
   <<Abstract>> Link
   Feature <|-- Link
 
-  class NamespaceProvider {
-    +namespaceQualifier() : String
-  }
+  class NamespaceProvider
   <<Interface>> NamespaceProvider
 
   class NamespacedEntity {
     +String name
     +String key
-    +qualifiedName() : String
   }
   <<Abstract>> NamespacedEntity
 
   class PrimitiveType
   DataType <|-- PrimitiveType
 
-  class Property {
-    +Boolean programmatic
-  }
+  class Property
   Feature <|-- Property
 
   class Reference

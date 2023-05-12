@@ -41,8 +41,7 @@
       "children": {
         "LIonCore_M3_FeaturesContainer_features": [
           "LIonCore_M3_NamespacedEntity_name",
-          "LIonCore_M3_NamespacedEntity_key",
-          "LIonCore_M3_NamespacedEntity_qualifiedName"
+          "LIonCore_M3_NamespacedEntity_key"
         ]
       },
       "references": {},
@@ -52,9 +51,7 @@
       "concept": "LIonCore_M3_Property",
       "id": "LIonCore_M3_NamespacedEntity_name",
       "properties": {
-        "LIonCore_M3_Property_programmatic": "false",
         "LIonCore_M3_Feature_optional": "false",
-        "LIonCore_M3_Feature_computed": "false",
         "LIonCore_M3_NamespacedEntity_name": "name",
         "LIonCore_M3_NamespacedEntity_key": "NamespacedEntity_name"
       },
@@ -70,29 +67,9 @@
       "concept": "LIonCore_M3_Property",
       "id": "LIonCore_M3_NamespacedEntity_key",
       "properties": {
-        "LIonCore_M3_Property_programmatic": "false",
         "LIonCore_M3_Feature_optional": "false",
-        "LIonCore_M3_Feature_computed": "false",
         "LIonCore_M3_NamespacedEntity_name": "key",
         "LIonCore_M3_NamespacedEntity_key": "NamespacedEntity_key"
-      },
-      "children": {},
-      "references": {
-        "LIonCore_M3_Property_type": [
-          "LIonCore_builtins_String"
-        ]
-      },
-      "parent": "LIonCore_M3_NamespacedEntity"
-    },
-    {
-      "concept": "LIonCore_M3_Property",
-      "id": "LIonCore_M3_NamespacedEntity_qualifiedName",
-      "properties": {
-        "LIonCore_M3_Property_programmatic": "false",
-        "LIonCore_M3_Feature_optional": "false",
-        "LIonCore_M3_Feature_computed": "true",
-        "LIonCore_M3_NamespacedEntity_name": "qualifiedName",
-        "LIonCore_M3_NamespacedEntity_key": "qualifiedName"
       },
       "children": {},
       "references": {
@@ -109,31 +86,9 @@
         "LIonCore_M3_NamespacedEntity_name": "NamespaceProvider",
         "LIonCore_M3_NamespacedEntity_key": "NamespaceProvider"
       },
-      "children": {
-        "LIonCore_M3_FeaturesContainer_features": [
-          "LIonCore_M3_NamespaceProvider_namespaceQualifier"
-        ]
-      },
+      "children": {},
       "references": {},
       "parent": "LIonCore_M3"
-    },
-    {
-      "concept": "LIonCore_M3_Property",
-      "id": "LIonCore_M3_NamespaceProvider_namespaceQualifier",
-      "properties": {
-        "LIonCore_M3_Property_programmatic": "false",
-        "LIonCore_M3_Feature_optional": "false",
-        "LIonCore_M3_Feature_computed": "true",
-        "LIonCore_M3_NamespacedEntity_name": "namespaceQualifier",
-        "LIonCore_M3_NamespacedEntity_key": "namespaceQualifier"
-      },
-      "children": {},
-      "references": {
-        "LIonCore_M3_Property_type": [
-          "LIonCore_builtins_String"
-        ]
-      },
-      "parent": "LIonCore_M3_NamespaceProvider"
     },
     {
       "concept": "LIonCore_M3_Concept",
@@ -162,9 +117,7 @@
       "concept": "LIonCore_M3_Property",
       "id": "LIonCore_M3_Language_name",
       "properties": {
-        "LIonCore_M3_Property_programmatic": "false",
         "LIonCore_M3_Feature_optional": "false",
-        "LIonCore_M3_Feature_computed": "false",
         "LIonCore_M3_NamespacedEntity_name": "name",
         "LIonCore_M3_NamespacedEntity_key": "Language_name"
       },
@@ -180,9 +133,7 @@
       "concept": "LIonCore_M3_Property",
       "id": "LIonCore_M3_Language_version",
       "properties": {
-        "LIonCore_M3_Property_programmatic": "false",
         "LIonCore_M3_Feature_optional": "false",
-        "LIonCore_M3_Feature_computed": "false",
         "LIonCore_M3_NamespacedEntity_name": "version",
         "LIonCore_M3_NamespacedEntity_key": "version"
       },
@@ -200,7 +151,6 @@
       "properties": {
         "LIonCore_M3_Link_multiple": "true",
         "LIonCore_M3_Feature_optional": "true",
-        "LIonCore_M3_Feature_computed": "false",
         "LIonCore_M3_NamespacedEntity_name": "elements",
         "LIonCore_M3_NamespacedEntity_key": "elements"
       },
@@ -218,7 +168,6 @@
       "properties": {
         "LIonCore_M3_Link_multiple": "true",
         "LIonCore_M3_Feature_optional": "true",
-        "LIonCore_M3_Feature_computed": "false",
         "LIonCore_M3_NamespacedEntity_name": "dependsOn",
         "LIonCore_M3_NamespacedEntity_key": "dependsOn"
       },
@@ -256,8 +205,7 @@
       },
       "children": {
         "LIonCore_M3_FeaturesContainer_features": [
-          "LIonCore_M3_FeaturesContainer_features",
-          "LIonCore_M3_FeaturesContainer_allFeatures"
+          "LIonCore_M3_FeaturesContainer_features"
         ]
       },
       "references": {
@@ -276,27 +224,8 @@
       "properties": {
         "LIonCore_M3_Link_multiple": "true",
         "LIonCore_M3_Feature_optional": "true",
-        "LIonCore_M3_Feature_computed": "false",
         "LIonCore_M3_NamespacedEntity_name": "features",
         "LIonCore_M3_NamespacedEntity_key": "features"
-      },
-      "children": {},
-      "references": {
-        "LIonCore_M3_Link_type": [
-          "LIonCore_M3_Feature"
-        ]
-      },
-      "parent": "LIonCore_M3_FeaturesContainer"
-    },
-    {
-      "concept": "LIonCore_M3_Reference",
-      "id": "LIonCore_M3_FeaturesContainer_allFeatures",
-      "properties": {
-        "LIonCore_M3_Link_multiple": "true",
-        "LIonCore_M3_Feature_optional": "true",
-        "LIonCore_M3_Feature_computed": "true",
-        "LIonCore_M3_NamespacedEntity_name": "allFeatures",
-        "LIonCore_M3_NamespacedEntity_key": "allFeatures"
       },
       "children": {},
       "references": {
@@ -332,9 +261,7 @@
       "concept": "LIonCore_M3_Property",
       "id": "LIonCore_M3_Concept_abstract",
       "properties": {
-        "LIonCore_M3_Property_programmatic": "false",
         "LIonCore_M3_Feature_optional": "false",
-        "LIonCore_M3_Feature_computed": "false",
         "LIonCore_M3_NamespacedEntity_name": "abstract",
         "LIonCore_M3_NamespacedEntity_key": "abstract"
       },
@@ -352,7 +279,6 @@
       "properties": {
         "LIonCore_M3_Link_multiple": "false",
         "LIonCore_M3_Feature_optional": "true",
-        "LIonCore_M3_Feature_computed": "false",
         "LIonCore_M3_NamespacedEntity_name": "extends",
         "LIonCore_M3_NamespacedEntity_key": "Concept_extends"
       },
@@ -370,7 +296,6 @@
       "properties": {
         "LIonCore_M3_Link_multiple": "true",
         "LIonCore_M3_Feature_optional": "true",
-        "LIonCore_M3_Feature_computed": "false",
         "LIonCore_M3_NamespacedEntity_name": "implements",
         "LIonCore_M3_NamespacedEntity_key": "implements"
       },
@@ -408,7 +333,6 @@
       "properties": {
         "LIonCore_M3_Link_multiple": "true",
         "LIonCore_M3_Feature_optional": "true",
-        "LIonCore_M3_Feature_computed": "false",
         "LIonCore_M3_NamespacedEntity_name": "extends",
         "LIonCore_M3_NamespacedEntity_key": "ConceptInterface_extends"
       },
@@ -430,8 +354,7 @@
       },
       "children": {
         "LIonCore_M3_FeaturesContainer_features": [
-          "LIonCore_M3_Feature_optional",
-          "LIonCore_M3_Feature_computed"
+          "LIonCore_M3_Feature_optional"
         ]
       },
       "references": {
@@ -445,29 +368,9 @@
       "concept": "LIonCore_M3_Property",
       "id": "LIonCore_M3_Feature_optional",
       "properties": {
-        "LIonCore_M3_Property_programmatic": "false",
         "LIonCore_M3_Feature_optional": "false",
-        "LIonCore_M3_Feature_computed": "false",
         "LIonCore_M3_NamespacedEntity_name": "optional",
         "LIonCore_M3_NamespacedEntity_key": "optional"
-      },
-      "children": {},
-      "references": {
-        "LIonCore_M3_Property_type": [
-          "LIonCore_builtins_Boolean"
-        ]
-      },
-      "parent": "LIonCore_M3_Feature"
-    },
-    {
-      "concept": "LIonCore_M3_Property",
-      "id": "LIonCore_M3_Feature_computed",
-      "properties": {
-        "LIonCore_M3_Property_programmatic": "true",
-        "LIonCore_M3_Feature_optional": "false",
-        "LIonCore_M3_Feature_computed": "false",
-        "LIonCore_M3_NamespacedEntity_name": "computed",
-        "LIonCore_M3_NamespacedEntity_key": "computed"
       },
       "children": {},
       "references": {
@@ -502,9 +405,7 @@
       "concept": "LIonCore_M3_Property",
       "id": "LIonCore_M3_Link_multiple",
       "properties": {
-        "LIonCore_M3_Property_programmatic": "false",
         "LIonCore_M3_Feature_optional": "false",
-        "LIonCore_M3_Feature_computed": "false",
         "LIonCore_M3_NamespacedEntity_name": "multiple",
         "LIonCore_M3_NamespacedEntity_key": "multiple"
       },
@@ -522,7 +423,6 @@
       "properties": {
         "LIonCore_M3_Link_multiple": "false",
         "LIonCore_M3_Feature_optional": "false",
-        "LIonCore_M3_Feature_computed": "false",
         "LIonCore_M3_NamespacedEntity_name": "type",
         "LIonCore_M3_NamespacedEntity_key": "Link_type"
       },
@@ -560,8 +460,7 @@
       },
       "children": {
         "LIonCore_M3_FeaturesContainer_features": [
-          "LIonCore_M3_Property_type",
-          "LIonCore_M3_Property_programmatic"
+          "LIonCore_M3_Property_type"
         ]
       },
       "references": {
@@ -577,7 +476,6 @@
       "properties": {
         "LIonCore_M3_Link_multiple": "false",
         "LIonCore_M3_Feature_optional": "false",
-        "LIonCore_M3_Feature_computed": "false",
         "LIonCore_M3_NamespacedEntity_name": "type",
         "LIonCore_M3_NamespacedEntity_key": "type"
       },
@@ -585,24 +483,6 @@
       "references": {
         "LIonCore_M3_Link_type": [
           "LIonCore_M3_DataType"
-        ]
-      },
-      "parent": "LIonCore_M3_Property"
-    },
-    {
-      "concept": "LIonCore_M3_Property",
-      "id": "LIonCore_M3_Property_programmatic",
-      "properties": {
-        "LIonCore_M3_Property_programmatic": "false",
-        "LIonCore_M3_Feature_optional": "false",
-        "LIonCore_M3_Feature_computed": "false",
-        "LIonCore_M3_NamespacedEntity_name": "programmatic",
-        "LIonCore_M3_NamespacedEntity_key": "Property_type"
-      },
-      "children": {},
-      "references": {
-        "LIonCore_M3_Property_type": [
-          "LIonCore_builtins_Boolean"
         ]
       },
       "parent": "LIonCore_M3_Property"
@@ -684,7 +564,6 @@
       "properties": {
         "LIonCore_M3_Link_multiple": "true",
         "LIonCore_M3_Feature_optional": "false",
-        "LIonCore_M3_Feature_computed": "false",
         "LIonCore_M3_NamespacedEntity_name": "literals",
         "LIonCore_M3_NamespacedEntity_key": "literals"
       },

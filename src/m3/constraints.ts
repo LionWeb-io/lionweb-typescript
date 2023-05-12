@@ -53,14 +53,6 @@ export const issuesLanguage = (language: Language): Issue[] =>
                     }
                 }
 
-                if (t instanceof ConceptInterface) {
-                    const nonComputedFeatures = t.allFeatures().filter(({computed}) => !computed)
-                    if (nonComputedFeatures.length > 0) {
-                        const isPlural = nonComputedFeatures.length > 1
-                        issue(`The features of a ConceptInterface must all be computed, but the following feature${isPlural ? `s` : ``} of ${t.qualifiedName()} ${isPlural ? `are` : `is`} not: ${nonComputedFeatures.map(({name}) => name).join(", ")}.`)
-                    }
-                }
-
                 if (t instanceof Language || t instanceof NamespacedEntity) {
                     if (t.name.trim().length === 0) {
                         issue(`A ${t.constructor.name} must have a non-whitespace name`)

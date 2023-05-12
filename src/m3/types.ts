@@ -138,13 +138,8 @@ class ConceptInterface extends FeaturesContainer {
 
 abstract class Feature extends NamespacedEntity {
     optional /*: boolean */ = false
-    computed /*: boolean */ = false
     constructor(featuresContainer: FeaturesContainer, name: string, id: Id) {
         super(featuresContainer, name, id)
-    }
-    isComputed() {
-        this.computed = true
-        return this
     }
     isOptional() {
         this.optional = true
@@ -173,17 +168,8 @@ class Containment extends Link {
 
 class Property extends Feature {
     type: SingleRef<Datatype> = unresolved   // (reference)
-    /**
-     * Indicates whether this property targets the _programmatic_ aspect of
-     * the LIonCore/M3 instance.
-     */
-    programmatic /*: boolean */ = false
     ofType(type: Datatype) {
         this.type = type
-        return this
-    }
-    isProgrammatic() {
-        this.programmatic = true
         return this
     }
 }

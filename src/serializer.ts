@@ -33,9 +33,6 @@ export const serializeModel = <NT extends Node>(model: NT[], api: ModelAPI<NT>):
         nodes.push(serializedNode)
         ids[node.id] = true
         allFeaturesOf(concept).forEach((feature) => {
-            if (feature.computed) {
-                return
-            }
             const value = api.getFeatureValue(node, feature)
             if (feature instanceof Property && value !== undefined) {
                 serializedNode.properties[feature.id] = serializeBuiltin(value as BuiltinPrimitive)

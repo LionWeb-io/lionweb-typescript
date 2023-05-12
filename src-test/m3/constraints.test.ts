@@ -6,21 +6,6 @@ import {Concept, Language} from "../../src/m3/types.ts"
 
 Deno.test("constraints (LIonCore)", async (tctx) => {
 
-    await tctx.step("check that a ConceptInterface only has computed features", () => {
-        const factory = new LanguageFactory("metamodel", "1")
-        const {language} = factory
-        const conceptInterface = factory.conceptInterface("conceptInterface")
-        language.havingElements(conceptInterface)
-        const property = factory.property(conceptInterface, "property")
-        conceptInterface.havingFeatures(property)
-
-        const issues = issuesLanguage(language)
-        assertEquals(issues.length, 1)
-        const {location, message} = issues[0]
-        assertEquals(location, conceptInterface)
-        assertEquals(message, `The features of a ConceptInterface must all be computed, but the following feature of metamodel.conceptInterface is not: property.`)
-    })
-
     await tctx.step("check that inheritance cycles are detected", () => {
         const factory = new LanguageFactory("metamodel", "1")
         const {language} = factory

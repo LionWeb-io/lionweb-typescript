@@ -103,7 +103,6 @@ export const deserializeModel = <NT extends Node>(
         const node = modelAPI.nodeFor(parent, concept, id, settings)
 
         allFeatures
-            .filter((feature) => !feature.computed)
             .forEach((feature) => {
                 if (feature instanceof Property && properties !== undefined && feature.id in properties) {
                     modelAPI.setFeatureValue(node, feature, deserializeBuiltin(properties[feature.id], feature))

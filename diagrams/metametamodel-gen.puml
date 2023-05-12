@@ -20,12 +20,9 @@ class EnumerationLiteral extends NamespacedEntity
 
 abstract class Feature extends NamespacedEntity {
   optional: Boolean
-  #Orange computed: Boolean
 }
 
-abstract class FeaturesContainer extends LanguageElement implements NamespaceProvider {
-  allFeatures(): List<Feature>
-}
+abstract class FeaturesContainer extends LanguageElement implements NamespaceProvider
 
 class Language implements NamespaceProvider {
   name: String
@@ -38,21 +35,15 @@ abstract class Link extends Feature {
   multiple: Boolean
 }
 
-interface NamespaceProvider {
-  namespaceQualifier(): String
-}
-
+interface NamespaceProvider
 abstract class NamespacedEntity {
   name: String
   key: String
-  qualifiedName(): String
 }
 
 class PrimitiveType extends DataType
 
-class Property extends Feature {
-  programmatic: Boolean
-}
+class Property extends Feature
 
 class Reference extends Link
 
@@ -79,7 +70,4 @@ Link "*" -- "1" FeaturesContainer: type
 Property "*" -- "1" DataType: type
 
 
-legend
-  <#LightGray,#LightGray>| <#Orange>Programmatic |
-end legend
 @enduml

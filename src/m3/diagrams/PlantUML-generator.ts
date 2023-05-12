@@ -8,8 +8,7 @@ import {
     Language,
     LanguageElement,
     Link,
-    PrimitiveType,
-    Property
+    PrimitiveType
 } from "../types.ts"
 import {
     elementsSortedByName,
@@ -44,9 +43,6 @@ hide empty members
 `,
     elementsSortedByName(elements).map(generateForRelationsOf),
 `
-legend
-  <#LightGray,#LightGray>| <#Orange>Programmatic |
-end legend
 @enduml
 `
 ])
@@ -106,10 +102,10 @@ const generateForConceptInterface = ({name, extends: extends_, features}: Concep
 
 
 const generateForNonRelationalFeature = (feature: Feature) => {
-    const {name, optional, computed} = feature
+    const {name, optional} = feature
     const multiple = feature instanceof Link && feature.multiple
     const type_ = type(feature)
-    return `${(feature instanceof Property && feature.programmatic) ? "#Orange ": ""}${name}${computed ? `()` : ``}: ${multiple ? `List<` : ``}${type_ === unresolved ? `???` : type_.name}${multiple ? `>` : ``}${(optional && !multiple) ? `?` : ``}`
+    return `${name}: ${multiple ? `List<` : ``}${type_ === unresolved ? `???` : type_.name}${multiple ? `>` : ``}${(optional && !multiple) ? `?` : ``}`
 }
 
 

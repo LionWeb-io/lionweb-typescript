@@ -4,7 +4,7 @@ import {
     flatMapNonCyclingFollowing,
     trivialFlatMapper
 } from "./utils/recursion.ts"
-import {allFeaturesOf, isNonComputedContainment} from "./m3/functions.ts"
+import {allFeaturesOf, isContainment} from "./m3/functions.ts"
 
 
 export type ConceptDeducer<NT extends Node> = (node: NT) => Concept
@@ -51,7 +51,7 @@ export interface ModelAPI<NT extends Node> {
 export const childrenExtractorUsing = <NT extends Node>(api: ModelAPI<NT>) =>
     (node: NT): NT[] =>
         allFeaturesOf(api.conceptOf(node))
-            .filter(isNonComputedContainment)
+            .filter(isContainment)
             .flatMap((containment) => api.getFeatureValue(node, containment) as NT[])
 
 
