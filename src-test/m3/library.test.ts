@@ -3,13 +3,15 @@ import {libraryLanguage} from "./library-meta.ts"
 import {
     generatePlantUmlForMetamodel
 } from "../../src/m3/diagrams/PlantUML-generator.ts"
-import {generateMermaidForMetamodel} from "../../src/m3/diagrams/Mermaid-generator.ts"
+import {
+    generateMermaidForMetamodel
+} from "../../src/m3/diagrams/Mermaid-generator.ts"
 import {serializeLanguage} from "../../src/m3/serializer.ts"
 import {deserializeLanguage} from "../../src/m3/deserializer.ts"
 import {lioncoreBuiltins} from "../../src/m3/builtins.ts"
 import {writeJsonAsFile} from "../utils/json.ts"
 import {schemaFor} from "../../src/m3/schema-generator.ts"
-import {metaValidator} from "./json-validator.ts"
+import {assertJsonValidates, metaSchema} from "../utils/json-validator.ts"
 import {undefinedValuesDeletedFrom} from "../utils/test-helpers.ts"
 
 
@@ -36,9 +38,8 @@ Deno.test("Library test metamodel", async (tctx) => {
 
     await tctx.step("generate JSON Schema for serialization format of libraries", async () => {
         const schema = schemaFor(libraryLanguage)
-        const metaErrors = metaValidator(schema)
         await writeJsonAsFile("schemas/library.serialization.schema.json", schema)
-        assertEquals(metaErrors, [])
+        await assertJsonValidates(schema, metaSchema, "schemas/library.serialization.schema.errors.json")
     })
 
 })

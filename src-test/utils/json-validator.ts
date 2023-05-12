@@ -1,4 +1,5 @@
-import {Ajv, ErrorObject, addFormats} from "../deps.ts"
+import {Ajv, ErrorObject, addFormats, assertEquals} from "../deps.ts"
+import {writeJsonAsFile} from "./json.ts"
 
 
 const ajv = new Ajv({
@@ -14,7 +15,7 @@ addFormats(ajv)
 /**
  * Creates a JSON validator for the given JSON Schema.
  */
-export const createJsonValidatorForSchema = (schema: unknown): (json: unknown) => ErrorObject[] => {
+const createJsonValidatorForSchema = (schema: unknown): (json: unknown) => ErrorObject[] => {
     // deno-lint-ignore no-explicit-any
     const ajvSchemaValidator = ajv.compile(schema as any)
     return (json: unknown): ErrorObject[] => {
@@ -32,8 +33,30 @@ import metaSchema from "./json.schema.json" assert { type: "json" }
  * TODO  download that file and tweak it automatically/programmatically
  */
 
+
 /**
- * A validator that validates given JSON as a JSON Schema.
+ * Asserts that the given JSON validates against the given JSON Schema.
+ * If not, it stores the errors at the given file (path), and assert-fails.
+ * If it does validate, it makes sure that no errors file remains.
  */
-export const metaValidator = createJsonValidatorForSchema(metaSchema)
+const assertJsonValidates = async (json: unknown, schema: unknown, pathErrorsFile: string, message?: string) => {
+    const jsonValidator = createJsonValidatorForSchema(schema)
+    const errors = jsonValidator(json)
+    if (errors.length > 0) {
+        await writeJsonAsFile(pathErrorsFile, errors)
+    } else {
+        try {
+            await Deno.remove(pathErrorsFile)
+        } catch (_) {
+            // (do nothing)
+        }
+    }
+    assertEquals(errors.length, 0, message)
+}
+
+export {
+    assertJsonValidates,
+    createJsonValidatorForSchema,
+    metaSchema
+}
 
