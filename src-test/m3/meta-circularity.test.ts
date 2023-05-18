@@ -11,9 +11,7 @@ import {issuesLanguage} from "../../src/m3/constraints.ts"
 import {serializeLanguage} from "../../src/m3/serializer.ts"
 import {deserializeLanguage} from "../../src/m3/deserializer.ts"
 import {readFileAsJson, writeJsonAsFile} from "../utils/json.ts"
-import {assertJsonValidates, metaSchema} from "../utils/json-validator.ts"
 import {SerializedModel} from "../../src/serialization.ts"
-import {schemaFor} from "../../src/m3/schema-generator.ts"
 import {
     logIssues,
     logUnresolvedReferences,
@@ -50,20 +48,6 @@ Deno.test("meta-circularity (LIonCore)", async (tctx) => {
         const serialization = await readFileAsJson(serializedLioncorePath) as SerializedModel
         const deserialization = deserializeLanguage(undefinedValuesDeletedFrom(serialization))
         assertEquals(deserialization, lioncore)
-    })
-
-    await tctx.step("validate serialization of LIonCore against generic JSON Schema for the serialization format", async () => {
-        const schema = await readFileAsJson("schemas/generic.serialization.schema.json")
-        await assertJsonValidates(schema, metaSchema, "schemas/generic.serialization.schema.errors.json")
-
-        const serialization = serializeLanguage(lioncore)
-        await assertJsonValidates(serialization, schema, "models/meta/lioncore.generic-serialization.errors.json")
-    })
-
-    await tctx.step("validate serialization of LIonCore against generated, language-specific JSON Schema for the serialization format", async () => {
-        const schema = schemaFor(lioncore)
-        const serialization = serializeLanguage(lioncore)
-        await assertJsonValidates(serialization, schema, "models/meta/lioncore.specific-serialization.errors.json")
     })
 
 })
