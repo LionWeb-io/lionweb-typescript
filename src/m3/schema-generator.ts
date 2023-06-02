@@ -124,7 +124,7 @@ export const schemaFor = (language: Language): unknown /* <=> JSON Schema */ => 
                     serializationFormatVersion: {
                         const: "1"
                     },
-                    metamodels: {
+                    languages: {
                         const: []
                     },
                     nodes: {
@@ -134,7 +134,7 @@ export const schemaFor = (language: Language): unknown /* <=> JSON Schema */ => 
                 },
                 required: [
                     "serializationFormatVersion",
-                    "metamodels",
+                    "languages",
                     "nodes"
                 ],
                 additionalProperties: false
@@ -151,12 +151,12 @@ export const schemaFor = (language: Language): unknown /* <=> JSON Schema */ => 
             "MetaPointer": {
                 type: "object",
                 properties: {
-                    "metamodel": isString(),
+                    "language": isString(),
                     "version": isString(),
                     "key": isString()
                 },
                 required: [
-                    "metamodel",
+                    "language",
                     "version",
                     "key"
                 ],

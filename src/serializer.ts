@@ -28,7 +28,7 @@ export const serializeModel = <NT extends Node>(model: NT[], api: ModelAPI<NT>):
         const serializedNode: SerializedNode = {
             id: node.id,
             concept: {
-                metamodel: "LIonCore_M3",
+                language: "LIonCore_M3",
                 version: "1",
                 key: concept.key
             },
@@ -44,7 +44,7 @@ export const serializeModel = <NT extends Node>(model: NT[], api: ModelAPI<NT>):
                 serializedNode.properties.push({
                     property: {
                         // FIXME  proper metamodel+version
-                        metamodel: "LIonCore_M3",
+                        language: "LIonCore_M3",
                         version: "1",
                         key: feature.key
                     },
@@ -57,7 +57,7 @@ export const serializeModel = <NT extends Node>(model: NT[], api: ModelAPI<NT>):
                 serializedNode.children.push({
                     containment: {
                         // FIXME  proper metamodel+version
-                        metamodel: "LIonCore_M3",
+                        language: "LIonCore_M3",
                         version: "1",
                         key: feature.key
                     },
@@ -71,7 +71,7 @@ export const serializeModel = <NT extends Node>(model: NT[], api: ModelAPI<NT>):
                 serializedNode.references.push({
                     reference: {
                         // FIXME  proper metamodel+version
-                        metamodel: "LIonCore_M3",
+                        language: "LIonCore_M3",
                         version: "1",
                         key: feature.key
                     },
@@ -89,7 +89,7 @@ export const serializeModel = <NT extends Node>(model: NT[], api: ModelAPI<NT>):
     return {
         serializationFormatVersion: "1",
         // FIXME  proper metamodels
-        metamodels: [],
+        languages: [],
         nodes
     }
 }

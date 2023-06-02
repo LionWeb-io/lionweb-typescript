@@ -5,7 +5,7 @@ export type Ids = Id[]
 
 
 export type MetaPointer = {
-    metamodel: string
+    language: string
     version: string
     key: string
 }
@@ -48,7 +48,7 @@ export type SerializedNode = {
  */
 export type SerializedModel = {
     serializationFormatVersion: string
-    metamodels: []
+    languages: []   // FIXME
     nodes: SerializedNode[]
 }
 // TODO  rename -> Serialization?

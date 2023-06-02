@@ -10,7 +10,7 @@
         "serializationFormatVersion": {
           "const": "1"
         },
-        "metamodels": {
+        "languages": {
           "const": []
         },
         "nodes": {
@@ -22,7 +22,7 @@
       },
       "required": [
         "serializationFormatVersion",
-        "metamodels",
+        "languages",
         "nodes"
       ],
       "additionalProperties": false
@@ -41,7 +41,7 @@
     "MetaPointer": {
       "type": "object",
       "properties": {
-        "metamodel": {
+        "language": {
           "type": "string"
         },
         "version": {
@@ -52,7 +52,7 @@
         }
       },
       "required": [
-        "metamodel",
+        "language",
         "version",
         "key"
       ],
