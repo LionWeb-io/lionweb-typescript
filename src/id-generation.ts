@@ -36,6 +36,7 @@ const defaultHashAlgorithm = "SHA256"
 export type HashingIdGenConfig = {
     algorithm?: typeof defaultHashAlgorithm | string
     salt?: string
+    encoding?: "base64url" | "base64"
 }
 
 /**
@@ -49,6 +50,7 @@ export type HashingIdGenConfig = {
 export const hashingIdGen = (config?: HashingIdGenConfig): IdGenerator => {
     const algorithm = config?.algorithm ?? defaultHashAlgorithm
     const salt = config?.salt ?? ""
+    const encoding = config?.encoding ?? "base64url"
 
     return (data) => {
         if (data === undefined) {
@@ -56,7 +58,7 @@ export const hashingIdGen = (config?: HashingIdGenConfig): IdGenerator => {
         }
         return createHash(algorithm)
             .update(salt + data)
-            .digest("base64url")
+            .digest(encoding)
             .toString()
     }
 }

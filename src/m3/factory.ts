@@ -13,7 +13,7 @@ import {
 } from "./types.ts"
 import {SingleRef} from "../references.ts"
 import {IdGenerator, nanoIdGen} from "../id-generation.ts"
-import {KeyGenerator, simpleNameIsKeyGenerator} from "./key-generator.ts"
+import {KeyGenerator, simpleNameIsKeyGenerator} from "./key-generation.ts"
 
 
 /**

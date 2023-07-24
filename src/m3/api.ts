@@ -14,7 +14,7 @@ import {
 } from "./types.ts"
 import {lioncore, metaConcepts, metaFeatures} from "./self-definition.ts"
 import {classBasedConceptDeducerFor} from "./functions.ts"
-import {KeyGenerator, simpleNameIsKeyGenerator} from "./key-generator.ts"
+import {KeyGenerator, simpleNameIsKeyGenerator} from "./key-generation.ts"
 
 
 /**
@@ -57,6 +57,8 @@ export const lioncoreAPIWithKeyGen = (keyGen: KeyGenerator): ModelAPI<M3Concept>
 
 /**
  * An implementation of {@link ModelAPI} for instances of the LIonCore M3 (so M2s), where key = name.
+ *
+ * TODO  deprecate this: [de-]serialization of metamodels should be parametrized with key generation throughout
  */
 export const lioncoreAPI: ModelAPI<M3Concept> = lioncoreAPIWithKeyGen(simpleNameIsKeyGenerator)
 

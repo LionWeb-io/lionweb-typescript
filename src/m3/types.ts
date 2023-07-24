@@ -6,7 +6,7 @@
 import {MultiRef, SingleRef, unresolved} from "../references.ts"
 import {Id, Node} from "../types.ts"
 import {allFeaturesOf} from "./functions.ts"
-import {KeyGenerator} from "./key-generator.ts"
+import {KeyGenerator} from "./key-generation.ts"
 
 
 /**
