@@ -112,7 +112,7 @@ We can use the compressed package as a dependency of local projects, for testing
 ```json
 "dependencies": {
     ...
-    "lioncore": "file:///Users/alessio/projects/lioncore-typescript/npm/lioncore-0.2.0.tgz"
+    "lioncore-typescript": "file:...<relative path>.../lioncore-typescript/npm/lioncore-0.2.0.tgz"
     ...
 },
 ```
