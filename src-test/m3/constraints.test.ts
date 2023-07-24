@@ -37,7 +37,7 @@ Deno.test("constraints (LIonCore)", async (tctx) => {
 
     await tctx.step("check that things have names", () => {
         const language = new Language("", "x", "x")
-        const concept = new Concept(language, "   ", "y", false)
+        const concept = new Concept(language, "   ", "y", "y", false)
         language.havingElements(concept)
         const issues = issuesLanguage(language)
         assertEquals(issues.length, 2)

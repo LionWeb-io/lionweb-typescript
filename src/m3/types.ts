@@ -6,6 +6,7 @@
 import {MultiRef, SingleRef, unresolved} from "../references.ts"
 import {Id, Node} from "../types.ts"
 import {allFeaturesOf} from "./functions.ts"
+import {KeyGenerator} from "./key-generator.ts"
 
 
 /**
@@ -45,6 +46,16 @@ abstract class M3Node implements Node {
         this.key = key
         return this
     }
+
+    /**
+     * Sets the key of this {@link M3Node} using the given {@link KeyGenerator key generator}.
+     * Note: this doesn't need to be idempotent!
+     */
+    keyed(keyGenerator: KeyGenerator) {
+        this.key = keyGenerator(this as unknown as M3Concept)
+            // FIXME  the cast smells like a hack...
+        return this
+    }
 }
 // TODO  inline into NamespacedEntity?
 
@@ -55,9 +66,8 @@ interface NamespaceProvider extends Node {
 
 abstract class NamespacedEntity extends M3Node {
     name: string
-    protected constructor(parent: NamespaceProvider, name: string, id: Id) {
-        super(id, name, parent)
-            // Note: key = name by default
+    protected constructor(parent: NamespaceProvider, name: string, key: string, id: Id) {
+        super(id, key, parent)
         this.name = name
     }
     qualifiedName() {
@@ -94,8 +104,8 @@ class Language implements NamespaceProvider, Node {
 }
 
 abstract class LanguageElement extends NamespacedEntity {
-    constructor(language: Language, name: string, id: Id) {
-        super(language, name, id)
+    constructor(language: Language, name: string, key: string, id: Id) {
+        super(language, name, key, id)
     }
 }
 
@@ -115,8 +125,8 @@ class Concept extends FeaturesContainer {
     abstract: boolean
     extends?: SingleRef<Concept>    // (reference)
     implements: MultiRef<ConceptInterface> = []  // (reference)
-    constructor(language: Language, name: string, id: Id, abstract: boolean, extends_?: SingleRef<Concept>) {
-        super(language, name, id)
+    constructor(language: Language, name: string, key: string, id: Id, abstract: boolean, extends_?: SingleRef<Concept>) {
+        super(language, name, key, id)
         this.abstract = abstract
         this.extends = extends_
     }
@@ -138,8 +148,8 @@ class ConceptInterface extends FeaturesContainer {
 
 abstract class Feature extends NamespacedEntity {
     optional /*: boolean */ = false
-    constructor(featuresContainer: FeaturesContainer, name: string, id: Id) {
-        super(featuresContainer, name, id)
+    constructor(featuresContainer: FeaturesContainer, name: string, key: string, id: Id) {
+        super(featuresContainer, name, key, id)
     }
     isOptional() {
         this.optional = true
@@ -186,8 +196,8 @@ class Enumeration extends Datatype implements NamespaceProvider {
 }
 
 class EnumerationLiteral extends NamespacedEntity {
-    constructor(enumeration: Enumeration, name: string, id: Id) {
-        super(enumeration, name, id)
+    constructor(enumeration: Enumeration, name: string, key: string, id: Id) {
+        super(enumeration, name, key, id)
     }
 }
 

@@ -13,6 +13,7 @@ import {
 } from "./types.ts"
 import {SingleRef} from "../references.ts"
 import {IdGenerator, nanoIdGen} from "../id-generation.ts"
+import {KeyGenerator, simpleNameIsKeyGenerator} from "./key-generator.ts"
 
 
 /**
@@ -24,46 +25,50 @@ import {IdGenerator, nanoIdGen} from "../id-generation.ts"
 export class LanguageFactory {
 
     readonly id: IdGenerator
+    readonly key: KeyGenerator
     readonly language: Language
 
-    constructor(name: string, version: string, id: IdGenerator = nanoIdGen()) {
+    constructor(name: string, version: string, id: IdGenerator = nanoIdGen(), key: KeyGenerator = simpleNameIsKeyGenerator) {
         this.id = id
+        this.key = key
         this.language = new Language(name, version, this.id(name))
     }
 
 
+    // TODO  this pattern (post-re-setting the key) is not nice: improve...
+
     concept(name: string, abstract: boolean, extends_?: SingleRef<Concept>) {
-        return new Concept(this.language, name, this.id(qualify(this.language.name, name)), abstract, extends_)
+        return new Concept(this.language, name, "", this.id(qualify(this.language.name, name)), abstract, extends_).keyed(this.key)
     }
 
     conceptInterface(name: string) {
-        return new ConceptInterface(this.language, name, this.id(qualify(this.language.name, name)))
+        return new ConceptInterface(this.language, name, "", this.id(qualify(this.language.name, name))).keyed(this.key)
     }
 
     enumeration(name: string) {
-        return new Enumeration(this.language, name, this.id(qualify(this.language.name, name)))
+        return new Enumeration(this.language, name, "", this.id(qualify(this.language.name, name))).keyed(this.key)
     }
 
     primitiveType(name: string) {
-        return new PrimitiveType(this.language, name, this.id(qualify(this.language.name, name)))
+        return new PrimitiveType(this.language, name, "", this.id(qualify(this.language.name, name))).keyed(this.key)
     }
 
 
     containment(featuresContainer: FeaturesContainer, name: string) {
-        return new Containment(featuresContainer, name, this.id(qualify(featuresContainer.qualifiedName(), name)))
+        return new Containment(featuresContainer, name, "", this.id(qualify(featuresContainer.qualifiedName(), name))).keyed(this.key)
     }
 
     property(featuresContainer: FeaturesContainer, name: string) {
-        return new Property(featuresContainer, name, this.id(qualify(featuresContainer.qualifiedName(), name)))
+        return new Property(featuresContainer, name, "", this.id(qualify(featuresContainer.qualifiedName(), name))).keyed(this.key)
     }
 
     reference(featuresContainer: FeaturesContainer, name: string) {
-        return new Reference(featuresContainer, name, this.id(qualify(featuresContainer.qualifiedName(), name)))
+        return new Reference(featuresContainer, name, "", this.id(qualify(featuresContainer.qualifiedName(), name))).keyed(this.key)
     }
 
 
     enumerationLiteral(enumeration: Enumeration, name: string) {
-        return new EnumerationLiteral(enumeration, name, this.id(qualify(enumeration.qualifiedName(), name)))
+        return new EnumerationLiteral(enumeration, name, "", this.id(qualify(enumeration.qualifiedName(), name))).keyed(this.key)
     }
 
 }
