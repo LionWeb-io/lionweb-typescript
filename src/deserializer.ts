@@ -119,8 +119,8 @@ export const deserializeModel = <NT extends Node>(
                     const childIds = serializedChildrenPerKey[feature.key].flatMap((serChildren) => serChildren.children) as Id[]
                     if (feature.multiple) {
                         childIds
-                            .forEach((id) => {
-                                modelAPI.setFeatureValue(node, feature, instantiateMemoised(serializedNodeById[id], node))
+                            .forEach((childId) => {
+                                modelAPI.setFeatureValue(node, feature, instantiateMemoised(serializedNodeById[childId], node))
                             })
                     } else {
                         if (childIds.length > 0) {
