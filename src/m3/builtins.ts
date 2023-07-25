@@ -1,14 +1,14 @@
-import {MetamodelFactory} from "./factory.ts"
+import {LanguageFactory} from "./factory.ts"
 import {lioncoreIdGen} from "./id-generation.ts"
 import {lioncoreBuiltinsQName, Property} from "./types.ts"
 
 
-const factory = new MetamodelFactory(lioncoreBuiltinsQName, lioncoreIdGen)
+const factory = new LanguageFactory(lioncoreBuiltinsQName, "1", lioncoreIdGen)
 
 /**
- * Definition of a LIonCore metamodel that serves as a standard library of built-in primitive types.
+ * Definition of a LIonCore language that serves as a standard library of built-in primitive types.
  */
-export const lioncoreBuiltins = factory.metamodel
+export const lioncoreBuiltins = factory.language
 
 export const stringDatatype = factory.primitiveType("String")
 export const booleanDatatype = factory.primitiveType("Boolean")

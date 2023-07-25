@@ -12,7 +12,7 @@ class ConceptInterface extends FeaturesContainer
 
 class Containment extends Link
 
-abstract class DataType extends MetamodelElement
+abstract class DataType extends LanguageElement
 
 class Enumeration extends DataType implements NamespaceProvider
 
@@ -20,37 +20,30 @@ class EnumerationLiteral extends NamespacedEntity
 
 abstract class Feature extends NamespacedEntity {
   optional: Boolean
-  #Orange derived: Boolean
 }
 
-abstract class FeaturesContainer extends MetamodelElement implements NamespaceProvider {
-  allFeatures(): List<Feature>
+abstract class FeaturesContainer extends LanguageElement implements NamespaceProvider
+
+class Language implements NamespaceProvider {
+  name: String
+  version: String
 }
+
+abstract class LanguageElement extends NamespacedEntity
 
 abstract class Link extends Feature {
   multiple: Boolean
 }
 
-class Metamodel implements NamespaceProvider {
-  name: String
-}
-
-abstract class MetamodelElement extends NamespacedEntity
-
-interface NamespaceProvider {
-  namespaceQualifier(): String
-}
-
+interface NamespaceProvider
 abstract class NamespacedEntity {
   name: String
-  qualifiedName(): String
+  key: String
 }
 
 class PrimitiveType extends DataType
 
-class Property extends Feature {
-  programmatic: Boolean
-}
+class Property extends Feature
 
 class Reference extends Link
 
@@ -67,17 +60,14 @@ Enumeration "1" o-- "*" EnumerationLiteral: literals
 
 
 FeaturesContainer "1" o-- "*" Feature: features
-Link "*" -- "1" FeaturesContainer: type
-Metamodel "1" o-- "*" MetamodelElement: elements
-Metamodel "*" -- "*" Metamodel: dependsOn
+Language "1" o-- "*" LanguageElement: elements
+Language "*" -- "*" Language: dependsOn
 
+Link "*" -- "1" FeaturesContainer: type
 
 
 
 Property "*" -- "1" DataType: type
 
 
-legend
-  <#LightGray,#LightGray>| <#Orange>Programmatic |
-end legend
 @enduml

@@ -1,27 +1,34 @@
 /**
  * TypeScript type definitions for the `LIonCore` M3 (=meta-meta) model.
- * A LIonWeb metamodel (at the M2 meta level) can be represented as an instance of the {@link Metamodel} type.
+ * A LIonWeb language (at the M2 meta level) can be represented as an instance of the {@link Language} type.
  */
 
 import {MultiRef, SingleRef, unresolved} from "../references.ts"
 import {Id, Node} from "../types.ts"
 import {allFeaturesOf} from "./functions.ts"
+import {KeyGenerator} from "./key-generation.ts"
 
 
 /**
- * Joins fragments of a qualified name using the `.` character.
+ * @return A function that combines fragments of a qualified name using the given separator string.
  */
-export const qualify = (...names: (string|undefined)[]): string =>
-    names
-        .filter((name) => typeof name === "string")
-        .join(".")
+const combiner = (separator: string) =>
+    (...names: (string|undefined)[]): string =>
+        names
+            .filter((name) => typeof name === "string")
+            .join(separator)
+
+/**
+ * @return The combination of fragments of a qualified name using the `.` character.
+ */
+const qualify = combiner(".")
 
 
 /**
- * The qualified name of the LIonCore metamodel containing the built-in {@link PrimitiveType primitive types}.
+ * The qualified name of the LIonCore language containing the built-in {@link PrimitiveType primitive types}.
  * (It's defined here because its knowledge intrinsic to all LIonCore M3 instances.
  */
-export const lioncoreBuiltinsQName = "LIonCore.builtins"
+const lioncoreBuiltinsQName = "LIonCore.builtins"
 
 
 /**
@@ -32,19 +39,30 @@ abstract class M3Node implements Node {
     parent?: NamespaceProvider
         /*
          * Note: every parent in an M2 (i.e., a Metamodel, Concept, ConceptInterface, Enumeration) also happens to be a namespace.
-         * This is why we can give `parent` the narrower type `NamespaceProvider` instead of `NodeClass`.
+         * This is why we can give `parent` the narrower type `NamespaceProvider` instead of `M3Node`.
          */
-    id: Id
-    protected constructor(id: Id, parent?: NamespaceProvider) {
+    readonly id: Id
+    key: string // TODO  make this a specific type?
+    protected constructor(id: Id, key: string, parent?: NamespaceProvider) {
         this.id = id
+        this.key = key
         this.parent = parent
     }
+    havingKey(key: string) {
+        this.key = key
+        return this
+    }
+
+    /**
+     * Sets the key of this {@link M3Node} using the given {@link KeyGenerator key generator}.
+     * Note: this doesn't need to be idempotent!
+     */
+    keyed(keyGenerator: KeyGenerator) {
+        this.key = keyGenerator(this as unknown as M3Concept)
+            // FIXME  the cast smells like a hack...
+        return this
+    }
 }
-/*
- * Note: this definition should be moved up to src/types.ts
- * to express that all nodes except roots/unattached nodes have a parent
- * (of a parametrized type).
- */
 
 
 interface NamespaceProvider extends Node {
@@ -53,32 +71,40 @@ interface NamespaceProvider extends Node {
 
 abstract class NamespacedEntity extends M3Node {
     name: string
-    protected constructor(parent: NamespaceProvider, name: string, id: Id) {
-        super(id, parent)
+    protected constructor(parent: NamespaceProvider, name: string, key: string, id: Id) {
+        super(id, key, parent)
         this.name = name
     }
-    qualifiedName() {
-        return qualify(this.parent?.namespaceQualifier(), this.name)
+    qualifiedName(separator = ".") {
+        return combiner(separator)(this.parent?.namespaceQualifier(), this.name)
     }
 }
 
-class Metamodel extends M3Node implements NamespaceProvider {
+class Language implements NamespaceProvider, Node {
+    readonly id: string
     name: string
-    elements: MetamodelElement[] = []   // (containment)
-    dependsOn: MultiRef<Metamodel> = []  // special (!) reference
+    version: string
+    elements: LanguageElement[] = []   // (containment)
+    dependsOn: MultiRef<Language> = []  // special (!) reference
         // (!) special because deserializer needs to be aware of where to get the instance from
-    constructor(name: string, id: Id) {
-        super(id)
+    constructor(name: string, version: string, id: Id) {
+        this.id = id
         this.name = name
+        this.version = version
     }
     namespaceQualifier(): string {
         return this.name
     }
-    havingElements(...elements: MetamodelElement[]) {
+    havingElements(...elements: LanguageElement[]): Language {
+        const nonLanguageElements = elements.filter((element) => !(element instanceof LanguageElement))
+        if (nonLanguageElements.length > 0) {
+            throw Error(`trying to add non-LanguageElements to Language: ${nonLanguageElements.map((node) => `<${node.constructor.name}>"${node.name}"`).join(", ")}`)
+        }
         this.elements.push(...elements)
         return this
     }
-    dependingOn(...metamodels: Metamodel[]) {
+    dependingOn(...metamodels: Language[]): Language {
+        // TODO  check actual types of metamodels, or use type shapes/interfaces
         this.dependsOn.push(
             ...metamodels
                 .filter((metamodel) => metamodel.name !== lioncoreBuiltinsQName)
@@ -87,15 +113,16 @@ class Metamodel extends M3Node implements NamespaceProvider {
     }
 }
 
-abstract class MetamodelElement extends NamespacedEntity {
-    constructor(metamodel: Metamodel, name: string, id: Id) {
-        super(metamodel, name, id)
+abstract class LanguageElement extends NamespacedEntity {
+    constructor(language: Language, name: string, key: string, id: Id) {
+        super(language, name, key, id)
     }
 }
 
-abstract class FeaturesContainer extends MetamodelElement implements NamespaceProvider {
+abstract class FeaturesContainer extends LanguageElement implements NamespaceProvider {
     features: Feature[] = [] // (containment)
     havingFeatures(...features: Feature[]) {
+        // TODO  check actual types of features, or use type shapes/interfaces
         this.features.push(...features)
         return this
     }
@@ -109,12 +136,13 @@ class Concept extends FeaturesContainer {
     abstract: boolean
     extends?: SingleRef<Concept>    // (reference)
     implements: MultiRef<ConceptInterface> = []  // (reference)
-    constructor(metamodel: Metamodel, name: string, id: Id, abstract: boolean, extends_?: SingleRef<Concept>) {
-        super(metamodel, name, id)
+    constructor(language: Language, name: string, key: string, id: Id, abstract: boolean, extends_?: SingleRef<Concept>) {
+        super(language, name, key, id)
         this.abstract = abstract
         this.extends = extends_
     }
-    implementing(...conceptInterfaces: ConceptInterface[]) {
+    implementing(...conceptInterfaces: ConceptInterface[]): Concept {
+        // TODO  check actual types of concept interfaces, or use type shapes/interfaces
         this.implements.push(...conceptInterfaces)
         return this
     }
@@ -132,13 +160,8 @@ class ConceptInterface extends FeaturesContainer {
 
 abstract class Feature extends NamespacedEntity {
     optional /*: boolean */ = false
-    derived /*: boolean */ = false
-    constructor(featuresContainer: FeaturesContainer, name: string, id: Id) {
-        super(featuresContainer, name, id)
-    }
-    isDerived() {
-        this.derived = true
-        return this
+    constructor(featuresContainer: FeaturesContainer, name: string, key: string, id: Id) {
+        super(featuresContainer, name, key, id)
     }
     isOptional() {
         this.optional = true
@@ -167,35 +190,26 @@ class Containment extends Link {
 
 class Property extends Feature {
     type: SingleRef<Datatype> = unresolved   // (reference)
-    /**
-     * Indicates whether this property targets the _programmatic_ aspect of
-     * the LIonCore/M3 instance.
-     */
-    programmatic /*: boolean */ = false
-    ofType(type: Datatype) {
+    ofType(type: Datatype): Property {
         this.type = type
-        return this
-    }
-    isProgrammatic() {
-        this.programmatic = true
         return this
     }
 }
 
-abstract class Datatype extends MetamodelElement {}
+abstract class Datatype extends LanguageElement {}
 
 class PrimitiveType extends Datatype {}
 
 class Enumeration extends Datatype implements NamespaceProvider {
     literals: EnumerationLiteral[] = [] // (containment)
-    namespaceQualifier(): string {
-        return qualify(this.parent?.namespaceQualifier(), this.name)
+    namespaceQualifier(separator = "."): string {
+        return combiner(separator)(this.parent?.namespaceQualifier(), this.name)
     }
 }
 
 class EnumerationLiteral extends NamespacedEntity {
-    constructor(enumeration: Enumeration, name: string, id: Id) {
-        super(enumeration, name, id)
+    constructor(enumeration: Enumeration, name: string, key: string, id: Id) {
+        super(enumeration, name, key, id)
     }
 }
 
@@ -204,7 +218,7 @@ class EnumerationLiteral extends NamespacedEntity {
  * Sum type of all LIonCore type definitions whose meta-type is a concrete (thus: instantiable) Concept.
  */
 type M3Concept =
-    | Metamodel
+    | Language
     // ▼▼▼ all NamespacedEntity-s
     | Concept
     | ConceptInterface
@@ -226,12 +240,15 @@ export {
     EnumerationLiteral,
     Feature,
     FeaturesContainer,
+    Language,
+    LanguageElement,
     Link,
-    Metamodel,
-    MetamodelElement,
+    NamespacedEntity,
     PrimitiveType,
     Property,
-    Reference
+    Reference,
+    lioncoreBuiltinsQName,
+    qualify
 }
 export type {
     M3Concept

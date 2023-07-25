@@ -2,11 +2,11 @@ import {
     Concept,
     Feature,
     FeaturesContainer,
-    Metamodel,
-    MetamodelElement,
+    Language,
+    LanguageElement,
     PrimitiveType
 } from "../types.ts"
-import {MetamodelFactory} from "../factory.ts"
+import {LanguageFactory} from "../factory.ts"
 import {
     checkDefinedData,
     checkUniqueData,
@@ -21,8 +21,9 @@ import {
     EcoreXml,
     EStructuralFeature
 } from "./types.ts"
-import {ConceptType} from "../functions.ts"
+import {ConceptType, keyOf, namedsOf} from "../functions.ts"
 import {booleanDatatype, intDatatype, stringDatatype} from "../builtins.ts"
+import {duplicatesAmong} from "../../utils/grouping.ts"
 
 
 const localRefPrefix = "#//"
@@ -33,13 +34,16 @@ const deref = (typeDescriptor: string): string =>
 
 
 /**
- * Converts a parsed Ecore XML metamodel (file) to a {@link Metamodel LIonCore/M3 instance}.
+ * Converts a parsed Ecore XML metamodel (file) to a {@link Language LIonCore/M3 instance}.
  */
-export const asLIonCoreMetamodel = (ecoreXml: EcoreXml): Metamodel => {
+export const asLIonCoreLanguage = (ecoreXml: EcoreXml, version: string): Language => {
 
     const ePackage = ecoreXml["ecore:EPackage"]
     // TODO (#10)  an Ecore XML can contain multiple EPackage-s
-    const factory = new MetamodelFactory(ePackage["@name"], wrapIdGen(
+    const factory = new LanguageFactory(
+        ePackage["@name"],
+        version,
+        wrapIdGen(
             hashingIdGen(),
             checkDefinedData,
             checkUniqueData,
@@ -55,13 +59,13 @@ export const asLIonCoreMetamodel = (ecoreXml: EcoreXml): Metamodel => {
         factory.concept(eClassifier["@name"], false)
     // TODO (#10)  ConceptInterface, Enumeration
 
-    const convertedEClassifiers: [eClassifier: EClassifier, metamodelElement: MetamodelElement][] =
+    const convertedEClassifiers: [eClassifier: EClassifier, element: LanguageElement][] =
         ePackage["eClassifiers"]
             .map((eClassifier) =>
                 [eClassifier, convertEClassifier(eClassifier)]
             )
 
-    const eClassifierConversionFor = (eClassifierName: string): MetamodelElement =>
+    const eClassifierConversionFor = (eClassifierName: string): LanguageElement =>
         convertedEClassifiers
             .find(([source, _]) => source["@name"] === eClassifierName)![1]
 
@@ -134,9 +138,16 @@ export const asLIonCoreMetamodel = (ecoreXml: EcoreXml): Metamodel => {
 
     // phase 3: put all converted things into the metamodel
 
-    factory.metamodel
+    factory.language
         .havingElements(...convertedEClassifiers.map(([_, mmElement]) => mmElement))
 
-    return factory.metamodel
+    // phase 4: dedup keys (crudely, using the qualified name) where necessary
+
+    Object.entries(duplicatesAmong(namedsOf(factory.language), keyOf))
+        .forEach(([_, mmElements]) => {
+            mmElements.forEach((mmElement) => mmElement.havingKey(mmElement.qualifiedName().replaceAll(/\./g, "_")))
+        })
+
+    return factory.language
 }
 

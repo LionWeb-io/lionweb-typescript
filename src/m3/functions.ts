@@ -11,10 +11,11 @@ import {
     Enumeration,
     Feature,
     FeaturesContainer,
+    Language,
+    LanguageElement,
     Link,
     M3Concept,
-    Metamodel,
-    MetamodelElement,
+    NamespacedEntity,
     Property,
     Reference
 } from "./types.ts"
@@ -33,22 +34,22 @@ export const type = (feature: Feature): FeaturesContainer | Datatype | typeof un
     (feature as (Link | Property)).type
 
 
-export const isNonDerivedProperty = (feature: Feature): feature is Property =>
-    feature instanceof Property && !feature.derived
+export const isProperty = (feature: Feature): feature is Property =>
+    feature instanceof Property
 
-export const isNonDerivedContainment = (feature: Feature): feature is Containment =>
-    feature instanceof Containment && !feature.derived
+export const isContainment = (feature: Feature): feature is Containment =>
+    feature instanceof Containment
 
-export const isNonDerivedReference = (feature: Feature): feature is Reference =>
-    feature instanceof Reference && !feature.derived
+export const isReference = (feature: Feature): feature is Reference =>
+    feature instanceof Reference
 
 
 /**
  * Determines whether a {@link Feature feature} is "relational",
- * i.e. it's a non-derived {@link Link containment or reference}.
+ * i.e. it's a {@link Link containment or reference}.
  */
 const isRelational = (feature: Feature): feature is Link =>
-    feature instanceof Link && !feature.derived
+    feature instanceof Link
 
 /**
  * @return the relations among the given {@link Feature features}.
@@ -64,21 +65,21 @@ export const nonRelationalFeatures = (features: Feature[]): Feature[] =>
 
 
 /**
- * @return the relations of the given {@link MetamodelElement metamodel element}.
+ * @return the relations of the given {@link LanguageElement language element}.
  */
-export const relationsOf = (metamodelElement: MetamodelElement): Link[] =>
-    metamodelElement instanceof FeaturesContainer
-        ? relations(metamodelElement.features)
+export const relationsOf = (element: LanguageElement): Link[] =>
+    element instanceof FeaturesContainer
+        ? relations(element.features)
         : []
 
 
 /**
  * @return The "things", i.e. {@link M3Concept}s, contained by the given "thing".
- *  These can be: {@link MetamodelElement}s, {@link Feature}s, {@link EnumerationLiteral}
+ *  These can be: {@link LanguageElement}s, {@link Feature}s, {@link EnumerationLiteral}
  *  (and all their sub types).
  */
 export const containeds = (thing: M3Concept): M3Concept[] => {
-    if (thing instanceof Metamodel) {
+    if (thing instanceof Language) {
         return thing.elements
     }
     if (thing instanceof FeaturesContainer) {
@@ -92,18 +93,53 @@ export const containeds = (thing: M3Concept): M3Concept[] => {
 
 
 /**
- * Performs a depth-first tree traversal of a metamodel, "flatMapping" the `map` function on every node.
+ * Performs a depth-first tree traversal of a language, "flatMapping" the `map` function on every node.
  * It avoids visiting nodes twice (to avoid potential infinite loops), but doesn't report cycles.
  */
-export const flatMap = <T>(metamodel: Metamodel, map: (t: M3Concept) => T[]): T[] =>
-    flatMapNonCyclingFollowing(map, containeds)(metamodel)
+export const flatMap = <T>(language: Language, map: (t: M3Concept) => T[]): T[] =>
+    flatMapNonCyclingFollowing(map, containeds)(language)
 
 
 /**
- * Sorts the given {@link MetamodelElement metamodel elements} by name.
+ * @return the name of the given {@link NamespacedEntity named thing}.
  */
-export const elementsSortedByName = (metamodelElements: MetamodelElement[]) =>
-    sortByStringKey(metamodelElements, (element) => element.name)
+export const nameOf = <T extends NamespacedEntity>({name}: T): string =>
+    name
+
+/**
+ * @return the qualified name of the given {@link NamespacedEntity named thing}.
+ */
+export const qualifiedNameOf = <T extends NamespacedEntity>(t: T): string =>
+    t.qualifiedName()
+
+
+/**
+ * @return the {@link NamespacedEntity named things} in this {@link Language language}
+ *  (excluding the language itself)
+ */
+export const namedsOf = (language: Language): NamespacedEntity[] =>
+    flatMap(language, (t) => t instanceof NamespacedEntity ? [t] : [])
+
+
+/**
+ * @return the key of the given {@link NamespacedEntity named thing}.
+ */
+export const keyOf = <T extends NamespacedEntity>({key}: T): string =>
+    key
+
+
+/**
+ * @return the id of the given {@link M3Concept}.
+ */
+export const idOf = <T extends M3Concept>({id}: T): string =>
+    id
+
+
+/**
+ * Sorts the given {@link LanguageElement metamodel elements} by name.
+ */
+export const elementsSortedByName = (elements: LanguageElement[]) =>
+    sortByStringKey(elements, nameOf)
 
 
 /**
@@ -112,10 +148,10 @@ export const elementsSortedByName = (metamodelElements: MetamodelElement[]) =>
 export type ConceptType = Concept | ConceptInterface
 
 /**
- * Determines whether the given {@link MetamodelElement metamodel element} is
+ * Determines whether the given {@link LanguageElement metamodel element} is
  * *concrete*, i.e. is instantiable.
  */
-export const isConcrete = (thing: MetamodelElement): thing is Concept =>
+export const isConcrete = (thing: LanguageElement): thing is Concept =>
     thing instanceof Concept && !thing.abstract
 
 const inheritsFrom = (conceptType: ConceptType): ConceptType[] => {
@@ -159,33 +195,33 @@ export const allFeaturesOf = (conceptType: ConceptType): Feature[] =>
 
 
 /**
- * Determines whether the given {@link MetamodelElement metamodel element} is an {@link Enumeration enumeration}.
+ * Determines whether the given {@link LanguageElement language element} is an {@link Enumeration enumeration}.
  */
-export const isEnumeration = (metamodelElement: MetamodelElement): metamodelElement is Enumeration =>
-    metamodelElement instanceof Enumeration
+export const isEnumeration = (element: LanguageElement): element is Enumeration =>
+    element instanceof Enumeration
 
 
 /**
- * @return a function that looks up a concept from the given {@link Metamodel metamodel} by its ID.
+ * @return a function that looks up a concept from the given {@link Language language} by its ID.
  */
-export const idBasedConceptDeducerFor = (metamodel: Metamodel) =>
+export const idBasedConceptDeducerFor = (language: Language) =>
     (id: Id) =>
-        metamodel.elements.find((element) => element instanceof Concept && element.id === id) as Concept
+        language.elements.find((element) => element instanceof Concept && element.id === id) as Concept
 
 /**
- * @return a function that looks up a concept from the given {@link Metamodel metamodel} by its name.
+ * @return a function that looks up a concept from the given {@link Language language} by its name.
  */
-export const nameBasedConceptDeducerFor = (metamodel: Metamodel) =>
+export const nameBasedConceptDeducerFor = (language: Language) =>
     (name: string) =>
-        metamodel.elements.find((element) => element instanceof Concept && element.name === name) as Concept
+        language.elements.find((element) => element instanceof Concept && element.name === name) as Concept
 
 
 /**
  * @return a {@link ConceptDeducer concept deducer} that deduces the concept of nodes by looking up
- * the concept in the given {@link Metamodel metamodel} by matching the node object's class name to the concept's name.
+ * the concept in the given {@link Language language} by matching the node object's class name to the concept's name.
  */
-export const classBasedConceptDeducerFor = <NT extends Node>(metamodel: Metamodel): ConceptDeducer<NT> => {
-    const deducer = nameBasedConceptDeducerFor(metamodel)
+export const classBasedConceptDeducerFor = <NT extends Node>(language: Language): ConceptDeducer<NT> => {
+    const deducer = nameBasedConceptDeducerFor(language)
     return (node: NT) => deducer(node.constructor.name)
 }
 

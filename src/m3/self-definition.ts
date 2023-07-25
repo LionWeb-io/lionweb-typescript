@@ -1,79 +1,72 @@
-import {MetamodelFactory} from "./factory.ts"
+import {LanguageFactory} from "./factory.ts"
 import {lioncoreIdGen} from "./id-generation.ts"
 import {booleanDatatype, stringDatatype} from "./builtins.ts"
 
 
-const factory = new MetamodelFactory("LIonCore.M3", lioncoreIdGen)
+const factory = new LanguageFactory("LIonCore.M3", "1", lioncoreIdGen)
 
 
 /**
  * Definition of LIonCore in terms of itself.
  */
-export const lioncore = factory.metamodel
+export const lioncore = factory.language
 
 
 const namespaceProvider = factory.conceptInterface("NamespaceProvider")
-
-const namespaceProvider_namespaceQualifier = factory.property(namespaceProvider, "namespaceQualifier")
-    .isDerived()
-    .ofType(stringDatatype)
-
-namespaceProvider.havingFeatures(namespaceProvider_namespaceQualifier)
 
 
 const namespacedEntity = factory.concept("NamespacedEntity", true)
 
 const namespacedEntity_name = factory.property(namespacedEntity, "name")
     .ofType(stringDatatype)
+    .havingKey("NamespacedEntity_name")
 
-const namespacedEntity_qualifiedName = factory.property(namespacedEntity, "qualifiedName")
-    .isDerived()
+const namespacedEntity_key = factory.property(namespacedEntity, "key")
     .ofType(stringDatatype)
+    .havingKey("NamespacedEntity_key")
 
 namespacedEntity.havingFeatures(
         namespacedEntity_name,
-        namespacedEntity_qualifiedName
+        namespacedEntity_key
     )
 
 
-const metamodel = factory.concept("Metamodel", false)
+const language = factory.concept("Language", false)
     .implementing(namespaceProvider)
 
-const metamodel_name = factory.property(metamodel, "name")
+const language_name = factory.property(language, "name")
+    .ofType(stringDatatype)
+    .havingKey("Language_name")
+
+const language_version = factory.property(language, "version")
     .ofType(stringDatatype)
 
-const metamodel_elements = factory.containment(metamodel, "elements")
+const language_elements = factory.containment(language, "elements")
     .isOptional()
     .isMultiple()
 
-const metamodel_dependsOn = factory.reference(metamodel, "dependsOn")
+const language_dependsOn = factory.reference(language, "dependsOn")
     .isOptional()
     .isMultiple()
-    .ofType(metamodel)
+    .ofType(language)
 
-metamodel.havingFeatures(metamodel_name, metamodel_elements, metamodel_dependsOn)
-
-
-const metamodelElement = factory.concept("MetamodelElement", true, namespacedEntity)
-
-metamodel_elements.ofType(metamodelElement)
+language.havingFeatures(language_name, language_version, language_elements, language_dependsOn)
 
 
-const featuresContainer = factory.concept("FeaturesContainer", true, metamodelElement)
+const languageElement = factory.concept("LanguageElement", true, namespacedEntity)
+
+language_elements.ofType(languageElement)
+
+
+const featuresContainer = factory.concept("FeaturesContainer", true, languageElement)
     .implementing(namespaceProvider)
 
 const featuresContainer_features = factory.containment(featuresContainer, "features")
     .isOptional()
     .isMultiple()
 
-const featuresContainer_allFeatures = factory.reference(featuresContainer, "allFeatures")
-    .isOptional()
-    .isMultiple()
-    .isDerived()
-
 featuresContainer.havingFeatures(
-    featuresContainer_features,
-    featuresContainer_allFeatures
+    featuresContainer_features
 )
 
 
@@ -85,6 +78,7 @@ const concept_abstract = factory.property(concept, "abstract")
 const concept_extends = factory.reference(concept, "extends")
     .isOptional()
     .ofType(concept)
+    .havingKey("Concept_extends")
 
 const concept_implements = factory.reference(concept, "implements")
     .isOptional()
@@ -104,6 +98,7 @@ const conceptInterface_extends = factory.reference(conceptInterface, "extends")
     .isOptional()
     .isMultiple()
     .ofType(conceptInterface)
+    .havingKey("ConceptInterface_extends")
 
 concept_implements.ofType(conceptInterface)
 conceptInterface.havingFeatures(conceptInterface_extends)
@@ -114,16 +109,10 @@ const feature = factory.concept("Feature", true, namespacedEntity)
 const feature_optional = factory.property(feature, "optional")
     .ofType(booleanDatatype)
 
-const feature_derived = factory.property(feature, "derived")
-    .ofType(booleanDatatype)
-    .isProgrammatic()
-
 feature.havingFeatures(
-    feature_optional,
-    feature_derived
+    feature_optional
 )
 
-featuresContainer_allFeatures.type = feature
 featuresContainer_features.type = feature
 
 
@@ -134,6 +123,7 @@ const link_multiple = factory.property(link, "multiple")
 
 const link_type = factory.reference(link, "type")
     .ofType(featuresContainer)
+    .havingKey("Link_type")
 
 link.havingFeatures(
     link_multiple,
@@ -147,16 +137,13 @@ const reference = factory.concept("Reference", false, link)
 const property = factory.concept("Property", false, feature)
 
 const property_type = factory.reference(property, "type")
-const property_programmatic = factory.property(property, "programmatic")
-    .ofType(booleanDatatype)
 
 property.havingFeatures(
-    property_type,
-    property_programmatic
+    property_type
 )
 
 
-const dataType = factory.concept("DataType", true, metamodelElement)
+const dataType = factory.concept("DataType", true, languageElement)
 property_type.ofType(dataType)
 
 
@@ -181,8 +168,8 @@ enumeration.havingFeatures(enumeration_literals)
 lioncore.havingElements(
     namespacedEntity,
     namespaceProvider,
-    metamodel,
-    metamodelElement,
+    language,
+    languageElement,
     featuresContainer,
     concept,
     conceptInterface,
@@ -204,7 +191,7 @@ export const metaConcepts = {
     containment,
     enumeration,
     enumerationLiteral,
-    metamodel,
+    language,
     primitiveType,
     property,
     reference
@@ -216,16 +203,15 @@ export const metaFeatures = {
     concept_implements,
     conceptInterface_extends,
     enumeration_literals,
-    feature_derived,
     feature_optional,
     featuresContainer_features,
     link_multiple,
     link_type,
-    metamodel_dependsOn,
-    metamodel_elements,
-    metamodel_name,
+    language_dependsOn,
+    language_elements,
+    language_name,
+    language_version,
     namespacedEntity_name,
-    property_type,
-    property_programmatic,
+    property_type
 }
 

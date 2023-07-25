@@ -1,7 +1,7 @@
 import {
     Concept,
     Containment,
-    Metamodel,
+    Language,
     Property,
     Reference
 } from "./types.ts"
@@ -10,11 +10,11 @@ import {SingleRef, unresolved} from "../references.ts"
 
 
 /**
- * Checks whether the given metamodel contains unresolved references.
+ * Checks whether the metamodel of the given language contains unresolved references.
  */
-export const checkReferences = (metamodel: Metamodel): string[] =>
+export const checkReferences = (language: Language): string[] =>
     flatMap(
-        metamodel,
+        language,
         (thing) => {
 
             const locations: string[] = []

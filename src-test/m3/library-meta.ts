@@ -1,10 +1,10 @@
-import {MetamodelFactory} from "../../src/m3/factory.ts"
+import {LanguageFactory} from "../../src/m3/factory.ts"
 import {hashingIdGen} from "../../src/id-generation.ts"
 import {intDatatype, stringDatatype} from "../../src/m3/builtins.ts"
 
 
-const factory = new MetamodelFactory("library", hashingIdGen())
-export const libraryMetamodel = factory.metamodel
+const factory = new LanguageFactory("library", "1", hashingIdGen())
+export const libraryLanguage = factory.language
 
 
 const library = factory.concept("Library", false)
@@ -13,7 +13,7 @@ const writer = factory.concept("Writer", false)
 const guideBookWriter = factory.concept("GuideBookWriter", false, writer)
 const specialistBookWriter = factory.concept("SpecialistBookWriter", false, writer)
 
-const library_name = factory.property(library, "name").ofType(stringDatatype)
+const library_name = factory.property(library, "name").ofType(stringDatatype).havingKey("library_Library_name")
 const library_books = factory.containment(library, "books").ofType(book).isMultiple()
 library.havingFeatures(library_name, library_books)
 
@@ -22,7 +22,7 @@ const book_pages = factory.property(book, "pages").ofType(intDatatype)
 const book_author = factory.reference(book, "author").ofType(writer)
 book.havingFeatures(book_title, book_pages, book_author)
 
-const writer_name = factory.property(writer, "name").ofType(stringDatatype)
+const writer_name = factory.property(writer, "name").ofType(stringDatatype).havingKey("library_Writer_name")
 writer.havingFeatures(writer_name)
 // Note: writers are _not_ contained in the library (node) itself, so are separate nodes.
 
@@ -33,7 +33,7 @@ const specialistBookWriter_subject = factory.property(specialistBookWriter, "sub
 specialistBookWriter.havingFeatures(specialistBookWriter_subject)
 
 
-libraryMetamodel.havingElements(
+libraryLanguage.havingElements(
     book,
     library,
     writer,

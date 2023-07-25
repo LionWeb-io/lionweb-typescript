@@ -3,17 +3,17 @@ import {
     Datatype,
     Enumeration,
     Feature,
-    Metamodel,
+    Language,
     PrimitiveType,
     Property
 } from "./types.ts"
 import {
     allFeaturesOf,
     isConcrete,
+    isContainment,
     isEnumeration,
-    isNonDerivedContainment,
-    isNonDerivedProperty,
-    isNonDerivedReference
+    isProperty,
+    isReference
 } from "./functions.ts"
 import {isRef} from "../references.ts"
 // TODO  import types for JSON Schema for added type-safety?
@@ -22,10 +22,11 @@ import {isRef} from "../references.ts"
 const ref = (id: string): { $ref: string } =>
     ({ $ref: `#/$defs/${id}` })
 
+const isString = () => ({ type: "string" })
 
 const asJSONSchemaType = (dataType: Datatype): unknown => {
     if (dataType instanceof Enumeration) {
-        return ref(dataType.id)
+        return ref(dataType.key)
     }
     if (dataType instanceof PrimitiveType) {
         // (TODO  use equality on the level of PrimitiveType instances (but builtins is not a singleton))
@@ -33,7 +34,7 @@ const asJSONSchemaType = (dataType: Datatype): unknown => {
             case "String":
             case "Boolean":
             case "Integer":
-            case "JSON": return { type: "string" }
+            case "JSON": return isString()
             default:
                 throw new Error(`can't deal with PrimitiveType "${dataType.name}"`)
         }
@@ -45,16 +46,19 @@ const asJSONSchemaType = (dataType: Datatype): unknown => {
 const schemaForFeatures = <T extends Feature>(features: T[], mapFeature: (feature: T) => unknown, specifyRequireds: boolean) => {
     const requireds = features.filter(({optional}) => !optional)
     return {
-        type: "object",
+        type: "array",
+        items: {
+            // FIXME  what here?
+        },
         properties: Object.fromEntries(
             features
                 .map((feature) => [
-                    feature.id,
+                    feature.key,
                     mapFeature(feature)
                 ])
         ),
         required: specifyRequireds && requireds.length > 0
-            ? requireds.map(({id}) => id)
+            ? requireds.map(({key}) => key)
             : undefined,
         additionalProperties: false
     }
@@ -70,18 +74,22 @@ const schemaForConcept = (concept: Concept): unknown => {
     return {
         type: "object",
         properties: {
-            concept: {
-                const: concept.id
-            },
             id: ref("Id"),
-            properties: schemaForFeatures(allFeatures.filter(isNonDerivedProperty), schemaForProperty, true),
-            children: schemaForFeatures(allFeatures.filter(isNonDerivedContainment), (_) => ref("Ids"), true),
-            references: schemaForFeatures(allFeatures.filter(isNonDerivedReference), (_) => ref("Ids"), false),
+            concept: {
+                const: {
+                    metamodel: "LIonCore_M3",
+                    version: "1",
+                    key: concept.key
+                }
+            },
+            properties: schemaForFeatures(allFeatures.filter(isProperty), schemaForProperty, true),
+            children: schemaForFeatures(allFeatures.filter(isContainment), (_) => ref("Ids"), true),
+            references: schemaForFeatures(allFeatures.filter(isReference), (_) => ref("Ids"), false),
             parent: ref("Id")
         },
         required: [
-            "concept",
             "id",
+            "concept",
             "properties",
             "children",
             "references"
@@ -98,31 +106,39 @@ const schemaForEnumeration = ({literals}: Enumeration): unknown =>
 
 /**
  * Generates a JSON Schema for the LIonWeb-compliant serialization JSON format
- * specific to the given metamodel.
+ * specific to the (metamodel in/of the) given language.
  */
-export const schemaFor = (metamodel: Metamodel): unknown /* <=> JSON Schema */ => {
-    const concreteConcepts = metamodel.elements.filter(isConcrete)
-    const enumerations = metamodel.elements.filter(isEnumeration)
+export const schemaFor = (language: Language): unknown /* <=> JSON Schema */ => {
+    const concreteConcepts = language.elements.filter(isConcrete)
+    const enumerations = language.elements.filter(isEnumeration)
     return {
         $schema: "https://json-schema.org/draft/2020-12/schema",
-        $id: `${metamodel.name}-serialization`,    // TODO  let caller specify URL instead?
-        title: `Serialization format specific to ${metamodel.name}`,
-        type: "object",
-        properties: {
-            serializationFormatVersion: {
-                const: "1"
-            },
-            nodes: {
-                type: "array",
-                items: ref("SerializedNode")
-            }
-        },
-        required: [
-            "serializationFormatVersion",
-            "nodes"
-        ],
+        $id: `${language.name}-serialization`,    // TODO  let caller specify URL instead?
+        title: `Serialization format specific to ${language.name}`,
+        ...ref("SerializedModel"),
         $defs: {
-            // TODO (#34)  put these definitions in a separate, referred-to JSON Schema
+            // TODO (#34)  put the static definitions in a separate, referred-to JSON Schema
+            "SerializedModel": {
+                type: "object",
+                properties: {
+                    serializationFormatVersion: {
+                        const: "1"
+                    },
+                    languages: {
+                        const: []
+                    },
+                    nodes: {
+                        type: "array",
+                        items: ref("SerializedNode")
+                    }
+                },
+                required: [
+                    "serializationFormatVersion",
+                    "languages",
+                    "nodes"
+                ],
+                additionalProperties: false
+            },
             "Id": {
                 type: "string",
                 minLength: 1
@@ -131,6 +147,20 @@ export const schemaFor = (metamodel: Metamodel): unknown /* <=> JSON Schema */ =
                 type: "array",
                 items: ref("Id"),
                 minItems: 1 // because empties are not allowed
+            },
+            "MetaPointer": {
+                type: "object",
+                properties: {
+                    "language": isString(),
+                    "version": isString(),
+                    "key": isString()
+                },
+                required: [
+                    "language",
+                    "version",
+                    "key"
+                ],
+                additionalProperties: false
             },
             ...Object.fromEntries(
                 concreteConcepts
@@ -146,7 +176,7 @@ export const schemaFor = (metamodel: Metamodel): unknown /* <=> JSON Schema */ =
             ...Object.fromEntries(
                 enumerations
                     .map((enumeration) => [
-                        enumeration.id,
+                        enumeration.key,
                         schemaForEnumeration(enumeration)
                     ])
             )

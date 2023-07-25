@@ -14,7 +14,7 @@ classDiagram
 
   class DataType
   <<Abstract>> DataType
-  MetamodelElement <|-- DataType
+  LanguageElement <|-- DataType
 
   class Enumeration
   DataType <|-- Enumeration
@@ -24,16 +24,22 @@ classDiagram
 
   class Feature {
     +Boolean optional
-    +Boolean derived
   }
   <<Abstract>> Feature
   NamespacedEntity <|-- Feature
 
-  class FeaturesContainer {
-    +allFeatures() : List~Feature~?
-  }
+  class FeaturesContainer
   <<Abstract>> FeaturesContainer
-  MetamodelElement <|-- FeaturesContainer
+  LanguageElement <|-- FeaturesContainer
+
+  class Language {
+    +String name
+    +String version
+  }
+
+  class LanguageElement
+  <<Abstract>> LanguageElement
+  NamespacedEntity <|-- LanguageElement
 
   class Link {
     +Boolean multiple
@@ -41,31 +47,19 @@ classDiagram
   <<Abstract>> Link
   Feature <|-- Link
 
-  class Metamodel {
-    +String name
-  }
-
-  class MetamodelElement
-  <<Abstract>> MetamodelElement
-  NamespacedEntity <|-- MetamodelElement
-
-  class NamespaceProvider {
-    +namespaceQualifier() : String
-  }
+  class NamespaceProvider
   <<Interface>> NamespaceProvider
 
   class NamespacedEntity {
     +String name
-    +qualifiedName() : String
+    +String key
   }
   <<Abstract>> NamespacedEntity
 
   class PrimitiveType
   DataType <|-- PrimitiveType
 
-  class Property {
-    +Boolean programmatic
-  }
+  class Property
   Feature <|-- Property
 
   class Reference
@@ -81,10 +75,10 @@ classDiagram
 
 
   FeaturesContainer "1" o-- "*" Feature: features
-  Link "*" -- "1" FeaturesContainer: type
-  Metamodel "1" o-- "*" MetamodelElement: elements
-  Metamodel "*" -- "*" Metamodel: dependsOn
+  Language "1" o-- "*" LanguageElement: elements
+  Language "*" -- "*" Language: dependsOn
 
+  Link "*" -- "1" FeaturesContainer: type
 
 
 

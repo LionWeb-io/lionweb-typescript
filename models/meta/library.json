@@ -1,243 +1,733 @@
 {
   "serializationFormatVersion": "1",
+  "languages": [],
   "nodes": [
     {
-      "concept": "LIonCore_M3_Metamodel",
       "id": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
-      "properties": {
-        "LIonCore_M3_Metamodel_name": "library"
+      "concept": {
+        "language": "LIonCore_M3",
+        "version": "1",
+        "key": "Language"
       },
-      "children": {
-        "LIonCore_M3_Metamodel_elements": [
-          "OcDK2GESljInG-ApIqtkXUoA2UeviB97u0UuiZzM0Hs",
-          "Pk1NRJfHMt4eSja2kpXia7x8vj6Vzc6WQCUzT3aVeYY",
-          "DuBg-a_slgc_VOG0huySkSWi3rZQX1Q20EEd2f7lvLE",
-          "nNUEzZ7it7d2HoHPAtk5rGO4SsqVA3hAlBwkK1KP8QU",
-          "RDa_L8gbU8XgW9z46oMysBi1Hb7vjcS8O8LUgXlFpeU"
-        ]
-      },
-      "references": {}
+      "properties": [
+        {
+          "property": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "Language_name"
+          },
+          "value": "library"
+        },
+        {
+          "property": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "version"
+          },
+          "value": "1"
+        }
+      ],
+      "children": [
+        {
+          "containment": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "elements"
+          },
+          "children": [
+            "OcDK2GESljInG-ApIqtkXUoA2UeviB97u0UuiZzM0Hs",
+            "Pk1NRJfHMt4eSja2kpXia7x8vj6Vzc6WQCUzT3aVeYY",
+            "DuBg-a_slgc_VOG0huySkSWi3rZQX1Q20EEd2f7lvLE",
+            "nNUEzZ7it7d2HoHPAtk5rGO4SsqVA3hAlBwkK1KP8QU",
+            "RDa_L8gbU8XgW9z46oMysBi1Hb7vjcS8O8LUgXlFpeU"
+          ]
+        }
+      ],
+      "references": []
     },
     {
-      "concept": "LIonCore_M3_Concept",
       "id": "OcDK2GESljInG-ApIqtkXUoA2UeviB97u0UuiZzM0Hs",
-      "properties": {
-        "LIonCore_M3_Concept_abstract": "false",
-        "LIonCore_M3_NamespacedEntity_name": "Book"
+      "concept": {
+        "language": "LIonCore_M3",
+        "version": "1",
+        "key": "Concept"
       },
-      "children": {
-        "LIonCore_M3_FeaturesContainer_features": [
-          "Ei9m_HbdmEYg_EwMLLVZ71ERRBZyXH8GHVyOVia8Sqg",
-          "OJhF8vB_qRMrA8A9a-H0LsByONdYtHGmQ-lk9rUHUc4",
-          "9ATCb8nXEuQAL3NOY-EUZwuThpIQnQ2C_2n97IRGA_g"
-        ]
-      },
-      "references": {},
+      "properties": [
+        {
+          "property": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "abstract"
+          },
+          "value": "false"
+        },
+        {
+          "property": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "NamespacedEntity_name"
+          },
+          "value": "Book"
+        },
+        {
+          "property": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "NamespacedEntity_key"
+          },
+          "value": "Book"
+        }
+      ],
+      "children": [
+        {
+          "containment": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "features"
+          },
+          "children": [
+            "Ei9m_HbdmEYg_EwMLLVZ71ERRBZyXH8GHVyOVia8Sqg",
+            "OJhF8vB_qRMrA8A9a-H0LsByONdYtHGmQ-lk9rUHUc4",
+            "9ATCb8nXEuQAL3NOY-EUZwuThpIQnQ2C_2n97IRGA_g"
+          ]
+        }
+      ],
+      "references": [],
       "parent": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow"
     },
     {
-      "concept": "LIonCore_M3_Property",
       "id": "Ei9m_HbdmEYg_EwMLLVZ71ERRBZyXH8GHVyOVia8Sqg",
-      "properties": {
-        "LIonCore_M3_Property_programmatic": "false",
-        "LIonCore_M3_Feature_optional": "false",
-        "LIonCore_M3_Feature_derived": "false",
-        "LIonCore_M3_NamespacedEntity_name": "title"
+      "concept": {
+        "language": "LIonCore_M3",
+        "version": "1",
+        "key": "Property"
       },
-      "children": {},
-      "references": {
-        "LIonCore_M3_Property_type": [
-          "LIonCore_builtins_String"
-        ]
-      },
+      "properties": [
+        {
+          "property": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "optional"
+          },
+          "value": "false"
+        },
+        {
+          "property": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "NamespacedEntity_name"
+          },
+          "value": "title"
+        },
+        {
+          "property": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "NamespacedEntity_key"
+          },
+          "value": "title"
+        }
+      ],
+      "children": [],
+      "references": [
+        {
+          "reference": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "type"
+          },
+          "targets": [
+            {
+              "reference": "LIonCore_builtins_String"
+            }
+          ]
+        }
+      ],
       "parent": "OcDK2GESljInG-ApIqtkXUoA2UeviB97u0UuiZzM0Hs"
     },
     {
-      "concept": "LIonCore_M3_Property",
       "id": "OJhF8vB_qRMrA8A9a-H0LsByONdYtHGmQ-lk9rUHUc4",
-      "properties": {
-        "LIonCore_M3_Property_programmatic": "false",
-        "LIonCore_M3_Feature_optional": "false",
-        "LIonCore_M3_Feature_derived": "false",
-        "LIonCore_M3_NamespacedEntity_name": "pages"
+      "concept": {
+        "language": "LIonCore_M3",
+        "version": "1",
+        "key": "Property"
       },
-      "children": {},
-      "references": {
-        "LIonCore_M3_Property_type": [
-          "LIonCore_builtins_Integer"
-        ]
-      },
+      "properties": [
+        {
+          "property": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "optional"
+          },
+          "value": "false"
+        },
+        {
+          "property": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "NamespacedEntity_name"
+          },
+          "value": "pages"
+        },
+        {
+          "property": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "NamespacedEntity_key"
+          },
+          "value": "pages"
+        }
+      ],
+      "children": [],
+      "references": [
+        {
+          "reference": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "type"
+          },
+          "targets": [
+            {
+              "reference": "LIonCore_builtins_Integer"
+            }
+          ]
+        }
+      ],
       "parent": "OcDK2GESljInG-ApIqtkXUoA2UeviB97u0UuiZzM0Hs"
     },
     {
-      "concept": "LIonCore_M3_Reference",
       "id": "9ATCb8nXEuQAL3NOY-EUZwuThpIQnQ2C_2n97IRGA_g",
-      "properties": {
-        "LIonCore_M3_Link_multiple": "false",
-        "LIonCore_M3_Feature_optional": "false",
-        "LIonCore_M3_Feature_derived": "false",
-        "LIonCore_M3_NamespacedEntity_name": "author"
+      "concept": {
+        "language": "LIonCore_M3",
+        "version": "1",
+        "key": "Reference"
       },
-      "children": {},
-      "references": {
-        "LIonCore_M3_Link_type": [
-          "DuBg-a_slgc_VOG0huySkSWi3rZQX1Q20EEd2f7lvLE"
-        ]
-      },
+      "properties": [
+        {
+          "property": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "multiple"
+          },
+          "value": "false"
+        },
+        {
+          "property": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "optional"
+          },
+          "value": "false"
+        },
+        {
+          "property": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "NamespacedEntity_name"
+          },
+          "value": "author"
+        },
+        {
+          "property": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "NamespacedEntity_key"
+          },
+          "value": "author"
+        }
+      ],
+      "children": [],
+      "references": [
+        {
+          "reference": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "Link_type"
+          },
+          "targets": [
+            {
+              "reference": "DuBg-a_slgc_VOG0huySkSWi3rZQX1Q20EEd2f7lvLE"
+            }
+          ]
+        }
+      ],
       "parent": "OcDK2GESljInG-ApIqtkXUoA2UeviB97u0UuiZzM0Hs"
     },
     {
-      "concept": "LIonCore_M3_Concept",
       "id": "Pk1NRJfHMt4eSja2kpXia7x8vj6Vzc6WQCUzT3aVeYY",
-      "properties": {
-        "LIonCore_M3_Concept_abstract": "false",
-        "LIonCore_M3_NamespacedEntity_name": "Library"
+      "concept": {
+        "language": "LIonCore_M3",
+        "version": "1",
+        "key": "Concept"
       },
-      "children": {
-        "LIonCore_M3_FeaturesContainer_features": [
-          "LdgCnVXNgZD7CLbBhBin2Rcdumx4qZUYz_jh2QnP5z8",
-          "TFS1ME6sEyRbkRchsr8zaZCcj_uF1LM0LXK24gbnxZM"
-        ]
-      },
-      "references": {},
+      "properties": [
+        {
+          "property": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "abstract"
+          },
+          "value": "false"
+        },
+        {
+          "property": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "NamespacedEntity_name"
+          },
+          "value": "Library"
+        },
+        {
+          "property": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "NamespacedEntity_key"
+          },
+          "value": "Library"
+        }
+      ],
+      "children": [
+        {
+          "containment": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "features"
+          },
+          "children": [
+            "LdgCnVXNgZD7CLbBhBin2Rcdumx4qZUYz_jh2QnP5z8",
+            "TFS1ME6sEyRbkRchsr8zaZCcj_uF1LM0LXK24gbnxZM"
+          ]
+        }
+      ],
+      "references": [],
       "parent": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow"
     },
     {
-      "concept": "LIonCore_M3_Property",
       "id": "LdgCnVXNgZD7CLbBhBin2Rcdumx4qZUYz_jh2QnP5z8",
-      "properties": {
-        "LIonCore_M3_Property_programmatic": "false",
-        "LIonCore_M3_Feature_optional": "false",
-        "LIonCore_M3_Feature_derived": "false",
-        "LIonCore_M3_NamespacedEntity_name": "name"
+      "concept": {
+        "language": "LIonCore_M3",
+        "version": "1",
+        "key": "Property"
       },
-      "children": {},
-      "references": {
-        "LIonCore_M3_Property_type": [
-          "LIonCore_builtins_String"
-        ]
-      },
+      "properties": [
+        {
+          "property": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "optional"
+          },
+          "value": "false"
+        },
+        {
+          "property": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "NamespacedEntity_name"
+          },
+          "value": "name"
+        },
+        {
+          "property": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "NamespacedEntity_key"
+          },
+          "value": "library_Library_name"
+        }
+      ],
+      "children": [],
+      "references": [
+        {
+          "reference": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "type"
+          },
+          "targets": [
+            {
+              "reference": "LIonCore_builtins_String"
+            }
+          ]
+        }
+      ],
       "parent": "Pk1NRJfHMt4eSja2kpXia7x8vj6Vzc6WQCUzT3aVeYY"
     },
     {
-      "concept": "LIonCore_M3_Containment",
       "id": "TFS1ME6sEyRbkRchsr8zaZCcj_uF1LM0LXK24gbnxZM",
-      "properties": {
-        "LIonCore_M3_Link_multiple": "true",
-        "LIonCore_M3_Feature_optional": "false",
-        "LIonCore_M3_Feature_derived": "false",
-        "LIonCore_M3_NamespacedEntity_name": "books"
+      "concept": {
+        "language": "LIonCore_M3",
+        "version": "1",
+        "key": "Containment"
       },
-      "children": {},
-      "references": {
-        "LIonCore_M3_Link_type": [
-          "OcDK2GESljInG-ApIqtkXUoA2UeviB97u0UuiZzM0Hs"
-        ]
-      },
+      "properties": [
+        {
+          "property": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "multiple"
+          },
+          "value": "true"
+        },
+        {
+          "property": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "optional"
+          },
+          "value": "false"
+        },
+        {
+          "property": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "NamespacedEntity_name"
+          },
+          "value": "books"
+        },
+        {
+          "property": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "NamespacedEntity_key"
+          },
+          "value": "books"
+        }
+      ],
+      "children": [],
+      "references": [
+        {
+          "reference": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "Link_type"
+          },
+          "targets": [
+            {
+              "reference": "OcDK2GESljInG-ApIqtkXUoA2UeviB97u0UuiZzM0Hs"
+            }
+          ]
+        }
+      ],
       "parent": "Pk1NRJfHMt4eSja2kpXia7x8vj6Vzc6WQCUzT3aVeYY"
     },
     {
-      "concept": "LIonCore_M3_Concept",
       "id": "DuBg-a_slgc_VOG0huySkSWi3rZQX1Q20EEd2f7lvLE",
-      "properties": {
-        "LIonCore_M3_Concept_abstract": "false",
-        "LIonCore_M3_NamespacedEntity_name": "Writer"
+      "concept": {
+        "language": "LIonCore_M3",
+        "version": "1",
+        "key": "Concept"
       },
-      "children": {
-        "LIonCore_M3_FeaturesContainer_features": [
-          "onRRrZaasiOtDU2qFJgyW8OVz8p5-hqQu0Vlc_7Aq6s"
-        ]
-      },
-      "references": {},
+      "properties": [
+        {
+          "property": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "abstract"
+          },
+          "value": "false"
+        },
+        {
+          "property": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "NamespacedEntity_name"
+          },
+          "value": "Writer"
+        },
+        {
+          "property": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "NamespacedEntity_key"
+          },
+          "value": "Writer"
+        }
+      ],
+      "children": [
+        {
+          "containment": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "features"
+          },
+          "children": [
+            "onRRrZaasiOtDU2qFJgyW8OVz8p5-hqQu0Vlc_7Aq6s"
+          ]
+        }
+      ],
+      "references": [],
       "parent": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow"
     },
     {
-      "concept": "LIonCore_M3_Property",
       "id": "onRRrZaasiOtDU2qFJgyW8OVz8p5-hqQu0Vlc_7Aq6s",
-      "properties": {
-        "LIonCore_M3_Property_programmatic": "false",
-        "LIonCore_M3_Feature_optional": "false",
-        "LIonCore_M3_Feature_derived": "false",
-        "LIonCore_M3_NamespacedEntity_name": "name"
+      "concept": {
+        "language": "LIonCore_M3",
+        "version": "1",
+        "key": "Property"
       },
-      "children": {},
-      "references": {
-        "LIonCore_M3_Property_type": [
-          "LIonCore_builtins_String"
-        ]
-      },
+      "properties": [
+        {
+          "property": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "optional"
+          },
+          "value": "false"
+        },
+        {
+          "property": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "NamespacedEntity_name"
+          },
+          "value": "name"
+        },
+        {
+          "property": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "NamespacedEntity_key"
+          },
+          "value": "library_Writer_name"
+        }
+      ],
+      "children": [],
+      "references": [
+        {
+          "reference": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "type"
+          },
+          "targets": [
+            {
+              "reference": "LIonCore_builtins_String"
+            }
+          ]
+        }
+      ],
       "parent": "DuBg-a_slgc_VOG0huySkSWi3rZQX1Q20EEd2f7lvLE"
     },
     {
-      "concept": "LIonCore_M3_Concept",
       "id": "nNUEzZ7it7d2HoHPAtk5rGO4SsqVA3hAlBwkK1KP8QU",
-      "properties": {
-        "LIonCore_M3_Concept_abstract": "false",
-        "LIonCore_M3_NamespacedEntity_name": "GuideBookWriter"
+      "concept": {
+        "language": "LIonCore_M3",
+        "version": "1",
+        "key": "Concept"
       },
-      "children": {
-        "LIonCore_M3_FeaturesContainer_features": [
-          "PoZyl6WXh-Cz5h2RspK1NL6zX9DdLwGpUUC-ygQmHMA"
-        ]
-      },
-      "references": {
-        "LIonCore_M3_Concept_extends": [
-          "DuBg-a_slgc_VOG0huySkSWi3rZQX1Q20EEd2f7lvLE"
-        ]
-      },
+      "properties": [
+        {
+          "property": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "abstract"
+          },
+          "value": "false"
+        },
+        {
+          "property": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "NamespacedEntity_name"
+          },
+          "value": "GuideBookWriter"
+        },
+        {
+          "property": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "NamespacedEntity_key"
+          },
+          "value": "GuideBookWriter"
+        }
+      ],
+      "children": [
+        {
+          "containment": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "features"
+          },
+          "children": [
+            "PoZyl6WXh-Cz5h2RspK1NL6zX9DdLwGpUUC-ygQmHMA"
+          ]
+        }
+      ],
+      "references": [
+        {
+          "reference": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "Concept_extends"
+          },
+          "targets": [
+            {
+              "reference": "DuBg-a_slgc_VOG0huySkSWi3rZQX1Q20EEd2f7lvLE"
+            }
+          ]
+        }
+      ],
       "parent": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow"
     },
     {
-      "concept": "LIonCore_M3_Property",
       "id": "PoZyl6WXh-Cz5h2RspK1NL6zX9DdLwGpUUC-ygQmHMA",
-      "properties": {
-        "LIonCore_M3_Property_programmatic": "false",
-        "LIonCore_M3_Feature_optional": "false",
-        "LIonCore_M3_Feature_derived": "false",
-        "LIonCore_M3_NamespacedEntity_name": "countries"
+      "concept": {
+        "language": "LIonCore_M3",
+        "version": "1",
+        "key": "Property"
       },
-      "children": {},
-      "references": {
-        "LIonCore_M3_Property_type": [
-          "LIonCore_builtins_String"
-        ]
-      },
+      "properties": [
+        {
+          "property": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "optional"
+          },
+          "value": "false"
+        },
+        {
+          "property": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "NamespacedEntity_name"
+          },
+          "value": "countries"
+        },
+        {
+          "property": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "NamespacedEntity_key"
+          },
+          "value": "countries"
+        }
+      ],
+      "children": [],
+      "references": [
+        {
+          "reference": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "type"
+          },
+          "targets": [
+            {
+              "reference": "LIonCore_builtins_String"
+            }
+          ]
+        }
+      ],
       "parent": "nNUEzZ7it7d2HoHPAtk5rGO4SsqVA3hAlBwkK1KP8QU"
     },
     {
-      "concept": "LIonCore_M3_Concept",
       "id": "RDa_L8gbU8XgW9z46oMysBi1Hb7vjcS8O8LUgXlFpeU",
-      "properties": {
-        "LIonCore_M3_Concept_abstract": "false",
-        "LIonCore_M3_NamespacedEntity_name": "SpecialistBookWriter"
+      "concept": {
+        "language": "LIonCore_M3",
+        "version": "1",
+        "key": "Concept"
       },
-      "children": {
-        "LIonCore_M3_FeaturesContainer_features": [
-          "DbVixG73dI8xIF9TAoq2GOZru4CRQfRD8gG7TkFCZuU"
-        ]
-      },
-      "references": {
-        "LIonCore_M3_Concept_extends": [
-          "DuBg-a_slgc_VOG0huySkSWi3rZQX1Q20EEd2f7lvLE"
-        ]
-      },
+      "properties": [
+        {
+          "property": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "abstract"
+          },
+          "value": "false"
+        },
+        {
+          "property": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "NamespacedEntity_name"
+          },
+          "value": "SpecialistBookWriter"
+        },
+        {
+          "property": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "NamespacedEntity_key"
+          },
+          "value": "SpecialistBookWriter"
+        }
+      ],
+      "children": [
+        {
+          "containment": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "features"
+          },
+          "children": [
+            "DbVixG73dI8xIF9TAoq2GOZru4CRQfRD8gG7TkFCZuU"
+          ]
+        }
+      ],
+      "references": [
+        {
+          "reference": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "Concept_extends"
+          },
+          "targets": [
+            {
+              "reference": "DuBg-a_slgc_VOG0huySkSWi3rZQX1Q20EEd2f7lvLE"
+            }
+          ]
+        }
+      ],
       "parent": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow"
     },
     {
-      "concept": "LIonCore_M3_Property",
       "id": "DbVixG73dI8xIF9TAoq2GOZru4CRQfRD8gG7TkFCZuU",
-      "properties": {
-        "LIonCore_M3_Property_programmatic": "false",
-        "LIonCore_M3_Feature_optional": "false",
-        "LIonCore_M3_Feature_derived": "false",
-        "LIonCore_M3_NamespacedEntity_name": "subject"
+      "concept": {
+        "language": "LIonCore_M3",
+        "version": "1",
+        "key": "Property"
       },
-      "children": {},
-      "references": {
-        "LIonCore_M3_Property_type": [
-          "LIonCore_builtins_String"
-        ]
-      },
+      "properties": [
+        {
+          "property": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "optional"
+          },
+          "value": "false"
+        },
+        {
+          "property": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "NamespacedEntity_name"
+          },
+          "value": "subject"
+        },
+        {
+          "property": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "NamespacedEntity_key"
+          },
+          "value": "subject"
+        }
+      ],
+      "children": [],
+      "references": [
+        {
+          "reference": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "type"
+          },
+          "targets": [
+            {
+              "reference": "LIonCore_builtins_String"
+            }
+          ]
+        }
+      ],
       "parent": "RDa_L8gbU8XgW9z46oMysBi1Hb7vjcS8O8LUgXlFpeU"
     }
   ]

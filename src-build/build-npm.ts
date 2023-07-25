@@ -1,5 +1,5 @@
-import { build, emptyDir } from "https://deno.land/x/dnt/mod.ts";
-import { copy } from "https://deno.land/std@0.177.0/fs/mod.ts";
+import { build, emptyDir } from "https://deno.land/x/dnt@0.35.0/mod.ts";
+import { copy } from "https://deno.land/std@0.187.0/fs/mod.ts";
 
 // Copy test data
 await Deno.remove("npm", { recursive: true }).catch((_) => {});
