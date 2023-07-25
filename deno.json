@@ -6,9 +6,11 @@
         "lock-deps": "deno cache --reload --lock=deno.lock --lock-write src/deps.ts src-build/build-npm.ts src-test/deps.ts"
     },
     "lint": {
-        "files": {
-            "include": ["src/"]
-        },
+        "include": [
+          "src/",
+          "src-build/",
+          "src-test/"
+        ],
         "rules": {
             "tags": ["recommended"],
             "exclude": ["no-explicit-any"]

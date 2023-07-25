@@ -7,9 +7,9 @@ import {intDatatype} from "../../src/m3/builtins.ts"
  * The following typechecks because all classes are effectively one type “class” as TypeScript is concerned.
  */
 class A {
-    with(e: B) {}
+    with(_: _B) {}
 }
-class B {}
+class _B {}
 const a = new A()
 a.with(a)   // would be nice if this produced a compiler error!
 /*

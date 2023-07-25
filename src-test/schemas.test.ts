@@ -1,4 +1,4 @@
-import {readFileAsJson, writeJsonAsFile} from "./utils/json.ts"
+import {writeJsonAsFile} from "./utils/json.ts"
 import {lioncore} from "../src/m3/self-definition.ts"
 import {schemaFor} from "../src/m3/schema-generator.ts"
 import {Language} from "../src/m3/types.ts"

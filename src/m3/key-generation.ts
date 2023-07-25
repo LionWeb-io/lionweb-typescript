@@ -23,6 +23,5 @@ export const qualifiedNameBasedKeyGenerator = (separator: string): KeyGenerator 
     (node) =>
         (node instanceof Language)
             ? node.name
-            : node.qualifiedName().replaceAll(".", separator)
-                // FIXME  this is a hack: qualifiedName should be parametrized with a separator
+            : node.qualifiedName(separator)
 

@@ -10,12 +10,18 @@ import {KeyGenerator} from "./key-generation.ts"
 
 
 /**
- * Joins fragments of a qualified name using the `.` character.
+ * @return A function that combines fragments of a qualified name using the given separator string.
  */
-const qualify = (...names: (string|undefined)[]): string =>
-    names
-        .filter((name) => typeof name === "string")
-        .join(".")
+const combiner = (separator: string) =>
+    (...names: (string|undefined)[]): string =>
+        names
+            .filter((name) => typeof name === "string")
+            .join(separator)
+
+/**
+ * @return The combination of fragments of a qualified name using the `.` character.
+ */
+const qualify = combiner(".")
 
 
 /**
@@ -69,8 +75,8 @@ abstract class NamespacedEntity extends M3Node {
         super(id, key, parent)
         this.name = name
     }
-    qualifiedName() {
-        return qualify(this.parent?.namespaceQualifier(), this.name)
+    qualifiedName(separator = ".") {
+        return combiner(separator)(this.parent?.namespaceQualifier(), this.name)
     }
 }
 
@@ -196,8 +202,8 @@ class PrimitiveType extends Datatype {}
 
 class Enumeration extends Datatype implements NamespaceProvider {
     literals: EnumerationLiteral[] = [] // (containment)
-    namespaceQualifier(): string {
-        return qualify(this.parent?.namespaceQualifier(), this.name)
+    namespaceQualifier(separator = "."): string {
+        return combiner(separator)(this.parent?.namespaceQualifier(), this.name)
     }
 }
 
