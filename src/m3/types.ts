@@ -57,7 +57,6 @@ abstract class M3Node implements Node {
         return this
     }
 }
-// TODO  inline into NamespacedEntity?
 
 
 interface NamespaceProvider extends Node {
@@ -90,11 +89,16 @@ class Language implements NamespaceProvider, Node {
     namespaceQualifier(): string {
         return this.name
     }
-    havingElements(...elements: LanguageElement[]) {
+    havingElements(...elements: LanguageElement[]): Language {
+        const nonLanguageElements = elements.filter((element) => !(element instanceof LanguageElement))
+        if (nonLanguageElements.length > 0) {
+            throw Error(`trying to add non-LanguageElements to Language: ${nonLanguageElements.map((node) => `<${node.constructor.name}>"${node.name}"`).join(", ")}`)
+        }
         this.elements.push(...elements)
         return this
     }
-    dependingOn(...metamodels: Language[]) {
+    dependingOn(...metamodels: Language[]): Language {
+        // TODO  check actual types of metamodels, or use type shapes/interfaces
         this.dependsOn.push(
             ...metamodels
                 .filter((metamodel) => metamodel.name !== lioncoreBuiltinsQName)
@@ -112,6 +116,7 @@ abstract class LanguageElement extends NamespacedEntity {
 abstract class FeaturesContainer extends LanguageElement implements NamespaceProvider {
     features: Feature[] = [] // (containment)
     havingFeatures(...features: Feature[]) {
+        // TODO  check actual types of features, or use type shapes/interfaces
         this.features.push(...features)
         return this
     }
@@ -130,7 +135,8 @@ class Concept extends FeaturesContainer {
         this.abstract = abstract
         this.extends = extends_
     }
-    implementing(...conceptInterfaces: ConceptInterface[]) {
+    implementing(...conceptInterfaces: ConceptInterface[]): Concept {
+        // TODO  check actual types of concept interfaces, or use type shapes/interfaces
         this.implements.push(...conceptInterfaces)
         return this
     }
@@ -178,7 +184,7 @@ class Containment extends Link {
 
 class Property extends Feature {
     type: SingleRef<Datatype> = unresolved   // (reference)
-    ofType(type: Datatype) {
+    ofType(type: Datatype): Property {
         this.type = type
         return this
     }
