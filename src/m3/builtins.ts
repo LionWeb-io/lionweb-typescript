@@ -15,7 +15,7 @@ export const booleanDatatype = factory.primitiveType("Boolean")
 export const intDatatype = factory.primitiveType("Integer")
 export const jsonDatatype = factory.primitiveType("JSON")
 
-lioncoreBuiltins.havingElements(
+lioncoreBuiltins.havingEntities(
     stringDatatype,
     booleanDatatype,
     intDatatype,

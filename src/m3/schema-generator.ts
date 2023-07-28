@@ -1,20 +1,5 @@
-import {
-    Concept,
-    Datatype,
-    Enumeration,
-    Feature,
-    Language,
-    PrimitiveType,
-    Property
-} from "./types.ts"
-import {
-    allFeaturesOf,
-    isConcrete,
-    isContainment,
-    isEnumeration,
-    isProperty,
-    isReference
-} from "./functions.ts"
+import {Concept, Datatype, Enumeration, Feature, Language, PrimitiveType, Property} from "./types.ts"
+import {allFeaturesOf, isConcrete, isContainment, isEnumeration, isProperty, isReference} from "./functions.ts"
 import {isRef} from "../references.ts"
 // TODO  import types for JSON Schema for added type-safety?
 
@@ -109,8 +94,8 @@ const schemaForEnumeration = ({literals}: Enumeration): unknown =>
  * specific to the (metamodel in/of the) given language.
  */
 export const schemaFor = (language: Language): unknown /* <=> JSON Schema */ => {
-    const concreteConcepts = language.elements.filter(isConcrete)
-    const enumerations = language.elements.filter(isEnumeration)
+    const concreteConcepts = language.entities.filter(isConcrete)
+    const enumerations = language.entities.filter(isEnumeration)
     return {
         $schema: "https://json-schema.org/draft/2020-12/schema",
         $id: `${language.name}-serialization`,    // TODO  let caller specify URL instead?

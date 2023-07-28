@@ -1,9 +1,6 @@
 import {Node} from "./types.ts"
 import {Concept, Feature, Link} from "./m3/types.ts"
-import {
-    flatMapNonCyclingFollowing,
-    trivialFlatMapper
-} from "./utils/recursion.ts"
+import {flatMapNonCyclingFollowing, trivialFlatMapper} from "./utils/recursion.ts"
 import {allFeaturesOf, isContainment} from "./m3/functions.ts"
 
 

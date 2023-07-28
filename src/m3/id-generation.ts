@@ -1,10 +1,4 @@
-import {
-    checkDefinedData,
-    checkUniqueData,
-    checkUniqueId,
-    checkValidId,
-    wrapIdGen
-} from "../id-generation.ts"
+import {checkDefinedData, checkUniqueData, checkUniqueId, checkValidId, wrapIdGen} from "../id-generation.ts"
 
 
 /**

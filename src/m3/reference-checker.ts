@@ -1,11 +1,5 @@
-import {
-    Concept,
-    Containment,
-    Language,
-    Property,
-    Reference
-} from "./types.ts"
-import {flatMap} from "./functions.ts"
+import {Concept, Containment, Language, Property, Reference} from "./types.ts"
+import {flatMap, qualifiedNameOf} from "./functions.ts"
 import {SingleRef, unresolved} from "../references.ts"
 
 
@@ -25,16 +19,16 @@ export const checkReferences = (language: Language): string[] =>
             }
 
             if (thing instanceof Concept) {
-                check(thing.extends, `<Concept>${thing.qualifiedName()}#extends`)
+                check(thing.extends, `<Concept>${qualifiedNameOf(thing)}#extends`)
             }
             if (thing instanceof Containment) {
-                check(thing.type, `<Containment>${thing.qualifiedName()}#type`)
+                check(thing.type, `<Containment>${qualifiedNameOf(thing)}#type`)
             }
             if (thing instanceof Property) {
-                check(thing.type, `<Property>${thing.qualifiedName()}#type`)
+                check(thing.type, `<Property>${qualifiedNameOf(thing)}#type`)
             }
             if (thing instanceof Reference) {
-                check(thing.type, `<Reference>${thing.qualifiedName()}#type`)
+                check(thing.type, `<Reference>${qualifiedNameOf(thing)}#type`)
             }
 
             return locations

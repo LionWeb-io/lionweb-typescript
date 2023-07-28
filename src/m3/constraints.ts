@@ -1,17 +1,5 @@
-import {
-    Concept,
-    ConceptInterface,
-    Language,
-    M3Concept,
-    NamespacedEntity
-} from "./types.ts"
-import {
-    flatMap,
-    inheritedCycleWith,
-    keyOf,
-    namedsOf,
-    qualifiedNameOf
-} from "./functions.ts"
+import {Concept, ConceptInterface, isINamed, Language, M3Concept} from "./types.ts"
+import {flatMap, inheritedCycleWith, keyOf, namedsOf, qualifiedNameOf} from "./functions.ts"
 import {duplicatesAmong} from "../utils/grouping.ts"
 
 
@@ -49,11 +37,11 @@ export const issuesLanguage = (language: Language): Issue[] =>
                 if (t instanceof Concept || t instanceof ConceptInterface) {
                     const cycle = inheritedCycleWith(t)
                     if (cycle.length > 0) {
-                        issue(`A ${t.constructor.name} can't inherit (directly or indirectly) from itself, but ${t.qualifiedName()} does so through the following cycle: ${cycle.map((t) => t.qualifiedName()).join(" -> ")}`)
+                        issue(`A ${t.constructor.name} can't inherit (directly or indirectly) from itself, but ${qualifiedNameOf(t)} does so through the following cycle: ${cycle.map((t) => qualifiedNameOf(t)).join(" -> ")}`)
                     }
                 }
 
-                if (t instanceof Language || t instanceof NamespacedEntity) {
+                if (isINamed(t)) {
                     if (t.name.trim().length === 0) {
                         issue(`A ${t.constructor.name} must have a non-whitespace name`)
                     }

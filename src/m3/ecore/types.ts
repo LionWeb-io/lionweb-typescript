@@ -1,3 +1,6 @@
+import {AnyNumberOf} from "../../utils/array-helpers.ts"
+
+
 /**
  * Type definitions that correspond to an Ecore XML metamodel (file),
  * parsed using the XML parser built-in to Deno (see {@link https://deno.land/x/xml@2.1.0/mod.ts}),
@@ -47,28 +50,5 @@ export type EReference = ENamed & {
     "@upperBound": string   // number
     "@eType": string    // `#//${targetType.name}`
     "@containment": boolean
-}
-
-
-/**
- * Feature values that are parsed from an Ecore XML metamodel file
- * can be either `undefined`, a single object, or an array of objects,
- * regardless of the actual cardinality of that feature.
- */
-export type AnyNumberOf<T> = undefined | T | T[]
-
-/**
- * Turns a {@link AnyNumberOf feature's value} into an array of objects
- * (possibly empty), regardless of the feature's cardinality and how its
- * value happened to be parsed.
- */
-export const asArray = <T>(thing: AnyNumberOf<T>): T[] => {
-    if (thing === undefined) {
-        return []
-    }
-    if (Array.isArray(thing)) {
-        return thing
-    }
-    return [thing]
 }
 

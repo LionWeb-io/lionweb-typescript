@@ -1,4 +1,5 @@
-import {Language, M3Concept} from "./types.ts"
+import {M3Concept} from "./types.ts"
+import {qualifiedNameOf} from "./functions.ts"
 
 
 /**
@@ -6,13 +7,12 @@ import {Language, M3Concept} from "./types.ts"
  * Note that, in theory, key generation doesn't need to be idempotent: f(node) != f(node.havingKey(f(node)), with f of type KeyGenerator.
  */
 export type KeyGenerator = (node: M3Concept) => string
-    // TODO  should have as type NamespacedEntity, but don't want to do that until propagating recent-recent changes
 
 
 /**
  * A {@link KeyGenerator key generator} for which: key = name
  */
-export const simpleNameIsKeyGenerator = (node: M3Concept) =>
+export const nameIsKeyGenerator = (node: M3Concept) =>
     node.name
 
 
@@ -20,8 +20,5 @@ export const simpleNameIsKeyGenerator = (node: M3Concept) =>
  * @return A {@link KeyGenerator key generator} that generates a key with the qualified name using the given separator.
  */
 export const qualifiedNameBasedKeyGenerator = (separator: string): KeyGenerator =>
-    (node) =>
-        (node instanceof Language)
-            ? node.name
-            : node.qualifiedName(separator)
+    (node) => qualifiedNameOf(node, separator)
 

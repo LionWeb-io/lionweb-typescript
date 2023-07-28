@@ -1,11 +1,4 @@
-import {
-    Concept,
-    Feature,
-    FeaturesContainer,
-    Language,
-    LanguageElement,
-    PrimitiveType
-} from "../types.ts"
+import {Classifier, Concept, Feature, Language, LanguageEntity, PrimitiveType} from "../types.ts"
 import {LanguageFactory} from "../factory.ts"
 import {
     checkDefinedData,
@@ -15,15 +8,11 @@ import {
     hashingIdGen,
     wrapIdGen
 } from "../../id-generation.ts"
-import {
-    asArray,
-    EClassifier,
-    EcoreXml,
-    EStructuralFeature
-} from "./types.ts"
-import {ConceptType, keyOf, namedsOf} from "../functions.ts"
+import {EClassifier, EcoreXml, EStructuralFeature} from "./types.ts"
+import {ConceptType, keyOf, namedsOf, qualifiedNameOf} from "../functions.ts"
 import {booleanDatatype, intDatatype, stringDatatype} from "../builtins.ts"
 import {duplicatesAmong} from "../../utils/grouping.ts"
+import {asArray} from "../../utils/array-helpers.ts"
 
 
 const localRefPrefix = "#//"
@@ -59,13 +48,13 @@ export const asLIonCoreLanguage = (ecoreXml: EcoreXml, version: string): Languag
         factory.concept(eClassifier["@name"], false)
     // TODO (#10)  ConceptInterface, Enumeration
 
-    const convertedEClassifiers: [eClassifier: EClassifier, element: LanguageElement][] =
+    const convertedEClassifiers: [eClassifier: EClassifier, element: LanguageEntity][] =
         ePackage["eClassifiers"]
             .map((eClassifier) =>
                 [eClassifier, convertEClassifier(eClassifier)]
             )
 
-    const eClassifierConversionFor = (eClassifierName: string): LanguageElement =>
+    const eClassifierConversionFor = (eClassifierName: string): LanguageEntity =>
         convertedEClassifiers
             .find(([source, _]) => source["@name"] === eClassifierName)![1]
 
@@ -86,7 +75,7 @@ export const asLIonCoreLanguage = (ecoreXml: EcoreXml, version: string): Languag
         }
     }
 
-    const convertEStructuralFeature = (container: FeaturesContainer, feature: EStructuralFeature): Feature => {
+    const convertEStructuralFeature = (container: Classifier, feature: EStructuralFeature): Feature => {
         const metaType = feature["@xsi:type"]
         const name = feature["@name"]
         switch (metaType) {
@@ -104,7 +93,7 @@ export const asLIonCoreLanguage = (ecoreXml: EcoreXml, version: string): Languag
                             ? factory.containment(container, name)
                             : factory.reference(container, name)
                     )
-                        .ofType(eClassifierConversionFor(deref(feature["@eType"])) as FeaturesContainer)
+                        .ofType(eClassifierConversionFor(deref(feature["@eType"])) as Classifier)
                 if (feature["@lowerBound"] === "0") {
                     link.isOptional()
                 }
@@ -121,7 +110,7 @@ export const asLIonCoreLanguage = (ecoreXml: EcoreXml, version: string): Languag
     convertedEClassifiers.forEach(([source, target]) => {
         if (source["@xsi:type"] === "ecore:EClass") {
             const eClass = source
-            const container = target as FeaturesContainer
+            const container = target as Classifier
             container
                 .havingFeatures(
                     ...asArray(source.eStructuralFeatures)
@@ -139,13 +128,13 @@ export const asLIonCoreLanguage = (ecoreXml: EcoreXml, version: string): Languag
     // phase 3: put all converted things into the metamodel
 
     factory.language
-        .havingElements(...convertedEClassifiers.map(([_, mmElement]) => mmElement))
+        .havingEntities(...convertedEClassifiers.map(([_, mmElement]) => mmElement))
 
     // phase 4: dedup keys (crudely, using the qualified name) where necessary
 
     Object.entries(duplicatesAmong(namedsOf(factory.language), keyOf))
         .forEach(([_, mmElements]) => {
-            mmElements.forEach((mmElement) => mmElement.havingKey(mmElement.qualifiedName().replaceAll(/\./g, "_")))
+            mmElements.forEach((mmElement) => mmElement.havingKey(qualifiedNameOf(mmElement, "_")))
         })
 
     return factory.language

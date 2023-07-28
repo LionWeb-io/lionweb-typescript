@@ -8,11 +8,6 @@ export type Id = string
  */
 export type Node = {
     id: Id
+    parent?: Node
 }
-
-/**
- * Maps an array of {@link Node AST nodes} to their IDs.
- */
-export const asIds = (nodes: Node[]): Id[] =>
-    nodes.map(({id}) => id)
 

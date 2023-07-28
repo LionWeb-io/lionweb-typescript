@@ -33,7 +33,7 @@ const specialistBookWriter_subject = factory.property(specialistBookWriter, "sub
 specialistBookWriter.havingFeatures(specialistBookWriter_subject)
 
 
-libraryLanguage.havingElements(
+libraryLanguage.havingEntities(
     book,
     library,
     writer,

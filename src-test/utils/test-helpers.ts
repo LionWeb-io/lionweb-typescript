@@ -1,5 +1,5 @@
 import {Issue} from "../../src/m3/constraints.ts"
-import {asIds} from "../../src/types.ts"
+import {asIds} from "../../src/functions.ts"
 
 
 /**

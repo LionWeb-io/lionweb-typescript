@@ -1,20 +1,24 @@
 import {
+    Classifier,
     Concept,
     ConceptInterface,
     Containment,
     Enumeration,
     EnumerationLiteral,
-    FeaturesContainer,
     Language,
+    lioncoreQNameSeparator,
     PrimitiveType,
     Property,
-    qualify,
     Reference
 } from "./types.ts"
 import {SingleRef} from "../references.ts"
 import {IdGenerator, nanoIdGen} from "../id-generation.ts"
-import {KeyGenerator, simpleNameIsKeyGenerator} from "./key-generation.ts"
+import {qualifiedNameOf} from "./functions.ts"
+import {KeyGenerator, nameIsKeyGenerator} from "./key-generation.ts"
 
+
+const concat = (...names: string[]): string =>
+    names.join(lioncoreQNameSeparator)
 
 /**
  * A factory that produces a {@link Language} instance,
@@ -28,47 +32,48 @@ export class LanguageFactory {
     readonly key: KeyGenerator
     readonly language: Language
 
-    constructor(name: string, version: string, id: IdGenerator = nanoIdGen(), key: KeyGenerator = simpleNameIsKeyGenerator) {
+    constructor(name: string, version: string, id: IdGenerator = nanoIdGen(), key: KeyGenerator = nameIsKeyGenerator) {
         this.id = id
         this.key = key
-        this.language = new Language(name, version, this.id(name))
+        const idAndKey = this.id(name)  // need to call this.id just once
+        this.language = new Language(name, version, idAndKey, idAndKey)
     }
 
 
     // TODO  this pattern (post-re-setting the key) is not nice: improve...
 
     concept(name: string, abstract: boolean, extends_?: SingleRef<Concept>) {
-        return new Concept(this.language, name, "", this.id(qualify(this.language.name, name)), abstract, extends_).keyed(this.key)
+        return new Concept(this.language, name, "", this.id(concat(this.language.name, name)), abstract, extends_).keyed(this.key)
     }
 
     conceptInterface(name: string) {
-        return new ConceptInterface(this.language, name, "", this.id(qualify(this.language.name, name))).keyed(this.key)
+        return new ConceptInterface(this.language, name, "", this.id(concat(this.language.name, name))).keyed(this.key)
     }
 
     enumeration(name: string) {
-        return new Enumeration(this.language, name, "", this.id(qualify(this.language.name, name))).keyed(this.key)
+        return new Enumeration(this.language, name, "", this.id(concat(this.language.name, name))).keyed(this.key)
     }
 
     primitiveType(name: string) {
-        return new PrimitiveType(this.language, name, "", this.id(qualify(this.language.name, name))).keyed(this.key)
+        return new PrimitiveType(this.language, name, "", this.id(concat(this.language.name, name))).keyed(this.key)
     }
 
 
-    containment(featuresContainer: FeaturesContainer, name: string) {
-        return new Containment(featuresContainer, name, "", this.id(qualify(featuresContainer.qualifiedName(), name))).keyed(this.key)
+    containment(classifier: Classifier, name: string) {
+        return new Containment(classifier, name, "", this.id(concat(qualifiedNameOf(classifier, lioncoreQNameSeparator), name))).keyed(this.key)
     }
 
-    property(featuresContainer: FeaturesContainer, name: string) {
-        return new Property(featuresContainer, name, "", this.id(qualify(featuresContainer.qualifiedName(), name))).keyed(this.key)
+    property(classifier: Classifier, name: string) {
+        return new Property(classifier, name, "", this.id(concat(qualifiedNameOf(classifier, lioncoreQNameSeparator), name))).keyed(this.key)
     }
 
-    reference(featuresContainer: FeaturesContainer, name: string) {
-        return new Reference(featuresContainer, name, "", this.id(qualify(featuresContainer.qualifiedName(), name))).keyed(this.key)
+    reference(classifier: Classifier, name: string) {
+        return new Reference(classifier, name, "", this.id(concat(qualifiedNameOf(classifier, lioncoreQNameSeparator), name))).keyed(this.key)
     }
 
 
     enumerationLiteral(enumeration: Enumeration, name: string) {
-        return new EnumerationLiteral(enumeration, name, "", this.id(qualify(enumeration.qualifiedName(), name))).keyed(this.key)
+        return new EnumerationLiteral(enumeration, name, "", this.id(concat(qualifiedNameOf(enumeration, lioncoreQNameSeparator), name))).keyed(this.key)
     }
 
 }

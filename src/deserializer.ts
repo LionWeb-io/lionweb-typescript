@@ -1,13 +1,7 @@
 import {Id, Node} from "./types.ts"
 import {SerializedModel, SerializedNode} from "./serialization.ts"
 import {ModelAPI} from "./api.ts"
-import {
-    Concept,
-    Containment,
-    Language,
-    Property,
-    Reference
-} from "./m3/types.ts"
+import {Concept, Containment, Language, Property, Reference} from "./m3/types.ts"
 import {allFeaturesOf} from "./m3/functions.ts"
 import {deserializeBuiltin} from "./m3/builtins.ts"
 import {groupBy} from "./utils/grouping.ts"
@@ -78,7 +72,7 @@ export const deserializeModel = <NT extends Node>(
      */
     const instantiate = ({concept: conceptMetaPointer, id, properties, children, references}: SerializedNode, parent?: NT): NT => {
 
-        const concept = language.elements
+        const concept = language.entities
             .find((element) =>
                 element instanceof Concept && element.key === conceptMetaPointer.key
             ) as (Concept | undefined)

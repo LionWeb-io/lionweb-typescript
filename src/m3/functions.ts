@@ -4,18 +4,20 @@
 
 
 import {
+    Classifier,
     Concept,
     ConceptInterface,
     Containment,
     Datatype,
     Enumeration,
     Feature,
-    FeaturesContainer,
+    IKeyed,
+    INamed,
+    isINamed,
     Language,
-    LanguageElement,
+    LanguageEntity,
     Link,
     M3Concept,
-    NamespacedEntity,
     Property,
     Reference
 } from "./types.ts"
@@ -25,22 +27,23 @@ import {cycleWith} from "../utils/cycles.ts"
 import {flatMapNonCyclingFollowing} from "../utils/recursion.ts"
 import {Id, Node} from "../types.ts"
 import {ConceptDeducer} from "../api.ts"
+import {containmentChain} from "../functions.ts"
 
 
 /**
  * @return The type of the given {@link Feature}
  */
-export const type = (feature: Feature): FeaturesContainer | Datatype | typeof unresolved =>
+const type = (feature: Feature): Classifier | Datatype | typeof unresolved =>
     (feature as (Link | Property)).type
 
 
-export const isProperty = (feature: Feature): feature is Property =>
+const isProperty = (feature: Feature): feature is Property =>
     feature instanceof Property
 
-export const isContainment = (feature: Feature): feature is Containment =>
+const isContainment = (feature: Feature): feature is Containment =>
     feature instanceof Containment
 
-export const isReference = (feature: Feature): feature is Reference =>
+const isReference = (feature: Feature): feature is Reference =>
     feature instanceof Reference
 
 
@@ -54,35 +57,35 @@ const isRelational = (feature: Feature): feature is Link =>
 /**
  * @return the relations among the given {@link Feature features}.
  */
-export const relations = (features: Feature[]): Link[] =>
+const relations = (features: Feature[]): Link[] =>
     features.filter(isRelational)
 
 /**
  * @return the non-relations among the given {@link Feature features}.
  */
-export const nonRelationalFeatures = (features: Feature[]): Feature[] =>
+const nonRelationalFeatures = (features: Feature[]): Feature[] =>
     features.filter((feature) => !isRelational(feature))
 
 
 /**
- * @return the relations of the given {@link LanguageElement language element}.
+ * @return the relations of the given {@link LanguageEntity language element}.
  */
-export const relationsOf = (element: LanguageElement): Link[] =>
-    element instanceof FeaturesContainer
+const relationsOf = (element: LanguageEntity): Link[] =>
+    element instanceof Classifier
         ? relations(element.features)
         : []
 
 
 /**
  * @return The "things", i.e. {@link M3Concept}s, contained by the given "thing".
- *  These can be: {@link LanguageElement}s, {@link Feature}s, {@link EnumerationLiteral}
+ *  These can be: {@link LanguageEntity}s, {@link Feature}s, {@link EnumerationLiteral}
  *  (and all their sub types).
  */
-export const containeds = (thing: M3Concept): M3Concept[] => {
+const containeds = (thing: M3Concept): M3Concept[] => {
     if (thing instanceof Language) {
-        return thing.elements
+        return thing.entities
     }
-    if (thing instanceof FeaturesContainer) {
+    if (thing instanceof Classifier) {
         return thing.features
     }
     if (thing instanceof Enumeration) {
@@ -96,62 +99,72 @@ export const containeds = (thing: M3Concept): M3Concept[] => {
  * Performs a depth-first tree traversal of a language, "flatMapping" the `map` function on every node.
  * It avoids visiting nodes twice (to avoid potential infinite loops), but doesn't report cycles.
  */
-export const flatMap = <T>(language: Language, map: (t: M3Concept) => T[]): T[] =>
+const flatMap = <T>(language: Language, map: (t: M3Concept) => T[]): T[] =>
     flatMapNonCyclingFollowing(map, containeds)(language)
 
 
 /**
- * @return the name of the given {@link NamespacedEntity named thing}.
+ * @return the name of the given {@link INamed named thing}.
  */
-export const nameOf = <T extends NamespacedEntity>({name}: T): string =>
+const nameOf = <T extends INamed>({name}: T): string =>
     name
 
 /**
- * @return the qualified name of the given {@link NamespacedEntity named thing}.
+ * @return the concatenation of the names of the given nodes using the given separator.
  */
-export const qualifiedNameOf = <T extends NamespacedEntity>(t: T): string =>
-    t.qualifiedName()
+const concatenateNamesOf = (separator: string, nodes: M3Concept[]): string =>
+    nodes
+        .filter(isINamed)
+        .map(nameOf)
+        .join(separator)
+    // !! slight overkill: every node in an M2 is an M3Concept, so IKeyed and INamed
+
+/**
+ * @return the qualified name of the given {@link INamed named thing}.
+ */
+const qualifiedNameOf = <T extends INamed>(node: T, separator = "."): string =>
+    concatenateNamesOf(separator, containmentChain(node).reverse() as M3Concept[])
 
 
 /**
- * @return the {@link NamespacedEntity named things} in this {@link Language language}
+ * @return the {@link INamed named things} in this {@link Language language}
  *  (excluding the language itself)
  */
-export const namedsOf = (language: Language): NamespacedEntity[] =>
-    flatMap(language, (t) => t instanceof NamespacedEntity ? [t] : [])
+const namedsOf = (language: Language): M3Concept[] =>
+    flatMap(language, (t) => isINamed(t) ? [t] : [])
 
 
 /**
- * @return the key of the given {@link NamespacedEntity named thing}.
+ * @return the key of the given {@link INamed named thing}.
  */
-export const keyOf = <T extends NamespacedEntity>({key}: T): string =>
+const keyOf = <T extends IKeyed>({key}: T): string =>
     key
 
 
 /**
  * @return the id of the given {@link M3Concept}.
  */
-export const idOf = <T extends M3Concept>({id}: T): string =>
+const idOf = <T extends M3Concept>({id}: T): string =>
     id
 
 
 /**
- * Sorts the given {@link LanguageElement metamodel elements} by name.
+ * Sorts the given {@link LanguageEntity metamodel elements} by name.
  */
-export const elementsSortedByName = (elements: LanguageElement[]) =>
+const elementsSortedByName = (elements: LanguageEntity[]) =>
     sortByStringKey(elements, nameOf)
 
 
 /**
  * A sum type of {@link Concept} and {@link ConceptInterface}.
  */
-export type ConceptType = Concept | ConceptInterface
+type ConceptType = Concept | ConceptInterface
 
 /**
- * Determines whether the given {@link LanguageElement metamodel element} is
+ * Determines whether the given {@link LanguageEntity metamodel element} is
  * *concrete*, i.e. is instantiable.
  */
-export const isConcrete = (thing: LanguageElement): thing is Concept =>
+const isConcrete = (thing: LanguageEntity): thing is Concept =>
     thing instanceof Concept && !thing.abstract
 
 const inheritsFrom = (conceptType: ConceptType): ConceptType[] => {
@@ -174,7 +187,7 @@ const inheritsFrom = (conceptType: ConceptType): ConceptType[] => {
 /**
  * @return an array that's either an inheritance cycle, or empty (meaning: no inheritance cycle).
  */
-export const inheritedCycleWith = (conceptType: ConceptType) =>
+const inheritedCycleWith = (conceptType: ConceptType) =>
     cycleWith(conceptType, inheritsFrom)
 
 
@@ -182,7 +195,7 @@ export const inheritedCycleWith = (conceptType: ConceptType) =>
  * @return *all* super types (through `extends` or `implements`) of the given
  *  {@link Concept concept} or {@link ConceptInterface concept interface}.
  */
-export const allSuperTypesOf = (conceptType: ConceptType): ConceptType[] =>
+const allSuperTypesOf = (conceptType: ConceptType): ConceptType[] =>
     flatMapNonCyclingFollowing(inheritsFrom, inheritsFrom)(conceptType)
 
 
@@ -190,38 +203,71 @@ export const allSuperTypesOf = (conceptType: ConceptType): ConceptType[] =>
  * @return *all* {@link Feature features} of the given {@link Concept concept} or {@link ConceptInterface concept interface},
  * including the inherited ones.
  */
-export const allFeaturesOf = (conceptType: ConceptType): Feature[] =>
+const allFeaturesOf = (conceptType: ConceptType): Feature[] =>
     flatMapNonCyclingFollowing((ci) => ci.features, inheritsFrom)(conceptType)
 
 
 /**
- * Determines whether the given {@link LanguageElement language element} is an {@link Enumeration enumeration}.
+ * Determines whether the given {@link LanguageEntity language element} is an {@link Enumeration enumeration}.
  */
-export const isEnumeration = (element: LanguageElement): element is Enumeration =>
+const isEnumeration = (element: LanguageEntity): element is Enumeration =>
     element instanceof Enumeration
 
 
 /**
  * @return a function that looks up a concept from the given {@link Language language} by its ID.
  */
-export const idBasedConceptDeducerFor = (language: Language) =>
+const idBasedConceptDeducerFor = (language: Language) =>
     (id: Id) =>
-        language.elements.find((element) => element instanceof Concept && element.id === id) as Concept
+        language.entities.find((element) => element instanceof Concept && element.id === id) as Concept
 
 /**
  * @return a function that looks up a concept from the given {@link Language language} by its name.
  */
-export const nameBasedConceptDeducerFor = (language: Language) =>
+const nameBasedConceptDeducerFor = (language: Language) =>
     (name: string) =>
-        language.elements.find((element) => element instanceof Concept && element.name === name) as Concept
+        language.entities.find((element) => element instanceof Concept && element.name === name) as Concept
 
 
 /**
  * @return a {@link ConceptDeducer concept deducer} that deduces the concept of nodes by looking up
  * the concept in the given {@link Language language} by matching the node object's class name to the concept's name.
  */
-export const classBasedConceptDeducerFor = <NT extends Node>(language: Language): ConceptDeducer<NT> => {
+const classBasedConceptDeducerFor = <NT extends Node>(language: Language): ConceptDeducer<NT> => {
     const deducer = nameBasedConceptDeducerFor(language)
     return (node: NT) => deducer(node.constructor.name)
+}
+
+
+export {
+    allFeaturesOf,
+    allSuperTypesOf,
+    classBasedConceptDeducerFor,
+    concatenateNamesOf,
+    containeds,
+    containmentChain,
+    elementsSortedByName,
+    flatMap,
+    idBasedConceptDeducerFor,
+    idOf,
+    inheritedCycleWith,
+    isConcrete,
+    isContainment,
+    isEnumeration,
+    isProperty,
+    isReference,
+    keyOf,
+    nameBasedConceptDeducerFor,
+    nameOf,
+    namedsOf,
+    nonRelationalFeatures,
+    relations,
+    relationsOf,
+    type,
+    qualifiedNameOf
+}
+
+export type {
+    ConceptType
 }
 

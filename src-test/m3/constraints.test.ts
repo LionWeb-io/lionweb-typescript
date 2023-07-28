@@ -13,7 +13,7 @@ Deno.test("constraints (LIonCore)", async (tctx) => {
         cis[2].extends.push(cis[1])
         cis[1].extends.push(cis[0])
         cis[0].extends.push(cis[2])
-        language.elements.push(...cis)
+        language.entities.push(...cis)
 
         const issues = issuesLanguage(language)
         assertEquals(issues.length, 3)
@@ -26,7 +26,7 @@ Deno.test("constraints (LIonCore)", async (tctx) => {
         const {language} = factory
         const ci = factory.conceptInterface(`foo`)
         ci.extends.push(ci)
-        language.elements.push(ci)
+        language.entities.push(ci)
 
         const issues = issuesLanguage(language)
         assertEquals(issues.length, 1)
@@ -36,9 +36,9 @@ Deno.test("constraints (LIonCore)", async (tctx) => {
     })
 
     await tctx.step("check that things have names", () => {
-        const language = new Language("", "x", "x")
+        const language = new Language("", "0", "x", "x")
         const concept = new Concept(language, "   ", "y", "y", false)
-        language.havingElements(concept)
+        language.havingEntities(concept)
         const issues = issuesLanguage(language)
         assertEquals(issues.length, 2)
         assertEquals(issues[0], {

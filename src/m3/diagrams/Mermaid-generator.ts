@@ -6,16 +6,11 @@ import {
     Enumeration,
     Feature,
     Language,
-    LanguageElement,
+    LanguageEntity,
     Link,
     PrimitiveType
 } from "../types.ts"
-import {
-    elementsSortedByName,
-    nonRelationalFeatures,
-    relationsOf,
-    type
-} from "../functions.ts"
+import {elementsSortedByName, nonRelationalFeatures, relationsOf, type} from "../functions.ts"
 import {isRef, unresolved} from "../../references.ts"
 
 
@@ -43,15 +38,15 @@ const withNewLine = (content: NestedString): NestedString =>
  * Generates a string with a Mermaid class diagram
  * representing the given {@link Language LIonCore/M3 instance}.
  */
-export const generateMermaidForMetamodel = ({elements}: Language) =>
+export const generateMermaidForMetamodel = ({entities}: Language) =>
     asString([
         "```mermaid",
         `classDiagram
 
 `,
-        indented(elementsSortedByName(elements).map(generateForElement)),
+        indented(elementsSortedByName(entities).map(generateForElement)),
         ``,
-        indented(elementsSortedByName(elements).map(generateForRelationsOf)),
+        indented(elementsSortedByName(entities).map(generateForRelationsOf)),
         ``,
         "```"
     ])
@@ -107,7 +102,7 @@ const generateForPrimitiveType = ({name}: PrimitiveType) =>
 // Note: No construct for PrimitiveType exists in PlantUML.
 
 
-const generateForElement = (element: LanguageElement) => {
+const generateForElement = (element: LanguageEntity) => {
     if (element instanceof Concept) {
         return generateForConcept(element)
     }
@@ -124,7 +119,7 @@ const generateForElement = (element: LanguageElement) => {
 }
 
 
-const generateForRelationsOf = (element: LanguageElement) => {
+const generateForRelationsOf = (element: LanguageEntity) => {
     const relations = relationsOf(element)
     return relations.length === 0
         ? ``
@@ -133,7 +128,7 @@ const generateForRelationsOf = (element: LanguageElement) => {
 }
 
 
-const generateForRelation = ({name: leftName}: LanguageElement, relation: Link) => {
+const generateForRelation = ({name: leftName}: LanguageEntity, relation: Link) => {
     const {name: relationName, optional, multiple, type} = relation
     const rightName = isRef(type) ? type.name : (type === unresolved ? `<unresolved>` : `<null>`)
     const isContainment = relation instanceof Containment

@@ -11,7 +11,7 @@ Deno.test("key generation", async (tctx) => {
         const factory = new LanguageFactory("FormLanguage", "1", hashingIdGen(), qualifiedNameBasedKeyGenerator("-"))
 
         const form = factory.concept("Form", false)
-        factory.language.havingElements(form)
+        factory.language.havingEntities(form)
 
         assertEquals(form.key, "FormLanguage-Form")
 

@@ -1,60 +1,59 @@
 ```mermaid
 classDiagram
 
+  class Classifier
+  <<Abstract>> Classifier
+  LanguageEntity <|-- Classifier
+
   class Concept {
     +Boolean abstract
+    +Boolean partition
   }
-  FeaturesContainer <|-- Concept
+  Classifier <|-- Concept
 
   class ConceptInterface
-  FeaturesContainer <|-- ConceptInterface
+  Classifier <|-- ConceptInterface
 
   class Containment
   Link <|-- Containment
 
   class DataType
   <<Abstract>> DataType
-  LanguageElement <|-- DataType
+  LanguageEntity <|-- DataType
 
   class Enumeration
   DataType <|-- Enumeration
 
   class EnumerationLiteral
-  NamespacedEntity <|-- EnumerationLiteral
 
   class Feature {
     +Boolean optional
   }
   <<Abstract>> Feature
-  NamespacedEntity <|-- Feature
 
-  class FeaturesContainer
-  <<Abstract>> FeaturesContainer
-  LanguageElement <|-- FeaturesContainer
+  class IKeyed {
+    +String key
+  }
+  <<Interface>> IKeyed
+  INamed <|-- IKeyed
+
+  class INamed {
+    +String name
+  }
+  <<Interface>> INamed
 
   class Language {
-    +String name
     +String version
   }
 
-  class LanguageElement
-  <<Abstract>> LanguageElement
-  NamespacedEntity <|-- LanguageElement
+  class LanguageEntity
+  <<Abstract>> LanguageEntity
 
   class Link {
     +Boolean multiple
   }
   <<Abstract>> Link
   Feature <|-- Link
-
-  class NamespaceProvider
-  <<Interface>> NamespaceProvider
-
-  class NamespacedEntity {
-    +String name
-    +String key
-  }
-  <<Abstract>> NamespacedEntity
 
   class PrimitiveType
   DataType <|-- PrimitiveType
@@ -66,6 +65,7 @@ classDiagram
   Link <|-- Reference
 
 
+  Classifier "1" o-- "*" Feature: features
   Concept "*" -- "0..1" Concept: extends
   Concept "*" -- "*" ConceptInterface: implements
   ConceptInterface "*" -- "*" ConceptInterface: extends
@@ -74,13 +74,12 @@ classDiagram
   Enumeration "1" o-- "*" EnumerationLiteral: literals
 
 
-  FeaturesContainer "1" o-- "*" Feature: features
-  Language "1" o-- "*" LanguageElement: elements
+
+
+  Language "1" o-- "*" LanguageEntity: entities
   Language "*" -- "*" Language: dependsOn
 
-  Link "*" -- "1" FeaturesContainer: type
-
-
+  Link "*" -- "1" Classifier: type
 
   Property "*" -- "1" DataType: type
 

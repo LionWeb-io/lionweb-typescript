@@ -1,9 +1,21 @@
 import {LanguageFactory} from "./factory.ts"
 import {lioncoreIdGen} from "./id-generation.ts"
 import {booleanDatatype, stringDatatype} from "./builtins.ts"
+import {qualifiedNameBasedKeyGenerator} from "./key-generation.ts"
 
 
-const factory = new LanguageFactory("LIonCore.M3", "1", lioncoreIdGen)
+const factory = new LanguageFactory("LIonCore.M3", "2", lioncoreIdGen, qualifiedNameBasedKeyGenerator("-"))
+
+/**
+ * TODO:
+ *  * &#10003; Add the missing builtins Node and INamed
+ *  * Use the id of a node as the default key instead of the name
+ *  * Remove NamespaceProvider and NamespacedEntity from the self definition, let a number of concepts implement INamed instead (and I'm missing IKeyed in this definition)
+ *  * Change underscores to dashes in the havingKey keys of the self defintiion and add some more specified keys
+ *  * Change the separator from a dot to a dash
+ *
+ *  Source of definition: https://lionweb-org.github.io/organization/lioncore/metametamodel/metametamodel.html
+ */
 
 
 /**
@@ -12,99 +24,24 @@ const factory = new LanguageFactory("LIonCore.M3", "1", lioncoreIdGen)
 export const lioncore = factory.language
 
 
-const namespaceProvider = factory.conceptInterface("NamespaceProvider")
+const inamed = factory.conceptInterface("INamed")
 
-
-const namespacedEntity = factory.concept("NamespacedEntity", true)
-
-const namespacedEntity_name = factory.property(namespacedEntity, "name")
-    .ofType(stringDatatype)
-    .havingKey("NamespacedEntity_name")
-
-const namespacedEntity_key = factory.property(namespacedEntity, "key")
-    .ofType(stringDatatype)
-    .havingKey("NamespacedEntity_key")
-
-namespacedEntity.havingFeatures(
-        namespacedEntity_name,
-        namespacedEntity_key
-    )
-
-
-const language = factory.concept("Language", false)
-    .implementing(namespaceProvider)
-
-const language_name = factory.property(language, "name")
-    .ofType(stringDatatype)
-    .havingKey("Language_name")
-
-const language_version = factory.property(language, "version")
+const inamed_name = factory.property(inamed, "name")
     .ofType(stringDatatype)
 
-const language_elements = factory.containment(language, "elements")
-    .isOptional()
-    .isMultiple()
-
-const language_dependsOn = factory.reference(language, "dependsOn")
-    .isOptional()
-    .isMultiple()
-    .ofType(language)
-
-language.havingFeatures(language_name, language_version, language_elements, language_dependsOn)
+inamed.havingFeatures(inamed_name)
 
 
-const languageElement = factory.concept("LanguageElement", true, namespacedEntity)
+const ikeyed = factory.conceptInterface("IKeyed")
+    .extending(inamed)
 
-language_elements.ofType(languageElement)
+const ikeyed_key = factory.property(inamed, "key")
+    .ofType(stringDatatype)
 
-
-const featuresContainer = factory.concept("FeaturesContainer", true, languageElement)
-    .implementing(namespaceProvider)
-
-const featuresContainer_features = factory.containment(featuresContainer, "features")
-    .isOptional()
-    .isMultiple()
-
-featuresContainer.havingFeatures(
-    featuresContainer_features
-)
+ikeyed.havingFeatures(ikeyed_key)
 
 
-const concept = factory.concept("Concept", false, featuresContainer)
-
-const concept_abstract = factory.property(concept, "abstract")
-    .ofType(booleanDatatype)
-
-const concept_extends = factory.reference(concept, "extends")
-    .isOptional()
-    .ofType(concept)
-    .havingKey("Concept_extends")
-
-const concept_implements = factory.reference(concept, "implements")
-    .isOptional()
-    .isMultiple()
-
-
-concept.havingFeatures(
-    concept_abstract,
-    concept_extends,
-    concept_implements
-)
-
-
-const conceptInterface = factory.concept("ConceptInterface", false, featuresContainer)
-
-const conceptInterface_extends = factory.reference(conceptInterface, "extends")
-    .isOptional()
-    .isMultiple()
-    .ofType(conceptInterface)
-    .havingKey("ConceptInterface_extends")
-
-concept_implements.ofType(conceptInterface)
-conceptInterface.havingFeatures(conceptInterface_extends)
-
-
-const feature = factory.concept("Feature", true, namespacedEntity)
+const feature = factory.concept("Feature", true).implementing(ikeyed)
 
 const feature_optional = factory.property(feature, "optional")
     .ofType(booleanDatatype)
@@ -112,26 +49,6 @@ const feature_optional = factory.property(feature, "optional")
 feature.havingFeatures(
     feature_optional
 )
-
-featuresContainer_features.type = feature
-
-
-const link = factory.concept("Link", true, feature)
-
-const link_multiple = factory.property(link, "multiple")
-    .ofType(booleanDatatype)
-
-const link_type = factory.reference(link, "type")
-    .ofType(featuresContainer)
-    .havingKey("Link_type")
-
-link.havingFeatures(
-    link_multiple,
-    link_type
-)
-
-
-const reference = factory.concept("Reference", false, link)
 
 
 const property = factory.concept("Property", false, feature)
@@ -143,45 +60,137 @@ property.havingFeatures(
 )
 
 
-const dataType = factory.concept("DataType", true, languageElement)
+const link = factory.concept("Link", true, feature)
+
+const link_multiple = factory.property(link, "multiple")
+    .ofType(booleanDatatype)
+
+const link_type = factory.reference(link, "type")
+
+link.havingFeatures(
+    link_multiple,
+    link_type
+)
+
+
+const containment = factory.concept("Containment", false, link)
+
+
+const reference = factory.concept("Reference", false, link)
+
+
+const languageEntity = factory.concept("LanguageEntity", true)
+    .implementing(ikeyed)
+
+
+const classifier = factory.concept("Classifier", true, languageEntity)
+
+const classifier_features = factory.containment(classifier, "features")
+    .isOptional()
+    .isMultiple()
+    .ofType(feature)
+
+classifier.havingFeatures(
+    classifier_features
+)
+
+link_type.ofType(classifier)
+
+
+const concept = factory.concept("Concept", false, classifier)
+
+const concept_abstract = factory.property(concept, "abstract")
+    .ofType(booleanDatatype)
+
+const concept_partition = factory.property(concept, "partition")
+    .ofType(booleanDatatype)
+
+const concept_extends = factory.reference(concept, "extends")
+    .isOptional()
+    .ofType(concept)
+
+const concept_implements = factory.reference(concept, "implements")
+    .isOptional()
+    .isMultiple()
+
+concept.havingFeatures(
+    concept_abstract,
+    concept_partition,
+    concept_extends,
+    concept_implements
+)
+
+
+const conceptInterface = factory.concept("ConceptInterface", false, classifier)
+
+const conceptInterface_extends = factory.reference(conceptInterface, "extends")
+    .isOptional()
+    .isMultiple()
+    .ofType(conceptInterface)
+
+conceptInterface.havingFeatures(conceptInterface_extends)
+
+concept_implements.ofType(conceptInterface)
+
+
+const dataType = factory.concept("DataType", true, languageEntity)
+
 property_type.ofType(dataType)
 
 
 const primitiveType = factory.concept("PrimitiveType", false, dataType)
 
 
-const containment = factory.concept("Containment", false, link)
-
-
 const enumeration = factory.concept("Enumeration", false, dataType)
-    .implementing(namespaceProvider)
 
 const enumeration_literals = factory.containment(enumeration, "literals")
     .isMultiple()
 
-const enumerationLiteral = factory.concept("EnumerationLiteral", false, namespacedEntity)
-
-enumeration_literals.ofType(enumerationLiteral)
 enumeration.havingFeatures(enumeration_literals)
 
 
-lioncore.havingElements(
-    namespacedEntity,
-    namespaceProvider,
-    language,
-    languageElement,
-    featuresContainer,
+const enumerationLiteral = factory.concept("EnumerationLiteral", false)
+    .implementing(ikeyed)
+
+enumeration_literals.ofType(enumerationLiteral)
+
+
+const language = factory.concept("Language", false)
+    .implementing(ikeyed)
+
+const language_version = factory.property(language, "version")
+    .ofType(stringDatatype)
+
+const language_entities = factory.containment(language, "entities")
+    .isOptional()
+    .isMultiple()
+    .ofType(languageEntity)
+
+const language_dependsOn = factory.reference(language, "dependsOn")
+    .isOptional()
+    .isMultiple()
+    .ofType(language)
+
+language.havingFeatures(language_version, language_entities, language_dependsOn)
+
+
+lioncore.havingEntities(
+    inamed,
+    ikeyed,
+    feature,
+    property,
+    link,
+    containment,
+    reference,
+    languageEntity,
+    classifier,
     concept,
     conceptInterface,
-    feature,
-    link,
-    reference,
-    property,
     dataType,
     primitiveType,
-    containment,
     enumeration,
-    enumerationLiteral
+    enumerationLiteral,
+    language
 )
 
 
@@ -198,20 +207,21 @@ export const metaConcepts = {
 }
 
 export const metaFeatures = {
+    inamed_name,
+    ikeyed_key,
     concept_abstract,
+    concept_partition,
     concept_extends,
     concept_implements,
     conceptInterface_extends,
     enumeration_literals,
     feature_optional,
-    featuresContainer_features,
     link_multiple,
     link_type,
-    language_dependsOn,
-    language_elements,
-    language_name,
+    classifier_features,
     language_version,
-    namespacedEntity_name,
+    language_dependsOn,
+    language_entities,
     property_type
 }
 

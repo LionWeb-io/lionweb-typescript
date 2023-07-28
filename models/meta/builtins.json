@@ -7,24 +7,32 @@
       "concept": {
         "language": "LIonCore_M3",
         "version": "1",
-        "key": "Language"
+        "key": "LIonCore.M3-Language"
       },
       "properties": [
         {
           "property": {
             "language": "LIonCore_M3",
             "version": "1",
-            "key": "Language_name"
+            "key": "LIonCore.M3-Language-version"
           },
-          "value": "LIonCore.builtins"
+          "value": "1"
         },
         {
           "property": {
             "language": "LIonCore_M3",
             "version": "1",
-            "key": "version"
+            "key": "LIonCore.M3-INamed-key"
           },
-          "value": "1"
+          "value": "LIonCore_builtins"
+        },
+        {
+          "property": {
+            "language": "LIonCore_M3",
+            "version": "1",
+            "key": "LIonCore.M3-INamed-name"
+          },
+          "value": "LIonCore.builtins"
         }
       ],
       "children": [
@@ -32,7 +40,7 @@
           "containment": {
             "language": "LIonCore_M3",
             "version": "1",
-            "key": "elements"
+            "key": "LIonCore.M3-Language-entities"
           },
           "children": [
             "LIonCore_builtins_String",
@@ -49,14 +57,14 @@
       "concept": {
         "language": "LIonCore_M3",
         "version": "1",
-        "key": "PrimitiveType"
+        "key": "LIonCore.M3-PrimitiveType"
       },
       "properties": [
         {
           "property": {
             "language": "LIonCore_M3",
             "version": "1",
-            "key": "NamespacedEntity_name"
+            "key": "LIonCore.M3-INamed-key"
           },
           "value": "String"
         },
@@ -64,7 +72,7 @@
           "property": {
             "language": "LIonCore_M3",
             "version": "1",
-            "key": "NamespacedEntity_key"
+            "key": "LIonCore.M3-INamed-name"
           },
           "value": "String"
         }
@@ -78,14 +86,14 @@
       "concept": {
         "language": "LIonCore_M3",
         "version": "1",
-        "key": "PrimitiveType"
+        "key": "LIonCore.M3-PrimitiveType"
       },
       "properties": [
         {
           "property": {
             "language": "LIonCore_M3",
             "version": "1",
-            "key": "NamespacedEntity_name"
+            "key": "LIonCore.M3-INamed-key"
           },
           "value": "Boolean"
         },
@@ -93,7 +101,7 @@
           "property": {
             "language": "LIonCore_M3",
             "version": "1",
-            "key": "NamespacedEntity_key"
+            "key": "LIonCore.M3-INamed-name"
           },
           "value": "Boolean"
         }
@@ -107,14 +115,14 @@
       "concept": {
         "language": "LIonCore_M3",
         "version": "1",
-        "key": "PrimitiveType"
+        "key": "LIonCore.M3-PrimitiveType"
       },
       "properties": [
         {
           "property": {
             "language": "LIonCore_M3",
             "version": "1",
-            "key": "NamespacedEntity_name"
+            "key": "LIonCore.M3-INamed-key"
           },
           "value": "Integer"
         },
@@ -122,7 +130,7 @@
           "property": {
             "language": "LIonCore_M3",
             "version": "1",
-            "key": "NamespacedEntity_key"
+            "key": "LIonCore.M3-INamed-name"
           },
           "value": "Integer"
         }
@@ -136,14 +144,14 @@
       "concept": {
         "language": "LIonCore_M3",
         "version": "1",
-        "key": "PrimitiveType"
+        "key": "LIonCore.M3-PrimitiveType"
       },
       "properties": [
         {
           "property": {
             "language": "LIonCore_M3",
             "version": "1",
-            "key": "NamespacedEntity_name"
+            "key": "LIonCore.M3-INamed-key"
           },
           "value": "JSON"
         },
@@ -151,7 +159,7 @@
           "property": {
             "language": "LIonCore_M3",
             "version": "1",
-            "key": "NamespacedEntity_key"
+            "key": "LIonCore.M3-INamed-name"
           },
           "value": "JSON"
         }

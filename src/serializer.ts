@@ -1,9 +1,10 @@
-import {Containment, Property, Reference} from "./m3/types.ts"
-import {SerializedModel, SerializedNode} from "./serialization.ts"
-import {asIds, Node} from "./types.ts"
-import {allFeaturesOf} from "./m3/functions.ts"
-import {asArray} from "./m3/ecore/types.ts"
 import {ConceptDeducer as _ConceptDeducer, ModelAPI} from "./api.ts"
+import {SerializedModel, SerializedNode} from "./serialization.ts"
+import {asIds} from "./functions.ts"
+import {Node} from "./types.ts"
+import {Containment, Property, Reference} from "./m3/types.ts"
+import {allFeaturesOf} from "./m3/functions.ts"
+import {asArray} from "./utils/array-helpers.ts"
 import {BuiltinPrimitive, serializeBuiltin} from "./m3/builtins.ts"
 
 

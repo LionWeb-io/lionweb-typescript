@@ -5,24 +5,10 @@
 
 import {MultiRef, SingleRef, unresolved} from "../references.ts"
 import {Id, Node} from "../types.ts"
-import {allFeaturesOf} from "./functions.ts"
 import {KeyGenerator} from "./key-generation.ts"
 
 
-/**
- * @return A function that combines fragments of a qualified name using the given separator string.
- */
-const combiner = (separator: string) =>
-    (...names: (string|undefined)[]): string =>
-        names
-            .filter((name) => typeof name === "string")
-            .join(separator)
-
-/**
- * @return The combination of fragments of a qualified name using the `.` character.
- */
-const qualify = combiner(".")
-
+const lioncoreQNameSeparator = "."
 
 /**
  * The qualified name of the LIonCore language containing the built-in {@link PrimitiveType primitive types}.
@@ -31,24 +17,42 @@ const qualify = combiner(".")
 const lioncoreBuiltinsQName = "LIonCore.builtins"
 
 
+interface INamed extends Node {
+    name: string
+}
+
+const isINamed = (node: Node): node is INamed =>
+    "name" in node && typeof node.name === "string"
+
+
+interface IKeyed extends INamed {
+    key: Id
+}
+
+const isIKeyed = (node: Node): node is IKeyed =>
+    isINamed(node) && "key" in node && typeof node.key === "string"
+
+
 /**
  * Abstract base class for nodes in an LIonCore/M3-instance,
- * providing an ID and the containment hierarchy.
+ * providing an ID, a key, and the containment hierarchy.
  */
-abstract class M3Node implements Node {
-    parent?: NamespaceProvider
+abstract class M3Node implements IKeyed {
+    parent?: M3Node
         /*
-         * Note: every parent in an M2 (i.e., a Metamodel, Concept, ConceptInterface, Enumeration) also happens to be a namespace.
-         * This is why we can give `parent` the narrower type `NamespaceProvider` instead of `M3Node`.
+         * Note: every parent in an M2 (i.e., a Language, Concept, ConceptInterface, Enumeration) implements IKeyed.
+         * Because that's just an interface and is implemented by {@link M3Node}
          */
     readonly id: Id
-    key: string // TODO  make this a specific type?
-    protected constructor(id: Id, key: string, parent?: NamespaceProvider) {
+    name: string
+    key: Id
+    protected constructor(id: Id, name: string, key: Id, parent?: M3Node) {
         this.id = id
+        this.name = name
         this.key = key
         this.parent = parent
     }
-    havingKey(key: string) {
+    havingKey(key: Id) {
         this.key = key
         return this
     }
@@ -59,80 +63,66 @@ abstract class M3Node implements Node {
      */
     keyed(keyGenerator: KeyGenerator) {
         this.key = keyGenerator(this as unknown as M3Concept)
-            // FIXME  the cast smells like a hack...
+        // FIXME  the cast smells like a hack...
         return this
     }
 }
 
-
-interface NamespaceProvider extends Node {
-    namespaceQualifier(): string
-}
-
-abstract class NamespacedEntity extends M3Node {
-    name: string
-    protected constructor(parent: NamespaceProvider, name: string, key: string, id: Id) {
-        super(id, key, parent)
-        this.name = name
+abstract class Feature extends M3Node {
+    optional /*: boolean */ = false
+    // TODO  look at order of constructors' arguments!
+    constructor(featuresContainer: Classifier, name: string, key: string, id: Id) {
+        super(id, name, key, featuresContainer)
     }
-    qualifiedName(separator = ".") {
-        return combiner(separator)(this.parent?.namespaceQualifier(), this.name)
-    }
-}
-
-class Language implements NamespaceProvider, Node {
-    readonly id: string
-    name: string
-    version: string
-    elements: LanguageElement[] = []   // (containment)
-    dependsOn: MultiRef<Language> = []  // special (!) reference
-        // (!) special because deserializer needs to be aware of where to get the instance from
-    constructor(name: string, version: string, id: Id) {
-        this.id = id
-        this.name = name
-        this.version = version
-    }
-    namespaceQualifier(): string {
-        return this.name
-    }
-    havingElements(...elements: LanguageElement[]): Language {
-        const nonLanguageElements = elements.filter((element) => !(element instanceof LanguageElement))
-        if (nonLanguageElements.length > 0) {
-            throw Error(`trying to add non-LanguageElements to Language: ${nonLanguageElements.map((node) => `<${node.constructor.name}>"${node.name}"`).join(", ")}`)
-        }
-        this.elements.push(...elements)
-        return this
-    }
-    dependingOn(...metamodels: Language[]): Language {
-        // TODO  check actual types of metamodels, or use type shapes/interfaces
-        this.dependsOn.push(
-            ...metamodels
-                .filter((metamodel) => metamodel.name !== lioncoreBuiltinsQName)
-        )
+    isOptional() {
+        this.optional = true
         return this
     }
 }
 
-abstract class LanguageElement extends NamespacedEntity {
-    constructor(language: Language, name: string, key: string, id: Id) {
-        super(language, name, key, id)
+class Property extends Feature {
+    type: SingleRef<Datatype> = unresolved   // (reference)
+    ofType(type: Datatype): Property {
+        this.type = type
+        return this
     }
 }
 
-abstract class FeaturesContainer extends LanguageElement implements NamespaceProvider {
+abstract class Link extends Feature {
+    multiple /*: boolean */ = false
+    type: SingleRef<Classifier> = unresolved   // (reference)
+    isMultiple() {
+        this.multiple = true
+        return this
+    }
+    ofType(type: Classifier) {
+        this.type = type
+        return this
+    }
+}
+
+class Containment extends Link {
+}
+
+class Reference extends Link {
+}
+
+abstract class LanguageEntity extends M3Node {
+    constructor(language: Language, name: string, key: Id, id: Id) {
+        super(id, name, key, language)
+    }
+}
+
+abstract class Classifier extends LanguageEntity {
     features: Feature[] = [] // (containment)
     havingFeatures(...features: Feature[]) {
         // TODO  check actual types of features, or use type shapes/interfaces
         this.features.push(...features)
         return this
     }
-    abstract allFeatures(): Feature[]
-    namespaceQualifier(): string {
-        return this.qualifiedName()
-    }
 }
 
-class Concept extends FeaturesContainer {
+class Concept extends Classifier {
     abstract: boolean
     extends?: SingleRef<Concept>    // (reference)
     implements: MultiRef<ConceptInterface> = []  // (reference)
@@ -146,84 +136,70 @@ class Concept extends FeaturesContainer {
         this.implements.push(...conceptInterfaces)
         return this
     }
-    allFeatures(): Feature[] {
-        return allFeaturesOf(this)
-    }
 }
 
-class ConceptInterface extends FeaturesContainer {
+class ConceptInterface extends Classifier {
     extends: MultiRef<ConceptInterface> = []    // (reference)
-    allFeatures(): Feature[] {
-        return allFeaturesOf(this)
-    }
-}
-
-abstract class Feature extends NamespacedEntity {
-    optional /*: boolean */ = false
-    constructor(featuresContainer: FeaturesContainer, name: string, key: string, id: Id) {
-        super(featuresContainer, name, key, id)
-    }
-    isOptional() {
-        this.optional = true
+    extending(...conceptInterfaces: ConceptInterface[]): ConceptInterface {
+        // TODO  check actual types of concept interfaces, or use type shapes/interfaces
+        this.extends.push(...conceptInterfaces)
         return this
     }
 }
 
-abstract class Link extends Feature {
-    multiple /*: boolean */ = false
-    type: SingleRef<FeaturesContainer> = unresolved   // (reference)
-    ofType(type: FeaturesContainer) {
-        this.type = type
-        return this
-    }
-    isMultiple() {
-        this.multiple = true
-        return this
-    }
-}
-
-class Reference extends Link {
-}
-
-class Containment extends Link {
-}
-
-class Property extends Feature {
-    type: SingleRef<Datatype> = unresolved   // (reference)
-    ofType(type: Datatype): Property {
-        this.type = type
-        return this
-    }
-}
-
-abstract class Datatype extends LanguageElement {}
+abstract class Datatype extends LanguageEntity {}
 
 class PrimitiveType extends Datatype {}
 
-class Enumeration extends Datatype implements NamespaceProvider {
+class Enumeration extends Datatype {
     literals: EnumerationLiteral[] = [] // (containment)
-    namespaceQualifier(separator = "."): string {
-        return combiner(separator)(this.parent?.namespaceQualifier(), this.name)
+}
+
+class EnumerationLiteral extends M3Node {
+    constructor(enumeration: Enumeration, name: string, key: string, id: Id) {
+        super(id, name, key, enumeration)
     }
 }
 
-class EnumerationLiteral extends NamespacedEntity {
-    constructor(enumeration: Enumeration, name: string, key: string, id: Id) {
-        super(enumeration, name, key, id)
+class Language extends M3Node {
+    version: string
+    entities: LanguageEntity[] = []   // (containment)
+    dependsOn: MultiRef<Language> = []  // special (!) reference
+        // (!) special because deserializer needs to be aware of where to get the instance from
+    constructor(name: string, version: string, id: Id, key: Id) {
+        super(id, name, key)
+        this.version = version
+    }
+    havingEntities(...elements: LanguageEntity[]): Language {
+        const nonLanguageElements = elements.filter((element) => !(element instanceof LanguageEntity))
+        if (nonLanguageElements.length > 0) {
+            throw Error(`trying to add non-LanguageElements to Language: ${nonLanguageElements.map((node) => `<${node.constructor.name}>"${node.name}"`).join(", ")}`)
+        }
+        this.entities.push(...elements)
+        return this
+    }
+    dependingOn(...metamodels: Language[]): Language {
+        // TODO  check actual types of metamodels, or use type shapes/interfaces
+        this.dependsOn.push(
+            ...metamodels
+                .filter((metamodel) => metamodel.name !== lioncoreBuiltinsQName)
+        )
+        return this
     }
 }
+// TODO  can we add the `<<partition>>` tag on it programmatically (to make it truly meta-circular)?
 
 
 /**
  * Sum type of all LIonCore type definitions whose meta-type is a concrete (thus: instantiable) Concept.
+ * All the classes in this sum type extend (from) {@link M3Node},
+ * so they also implement {@link INamed} and {@link IKeyed}.
  */
 type M3Concept =
     | Language
-    // ▼▼▼ all NamespacedEntity-s
     | Concept
     | ConceptInterface
     | Enumeration
-    // ▲▲▲ all NamespaceProvider-s
     | EnumerationLiteral
     | PrimitiveType
     | Containment
@@ -232,6 +208,7 @@ type M3Concept =
 
 
 export {
+    Classifier,
     Concept,
     ConceptInterface,
     Containment,
@@ -239,18 +216,21 @@ export {
     Enumeration,
     EnumerationLiteral,
     Feature,
-    FeaturesContainer,
     Language,
-    LanguageElement,
+    LanguageEntity,
     Link,
-    NamespacedEntity,
     PrimitiveType,
     Property,
     Reference,
+    isINamed,
+    isIKeyed,
     lioncoreBuiltinsQName,
-    qualify
+    lioncoreQNameSeparator
 }
+
 export type {
+    IKeyed,
+    INamed,
     M3Concept
 }
 

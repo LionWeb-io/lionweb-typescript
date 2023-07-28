@@ -1,11 +1,7 @@
 import {assertEquals} from "../deps.ts"
 import {libraryLanguage} from "./library-meta.ts"
-import {
-    generatePlantUmlForMetamodel
-} from "../../src/m3/diagrams/PlantUML-generator.ts"
-import {
-    generateMermaidForMetamodel
-} from "../../src/m3/diagrams/Mermaid-generator.ts"
+import {generatePlantUmlForMetamodel} from "../../src/m3/diagrams/PlantUML-generator.ts"
+import {generateMermaidForMetamodel} from "../../src/m3/diagrams/Mermaid-generator.ts"
 import {serializeLanguage} from "../../src/m3/serializer.ts"
 import {deserializeLanguage} from "../../src/m3/deserializer.ts"
 import {lioncoreBuiltins} from "../../src/m3/builtins.ts"

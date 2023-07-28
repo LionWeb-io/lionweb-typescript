@@ -24,9 +24,9 @@ Deno.test("M3 types", async (tctx) => {
         const {language} = factory
         const concept = factory.concept("Concept", false)
         const property = factory.property(concept, "property").ofType(intDatatype)
-        factory.language.havingElements(concept)
+        factory.language.havingEntities(concept)
         assertThrows(() => {
-            language.havingElements(property),
+            language.havingEntities(property),
             Error,
             `trying to add non-LanguageElements to Language: <Property>"property"`
         })
