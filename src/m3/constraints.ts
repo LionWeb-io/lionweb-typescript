@@ -62,7 +62,6 @@ export const issuesLanguage = (language: Language): Issue[] =>
                     (t) => ({ location: t, message: `Multiple (nested) language elements with the same key "${key}" exist in this language`, secondaries: ts.filter((otherT) => t !== otherT) })
                 )
             )
-
     ]
 
 

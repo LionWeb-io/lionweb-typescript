@@ -6,7 +6,7 @@ import {deserializeModel} from "../src/deserializer.ts"
 import {dynamicModelAPI, DynamicNode} from "../src/dynamic-api.ts"
 import {nameBasedConceptDeducerFor} from "../src/m3/functions.ts"
 import {libraryModel, libraryModelApi} from "./library.ts"
-import {libraryLanguage} from "./m3/library-meta.ts"
+import {libraryLanguage} from "./m3/library-language.ts"
 
 
 Deno.test("Library test model", async (tctx) => {

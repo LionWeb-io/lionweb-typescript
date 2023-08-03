@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "LIonCore.M3-serialization",
-  "title": "Serialization format specific to LIonCore.M3",
+  "$id": "LIonCore-M3-serialization",
+  "title": "Serialization format specific to LIonCore-M3",
   "$ref": "#/$defs/SerializedModel",
   "$defs": {
     "SerializedModel": {
@@ -68,27 +68,27 @@
           "const": {
             "metamodel": "LIonCore_M3",
             "version": "1",
-            "key": "LIonCore.M3-Property"
+            "key": "Property"
           }
         },
         "properties": {
           "type": "array",
           "items": {},
           "properties": {
-            "LIonCore.M3-Feature-optional": {
+            "Feature-optional": {
               "type": "string"
             },
-            "LIonCore.M3-INamed-key": {
+            "INamed-key": {
               "type": "string"
             },
-            "LIonCore.M3-INamed-name": {
+            "INamed-name": {
               "type": "string"
             }
           },
           "required": [
-            "LIonCore.M3-Feature-optional",
-            "LIonCore.M3-INamed-key",
-            "LIonCore.M3-INamed-name"
+            "Feature-optional",
+            "INamed-key",
+            "INamed-name"
           ],
           "additionalProperties": false
         },
@@ -102,7 +102,7 @@
           "type": "array",
           "items": {},
           "properties": {
-            "LIonCore.M3-Property-type": {
+            "Property-type": {
               "$ref": "#/$defs/Ids"
             }
           },
@@ -131,31 +131,31 @@
           "const": {
             "metamodel": "LIonCore_M3",
             "version": "1",
-            "key": "LIonCore.M3-Containment"
+            "key": "Containment"
           }
         },
         "properties": {
           "type": "array",
           "items": {},
           "properties": {
-            "LIonCore.M3-Link-multiple": {
+            "Link-multiple": {
               "type": "string"
             },
-            "LIonCore.M3-Feature-optional": {
+            "Feature-optional": {
               "type": "string"
             },
-            "LIonCore.M3-INamed-key": {
+            "INamed-key": {
               "type": "string"
             },
-            "LIonCore.M3-INamed-name": {
+            "INamed-name": {
               "type": "string"
             }
           },
           "required": [
-            "LIonCore.M3-Link-multiple",
-            "LIonCore.M3-Feature-optional",
-            "LIonCore.M3-INamed-key",
-            "LIonCore.M3-INamed-name"
+            "Link-multiple",
+            "Feature-optional",
+            "INamed-key",
+            "INamed-name"
           ],
           "additionalProperties": false
         },
@@ -169,7 +169,7 @@
           "type": "array",
           "items": {},
           "properties": {
-            "LIonCore.M3-Link-type": {
+            "Link-type": {
               "$ref": "#/$defs/Ids"
             }
           },
@@ -198,31 +198,31 @@
           "const": {
             "metamodel": "LIonCore_M3",
             "version": "1",
-            "key": "LIonCore.M3-Reference"
+            "key": "Reference"
           }
         },
         "properties": {
           "type": "array",
           "items": {},
           "properties": {
-            "LIonCore.M3-Link-multiple": {
+            "Link-multiple": {
               "type": "string"
             },
-            "LIonCore.M3-Feature-optional": {
+            "Feature-optional": {
               "type": "string"
             },
-            "LIonCore.M3-INamed-key": {
+            "INamed-key": {
               "type": "string"
             },
-            "LIonCore.M3-INamed-name": {
+            "INamed-name": {
               "type": "string"
             }
           },
           "required": [
-            "LIonCore.M3-Link-multiple",
-            "LIonCore.M3-Feature-optional",
-            "LIonCore.M3-INamed-key",
-            "LIonCore.M3-INamed-name"
+            "Link-multiple",
+            "Feature-optional",
+            "INamed-key",
+            "INamed-name"
           ],
           "additionalProperties": false
         },
@@ -236,7 +236,7 @@
           "type": "array",
           "items": {},
           "properties": {
-            "LIonCore.M3-Link-type": {
+            "Link-type": {
               "$ref": "#/$defs/Ids"
             }
           },
@@ -265,31 +265,31 @@
           "const": {
             "metamodel": "LIonCore_M3",
             "version": "1",
-            "key": "LIonCore.M3-Concept"
+            "key": "Concept"
           }
         },
         "properties": {
           "type": "array",
           "items": {},
           "properties": {
-            "LIonCore.M3-Concept-abstract": {
+            "Concept-abstract": {
               "type": "string"
             },
-            "LIonCore.M3-Concept-partition": {
+            "Concept-partition": {
               "type": "string"
             },
-            "LIonCore.M3-INamed-key": {
+            "INamed-key": {
               "type": "string"
             },
-            "LIonCore.M3-INamed-name": {
+            "INamed-name": {
               "type": "string"
             }
           },
           "required": [
-            "LIonCore.M3-Concept-abstract",
-            "LIonCore.M3-Concept-partition",
-            "LIonCore.M3-INamed-key",
-            "LIonCore.M3-INamed-name"
+            "Concept-abstract",
+            "Concept-partition",
+            "INamed-key",
+            "INamed-name"
           ],
           "additionalProperties": false
         },
@@ -297,7 +297,7 @@
           "type": "array",
           "items": {},
           "properties": {
-            "LIonCore.M3-Classifier-features": {
+            "Classifier-features": {
               "$ref": "#/$defs/Ids"
             }
           },
@@ -307,10 +307,10 @@
           "type": "array",
           "items": {},
           "properties": {
-            "LIonCore.M3-Concept-extends": {
+            "Concept-extends": {
               "$ref": "#/$defs/Ids"
             },
-            "LIonCore.M3-Concept-implements": {
+            "Concept-implements": {
               "$ref": "#/$defs/Ids"
             }
           },
@@ -339,23 +339,23 @@
           "const": {
             "metamodel": "LIonCore_M3",
             "version": "1",
-            "key": "LIonCore.M3-ConceptInterface"
+            "key": "ConceptInterface"
           }
         },
         "properties": {
           "type": "array",
           "items": {},
           "properties": {
-            "LIonCore.M3-INamed-key": {
+            "INamed-key": {
               "type": "string"
             },
-            "LIonCore.M3-INamed-name": {
+            "INamed-name": {
               "type": "string"
             }
           },
           "required": [
-            "LIonCore.M3-INamed-key",
-            "LIonCore.M3-INamed-name"
+            "INamed-key",
+            "INamed-name"
           ],
           "additionalProperties": false
         },
@@ -363,7 +363,7 @@
           "type": "array",
           "items": {},
           "properties": {
-            "LIonCore.M3-Classifier-features": {
+            "Classifier-features": {
               "$ref": "#/$defs/Ids"
             }
           },
@@ -373,7 +373,7 @@
           "type": "array",
           "items": {},
           "properties": {
-            "LIonCore.M3-ConceptInterface-extends": {
+            "ConceptInterface-extends": {
               "$ref": "#/$defs/Ids"
             }
           },
@@ -402,23 +402,23 @@
           "const": {
             "metamodel": "LIonCore_M3",
             "version": "1",
-            "key": "LIonCore.M3-PrimitiveType"
+            "key": "PrimitiveType"
           }
         },
         "properties": {
           "type": "array",
           "items": {},
           "properties": {
-            "LIonCore.M3-INamed-key": {
+            "INamed-key": {
               "type": "string"
             },
-            "LIonCore.M3-INamed-name": {
+            "INamed-name": {
               "type": "string"
             }
           },
           "required": [
-            "LIonCore.M3-INamed-key",
-            "LIonCore.M3-INamed-name"
+            "INamed-key",
+            "INamed-name"
           ],
           "additionalProperties": false
         },
@@ -457,23 +457,23 @@
           "const": {
             "metamodel": "LIonCore_M3",
             "version": "1",
-            "key": "LIonCore.M3-Enumeration"
+            "key": "Enumeration"
           }
         },
         "properties": {
           "type": "array",
           "items": {},
           "properties": {
-            "LIonCore.M3-INamed-key": {
+            "INamed-key": {
               "type": "string"
             },
-            "LIonCore.M3-INamed-name": {
+            "INamed-name": {
               "type": "string"
             }
           },
           "required": [
-            "LIonCore.M3-INamed-key",
-            "LIonCore.M3-INamed-name"
+            "INamed-key",
+            "INamed-name"
           ],
           "additionalProperties": false
         },
@@ -481,12 +481,12 @@
           "type": "array",
           "items": {},
           "properties": {
-            "LIonCore.M3-Enumeration-literals": {
+            "Enumeration-literals": {
               "$ref": "#/$defs/Ids"
             }
           },
           "required": [
-            "LIonCore.M3-Enumeration-literals"
+            "Enumeration-literals"
           ],
           "additionalProperties": false
         },
@@ -519,23 +519,23 @@
           "const": {
             "metamodel": "LIonCore_M3",
             "version": "1",
-            "key": "LIonCore.M3-EnumerationLiteral"
+            "key": "EnumerationLiteral"
           }
         },
         "properties": {
           "type": "array",
           "items": {},
           "properties": {
-            "LIonCore.M3-INamed-key": {
+            "INamed-key": {
               "type": "string"
             },
-            "LIonCore.M3-INamed-name": {
+            "INamed-name": {
               "type": "string"
             }
           },
           "required": [
-            "LIonCore.M3-INamed-key",
-            "LIonCore.M3-INamed-name"
+            "INamed-key",
+            "INamed-name"
           ],
           "additionalProperties": false
         },
@@ -574,27 +574,27 @@
           "const": {
             "metamodel": "LIonCore_M3",
             "version": "1",
-            "key": "LIonCore.M3-Language"
+            "key": "Language"
           }
         },
         "properties": {
           "type": "array",
           "items": {},
           "properties": {
-            "LIonCore.M3-Language-version": {
+            "Language-version": {
               "type": "string"
             },
-            "LIonCore.M3-INamed-key": {
+            "INamed-key": {
               "type": "string"
             },
-            "LIonCore.M3-INamed-name": {
+            "INamed-name": {
               "type": "string"
             }
           },
           "required": [
-            "LIonCore.M3-Language-version",
-            "LIonCore.M3-INamed-key",
-            "LIonCore.M3-INamed-name"
+            "Language-version",
+            "INamed-key",
+            "INamed-name"
           ],
           "additionalProperties": false
         },
@@ -602,7 +602,7 @@
           "type": "array",
           "items": {},
           "properties": {
-            "LIonCore.M3-Language-entities": {
+            "Language-entities": {
               "$ref": "#/$defs/Ids"
             }
           },
@@ -612,7 +612,7 @@
           "type": "array",
           "items": {},
           "properties": {
-            "LIonCore.M3-Language-dependsOn": {
+            "Language-dependsOn": {
               "$ref": "#/$defs/Ids"
             }
           },

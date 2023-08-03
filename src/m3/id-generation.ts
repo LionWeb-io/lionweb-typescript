@@ -6,10 +6,11 @@ import {checkDefinedData, checkUniqueData, checkUniqueId, checkValidId, wrapIdGe
  * namely: its self-definition, and its standard library of built-in primitive types.
  */
 export const lioncoreIdGen = wrapIdGen(
-    (qualifiedName) => qualifiedName!.replaceAll(".", "_"),
+    (qualifiedName) => qualifiedName!.replaceAll(".", "-"), // FIXME
     checkDefinedData,   // ensures that the '!' on the previous line always works
     checkUniqueData,
     checkValidId,
     checkUniqueId
 )
+// TODO  figure out whether we really need this
 

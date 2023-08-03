@@ -1,0 +1,10 @@
+Language language-with-enum
+    version: 1
+    (dependsOn: --not printed!!--)
+    entities (↓name):
+
+        Enumeration enum
+            literals:
+                lit1
+                lit2
+

@@ -1,4 +1,4 @@
-import {assertEquals} from "https://deno.land/std@0.168.0/testing/asserts.ts"
+import {assertEquals} from "./deps.ts"
 import {Node} from "../src/types.ts"
 import {containmentChain} from "../src/functions.ts"
 

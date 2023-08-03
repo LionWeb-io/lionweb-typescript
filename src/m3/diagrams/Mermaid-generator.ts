@@ -10,7 +10,7 @@ import {
     Link,
     PrimitiveType
 } from "../types.ts"
-import {elementsSortedByName, nonRelationalFeatures, relationsOf, type} from "../functions.ts"
+import {entitiesSortedByName, nonRelationalFeatures, relationsOf, type} from "../functions.ts"
 import {isRef, unresolved} from "../../references.ts"
 
 
@@ -44,9 +44,9 @@ export const generateMermaidForMetamodel = ({entities}: Language) =>
         `classDiagram
 
 `,
-        indented(elementsSortedByName(entities).map(generateForElement)),
+        indented(entitiesSortedByName(entities).map(generateForElement)),
         ``,
-        indented(elementsSortedByName(entities).map(generateForRelationsOf)),
+        indented(entitiesSortedByName(entities).map(generateForRelationsOf)),
         ``,
         "```"
     ])

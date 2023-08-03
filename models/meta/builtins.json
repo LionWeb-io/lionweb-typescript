@@ -3,18 +3,18 @@
   "languages": [],
   "nodes": [
     {
-      "id": "LIonCore_builtins",
+      "id": "LIonCore-builtins",
       "concept": {
         "language": "LIonCore_M3",
         "version": "1",
-        "key": "LIonCore.M3-Language"
+        "key": "Language"
       },
       "properties": [
         {
           "property": {
             "language": "LIonCore_M3",
             "version": "1",
-            "key": "LIonCore.M3-Language-version"
+            "key": "Language-version"
           },
           "value": "1"
         },
@@ -22,17 +22,17 @@
           "property": {
             "language": "LIonCore_M3",
             "version": "1",
-            "key": "LIonCore.M3-INamed-key"
+            "key": "INamed-key"
           },
-          "value": "LIonCore_builtins"
+          "value": "LIonCore-builtins"
         },
         {
           "property": {
             "language": "LIonCore_M3",
             "version": "1",
-            "key": "LIonCore.M3-INamed-name"
+            "key": "INamed-name"
           },
-          "value": "LIonCore.builtins"
+          "value": "LIonCore-builtins"
         }
       ],
       "children": [
@@ -40,31 +40,31 @@
           "containment": {
             "language": "LIonCore_M3",
             "version": "1",
-            "key": "LIonCore.M3-Language-entities"
+            "key": "Language-entities"
           },
           "children": [
-            "LIonCore_builtins_String",
-            "LIonCore_builtins_Boolean",
-            "LIonCore_builtins_Integer",
-            "LIonCore_builtins_JSON"
+            "LIonCore-builtins-String",
+            "LIonCore-builtins-Boolean",
+            "LIonCore-builtins-Integer",
+            "LIonCore-builtins-JSON"
           ]
         }
       ],
       "references": []
     },
     {
-      "id": "LIonCore_builtins_String",
+      "id": "LIonCore-builtins-String",
       "concept": {
         "language": "LIonCore_M3",
         "version": "1",
-        "key": "LIonCore.M3-PrimitiveType"
+        "key": "PrimitiveType"
       },
       "properties": [
         {
           "property": {
             "language": "LIonCore_M3",
             "version": "1",
-            "key": "LIonCore.M3-INamed-key"
+            "key": "INamed-key"
           },
           "value": "String"
         },
@@ -72,28 +72,28 @@
           "property": {
             "language": "LIonCore_M3",
             "version": "1",
-            "key": "LIonCore.M3-INamed-name"
+            "key": "INamed-name"
           },
           "value": "String"
         }
       ],
       "children": [],
       "references": [],
-      "parent": "LIonCore_builtins"
+      "parent": "LIonCore-builtins"
     },
     {
-      "id": "LIonCore_builtins_Boolean",
+      "id": "LIonCore-builtins-Boolean",
       "concept": {
         "language": "LIonCore_M3",
         "version": "1",
-        "key": "LIonCore.M3-PrimitiveType"
+        "key": "PrimitiveType"
       },
       "properties": [
         {
           "property": {
             "language": "LIonCore_M3",
             "version": "1",
-            "key": "LIonCore.M3-INamed-key"
+            "key": "INamed-key"
           },
           "value": "Boolean"
         },
@@ -101,28 +101,28 @@
           "property": {
             "language": "LIonCore_M3",
             "version": "1",
-            "key": "LIonCore.M3-INamed-name"
+            "key": "INamed-name"
           },
           "value": "Boolean"
         }
       ],
       "children": [],
       "references": [],
-      "parent": "LIonCore_builtins"
+      "parent": "LIonCore-builtins"
     },
     {
-      "id": "LIonCore_builtins_Integer",
+      "id": "LIonCore-builtins-Integer",
       "concept": {
         "language": "LIonCore_M3",
         "version": "1",
-        "key": "LIonCore.M3-PrimitiveType"
+        "key": "PrimitiveType"
       },
       "properties": [
         {
           "property": {
             "language": "LIonCore_M3",
             "version": "1",
-            "key": "LIonCore.M3-INamed-key"
+            "key": "INamed-key"
           },
           "value": "Integer"
         },
@@ -130,28 +130,28 @@
           "property": {
             "language": "LIonCore_M3",
             "version": "1",
-            "key": "LIonCore.M3-INamed-name"
+            "key": "INamed-name"
           },
           "value": "Integer"
         }
       ],
       "children": [],
       "references": [],
-      "parent": "LIonCore_builtins"
+      "parent": "LIonCore-builtins"
     },
     {
-      "id": "LIonCore_builtins_JSON",
+      "id": "LIonCore-builtins-JSON",
       "concept": {
         "language": "LIonCore_M3",
         "version": "1",
-        "key": "LIonCore.M3-PrimitiveType"
+        "key": "PrimitiveType"
       },
       "properties": [
         {
           "property": {
             "language": "LIonCore_M3",
             "version": "1",
-            "key": "LIonCore.M3-INamed-key"
+            "key": "INamed-key"
           },
           "value": "JSON"
         },
@@ -159,14 +159,14 @@
           "property": {
             "language": "LIonCore_M3",
             "version": "1",
-            "key": "LIonCore.M3-INamed-name"
+            "key": "INamed-name"
           },
           "value": "JSON"
         }
       ],
       "children": [],
       "references": [],
-      "parent": "LIonCore_builtins"
+      "parent": "LIonCore-builtins"
     }
   ]
 }

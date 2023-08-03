@@ -10,7 +10,7 @@ import {
     Link,
     PrimitiveType
 } from "../types.ts"
-import {elementsSortedByName, nonRelationalFeatures, relationsOf, type} from "../functions.ts"
+import {entitiesSortedByName, nonRelationalFeatures, relationsOf, type} from "../functions.ts"
 import {isRef, unresolved} from "../../references.ts"
 
 
@@ -30,13 +30,13 @@ hide empty members
 
 
 `,
-    elementsSortedByName(entities).map(generateForElement),
+    entitiesSortedByName(entities).map(generateForElement),
 `
 
 ' relations:
 
 `,
-    elementsSortedByName(entities).map(generateForRelationsOf),
+    entitiesSortedByName(entities).map(generateForRelationsOf),
 `
 @enduml
 `

@@ -1,5 +1,5 @@
 import {assertEquals} from "../deps.ts"
-import {libraryLanguage} from "./library-meta.ts"
+import {libraryLanguage} from "./library-language.ts"
 import {generatePlantUmlForMetamodel} from "../../src/m3/diagrams/PlantUML-generator.ts"
 import {generateMermaidForMetamodel} from "../../src/m3/diagrams/Mermaid-generator.ts"
 import {serializeLanguage} from "../../src/m3/serializer.ts"

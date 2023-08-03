@@ -1,27 +1,29 @@
 import {LanguageFactory} from "./factory.ts"
 import {lioncoreIdGen} from "./id-generation.ts"
 import {booleanDatatype, stringDatatype} from "./builtins.ts"
-import {qualifiedNameBasedKeyGenerator} from "./key-generation.ts"
+import {Classifier, Feature} from "./types.ts"
 
 
-const factory = new LanguageFactory("LIonCore.M3", "2", lioncoreIdGen, qualifiedNameBasedKeyGenerator("-"))
-
-/**
- * TODO:
- *  * &#10003; Add the missing builtins Node and INamed
- *  * Use the id of a node as the default key instead of the name
- *  * Remove NamespaceProvider and NamespacedEntity from the self definition, let a number of concepts implement INamed instead (and I'm missing IKeyed in this definition)
- *  * Change underscores to dashes in the havingKey keys of the self defintiion and add some more specified keys
- *  * Change the separator from a dot to a dash
- *
- *  Source of definition: https://lionweb-org.github.io/organization/lioncore/metametamodel/metametamodel.html
- */
+const factory = new LanguageFactory(
+    "LIonCore-M3",
+    "2",
+    lioncoreIdGen,
+    (node) => {
+        if (node instanceof Classifier) {
+            return node.name
+        }
+        if (node instanceof Feature) {
+            return `${node.parent!.name}-${node.name}`
+        }
+        throw Error(`cannot compute key for node "${node.name}" of runtime-type "${node.constructor.name}"`)
+    }
+)
 
 
 /**
  * Definition of LIonCore in terms of itself.
  */
-export const lioncore = factory.language
+export const lioncore = factory.language.havingKey("LIonCore-M3")
 
 
 const inamed = factory.conceptInterface("INamed")
@@ -157,6 +159,8 @@ enumeration_literals.ofType(enumerationLiteral)
 
 const language = factory.concept("Language", false)
     .implementing(ikeyed)
+    .havingKey("Language")
+    .isPartition()
 
 const language_version = factory.property(language, "version")
     .ofType(stringDatatype)

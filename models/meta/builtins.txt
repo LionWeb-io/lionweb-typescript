@@ -1,0 +1,13 @@
+Language LIonCore-builtins
+    version: 1
+    (dependsOn: --not printed!!--)
+    entities (↓name):
+
+        PrimitiveType Boolean
+
+        PrimitiveType Integer
+
+        PrimitiveType JSON
+
+        PrimitiveType String
+

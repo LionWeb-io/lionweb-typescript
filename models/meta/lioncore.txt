@@ -1,0 +1,63 @@
+Language LIonCore-M3
+    version: 2
+    (dependsOn: --not printed!!--)
+    entities (↓name):
+
+        abstract Concept Classifier extends LanguageEntity
+            features (↓name):
+                features: Feature[0..*]
+
+        Concept Concept extends Classifier
+            features (↓name):
+                abstract: Boolean
+                extends -> Concept?
+                implements -> ConceptInterface[0..*]
+                partition: Boolean
+
+        Concept ConceptInterface extends Classifier
+            features (↓name):
+                extends -> ConceptInterface[0..*]
+
+        Concept Containment extends Link
+
+        abstract Concept DataType extends LanguageEntity
+
+        Concept Enumeration extends DataType
+            features (↓name):
+                literals: EnumerationLiteral[1..*]
+
+        Concept EnumerationLiteral implements IKeyed
+
+        abstract Concept Feature implements IKeyed
+            features (↓name):
+                optional: Boolean
+
+        ConceptInterface IKeyed extends INamed
+            features (↓name):
+                key: String
+
+        ConceptInterface INamed
+            features (↓name):
+                name: String
+
+        Concept Language implements IKeyed
+            features (↓name):
+                dependsOn -> Language[0..*]
+                entities: LanguageEntity[0..*]
+                version: String
+
+        abstract Concept LanguageEntity implements IKeyed
+
+        abstract Concept Link extends Feature
+            features (↓name):
+                multiple: Boolean
+                type -> Classifier
+
+        Concept PrimitiveType extends DataType
+
+        Concept Property extends Feature
+            features (↓name):
+                type -> DataType
+
+        Concept Reference extends Link
+

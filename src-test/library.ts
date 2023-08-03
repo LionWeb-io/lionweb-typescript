@@ -2,7 +2,7 @@ import {Node} from "../src/types.ts"
 import {hashingIdGen} from "../src/id-generation.ts"
 import {ModelAPI, updateSettings} from "../src/api.ts"
 import {nameBasedConceptDeducerFor} from "../src/m3/functions.ts"
-import {libraryLanguage} from "./m3/library-meta.ts"
+import {libraryLanguage} from "./m3/library-language.ts"
 
 
 export type BaseNode = Node & {

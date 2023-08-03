@@ -8,13 +8,17 @@ import {Id, Node} from "../types.ts"
 import {KeyGenerator} from "./key-generation.ts"
 
 
-const lioncoreQNameSeparator = "."
+const lioncoreQNameSeparator = "-"
 
 /**
  * The qualified name of the LIonCore language containing the built-in {@link PrimitiveType primitive types}.
  * (It's defined here because its knowledge intrinsic to all LIonCore M3 instances.
  */
-const lioncoreBuiltinsQName = "LIonCore.builtins"
+const lioncoreBuiltinsQName = "LIonCore-builtins"
+
+
+// Types appear roughly in the order of top-to-down+left-to-right in the diagram at:
+//      https://lionweb-org.github.io/organization/metametamodel/metametamodel.html#_overview
 
 
 interface INamed extends Node {
@@ -124,16 +128,22 @@ abstract class Classifier extends LanguageEntity {
 
 class Concept extends Classifier {
     abstract: boolean
+    partition: boolean
     extends?: SingleRef<Concept>    // (reference)
     implements: MultiRef<ConceptInterface> = []  // (reference)
     constructor(language: Language, name: string, key: string, id: Id, abstract: boolean, extends_?: SingleRef<Concept>) {
         super(language, name, key, id)
         this.abstract = abstract
         this.extends = extends_
+        this.partition = false
     }
     implementing(...conceptInterfaces: ConceptInterface[]): Concept {
         // TODO  check actual types of concept interfaces, or use type shapes/interfaces
         this.implements.push(...conceptInterfaces)
+        return this
+    }
+    isPartition(): Concept {
+        this.partition = true
         return this
     }
 }
@@ -153,6 +163,10 @@ class PrimitiveType extends Datatype {}
 
 class Enumeration extends Datatype {
     literals: EnumerationLiteral[] = [] // (containment)
+    havingLiterals(...literals: EnumerationLiteral[]) {
+        this.literals.push(...literals)
+        return this
+    }
 }
 
 class EnumerationLiteral extends M3Node {
@@ -231,6 +245,7 @@ export {
 export type {
     IKeyed,
     INamed,
-    M3Concept
+    M3Concept,
+    M3Node
 }
 

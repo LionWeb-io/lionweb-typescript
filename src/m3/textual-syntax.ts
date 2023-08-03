@@ -1,0 +1,94 @@
+import {
+    Concept,
+    ConceptInterface,
+    Containment,
+    Enumeration,
+    EnumerationLiteral,
+    INamed,
+    Language,
+    M3Node,
+    PrimitiveType,
+    Property,
+    Reference
+} from "./types.ts"
+import {nameOf} from "./functions.ts"
+import {sortByStringKey} from "../utils/sorting.ts"
+import {SingleRef, unresolved} from "../references.ts"
+
+
+const indent = (str: string) =>
+    str.split("\n").map((line) => `    ${line}`).join("\n")
+
+
+const nameSorted = <T extends INamed>(ts: T[]): T[] =>
+    sortByStringKey(ts, nameOf)
+
+const descent = <T extends M3Node>(ts: T[], separator: string): string =>
+    nameSorted(ts).map((t) => indent(indent(asText(t)))).join(separator)
+
+const refAsText = <T extends INamed>(ref: SingleRef<T>): string =>
+    ref === unresolved ? `???` : ref.name
+
+
+const asText = (node: M3Node): string => {
+
+    if (node instanceof Concept) {
+        // TODO  add coords bit
+        return `${node.abstract ? `abstract ` : ``}Concept ${node.name}${node.extends === undefined ? `` : ` extends ${refAsText(node.extends)}`}${node.implements.length === 0 ? `` : ` implements ${sortByStringKey(node.implements, nameOf).map(nameOf).join(", ")}`}${node.features.length === 0 ? `` : `
+    features (↓name):
+${descent(node.features, "\n")}`}`
+    }
+
+    if (node instanceof ConceptInterface) {
+        return `ConceptInterface ${node.name}${node.extends.length === 0 ? `` : ` extends ${sortByStringKey(node.extends, nameOf).map(nameOf).join(", ")}`}${node.features.length === 0 ? `` : `
+    features (↓name):
+${descent(node.features, "\n")}`}`
+    }
+
+    if (node instanceof Containment) {
+        return `${node.name}: ${refAsText(node.type)}${node.multiple ? `[${node.optional ? `0` : `1`}..*]` : ``}${node.optional && !node.multiple ? `?` : ``}`
+    }
+
+    if (node instanceof Enumeration) {
+        return `Enumeration ${node.name}${node.literals.length === 0 ? `` : `
+    literals:
+${descent(node.literals, "\n")}`}`
+    }
+
+    if (node instanceof EnumerationLiteral) {
+        return `${node.name}`
+    }
+
+    if (node instanceof Language) {
+        return `Language ${node.name}
+    version: ${node.version}
+    (dependsOn: --not printed!!--)
+    entities (↓name):
+
+${descent(node.entities, "\n\n")}
+
+`
+    }
+
+    if (node instanceof PrimitiveType) {
+        return `PrimitiveType ${node.name}`
+    }
+
+    if (node instanceof Property) {
+        return `${node.name}: ${refAsText(node.type)}${node.optional ? `?` : ``}`
+    }
+
+    if (node instanceof Reference) {
+        return `${node.name} -> ${refAsText(node.type)}${node.multiple ? `[${node.optional ? `0` : `1`}..*]` : ``}${node.optional && !node.multiple ? `?` : ``}`
+    }
+
+    return `node (key=${node.key}, ID=${node.id}) of class ${node.constructor.name} not handled`
+
+}
+// TODO  use littoral-templates!
+
+
+export {
+    asText
+}
+

@@ -149,10 +149,10 @@ const idOf = <T extends M3Concept>({id}: T): string =>
 
 
 /**
- * Sorts the given {@link LanguageEntity metamodel elements} by name.
+ * Sorts the given {@link LanguageEntity language entities} by name.
  */
-const elementsSortedByName = (elements: LanguageEntity[]) =>
-    sortByStringKey(elements, nameOf)
+const entitiesSortedByName = (entities: LanguageEntity[]) =>
+    sortByStringKey(entities, nameOf)
 
 
 /**
@@ -246,7 +246,7 @@ export {
     concatenateNamesOf,
     containeds,
     containmentChain,
-    elementsSortedByName,
+    entitiesSortedByName,
     flatMap,
     idBasedConceptDeducerFor,
     idOf,
