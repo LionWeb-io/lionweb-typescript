@@ -41,7 +41,7 @@ export const deserializeModel = <NT extends Node>(
 
     const { nodes: serializedNodes } = serializedModel
 
-    const serializedRootNodes = serializedNodes.filter(({parent}) => parent === undefined)
+    const serializedRootNodes = serializedNodes.filter(({parent}) => parent === null)
     if (serializedRootNodes.length === 0) {
         throw new Error(`could not deserialize: no root nodes found`)
     }

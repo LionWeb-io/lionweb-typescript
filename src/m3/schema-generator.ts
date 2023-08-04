@@ -70,7 +70,7 @@ const schemaForConcept = (concept: Concept): unknown => {
             properties: schemaForFeatures(allFeatures.filter(isProperty), schemaForProperty, true),
             children: schemaForFeatures(allFeatures.filter(isContainment), (_) => ref("Ids"), true),
             references: schemaForFeatures(allFeatures.filter(isReference), (_) => ref("Ids"), false),
-            parent: ref("Id")
+            parent: ref("ParentId")
         },
         required: [
             "id",
@@ -146,6 +146,12 @@ export const schemaFor = (language: Language): unknown /* <=> JSON Schema */ => 
                     "key"
                 ],
                 additionalProperties: false
+            },
+            "ParentId": {
+                oneOf: [
+                    ref("Id"),
+                    { type: null }
+                ]
             },
             ...Object.fromEntries(
                 concreteConcepts

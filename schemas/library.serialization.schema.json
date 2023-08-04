@@ -58,6 +58,16 @@
       ],
       "additionalProperties": false
     },
+    "ParentId": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/Id"
+        },
+        {
+          "type": null
+        }
+      ]
+    },
     "Book": {
       "type": "object",
       "properties": {
@@ -105,7 +115,7 @@
           "additionalProperties": false
         },
         "parent": {
-          "$ref": "#/$defs/Id"
+          "$ref": "#/$defs/ParentId"
         }
       },
       "required": [
@@ -163,7 +173,7 @@
           "additionalProperties": false
         },
         "parent": {
-          "$ref": "#/$defs/Id"
+          "$ref": "#/$defs/ParentId"
         }
       },
       "required": [
@@ -214,7 +224,7 @@
           "additionalProperties": false
         },
         "parent": {
-          "$ref": "#/$defs/Id"
+          "$ref": "#/$defs/ParentId"
         }
       },
       "required": [
@@ -269,7 +279,7 @@
           "additionalProperties": false
         },
         "parent": {
-          "$ref": "#/$defs/Id"
+          "$ref": "#/$defs/ParentId"
         }
       },
       "required": [
@@ -324,7 +334,7 @@
           "additionalProperties": false
         },
         "parent": {
-          "$ref": "#/$defs/Id"
+          "$ref": "#/$defs/ParentId"
         }
       },
       "required": [

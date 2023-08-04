@@ -31,7 +31,9 @@ export const undefinedValuesDeletedFrom = <T>(root: T): T => {
             if (value === undefined) {
                 delete obj[key]
             } else {
-                visit(value)
+                if (value !== null) {
+                    visit(value)
+                }
             }
         })
     }

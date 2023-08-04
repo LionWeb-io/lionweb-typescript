@@ -62,7 +62,8 @@
           ]
         }
       ],
-      "references": []
+      "references": [],
+      "parent": null
     },
     {
       "id": "LIonCore-M3-INamed",

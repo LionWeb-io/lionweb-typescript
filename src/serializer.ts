@@ -35,7 +35,8 @@ export const serializeModel = <NT extends Node>(model: NT[], api: ModelAPI<NT>):
             },
             properties: [],
             children: [],
-            references: []
+            references: [],
+            parent: null
         }
         nodes.push(serializedNode)
         ids[node.id] = true
@@ -82,7 +83,7 @@ export const serializeModel = <NT extends Node>(model: NT[], api: ModelAPI<NT>):
                 return
             }
         })
-        serializedNode.parent = parent?.id
+        serializedNode.parent = parent?.id ?? null
     }
 
     model.forEach((node) => visit(node, undefined))

@@ -39,7 +39,7 @@ export type SerializedNode = {
     properties: SerializedProperty[]
     children: SerializedContainment[]
     references: SerializedReference[]
-    parent?: Id
+    parent: Id | null
 }
 
 
