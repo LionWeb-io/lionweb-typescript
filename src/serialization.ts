@@ -43,12 +43,17 @@ export type SerializedNode = {
 }
 
 
+export type SerializedLanguageReference = {
+    key: string
+    version: string
+}
+
 /**
  * Type definition for a serialization of a whole model to JSON.
  */
 export type SerializedModel = {
     serializationFormatVersion: string
-    languages: []   // FIXME
+    languages: SerializedLanguageReference[]
     nodes: SerializedNode[]
 }
 // TODO  rename -> Serialization?

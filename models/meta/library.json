@@ -1,18 +1,23 @@
 {
   "serializationFormatVersion": "1",
-  "languages": [],
+  "languages": [
+    {
+      "key": "LIonCore-M3",
+      "version": "1"
+    }
+  ],
   "nodes": [
     {
       "id": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
       "concept": {
-        "language": "LIonCore_M3",
+        "language": "LIonCore-M3",
         "version": "1",
         "key": "Language"
       },
       "properties": [
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
             "key": "Language-version"
           },
@@ -20,17 +25,17 @@
         },
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
-            "key": "INamed-key"
+            "key": "IKeyed-key"
           },
           "value": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow"
         },
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-builtins",
             "version": "1",
-            "key": "INamed-name"
+            "key": "LIonCore-builtins-INamed-name"
           },
           "value": "library"
         }
@@ -38,7 +43,7 @@
       "children": [
         {
           "containment": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
             "key": "Language-entities"
           },
@@ -51,20 +56,29 @@
           ]
         }
       ],
-      "references": [],
+      "references": [
+        {
+          "reference": {
+            "language": "LIonCore-M3",
+            "version": "1",
+            "key": "Language-dependsOn"
+          },
+          "targets": []
+        }
+      ],
       "parent": null
     },
     {
       "id": "uEoqgTU-BImmpne9vdcqM-o2JWS8yGAveLounJcncVU",
       "concept": {
-        "language": "LIonCore_M3",
+        "language": "LIonCore-M3",
         "version": "1",
         "key": "Concept"
       },
       "properties": [
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
             "key": "Concept-abstract"
           },
@@ -72,7 +86,7 @@
         },
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
             "key": "Concept-partition"
           },
@@ -80,17 +94,17 @@
         },
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
-            "key": "INamed-key"
+            "key": "IKeyed-key"
           },
           "value": "Book"
         },
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-builtins",
             "version": "1",
-            "key": "INamed-name"
+            "key": "LIonCore-builtins-INamed-name"
           },
           "value": "Book"
         }
@@ -98,7 +112,7 @@
       "children": [
         {
           "containment": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
             "key": "Classifier-features"
           },
@@ -109,20 +123,37 @@
           ]
         }
       ],
-      "references": [],
+      "references": [
+        {
+          "reference": {
+            "language": "LIonCore-M3",
+            "version": "1",
+            "key": "Concept-extends"
+          },
+          "targets": []
+        },
+        {
+          "reference": {
+            "language": "LIonCore-M3",
+            "version": "1",
+            "key": "Concept-implements"
+          },
+          "targets": []
+        }
+      ],
       "parent": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow"
     },
     {
       "id": "ydTFbSaxS3-iPy4Z0BXupobIaWIpdtL9c_WfbzpBeOw",
       "concept": {
-        "language": "LIonCore_M3",
+        "language": "LIonCore-M3",
         "version": "1",
         "key": "Property"
       },
       "properties": [
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
             "key": "Feature-optional"
           },
@@ -130,17 +161,17 @@
         },
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
-            "key": "INamed-key"
+            "key": "IKeyed-key"
           },
           "value": "title"
         },
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-builtins",
             "version": "1",
-            "key": "INamed-name"
+            "key": "LIonCore-builtins-INamed-name"
           },
           "value": "title"
         }
@@ -149,12 +180,13 @@
       "references": [
         {
           "reference": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
             "key": "Property-type"
           },
           "targets": [
             {
+              "resolveInfo": "String",
               "reference": "LIonCore-builtins-String"
             }
           ]
@@ -165,14 +197,14 @@
     {
       "id": "kGSV8eFs5WIxjUKXyNoBIDW7pL4gyszY2LHKmmzvegU",
       "concept": {
-        "language": "LIonCore_M3",
+        "language": "LIonCore-M3",
         "version": "1",
         "key": "Property"
       },
       "properties": [
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
             "key": "Feature-optional"
           },
@@ -180,17 +212,17 @@
         },
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
-            "key": "INamed-key"
+            "key": "IKeyed-key"
           },
           "value": "pages"
         },
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-builtins",
             "version": "1",
-            "key": "INamed-name"
+            "key": "LIonCore-builtins-INamed-name"
           },
           "value": "pages"
         }
@@ -199,12 +231,13 @@
       "references": [
         {
           "reference": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
             "key": "Property-type"
           },
           "targets": [
             {
+              "resolveInfo": "Integer",
               "reference": "LIonCore-builtins-Integer"
             }
           ]
@@ -215,14 +248,14 @@
     {
       "id": "LGawCEgHtaqYxRhVWTlQSf6NuCpW5MDpi7QWLbGG3DM",
       "concept": {
-        "language": "LIonCore_M3",
+        "language": "LIonCore-M3",
         "version": "1",
         "key": "Reference"
       },
       "properties": [
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
             "key": "Link-multiple"
           },
@@ -230,7 +263,7 @@
         },
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
             "key": "Feature-optional"
           },
@@ -238,17 +271,17 @@
         },
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
-            "key": "INamed-key"
+            "key": "IKeyed-key"
           },
           "value": "author"
         },
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-builtins",
             "version": "1",
-            "key": "INamed-name"
+            "key": "LIonCore-builtins-INamed-name"
           },
           "value": "author"
         }
@@ -257,12 +290,13 @@
       "references": [
         {
           "reference": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
             "key": "Link-type"
           },
           "targets": [
             {
+              "resolveInfo": "Writer",
               "reference": "7GwNCVubFACsj8FdlnwwIOaPbJ-mLJ5UvU5EnZRjLds"
             }
           ]
@@ -273,14 +307,14 @@
     {
       "id": "J3-V1k6rqq4Ml8qX_SuUOFhhjXoxLkHrt4mShDRJH1g",
       "concept": {
-        "language": "LIonCore_M3",
+        "language": "LIonCore-M3",
         "version": "1",
         "key": "Concept"
       },
       "properties": [
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
             "key": "Concept-abstract"
           },
@@ -288,7 +322,7 @@
         },
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
             "key": "Concept-partition"
           },
@@ -296,17 +330,17 @@
         },
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
-            "key": "INamed-key"
+            "key": "IKeyed-key"
           },
           "value": "Library"
         },
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-builtins",
             "version": "1",
-            "key": "INamed-name"
+            "key": "LIonCore-builtins-INamed-name"
           },
           "value": "Library"
         }
@@ -314,7 +348,7 @@
       "children": [
         {
           "containment": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
             "key": "Classifier-features"
           },
@@ -324,20 +358,37 @@
           ]
         }
       ],
-      "references": [],
+      "references": [
+        {
+          "reference": {
+            "language": "LIonCore-M3",
+            "version": "1",
+            "key": "Concept-extends"
+          },
+          "targets": []
+        },
+        {
+          "reference": {
+            "language": "LIonCore-M3",
+            "version": "1",
+            "key": "Concept-implements"
+          },
+          "targets": []
+        }
+      ],
       "parent": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow"
     },
     {
       "id": "Rfy7VBCRh_jJSNcJTaqprdD1YcQS0OnoCMXnbmLCm8Y",
       "concept": {
-        "language": "LIonCore_M3",
+        "language": "LIonCore-M3",
         "version": "1",
         "key": "Property"
       },
       "properties": [
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
             "key": "Feature-optional"
           },
@@ -345,17 +396,17 @@
         },
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
-            "key": "INamed-key"
+            "key": "IKeyed-key"
           },
           "value": "library_Library_name"
         },
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-builtins",
             "version": "1",
-            "key": "INamed-name"
+            "key": "LIonCore-builtins-INamed-name"
           },
           "value": "name"
         }
@@ -364,12 +415,13 @@
       "references": [
         {
           "reference": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
             "key": "Property-type"
           },
           "targets": [
             {
+              "resolveInfo": "String",
               "reference": "LIonCore-builtins-String"
             }
           ]
@@ -380,14 +432,14 @@
     {
       "id": "ZAYPfVsZ-nRe7ICpRe_3LzKufog84Unh9qT4jpT4Izc",
       "concept": {
-        "language": "LIonCore_M3",
+        "language": "LIonCore-M3",
         "version": "1",
         "key": "Containment"
       },
       "properties": [
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
             "key": "Link-multiple"
           },
@@ -395,7 +447,7 @@
         },
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
             "key": "Feature-optional"
           },
@@ -403,17 +455,17 @@
         },
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
-            "key": "INamed-key"
+            "key": "IKeyed-key"
           },
           "value": "books"
         },
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-builtins",
             "version": "1",
-            "key": "INamed-name"
+            "key": "LIonCore-builtins-INamed-name"
           },
           "value": "books"
         }
@@ -422,12 +474,13 @@
       "references": [
         {
           "reference": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
             "key": "Link-type"
           },
           "targets": [
             {
+              "resolveInfo": "Book",
               "reference": "uEoqgTU-BImmpne9vdcqM-o2JWS8yGAveLounJcncVU"
             }
           ]
@@ -438,14 +491,14 @@
     {
       "id": "7GwNCVubFACsj8FdlnwwIOaPbJ-mLJ5UvU5EnZRjLds",
       "concept": {
-        "language": "LIonCore_M3",
+        "language": "LIonCore-M3",
         "version": "1",
         "key": "Concept"
       },
       "properties": [
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
             "key": "Concept-abstract"
           },
@@ -453,7 +506,7 @@
         },
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
             "key": "Concept-partition"
           },
@@ -461,17 +514,17 @@
         },
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
-            "key": "INamed-key"
+            "key": "IKeyed-key"
           },
           "value": "Writer"
         },
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-builtins",
             "version": "1",
-            "key": "INamed-name"
+            "key": "LIonCore-builtins-INamed-name"
           },
           "value": "Writer"
         }
@@ -479,7 +532,7 @@
       "children": [
         {
           "containment": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
             "key": "Classifier-features"
           },
@@ -488,20 +541,37 @@
           ]
         }
       ],
-      "references": [],
+      "references": [
+        {
+          "reference": {
+            "language": "LIonCore-M3",
+            "version": "1",
+            "key": "Concept-extends"
+          },
+          "targets": []
+        },
+        {
+          "reference": {
+            "language": "LIonCore-M3",
+            "version": "1",
+            "key": "Concept-implements"
+          },
+          "targets": []
+        }
+      ],
       "parent": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow"
     },
     {
       "id": "6ephvryVAYXE1bm1LDlUBl0Ib9MOGcM23RDej6kyuqo",
       "concept": {
-        "language": "LIonCore_M3",
+        "language": "LIonCore-M3",
         "version": "1",
         "key": "Property"
       },
       "properties": [
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
             "key": "Feature-optional"
           },
@@ -509,17 +579,17 @@
         },
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
-            "key": "INamed-key"
+            "key": "IKeyed-key"
           },
           "value": "library_Writer_name"
         },
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-builtins",
             "version": "1",
-            "key": "INamed-name"
+            "key": "LIonCore-builtins-INamed-name"
           },
           "value": "name"
         }
@@ -528,12 +598,13 @@
       "references": [
         {
           "reference": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
             "key": "Property-type"
           },
           "targets": [
             {
+              "resolveInfo": "String",
               "reference": "LIonCore-builtins-String"
             }
           ]
@@ -544,14 +615,14 @@
     {
       "id": "z4c4dBOvVtSw9UN9T3k5v608cRvRmBgqFIo3nyHo_QA",
       "concept": {
-        "language": "LIonCore_M3",
+        "language": "LIonCore-M3",
         "version": "1",
         "key": "Concept"
       },
       "properties": [
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
             "key": "Concept-abstract"
           },
@@ -559,7 +630,7 @@
         },
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
             "key": "Concept-partition"
           },
@@ -567,17 +638,17 @@
         },
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
-            "key": "INamed-key"
+            "key": "IKeyed-key"
           },
           "value": "GuideBookWriter"
         },
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-builtins",
             "version": "1",
-            "key": "INamed-name"
+            "key": "LIonCore-builtins-INamed-name"
           },
           "value": "GuideBookWriter"
         }
@@ -585,7 +656,7 @@
       "children": [
         {
           "containment": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
             "key": "Classifier-features"
           },
@@ -597,15 +668,24 @@
       "references": [
         {
           "reference": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
             "key": "Concept-extends"
           },
           "targets": [
             {
+              "resolveInfo": "Writer",
               "reference": "7GwNCVubFACsj8FdlnwwIOaPbJ-mLJ5UvU5EnZRjLds"
             }
           ]
+        },
+        {
+          "reference": {
+            "language": "LIonCore-M3",
+            "version": "1",
+            "key": "Concept-implements"
+          },
+          "targets": []
         }
       ],
       "parent": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow"
@@ -613,14 +693,14 @@
     {
       "id": "ajxn2_nvTlZaETaH5NBSdjg-4ecBXAz0PLI9ZISNtfo",
       "concept": {
-        "language": "LIonCore_M3",
+        "language": "LIonCore-M3",
         "version": "1",
         "key": "Property"
       },
       "properties": [
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
             "key": "Feature-optional"
           },
@@ -628,17 +708,17 @@
         },
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
-            "key": "INamed-key"
+            "key": "IKeyed-key"
           },
           "value": "countries"
         },
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-builtins",
             "version": "1",
-            "key": "INamed-name"
+            "key": "LIonCore-builtins-INamed-name"
           },
           "value": "countries"
         }
@@ -647,12 +727,13 @@
       "references": [
         {
           "reference": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
             "key": "Property-type"
           },
           "targets": [
             {
+              "resolveInfo": "String",
               "reference": "LIonCore-builtins-String"
             }
           ]
@@ -663,14 +744,14 @@
     {
       "id": "rs6OGi3yUdrLwpsDHxfQOFx6cb1GsMDT8XzJhcVK988",
       "concept": {
-        "language": "LIonCore_M3",
+        "language": "LIonCore-M3",
         "version": "1",
         "key": "Concept"
       },
       "properties": [
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
             "key": "Concept-abstract"
           },
@@ -678,7 +759,7 @@
         },
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
             "key": "Concept-partition"
           },
@@ -686,17 +767,17 @@
         },
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
-            "key": "INamed-key"
+            "key": "IKeyed-key"
           },
           "value": "SpecialistBookWriter"
         },
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-builtins",
             "version": "1",
-            "key": "INamed-name"
+            "key": "LIonCore-builtins-INamed-name"
           },
           "value": "SpecialistBookWriter"
         }
@@ -704,7 +785,7 @@
       "children": [
         {
           "containment": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
             "key": "Classifier-features"
           },
@@ -716,15 +797,24 @@
       "references": [
         {
           "reference": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
             "key": "Concept-extends"
           },
           "targets": [
             {
+              "resolveInfo": "Writer",
               "reference": "7GwNCVubFACsj8FdlnwwIOaPbJ-mLJ5UvU5EnZRjLds"
             }
           ]
+        },
+        {
+          "reference": {
+            "language": "LIonCore-M3",
+            "version": "1",
+            "key": "Concept-implements"
+          },
+          "targets": []
         }
       ],
       "parent": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow"
@@ -732,14 +822,14 @@
     {
       "id": "JH7BxhpDr9L7f6UBOKtFQBr0TV6r2nAK_6NajM1ij2Q",
       "concept": {
-        "language": "LIonCore_M3",
+        "language": "LIonCore-M3",
         "version": "1",
         "key": "Property"
       },
       "properties": [
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
             "key": "Feature-optional"
           },
@@ -747,17 +837,17 @@
         },
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
-            "key": "INamed-key"
+            "key": "IKeyed-key"
           },
           "value": "subject"
         },
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-builtins",
             "version": "1",
-            "key": "INamed-name"
+            "key": "LIonCore-builtins-INamed-name"
           },
           "value": "subject"
         }
@@ -766,12 +856,13 @@
       "references": [
         {
           "reference": {
-            "language": "LIonCore_M3",
+            "language": "LIonCore-M3",
             "version": "1",
             "key": "Property-type"
           },
           "targets": [
             {
+              "resolveInfo": "String",
               "reference": "LIonCore-builtins-String"
             }
           ]

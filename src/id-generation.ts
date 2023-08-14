@@ -144,3 +144,17 @@ export type IdGenTransformer = (idGen: IdGenerator) => IdGenerator
 export const wrapIdGen = (idGen: IdGenerator, ...idGenTransformers: IdGenTransformer[]): IdGenerator =>
     idGenTransformers.reduce((acc, current) => current(acc), idGen)
 
+
+/**
+ * Wraps the given ("initial") {@link IdGenerator ID generator} with all
+ * {@link IdGenTransformer ID generator checkers} defined above.
+ */
+export const checkAll = (idGen: IdGenerator): IdGenerator =>
+    wrapIdGen(
+        idGen,
+        checkDefinedData,
+        checkUniqueData,
+        checkValidId,
+        checkUniqueId
+    )
+

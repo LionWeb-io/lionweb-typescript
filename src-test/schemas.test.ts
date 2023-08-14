@@ -1,5 +1,5 @@
 import {writeJsonAsFile} from "./utils/json.ts"
-import {lioncore} from "../src/m3/self-definition.ts"
+import {lioncore} from "../src/m3/lioncore.ts"
 import {schemaFor} from "../src/m3/schema-generator.ts"
 import {Language} from "../src/m3/types.ts"
 import {libraryLanguage} from "./m3/library-language.ts"

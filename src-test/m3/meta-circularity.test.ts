@@ -1,5 +1,5 @@
 import {assertEquals} from "../deps.ts"
-import {lioncore} from "../../src/m3/self-definition.ts"
+import {lioncore} from "../../src/m3/lioncore.ts"
 import {generateMermaidForMetamodel} from "../../src/m3/diagrams/Mermaid-generator.ts"
 import {generatePlantUmlForMetamodel} from "../../src/m3/diagrams/PlantUML-generator.ts"
 import {checkReferences} from "../../src/m3/reference-checker.ts"

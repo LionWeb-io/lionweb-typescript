@@ -3,7 +3,7 @@ import {SerializedModel} from "../serialization.ts"
 import {lioncoreAPI} from "./api.ts"
 import {nodesExtractorUsing} from "../api.ts"
 import {deserializeModel} from "../deserializer.ts"
-import {lioncore} from "./self-definition.ts"
+import {lioncore} from "./lioncore.ts"
 import {lioncoreBuiltins} from "./builtins.ts"
 
 

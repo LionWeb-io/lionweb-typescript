@@ -88,17 +88,17 @@
             "Feature-optional": {
               "type": "string"
             },
-            "INamed-key": {
+            "IKeyed-key": {
               "type": "string"
             },
-            "INamed-name": {
+            "LIonCore-builtins-INamed-name": {
               "type": "string"
             }
           },
           "required": [
             "Feature-optional",
-            "INamed-key",
-            "INamed-name"
+            "IKeyed-key",
+            "LIonCore-builtins-INamed-name"
           ],
           "additionalProperties": false
         },
@@ -154,18 +154,18 @@
             "Feature-optional": {
               "type": "string"
             },
-            "INamed-key": {
+            "IKeyed-key": {
               "type": "string"
             },
-            "INamed-name": {
+            "LIonCore-builtins-INamed-name": {
               "type": "string"
             }
           },
           "required": [
             "Link-multiple",
             "Feature-optional",
-            "INamed-key",
-            "INamed-name"
+            "IKeyed-key",
+            "LIonCore-builtins-INamed-name"
           ],
           "additionalProperties": false
         },
@@ -221,18 +221,18 @@
             "Feature-optional": {
               "type": "string"
             },
-            "INamed-key": {
+            "IKeyed-key": {
               "type": "string"
             },
-            "INamed-name": {
+            "LIonCore-builtins-INamed-name": {
               "type": "string"
             }
           },
           "required": [
             "Link-multiple",
             "Feature-optional",
-            "INamed-key",
-            "INamed-name"
+            "IKeyed-key",
+            "LIonCore-builtins-INamed-name"
           ],
           "additionalProperties": false
         },
@@ -288,18 +288,18 @@
             "Concept-partition": {
               "type": "string"
             },
-            "INamed-key": {
+            "IKeyed-key": {
               "type": "string"
             },
-            "INamed-name": {
+            "LIonCore-builtins-INamed-name": {
               "type": "string"
             }
           },
           "required": [
             "Concept-abstract",
             "Concept-partition",
-            "INamed-key",
-            "INamed-name"
+            "IKeyed-key",
+            "LIonCore-builtins-INamed-name"
           ],
           "additionalProperties": false
         },
@@ -356,16 +356,16 @@
           "type": "array",
           "items": {},
           "properties": {
-            "INamed-key": {
+            "IKeyed-key": {
               "type": "string"
             },
-            "INamed-name": {
+            "LIonCore-builtins-INamed-name": {
               "type": "string"
             }
           },
           "required": [
-            "INamed-key",
-            "INamed-name"
+            "IKeyed-key",
+            "LIonCore-builtins-INamed-name"
           ],
           "additionalProperties": false
         },
@@ -419,16 +419,16 @@
           "type": "array",
           "items": {},
           "properties": {
-            "INamed-key": {
+            "IKeyed-key": {
               "type": "string"
             },
-            "INamed-name": {
+            "LIonCore-builtins-INamed-name": {
               "type": "string"
             }
           },
           "required": [
-            "INamed-key",
-            "INamed-name"
+            "IKeyed-key",
+            "LIonCore-builtins-INamed-name"
           ],
           "additionalProperties": false
         },
@@ -474,16 +474,16 @@
           "type": "array",
           "items": {},
           "properties": {
-            "INamed-key": {
+            "IKeyed-key": {
               "type": "string"
             },
-            "INamed-name": {
+            "LIonCore-builtins-INamed-name": {
               "type": "string"
             }
           },
           "required": [
-            "INamed-key",
-            "INamed-name"
+            "IKeyed-key",
+            "LIonCore-builtins-INamed-name"
           ],
           "additionalProperties": false
         },
@@ -536,16 +536,16 @@
           "type": "array",
           "items": {},
           "properties": {
-            "INamed-key": {
+            "IKeyed-key": {
               "type": "string"
             },
-            "INamed-name": {
+            "LIonCore-builtins-INamed-name": {
               "type": "string"
             }
           },
           "required": [
-            "INamed-key",
-            "INamed-name"
+            "IKeyed-key",
+            "LIonCore-builtins-INamed-name"
           ],
           "additionalProperties": false
         },
@@ -594,17 +594,17 @@
             "Language-version": {
               "type": "string"
             },
-            "INamed-key": {
+            "IKeyed-key": {
               "type": "string"
             },
-            "INamed-name": {
+            "LIonCore-builtins-INamed-name": {
               "type": "string"
             }
           },
           "required": [
             "Language-version",
-            "INamed-key",
-            "INamed-name"
+            "IKeyed-key",
+            "LIonCore-builtins-INamed-name"
           ],
           "additionalProperties": false
         },

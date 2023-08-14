@@ -1,63 +1,59 @@
-Language LIonCore-M3
-    version: 2
+language LIonCore-M3
+    version: 1
     (dependsOn: --not printed!!--)
     entities (↓name):
 
-        abstract Concept Classifier extends LanguageEntity
+        abstract concept Classifier extends LanguageEntity
             features (↓name):
                 features: Feature[0..*]
 
-        Concept Concept extends Classifier
+        concept Concept extends Classifier
             features (↓name):
                 abstract: Boolean
                 extends -> Concept?
                 implements -> ConceptInterface[0..*]
                 partition: Boolean
 
-        Concept ConceptInterface extends Classifier
+        concept ConceptInterface extends Classifier
             features (↓name):
                 extends -> ConceptInterface[0..*]
 
-        Concept Containment extends Link
+        concept Containment extends Link
 
-        abstract Concept DataType extends LanguageEntity
+        abstract concept DataType extends LanguageEntity
 
-        Concept Enumeration extends DataType
+        concept Enumeration extends DataType
             features (↓name):
                 literals: EnumerationLiteral[1..*]
 
-        Concept EnumerationLiteral implements IKeyed
+        concept EnumerationLiteral implements IKeyed
 
-        abstract Concept Feature implements IKeyed
+        abstract concept Feature implements IKeyed
             features (↓name):
                 optional: Boolean
 
-        ConceptInterface IKeyed extends INamed
+        concept-interface IKeyed extends INamed
             features (↓name):
                 key: String
 
-        ConceptInterface INamed
-            features (↓name):
-                name: String
-
-        Concept Language implements IKeyed
+        concept Language implements IKeyed
             features (↓name):
                 dependsOn -> Language[0..*]
                 entities: LanguageEntity[0..*]
                 version: String
 
-        abstract Concept LanguageEntity implements IKeyed
+        abstract concept LanguageEntity implements IKeyed
 
-        abstract Concept Link extends Feature
+        abstract concept Link extends Feature
             features (↓name):
                 multiple: Boolean
                 type -> Classifier
 
-        Concept PrimitiveType extends DataType
+        concept PrimitiveType extends DataType
 
-        Concept Property extends Feature
+        concept Property extends Feature
             features (↓name):
                 type -> DataType
 
-        Concept Reference extends Link
+        concept Reference extends Link
 

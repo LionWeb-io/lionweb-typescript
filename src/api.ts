@@ -6,6 +6,7 @@ import {allFeaturesOf, isContainment} from "./m3/functions.ts"
 
 export type ConceptDeducer<NT extends Node> = (node: NT) => Concept
 
+
 /**
  * An interface that defines an API for in-memory models.
  * Instances/implementations of this interface parametrize generic (de-)serialization.
@@ -16,18 +17,18 @@ export type ConceptDeducer<NT extends Node> = (node: NT) => Concept
 export interface ModelAPI<NT extends Node> {
 
     /**
-     * @return the {@link Concept concept} of the given node
+     * @return The {@link Concept concept} of the given node
      */
     conceptOf: ConceptDeducer<NT>
 
     /**
-     * @return the value of the given {@link Feature feature} on the given node.
+     * @return The value of the given {@link Feature feature} on the given node.
      */
     getFeatureValue: (node: NT, feature: Feature) => unknown
 
 
     /**
-     * @return an instance of the concept, given through its ID, also given its parent (or {@link undefined} for root nodes), and the values of the node's properties ("settings")
+     * @return An instance of the concept, given through its ID, also given its parent (or {@link undefined} for root nodes), and the values of the node's properties ("settings")
      * (The latter may be required as arguments for the constructor of a class, whose instances represent nodes.)
      */
     nodeFor: (parent: NT | undefined, concept: Concept, id: string, settings: { [propertyKey: string]: unknown }) => NT
@@ -43,7 +44,7 @@ export interface ModelAPI<NT extends Node> {
 
 
 /**
- * @return a function that extracts the children from a given node
+ * @return A function that extracts the children from a given node
  */
 export const childrenExtractorUsing = <NT extends Node>(api: ModelAPI<NT>) =>
     (node: NT): NT[] =>

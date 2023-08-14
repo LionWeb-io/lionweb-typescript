@@ -3,7 +3,7 @@ export type NextsFunction<T> = (t: T) => T[]
 
 /**
  * Compute whether there's a cycle of dependencies, starting with `thing` and computing "nexts" with the given `nextsFunction`.
- * @returns An array with a cycle of "things", starting at the given `thing`.
+ * @return An array with a cycle of "things", starting at the given `thing`.
  *  An array of length 0 means: the given `thing` is not part of any cycle.
  */
 export const cycleWith = <T>(thing: T, nextsFunction: NextsFunction<T>): T[] => {

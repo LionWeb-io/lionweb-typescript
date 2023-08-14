@@ -34,13 +34,13 @@ const asText = (node: M3Node): string => {
 
     if (node instanceof Concept) {
         // TODO  add coords bit
-        return `${node.abstract ? `abstract ` : ``}Concept ${node.name}${node.extends === undefined ? `` : ` extends ${refAsText(node.extends)}`}${node.implements.length === 0 ? `` : ` implements ${sortByStringKey(node.implements, nameOf).map(nameOf).join(", ")}`}${node.features.length === 0 ? `` : `
+        return `${node.abstract ? `abstract ` : ``}concept ${node.name}${node.extends === undefined ? `` : ` extends ${refAsText(node.extends)}`}${node.implements.length === 0 ? `` : ` implements ${sortByStringKey(node.implements, nameOf).map(nameOf).join(", ")}`}${node.features.length === 0 ? `` : `
     features (↓name):
 ${descent(node.features, "\n")}`}`
     }
 
     if (node instanceof ConceptInterface) {
-        return `ConceptInterface ${node.name}${node.extends.length === 0 ? `` : ` extends ${sortByStringKey(node.extends, nameOf).map(nameOf).join(", ")}`}${node.features.length === 0 ? `` : `
+        return `concept-interface ${node.name}${node.extends.length === 0 ? `` : ` extends ${sortByStringKey(node.extends, nameOf).map(nameOf).join(", ")}`}${node.features.length === 0 ? `` : `
     features (↓name):
 ${descent(node.features, "\n")}`}`
     }
@@ -50,7 +50,7 @@ ${descent(node.features, "\n")}`}`
     }
 
     if (node instanceof Enumeration) {
-        return `Enumeration ${node.name}${node.literals.length === 0 ? `` : `
+        return `enumeration ${node.name}${node.literals.length === 0 ? `` : `
     literals:
 ${descent(node.literals, "\n")}`}`
     }
@@ -60,7 +60,7 @@ ${descent(node.literals, "\n")}`}`
     }
 
     if (node instanceof Language) {
-        return `Language ${node.name}
+        return `language ${node.name}
     version: ${node.version}
     (dependsOn: --not printed!!--)
     entities (↓name):
@@ -71,7 +71,7 @@ ${descent(node.entities, "\n\n")}
     }
 
     if (node instanceof PrimitiveType) {
-        return `PrimitiveType ${node.name}`
+        return `primitive type ${node.name}`
     }
 
     if (node instanceof Property) {

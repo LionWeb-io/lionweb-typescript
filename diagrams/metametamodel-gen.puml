@@ -29,10 +29,6 @@ interface IKeyed extends INamed {
   key: String
 }
 
-interface INamed {
-  name: String
-}
-
 class Language implements IKeyed {
   version: String
 }
@@ -60,7 +56,6 @@ ConceptInterface "*" -- "*" ConceptInterface: extends
 
 
 Enumeration "1" o-- "*" EnumerationLiteral: literals
-
 
 
 

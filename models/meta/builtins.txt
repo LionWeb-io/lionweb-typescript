@@ -1,13 +1,19 @@
-Language LIonCore-builtins
+language LIonCore-builtins
     version: 1
     (dependsOn: --not printed!!--)
     entities (↓name):
 
-        PrimitiveType Boolean
+        primitive type Boolean
 
-        PrimitiveType Integer
+        concept-interface INamed
+            features (↓name):
+                name: String
 
-        PrimitiveType JSON
+        primitive type Integer
 
-        PrimitiveType String
+        primitive type JSON
+
+        abstract concept Node
+
+        primitive type String
 

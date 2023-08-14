@@ -75,12 +75,15 @@ abstract class M3Node implements IKeyed {
 abstract class Feature extends M3Node {
     optional /*: boolean */ = false
     // TODO  look at order of constructors' arguments!
-    constructor(featuresContainer: Classifier, name: string, key: string, id: Id) {
-        super(id, name, key, featuresContainer)
+    constructor(classifier: Classifier, name: string, key: string, id: Id) {
+        super(id, name, key, classifier)
     }
     isOptional() {
         this.optional = true
         return this
+    }
+    get classifier(): Classifier {
+        return this.parent! as Classifier
     }
 }
 
@@ -114,6 +117,9 @@ class Reference extends Link {
 abstract class LanguageEntity extends M3Node {
     constructor(language: Language, name: string, key: Id, id: Id) {
         super(id, name, key, language)
+    }
+    get language(): Language {
+        return this.parent! as Language
     }
 }
 
@@ -173,6 +179,7 @@ class EnumerationLiteral extends M3Node {
     constructor(enumeration: Enumeration, name: string, key: string, id: Id) {
         super(id, name, key, enumeration)
     }
+    // TODO  add enumeration getter
 }
 
 class Language extends M3Node {
@@ -199,6 +206,9 @@ class Language extends M3Node {
                 .filter((metamodel) => metamodel.name !== lioncoreBuiltinsQName)
         )
         return this
+    }
+    equals(that: Language): boolean {
+        return this.key === that.key && this.version === that.version
     }
 }
 // TODO  can we add the `<<partition>>` tag on it programmatically (to make it truly meta-circular)?

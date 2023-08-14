@@ -10,7 +10,7 @@ import {
 } from "../../id-generation.ts"
 import {EClassifier, EcoreXml, EStructuralFeature} from "./types.ts"
 import {ConceptType, keyOf, namedsOf, qualifiedNameOf} from "../functions.ts"
-import {booleanDatatype, intDatatype, stringDatatype} from "../builtins.ts"
+import {builtinPrimitives} from "../builtins.ts"
 import {duplicatesAmong} from "../../utils/grouping.ts"
 import {asArray} from "../../utils/array-helpers.ts"
 
@@ -21,6 +21,8 @@ const deref = (typeDescriptor: string): string =>
         ? typeDescriptor.substring(localRefPrefix.length)
         : typeDescriptor
 
+
+const {booleanDatatype, intDatatype, stringDatatype} = builtinPrimitives
 
 /**
  * Converts a parsed Ecore XML metamodel (file) to a {@link Language LIonCore/M3 instance}.

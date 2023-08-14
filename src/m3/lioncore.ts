@@ -1,19 +1,21 @@
 import {LanguageFactory} from "./factory.ts"
-import {lioncoreIdGen} from "./id-generation.ts"
-import {booleanDatatype, stringDatatype} from "./builtins.ts"
+import {builtinClassifiers, builtinPrimitives} from "./builtins.ts"
 import {Classifier, Feature} from "./types.ts"
+import {checkAll} from "../id-generation.ts"
 
+
+export const lioncoreId = "LIonCore-M3"
 
 const factory = new LanguageFactory(
-    "LIonCore-M3",
-    "2",
-    lioncoreIdGen,
+    lioncoreId,
+    "1",
+    checkAll((qualifiedName) => qualifiedName!),
     (node) => {
         if (node instanceof Classifier) {
             return node.name
         }
         if (node instanceof Feature) {
-            return `${node.parent!.name}-${node.name}`
+            return `${node.classifier.name}-${node.name}`
         }
         throw Error(`cannot compute key for node "${node.name}" of runtime-type "${node.constructor.name}"`)
     }
@@ -26,19 +28,17 @@ const factory = new LanguageFactory(
 export const lioncore = factory.language.havingKey("LIonCore-M3")
 
 
-const inamed = factory.conceptInterface("INamed")
-
-const inamed_name = factory.property(inamed, "name")
-    .ofType(stringDatatype)
-
-inamed.havingFeatures(inamed_name)
+const {inamed} = builtinClassifiers
+const {booleanDatatype, stringDatatype} = builtinPrimitives
 
 
 const ikeyed = factory.conceptInterface("IKeyed")
     .extending(inamed)
+    .havingKey("IKeyed")
 
-const ikeyed_key = factory.property(inamed, "key")
+const ikeyed_key = factory.property(ikeyed, "key")
     .ofType(stringDatatype)
+    .havingKey("IKeyed-key")
 
 ikeyed.havingFeatures(ikeyed_key)
 
@@ -179,7 +179,6 @@ language.havingFeatures(language_version, language_entities, language_dependsOn)
 
 
 lioncore.havingEntities(
-    inamed,
     ikeyed,
     feature,
     property,
@@ -211,7 +210,6 @@ export const metaConcepts = {
 }
 
 export const metaFeatures = {
-    inamed_name,
     ikeyed_key,
     concept_abstract,
     concept_partition,

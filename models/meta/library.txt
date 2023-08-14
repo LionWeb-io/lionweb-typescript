@@ -1,28 +1,28 @@
-Language library
+language library
     version: 1
     (dependsOn: --not printed!!--)
     entities (↓name):
 
-        Concept Book
+        concept Book
             features (↓name):
                 author -> Writer
                 pages: Integer
                 title: String
 
-        Concept GuideBookWriter extends Writer
+        concept GuideBookWriter extends Writer
             features (↓name):
                 countries: String
 
-        Concept Library
+        concept Library
             features (↓name):
                 books: Book[1..*]
                 name: String
 
-        Concept SpecialistBookWriter extends Writer
+        concept SpecialistBookWriter extends Writer
             features (↓name):
                 subject: String
 
-        Concept Writer
+        concept Writer
             features (↓name):
                 name: String
 

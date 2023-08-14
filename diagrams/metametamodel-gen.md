@@ -37,11 +37,6 @@ classDiagram
   <<Interface>> IKeyed
   INamed <|-- IKeyed
 
-  class INamed {
-    +String name
-  }
-  <<Interface>> INamed
-
   class Language {
     +String version
   }
@@ -72,7 +67,6 @@ classDiagram
 
 
   Enumeration "1" o-- "*" EnumerationLiteral: literals
-
 
 
 
