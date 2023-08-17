@@ -46,11 +46,11 @@ export interface ModelAPI<NT extends Node> {
 /**
  * @return A function that extracts the children from a given node
  */
-export const childrenExtractorUsing = <NT extends Node>(api: ModelAPI<NT>) =>
+export const childrenExtractorUsing = <NT extends Node>(modelAPI: ModelAPI<NT>) =>
     (node: NT): NT[] =>
-        allFeaturesOf(api.conceptOf(node))
+        allFeaturesOf(modelAPI.conceptOf(node))
             .filter(isContainment)
-            .flatMap((containment) => api.getFeatureValue(node, containment) as NT[])
+            .flatMap((containment) => modelAPI.getFeatureValue(node, containment) as NT[])
 
 
 /**

@@ -45,7 +45,7 @@ abstract class M3Node implements IKeyed {
     parent?: M3Node
         /*
          * Note: every parent in an M2 (i.e., a Language, Concept, ConceptInterface, Enumeration) implements IKeyed.
-         * Because that's just an interface and is implemented by {@link M3Node}
+         * Because that's just an interface and is implemented by {@link M3Node}.
          */
     readonly id: Id
     name: string

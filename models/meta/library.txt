@@ -1,6 +1,5 @@
 language library
     version: 1
-    (dependsOn: --not printed!!--)
     entities (↓name):
 
         concept Book

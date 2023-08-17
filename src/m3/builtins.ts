@@ -1,5 +1,5 @@
 import {LanguageFactory} from "./factory.ts"
-import {lioncoreBuiltinsQName, Property} from "./types.ts"
+import {lioncoreBuiltinsQName, lioncoreQNameSeparator, Property} from "./types.ts"
 import {qualifiedNameBasedKeyGenerator} from "./key-generation.ts"
 import {checkAll} from "../id-generation.ts"
 
@@ -8,7 +8,7 @@ const factory = new LanguageFactory(
     lioncoreBuiltinsQName,
     "1",
     checkAll((qualifiedName) => qualifiedName!),
-    qualifiedNameBasedKeyGenerator("-")
+    qualifiedNameBasedKeyGenerator(lioncoreQNameSeparator)
 )
 
 /**

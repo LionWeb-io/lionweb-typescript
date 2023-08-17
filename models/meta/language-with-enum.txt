@@ -1,6 +1,5 @@
 language language-with-enum
     version: 1
-    (dependsOn: --not printed!!--)
     entities (↓name):
 
         enumeration enum

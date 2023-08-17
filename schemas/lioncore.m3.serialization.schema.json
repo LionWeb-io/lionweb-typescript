@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "LIonCore-M3-serialization",
-  "title": "Serialization format specific to LIonCore-M3",
+  "$id": "LIonCore.M3-serialization",
+  "title": "Serialization format specific to LIonCore.M3",
   "$ref": "#/$defs/SerializedModel",
   "$defs": {
     "SerializedModel": {
@@ -495,9 +495,6 @@
               "$ref": "#/$defs/Ids"
             }
           },
-          "required": [
-            "Enumeration-literals"
-          ],
           "additionalProperties": false
         },
         "references": {

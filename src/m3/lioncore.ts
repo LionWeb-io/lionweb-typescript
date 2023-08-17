@@ -1,15 +1,24 @@
 import {LanguageFactory} from "./factory.ts"
 import {builtinClassifiers, builtinPrimitives} from "./builtins.ts"
-import {Classifier, Feature} from "./types.ts"
+import {Classifier, Feature, lioncoreQNameSeparator} from "./types.ts"
 import {checkAll} from "../id-generation.ts"
 
 
-export const lioncoreId = "LIonCore-M3"
+const lioncoreQName = "LIonCore-M3"
+
 
 const factory = new LanguageFactory(
-    lioncoreId,
+    "LIonCore.M3",
     "1",
-    checkAll((qualifiedName) => qualifiedName!),
+    checkAll((qualifiedName) =>
+        "-id-" +
+            (qualifiedName === "LIonCore.M3"
+                ? lioncoreQName
+                : qualifiedName!
+                    .substring(lioncoreQName.length + 1)
+                    .replaceAll(".", lioncoreQNameSeparator)
+            )
+    ),
     (node) => {
         if (node instanceof Classifier) {
             return node.name
@@ -34,11 +43,9 @@ const {booleanDatatype, stringDatatype} = builtinPrimitives
 
 const ikeyed = factory.conceptInterface("IKeyed")
     .extending(inamed)
-    .havingKey("IKeyed")
 
 const ikeyed_key = factory.property(ikeyed, "key")
     .ofType(stringDatatype)
-    .havingKey("IKeyed-key")
 
 ikeyed.havingFeatures(ikeyed_key)
 
@@ -147,6 +154,7 @@ const enumeration = factory.concept("Enumeration", false, dataType)
 
 const enumeration_literals = factory.containment(enumeration, "literals")
     .isMultiple()
+    .isOptional()
 
 enumeration.havingFeatures(enumeration_literals)
 
@@ -159,7 +167,6 @@ enumeration_literals.ofType(enumerationLiteral)
 
 const language = factory.concept("Language", false)
     .implementing(ikeyed)
-    .havingKey("Language")
     .isPartition()
 
 const language_version = factory.property(language, "version")

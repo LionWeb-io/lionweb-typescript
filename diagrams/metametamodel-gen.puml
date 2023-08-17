@@ -1,7 +1,7 @@
 @startuml
 hide empty members
 
-' qualified name: "LIonCore-M3"
+' qualified name: "LIonCore.M3"
 
 
 abstract class Classifier extends LanguageEntity

@@ -29,9 +29,8 @@ Deno.test("textual syntax (LIonCore)", async (tctx) => {
     })
 
     await tctx.step("print out languages from Java, as text (no assertions)", async () => {
-        const lioncoreFromJava = deserializeLanguage(await readFileAsJson("models/from_java/lioncore-repaired.json") as SerializedModel)
-        assertEquals(lioncoreFromJava.name, "LIonCore-M3")
-            // FIXME  LIonCore.json from Java is not what we expect
+        const lioncoreFromJava = deserializeLanguage(await readFileAsJson("models/from_java/lioncore.json") as SerializedModel)
+        assertEquals(lioncoreFromJava.name, "LIonCore.M3")
         await Deno.writeTextFile("models/from_java/lioncore.txt", asText(lioncoreFromJava))
     })
 

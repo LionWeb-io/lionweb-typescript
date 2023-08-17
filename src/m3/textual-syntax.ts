@@ -16,6 +16,7 @@ import {sortByStringKey} from "../utils/sorting.ts"
 import {SingleRef, unresolved} from "../references.ts"
 
 
+// TODO  use littoral-templates!
 const indent = (str: string) =>
     str.split("\n").map((line) => `    ${line}`).join("\n")
 
@@ -33,7 +34,6 @@ const refAsText = <T extends INamed>(ref: SingleRef<T>): string =>
 const asText = (node: M3Node): string => {
 
     if (node instanceof Concept) {
-        // TODO  add coords bit
         return `${node.abstract ? `abstract ` : ``}concept ${node.name}${node.extends === undefined ? `` : ` extends ${refAsText(node.extends)}`}${node.implements.length === 0 ? `` : ` implements ${sortByStringKey(node.implements, nameOf).map(nameOf).join(", ")}`}${node.features.length === 0 ? `` : `
     features (↓name):
 ${descent(node.features, "\n")}`}`
@@ -61,8 +61,11 @@ ${descent(node.literals, "\n")}`}`
 
     if (node instanceof Language) {
         return `language ${node.name}
-    version: ${node.version}
-    (dependsOn: --not printed!!--)
+    version: ${node.version}${node.dependsOn.length > 0
+        ? `    dependsOn:
+${node.dependsOn.map((language) => `        ${language.key} (${language.version})`).join("\n")}
+`
+        : ``}
     entities (↓name):
 
 ${descent(node.entities, "\n\n")}
@@ -85,7 +88,6 @@ ${descent(node.entities, "\n\n")}
     return `node (key=${node.key}, ID=${node.id}) of class ${node.constructor.name} not handled`
 
 }
-// TODO  use littoral-templates!
 
 
 export {

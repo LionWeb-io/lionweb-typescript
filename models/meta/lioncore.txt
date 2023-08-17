@@ -1,6 +1,5 @@
-language LIonCore-M3
+language LIonCore.M3
     version: 1
-    (dependsOn: --not printed!!--)
     entities (↓name):
 
         abstract concept Classifier extends LanguageEntity
@@ -24,7 +23,7 @@ language LIonCore-M3
 
         concept Enumeration extends DataType
             features (↓name):
-                literals: EnumerationLiteral[1..*]
+                literals: EnumerationLiteral[0..*]
 
         concept EnumerationLiteral implements IKeyed
 
