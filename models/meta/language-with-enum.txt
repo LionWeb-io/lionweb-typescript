@@ -1,9 +1,0 @@
-language language-with-enum
-    version: 1
-    entities (↓name):
-
-        enumeration enum
-            literals:
-                lit1
-                lit2
-

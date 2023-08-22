@@ -1,6 +1,6 @@
 import {LanguageFactory} from "./factory.ts"
 import {builtinClassifiers, builtinPrimitives} from "./builtins.ts"
-import {Classifier, Feature, lioncoreQNameSeparator} from "./types.ts"
+import {Classifier, EnumerationLiteral, Feature, lioncoreQNameSeparator} from "./types.ts"
 import {checkAll} from "../id-generation.ts"
 
 
@@ -22,6 +22,9 @@ const factory = new LanguageFactory(
     (node) => {
         if (node instanceof Classifier) {
             return node.name
+        }
+        if (node instanceof EnumerationLiteral) {
+            return `${node.enumeration.name}-${node.name}`
         }
         if (node instanceof Feature) {
             return `${node.classifier.name}-${node.name}`
@@ -233,4 +236,6 @@ export const metaFeatures = {
     language_entities,
     property_type
 }
+
+export {lioncoreQName}
 

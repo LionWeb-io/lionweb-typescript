@@ -1,7 +1,7 @@
 import {assertEquals} from "./deps.ts"
 import {writeJsonAsFile} from "./utils/json.ts"
 import {undefinedValuesDeletedFrom} from "./utils/test-helpers.ts"
-import {serializeModel} from "../src/serializer.ts"
+import {serializeNodes} from "../src/serializer.ts"
 import {deserializeModel} from "../src/deserializer.ts"
 import {dynamicModelAPI, DynamicNode} from "../src/dynamic-api.ts"
 import {nameBasedConceptDeducerFor} from "../src/m3/functions.ts"
@@ -12,14 +12,14 @@ import {libraryLanguage} from "./m3/library-language.ts"
 Deno.test("Library test model", async (tctx) => {
 
     await tctx.step("[de-]serialize example library", async () => {
-        const serialization = serializeModel(libraryModel, libraryModelApi)
+        const serialization = serializeNodes(libraryModel, libraryModelApi)
         await writeJsonAsFile("models/instance/library.json", serialization)
         const deserialization = deserializeModel(undefinedValuesDeletedFrom(serialization), libraryModelApi, libraryLanguage, [])
         assertEquals(deserialization, libraryModel)
     })
 
     await tctx.step(`"dynamify" example library through serialization and deserialization using the Dynamic Model API`, () => {
-        const serialization = serializeModel(libraryModel, libraryModelApi)
+        const serialization = serializeNodes(libraryModel, libraryModelApi)
         const dynamification = deserializeModel(undefinedValuesDeletedFrom(serialization), dynamicModelAPI, libraryLanguage, [])
 
         assertEquals(dynamification.length, 2)

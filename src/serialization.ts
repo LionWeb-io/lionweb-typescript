@@ -51,10 +51,9 @@ export type SerializedLanguageReference = {
 /**
  * Type definition for a serialization of a whole model to JSON.
  */
-export type SerializedModel = {
+export type SerializationChunk = {
     serializationFormatVersion: string
     languages: SerializedLanguageReference[]
     nodes: SerializedNode[]
 }
-// TODO  rename -> Serialization?
 

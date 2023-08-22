@@ -86,7 +86,7 @@ const containeds = (thing: M3Concept): M3Concept[] => {
         return thing.entities
     }
     if (thing instanceof Classifier) {
-        return thing.features
+        return thing.features as M3Concept[]    // (cast is necessary because of presence of Feature#classifier getter...?)
     }
     if (thing instanceof Enumeration) {
         return thing.literals

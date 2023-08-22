@@ -1,5 +1,5 @@
 import {ConceptDeducer as _ConceptDeducer, ModelAPI} from "./api.ts"
-import {MetaPointer, SerializedModel, SerializedNode} from "./serialization.ts"
+import {MetaPointer, SerializationChunk, SerializedNode} from "./serialization.ts"
 import {asIds} from "./functions.ts"
 import {Node} from "./types.ts"
 import {Containment, isINamed, Language, Property, Reference} from "./m3/types.ts"
@@ -14,8 +14,8 @@ import {BuiltinPrimitive, lioncoreBuiltins, serializeBuiltin} from "./m3/builtin
  * This usage implies that the serialization will conform to (the metamodel of) a particular {@link Language language},
  * which means that models that _don't_ conform to a (given) language can't be serialized truthfully!
  */
-export const serializeModel = <NT extends Node>(model: NT[], api: ModelAPI<NT>): SerializedModel /* <=> JSON */ => {
-    const nodes: SerializedNode[] = []  // keep nodes as much as possible "in order"
+export const serializeNodes = <NT extends Node>(nodes: NT[], api: ModelAPI<NT>): SerializationChunk /* <=> JSON */ => {
+    const serializedNodes: SerializedNode[] = []  // keep nodes as much as possible "in order"
     const ids: { [id: string]: boolean } = {}   // maintain a map to keep track of IDs of nodes that have been serialized
     const languagesUsed: Language[] = []
     const registerLanguageUsed = (language: Language) => {
@@ -44,7 +44,7 @@ export const serializeModel = <NT extends Node>(model: NT[], api: ModelAPI<NT>):
             references: [],
             parent: null
         }
-        nodes.push(serializedNode)
+        serializedNodes.push(serializedNode)
         ids[node.id] = true
         allFeaturesOf(concept).forEach((feature) => {
             const value = api.getFeatureValue(node, feature)
@@ -62,7 +62,7 @@ export const serializeModel = <NT extends Node>(model: NT[], api: ModelAPI<NT>):
                 })
                 return
             }
-            if (feature instanceof Containment /* && asArray(value).length > 0 */) {
+            if (feature instanceof Containment) {
                 const children = asArray(value) as NT[]
                 serializedNode.children.push({
                     containment: featureMetaPointer,
@@ -71,7 +71,7 @@ export const serializeModel = <NT extends Node>(model: NT[], api: ModelAPI<NT>):
                 children.forEach((child) => visit(child, node))
                 return
             }
-            if (feature instanceof Reference /* && asArray(value).length > 0 */) {
+            if (feature instanceof Reference) {
                 const targets = asArray(value)
                 serializedNode.references.push({
                     reference: featureMetaPointer,
@@ -86,14 +86,14 @@ export const serializeModel = <NT extends Node>(model: NT[], api: ModelAPI<NT>):
         serializedNode.parent = parent?.id ?? null
     }
 
-    model.forEach((node) => visit(node, undefined))
+    nodes.forEach((node) => visit(node, undefined))
 
     return {
         serializationFormatVersion: "1",
         languages: languagesUsed
             .filter((language) => !language.equals(lioncoreBuiltins))
             .map(({key, version}) => ({ key, version })),
-        nodes
+        nodes: serializedNodes
     }
 }
 

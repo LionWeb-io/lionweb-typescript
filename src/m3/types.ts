@@ -179,7 +179,9 @@ class EnumerationLiteral extends M3Node {
     constructor(enumeration: Enumeration, name: string, key: string, id: Id) {
         super(id, name, key, enumeration)
     }
-    // TODO  add enumeration getter
+    get enumeration(): Enumeration {
+        return this.parent! as Enumeration
+    }
 }
 
 class Language extends M3Node {

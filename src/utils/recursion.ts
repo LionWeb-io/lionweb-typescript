@@ -1,4 +1,7 @@
-export type FlatMapper<T, R> = (t: T) => R[]
+/**
+ * Type def. of a generic "flatMap" function.
+ */
+type FlatMapper<T, R> = (t: T) => R[]
 
 /**
  * Performs a "flatMap" on a graph that's specified as a start vertex and a function that computes (outgoing) edges.
@@ -26,6 +29,10 @@ const flatMapNonCyclingFollowing = <T, R>(
 
 const trivialFlatMapper = <T>(t: T) => [t]
 
+
+export type {
+    FlatMapper
+}
 
 export {
     flatMapNonCyclingFollowing,

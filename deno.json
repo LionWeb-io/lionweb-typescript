@@ -1,19 +1,25 @@
 {
-    "tasks": {
-        "run-tests": "deno test --allow-read --allow-write src-test/",
-        "watch-tests": "deno test --watch --allow-write --allow-read src-test/",
-        "lint": "deno lint src/ src-test/",
-        "lock-deps": "deno cache --reload --lock=deno.lock --lock-write src/deps.ts src-build/build-npm.ts src-test/deps.ts"
-    },
-    "lint": {
-        "include": [
-          "src/",
-          "src-build/",
-          "src-test/"
-        ],
-        "rules": {
-            "tags": ["recommended"],
-            "exclude": ["no-explicit-any"]
-        }
+  "tasks": {
+    "run-tests": "deno test --allow-read --allow-write src-test/",
+    "watch-tests": "deno test --watch --allow-write --allow-read src-test/",
+    "lint": "deno lint src/ src-test/ src-aux/",
+    "lock-deps": "deno cache --reload --lock=deno.lock --lock-write src/deps.ts src-aux/deps.ts src-build/build-npm.ts src-test/deps.ts",
+    "compile-cli": "deno compile --allow-read --allow-write src-aux/extract-serialization.ts && mv extract-serialization lib/"
+  },
+  "lint": {
+    "include": [
+      "src/",
+      "src-aux/",
+      "src-build/",
+      "src-test/"
+    ],
+    "rules": {
+      "tags": [
+        "recommended"
+      ],
+      "exclude": [
+        "no-explicit-any"
+      ]
     }
+  }
 }

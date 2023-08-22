@@ -63,6 +63,7 @@ The following is a list of links to potential starting points:
 * [Models](models/) - various models in their serialized formats (the LIonWeb JSON format, or Ecore XML); see the [specific README](models/README.md).
 * [Schemas](schemas/) - various JSON Schema files for validating models serialized in the LIonWeb JSON format against; see the [specific README](schemas/README.md).
 * [Source](src/) - all TypeScript source to be exported as part of the NPM/Deno package.
+* [Auxiliary](src-aux/) - all TypeScript source that's not core to the NPM/Deno package but still useful, e.g. for testing.
 * [Scripts](src-build) - a `build-npm.ts` Deno script to package the source as an NPM package using [`dnt`](https://github.com/denoland/dnt).
 * [Test sources](src-test/) - all TypeScript sources with/for (unit) tests.
   Tests are located in files with names ending with `.test.ts`.
@@ -88,6 +89,7 @@ The following are considerations or concerns that bubbled up during implementati
   * Can't we have qualified names as a computed feature defined post-facto _on top_ of the LIonCore/M3?
 * What happens during deserialization if things don't match the provided M2?
   Just error out, or return `(model', issues*)`?
+
 
 ## Building an NPM Package
 
@@ -120,3 +122,34 @@ Or, we can publish the package to the NPM registry with
 ```shell
 pushd npm; npm publish; popd
 ```
+
+
+## Extracting essential information from a serialization
+
+Run
+
+```shell
+deno task compile-cli
+```
+
+to produce a binary executable `lib/extract-serialization` for your platform.
+
+This you can then call to make "extractions" from a serialization ("chunk"), as follows (e.g.):
+
+```shell
+lib/extract-serialization models/meta/lioncore.json
+```
+
+This is meant as a way to inspect, reason about, and compare serialization because the format is rather verbose.
+These extractions are:
+
+* A "sorted" JSON with:
+  * all nodes sorted by ID,
+  * for all nodes, their properties, containments, and references sorted by key (from the meta-pointer),
+  * and all containments and references sorted by ID.
+* A "shortened" JSON where keys are used as key names.
+* If the serialization represents a language - i.e.: a LIonCore model - then a textual version is generated as well.
+
+This CLI utility does not perform any explicit validation apart from the file at the given path existing and being valid JSON.
+It does some implicit validation as it can error out on incorrect serializations.
+

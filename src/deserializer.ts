@@ -1,5 +1,5 @@
 import {Id, Node} from "./types.ts"
-import {SerializedModel, SerializedNode} from "./serialization.ts"
+import {SerializationChunk, SerializedNode} from "./serialization.ts"
 import {ModelAPI} from "./api.ts"
 import {Concept, Containment, Language, Property, Reference} from "./m3/types.ts"
 import {allFeaturesOf} from "./m3/functions.ts"
@@ -22,24 +22,24 @@ const byIdMap = <T extends { id: Id }>(ts: T[]): { [id: Id]: T } => {
 /**
  * @return a deserialization of a serialized model
  *
- * @param serializedModel - a {@link SerializedModel model} from its LIonWeb serialization JSON format
+ * @param serializationChunk - a {@link SerializedModel model} from its LIonWeb serialization JSON format
  * @param modelAPI - a {@link ModelAPI model API} that is used to instantiate nodes and set values on them
  * @param language - a {@link Language language} that the serialized model is expected to conform to
  * @param dependentNodes - a collection of nodes from dependent models against which all references in the serialized model are supposed to resolve against
  */
 export const deserializeModel = <NT extends Node>(
-    serializedModel: SerializedModel,
+    serializationChunk: SerializationChunk,
     modelAPI: ModelAPI<NT>,
     language: Language,
     dependentNodes: Node[]
     // TODO (#13)  see if you can turn this into [nodes: Node[], api: ModelAPI<Node>][] after all
 ): NT[] => {
 
-    if (serializedModel.serializationFormatVersion !== "1") {
+    if (serializationChunk.serializationFormatVersion !== "1") {
         throw new Error(`can't deserialize from serialization format other than version 1`)
     }
 
-    const { nodes: serializedNodes } = serializedModel
+    const { nodes: serializedNodes } = serializationChunk
 
     const serializedRootNodes = serializedNodes.filter(({parent}) => parent === null)
     if (serializedRootNodes.length === 0) {

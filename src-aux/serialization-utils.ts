@@ -1,16 +1,16 @@
-import {SerializedModel} from "./serialization.ts"
-import {sortByStringKey} from "./utils/sorting.ts"
+import {SerializationChunk} from "../src/serialization.ts"
+import {sortByStringKey} from "../src/utils/sorting.ts"
 
 
 /**
  * @return A shortened version of a {@link SerializedModel JSON serialization}, which should make it easier to inspect.
  *  Note that the shortened version doesn't contain all information, and could (in theory) be malformed.
  */
-export const shorten = ({nodes}: SerializedModel) =>
+export const shortenSerialization = ({nodes}: SerializationChunk) =>
     nodes.map((node) => ({
         id: node.id,
         concept: node.concept.key,
-        parent: node.parent,
+        parent: node.parent ?? undefined,
         ...Object.fromEntries(
             [
                 ...node.properties.map((serProp) => [serProp.property.key, serProp.value]),
@@ -25,7 +25,7 @@ export const shorten = ({nodes}: SerializedModel) =>
  * @return A sorted version of a {@link SerializedModel JSON serialization}, which should make it easier to inspect.
  *  Note that the sorted version destroy the order of links, which might effectively alter semantics.
  */
-export const sort = ({serializationFormatVersion, languages, nodes}: SerializedModel): SerializedModel =>
+export const sortSerialization = ({serializationFormatVersion, languages, nodes}: SerializationChunk): SerializationChunk =>
     ({
         serializationFormatVersion,
         languages,

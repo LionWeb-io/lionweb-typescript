@@ -7,7 +7,7 @@ import {issuesLanguage} from "../../src/m3/constraints.ts"
 import {serializeLanguage} from "../../src/m3/serializer.ts"
 import {deserializeLanguage} from "../../src/m3/deserializer.ts"
 import {readFileAsJson, writeJsonAsFile} from "../utils/json.ts"
-import {SerializedModel} from "../../src/serialization.ts"
+import {SerializationChunk} from "../../src/serialization.ts"
 import {logIssues, logUnresolvedReferences} from "../utils/test-helpers.ts"
 import {asText} from "../../src/m3/textual-syntax.ts"
 
@@ -39,7 +39,7 @@ Deno.test("meta-circularity (LIonCore)", async (tctx) => {
     })
 
     await tctx.step("deserialize LIonCore", async () => {
-        const serialization = await readFileAsJson(serializedLioncorePath) as SerializedModel
+        const serialization = await readFileAsJson(serializedLioncorePath) as SerializationChunk
         const deserialization = deserializeLanguage(serialization)
         assertEquals(asText(deserialization), asText(lioncore))
         // assertEquals on object-level is not good enouogh (- maybe because of class JIT'ing?):
