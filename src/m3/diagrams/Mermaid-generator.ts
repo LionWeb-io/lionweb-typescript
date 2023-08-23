@@ -62,10 +62,10 @@ const generateForEnumeration = ({name, literals}: Enumeration) =>
     ))
 
 
-const generateForConcept = ({name, features, abstract: abstract_, extends: extends_/*, implements: implements_*/}: Concept) =>
+const generateForConcept = ({name, features, abstract: abstract_, extends: extends_/*, implements: implements_*/, partition}: Concept) =>
     [
         block(
-            `class ${name}`,
+            `class ${partition ? `<<partition>> ` : ``}${name}`,
             nonRelationalFeatures(features).map(generateForNonRelationalFeature)
         ),
         abstract_ ? `<<Abstract>> ${name}` : [],

@@ -52,13 +52,16 @@ const generateForEnumeration = ({name, literals}: Enumeration) =>
     ]
 
 
-const generateForConcept = ({name, features, abstract: abstract_, extends: extends_, implements: implements_}: Concept) => {
+const generateForConcept = ({name, features, abstract: abstract_, extends: extends_, implements: implements_, partition}: Concept) => {
     const nonRelationalFeatures_ = nonRelationalFeatures(features)
     const fragments: string[] = []
     if (abstract_) {
         fragments.push(`abstract`)
     }
     fragments.push(`class`, name)
+    if (partition) {
+        fragments.push(`<<partition>>`)
+    }
     if (isRef(extends_)) {
         fragments.push(`extends`, extends_.name)
     }

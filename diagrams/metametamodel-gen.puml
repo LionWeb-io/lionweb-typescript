@@ -29,7 +29,7 @@ interface IKeyed extends INamed {
   key: String
 }
 
-class Language implements IKeyed {
+class Language <<partition>> implements IKeyed {
   version: String
 }
 

@@ -37,7 +37,7 @@ classDiagram
   <<Interface>> IKeyed
   INamed <|-- IKeyed
 
-  class Language {
+  class <<partition>> Language {
     +String version
   }
 
