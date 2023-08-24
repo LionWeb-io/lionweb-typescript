@@ -1,5 +1,5 @@
-import {build, emptyDir} from "https://deno.land/x/dnt@0.35.0/mod.ts"
-import {copy} from "https://deno.land/std@0.187.0/fs/mod.ts"
+import {build, emptyDir} from "https://deno.land/x/dnt@0.38.1/mod.ts"
+import {copy} from "https://deno.land/std@0.199.0/fs/mod.ts"
 
 await Deno.remove("npm", { recursive: true }).catch((_) => {})
 await emptyDir("./npm/esm/src-test/m3")
