@@ -1,11 +1,12 @@
 import {LanguageFactory} from "../../src/m3/factory.ts"
 import {hashingIdGen} from "../../src/id-generation.ts"
-import {intDatatype, stringDatatype} from "../../src/m3/builtins.ts"
+import {builtinPrimitives} from "../../src/m3/builtins.ts"
 
 
 const factory = new LanguageFactory("library", "1", hashingIdGen())
 export const libraryLanguage = factory.language
 
+const {intDatatype, stringDatatype} = builtinPrimitives
 
 const library = factory.concept("Library", false)
 const book = factory.concept("Book", false)
@@ -33,7 +34,7 @@ const specialistBookWriter_subject = factory.property(specialistBookWriter, "sub
 specialistBookWriter.havingFeatures(specialistBookWriter_subject)
 
 
-libraryLanguage.havingElements(
+libraryLanguage.havingEntities(
     book,
     library,
     writer,

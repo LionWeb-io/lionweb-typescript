@@ -1,18 +1,23 @@
 {
   "serializationFormatVersion": "1",
-  "languages": [],
+  "languages": [
+    {
+      "key": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
+      "version": "1"
+    }
+  ],
   "nodes": [
     {
       "id": "jkxERSov0TuSh7MMz2D5ciLrZDrU4o_VMOpmBqh_j7E",
       "concept": {
-        "language": "LIonCore_M3",
+        "language": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
         "version": "1",
         "key": "Library"
       },
       "properties": [
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
             "version": "1",
             "key": "library_Library_name"
           },
@@ -22,7 +27,7 @@
       "children": [
         {
           "containment": {
-            "language": "LIonCore_M3",
+            "language": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
             "version": "1",
             "key": "books"
           },
@@ -31,19 +36,20 @@
           ]
         }
       ],
-      "references": []
+      "references": [],
+      "parent": null
     },
     {
       "id": "Q1NQ_zXwOF2Pjf1uklMTumJhQH4V1Qnfjnu0gz7Fzzs",
       "concept": {
-        "language": "LIonCore_M3",
+        "language": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
         "version": "1",
         "key": "Book"
       },
       "properties": [
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
             "version": "1",
             "key": "title"
           },
@@ -51,7 +57,7 @@
         },
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
             "version": "1",
             "key": "pages"
           },
@@ -62,12 +68,13 @@
       "references": [
         {
           "reference": {
-            "language": "LIonCore_M3",
+            "language": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
             "version": "1",
             "key": "author"
           },
           "targets": [
             {
+              "resolveInfo": "Jack London",
               "reference": "7RxOqvS1ZIdpk-ao-6Tzy1QQRxl6fp_tGMH_BIK4LzQ"
             }
           ]
@@ -78,14 +85,14 @@
     {
       "id": "7RxOqvS1ZIdpk-ao-6Tzy1QQRxl6fp_tGMH_BIK4LzQ",
       "concept": {
-        "language": "LIonCore_M3",
+        "language": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
         "version": "1",
         "key": "GuideBookWriter"
       },
       "properties": [
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
             "version": "1",
             "key": "countries"
           },
@@ -93,7 +100,7 @@
         },
         {
           "property": {
-            "language": "LIonCore_M3",
+            "language": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
             "version": "1",
             "key": "library_Writer_name"
           },
@@ -101,7 +108,8 @@
         }
       ],
       "children": [],
-      "references": []
+      "references": [],
+      "parent": null
     }
   ]
 }

@@ -1,6 +1,6 @@
 import {Language} from "./types.ts"
-import {SerializedModel} from "../serialization.ts"
-import {serializeModel} from "../serializer.ts"
+import {SerializationChunk} from "../serialization.ts"
+import {serializeNodes} from "../serializer.ts"
 import {lioncoreAPI} from "./api.ts"
 
 
@@ -9,6 +9,6 @@ import {lioncoreAPI} from "./api.ts"
  * using {@link M3Concept these type definitions})
  * into the LIonWeb serialization JSON format.
  */
-export const serializeLanguage = (language: Language): SerializedModel =>
-    serializeModel([language], lioncoreAPI)
+export const serializeLanguage = (language: Language): SerializationChunk =>
+    serializeNodes([language], lioncoreAPI)
 

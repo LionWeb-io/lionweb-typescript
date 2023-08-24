@@ -4,18 +4,10 @@ import {serializeLanguage} from "../../../src/m3/serializer.ts"
 import {EcoreXml} from "../../../src/m3/ecore/types.ts"
 import {issuesLanguage} from "../../../src/m3/constraints.ts"
 import {checkReferences} from "../../../src/m3/reference-checker.ts"
-import {
-    generatePlantUmlForMetamodel
-} from "../../../src/m3/diagrams/PlantUML-generator.ts"
-import {
-    generateMermaidForMetamodel
-} from "../../../src/m3/diagrams/Mermaid-generator.ts"
-import {
-    logIssues,
-    logUnresolvedReferences,
-    undefinedValuesDeletedFrom
-} from "../../utils/test-helpers.ts"
-import {libraryLanguage} from "../library-meta.ts"
+import {generatePlantUmlForMetamodel} from "../../../src/m3/diagrams/PlantUML-generator.ts"
+import {generateMermaidForMetamodel} from "../../../src/m3/diagrams/Mermaid-generator.ts"
+import {logIssues, logUnresolvedReferences, undefinedValuesDeletedFrom} from "../../utils/test-helpers.ts"
+import {libraryLanguage} from "../library-language.ts"
 
 
 /**

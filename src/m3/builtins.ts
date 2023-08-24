@@ -1,31 +1,69 @@
 import {LanguageFactory} from "./factory.ts"
-import {lioncoreIdGen} from "./id-generation.ts"
-import {lioncoreBuiltinsQName, Property} from "./types.ts"
+import {lioncoreBuiltinsQName, lioncoreQNameSeparator, Property} from "./types.ts"
+import {qualifiedNameBasedKeyGenerator} from "./key-generation.ts"
+import {checkAll} from "../id-generation.ts"
 
 
-const factory = new LanguageFactory(lioncoreBuiltinsQName, "1", lioncoreIdGen)
+const factory = new LanguageFactory(
+    lioncoreBuiltinsQName,
+    "1",
+    checkAll((qualifiedName) => qualifiedName!),
+    qualifiedNameBasedKeyGenerator(lioncoreQNameSeparator)
+)
 
 /**
  * Definition of a LIonCore language that serves as a standard library of built-in primitive types.
  */
-export const lioncoreBuiltins = factory.language
+const lioncoreBuiltins = factory.language
 
-export const stringDatatype = factory.primitiveType("String")
-export const booleanDatatype = factory.primitiveType("Boolean")
-export const intDatatype = factory.primitiveType("Integer")
-export const jsonDatatype = factory.primitiveType("JSON")
 
-lioncoreBuiltins.havingElements(
+const stringDatatype = factory.primitiveType("String")
+const booleanDatatype = factory.primitiveType("Boolean")
+const integerDatatype = factory.primitiveType("Integer")
+const jsonDatatype = factory.primitiveType("JSON")
+
+
+const node = factory.concept("Node", true)
+
+
+const inamed = factory.conceptInterface("INamed")
+
+const inamed_name = factory.property(inamed, "name")
+    .ofType(stringDatatype)
+
+inamed.havingFeatures(inamed_name)
+
+
+lioncoreBuiltins.havingEntities(
     stringDatatype,
     booleanDatatype,
-    intDatatype,
-    jsonDatatype
+    integerDatatype,
+    jsonDatatype,
+    node,
+    inamed
 )
 
 
-export type BuiltinPrimitive = string | boolean | number | Record<string, unknown>
+type BuiltinPrimitive = string | boolean | number | Record<string, unknown>
 
-export const serializeBuiltin = (value: BuiltinPrimitive): string => {
+const builtinPrimitives = {
+    stringDatatype,
+    booleanDatatype,
+    intDatatype: integerDatatype,
+    jsonDatatype
+}
+
+const builtinClassifiers = {
+    node,
+    inamed
+}
+
+const builtinFeatures = {
+    inamed_name
+}
+
+
+const serializeBuiltin = (value: BuiltinPrimitive): string => {
     switch (typeof value) {
         case "string": return value
         case "boolean": return `${value}`
@@ -42,7 +80,7 @@ export const serializeBuiltin = (value: BuiltinPrimitive): string => {
 }
 
 
-export const deserializeBuiltin = (value: string | undefined, property: Property): BuiltinPrimitive | undefined => {
+const deserializeBuiltin = (value: string | undefined, property: Property): BuiltinPrimitive | undefined => {
     if (value === undefined) {
         if (property.optional) {
             return undefined
@@ -58,5 +96,19 @@ export const deserializeBuiltin = (value: string | undefined, property: Property
         default:
             throw new Error(`can't deserialize value of type "${type!.name}": ${value}`)
     }
+}
+
+
+export type {
+    BuiltinPrimitive
+}
+
+export {
+    lioncoreBuiltins,
+    builtinPrimitives,
+    builtinClassifiers,
+    builtinFeatures,
+    serializeBuiltin,
+    deserializeBuiltin
 }
 

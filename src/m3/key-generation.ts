@@ -1,18 +1,18 @@
-import {Language, M3Concept} from "./types.ts"
+import {INamed, M3Concept as _M3Concept} from "./types.ts"
+import {qualifiedNameOf} from "./functions.ts"
 
 
 /**
- * Type definition for functions that generate a key given an {@link M3Concept}.
+ * Type definition for functions that generate a key given an {@link _M3Concept M3Concept}.
  * Note that, in theory, key generation doesn't need to be idempotent: f(node) != f(node.havingKey(f(node)), with f of type KeyGenerator.
  */
-export type KeyGenerator = (node: M3Concept) => string
-    // TODO  should have as type NamespacedEntity, but don't want to do that until propagating recent-recent changes
+export type KeyGenerator = (node: INamed) => string
 
 
 /**
  * A {@link KeyGenerator key generator} for which: key = name
  */
-export const simpleNameIsKeyGenerator = (node: M3Concept) =>
+export const nameIsKeyGenerator: KeyGenerator = (node: INamed) =>
     node.name
 
 
@@ -20,8 +20,8 @@ export const simpleNameIsKeyGenerator = (node: M3Concept) =>
  * @return A {@link KeyGenerator key generator} that generates a key with the qualified name using the given separator.
  */
 export const qualifiedNameBasedKeyGenerator = (separator: string): KeyGenerator =>
-    (node) =>
-        (node instanceof Language)
-            ? node.name
-            : node.qualifiedName(separator)
+    (node) => qualifiedNameOf(node, separator)
+
+
+// TODO  implement checkers
 

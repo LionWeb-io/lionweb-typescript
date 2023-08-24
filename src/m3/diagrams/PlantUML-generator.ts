@@ -6,16 +6,11 @@ import {
     Enumeration,
     Feature,
     Language,
-    LanguageElement,
+    LanguageEntity,
     Link,
     PrimitiveType
 } from "../types.ts"
-import {
-    elementsSortedByName,
-    nonRelationalFeatures,
-    relationsOf,
-    type
-} from "../functions.ts"
+import {entitiesSortedByName, nonRelationalFeatures, relationsOf, type} from "../functions.ts"
 import {isRef, unresolved} from "../../references.ts"
 
 
@@ -26,7 +21,7 @@ const indented = indentWith(`  `)(1)
  * Generates a string with a PlantUML class diagram
  * representing the given {@link Language LIonCore/M3 instance}.
  */
-export const generatePlantUmlForMetamodel = ({name, elements}: Language) =>
+export const generatePlantUmlForMetamodel = ({name, entities}: Language) =>
     asString([
 `@startuml
 hide empty members
@@ -35,13 +30,13 @@ hide empty members
 
 
 `,
-    elementsSortedByName(elements).map(generateForElement),
+    entitiesSortedByName(entities).map(generateForElement),
 `
 
 ' relations:
 
 `,
-    elementsSortedByName(elements).map(generateForRelationsOf),
+    entitiesSortedByName(entities).map(generateForRelationsOf),
 `
 @enduml
 `
@@ -57,13 +52,16 @@ const generateForEnumeration = ({name, literals}: Enumeration) =>
     ]
 
 
-const generateForConcept = ({name, features, abstract: abstract_, extends: extends_, implements: implements_}: Concept) => {
+const generateForConcept = ({name, features, abstract: abstract_, extends: extends_, implements: implements_, partition}: Concept) => {
     const nonRelationalFeatures_ = nonRelationalFeatures(features)
     const fragments: string[] = []
     if (abstract_) {
         fragments.push(`abstract`)
     }
     fragments.push(`class`, name)
+    if (partition) {
+        fragments.push(`<<partition>>`)
+    }
     if (isRef(extends_)) {
         fragments.push(`extends`, extends_.name)
     }
@@ -116,7 +114,7 @@ const generateForPrimitiveType = ({name}: PrimitiveType) =>
 // Note: No construct for PrimitiveType exists in PlantUML.
 
 
-const generateForElement = (element: LanguageElement) => {
+const generateForElement = (element: LanguageEntity) => {
     if (element instanceof Enumeration) {
         return generateForEnumeration(element)
     }
@@ -134,7 +132,7 @@ const generateForElement = (element: LanguageElement) => {
 }
 
 
-const generateForRelationsOf = (element: LanguageElement) => {
+const generateForRelationsOf = (element: LanguageEntity) => {
     const relations = relationsOf(element)
     return relations.length === 0
         ? ``
@@ -143,7 +141,7 @@ const generateForRelationsOf = (element: LanguageElement) => {
 }
 
 
-const generateForRelation = ({name: leftName}: LanguageElement, relation: Link) => {
+const generateForRelation = ({name: leftName}: LanguageEntity, relation: Link) => {
     const {name: relationName, type, optional, multiple} = relation
     const rightName = isRef(type) ? type.name : (type === unresolved ? `<unresolved>` : `<null>`)
     const isContainment = relation instanceof Containment

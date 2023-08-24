@@ -28,4 +28,5 @@ export const dynamicModelAPI: ModelAPI<DynamicNode> = ({
         updateSettings(node.settings, feature, value)
     }
 })
+// TODO  use feature's key instead of name
 

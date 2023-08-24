@@ -39,17 +39,21 @@ export type SerializedNode = {
     properties: SerializedProperty[]
     children: SerializedContainment[]
     references: SerializedReference[]
-    parent?: Id
+    parent: Id | null
 }
 
+
+export type SerializedLanguageReference = {
+    key: string
+    version: string
+}
 
 /**
  * Type definition for a serialization of a whole model to JSON.
  */
-export type SerializedModel = {
+export type SerializationChunk = {
     serializationFormatVersion: string
-    languages: []   // FIXME
+    languages: SerializedLanguageReference[]
     nodes: SerializedNode[]
 }
-// TODO  rename -> Serialization?
 

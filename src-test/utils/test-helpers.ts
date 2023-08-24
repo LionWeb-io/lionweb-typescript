@@ -1,5 +1,5 @@
 import {Issue} from "../../src/m3/constraints.ts"
-import {asIds} from "../../src/types.ts"
+import {asIds} from "../../src/functions.ts"
 
 
 /**
@@ -31,7 +31,9 @@ export const undefinedValuesDeletedFrom = <T>(root: T): T => {
             if (value === undefined) {
                 delete obj[key]
             } else {
-                visit(value)
+                if (value !== null) {
+                    visit(value)
+                }
             }
         })
     }

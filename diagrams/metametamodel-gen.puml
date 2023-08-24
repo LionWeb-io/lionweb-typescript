@@ -4,41 +4,39 @@ hide empty members
 ' qualified name: "LIonCore.M3"
 
 
-class Concept extends FeaturesContainer {
+abstract class Classifier extends LanguageEntity
+
+class Concept extends Classifier {
   abstract: Boolean
+  partition: Boolean
 }
 
-class ConceptInterface extends FeaturesContainer
+class ConceptInterface extends Classifier
 
 class Containment extends Link
 
-abstract class DataType extends LanguageElement
+abstract class DataType extends LanguageEntity
 
-class Enumeration extends DataType implements NamespaceProvider
+class Enumeration extends DataType
 
-class EnumerationLiteral extends NamespacedEntity
+class EnumerationLiteral implements IKeyed
 
-abstract class Feature extends NamespacedEntity {
+abstract class Feature implements IKeyed {
   optional: Boolean
 }
 
-abstract class FeaturesContainer extends LanguageElement implements NamespaceProvider
+interface IKeyed extends INamed {
+  key: String
+}
 
-class Language implements NamespaceProvider {
-  name: String
+class Language <<partition>> implements IKeyed {
   version: String
 }
 
-abstract class LanguageElement extends NamespacedEntity
+abstract class LanguageEntity implements IKeyed
 
 abstract class Link extends Feature {
   multiple: Boolean
-}
-
-interface NamespaceProvider
-abstract class NamespacedEntity {
-  name: String
-  key: String
 }
 
 class PrimitiveType extends DataType
@@ -51,6 +49,7 @@ class Reference extends Link
 
 ' relations:
 
+Classifier "1" o-- "*" Feature: features
 Concept "*" -- "0..1" Concept: extends
 Concept "*" -- "*" ConceptInterface: implements
 ConceptInterface "*" -- "*" ConceptInterface: extends
@@ -59,13 +58,11 @@ ConceptInterface "*" -- "*" ConceptInterface: extends
 Enumeration "1" o-- "*" EnumerationLiteral: literals
 
 
-FeaturesContainer "1" o-- "*" Feature: features
-Language "1" o-- "*" LanguageElement: elements
+
+Language "1" o-- "*" LanguageEntity: entities
 Language "*" -- "*" Language: dependsOn
 
-Link "*" -- "1" FeaturesContainer: type
-
-
+Link "*" -- "1" Classifier: type
 
 Property "*" -- "1" DataType: type
 
