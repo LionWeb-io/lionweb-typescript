@@ -96,10 +96,11 @@ The following are considerations or concerns that bubbled up during implementati
 Run
 
 ```shell
-deno run -A src-build/build-npm.ts x.y.z
+deno run -A src-build/build-npm.ts
 ```
 
-where x.y.z is the version of the package we're building. This will create a package in the `npm` directory.
+This will create a package in the `npm` directory.
+The version number stated in the package is stored in the file `src-build/current-version.txt`.
 
 Then, we can build an archive with
 
@@ -112,7 +113,7 @@ We can use the compressed package as a dependency of local projects, for testing
 ```json
 "dependencies": {
     ...
-    "lioncore-typescript": "file:...<relative path>.../lioncore-typescript/npm/lioncore-0.2.0.tgz"
+    "lioncore-typescript": "file:...<relative path>.../lioncore-typescript/npm/lioncore-0.3.0.tgz"
     ...
 },
 ```

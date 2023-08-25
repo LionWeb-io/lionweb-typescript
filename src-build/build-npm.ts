@@ -16,10 +16,12 @@ await copy("models", "npm/script/models", { overwrite: true })
 await copy("src-test/m3/ecore/library.ecore", "npm/esm/src-test/m3/ecore/library.ecore", { overwrite: true })
 await copy("src-test/m3/ecore/library.ecore", "npm/script/src-test/m3/ecore/library.ecore", { overwrite: true })
 
+const currentVersion = (await Deno.readTextFile("src-build/current-version.txt")).trim()
+
 await build({
     entryPoints: ["./src/mod.ts"],
     outDir: "./npm",
-    scriptModule: false,
+    scriptModule: false,    // when true (=default), testing errors out
     shims: {
         // see JS docs for overview and more options:
         deno: true,
@@ -27,7 +29,7 @@ await build({
     package: {
         // package.json properties:
         name: "lioncore-typescript",
-        version: Deno.args[0],
+        version: currentVersion,
         description: "LIonWeb core for {Java|Type}Script",
         license: "MIT",
         repository: {
