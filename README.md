@@ -63,7 +63,7 @@ The following is a list of links to potential starting points:
 * [Models](models/) - various models in their serialized formats (the LIonWeb JSON format, or Ecore XML); see the [specific README](models/README.md).
 * [Schemas](schemas/) - various JSON Schema files for validating models serialized in the LIonWeb JSON format against; see the [specific README](schemas/README.md).
 * [Source](src/) - all TypeScript source to be exported as part of the NPM/Deno package.
-* [Auxiliary](src-aux/) - all TypeScript source that's not core to the NPM/Deno package but still useful, e.g. for testing.
+* [Command-line interface](src-cli/) - TypeScript source that implements a single-entrypoint CLI for utilities around the LIonCore functionality, such as: JSON Schema and diagram generation, textual syntax, extractors for the deserialization format, Ecore import, etc.
 * [Scripts](src-build) - a `build-npm.ts` Deno script to package the source as an NPM package using [`dnt`](https://github.com/denoland/dnt).
 * [Test sources](src-test/) - all TypeScript sources with/for (unit) tests.
   Tests are located in files with names ending with `.test.ts`.
@@ -133,12 +133,12 @@ Run
 deno task compile-cli
 ```
 
-to produce a binary executable `lib/extract-serialization` for your platform.
+to produce a binary executable `lib/lioncore-cli` for your platform.
 
 This you can then call to make "extractions" from a serialization ("chunk"), as follows (e.g.):
 
 ```shell
-lib/extract-serialization models/meta/lioncore.json
+lib/lioncore-cli extract models/meta/lioncore.json
 ```
 
 This is meant as a way to inspect, reason about, and compare serialization because the format is rather verbose.

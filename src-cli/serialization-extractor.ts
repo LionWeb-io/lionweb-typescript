@@ -17,7 +17,7 @@ const isSerializedLanguage = (json: unknown): boolean =>
     && json["languages"].some((language) => isRecord(language) && language["key"] === lioncoreQName)
 
 
-const verbose = async (path: string) => {
+export const extractFromSerialization = async (path: string) => {
     try {
         const json = JSON.parse(await Deno.readTextFile(path))
         const extlessPath = path.substring(0, path.length - extensionOfPath(path).length)
@@ -32,10 +32,4 @@ const verbose = async (path: string) => {
         console.error(`"${path}" is not a valid JSON file`)
     }
 }
-
-
-const main = (args: string[])=> {
-    args.forEach(verbose)
-}
-main(Deno.args)
 
