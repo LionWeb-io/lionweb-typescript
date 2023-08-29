@@ -6,7 +6,7 @@ import {languageWithEnum} from "./language-with-enum.ts"
 
 Deno.test("textual syntax (LIonCore)", async (tctx) => {
 
-    await tctx.step("print out language with an enum as text (no assertions)", async () => {
+    await tctx.step("print out language with an enum as text (no assertions)", () => {
         assertEquals(
             asText(languageWithEnum),
 `language language-with-enum

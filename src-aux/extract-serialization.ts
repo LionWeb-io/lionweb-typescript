@@ -28,13 +28,13 @@ const verbose = async (path: string) => {
             await Deno.writeTextFile(extlessPath + ".txt", asText(deserializeLanguage(json)))
         }
         console.log(`extracted: "${path}" -> "${extlessPath}"`)
-    } catch (e) {
+    } catch (_) {
         console.error(`"${path}" is not a valid JSON file`)
     }
 }
 
 
-const main = async (args: string[])=> {
+const main = (args: string[])=> {
     args.forEach(verbose)
 }
 main(Deno.args)
