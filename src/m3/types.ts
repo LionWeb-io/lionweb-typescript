@@ -154,6 +154,25 @@ class Concept extends Classifier {
     }
 }
 
+class Annotation extends Classifier {
+    multiple /*: boolean */ = false
+    extends?: SingleRef<Annotation> // (reference)
+    implements: MultiRef<ConceptInterface> = [] // (reference)
+    constructor(language: Language, name: string, key: string, id: Id, extends_?: SingleRef<Annotation>) {
+        super(language, name, key, id)
+        this.extends = extends_
+    }
+    implementing(...conceptInterfaces: ConceptInterface[]): Annotation {
+        // TODO  check actual types of concept interfaces, or use type shapes/interfaces
+        this.implements.push(...conceptInterfaces)
+        return this
+    }
+    isMultiple(): Annotation {
+        this.multiple = true
+        return this
+    }
+}
+
 class ConceptInterface extends Classifier {
     extends: MultiRef<ConceptInterface> = []    // (reference)
     extending(...conceptInterfaces: ConceptInterface[]): ConceptInterface {
@@ -213,7 +232,6 @@ class Language extends M3Node {
         return this.key === that.key && this.version === that.version
     }
 }
-// TODO  can we add the `<<partition>>` tag on it programmatically (to make it truly meta-circular)?
 
 
 /**
@@ -222,18 +240,20 @@ class Language extends M3Node {
  * so they also implement {@link INamed} and {@link IKeyed}.
  */
 type M3Concept =
-    | Language
+    | Annotation
     | Concept
     | ConceptInterface
+    | Containment
     | Enumeration
     | EnumerationLiteral
+    | Language
     | PrimitiveType
-    | Containment
     | Property
     | Reference
 
 
 export {
+    Annotation,
     Classifier,
     Concept,
     ConceptInterface,

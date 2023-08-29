@@ -34,7 +34,7 @@ const refAsText = <T extends INamed>(ref: SingleRef<T>): string =>
 const asText = (node: M3Node): string => {
 
     if (node instanceof Concept) {
-        return `${node.abstract ? `abstract ` : ``}concept ${node.name}${node.extends === undefined ? `` : ` extends ${refAsText(node.extends)}`}${node.implements.length === 0 ? `` : ` implements ${sortByStringKey(node.implements, nameOf).map(nameOf).join(", ")}`}${node.features.length === 0 ? `` : `
+        return `${node.partition ? `<<partition>> ` : ``}${node.abstract ? `abstract ` : ``}concept ${node.name}${node.extends === undefined ? `` : ` extends ${refAsText(node.extends)}`}${node.implements.length === 0 ? `` : ` implements ${sortByStringKey(node.implements, nameOf).map(nameOf).join(", ")}`}${node.features.length === 0 ? `` : `
     features (↓name):
 ${descent(node.features, "\n")}`}`
     }

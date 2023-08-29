@@ -56,6 +56,7 @@
             "-id-Reference",
             "-id-LanguageEntity",
             "-id-Classifier",
+            "-id-Annotation",
             "-id-Concept",
             "-id-ConceptInterface",
             "-id-DataType",
@@ -1002,6 +1003,263 @@
         }
       ],
       "parent": "-id-Classifier"
+    },
+    {
+      "id": "-id-Annotation",
+      "concept": {
+        "language": "LIonCore-M3",
+        "version": "1",
+        "key": "Concept"
+      },
+      "properties": [
+        {
+          "property": {
+            "language": "LIonCore-M3",
+            "version": "1",
+            "key": "Concept-abstract"
+          },
+          "value": "false"
+        },
+        {
+          "property": {
+            "language": "LIonCore-M3",
+            "version": "1",
+            "key": "Concept-partition"
+          },
+          "value": "false"
+        },
+        {
+          "property": {
+            "language": "LIonCore-M3",
+            "version": "1",
+            "key": "IKeyed-key"
+          },
+          "value": "Annotation"
+        },
+        {
+          "property": {
+            "language": "LIonCore-builtins",
+            "version": "1",
+            "key": "LIonCore-builtins-INamed-name"
+          },
+          "value": "Annotation"
+        }
+      ],
+      "children": [
+        {
+          "containment": {
+            "language": "LIonCore-M3",
+            "version": "1",
+            "key": "Classifier-features"
+          },
+          "children": [
+            "-id-Annotation-annotates",
+            "-id-Annotation-extends",
+            "-id-Annotation-implements"
+          ]
+        }
+      ],
+      "references": [
+        {
+          "reference": {
+            "language": "LIonCore-M3",
+            "version": "1",
+            "key": "Concept-extends"
+          },
+          "targets": [
+            {
+              "resolveInfo": "Classifier",
+              "reference": "-id-Classifier"
+            }
+          ]
+        },
+        {
+          "reference": {
+            "language": "LIonCore-M3",
+            "version": "1",
+            "key": "Concept-implements"
+          },
+          "targets": []
+        }
+      ],
+      "parent": "-id-LIonCore-M3"
+    },
+    {
+      "id": "-id-Annotation-annotates",
+      "concept": {
+        "language": "LIonCore-M3",
+        "version": "1",
+        "key": "Reference"
+      },
+      "properties": [
+        {
+          "property": {
+            "language": "LIonCore-M3",
+            "version": "1",
+            "key": "Link-multiple"
+          },
+          "value": "false"
+        },
+        {
+          "property": {
+            "language": "LIonCore-M3",
+            "version": "1",
+            "key": "Feature-optional"
+          },
+          "value": "true"
+        },
+        {
+          "property": {
+            "language": "LIonCore-M3",
+            "version": "1",
+            "key": "IKeyed-key"
+          },
+          "value": "Annotation-annotates"
+        },
+        {
+          "property": {
+            "language": "LIonCore-builtins",
+            "version": "1",
+            "key": "LIonCore-builtins-INamed-name"
+          },
+          "value": "annotates"
+        }
+      ],
+      "children": [],
+      "references": [
+        {
+          "reference": {
+            "language": "LIonCore-M3",
+            "version": "1",
+            "key": "Link-type"
+          },
+          "targets": [
+            {
+              "resolveInfo": "Classifier",
+              "reference": "-id-Classifier"
+            }
+          ]
+        }
+      ],
+      "parent": "-id-Annotation"
+    },
+    {
+      "id": "-id-Annotation-extends",
+      "concept": {
+        "language": "LIonCore-M3",
+        "version": "1",
+        "key": "Reference"
+      },
+      "properties": [
+        {
+          "property": {
+            "language": "LIonCore-M3",
+            "version": "1",
+            "key": "Link-multiple"
+          },
+          "value": "false"
+        },
+        {
+          "property": {
+            "language": "LIonCore-M3",
+            "version": "1",
+            "key": "Feature-optional"
+          },
+          "value": "false"
+        },
+        {
+          "property": {
+            "language": "LIonCore-M3",
+            "version": "1",
+            "key": "IKeyed-key"
+          },
+          "value": "Annotation-extends"
+        },
+        {
+          "property": {
+            "language": "LIonCore-builtins",
+            "version": "1",
+            "key": "LIonCore-builtins-INamed-name"
+          },
+          "value": "extends"
+        }
+      ],
+      "children": [],
+      "references": [
+        {
+          "reference": {
+            "language": "LIonCore-M3",
+            "version": "1",
+            "key": "Link-type"
+          },
+          "targets": [
+            {
+              "resolveInfo": "Annotation",
+              "reference": "-id-Annotation"
+            }
+          ]
+        }
+      ],
+      "parent": "-id-Annotation"
+    },
+    {
+      "id": "-id-Annotation-implements",
+      "concept": {
+        "language": "LIonCore-M3",
+        "version": "1",
+        "key": "Reference"
+      },
+      "properties": [
+        {
+          "property": {
+            "language": "LIonCore-M3",
+            "version": "1",
+            "key": "Link-multiple"
+          },
+          "value": "true"
+        },
+        {
+          "property": {
+            "language": "LIonCore-M3",
+            "version": "1",
+            "key": "Feature-optional"
+          },
+          "value": "false"
+        },
+        {
+          "property": {
+            "language": "LIonCore-M3",
+            "version": "1",
+            "key": "IKeyed-key"
+          },
+          "value": "Annotation-implements"
+        },
+        {
+          "property": {
+            "language": "LIonCore-builtins",
+            "version": "1",
+            "key": "LIonCore-builtins-INamed-name"
+          },
+          "value": "implements"
+        }
+      ],
+      "children": [],
+      "references": [
+        {
+          "reference": {
+            "language": "LIonCore-M3",
+            "version": "1",
+            "key": "Link-type"
+          },
+          "targets": [
+            {
+              "resolveInfo": "ConceptInterface",
+              "reference": "-id-ConceptInterface"
+            }
+          ]
+        }
+      ],
+      "parent": "-id-Annotation"
     },
     {
       "id": "-id-Concept",

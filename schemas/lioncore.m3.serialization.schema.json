@@ -265,6 +265,75 @@
       ],
       "additionalProperties": false
     },
+    "Annotation": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/Id"
+        },
+        "concept": {
+          "const": {
+            "metamodel": "LIonCore_M3",
+            "version": "1",
+            "key": "Annotation"
+          }
+        },
+        "properties": {
+          "type": "array",
+          "items": {},
+          "properties": {
+            "IKeyed-key": {
+              "type": "string"
+            },
+            "LIonCore-builtins-INamed-name": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "IKeyed-key",
+            "LIonCore-builtins-INamed-name"
+          ],
+          "additionalProperties": false
+        },
+        "children": {
+          "type": "array",
+          "items": {},
+          "properties": {
+            "Classifier-features": {
+              "$ref": "#/$defs/Ids"
+            }
+          },
+          "additionalProperties": false
+        },
+        "references": {
+          "type": "array",
+          "items": {},
+          "properties": {
+            "Annotation-annotates": {
+              "$ref": "#/$defs/Ids"
+            },
+            "Annotation-extends": {
+              "$ref": "#/$defs/Ids"
+            },
+            "Annotation-implements": {
+              "$ref": "#/$defs/Ids"
+            }
+          },
+          "additionalProperties": false
+        },
+        "parent": {
+          "$ref": "#/$defs/ParentId"
+        }
+      },
+      "required": [
+        "id",
+        "concept",
+        "properties",
+        "children",
+        "references"
+      ],
+      "additionalProperties": false
+    },
     "Concept": {
       "type": "object",
       "properties": {
@@ -648,6 +717,9 @@
         },
         {
           "$ref": "#/$defs/Reference"
+        },
+        {
+          "$ref": "#/$defs/Annotation"
         },
         {
           "$ref": "#/$defs/Concept"

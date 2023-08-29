@@ -1,6 +1,9 @@
 ```mermaid
 classDiagram
 
+  class Annotation
+  Classifier <|-- Annotation
+
   class Classifier
   <<Abstract>> Classifier
   LanguageEntity <|-- Classifier
@@ -60,6 +63,9 @@ classDiagram
   Link <|-- Reference
 
 
+  Annotation "*" -- "0..1" Classifier: annotates
+  Annotation "*" -- "1" Annotation: extends
+  Annotation "*" -- "*" ConceptInterface: implements
   Classifier "1" o-- "*" Feature: features
   Concept "*" -- "0..1" Concept: extends
   Concept "*" -- "*" ConceptInterface: implements

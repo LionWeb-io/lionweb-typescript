@@ -109,6 +109,21 @@ classifier.havingFeatures(
 link_type.ofType(classifier)
 
 
+const annotation = factory.concept("Annotation", false, classifier)
+
+const annotation_annotates = factory.reference(annotation, "annotates")
+    .isOptional()
+    .ofType(classifier)
+
+const annotation_extends = factory.reference(annotation, "extends")
+    .ofType(annotation)
+
+const annotation_implements = factory.reference(annotation, "implements")
+    .isMultiple()
+
+annotation.havingFeatures(annotation_annotates, annotation_extends, annotation_implements)
+
+
 const concept = factory.concept("Concept", false, classifier)
 
 const concept_abstract = factory.property(concept, "abstract")
@@ -142,6 +157,7 @@ const conceptInterface_extends = factory.reference(conceptInterface, "extends")
 
 conceptInterface.havingFeatures(conceptInterface_extends)
 
+annotation_implements.ofType(conceptInterface)
 concept_implements.ofType(conceptInterface)
 
 
@@ -197,6 +213,7 @@ lioncore.havingEntities(
     reference,
     languageEntity,
     classifier,
+    annotation,
     concept,
     conceptInterface,
     dataType,
@@ -208,6 +225,7 @@ lioncore.havingEntities(
 
 
 export const metaConcepts = {
+    annotation,
     concept,
     conceptInterface,
     containment,
@@ -220,7 +238,10 @@ export const metaConcepts = {
 }
 
 export const metaFeatures = {
-    ikeyed_key,
+    annotation_annotates,
+    annotation_extends,
+    annotation_implements,
+    classifier_features,
     concept_abstract,
     concept_partition,
     concept_extends,
@@ -228,12 +249,12 @@ export const metaFeatures = {
     conceptInterface_extends,
     enumeration_literals,
     feature_optional,
-    link_multiple,
-    link_type,
-    classifier_features,
-    language_version,
+    ikeyed_key,
     language_dependsOn,
     language_entities,
+    language_version,
+    link_multiple,
+    link_type,
     property_type
 }
 
