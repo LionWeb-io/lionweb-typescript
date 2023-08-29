@@ -1,5 +1,4 @@
 import {assertEquals} from "./deps.ts"
-import {writeJsonAsFile} from "./utils/json.ts"
 import {undefinedValuesDeletedFrom} from "./utils/test-helpers.ts"
 import {serializeNodes} from "../src/serializer.ts"
 import {deserializeModel} from "../src/deserializer.ts"
@@ -11,9 +10,8 @@ import {libraryLanguage} from "./m3/library-language.ts"
 
 Deno.test("Library test model", async (tctx) => {
 
-    await tctx.step("[de-]serialize example library", async () => {
+    await tctx.step("[de-]serialize example library", () => {
         const serialization = serializeNodes(libraryModel, libraryModelApi)
-        await writeJsonAsFile("models/instance/library.json", serialization)
         const deserialization = deserializeModel(undefinedValuesDeletedFrom(serialization), libraryModelApi, libraryLanguage, [])
         assertEquals(deserialization, libraryModel)
     })

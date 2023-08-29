@@ -63,11 +63,12 @@ The following is a list of links to potential starting points:
 * [Models](models/) - various models in their serialized formats (the LIonWeb JSON format, or Ecore XML); see the [specific README](models/README.md).
 * [Schemas](schemas/) - various JSON Schema files for validating models serialized in the LIonWeb JSON format against; see the [specific README](schemas/README.md).
 * [Source](src/) - all TypeScript source to be exported as part of the NPM/Deno package.
-* [Command-line interface](src-cli/) - TypeScript source that implements a single-entrypoint CLI for utilities around the LIonCore functionality, such as: JSON Schema and diagram generation, textual syntax, extractors for the deserialization format, Ecore import, etc.
 * [Scripts](src-build) - a `build-npm.ts` Deno script to package the source as an NPM package using [`dnt`](https://github.com/denoland/dnt).
+* [Command-line interface](src-cli/) - TypeScript source that implements a single-entrypoint CLI for utilities around the LIonCore functionality, such as: JSON Schema and diagram generation, textual syntax, extractors for the deserialization format, Ecore import, etc.
 * [Test sources](src-test/) - all TypeScript sources with/for (unit) tests.
   Tests are located in files with names ending with `.test.ts`.
   Any such file tests the file under the same path in `src/` that has the same name minus the `.test` part.
+* [Utilities](src-utils/) - TypeScript source that implements utilities around LIonCore, but should not go in the NPM package.
 
 **TODO**  elaborate
 
@@ -96,7 +97,7 @@ The following are considerations or concerns that bubbled up during implementati
 Run
 
 ```shell
-deno run -A src-build/build-npm.ts
+deno task build-npm
 ```
 
 This will create a package in the `npm` directory.

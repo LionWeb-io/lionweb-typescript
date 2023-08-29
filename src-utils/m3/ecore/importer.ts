@@ -1,5 +1,5 @@
-import {Classifier, Concept, Feature, Language, LanguageEntity, PrimitiveType} from "../types.ts"
-import {LanguageFactory} from "../factory.ts"
+import {Classifier, Concept, Feature, Language, LanguageEntity, PrimitiveType} from "../../../src/m3/types.ts"
+import {LanguageFactory} from "../../../src/m3/factory.ts"
 import {
     checkDefinedData,
     checkUniqueData,
@@ -7,12 +7,12 @@ import {
     checkValidId,
     hashingIdGen,
     wrapIdGen
-} from "../../id-generation.ts"
+} from "../../../src/id-generation.ts"
 import {EClassifier, EcoreXml, EStructuralFeature} from "./types.ts"
-import {ConceptType, keyOf, namedsOf, qualifiedNameOf} from "../functions.ts"
-import {builtinPrimitives} from "../builtins.ts"
-import {duplicatesAmong} from "../../utils/grouping.ts"
-import {asArray} from "../../utils/array-helpers.ts"
+import {ConceptType, keyOf, namedsOf, qualifiedNameOf} from "../../../src/m3/functions.ts"
+import {builtinPrimitives} from "../../../src/m3/builtins.ts"
+import {duplicatesAmong} from "../../../src/utils/grouping.ts"
+import {asArray} from "../../../src/utils/array-helpers.ts"
 
 
 const localRefPrefix = "#//"

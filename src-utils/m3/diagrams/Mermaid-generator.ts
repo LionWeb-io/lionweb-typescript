@@ -9,9 +9,9 @@ import {
     LanguageEntity,
     Link,
     PrimitiveType
-} from "../types.ts"
-import {entitiesSortedByName, nonRelationalFeatures, relationsOf, type} from "../functions.ts"
-import {isRef, unresolved} from "../../references.ts"
+} from "../../../src/m3/types.ts"
+import {entitiesSortedByName, nonRelationalFeatures, relationsOf, type} from "../../../src/m3/functions.ts"
+import {isRef, unresolved} from "../../../src/references.ts"
 
 
 // define some layouting basics/building algebra:
@@ -38,7 +38,7 @@ const withNewLine = (content: NestedString): NestedString =>
  * Generates a string with a Mermaid class diagram
  * representing the given {@link Language LIonCore/M3 instance}.
  */
-export const generateMermaidForMetamodel = ({entities}: Language) =>
+export const generateMermaidForLanguage = ({entities}: Language) =>
     asString([
         "```mermaid",
         `classDiagram

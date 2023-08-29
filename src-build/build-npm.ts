@@ -7,8 +7,8 @@ await emptyDir("./npm/script/src-test/m3")
 await emptyDir("./npm/esm/src-test/m3/ecore")
 await emptyDir("./npm/script/src-test/m3/ecore")
 
-await copy("schemas", "npm/esm/schemas", { overwrite: true });
-await copy("schemas", "npm/script/schemas", { overwrite: true });
+await copy("schemas", "npm/esm/schemas", { overwrite: true })
+await copy("schemas", "npm/script/schemas", { overwrite: true })
 await copy("diagrams", "npm/esm/diagrams", { overwrite: true })
 await copy("diagrams", "npm/script/diagrams", { overwrite: true })
 await copy("models", "npm/esm/models", { overwrite: true })

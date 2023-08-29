@@ -1,6 +1,6 @@
-import {Concept, Datatype, Enumeration, Feature, Language, PrimitiveType, Property} from "./types.ts"
-import {allFeaturesOf, isConcrete, isContainment, isEnumeration, isProperty, isReference} from "./functions.ts"
-import {isRef} from "../references.ts"
+import {Concept, Datatype, Enumeration, Feature, Language, PrimitiveType, Property} from "../../src/m3/types.ts"
+import {allFeaturesOf, isConcrete, isContainment, isEnumeration, isProperty, isReference} from "../../src/m3/functions.ts"
+import {isRef} from "../../src/references.ts"
 // TODO  import types for JSON Schema for added type-safety?
 
 

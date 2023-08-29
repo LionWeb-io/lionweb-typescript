@@ -1,4 +1,4 @@
-import {AnyNumberOf} from "../../utils/array-helpers.ts"
+import {AnyNumberOf} from "../../../src/utils/array-helpers.ts"
 
 
 /**

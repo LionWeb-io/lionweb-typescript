@@ -16,7 +16,7 @@ import {sortByStringKey} from "../utils/sorting.ts"
 import {SingleRef, unresolved} from "../references.ts"
 
 
-// TODO  use littoral-templates!
+// TODO  use littoral-templates?
 const indent = (str: string) =>
     str.split("\n").map((line) => `    ${line}`).join("\n")
 

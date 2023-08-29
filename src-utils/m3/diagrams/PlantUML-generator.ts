@@ -9,9 +9,9 @@ import {
     LanguageEntity,
     Link,
     PrimitiveType
-} from "../types.ts"
-import {entitiesSortedByName, nonRelationalFeatures, relationsOf, type} from "../functions.ts"
-import {isRef, unresolved} from "../../references.ts"
+} from "../../../src/m3/types.ts"
+import {entitiesSortedByName, nonRelationalFeatures, relationsOf, type} from "../../../src/m3/functions.ts"
+import {isRef, unresolved} from "../../../src/references.ts"
 
 
 const indented = indentWith(`  `)(1)
@@ -21,7 +21,7 @@ const indented = indentWith(`  `)(1)
  * Generates a string with a PlantUML class diagram
  * representing the given {@link Language LIonCore/M3 instance}.
  */
-export const generatePlantUmlForMetamodel = ({name, entities}: Language) =>
+export const generatePlantUmlForLanguage = ({name, entities}: Language) =>
     asString([
 `@startuml
 hide empty members

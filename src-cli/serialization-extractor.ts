@@ -1,9 +1,9 @@
 import {extensionOfPath} from "./deps.ts"
-import {shortenSerialization, sortSerialization} from "./serialization-utils.ts"
-import {writeJsonAsFile} from "../src-test/utils/json.ts"
-import {asText} from "../src/m3/textual-syntax.ts"
+import {shortenSerialization, sortSerialization} from "../src-utils/serialization-utils.ts"
+import {writeJsonAsFile} from "../src-utils/json.ts"
 import {deserializeLanguage} from "../src/m3/deserializer.ts"
 import {lioncoreQName} from "../src/m3/lioncore.ts"
+import {asText} from "../src/m3/textual-syntax.ts"
 
 
 const isRecord = (json: unknown): json is Record<string, unknown> =>

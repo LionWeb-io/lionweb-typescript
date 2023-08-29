@@ -1,11 +1,11 @@
 import {assertEquals, parse} from "../../deps.ts"
-import {asLIonCoreLanguage} from "../../../src/m3/ecore/importer.ts"
+import {asLIonCoreLanguage} from "../../../src-utils/m3/ecore/importer.ts"
 import {serializeLanguage} from "../../../src/m3/serializer.ts"
-import {EcoreXml} from "../../../src/m3/ecore/types.ts"
+import {EcoreXml} from "../../../src-utils/m3/ecore/types.ts"
 import {issuesLanguage} from "../../../src/m3/constraints.ts"
 import {checkReferences} from "../../../src/m3/reference-checker.ts"
-import {generatePlantUmlForMetamodel} from "../../../src/m3/diagrams/PlantUML-generator.ts"
-import {generateMermaidForMetamodel} from "../../../src/m3/diagrams/Mermaid-generator.ts"
+import {generatePlantUmlForLanguage} from "../../../src-utils/m3/diagrams/PlantUML-generator.ts"
+import {generateMermaidForLanguage} from "../../../src-utils/m3/diagrams/Mermaid-generator.ts"
 import {logIssues, logUnresolvedReferences, undefinedValuesDeletedFrom} from "../../utils/test-helpers.ts"
 import {libraryLanguage} from "../library-language.ts"
 
@@ -32,8 +32,8 @@ Deno.test("Ecore importer", async (tctx) => {
         assertEquals(issues, [])
         const serialization = serializeLanguage(language)
         assertEquals(undefinedValuesDeletedFrom(serialization), undefinedValuesDeletedFrom(serializeLanguage(libraryLanguage)))
-        assertEquals(generatePlantUmlForMetamodel(language), generatePlantUmlForMetamodel(libraryLanguage))
-        assertEquals(generateMermaidForMetamodel(language), generateMermaidForMetamodel(libraryLanguage))
+        assertEquals(generatePlantUmlForLanguage(language), generatePlantUmlForLanguage(libraryLanguage))
+        assertEquals(generateMermaidForLanguage(language), generateMermaidForLanguage(libraryLanguage))
     })
 
 })
