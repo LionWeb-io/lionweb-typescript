@@ -5,6 +5,11 @@ import {nameBasedConceptDeducerFor} from "../src/m3/functions.ts"
 import {libraryLanguage} from "./m3/library-language.ts"
 
 
+export enum BookType {
+    Normal,
+    Special,
+}
+
 export type BaseNode = Node & {
     concept: string
 }
@@ -14,6 +19,7 @@ export type Book = BaseNode & {
     title: string
     pages: number
     author: Writer
+    type?: BookType
 }
 
 export type Library = BaseNode & {
@@ -62,7 +68,8 @@ const explorerBook: Book = {
     concept: "Book",
     title: "Explorer Book",
     author: jackLondon,
-    pages: 1337
+    pages: 1337,
+    type: BookType.Special
 }
 
 const bobLibrary: Library = {
