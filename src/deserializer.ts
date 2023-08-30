@@ -1,7 +1,7 @@
 import {Id, Node} from "./types.ts"
 import {SerializationChunk, SerializedNode} from "./serialization.ts"
 import {ModelAPI} from "./api.ts"
-import {Concept, Containment, Language, Property, Reference} from "./m3/types.ts"
+import {Concept, Containment, Enumeration, Language, PrimitiveType, Property, Reference} from "./m3/types.ts"
 import {allFeaturesOf} from "./m3/functions.ts"
 import {deserializeBuiltin} from "./m3/builtins.ts"
 import {groupBy} from "./utils/grouping.ts"
@@ -91,9 +91,20 @@ export const deserializeModel = <NT extends Node>(
         if (properties !== undefined) {
             allFeatures
                 .filter((feature) => feature instanceof Property)
+                .map((feature) => feature as Property)
                 .forEach((property) => {
                     if (property.key in serializedPropertiesPerKey) {
-                        settings[property.key] = deserializeBuiltin(serializedPropertiesPerKey[property.key][0].value, property as Property)
+                        const value = serializedPropertiesPerKey[property.key][0].value
+                        if (property.type instanceof PrimitiveType) {
+                            settings[property.key] = deserializeBuiltin(value, property as Property)
+                        }
+                        if (property.type instanceof Enumeration) {
+                            const literal = property.type.literals.find((literal) => literal.key = value)
+                            if (literal !== undefined) {
+                                settings[property.key] = literal
+                            }
+                        }
+                        // (property is not handled, because neither a primitive type nor of enumeration type)
                     }
                 })
         }
