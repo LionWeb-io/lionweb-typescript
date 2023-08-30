@@ -6,7 +6,7 @@ import {builtinPrimitives} from "../../src/m3/builtins.ts"
 const factory = new LanguageFactory("library", "1", hashingIdGen())
 export const libraryLanguage = factory.language
 
-const {intDatatype, stringDatatype} = builtinPrimitives
+const {integerDatatype, stringDatatype} = builtinPrimitives
 
 const library = factory.concept("Library", false)
 const book = factory.concept("Book", false)
@@ -24,7 +24,7 @@ const library_books = factory.containment(library, "books").ofType(book).isMulti
 library.havingFeatures(library_name, library_books)
 
 const book_title = factory.property(book, "title").ofType(stringDatatype)
-const book_pages = factory.property(book, "pages").ofType(intDatatype)
+const book_pages = factory.property(book, "pages").ofType(integerDatatype)
 const book_author = factory.reference(book, "author").ofType(writer)
 const book_type = factory.property(book, "type").ofType(bookType).isOptional()
 book.havingFeatures(book_title, book_pages, book_author, book_type)

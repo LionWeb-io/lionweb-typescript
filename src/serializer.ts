@@ -2,7 +2,16 @@ import {ConceptDeducer as _ConceptDeducer, ModelAPI} from "./api.ts"
 import {MetaPointer, SerializationChunk, SerializedNode} from "./serialization.ts"
 import {asIds} from "./functions.ts"
 import {Node} from "./types.ts"
-import {Containment, isINamed, Language, Property, Reference} from "./m3/types.ts"
+import {
+    Containment,
+    Enumeration,
+    EnumerationLiteral,
+    isINamed,
+    Language,
+    PrimitiveType,
+    Property,
+    Reference
+} from "./m3/types.ts"
 import {allFeaturesOf} from "./m3/functions.ts"
 import {asArray} from "./utils/array-helpers.ts"
 import {BuiltinPrimitive, lioncoreBuiltins, serializeBuiltin} from "./m3/builtins.ts"
@@ -56,9 +65,20 @@ export const serializeNodes = <NT extends Node>(nodes: NT[], api: ModelAPI<NT>):
                 key: feature.key
             }
             if (feature instanceof Property && value !== undefined) {
+                const encodedValue = (() => {
+                    // (could also just inspect type of value:)
+                    if (feature.type instanceof PrimitiveType) {
+                        return serializeBuiltin(value as BuiltinPrimitive)
+                    }
+                    if (feature.type instanceof Enumeration) {
+                        return (value as EnumerationLiteral).key
+                    }
+                    return null
+                })()
+                if (encodedValue !== null)
                 serializedNode.properties.push({
                     property: featureMetaPointer,
-                    value: serializeBuiltin(value as BuiltinPrimitive)
+                    value: encodedValue
                 })
                 return
             }

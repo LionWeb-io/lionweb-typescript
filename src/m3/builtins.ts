@@ -44,12 +44,12 @@ lioncoreBuiltins.havingEntities(
 )
 
 
-type BuiltinPrimitive = string | boolean | number | Record<string, unknown>
+type BuiltinPrimitive = string | boolean | number | Record<string, unknown> | Array<unknown>
 
 const builtinPrimitives = {
     stringDatatype,
     booleanDatatype,
-    intDatatype: integerDatatype,
+    integerDatatype,
     jsonDatatype
 }
 

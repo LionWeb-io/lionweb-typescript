@@ -22,7 +22,7 @@ const deref = (typeDescriptor: string): string =>
         : typeDescriptor
 
 
-const {booleanDatatype, intDatatype, stringDatatype} = builtinPrimitives
+const {booleanDatatype, integerDatatype, stringDatatype} = builtinPrimitives
 
 /**
  * Converts a parsed Ecore XML metamodel (file) to a {@link Language LIonCore/M3 instance}.
@@ -71,7 +71,7 @@ export const asLIonCoreLanguage = (ecoreXml: EcoreXml, version: string): Languag
             case "ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean":
                 return booleanDatatype
             case "ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int":
-                return intDatatype
+                return integerDatatype
             default:
                 throw new Error(`don't know what to convert this EDataType ref. descriptor to: ${eDataType}`)
         }
