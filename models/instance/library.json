@@ -62,6 +62,14 @@
             "key": "pages"
           },
           "value": "1337"
+        },
+        {
+          "property": {
+            "language": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
+            "version": "1",
+            "key": "type"
+          },
+          "value": "1"
         }
       ],
       "children": [],

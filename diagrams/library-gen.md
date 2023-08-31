@@ -4,6 +4,13 @@ classDiagram
   class Book {
     +String title
     +Integer pages
+    +BookType? type
+  }
+
+  class BookType {
+    <<enumeration>>
+    normal
+    special
   }
 
   class GuideBookWriter {
@@ -26,6 +33,7 @@ classDiagram
 
 
   Book "*" -- "1" Writer: author
+
 
   Library "1" o-- "*" Book: books
 

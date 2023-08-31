@@ -90,6 +90,9 @@
             },
             "pages": {
               "type": "string"
+            },
+            "type": {
+              "$ref": "#/$defs/BookType"
             }
           },
           "required": [
@@ -363,6 +366,12 @@
         {
           "$ref": "#/$defs/SpecialistBookWriter"
         }
+      ]
+    },
+    "BookType": {
+      "enum": [
+        "normal",
+        "special"
       ]
     }
   }
