@@ -1,8 +1,8 @@
-import {Node} from "../src/types.ts"
 import {hashingIdGen} from "../src/id-generation.ts"
 import {ModelAPI, updateSettings} from "../src/api.ts"
 import {nameBasedConceptDeducerFor} from "../src/m3/functions.ts"
 import {libraryLanguage} from "./m3/library-language.ts"
+import {Enumeration, Node, Property} from "../src/mod.ts"
 
 
 export enum BookType {
@@ -45,7 +45,14 @@ export type SpecialistBookWriter = Writer & BaseNode & {
 
 export const libraryModelApi: ModelAPI<BaseNode> = {
     conceptOf: (node) => nameBasedConceptDeducerFor(libraryLanguage)(node.concept),
-    getFeatureValue: (node, feature) => (node as any)[feature.name],
+    getFeatureValue: (node, feature) => {
+        const value = (node as any)[feature.name]
+        // (hateful necessity because of the nature of enumerations in TypeScript:)
+        if (feature instanceof Property && feature.type instanceof Enumeration && feature.type.name === "BookType") {
+            return BookType[value]
+        }
+        return value
+    },
     nodeFor: (_parent, concept, id, _settings) => ({
         id,
         concept: concept.name
@@ -85,7 +92,4 @@ export const libraryModel: BaseNode[] = [
     bobLibrary,
     jackLondon
 ]
-
-// TODO  instantiate exact same library as Federico?
-
 

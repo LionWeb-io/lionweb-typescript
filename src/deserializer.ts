@@ -76,7 +76,6 @@ export const deserializeModel = <NT extends Node>(
             .find((element) =>
                 element instanceof Concept && element.key === conceptMetaPointer.key
             ) as (Concept | undefined)
-        // TODO  replace with idBasedConceptDeducer as soon as that can return undefined (without throwing an Error)
 
         if (concept === undefined) {
             throw new Error(`can't deserialize a node having concept with ID "${conceptMetaPointer.key}"`)
@@ -97,12 +96,15 @@ export const deserializeModel = <NT extends Node>(
                         const value = serializedPropertiesPerKey[property.key][0].value
                         if (property.type instanceof PrimitiveType) {
                             settings[property.key] = deserializeBuiltin(value, property as Property)
+                            return
                         }
                         if (property.type instanceof Enumeration) {
                             const literal = property.type.literals.find((literal) => literal.key = value)
                             if (literal !== undefined) {
                                 settings[property.key] = literal
+                                    // FIXME  literal is now of type EnumerationLiteral...from M3, so typically shouldn't end up in an M1 (-- only works for M2s)
                             }
+                            return
                         }
                         // (property is not handled, because neither a primitive type nor of enumeration type)
                     }

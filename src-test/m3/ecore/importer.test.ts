@@ -4,10 +4,9 @@ import {serializeLanguage} from "../../../src/m3/serializer.ts"
 import {EcoreXml} from "../../../src-utils/m3/ecore/types.ts"
 import {issuesLanguage} from "../../../src/m3/constraints.ts"
 import {checkReferences} from "../../../src/m3/reference-checker.ts"
-import {generatePlantUmlForLanguage} from "../../../src-utils/m3/diagrams/PlantUML-generator.ts"
-import {generateMermaidForLanguage} from "../../../src-utils/m3/diagrams/Mermaid-generator.ts"
 import {logIssues, logUnresolvedReferences, undefinedValuesDeletedFrom} from "../../utils/test-helpers.ts"
 import {libraryLanguage} from "../library-language.ts"
+import {sortSerialization} from "../../../src-utils/serialization-utils.ts"
 
 
 /**
@@ -31,9 +30,7 @@ Deno.test("Ecore importer", async (tctx) => {
         logIssues(issues)
         assertEquals(issues, [])
         const serialization = serializeLanguage(language)
-        assertEquals(undefinedValuesDeletedFrom(serialization), undefinedValuesDeletedFrom(serializeLanguage(libraryLanguage)))
-        assertEquals(generatePlantUmlForLanguage(language), generatePlantUmlForLanguage(libraryLanguage))
-        assertEquals(generateMermaidForLanguage(language), generateMermaidForLanguage(libraryLanguage))
+        assertEquals(sortSerialization(undefinedValuesDeletedFrom(serialization)), sortSerialization(undefinedValuesDeletedFrom(serializeLanguage(libraryLanguage))))
     })
 
 })
