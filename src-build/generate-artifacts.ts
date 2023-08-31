@@ -3,6 +3,7 @@ import {lioncoreBuiltins} from "../src/m3/builtins.ts"
 import {lioncore} from "../src/m3/lioncore.ts"
 import {serializeLanguage} from "../src/m3/serializer.ts"
 import {Language} from "../src/m3/types.ts"
+import {languageWithEnum} from "../src-test/m3/language-with-enum.ts"
 import {libraryLanguage} from "../src-test/m3/library-language.ts"
 import {libraryModel, libraryModelApi} from "../src-test/library.ts"
 import {generatePlantUmlForLanguage} from "../src-utils/m3/diagrams/PlantUML-generator.ts"
@@ -32,6 +33,8 @@ console.log(`generated diagrams for Library M2`)
 await writeJsonAsFile("models/instance/library.json", serializeNodes(libraryModel, libraryModelApi))
 console.log(`serialized library M1`)
 
+
+await writeJsonAsFile("models/meta/language-with-enum.json", serializeLanguage(languageWithEnum))
 
 const persistSchemaFor = async (language: Language) => {
     const schema = schemaFor(language)

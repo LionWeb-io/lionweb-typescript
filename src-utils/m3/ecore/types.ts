@@ -28,7 +28,7 @@ export type EcorePackage = ENamed & {
     "eClassifiers": EClassifier[]
 }
 
-export type EClassifier = EClass
+export type EClassifier = EClass | EEnum
 
 export type EClass = ENamed & {
     "@xsi:type": "ecore:EClass"
@@ -51,4 +51,11 @@ export type EReference = ENamed & {
     "@eType": string    // `#//${targetType.name}`
     "@containment": boolean
 }
+
+export type EEnum = ENamed & {
+    "@xsi:type": "ecore:EEnum"
+    "eLiterals"?: AnyNumberOf<EEnumLiteral>
+}
+
+export type EEnumLiteral = ENamed
 

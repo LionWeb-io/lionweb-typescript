@@ -15,7 +15,7 @@ Deno.test("key generation", async (tctx) => {
 
         assertEquals(form.key, "FormLanguage-Form")
 
-        const size = factory.property(form, "size").ofType(builtinPrimitives.intDatatype)
+        const size = factory.property(form, "size").ofType(builtinPrimitives.integerDatatype)
         form.havingFeatures(size)
 
         assertEquals(size.key, "FormLanguage-Form-size")

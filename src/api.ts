@@ -1,5 +1,5 @@
 import {Node} from "./types.ts"
-import {Concept, Feature, Link} from "./m3/types.ts"
+import {Concept, Enumeration, EnumerationLiteral, Feature, Link} from "./m3/types.ts"
 import {flatMapNonCyclingFollowing, trivialFlatMapper} from "./utils/recursion.ts"
 import {allFeaturesOf, isContainment} from "./m3/functions.ts"
 
@@ -29,6 +29,11 @@ interface ModelAPI<NT extends Node> {
      */
     getFeatureValue: (node: NT, feature: Feature) => unknown
 
+    /**
+     * @return The {@link EnumerationLiteral} corresponding to
+     * the given {@link Enumeration} and the runtime encoding of a literal of it,
+     */
+    enumerationLiteralFrom: (encoding: unknown, enumeration: Enumeration) => EnumerationLiteral | null
 
     /**
      * @return An instance of the given concept, also given its parent (or {@link undefined} for root nodes),
@@ -43,8 +48,13 @@ interface ModelAPI<NT extends Node> {
      */
     setFeatureValue: (node: NT, feature: Feature, value: unknown) => void
 
+    /**
+     * @return The runtime encoding of the given {@link EnumerationLiteral}.
+     */
+    encodingOf: (literal: EnumerationLiteral) => unknown
+
 }
-// TODO  could separate this in write- and read-only parts
+// TODO  separate this in write- and read-only parts
 
 
 /**

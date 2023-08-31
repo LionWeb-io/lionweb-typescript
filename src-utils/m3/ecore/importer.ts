@@ -1,4 +1,12 @@
-import {Classifier, Concept, Feature, Language, LanguageEntity, PrimitiveType} from "../../../src/m3/types.ts"
+import {
+    Classifier,
+    Concept,
+    Enumeration,
+    Feature,
+    Language,
+    LanguageEntity,
+    PrimitiveType
+} from "../../../src/m3/types.ts"
 import {LanguageFactory} from "../../../src/m3/factory.ts"
 import {
     checkDefinedData,
@@ -9,20 +17,31 @@ import {
     wrapIdGen
 } from "../../../src/id-generation.ts"
 import {EClassifier, EcoreXml, EStructuralFeature} from "./types.ts"
-import {ConceptType, keyOf, namedsOf, qualifiedNameOf} from "../../../src/m3/functions.ts"
+import {keyOf, namedsOf, qualifiedNameOf} from "../../../src/m3/functions.ts"
 import {builtinPrimitives} from "../../../src/m3/builtins.ts"
 import {duplicatesAmong} from "../../../src/utils/grouping.ts"
 import {asArray} from "../../../src/utils/array-helpers.ts"
 
 
 const localRefPrefix = "#//"
+/**
+ * "Dereferences" a type descriptor string by removing the optional <pre>"#//"</pre> prefix.
+ */
 const deref = (typeDescriptor: string): string =>
     typeDescriptor.startsWith(localRefPrefix)
         ? typeDescriptor.substring(localRefPrefix.length)
         : typeDescriptor
 
 
-const {booleanDatatype, intDatatype, stringDatatype} = builtinPrimitives
+const {booleanDatatype, integerDatatype, stringDatatype} = builtinPrimitives
+
+const typeDesc2primitiveType: Record<string, PrimitiveType> = {
+    "ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString": stringDatatype,
+    "ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String": stringDatatype,
+    "ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean": booleanDatatype,
+    "ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int": integerDatatype
+}
+
 
 /**
  * Converts a parsed Ecore XML metamodel (file) to a {@link Language LIonCore/M3 instance}.
@@ -46,9 +65,17 @@ export const asLIonCoreLanguage = (ecoreXml: EcoreXml, version: string): Languag
 
     // phase 1: convert EClassifiers but without their EStructuralFeatures (in the case of EClasses)
 
-    const convertEClassifier = (eClassifier: EClassifier): ConceptType =>
-        factory.concept(eClassifier["@name"], false)
-    // TODO (#10)  ConceptInterface, Enumeration
+    const convertEClassifier = (eClassifier: EClassifier): LanguageEntity => {
+        const xsiType = eClassifier["@xsi:type"]
+        if (xsiType === "ecore:EClass") {
+            return factory.concept(eClassifier["@name"], false)
+        }
+        if (xsiType === "ecore:EEnum") {
+            return factory.enumeration(eClassifier["@name"])
+        }
+        throw new Error(`don't know how to convert an EClassifier with descriptor "${xsiType}"`)
+    }
+    // TODO (#10)  ConceptInterface?
 
     const convertedEClassifiers: [eClassifier: EClassifier, element: LanguageEntity][] =
         ePackage["eClassifiers"]
@@ -63,27 +90,18 @@ export const asLIonCoreLanguage = (ecoreXml: EcoreXml, version: string): Languag
 
     // phase 2: also convert features of EClasses
 
-    const convertEDataType = (eDataType: string): PrimitiveType => {
-        switch (eDataType) {
-            case "ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString":
-            case "ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String":
-                return stringDatatype
-            case "ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean":
-                return booleanDatatype
-            case "ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int":
-                return intDatatype
-            default:
-                throw new Error(`don't know what to convert this EDataType ref. descriptor to: ${eDataType}`)
-        }
-    }
-
     const convertEStructuralFeature = (container: Classifier, feature: EStructuralFeature): Feature => {
         const metaType = feature["@xsi:type"]
         const name = feature["@name"]
         switch (metaType) {
             case "ecore:EAttribute": {
+                const typeDesc = feature["@eType"]
                 const property = factory.property(container, name)
-                    .ofType(convertEDataType(feature["@eType"]))
+                    .ofType(
+                        typeDesc in typeDesc2primitiveType
+                            ? typeDesc2primitiveType[typeDesc]
+                            : eClassifierConversionFor(deref(typeDesc))
+                    )
                 if (feature["@lowerBound"] === "0") {
                     property.isOptional()
                 }
@@ -110,19 +128,27 @@ export const asLIonCoreLanguage = (ecoreXml: EcoreXml, version: string): Languag
     }
 
     convertedEClassifiers.forEach(([source, target]) => {
-        if (source["@xsi:type"] === "ecore:EClass") {
-            const eClass = source
-            const container = target as Classifier
-            container
+        const xsiType = source["@xsi:type"]
+        if (xsiType === "ecore:EClass") {
+            const classifier = target as Classifier
+            classifier
                 .havingFeatures(
                     ...asArray(source.eStructuralFeatures)
                         .map((feature) =>
-                            convertEStructuralFeature(container, feature)
+                            convertEStructuralFeature(classifier, feature)
                         )
                 )
-            if (eClass["@eSuperTypes"] !== undefined) {
-                (target as Concept).extends = eClassifierConversionFor(deref(eClass["@eSuperTypes"])) as Concept
+            if (source["@eSuperTypes"] !== undefined) {
+                (target as Concept).extends = eClassifierConversionFor(deref(source["@eSuperTypes"])) as Concept
             }
+        }
+        if (xsiType === "ecore:EEnum") {
+            const classifier = target as Enumeration
+            classifier
+                .havingLiterals(
+                ...asArray(source.eLiterals)
+                    .map((literal) => factory.enumerationLiteral(classifier, literal["@name"]))
+                )
         }
     })
 

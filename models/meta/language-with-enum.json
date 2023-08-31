@@ -1,0 +1,167 @@
+{
+  "serializationFormatVersion": "1",
+  "languages": [
+    {
+      "key": "LIonCore-M3",
+      "version": "1"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "UfCEoQh-4-t4S9dmDP2-zHdaPk6qqsAO6VUMYfawa1g",
+      "concept": {
+        "language": "LIonCore-M3",
+        "version": "1",
+        "key": "Language"
+      },
+      "properties": [
+        {
+          "property": {
+            "language": "LIonCore-M3",
+            "version": "1",
+            "key": "Language-version"
+          },
+          "value": "1"
+        },
+        {
+          "property": {
+            "language": "LIonCore-M3",
+            "version": "1",
+            "key": "IKeyed-key"
+          },
+          "value": "UfCEoQh-4-t4S9dmDP2-zHdaPk6qqsAO6VUMYfawa1g"
+        },
+        {
+          "property": {
+            "language": "LIonCore-builtins",
+            "version": "1",
+            "key": "LIonCore-builtins-INamed-name"
+          },
+          "value": "language-with-enum"
+        }
+      ],
+      "children": [
+        {
+          "containment": {
+            "language": "LIonCore-M3",
+            "version": "1",
+            "key": "Language-entities"
+          },
+          "children": [
+            "Qi7Wpg6M_NYxbkYHsjMNAM0WOQe37Y5HAQtYekPdoIY"
+          ]
+        }
+      ],
+      "references": [
+        {
+          "reference": {
+            "language": "LIonCore-M3",
+            "version": "1",
+            "key": "Language-dependsOn"
+          },
+          "targets": []
+        }
+      ],
+      "parent": null
+    },
+    {
+      "id": "Qi7Wpg6M_NYxbkYHsjMNAM0WOQe37Y5HAQtYekPdoIY",
+      "concept": {
+        "language": "LIonCore-M3",
+        "version": "1",
+        "key": "Enumeration"
+      },
+      "properties": [
+        {
+          "property": {
+            "language": "LIonCore-M3",
+            "version": "1",
+            "key": "IKeyed-key"
+          },
+          "value": "enum"
+        },
+        {
+          "property": {
+            "language": "LIonCore-builtins",
+            "version": "1",
+            "key": "LIonCore-builtins-INamed-name"
+          },
+          "value": "enum"
+        }
+      ],
+      "children": [
+        {
+          "containment": {
+            "language": "LIonCore-M3",
+            "version": "1",
+            "key": "Enumeration-literals"
+          },
+          "children": [
+            "bfdoazbCiEXFHVQ3Ei5Nh-IbR-sWl-7yHscJlpJywdM",
+            "I0IVus3fEHpPA-fLQFw10H7T9L271O7W3aG3LWXatXY"
+          ]
+        }
+      ],
+      "references": [],
+      "parent": "UfCEoQh-4-t4S9dmDP2-zHdaPk6qqsAO6VUMYfawa1g"
+    },
+    {
+      "id": "bfdoazbCiEXFHVQ3Ei5Nh-IbR-sWl-7yHscJlpJywdM",
+      "concept": {
+        "language": "LIonCore-M3",
+        "version": "1",
+        "key": "EnumerationLiteral"
+      },
+      "properties": [
+        {
+          "property": {
+            "language": "LIonCore-M3",
+            "version": "1",
+            "key": "IKeyed-key"
+          },
+          "value": "lit1"
+        },
+        {
+          "property": {
+            "language": "LIonCore-builtins",
+            "version": "1",
+            "key": "LIonCore-builtins-INamed-name"
+          },
+          "value": "lit1"
+        }
+      ],
+      "children": [],
+      "references": [],
+      "parent": "Qi7Wpg6M_NYxbkYHsjMNAM0WOQe37Y5HAQtYekPdoIY"
+    },
+    {
+      "id": "I0IVus3fEHpPA-fLQFw10H7T9L271O7W3aG3LWXatXY",
+      "concept": {
+        "language": "LIonCore-M3",
+        "version": "1",
+        "key": "EnumerationLiteral"
+      },
+      "properties": [
+        {
+          "property": {
+            "language": "LIonCore-M3",
+            "version": "1",
+            "key": "IKeyed-key"
+          },
+          "value": "lit2"
+        },
+        {
+          "property": {
+            "language": "LIonCore-builtins",
+            "version": "1",
+            "key": "LIonCore-builtins-INamed-name"
+          },
+          "value": "lit2"
+        }
+      ],
+      "children": [],
+      "references": [],
+      "parent": "Qi7Wpg6M_NYxbkYHsjMNAM0WOQe37Y5HAQtYekPdoIY"
+    }
+  ]
+}

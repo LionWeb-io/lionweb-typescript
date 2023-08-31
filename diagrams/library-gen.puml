@@ -7,6 +7,12 @@ hide empty members
 class Book {
   title: String
   pages: Integer
+  type: BookType?
+}
+
+enum BookType {
+  Normal
+  Special
 }
 
 class GuideBookWriter extends Writer {
@@ -30,6 +36,7 @@ class Writer {
 ' relations:
 
 Book "*" -- "1" Writer: author
+
 
 Library "1" o-- "*" Book: books
 

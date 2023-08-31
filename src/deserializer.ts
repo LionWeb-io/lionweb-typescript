@@ -1,7 +1,7 @@
 import {Id, Node} from "./types.ts"
 import {SerializationChunk, SerializedNode} from "./serialization.ts"
 import {ModelAPI} from "./api.ts"
-import {Concept, Containment, Language, Property, Reference} from "./m3/types.ts"
+import {Concept, Containment, Enumeration, Language, PrimitiveType, Property, Reference} from "./m3/types.ts"
 import {allFeaturesOf} from "./m3/functions.ts"
 import {deserializeBuiltin} from "./m3/builtins.ts"
 import {groupBy} from "./utils/grouping.ts"
@@ -23,13 +23,13 @@ const byIdMap = <T extends { id: Id }>(ts: T[]): { [id: Id]: T } => {
  * @return a deserialization of a serialized model
  *
  * @param serializationChunk - a {@link SerializedModel model} from its LIonWeb serialization JSON format
- * @param modelAPI - a {@link ModelAPI model API} that is used to instantiate nodes and set values on them
+ * @param api - a {@link ModelAPI model API} that is used to instantiate nodes and set values on them
  * @param language - a {@link Language language} that the serialized model is expected to conform to
  * @param dependentNodes - a collection of nodes from dependent models against which all references in the serialized model are supposed to resolve against
  */
 export const deserializeModel = <NT extends Node>(
     serializationChunk: SerializationChunk,
-    modelAPI: ModelAPI<NT>,
+    api: ModelAPI<NT>,
     language: Language,
     dependentNodes: Node[]
     // TODO (#13)  see if you can turn this into [nodes: Node[], api: ModelAPI<Node>][] after all
@@ -76,7 +76,6 @@ export const deserializeModel = <NT extends Node>(
             .find((element) =>
                 element instanceof Concept && element.key === conceptMetaPointer.key
             ) as (Concept | undefined)
-        // TODO  replace with idBasedConceptDeducer as soon as that can return undefined (without throwing an Error)
 
         if (concept === undefined) {
             throw new Error(`can't deserialize a node having concept with ID "${conceptMetaPointer.key}"`)
@@ -91,14 +90,27 @@ export const deserializeModel = <NT extends Node>(
         if (properties !== undefined) {
             allFeatures
                 .filter((feature) => feature instanceof Property)
+                .map((feature) => feature as Property)
                 .forEach((property) => {
                     if (property.key in serializedPropertiesPerKey) {
-                        settings[property.key] = deserializeBuiltin(serializedPropertiesPerKey[property.key][0].value, property as Property)
+                        const value = serializedPropertiesPerKey[property.key][0].value
+                        if (property.type instanceof PrimitiveType) {
+                            settings[property.key] = deserializeBuiltin(value, property as Property)
+                            return
+                        }
+                        if (property.type instanceof Enumeration) {
+                            const literal = property.type.literals.find((literal) => literal.key = value)
+                            if (literal !== undefined) {
+                                settings[property.key] = api.encodingOf(literal)
+                            }
+                            return
+                        }
+                        // (property is not handled, because neither a primitive type nor of enumeration type)
                     }
                 })
         }
 
-        const node = modelAPI.nodeFor(parent, concept, id, settings)
+        const node = api.nodeFor(parent, concept, id, settings)
 
         const serializedChildrenPerKey =
             children === undefined ? {} : groupBy(children, (sp) => sp.containment.key)
@@ -108,17 +120,17 @@ export const deserializeModel = <NT extends Node>(
         allFeatures
             .forEach((feature) => {
                 if (feature instanceof Property && properties !== undefined && feature.key in serializedPropertiesPerKey) {
-                    modelAPI.setFeatureValue(node, feature, settings[feature.key])
+                    api.setFeatureValue(node, feature, settings[feature.key])
                 } else if (feature instanceof Containment && children !== undefined && feature.key in serializedChildrenPerKey) {
                     const childIds = serializedChildrenPerKey[feature.key].flatMap((serChildren) => serChildren.children) as Id[]
                     if (feature.multiple) {
                         childIds
                             .forEach((childId) => {
-                                modelAPI.setFeatureValue(node, feature, instantiateMemoised(serializedNodeById[childId], node))
+                                api.setFeatureValue(node, feature, instantiateMemoised(serializedNodeById[childId], node))
                             })
                     } else {
                         if (childIds.length > 0) {
-                            modelAPI.setFeatureValue(node, feature, instantiateMemoised(serializedNodeById[childIds[0]], node))
+                            api.setFeatureValue(node, feature, instantiateMemoised(serializedNodeById[childIds[0]], node))
                         }
                     }
                 } else if (feature instanceof Reference && references !== undefined && feature.key in serializedReferencesPerKey) {
@@ -153,7 +165,7 @@ export const deserializeModel = <NT extends Node>(
             }
             return target
         }
-        modelAPI.setFeatureValue(node, reference, lookUpById())
+        api.setFeatureValue(node, reference, lookUpById())
     })
 
     return rootNodes
