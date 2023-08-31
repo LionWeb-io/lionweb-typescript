@@ -11,8 +11,8 @@ class Book {
 }
 
 enum BookType {
-  normal
-  special
+  Normal
+  Special
 }
 
 class GuideBookWriter extends Writer {

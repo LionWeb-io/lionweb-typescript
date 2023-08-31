@@ -390,8 +390,8 @@
             "key": "Enumeration-literals"
           },
           "children": [
-            "MmKnsBb6x4yiu851ifgcciz6b9l04t71Wb7dOh-_TyQ",
-            "eoiASMXI8SCLxlRX-OCwJLLcpe5j_skD97zzB5Gix6s"
+            "I5CCX1NbCOzV2c_vtCJKrp0iHdqwYgNPeiQfLL4Gejg",
+            "U5NXStjkSAQJfuMgoi5zUDKJVbckzm_97dtBgm-AVLI"
           ]
         }
       ],
@@ -399,7 +399,7 @@
       "parent": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow"
     },
     {
-      "id": "MmKnsBb6x4yiu851ifgcciz6b9l04t71Wb7dOh-_TyQ",
+      "id": "I5CCX1NbCOzV2c_vtCJKrp0iHdqwYgNPeiQfLL4Gejg",
       "concept": {
         "language": "LIonCore-M3",
         "version": "1",
@@ -412,7 +412,7 @@
             "version": "1",
             "key": "IKeyed-key"
           },
-          "value": "normal"
+          "value": "Normal"
         },
         {
           "property": {
@@ -420,7 +420,7 @@
             "version": "1",
             "key": "LIonCore-builtins-INamed-name"
           },
-          "value": "normal"
+          "value": "Normal"
         }
       ],
       "children": [],
@@ -428,7 +428,7 @@
       "parent": "6S4CvZSArQGBLCO7FvP8hXw2gMpIzIjXGGz6pyTy-rA"
     },
     {
-      "id": "eoiASMXI8SCLxlRX-OCwJLLcpe5j_skD97zzB5Gix6s",
+      "id": "U5NXStjkSAQJfuMgoi5zUDKJVbckzm_97dtBgm-AVLI",
       "concept": {
         "language": "LIonCore-M3",
         "version": "1",
@@ -441,7 +441,7 @@
             "version": "1",
             "key": "IKeyed-key"
           },
-          "value": "special"
+          "value": "Special"
         },
         {
           "property": {
@@ -449,7 +449,7 @@
             "version": "1",
             "key": "LIonCore-builtins-INamed-name"
           },
-          "value": "special"
+          "value": "Special"
         }
       ],
       "children": [],

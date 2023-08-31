@@ -15,8 +15,8 @@ const guideBookWriter = factory.concept("GuideBookWriter", false, writer)
 const specialistBookWriter = factory.concept("SpecialistBookWriter", false, writer)
 const bookType = factory.enumeration("BookType")
 bookType.havingLiterals(
-        factory.enumerationLiteral(bookType, "normal"),
-        factory.enumerationLiteral(bookType, "special"),
+        factory.enumerationLiteral(bookType, "Normal"),
+        factory.enumerationLiteral(bookType, "Special"),
     )
 
 const library_name = factory.property(library, "name").ofType(stringDatatype).havingKey("library_Library_name")

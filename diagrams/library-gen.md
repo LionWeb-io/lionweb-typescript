@@ -9,8 +9,8 @@ classDiagram
 
   class BookType {
     <<enumeration>>
-    normal
-    special
+    Normal
+    Special
   }
 
   class GuideBookWriter {

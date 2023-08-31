@@ -370,8 +370,8 @@
     },
     "BookType": {
       "enum": [
-        "normal",
-        "special"
+        "Normal",
+        "Special"
       ]
     }
   }
