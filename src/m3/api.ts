@@ -28,6 +28,7 @@ export const lioncoreAPIWithKeyGen = (keyGen: KeyGenerator): ModelAPI<M3Concept>
     conceptOf: classBasedConceptDeducerFor(lioncore),
     getFeatureValue: (node, feature) =>
         (node as any)[feature.name],
+    enumerationLiteralFrom: (value, _) => value as (EnumerationLiteral | null),
     nodeFor: (parent, concept, id, settings) => {
         switch (concept.key) {
             case metaConcepts.concept.key:
@@ -54,7 +55,8 @@ export const lioncoreAPIWithKeyGen = (keyGen: KeyGenerator): ModelAPI<M3Concept>
     },
     setFeatureValue: (node, feature, value) => {
         updateSettings(node as unknown as Record<string, unknown>, feature, value)
-    }
+    },
+    encodingOf: (literal) => literal
 })
 
 

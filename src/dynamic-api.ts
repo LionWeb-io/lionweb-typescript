@@ -19,6 +19,9 @@ export const dynamicModelAPI: ModelAPI<DynamicNode> = ({
     conceptOf: (node) => node.concept,
     getFeatureValue: (node, feature) =>
         (node.settings as any)[feature.name],
+    enumerationLiteralFrom: (value, enumeration) =>
+        enumeration.literals.find(({key}) => key === value)
+            ?? null,    // (undefined -> null)
     nodeFor: (_parent, concept, id, _settings) => ({
         id,
         concept,
@@ -26,7 +29,8 @@ export const dynamicModelAPI: ModelAPI<DynamicNode> = ({
     }),
     setFeatureValue: (node, feature, value) => {
         updateSettings(node.settings, feature, value)
-    }
+    },
+    encodingOf: ({key}) => key
 })
 // TODO  use feature's key instead of name
 

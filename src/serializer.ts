@@ -9,10 +9,7 @@ import {BuiltinPrimitive, lioncoreBuiltins, serializeBuiltin} from "./m3/builtin
 
 
 /**
- * Serializes a model (i.e., an array of {@link Node nodes} - the first argument) to the LIonWeb serialization JSON format.
- * The {@link ModelAPI model API} given as second argument is used for its {@link _ConceptDeducer 'conceptOf' function}.
- * This usage implies that the serialization will conform to (the metamodel of) a particular {@link Language language},
- * which means that models that _don't_ conform to a (given) language can't be serialized truthfully!
+ * @return a {@link SerializationChunk} of the given model (i.e., an array of {@link Node nodes} - the first argument) to the LIonWeb serialization JSON format.
  */
 export const serializeNodes = <NT extends Node>(nodes: NT[], api: ModelAPI<NT>): SerializationChunk /* <=> JSON */ => {
     const serializedNodes: SerializedNode[] = []  // keep nodes as much as possible "in order"
@@ -62,7 +59,8 @@ export const serializeNodes = <NT extends Node>(nodes: NT[], api: ModelAPI<NT>):
                         return serializeBuiltin(value as BuiltinPrimitive)
                     }
                     if (feature.type instanceof Enumeration) {
-                        return value as string  // value is the key of an EnumerationLiteral
+                        return api.enumerationLiteralFrom(value, feature.type)?.key
+                            ?? null // (undefined -> null)
                     }
                     return null
                 })()
@@ -95,7 +93,7 @@ export const serializeNodes = <NT extends Node>(nodes: NT[], api: ModelAPI<NT>):
                 return
             }
         })
-        serializedNode.parent = parent?.id ?? null
+        serializedNode.parent = parent?.id ?? null  // (undefined -> null)
     }
 
     nodes.forEach((node) => visit(node, undefined))

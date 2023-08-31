@@ -2,12 +2,18 @@ import {hashingIdGen} from "../src/id-generation.ts"
 import {ModelAPI, updateSettings} from "../src/api.ts"
 import {nameBasedConceptDeducerFor} from "../src/m3/functions.ts"
 import {libraryLanguage} from "./m3/library-language.ts"
-import {Enumeration, Node, Property} from "../src/mod.ts"
+import {Node} from "../src/mod.ts"
 
 
 export enum BookType {
     Normal,
     Special,
+}
+// Note: don't want to (have to) adjust this definition to "fit" with [de-]serialization ==> leave as-is!
+
+// all enumerations in a lookup table, making use of the fact that at runtime a TS enum is also a value (an object):
+const rtEnums: { [enumKey: string]: unknown } = {
+    "BookType": BookType
 }
 
 export type BaseNode = Node & {
@@ -45,20 +51,34 @@ export type SpecialistBookWriter = Writer & BaseNode & {
 
 export const libraryModelApi: ModelAPI<BaseNode> = {
     conceptOf: (node) => nameBasedConceptDeducerFor(libraryLanguage)(node.concept),
-    getFeatureValue: (node, feature) => {
-        const value = (node as any)[feature.name]
-        // (hateful necessity because of the nature of enumerations in TypeScript:)
-        if (feature instanceof Property && feature.type instanceof Enumeration && feature.type.name === "BookType") {
-            return BookType[value]
-        }
-        return value
+    getFeatureValue: (node, feature) =>
+        (node as any)[feature.name],
+    enumerationLiteralFrom: (value, enumeration) => {
+        const rtEnum = rtEnums[enumeration.key] as any
+        const targetKey = rtEnum[value as number]
+        return enumeration.literals.find(({key}) => key === targetKey)
+            ?? null     // (undefined -> null)
     },
     nodeFor: (_parent, concept, id, _settings) => ({
         id,
         concept: concept.name
     }),
-    setFeatureValue: updateSettings
+    setFeatureValue: updateSettings,
+    encodingOf: (literal) => {
+        const rtEnum = rtEnums[literal.enumeration.key] as any
+        return rtEnum[literal.key as unknown as number]
+    }
+        /*
+         * This is a trick that uses TypeScript's reverse mappings for enumerations
+         * (@see https://www.typescriptlang.org/docs/handbook/enums.html#reverse-mappings).
+         * Unfortunately, it requires some "fugly" type casting to compile:
+         *  'key' really is a string containing the enumeration literal's name.
+         */
 }
+/*
+ * This {@link ModelAPI} implementation shows the problems that enumerations cause with TypeScript (or even: in general).
+ * A TS enum is a type and not an object as far as TS is concerned, which means that reflecting on it requires some jury-rigging through type-casting.
+ */
 
 
 const id = hashingIdGen()
