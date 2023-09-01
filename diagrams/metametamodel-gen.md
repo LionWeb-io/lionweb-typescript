@@ -1,7 +1,9 @@
 ```mermaid
 classDiagram
 
-  class Annotation
+  class Annotation {
+    +Boolean? multiple
+  }
   Classifier <|-- Annotation
 
   class Classifier
@@ -64,7 +66,7 @@ classDiagram
 
 
   Annotation "*" -- "0..1" Classifier: annotates
-  Annotation "*" -- "1" Annotation: extends
+  Annotation "*" -- "0..1" Annotation: extends
   Annotation "*" -- "*" ConceptInterface: implements
   Classifier "1" o-- "*" Feature: features
   Concept "*" -- "0..1" Concept: extends

@@ -111,17 +111,28 @@ link_type.ofType(classifier)
 
 const annotation = factory.concept("Annotation", false, classifier)
 
+const annotation_multiple = factory.property(annotation, "multiple")
+    .isOptional()
+    .ofType(booleanDatatype)
+
 const annotation_annotates = factory.reference(annotation, "annotates")
     .isOptional()
     .ofType(classifier)
 
 const annotation_extends = factory.reference(annotation, "extends")
+    .isOptional()
     .ofType(annotation)
 
 const annotation_implements = factory.reference(annotation, "implements")
     .isMultiple()
+    .isOptional()
 
-annotation.havingFeatures(annotation_annotates, annotation_extends, annotation_implements)
+annotation.havingFeatures(
+    annotation_multiple,
+    annotation_annotates,
+    annotation_extends,
+    annotation_implements
+)
 
 
 const concept = factory.concept("Concept", false, classifier)

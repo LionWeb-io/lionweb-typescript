@@ -1053,6 +1053,7 @@
             "key": "Classifier-features"
           },
           "children": [
+            "-id-Annotation-multiple",
             "-id-Annotation-annotates",
             "-id-Annotation-extends",
             "-id-Annotation-implements"
@@ -1083,6 +1084,57 @@
         }
       ],
       "parent": "-id-LIonCore-M3"
+    },
+    {
+      "id": "-id-Annotation-multiple",
+      "concept": {
+        "language": "LIonCore-M3",
+        "version": "1",
+        "key": "Property"
+      },
+      "properties": [
+        {
+          "property": {
+            "language": "LIonCore-M3",
+            "version": "1",
+            "key": "Feature-optional"
+          },
+          "value": "true"
+        },
+        {
+          "property": {
+            "language": "LIonCore-M3",
+            "version": "1",
+            "key": "IKeyed-key"
+          },
+          "value": "Annotation-multiple"
+        },
+        {
+          "property": {
+            "language": "LIonCore-builtins",
+            "version": "1",
+            "key": "LIonCore-builtins-INamed-name"
+          },
+          "value": "multiple"
+        }
+      ],
+      "children": [],
+      "references": [
+        {
+          "reference": {
+            "language": "LIonCore-M3",
+            "version": "1",
+            "key": "Property-type"
+          },
+          "targets": [
+            {
+              "resolveInfo": "Boolean",
+              "reference": "LIonCore-builtins-Boolean"
+            }
+          ]
+        }
+      ],
+      "parent": "-id-Annotation"
     },
     {
       "id": "-id-Annotation-annotates",
@@ -1165,7 +1217,7 @@
             "version": "1",
             "key": "Feature-optional"
           },
-          "value": "false"
+          "value": "true"
         },
         {
           "property": {
@@ -1224,7 +1276,7 @@
             "version": "1",
             "key": "Feature-optional"
           },
-          "value": "false"
+          "value": "true"
         },
         {
           "property": {

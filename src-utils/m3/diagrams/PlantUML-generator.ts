@@ -103,7 +103,7 @@ const generateForNonRelationalFeature = (feature: Feature) => {
     const {name, optional} = feature
     const multiple = feature instanceof Link && feature.multiple
     const type_ = type(feature)
-    return `${name}: ${multiple ? `List<` : ``}${type_ === unresolved ? `???` : type_.name}${multiple ? `>` : ``}${(optional && !multiple) ? `?` : ``}`
+    return `${name}: ${multiple ? `List<` : ``}${type_ === unresolved ? `???` : type_.name}${multiple ? `>` : ``}${(optional && !multiple) ? ` <<optional>>` : ``}`
 }
 
 

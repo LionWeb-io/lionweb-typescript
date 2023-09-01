@@ -282,6 +282,9 @@
           "type": "array",
           "items": {},
           "properties": {
+            "Annotation-multiple": {
+              "type": "string"
+            },
             "IKeyed-key": {
               "type": "string"
             },

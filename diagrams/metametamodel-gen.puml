@@ -4,7 +4,9 @@ hide empty members
 ' qualified name: "LIonCore.M3"
 
 
-class Annotation extends Classifier
+class Annotation extends Classifier {
+  multiple: Boolean <<optional>>
+}
 
 abstract class Classifier extends LanguageEntity
 
@@ -52,7 +54,7 @@ class Reference extends Link
 ' relations:
 
 Annotation "*" -- "0..1" Classifier: annotates
-Annotation "*" -- "1" Annotation: extends
+Annotation "*" -- "0..1" Annotation: extends
 Annotation "*" -- "*" ConceptInterface: implements
 Classifier "1" o-- "*" Feature: features
 Concept "*" -- "0..1" Concept: extends
