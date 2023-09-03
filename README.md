@@ -92,40 +92,6 @@ The following are considerations or concerns that bubbled up during implementati
   Just error out, or return `(model', issues*)`?
 
 
-## Building an NPM Package
-
-Run
-
-```shell
-deno task build-npm
-```
-
-This will create a package in the `npm` directory.
-The version number stated in the package is stored in the file `src-build/current-version.txt`.
-
-Then, we can build an archive with
-
-```shell
-pushd npm; npm pack; popd
-```
-
-We can use the compressed package as a dependency of local projects, for testing, with e.g.
-
-```json
-"dependencies": {
-    ...
-    "lioncore-typescript": "file:...<relative path>.../lioncore-typescript/npm/lioncore-0.3.0.tgz"
-    ...
-},
-```
-
-Or, we can publish the package to the NPM registry with
-
-```shell
-pushd npm; npm publish; popd
-```
-
-
 ## Extracting essential information from a serialization
 
 Run

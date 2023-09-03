@@ -4,9 +4,8 @@
     "run-tests": "deno task generate-artifacts && deno test --allow-read --allow-write src-test/",
     "watch-tests": "deno task generate-artifacts && deno test --watch --allow-write --allow-read src-test/",
     "lint": "deno lint src/ src-build/ src-cli/ src-test/ src-utils/",
-    "lock-deps": "deno cache --reload --lock=deno.lock --lock-write src/deps.ts src-build/build-npm.ts src-cli/deps.ts src-test/deps.ts src-utils/deps.ts",
-    "compile-cli": "deno compile --allow-read --allow-write src-cli/lioncore-cli.ts && mv lioncore-cli lib/",
-    "build-npm": "deno run -A src-build/build-npm.ts"
+    "lock-deps": "deno cache --reload --lock=deno.lock --lock-write src/deps.ts src-cli/deps.ts src-test/deps.ts src-utils/deps.ts",
+    "compile-cli": "deno compile --allow-read --allow-write src-cli/lioncore-cli.ts && mv lioncore-cli lib/"
   },
   "lint": {
     "include": [
