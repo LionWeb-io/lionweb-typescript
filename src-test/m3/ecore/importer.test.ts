@@ -1,4 +1,4 @@
-import {assertEquals, parse} from "../../deps.ts"
+import {assertEquals, parseXml} from "../../deps.ts"
 import {checkReferences, issuesLanguage, serializeLanguage} from "../../../src/index.ts"
 import {asLIonCoreLanguage} from "../../../src-utils/m3/ecore/importer.ts"
 import {EcoreXml} from "../../../src-utils/m3/ecore/types.ts"
@@ -11,7 +11,7 @@ import {sortSerialization} from "../../../src-utils/serialization-utils.ts"
  * Parse the given string as Ecore XML into objects matching the {@link EcoreXml the Ecore type definition}.
  */
 const textAsEcoreXml = (data: string): EcoreXml =>
-    parse(data, {emptyToNull: false, reviveNumbers: false}) as unknown as EcoreXml
+    parseXml(data, {emptyToNull: false, reviveNumbers: false}) as unknown as EcoreXml
 
 
 Deno.test("Ecore importer", async (tctx) => {
