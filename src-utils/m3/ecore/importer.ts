@@ -1,26 +1,26 @@
 import {
-    Classifier,
-    Concept,
-    Enumeration,
-    Feature,
-    Language,
-    LanguageEntity,
-    PrimitiveType
-} from "../../../src/m3/types.ts"
-import {LanguageFactory} from "../../../src/m3/factory.ts"
-import {
+    asArray,
+    builtinPrimitives,
     checkDefinedData,
     checkUniqueData,
     checkUniqueId,
     checkValidId,
+    Classifier,
+    Concept,
+    duplicatesAmong,
+    Enumeration,
+    Feature,
     hashingIdGen,
+    keyOf,
+    Language,
+    LanguageEntity,
+    LanguageFactory,
+    namedsOf,
+    PrimitiveType,
+    qualifiedNameOf,
     wrapIdGen
-} from "../../../src/id-generation.ts"
+} from "../../../src/index.ts"
 import {EClassifier, EcoreXml, EStructuralFeature} from "./types.ts"
-import {keyOf, namedsOf, qualifiedNameOf} from "../../../src/m3/functions.ts"
-import {builtinPrimitives} from "../../../src/m3/builtins.ts"
-import {duplicatesAmong} from "../../../src/utils/grouping.ts"
-import {asArray} from "../../../src/utils/array-helpers.ts"
 
 
 const localRefPrefix = "#//"

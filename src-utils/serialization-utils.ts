@@ -1,5 +1,4 @@
-import {SerializationChunk} from "../src/serialization.ts"
-import {sortByStringKey} from "../src/utils/sorting.ts"
+import {SerializationChunk, sortByStringKey} from "../src/index.ts"
 
 
 /**

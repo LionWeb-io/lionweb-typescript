@@ -3,15 +3,19 @@ import {
     Concept,
     ConceptInterface,
     Containment,
+    entitiesSortedByName,
     Enumeration,
     Feature,
+    isRef,
     Language,
     LanguageEntity,
     Link,
-    PrimitiveType
-} from "../../../src/m3/types.ts"
-import {entitiesSortedByName, nonRelationalFeatures, relationsOf, type} from "../../../src/m3/functions.ts"
-import {isRef, unresolved} from "../../../src/references.ts"
+    nonRelationalFeatures,
+    PrimitiveType,
+    relationsOf,
+    type,
+    unresolved
+} from "../../../src/index.ts"
 
 
 const indented = indentWith(`  `)(1)
