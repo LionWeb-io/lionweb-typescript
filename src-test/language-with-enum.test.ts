@@ -1,9 +1,5 @@
 import {assertEquals} from "./deps.ts"
-
-import {serializeLanguage} from "../src/m3/serializer.ts"
-import {deserializeLanguage} from "../src/m3/deserializer.ts"
-import {Enumeration} from "../src/m3/types.ts"
-
+import {deserializeLanguage, Enumeration, serializeLanguage} from "../src/index.ts"
 import {languageWithEnum} from "./m3/language-with-enum.ts"
 
 

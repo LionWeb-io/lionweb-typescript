@@ -1,5 +1,5 @@
 import {assertEquals} from "../deps.ts"
-import {cycleWith} from "../../src/utils/cycles.ts"
+import {cycleWith} from "../../src/index.ts"
 
 
 Deno.test("cycleWith", async (tctx) => {

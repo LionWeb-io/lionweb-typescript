@@ -1,11 +1,14 @@
 import {assertEquals} from "./deps.ts"
-import {undefinedValuesDeletedFrom} from "./utils/test-helpers.ts"
-import {serializeNodes} from "../src/serializer.ts"
-import {deserializeModel} from "../src/deserializer.ts"
-import {dynamicModelAPI, DynamicNode} from "../src/dynamic-api.ts"
-import {nameBasedConceptDeducerFor} from "../src/m3/functions.ts"
+import {
+    deserializeModel,
+    dynamicModelAPI,
+    DynamicNode,
+    nameBasedConceptDeducerFor,
+    serializeNodes
+} from "../src/index.ts"
 import {libraryModel, libraryModelApi} from "./library.ts"
 import {libraryLanguage} from "./m3/library-language.ts"
+import {undefinedValuesDeletedFrom} from "./utils/test-helpers.ts"
 
 
 Deno.test("Library test model", async (tctx) => {

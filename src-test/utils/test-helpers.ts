@@ -1,5 +1,4 @@
-import {Issue} from "../../src/m3/constraints.ts"
-import {asIds} from "../../src/functions.ts"
+import {asIds, Issue} from "../../src/index.ts"
 
 
 /**

@@ -1,7 +1,5 @@
 import {assertEquals} from "../deps.ts"
-import {issuesLanguage} from "../../src/m3/constraints.ts"
-import {LanguageFactory} from "../../src/m3/factory.ts"
-import {Concept, Language} from "../../src/m3/types.ts"
+import {Concept, issuesLanguage, Language, LanguageFactory} from "../../src/index.ts"
 
 
 Deno.test("constraints (LIonCore)", async (tctx) => {

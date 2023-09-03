@@ -1,8 +1,5 @@
-import {hashingIdGen} from "../src/id-generation.ts"
-import {ModelAPI, updateSettings} from "../src/api.ts"
-import {nameBasedConceptDeducerFor} from "../src/m3/functions.ts"
+import {hashingIdGen, ModelAPI, nameBasedConceptDeducerFor, Node, updateSettings} from "../src/index.ts"
 import {libraryLanguage} from "./m3/library-language.ts"
-import {Node} from "../src/mod.ts"
 
 
 export enum BookType {

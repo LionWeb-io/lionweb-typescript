@@ -1,6 +1,5 @@
 import {assertEquals} from "../deps.ts"
-
-import {asText} from "../../src/m3/textual-syntax.ts"
+import {asText} from "../../src/index.ts"
 import {languageWithEnum} from "./language-with-enum.ts"
 
 

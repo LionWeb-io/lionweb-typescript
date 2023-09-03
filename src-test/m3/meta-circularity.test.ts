@@ -1,12 +1,14 @@
 import {assertEquals} from "../deps.ts"
-import {lioncore} from "../../src/m3/lioncore.ts"
-import {checkReferences} from "../../src/m3/reference-checker.ts"
-import {issuesLanguage} from "../../src/m3/constraints.ts"
-import {deserializeLanguage} from "../../src/m3/deserializer.ts"
+import {
+    asText,
+    checkReferences,
+    deserializeLanguage,
+    issuesLanguage,
+    lioncore,
+    SerializationChunk
+} from "../../src/index.ts"
 import {readFileAsJson} from "../../src-utils/json.ts"
-import {SerializationChunk} from "../../src/serialization.ts"
 import {logIssues, logUnresolvedReferences} from "../utils/test-helpers.ts"
-import {asText} from "../../src/m3/textual-syntax.ts"
 import {serializedLioncorePath} from "../../src-build/paths.ts"
 
 
