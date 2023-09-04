@@ -8,7 +8,7 @@ export const libraryLanguage = factory.language
 
 const {integerDatatype, stringDatatype} = builtinPrimitives
 
-const library = factory.concept("Library", false)
+export const library = factory.concept("Library", false)
 const book = factory.concept("Book", false)
 const writer = factory.concept("Writer", false)
 const guideBookWriter = factory.concept("GuideBookWriter", false, writer)
