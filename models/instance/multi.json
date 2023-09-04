@@ -1,0 +1,150 @@
+{
+  "serializationFormatVersion": "1",
+  "languages": [
+    {
+      "key": "S9d8_7DajL2oOe1cqvXUGPGa3cWUF3bocmHgANb5bpM",
+      "version": "1"
+    },
+    {
+      "key": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
+      "version": "1"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "wsuObcp6U2F4ztbwamjfhoy8R_KOMx6RGiuy40RSC8U",
+      "concept": {
+        "language": "S9d8_7DajL2oOe1cqvXUGPGa3cWUF3bocmHgANb5bpM",
+        "version": "1",
+        "key": "Container"
+      },
+      "properties": [],
+      "children": [
+        {
+          "containment": {
+            "language": "S9d8_7DajL2oOe1cqvXUGPGa3cWUF3bocmHgANb5bpM",
+            "version": "1",
+            "key": "libraries"
+          },
+          "children": [
+            "jkxERSov0TuSh7MMz2D5ciLrZDrU4o_VMOpmBqh_j7E"
+          ]
+        }
+      ],
+      "references": [],
+      "parent": null
+    },
+    {
+      "id": "jkxERSov0TuSh7MMz2D5ciLrZDrU4o_VMOpmBqh_j7E",
+      "concept": {
+        "language": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
+        "version": "1",
+        "key": "Library"
+      },
+      "properties": [
+        {
+          "property": {
+            "language": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
+            "version": "1",
+            "key": "library_Library_name"
+          },
+          "value": "Bob's Library"
+        }
+      ],
+      "children": [
+        {
+          "containment": {
+            "language": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
+            "version": "1",
+            "key": "books"
+          },
+          "children": [
+            "Q1NQ_zXwOF2Pjf1uklMTumJhQH4V1Qnfjnu0gz7Fzzs"
+          ]
+        }
+      ],
+      "references": [],
+      "parent": "wsuObcp6U2F4ztbwamjfhoy8R_KOMx6RGiuy40RSC8U"
+    },
+    {
+      "id": "Q1NQ_zXwOF2Pjf1uklMTumJhQH4V1Qnfjnu0gz7Fzzs",
+      "concept": {
+        "language": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
+        "version": "1",
+        "key": "Book"
+      },
+      "properties": [
+        {
+          "property": {
+            "language": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
+            "version": "1",
+            "key": "title"
+          },
+          "value": "Explorer Book"
+        },
+        {
+          "property": {
+            "language": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
+            "version": "1",
+            "key": "pages"
+          },
+          "value": "1337"
+        },
+        {
+          "property": {
+            "language": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
+            "version": "1",
+            "key": "type"
+          },
+          "value": "Special"
+        }
+      ],
+      "children": [],
+      "references": [
+        {
+          "reference": {
+            "language": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
+            "version": "1",
+            "key": "author"
+          },
+          "targets": [
+            {
+              "resolveInfo": "Jack London",
+              "reference": "7RxOqvS1ZIdpk-ao-6Tzy1QQRxl6fp_tGMH_BIK4LzQ"
+            }
+          ]
+        }
+      ],
+      "parent": "jkxERSov0TuSh7MMz2D5ciLrZDrU4o_VMOpmBqh_j7E"
+    },
+    {
+      "id": "7RxOqvS1ZIdpk-ao-6Tzy1QQRxl6fp_tGMH_BIK4LzQ",
+      "concept": {
+        "language": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
+        "version": "1",
+        "key": "GuideBookWriter"
+      },
+      "properties": [
+        {
+          "property": {
+            "language": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
+            "version": "1",
+            "key": "countries"
+          },
+          "value": "Alaska"
+        },
+        {
+          "property": {
+            "language": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
+            "version": "1",
+            "key": "library_Writer_name"
+          },
+          "value": "Jack London"
+        }
+      ],
+      "children": [],
+      "references": [],
+      "parent": null
+    }
+  ]
+}

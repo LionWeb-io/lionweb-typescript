@@ -9,6 +9,8 @@ import {generateMermaidForLanguage} from "../src-utils/m3/diagrams/Mermaid-gener
 import {schemaFor} from "../src-utils/m3/schema-generator.js"
 import {writeJsonAsFile} from "../src-utils/json.js"
 import {serializedLioncorePath} from "./paths.js"
+import {multiModel, multiModelApi} from "../src-test/multi.js"
+import {multiLanguage} from "../src-test/m3/multi-language.js"
 
 
 writeJsonAsFile("models/meta/builtins.json", serializeLanguage(lioncoreBuiltins))
@@ -33,6 +35,16 @@ console.log(`serialized library M1`)
 
 
 writeJsonAsFile("models/meta/language-with-enum.json", serializeLanguage(languageWithEnum))
+
+
+writeJsonAsFile("models/meta/multi-language.json", serializeLanguage(multiLanguage))
+console.log(`serialized multi-language M2`)
+
+writeJsonAsFile("models/instance/multi.json", serializeNodes(multiModel, multiModelApi))
+console.log(`serialized multi-language M1`)
+
+writeJsonAsFile("models/meta/language-with-enum.json", serializeLanguage(languageWithEnum))
+
 
 const persistSchemaFor = (language: Language) => {
     const schema = schemaFor(language)

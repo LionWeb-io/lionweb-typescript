@@ -84,7 +84,7 @@ export const libraryModelApi: ModelAPI<BaseNode> = {
 
 const id = hashingIdGen()
 
-const jackLondon: GuideBookWriter = {
+export const jackLondon: GuideBookWriter = {
     id: id("Jack London"),
     concept: "GuideBookWriter",
     name: "Jack London",
@@ -100,7 +100,7 @@ const explorerBook: Book = {
     type: BookType.Special
 }
 
-const bobLibrary: Library = {
+export const bobLibrary: Library = {
     id: id("Bob's Library"),
     concept: "Library",
     name: "Bob's Library",
