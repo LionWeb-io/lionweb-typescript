@@ -1,18 +1,15 @@
 import {writeFileSync} from "fs"
 
 import {Language, lioncore, lioncoreBuiltins, serializeLanguage, serializeNodes} from "../src-pkg/index.js"
-
 import {libraryLanguage} from "../src-test/languages/library.js"
 import {multiLanguage} from "../src-test/languages/multi.js"
 import {languageWithEnum} from "../src-test/languages/with-enum.js"
-import {libraryModel, libraryModelApi} from "../src-test/instances/library.js"
-import {multiModel, multiModelApi} from "../src-test/instances/multi.js"
-
+import {libraryModel, libraryReadModelAPI} from "../src-test/instances/library.js"
+import {multiModel, multiReadModelAPI} from "../src-test/instances/multi.js"
 import {generatePlantUmlForLanguage} from "../src-utils/m3/diagrams/PlantUML-generator.js"
 import {generateMermaidForLanguage} from "../src-utils/m3/diagrams/Mermaid-generator.js"
 import {schemaFor} from "../src-utils/m3/schema-generator.js"
 import {writeJsonAsFile} from "../src-utils/json.js"
-
 import {builtinsPath, diagramPath, instancePath, languagePath, lioncorePath} from "./paths.js"
 
 
@@ -33,7 +30,7 @@ writeFileSync(diagramPath("library-gen.puml"), generatePlantUmlForLanguage(libra
 writeFileSync(diagramPath("library-gen.md"), generateMermaidForLanguage(libraryLanguage))
 console.log(`generated diagrams for Library M2`)
 
-writeJsonAsFile(instancePath("library.json"), serializeNodes(libraryModel, libraryModelApi))
+writeJsonAsFile(instancePath("library.json"), serializeNodes(libraryModel, libraryReadModelAPI))
 console.log(`serialized library M1`)
 
 
@@ -43,7 +40,7 @@ writeJsonAsFile(languagePath("with-enum.json"), serializeLanguage(languageWithEn
 writeJsonAsFile(languagePath("multi.json"), serializeLanguage(multiLanguage))
 console.log(`serialized multi-language M2`)
 
-writeJsonAsFile(instancePath("multi.json"), serializeNodes(multiModel, multiModelApi))
+writeJsonAsFile(instancePath("multi.json"), serializeNodes(multiModel, multiReadModelAPI))
 console.log(`serialized multi-language M1`)
 
 
@@ -55,7 +52,4 @@ const persistSchemaFor = (language: Language) => {
 
 persistSchemaFor(lioncore)
 persistSchemaFor(libraryLanguage)
-
-
-
 

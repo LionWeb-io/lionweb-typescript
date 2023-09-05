@@ -1,4 +1,4 @@
-import {ModelAPI, updateSettingsNameBased} from "../api.js"
+import {ReadModelAPI, updateSettingsNameBased, WriteModelAPI} from "../api.js"
 import {
     Classifier,
     Concept,
@@ -20,16 +20,21 @@ import {KeyGenerator, nameIsKeyGenerator} from "./key-generation.js"
 
 const {inamed_name} = builtinFeatures
 
-/**
- * @return An implementation of {@link ModelAPI model API} for instances of the LIonCore M3 (so M2s).
- * The returned {@link ModelAPI model API} uses the given {@link KeyGenerator key generator} to generate the keys of all objects in the M2.
- */
-export const lioncoreAPIWithKeyGen = (keyGen: KeyGenerator): ModelAPI<M3Concept> => ({
+
+export const lioncoreReadAPI: ReadModelAPI<M3Concept> = ({
     conceptOf: classBasedConceptDeducerFor(lioncore),
     getFeatureValue: (node, feature) =>
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (node as any)[feature.name],    // (mirrors name-based update of settings)
-    enumerationLiteralFrom: (value, _) => value as (EnumerationLiteral | null),
+    enumerationLiteralFrom: (value, _) => value as (EnumerationLiteral | null)
+})
+
+
+/**
+ * @return An implementation of {@link WriteModelAPI write-part of the model API} for instances of the LIonCore M3 (so M2s).
+ * The returned {@link ModelAPI model API} uses the given {@link KeyGenerator key generator} to generate the keys of all objects in the M2.
+ */
+export const lioncoreWriteAPIWithKeyGen = (keyGen: KeyGenerator): WriteModelAPI<M3Concept> => ({
     nodeFor: (parent, concept, id, settings) => {
         switch (concept.key) {
             case metaConcepts.concept.key:
@@ -62,9 +67,9 @@ export const lioncoreAPIWithKeyGen = (keyGen: KeyGenerator): ModelAPI<M3Concept>
 
 
 /**
- * An implementation of {@link ModelAPI} for instances of the LIonCore M3 (so M2s), where key = name.
+ * An implementation of {@link WriteModelAPI} for instances of the LIonCore M3 (so M2s), where key = name.
  *
  * TODO  deprecate this: [de-]serialization of metamodels should be parametrized with key generation throughout
  */
-export const lioncoreAPI: ModelAPI<M3Concept> = lioncoreAPIWithKeyGen(nameIsKeyGenerator)
+export const lioncoreWriteAPI = lioncoreWriteAPIWithKeyGen(nameIsKeyGenerator)
 

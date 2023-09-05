@@ -1,4 +1,10 @@
-import {ModelAPI, nameBasedConceptDeducerFor, Node, updateSettingsNameBased} from "../../src-pkg/index.js"
+import {
+    nameBasedConceptDeducerFor,
+    Node,
+    ReadModelAPI,
+    updateSettingsNameBased,
+    WriteModelAPI
+} from "../../src-pkg/index.js"
 import {hashingIdGen} from "../../src-utils/id-generation.js"
 import {libraryLanguage} from "../languages/library.js"
 
@@ -47,7 +53,7 @@ export type SpecialistBookWriter = Writer & BaseNode & {
 }
 
 
-export const libraryModelApi: ModelAPI<BaseNode> = {
+export const libraryReadModelAPI: ReadModelAPI<BaseNode> = {
     conceptOf: (node) => nameBasedConceptDeducerFor(libraryLanguage)(node.concept),
     getFeatureValue: (node, feature) =>
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -58,7 +64,10 @@ export const libraryModelApi: ModelAPI<BaseNode> = {
         const targetKey = rtEnum[value as number]
         return enumeration.literals.find(({key}) => key === targetKey)
             ?? null     // (undefined -> null)
-    },
+    }
+}
+
+export const libraryWriteModelAPI: WriteModelAPI<BaseNode> = {
     nodeFor: (_parent, concept, id, _settings) => ({
         id,
         concept: concept.key
@@ -69,13 +78,14 @@ export const libraryModelApi: ModelAPI<BaseNode> = {
         const rtEnum = rtEnums[literal.enumeration.key] as any
         return rtEnum[literal.key as unknown as number]
     }
-        /*
-         * This is a trick that uses TypeScript's reverse mappings for enumerations
-         * (@see https://www.typescriptlang.org/docs/handbook/enums.html#reverse-mappings).
-         * Unfortunately, it requires some "fugly" type casting to compile:
-         *  'key' really is a string containing the enumeration literal's name.
-         */
+    /*
+     * This is a trick that uses TypeScript's reverse mappings for enumerations
+     * (@see https://www.typescriptlang.org/docs/handbook/enums.html#reverse-mappings).
+     * Unfortunately, it requires some "fugly" type casting to compile:
+     *  'key' really is a string containing the enumeration literal's name.
+     */
 }
+
 /*
  * This {@link ModelAPI} implementation shows the problems that enumerations cause with TypeScript (or even: in general).
  * A TS enum is a type and not an object as far as TS is concerned, which means that reflecting on it requires some jury-rigging through type-casting.

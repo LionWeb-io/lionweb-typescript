@@ -3,12 +3,12 @@ const {deepEqual} = assert
 
 import {
     deserializeChunk,
-    dynamicModelAPI,
     DynamicNode,
+    dynamicWriteModelAPI,
     nameBasedConceptDeducerFor,
     serializeNodes
 } from "../src-pkg/index.js"
-import {libraryModel, libraryModelApi} from "./instances/library.js"
+import {libraryModel, libraryReadModelAPI, libraryWriteModelAPI} from "./instances/library.js"
 import {libraryLanguage} from "./languages/library.js"
 import {undefinedValuesDeletedFrom} from "./utils/test-helpers.js"
 
@@ -16,15 +16,14 @@ import {undefinedValuesDeletedFrom} from "./utils/test-helpers.js"
 describe("Library test model", () => {
 
     it("[de-]serialize example library", () => {
-        const serialization = serializeNodes(libraryModel, libraryModelApi)
-        const deserialization = deserializeChunk(undefinedValuesDeletedFrom(serialization), libraryModelApi, [libraryLanguage], [])
+        const serialization = serializeNodes(libraryModel, libraryReadModelAPI)
+        const deserialization = deserializeChunk(undefinedValuesDeletedFrom(serialization), libraryWriteModelAPI, [libraryLanguage], [])
         deepEqual(deserialization, libraryModel)
     })
 
     it(`"dynamify" example library through serialization and deserialization using the Dynamic Model API`, () => {
-        const serialization = serializeNodes(libraryModel, libraryModelApi)
-        const dynamification = deserializeChunk(undefinedValuesDeletedFrom(serialization), dynamicModelAPI, [libraryLanguage], [])
-
+        const serialization = serializeNodes(libraryModel, libraryReadModelAPI)
+        const dynamification = deserializeChunk(undefinedValuesDeletedFrom(serialization), dynamicWriteModelAPI, [libraryLanguage], [])
         deepEqual(dynamification.length, 2)
         const lookup = nameBasedConceptDeducerFor(libraryLanguage)
         deepEqual(dynamification[0].concept, lookup("Library"))

@@ -1,13 +1,9 @@
 import {hashingIdGen} from "../../src-utils/id-generation.js"
-import {ModelAPI, nameBasedConceptDeducerFor, Node} from "../../src-pkg/index.js"
+import {ReadModelAPI, nameBasedConceptDeducerFor, Node} from "../../src-pkg/index.js"
 import {multiLanguage} from "../languages/multi.js"
-import {bobLibrary, jackLondon, Library, libraryModelApi} from "./library.js"
+import {BaseNode, bobLibrary, jackLondon, Library, libraryReadModelAPI} from "./library.js"
 import {libraryLanguage} from "../languages/library.js"
 
-
-export type BaseNode = Node & {
-    concept: string
-}
 
 export type Container = Node & {
     concept: "Container",
@@ -15,11 +11,11 @@ export type Container = Node & {
 }
 
 
-export const  multiModelApi: ModelAPI<BaseNode> = {
-    ...libraryModelApi,
-    conceptOf: (node) =>
+export const multiReadModelAPI: ReadModelAPI<BaseNode> = {
+    ...libraryReadModelAPI,
+    /* override */ conceptOf: (node) =>
         nameBasedConceptDeducerFor(libraryLanguage)(node.concept)
-            ??
+        ??
         nameBasedConceptDeducerFor(multiLanguage)(node.concept),
 }
 

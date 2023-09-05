@@ -1,5 +1,5 @@
 import {Node} from "./types.js"
-import {ModelAPI, updateSettingsKeyBased} from "./api.js"
+import {ReadModelAPI, updateSettingsKeyBased, WriteModelAPI} from "./api.js"
 import {Concept} from "./m3/types.js"
 
 
@@ -13,16 +13,10 @@ export type DynamicNode = Node & {
 
 
 /**
- * An implementation of {@link ModelAPI} for {@link DynamicNode dynamic nodes}.
+ * An implementation of {@link WriteModelAPI} for {@link DynamicNode dynamic nodes}.
  */
-export const dynamicModelAPI: ModelAPI<DynamicNode> = ({
-    conceptOf: (node) => node.concept,
-    getFeatureValue: (node, feature) =>
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (node.settings as any)[feature.name],
-    enumerationLiteralFrom: (value, enumeration) =>
-        enumeration.literals.find(({key}) => key === value)
-            ?? null,    // (undefined -> null)
+
+export const dynamicWriteModelAPI: WriteModelAPI<DynamicNode> = ({
     nodeFor: (_parent, concept, id, _settings) => ({
         id,
         concept,
@@ -33,4 +27,18 @@ export const dynamicModelAPI: ModelAPI<DynamicNode> = ({
     },
     encodingOf: ({key}) => key
 })
+
+/**
+ * An implementation of {@link ReadModelAPI} for {@link DynamicNode dynamic nodes}.
+ */
+export const dynamicReadModelAPI: ReadModelAPI<DynamicNode> = ({
+    conceptOf: (node) => node.concept,
+    getFeatureValue: (node, feature) =>
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (node.settings as any)[feature.name],
+    enumerationLiteralFrom: (value, enumeration) =>
+        enumeration.literals.find(({key}) => key === value)
+        ?? null    // (undefined -> null)
+})
+// TODO  use feature's key instead of name
 

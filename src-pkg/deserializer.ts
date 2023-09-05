@@ -1,6 +1,6 @@
 import {Id, Node} from "./types.js"
 import {SerializationChunk, SerializedNode} from "./serialization.js"
-import {ModelAPI} from "./api.js"
+import {WriteModelAPI} from "./api.js"
 import {Concept, Containment, Enumeration, Language, PrimitiveType, Property, Reference} from "./m3/types.js"
 import {allFeaturesOf} from "./m3/functions.js"
 import {deserializeBuiltin} from "./m3/builtins.js"
@@ -29,7 +29,7 @@ const byIdMap = <T extends { id: Id }>(ts: T[]): { [id: Id]: T } => {
  */
 export const deserializeChunk = <NT extends Node>(
     serializationChunk: SerializationChunk,
-    api: ModelAPI<NT>,
+    api: WriteModelAPI<NT>,
     languages: Language[],
     dependentNodes: Node[]
     // TODO (#13)  see if you can turn this into [nodes: Node[], api: ModelAPI<Node>][] after all

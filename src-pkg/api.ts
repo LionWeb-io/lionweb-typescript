@@ -11,13 +11,15 @@ type ConceptDeducer<NT extends Node> = (node: NT) => Concept
 
 
 /**
- * An interface that defines an API for in-memory models.
+ * Two interfaces that defines APIs for in-memory models.
  * Instances/implementations of this interface parametrize generic (de-)serialization.
  * Implementations of ModelAPI {w|c}ould be:
  *  - specific to LIoncore (so to match m3/types.ts)
  *  - generic just to deserialize into Node & { settings: { [featureName: string]: unknown } } -- á la Federico
  */
-interface ModelAPI<NT extends Node> {
+
+
+interface ReadModelAPI<NT extends Node> {
 
     /**
      * @return The {@link Concept concept} of the given node
@@ -34,6 +36,10 @@ interface ModelAPI<NT extends Node> {
      * the given {@link Enumeration} and the runtime encoding of a literal of it,
      */
     enumerationLiteralFrom: (encoding: unknown, enumeration: Enumeration) => EnumerationLiteral | null
+
+}
+
+interface WriteModelAPI<NT extends Node> {
 
     /**
      * @return An instance of the given concept, also given its parent (or {@link undefined} for root nodes),
@@ -54,8 +60,6 @@ interface ModelAPI<NT extends Node> {
     encodingOf: (literal: EnumerationLiteral) => unknown
 
 }
-// TODO  separate this in write- and read-only parts
-
 
 /**
  * Type def. for functions that extract {@link Node nodes} from a given one.
@@ -65,18 +69,18 @@ type NodesExtractor<NT extends Node> = (nodes: NT) => NT[]
 /**
  * @return A function that extracts the children from a given node.
  */
-const childrenExtractorUsing = <NT extends Node>(modelAPI: ModelAPI<NT>): NodesExtractor<NT> =>
+const childrenExtractorUsing = <NT extends Node>(api: ReadModelAPI<NT>): NodesExtractor<NT> =>
     (node: NT): NT[] =>
-        allFeaturesOf(modelAPI.conceptOf(node))
+        allFeaturesOf(api.conceptOf(node))
             .filter(isContainment)
-            .flatMap((containment) => modelAPI.getFeatureValue(node, containment) as NT[])
+            .flatMap((containment) => api.getFeatureValue(node, containment) as NT[])
 
 
 /**
  * @return a function that extracts *all* nodes from a given start node - usually a root node.
  */
-const nodesExtractorUsing = <NT extends Node>(modelAPI: ModelAPI<NT>): NodesExtractor<NT> =>
-    flatMapNonCyclingFollowing(trivialFlatMapper, childrenExtractorUsing<NT>(modelAPI))
+const nodesExtractorUsing = <NT extends Node>(api: ReadModelAPI<NT>): NodesExtractor<NT> =>
+    flatMapNonCyclingFollowing(trivialFlatMapper, childrenExtractorUsing<NT>(api))
 
 
 /**
@@ -113,8 +117,9 @@ const updateSettingsKeyBased = (settings: Record<string, unknown>, feature: Feat
 
 export type {
     ConceptDeducer,
-    ModelAPI,
-    NodesExtractor
+    NodesExtractor,
+    ReadModelAPI,
+    WriteModelAPI
 }
 
 export {
