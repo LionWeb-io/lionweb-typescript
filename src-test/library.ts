@@ -1,4 +1,4 @@
-import {ModelAPI, nameBasedConceptDeducerFor, Node, updateSettings} from "../src-pkg/index.js"
+import {ModelAPI, nameBasedConceptDeducerFor, Node, updateSettingsNameBased} from "../src-pkg/index.js"
 import {hashingIdGen} from "../src-utils/id-generation.js"
 import {libraryLanguage} from "./m3/library-language.js"
 
@@ -51,7 +51,7 @@ export const libraryModelApi: ModelAPI<BaseNode> = {
     conceptOf: (node) => nameBasedConceptDeducerFor(libraryLanguage)(node.concept),
     getFeatureValue: (node, feature) =>
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (node as any)[feature.name],
+        (node as any)[feature.name],    // (mirrors name-based updating of settings)
     enumerationLiteralFrom: (value, enumeration) => {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const rtEnum = rtEnums[enumeration.key] as any
@@ -61,9 +61,9 @@ export const libraryModelApi: ModelAPI<BaseNode> = {
     },
     nodeFor: (_parent, concept, id, _settings) => ({
         id,
-        concept: concept.name
+        concept: concept.key
     }),
-    setFeatureValue: updateSettings,
+    setFeatureValue: updateSettingsNameBased,
     encodingOf: (literal) => {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const rtEnum = rtEnums[literal.enumeration.key] as any

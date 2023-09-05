@@ -1,4 +1,4 @@
-import {ModelAPI, updateSettings} from "../api.js"
+import {ModelAPI, updateSettingsNameBased} from "../api.js"
 import {
     Classifier,
     Concept,
@@ -28,7 +28,7 @@ export const lioncoreAPIWithKeyGen = (keyGen: KeyGenerator): ModelAPI<M3Concept>
     conceptOf: classBasedConceptDeducerFor(lioncore),
     getFeatureValue: (node, feature) =>
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (node as any)[feature.name],
+        (node as any)[feature.name],    // (mirrors name-based update of settings)
     enumerationLiteralFrom: (value, _) => value as (EnumerationLiteral | null),
     nodeFor: (parent, concept, id, settings) => {
         switch (concept.key) {
@@ -55,7 +55,7 @@ export const lioncoreAPIWithKeyGen = (keyGen: KeyGenerator): ModelAPI<M3Concept>
         }
     },
     setFeatureValue: (node, feature, value) => {
-        updateSettings(node as unknown as Record<string, unknown>, feature, value)
+        updateSettingsNameBased(node as unknown as Record<string, unknown>, feature, value)
     },
     encodingOf: (literal) => literal
 })

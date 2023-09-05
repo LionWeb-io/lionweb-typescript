@@ -1,5 +1,5 @@
 import {Node} from "./types.js"
-import {ModelAPI, updateSettings} from "./api.js"
+import {ModelAPI, updateSettingsKeyBased} from "./api.js"
 import {Concept} from "./m3/types.js"
 
 
@@ -8,7 +8,7 @@ import {Concept} from "./m3/types.js"
  */
 export type DynamicNode = Node & {
     concept: Concept
-    settings: { [featureName: string]: unknown }
+    settings: Record<string, unknown>
 }
 
 
@@ -29,9 +29,8 @@ export const dynamicModelAPI: ModelAPI<DynamicNode> = ({
         settings: {}
     }),
     setFeatureValue: (node, feature, value) => {
-        updateSettings(node.settings, feature, value)
+        updateSettingsKeyBased(node.settings, feature, value)
     },
     encodingOf: ({key}) => key
 })
-// TODO  use feature's key instead of name
 

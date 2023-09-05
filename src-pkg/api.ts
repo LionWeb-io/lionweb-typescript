@@ -81,9 +81,9 @@ const nodesExtractorUsing = <NT extends Node>(modelAPI: ModelAPI<NT>): NodesExtr
 
 /**
  * Updates the value of the given {@link Feature feature} on the given "settings" object
- *  - either a {@link Node node} or a sub object of it.
+ * (either a {@link Node node} or a sub object of it), using the feature's *name*.
  */
-const updateSettings = (settings: Record<string, unknown>, feature: Feature, value: unknown): void => {
+const updateSettingsNameBased = (settings: Record<string, unknown>, feature: Feature, value: unknown): void => {
     const fName = feature.name
     if (feature instanceof Link && feature.multiple) {
         if (!Array.isArray(settings[fName])) {
@@ -94,8 +94,22 @@ const updateSettings = (settings: Record<string, unknown>, feature: Feature, val
         settings[fName] = value
     }
 }
-// TODO  use feature's key instead of name
 
+/**
+ * Updates the value of the given {@link Feature feature} on the given "settings" object
+ * (either a {@link Node node} or a sub object of it), using the feature's *key*.
+ */
+const updateSettingsKeyBased = (settings: Record<string, unknown>, feature: Feature, value: unknown): void => {
+    const {key} = feature
+    if (feature instanceof Link && feature.multiple) {
+        if (!Array.isArray(settings[key])) {
+            settings[key] = []
+        }
+        (settings[key] as unknown[]).push(value)
+    } else {
+        settings[key] = value
+    }
+}
 
 export type {
     ConceptDeducer,
@@ -106,6 +120,7 @@ export type {
 export {
     childrenExtractorUsing,
     nodesExtractorUsing,
-    updateSettings
+    updateSettingsKeyBased,
+    updateSettingsNameBased
 }
 
