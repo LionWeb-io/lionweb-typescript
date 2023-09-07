@@ -1,4 +1,5 @@
-import {hashingIdGen, ModelAPI, nameBasedConceptDeducerFor, Node, updateSettings} from "../src/index.ts"
+import {ModelAPI, nameBasedConceptDeducerFor, Node, updateSettings} from "../src/index.ts"
+import {hashingIdGen} from "../src-utils/id-generation.ts"
 import {libraryLanguage} from "./m3/library-language.ts"
 
 

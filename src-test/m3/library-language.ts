@@ -1,4 +1,5 @@
-import {builtinPrimitives, hashingIdGen, LanguageFactory} from "../../src/index.ts"
+import {builtinPrimitives, LanguageFactory} from "../../src/index.ts"
+import {hashingIdGen} from "../../src-utils/id-generation.ts"
 
 
 const factory = new LanguageFactory("library", "1", hashingIdGen())

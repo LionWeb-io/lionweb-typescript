@@ -1,5 +1,6 @@
 import {assertEquals} from "../deps.ts"
-import {builtinPrimitives, hashingIdGen, LanguageFactory, qualifiedNameBasedKeyGenerator} from "../../src/index.ts"
+import {builtinPrimitives, LanguageFactory, qualifiedNameBasedKeyGenerator} from "../../src/index.ts"
+import {hashingIdGen} from "../../src-utils/id-generation.ts"
 
 
 Deno.test("key generation", async (tctx) => {

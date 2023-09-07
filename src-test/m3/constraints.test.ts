@@ -1,11 +1,12 @@
 import {assertEquals} from "../deps.ts"
 import {Concept, issuesLanguage, Language, LanguageFactory} from "../../src/index.ts"
+import {nanoIdGen} from "../../src-utils/id-generation.ts"
 
 
 Deno.test("constraints (LIonCore)", async (tctx) => {
 
     await tctx.step("check that inheritance cycles are detected", () => {
-        const factory = new LanguageFactory("metamodel", "1")
+        const factory = new LanguageFactory("metamodel", "1", nanoIdGen())
         const {language} = factory
         const cis = [0, 1, 2].map((i) => factory.conceptInterface(`conceptInterface ${i}`))
         cis[2].extends.push(cis[1])
@@ -20,7 +21,7 @@ Deno.test("constraints (LIonCore)", async (tctx) => {
     })
 
     await tctx.step("check that trivial inheritance cycles are detected", () => {
-        const factory = new LanguageFactory("metamodel", "1")
+        const factory = new LanguageFactory("metamodel", "1", nanoIdGen())
         const {language} = factory
         const ci = factory.conceptInterface(`foo`)
         ci.extends.push(ci)

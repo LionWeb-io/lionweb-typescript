@@ -1,4 +1,5 @@
-import {hashingIdGen, LanguageFactory} from "../../src/index.ts"
+import {LanguageFactory} from "../../src/index.ts"
+import {hashingIdGen} from "../../src-utils/id-generation.ts"
 
 
 const factory = new LanguageFactory("language-with-enum", "1", hashingIdGen())

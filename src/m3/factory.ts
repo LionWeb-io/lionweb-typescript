@@ -13,7 +13,7 @@ import {
     Reference
 } from "./types.ts"
 import {SingleRef} from "../references.ts"
-import {IdGenerator, nanoIdGen} from "../id-generation.ts"
+import {IdGenerator} from "../id-generation.ts"
 import {qualifiedNameOf} from "./functions.ts"
 import {KeyGenerator, nameIsKeyGenerator} from "./key-generation.ts"
 
@@ -37,7 +37,7 @@ export class LanguageFactory {
     readonly key: KeyGenerator
     readonly language: Language
 
-    constructor(name: string, version: string, id: IdGenerator = nanoIdGen(), key: KeyGenerator = nameIsKeyGenerator) {
+    constructor(name: string, version: string, id: IdGenerator, key: KeyGenerator = nameIsKeyGenerator) {
         this.id = id
         this.key = key
         const idAndKey = this.id(name)  // need to call this.id just once

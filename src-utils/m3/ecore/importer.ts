@@ -10,7 +10,6 @@ import {
     duplicatesAmong,
     Enumeration,
     Feature,
-    hashingIdGen,
     keyOf,
     Language,
     LanguageEntity,
@@ -20,6 +19,7 @@ import {
     qualifiedNameOf,
     wrapIdGen
 } from "../../../src/index.ts"
+import {hashingIdGen} from "../../../src-utils/id-generation.ts"
 import {EClassifier, EcoreXml, EStructuralFeature} from "./types.ts"
 
 
