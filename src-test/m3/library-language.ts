@@ -1,4 +1,4 @@
-import {builtinPrimitives, LanguageFactory} from "../../src/index.ts"
+import {builtinPrimitives, LanguageFactory} from "../../src-pkg/index.ts"
 import {hashingIdGen} from "../../src-utils/id-generation.ts"
 
 

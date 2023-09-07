@@ -13,7 +13,7 @@ import {
     Language,
     PrimitiveType,
     Property
-} from "../../src/index.ts"
+} from "../../src-pkg/index.ts"
 // TODO  import types for JSON Schema for added type-safety?
 
 

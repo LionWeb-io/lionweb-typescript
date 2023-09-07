@@ -1,5 +1,5 @@
 import {assertEquals} from "./deps.ts"
-import {deserializeLanguage, Enumeration, serializeLanguage} from "../src/index.ts"
+import {deserializeLanguage, Enumeration, serializeLanguage} from "../src-pkg/index.ts"
 import {languageWithEnum} from "./m3/language-with-enum.ts"
 
 

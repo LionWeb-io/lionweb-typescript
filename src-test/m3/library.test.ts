@@ -1,5 +1,5 @@
 import {assertEquals} from "../deps.ts"
-import {deserializeLanguage, lioncoreBuiltins, serializeLanguage} from "../../src/index.ts"
+import {deserializeLanguage, lioncoreBuiltins, serializeLanguage} from "../../src-pkg/index.ts"
 import {libraryLanguage} from "./library-language.ts"
 import {undefinedValuesDeletedFrom} from "../utils/test-helpers.ts"
 

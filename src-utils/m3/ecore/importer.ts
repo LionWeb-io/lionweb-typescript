@@ -18,7 +18,7 @@ import {
     PrimitiveType,
     qualifiedNameOf,
     wrapIdGen
-} from "../../../src/index.ts"
+} from "../../../src-pkg/index.ts"
 import {hashingIdGen} from "../../../src-utils/id-generation.ts"
 import {EClassifier, EcoreXml, EStructuralFeature} from "./types.ts"
 

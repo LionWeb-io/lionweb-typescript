@@ -6,7 +6,7 @@ import {
     issuesLanguage,
     lioncore,
     SerializationChunk
-} from "../../src/index.ts"
+} from "../../src-pkg/index.ts"
 import {readFileAsJson} from "../../src-utils/json.ts"
 import {logIssues, logUnresolvedReferences} from "../utils/test-helpers.ts"
 import {serializedLioncorePath} from "../../src-build/paths.ts"

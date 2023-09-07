@@ -1,5 +1,5 @@
 import {assertEquals, parseXml} from "../../deps.ts"
-import {checkReferences, issuesLanguage, serializeLanguage} from "../../../src/index.ts"
+import {checkReferences, issuesLanguage, serializeLanguage} from "../../../src-pkg/index.ts"
 import {asLIonCoreLanguage} from "../../../src-utils/m3/ecore/importer.ts"
 import {EcoreXml} from "../../../src-utils/m3/ecore/types.ts"
 import {logIssues, logUnresolvedReferences, undefinedValuesDeletedFrom} from "../../utils/test-helpers.ts"

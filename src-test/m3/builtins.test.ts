@@ -1,7 +1,7 @@
 import {assertEquals} from "../deps.ts"
-import {lioncoreBuiltins} from "../../src/index.ts"
-import {checkReferences} from "../../src/index.ts"
-import {issuesLanguage} from "../../src/index.ts"
+import {lioncoreBuiltins} from "../../src-pkg/index.ts"
+import {checkReferences} from "../../src-pkg/index.ts"
+import {issuesLanguage} from "../../src-pkg/index.ts"
 import {logIssues, logUnresolvedReferences} from "../utils/test-helpers.ts"
 
 

@@ -1,4 +1,4 @@
-import {asIds, Issue} from "../../src/index.ts"
+import {asIds, Issue} from "../../src-pkg/index.ts"
 
 
 /**

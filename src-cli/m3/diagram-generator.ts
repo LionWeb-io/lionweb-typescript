@@ -1,5 +1,5 @@
 import {extensionOfPath} from "../deps.ts"
-import {deserializeLanguage} from "../../src/index.ts"
+import {deserializeLanguage} from "../../src-pkg/index.ts"
 import {generatePlantUmlForLanguage} from "../../src-utils/m3/diagrams/PlantUML-generator.ts"
 import {generateMermaidForLanguage} from "../../src-utils/m3/diagrams/Mermaid-generator.ts"
 

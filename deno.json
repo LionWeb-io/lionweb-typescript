@@ -3,15 +3,15 @@
     "generate-artifacts": "deno run --allow-write src-build/generate-artifacts.ts",
     "run-tests": "deno task generate-artifacts && deno test --allow-read --allow-write src-test/",
     "watch-tests": "deno task generate-artifacts && deno test --watch --allow-write --allow-read src-test/",
-    "lint": "deno lint src/ src-build/ src-cli/ src-test/ src-utils/",
+    "lint": "deno lint src-pkg/ src-build/ src-cli/ src-test/ src-utils/",
     "lock-deps": "deno cache --reload --lock=deno.lock --lock-write src-cli/deps.ts src-test/deps.ts src-utils/deps.ts",
     "compile-cli": "deno compile --allow-read --allow-write src-cli/lioncore-cli.ts && mv lioncore-cli lib/"
   },
   "lint": {
     "include": [
-      "src/",
       "src-build/",
       "src-cli/",
+      "src-pkg/",
       "src-test/",
       "src-utils/"
     ],

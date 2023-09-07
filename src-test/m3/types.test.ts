@@ -1,6 +1,6 @@
 // import {assertThrows} from "../deps.ts"
-// import {LanguageFactory} from "../../src/m3/factory.ts"
-// import {builtinPrimitives} from "../../src/m3/builtins.ts"
+// import {LanguageFactory} from "../../src-pkg/m3/factory.ts"
+// import {builtinPrimitives} from "../../src-pkg/m3/builtins.ts"
 
 
 /*

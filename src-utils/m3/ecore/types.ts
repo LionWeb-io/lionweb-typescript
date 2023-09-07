@@ -1,4 +1,4 @@
-import {AnyNumberOf} from "../../../src/index.ts"
+import {AnyNumberOf} from "../../../src-pkg/index.ts"
 
 
 /**

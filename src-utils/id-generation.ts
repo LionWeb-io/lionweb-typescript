@@ -1,5 +1,5 @@
 import {createHash, nanoid} from "./deps.ts"
-import {IdGenerator} from "../src/index.ts"
+import {IdGenerator} from "../src-pkg/index.ts"
 
 
 /**

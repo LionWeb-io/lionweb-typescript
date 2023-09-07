@@ -1,4 +1,4 @@
-import {LanguageFactory} from "../../src/index.ts"
+import {LanguageFactory} from "../../src-pkg/index.ts"
 import {hashingIdGen} from "../../src-utils/id-generation.ts"
 
 

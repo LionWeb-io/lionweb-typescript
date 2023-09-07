@@ -1,5 +1,5 @@
 import {extensionOfPath} from "./deps.ts"
-import {asText, deserializeLanguage, lioncoreQName} from "../src/index.ts"
+import {asText, deserializeLanguage, lioncoreQName} from "../src-pkg/index.ts"
 import {shortenSerialization, sortSerialization} from "../src-utils/serialization-utils.ts"
 import {writeJsonAsFile} from "../src-utils/json.ts"
 

@@ -15,7 +15,7 @@ import {
     relationsOf,
     type,
     unresolved
-} from "../../../src/index.ts"
+} from "../../../src-pkg/index.ts"
 
 
 const indented = indentWith(`  `)(1)

@@ -1,4 +1,4 @@
-import {Language, lioncore, lioncoreBuiltins, serializeLanguage, serializeNodes} from "../src/index.ts"
+import {Language, lioncore, lioncoreBuiltins, serializeLanguage, serializeNodes} from "../src-pkg/index.ts"
 import {languageWithEnum} from "../src-test/m3/language-with-enum.ts"
 import {libraryLanguage} from "../src-test/m3/library-language.ts"
 import {libraryModel, libraryModelApi} from "../src-test/library.ts"

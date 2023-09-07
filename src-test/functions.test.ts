@@ -1,5 +1,5 @@
 import {assertEquals} from "./deps.ts"
-import {containmentChain, Node} from "../src/index.ts"
+import {containmentChain, Node} from "../src-pkg/index.ts"
 
 
 Deno.test("functions", async (tctx) => {

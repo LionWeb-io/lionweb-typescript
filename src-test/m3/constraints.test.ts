@@ -1,5 +1,5 @@
 import {assertEquals} from "../deps.ts"
-import {Concept, issuesLanguage, Language, LanguageFactory} from "../../src/index.ts"
+import {Concept, issuesLanguage, Language, LanguageFactory} from "../../src-pkg/index.ts"
 import {nanoIdGen} from "../../src-utils/id-generation.ts"
 
 

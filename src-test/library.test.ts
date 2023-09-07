@@ -5,7 +5,7 @@ import {
     DynamicNode,
     nameBasedConceptDeducerFor,
     serializeNodes
-} from "../src/index.ts"
+} from "../src-pkg/index.ts"
 import {libraryModel, libraryModelApi} from "./library.ts"
 import {libraryLanguage} from "./m3/library-language.ts"
 import {undefinedValuesDeletedFrom} from "./utils/test-helpers.ts"

@@ -15,7 +15,7 @@ import {
     relationsOf,
     type,
     unresolved
-} from "../../../src/index.ts"
+} from "../../../src-pkg/index.ts"
 
 
 // define some layouting basics/building algebra:
