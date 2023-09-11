@@ -1,20 +1,22 @@
-import {assertEquals} from "../deps.ts"
-import {deserializeLanguage, lioncoreBuiltins, serializeLanguage} from "../../src-pkg/index.ts"
-import {libraryLanguage} from "./library-language.ts"
-import {undefinedValuesDeletedFrom} from "../utils/test-helpers.ts"
+import {assert} from "chai"
+const {deepEqual} = assert
+
+import {deserializeLanguage, lioncoreBuiltins, serializeLanguage} from "../../src-pkg/index.js"
+import {libraryLanguage} from "./library-language.js"
+import {undefinedValuesDeletedFrom} from "../utils/test-helpers.js"
 
 
-Deno.test("Library test metamodel", async (tctx) => {
+describe("Library test metamodel", () => {
 
-    await tctx.step("LIonCore built-in primitive types are implicit", () => {
+    it("LIonCore built-in primitive types are implicit", () => {
         libraryLanguage.dependingOn(lioncoreBuiltins)
-        assertEquals(libraryLanguage.dependsOn, [])
+        deepEqual(libraryLanguage.dependsOn, [])
     })
 
-    await tctx.step("serialize it", () => {
+    it("serialize it", () => {
         const serialization = serializeLanguage(libraryLanguage)
         const deserialization = deserializeLanguage(undefinedValuesDeletedFrom(serialization))
-        assertEquals(deserialization, libraryLanguage)
+        deepEqual(deserialization, libraryLanguage)
     })
 
 })

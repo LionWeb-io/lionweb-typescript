@@ -20,14 +20,14 @@ import {
     M3Concept,
     Property,
     Reference
-} from "./types.ts"
-import {isRef, unresolved} from "../references.ts"
-import {sortByStringKey} from "../utils/sorting.ts"
-import {cycleWith} from "../utils/cycles.ts"
-import {flatMapNonCyclingFollowing} from "../utils/recursion.ts"
-import {Id, Node} from "../types.ts"
-import {ConceptDeducer} from "../api.ts"
-import {containmentChain} from "../functions.ts"
+} from "./types.js"
+import {isRef, unresolved} from "../references.js"
+import {sortByStringKey} from "../utils/sorting.js"
+import {cycleWith} from "../utils/cycles.js"
+import {flatMapNonCyclingFollowing} from "../utils/recursion.js"
+import {Id, Node} from "../types.js"
+import {ConceptDeducer} from "../api.js"
+import {containmentChain} from "../functions.js"
 
 
 /**

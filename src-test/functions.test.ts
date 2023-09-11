@@ -1,18 +1,20 @@
-import {assertEquals} from "./deps.ts"
-import {containmentChain, Node} from "../src-pkg/index.ts"
+import {assert} from "chai"
+const {deepEqual} = assert
+
+import {containmentChain, Node} from "../src-pkg/index.js"
 
 
-Deno.test("functions", async (tctx) => {
+describe("functions", () => {
 
-    await tctx.step("containmentChain", () => {
+    it("containmentChain", () => {
         const node1: Node = { id: "1" }
         const node2: Node = { id: "2", parent: node1 }
         const node3: Node = { id: "3", parent: node1 }
         const node4: Node = { id: "4", parent: node2 }
-        assertEquals(containmentChain(node1), [node1])
-        assertEquals(containmentChain(node2), [node2, node1])
-        assertEquals(containmentChain(node3), [node3, node1])
-        assertEquals(containmentChain(node4), [node4, node2, node1])
+        deepEqual(containmentChain(node1), [node1])
+        deepEqual(containmentChain(node2), [node2, node1])
+        deepEqual(containmentChain(node3), [node3, node1])
+        deepEqual(containmentChain(node4), [node4, node2, node1])
     })
 
 })

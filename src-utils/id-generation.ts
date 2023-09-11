@@ -1,5 +1,7 @@
-import {createHash, nanoid} from "./deps.ts"
-import {IdGenerator} from "../src-pkg/index.ts"
+import {nanoid} from "nanoid"
+import {createHash} from "crypto"
+
+import {IdGenerator} from "../src-pkg/index.js"
 
 
 /**

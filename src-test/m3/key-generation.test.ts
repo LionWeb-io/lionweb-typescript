@@ -1,22 +1,24 @@
-import {assertEquals} from "../deps.ts"
-import {builtinPrimitives, LanguageFactory, qualifiedNameBasedKeyGenerator} from "../../src-pkg/index.ts"
-import {hashingIdGen} from "../../src-utils/id-generation.ts"
+import {assert} from "chai"
+const {deepEqual} = assert
+
+import {builtinPrimitives, LanguageFactory, qualifiedNameBasedKeyGenerator} from "../../src-pkg/index.js"
+import {hashingIdGen} from "../../src-utils/id-generation.js"
 
 
-Deno.test("key generation", async (tctx) => {
+describe("key generation", () => {
 
-    await tctx.step("based on qualified name", () => {
+    it("based on qualified name", () => {
         const factory = new LanguageFactory("FormLanguage", "1", hashingIdGen(), qualifiedNameBasedKeyGenerator("-"))
 
         const form = factory.concept("Form", false)
         factory.language.havingEntities(form)
 
-        assertEquals(form.key, "FormLanguage-Form")
+        deepEqual(form.key, "FormLanguage-Form")
 
         const size = factory.property(form, "size").ofType(builtinPrimitives.integerDatatype)
         form.havingFeatures(size)
 
-        assertEquals(size.key, "FormLanguage-Form-size")
+        deepEqual(size.key, "FormLanguage-Form-size")
     })
 
 })

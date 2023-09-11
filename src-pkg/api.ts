@@ -1,7 +1,7 @@
-import {Node} from "./types.ts"
-import {Concept, Enumeration, EnumerationLiteral, Feature, Link} from "./m3/types.ts"
-import {flatMapNonCyclingFollowing, trivialFlatMapper} from "./utils/recursion.ts"
-import {allFeaturesOf, isContainment} from "./m3/functions.ts"
+import {Node} from "./types.js"
+import {Concept, Enumeration, EnumerationLiteral, Feature, Link} from "./m3/types.js"
+import {flatMapNonCyclingFollowing, trivialFlatMapper} from "./utils/recursion.js"
+import {allFeaturesOf, isContainment} from "./m3/functions.js"
 
 
 /**

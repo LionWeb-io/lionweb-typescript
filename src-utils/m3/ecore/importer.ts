@@ -18,9 +18,9 @@ import {
     PrimitiveType,
     qualifiedNameOf,
     wrapIdGen
-} from "../../../src-pkg/index.ts"
-import {hashingIdGen} from "../../../src-utils/id-generation.ts"
-import {EClassifier, EcoreXml, EStructuralFeature} from "./types.ts"
+} from "../../../src-pkg/index.js"
+import {hashingIdGen} from "../../../src-utils/id-generation.js"
+import {EClass, EClassifier, EcoreXml, EEnum, EStructuralFeature} from "./types.js"
 
 
 const localRefPrefix = "#//"
@@ -51,7 +51,7 @@ export const asLIonCoreLanguage = (ecoreXml: EcoreXml, version: string): Languag
     const ePackage = ecoreXml["ecore:EPackage"]
     // TODO (#10)  an Ecore XML can contain multiple EPackage-s
     const factory = new LanguageFactory(
-        ePackage["@name"],
+        ePackage["$"]["name"],
         version,
         wrapIdGen(
             hashingIdGen(),
@@ -66,12 +66,12 @@ export const asLIonCoreLanguage = (ecoreXml: EcoreXml, version: string): Languag
     // phase 1: convert EClassifiers but without their EStructuralFeatures (in the case of EClasses)
 
     const convertEClassifier = (eClassifier: EClassifier): LanguageEntity => {
-        const xsiType = eClassifier["@xsi:type"]
+        const xsiType = eClassifier["$"]["xsi:type"]
         if (xsiType === "ecore:EClass") {
-            return factory.concept(eClassifier["@name"], false)
+            return factory.concept(eClassifier["$"]["name"], false)
         }
         if (xsiType === "ecore:EEnum") {
-            return factory.enumeration(eClassifier["@name"])
+            return factory.enumeration(eClassifier["$"]["name"])
         }
         throw new Error(`don't know how to convert an EClassifier with descriptor "${xsiType}"`)
     }
@@ -85,39 +85,39 @@ export const asLIonCoreLanguage = (ecoreXml: EcoreXml, version: string): Languag
 
     const eClassifierConversionFor = (eClassifierName: string): LanguageEntity =>
         convertedEClassifiers
-            .find(([source, _]) => source["@name"] === eClassifierName)![1]
+            .find(([source, _]) => source["$"]["name"] === eClassifierName)![1]
 
 
     // phase 2: also convert features of EClasses
 
     const convertEStructuralFeature = (container: Classifier, feature: EStructuralFeature): Feature => {
-        const metaType = feature["@xsi:type"]
-        const name = feature["@name"]
+        const metaType = feature["$"]["xsi:type"]
+        const name = feature["$"]["name"]
         switch (metaType) {
             case "ecore:EAttribute": {
-                const typeDesc = feature["@eType"]
+                const typeDesc = feature["$"]["eType"]
                 const property = factory.property(container, name)
                     .ofType(
                         typeDesc in typeDesc2primitiveType
                             ? typeDesc2primitiveType[typeDesc]
                             : eClassifierConversionFor(deref(typeDesc))
                     )
-                if (feature["@lowerBound"] === "0") {
+                if (feature["$"]["lowerBound"] === "0") {
                     property.isOptional()
                 }
                 return property
             }
             case "ecore:EReference": {
                 const link = (
-                        feature["@containment"]
+                        feature["$"]["containment"]
                             ? factory.containment(container, name)
                             : factory.reference(container, name)
                     )
-                        .ofType(eClassifierConversionFor(deref(feature["@eType"])) as Classifier)
-                if (feature["@lowerBound"] === "0") {
+                        .ofType(eClassifierConversionFor(deref(feature["$"]["eType"])) as Classifier)
+                if (feature["$"]["lowerBound"] === "0") {
                     link.isOptional()
                 }
-                if (feature["@upperBound"] === "-1") {
+                if (feature["$"]["upperBound"] === "-1") {
                     link.isMultiple()
                 }
                 return link
@@ -128,26 +128,26 @@ export const asLIonCoreLanguage = (ecoreXml: EcoreXml, version: string): Languag
     }
 
     convertedEClassifiers.forEach(([source, target]) => {
-        const xsiType = source["@xsi:type"]
+        const xsiType = source["$"]["xsi:type"]
         if (xsiType === "ecore:EClass") {
             const classifier = target as Classifier
             classifier
                 .havingFeatures(
-                    ...asArray(source.eStructuralFeatures)
+                    ...asArray((source as EClass).eStructuralFeatures)
                         .map((feature) =>
                             convertEStructuralFeature(classifier, feature)
                         )
                 )
-            if (source["@eSuperTypes"] !== undefined) {
-                (target as Concept).extends = eClassifierConversionFor(deref(source["@eSuperTypes"])) as Concept
+            if (source["$"]["eSuperTypes"] !== undefined) {
+                (target as Concept).extends = eClassifierConversionFor(deref(source["$"]["eSuperTypes"])) as Concept
             }
         }
         if (xsiType === "ecore:EEnum") {
             const classifier = target as Enumeration
             classifier
                 .havingLiterals(
-                ...asArray(source.eLiterals)
-                    .map((literal) => factory.enumerationLiteral(classifier, literal["@name"]))
+                ...asArray((source as EEnum).eLiterals)
+                    .map((literal) => factory.enumerationLiteral(classifier, literal["$"]["name"]))
                 )
         }
     })

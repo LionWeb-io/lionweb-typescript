@@ -1,6 +1,6 @@
-import {Concept, ConceptInterface, isINamed, Language, M3Concept} from "./types.ts"
-import {flatMap, inheritedCycleWith, keyOf, namedsOf, qualifiedNameOf} from "./functions.ts"
-import {duplicatesAmong} from "../utils/grouping.ts"
+import {Concept, ConceptInterface, isINamed, Language, M3Concept} from "./types.js"
+import {flatMap, inheritedCycleWith, keyOf, namedsOf, qualifiedNameOf} from "./functions.js"
+import {duplicatesAmong} from "../utils/grouping.js"
 
 
 /**

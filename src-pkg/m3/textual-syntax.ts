@@ -10,10 +10,10 @@ import {
     PrimitiveType,
     Property,
     Reference
-} from "./types.ts"
-import {nameOf} from "./functions.ts"
-import {sortByStringKey} from "../utils/sorting.ts"
-import {SingleRef, unresolved} from "../references.ts"
+} from "./types.js"
+import {nameOf} from "./functions.js"
+import {sortByStringKey} from "../utils/sorting.js"
+import {SingleRef, unresolved} from "../references.js"
 
 
 // TODO  use littoral-templates?

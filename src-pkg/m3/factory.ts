@@ -11,11 +11,11 @@ import {
     PrimitiveType,
     Property,
     Reference
-} from "./types.ts"
-import {SingleRef} from "../references.ts"
-import {IdGenerator} from "../id-generation.ts"
-import {qualifiedNameOf} from "./functions.ts"
-import {KeyGenerator, nameIsKeyGenerator} from "./key-generation.ts"
+} from "./types.js"
+import {SingleRef} from "../references.js"
+import {IdGenerator} from "../id-generation.js"
+import {qualifiedNameOf} from "./functions.js"
+import {KeyGenerator, nameIsKeyGenerator} from "./key-generation.js"
 
 
 const concat = (...names: string[]): string =>

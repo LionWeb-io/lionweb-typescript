@@ -1,11 +1,11 @@
-import {ModelAPI} from "./api.ts"
-import {MetaPointer, SerializationChunk, SerializedNode} from "./serialization.ts"
-import {asIds} from "./functions.ts"
-import {Node} from "./types.ts"
-import {Containment, Enumeration, isINamed, Language, PrimitiveType, Property, Reference} from "./m3/types.ts"
-import {allFeaturesOf} from "./m3/functions.ts"
-import {asArray} from "./utils/array-helpers.ts"
-import {BuiltinPrimitive, lioncoreBuiltins, serializeBuiltin} from "./m3/builtins.ts"
+import {ModelAPI} from "./api.js"
+import {MetaPointer, SerializationChunk, SerializedNode} from "./serialization.js"
+import {asIds} from "./functions.js"
+import {Node} from "./types.js"
+import {Containment, Enumeration, isINamed, Language, PrimitiveType, Property, Reference} from "./m3/types.js"
+import {allFeaturesOf} from "./m3/functions.js"
+import {asArray} from "./utils/array-helpers.js"
+import {BuiltinPrimitive, lioncoreBuiltins, serializeBuiltin} from "./m3/builtins.js"
 
 
 /**

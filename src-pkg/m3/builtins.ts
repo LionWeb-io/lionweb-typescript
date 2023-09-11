@@ -1,7 +1,7 @@
-import {LanguageFactory} from "./factory.ts"
-import {lioncoreBuiltinsQName, lioncoreQNameSeparator, Property} from "./types.ts"
-import {qualifiedNameBasedKeyGenerator} from "./key-generation.ts"
-import {checkAll} from "../id-generation.ts"
+import {LanguageFactory} from "./factory.js"
+import {lioncoreBuiltinsQName, lioncoreQNameSeparator, Property} from "./types.js"
+import {qualifiedNameBasedKeyGenerator} from "./key-generation.js"
+import {checkAll} from "../id-generation.js"
 
 
 const factory = new LanguageFactory(

@@ -3,9 +3,9 @@
  * A LIonWeb language (at the M2 meta level) can be represented as an instance of the {@link Language} type.
  */
 
-import {MultiRef, SingleRef, unresolved} from "../references.ts"
-import {Id, Node} from "../types.ts"
-import {KeyGenerator} from "./key-generation.ts"
+import {MultiRef, SingleRef, unresolved} from "../references.js"
+import {Id, Node} from "../types.js"
+import {KeyGenerator} from "./key-generation.js"
 
 
 const lioncoreQNameSeparator = "-"

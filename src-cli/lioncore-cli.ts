@@ -1,15 +1,17 @@
-import {extractFromSerialization} from "./serialization-extractor.ts"
-import {diagramFromSerialization} from "./m3/diagram-generator.ts"
+import {argv} from "process"
+
+import {extractFromSerialization} from "./serialization-extractor.js"
+import {diagramFromSerialization} from "./m3/diagram-generator.js"
 
 
 const main = (args: string[])=> {
-    if (args.length === 0) {
+    if (args.length <= 2) {
         console.log(
 `lioncore-cli is a LIonWeb utility around LIonCore-TypeScript
 
 Usage: $ lioncore-cli <command> <arguments>
 
-Commands are:
+Available commands are:
 
     extract
 `
@@ -17,28 +19,29 @@ Commands are:
         return
     }
 
-    const command = args[0]
+    const command = args[2]
+    const commandArgs = args.slice(3)
     switch (command) {
 
         case "diagram": {
-            if (args.length === 1) {
+            if (commandArgs.length === 0) {
                 console.log(
                     `The diagram command generates a PlantUML and Mermaid diagram for the language that the given paths point to.`
                 )
             } else {
-                args.slice(1).forEach(diagramFromSerialization)
+                commandArgs.forEach(diagramFromSerialization)
             }
             return
         }
 
         case "extract": {
-            if (args.length === 1) {
+            if (commandArgs.length === 0) {
                 console.log(
 `The extract command extracts the following from a serialization chunk in the form of files: a sorted JSON, and a shortened JSON.
 If the chunk is the serialization of a LIonCore Language/M2, then a textual rendering is already output.`
                 )
             } else {
-                args.slice(1).forEach(extractFromSerialization)
+                commandArgs.forEach(extractFromSerialization)
             }
             return
         }
@@ -52,5 +55,5 @@ If the chunk is the serialization of a LIonCore Language/M2, then a textual rend
 
 }
 
-main(Deno.args)
+main(argv)
 

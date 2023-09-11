@@ -1,7 +1,7 @@
-import {LanguageFactory} from "./factory.ts"
-import {builtinClassifiers, builtinPrimitives} from "./builtins.ts"
-import {Classifier, EnumerationLiteral, Feature, lioncoreQNameSeparator} from "./types.ts"
-import {checkAll} from "../id-generation.ts"
+import {LanguageFactory} from "./factory.js"
+import {builtinClassifiers, builtinPrimitives} from "./builtins.js"
+import {Classifier, EnumerationLiteral, Feature, lioncoreQNameSeparator} from "./types.js"
+import {checkAll} from "../id-generation.js"
 
 
 const lioncoreQName = "LIonCore-M3"

@@ -1,12 +1,14 @@
-import {assertEquals} from "../deps.ts"
-import {asText} from "../../src-pkg/index.ts"
-import {languageWithEnum} from "./language-with-enum.ts"
+import {assert} from "chai"
+const {equal} = assert
+
+import {asText} from "../../src-pkg/index.js"
+import {languageWithEnum} from "./language-with-enum.js"
 
 
-Deno.test("textual syntax (LIonCore)", async (tctx) => {
+describe("textual syntax (LIonCore)", () => {
 
-    await tctx.step("print out language with an enum as text", () => {
-        assertEquals(
+    it("print out language with an enum as text", () => {
+        equal(
             asText(languageWithEnum),
 `language language-with-enum
     version: 1

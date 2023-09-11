@@ -1,4 +1,4 @@
-import {ModelAPI, updateSettings} from "../api.ts"
+import {ModelAPI, updateSettings} from "../api.js"
 import {
     Classifier,
     Concept,
@@ -11,11 +11,11 @@ import {
     PrimitiveType,
     Property,
     Reference
-} from "./types.ts"
-import {builtinFeatures} from "./builtins.ts"
-import {lioncore, metaConcepts, metaFeatures} from "./lioncore.ts"
-import {classBasedConceptDeducerFor, qualifiedNameOf} from "./functions.ts"
-import {KeyGenerator, nameIsKeyGenerator} from "./key-generation.ts"
+} from "./types.js"
+import {builtinFeatures} from "./builtins.js"
+import {lioncore, metaConcepts, metaFeatures} from "./lioncore.js"
+import {classBasedConceptDeducerFor, qualifiedNameOf} from "./functions.js"
+import {KeyGenerator, nameIsKeyGenerator} from "./key-generation.js"
 
 
 const {inamed_name} = builtinFeatures

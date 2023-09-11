@@ -1,6 +1,6 @@
-import {Node} from "./types.ts"
-import {ModelAPI, updateSettings} from "./api.ts"
-import {Concept} from "./m3/types.ts"
+import {Node} from "./types.js"
+import {ModelAPI, updateSettings} from "./api.js"
+import {Concept} from "./m3/types.js"
 
 
 /**

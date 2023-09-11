@@ -1,5 +1,5 @@
-import {INamed, M3Concept as _M3Concept} from "./types.ts"
-import {qualifiedNameOf} from "./functions.ts"
+import {INamed, M3Concept as _M3Concept} from "./types.js"
+import {qualifiedNameOf} from "./functions.js"
 
 
 /**

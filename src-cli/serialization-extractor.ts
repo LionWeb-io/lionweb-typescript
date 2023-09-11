@@ -1,7 +1,9 @@
-import {extensionOfPath} from "./deps.ts"
-import {asText, deserializeLanguage, lioncoreQName} from "../src-pkg/index.ts"
-import {shortenSerialization, sortSerialization} from "../src-utils/serialization-utils.ts"
-import {writeJsonAsFile} from "../src-utils/json.ts"
+import {writeFileSync} from "fs"
+import {extname} from "path"
+
+import {asText, deserializeLanguage, lioncoreQName, SerializationChunk} from "../src-pkg/index.js"
+import {shortenSerialization, sortSerialization} from "../src-utils/serialization-utils.js"
+import {readFileAsJson, writeJsonAsFile} from "../src-utils/json.js"
 
 
 const isRecord = (json: unknown): json is Record<string, unknown> =>
@@ -17,13 +19,13 @@ const isSerializedLanguage = (json: unknown): boolean =>
 
 export const extractFromSerialization = async (path: string) => {
     try {
-        const json = JSON.parse(await Deno.readTextFile(path))
-        const extlessPath = path.substring(0, path.length - extensionOfPath(path).length)
+        const json = readFileAsJson(path) as SerializationChunk
+        const extlessPath = path.substring(0, path.length - extname(path).length)
         const sortedJson = sortSerialization(json)
-        await writeJsonAsFile(extlessPath + ".sorted.json", sortedJson)
-        await writeJsonAsFile(extlessPath + ".shortened.json", shortenSerialization(json))   // (could also sort)
+        writeJsonAsFile(extlessPath + ".sorted.json", sortedJson)
+        writeJsonAsFile(extlessPath + ".shortened.json", shortenSerialization(json))   // (could also sort)
         if (isSerializedLanguage(json)) {
-            await Deno.writeTextFile(extlessPath + ".txt", asText(deserializeLanguage(json)))
+            writeFileSync(extlessPath + ".txt", asText(deserializeLanguage(json)))
         }
         console.log(`extracted: "${path}" -> "${extlessPath}"`)
     } catch (_) {

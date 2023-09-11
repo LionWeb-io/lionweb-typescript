@@ -1,10 +1,10 @@
-import {Id, Node} from "./types.ts"
-import {SerializationChunk, SerializedNode} from "./serialization.ts"
-import {ModelAPI} from "./api.ts"
-import {Concept, Containment, Enumeration, Language, PrimitiveType, Property, Reference} from "./m3/types.ts"
-import {allFeaturesOf} from "./m3/functions.ts"
-import {deserializeBuiltin} from "./m3/builtins.ts"
-import {groupBy} from "./utils/grouping.ts"
+import {Id, Node} from "./types.js"
+import {SerializationChunk, SerializedNode} from "./serialization.js"
+import {ModelAPI} from "./api.js"
+import {Concept, Containment, Enumeration, Language, PrimitiveType, Property, Reference} from "./m3/types.js"
+import {allFeaturesOf} from "./m3/functions.js"
+import {deserializeBuiltin} from "./m3/builtins.js"
+import {groupBy} from "./utils/grouping.js"
 
 
 /**

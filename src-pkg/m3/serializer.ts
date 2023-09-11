@@ -1,7 +1,7 @@
-import {Language} from "./types.ts"
-import {SerializationChunk} from "../serialization.ts"
-import {serializeNodes} from "../serializer.ts"
-import {lioncoreAPI} from "./api.ts"
+import {Language} from "./types.js"
+import {SerializationChunk} from "../serialization.js"
+import {serializeNodes} from "../serializer.js"
+import {lioncoreAPI} from "./api.js"
 
 
 /**

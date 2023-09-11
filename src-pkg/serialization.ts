@@ -1,4 +1,4 @@
-import {Id} from "./types.ts"
+import {Id} from "./types.js"
 
 
 export type Ids = Id[]

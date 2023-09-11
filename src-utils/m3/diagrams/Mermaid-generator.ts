@@ -1,4 +1,4 @@
-import {asString, indentWith, NestedString} from "../../deps.ts"
+import {asString, indentWith, NestedString} from "littoral-templates"
 import {
     Concept,
     ConceptInterface,
@@ -15,7 +15,7 @@ import {
     relationsOf,
     type,
     unresolved
-} from "../../../src-pkg/index.ts"
+} from "../../../src-pkg/index.js"
 
 
 // define some layouting basics/building algebra:

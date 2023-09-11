@@ -1,10 +1,10 @@
-import {Language} from "./types.ts"
-import {SerializationChunk} from "../serialization.ts"
-import {lioncoreAPI} from "./api.ts"
-import {nodesExtractorUsing} from "../api.ts"
-import {deserializeModel} from "../deserializer.ts"
-import {lioncore} from "./lioncore.ts"
-import {lioncoreBuiltins} from "./builtins.ts"
+import {Language} from "./types.js"
+import {SerializationChunk} from "../serialization.js"
+import {lioncoreAPI} from "./api.js"
+import {nodesExtractorUsing} from "../api.js"
+import {deserializeModel} from "../deserializer.js"
+import {lioncore} from "./lioncore.js"
+import {lioncoreBuiltins} from "./builtins.js"
 
 
 /**

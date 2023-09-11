@@ -1,4 +1,4 @@
-import {asString, indentWith} from "../../deps.ts"
+import {asString, indentWith} from "littoral-templates"
 import {
     Concept,
     ConceptInterface,
@@ -15,7 +15,7 @@ import {
     relationsOf,
     type,
     unresolved
-} from "../../../src-pkg/index.ts"
+} from "../../../src-pkg/index.js"
 
 
 const indented = indentWith(`  `)(1)

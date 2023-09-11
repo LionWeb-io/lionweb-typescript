@@ -1,4 +1,4 @@
-import {SerializationChunk, sortByStringKey} from "../src-pkg/index.ts"
+import {SerializationChunk, sortByStringKey} from "../src-pkg/index.js"
 
 
 /**

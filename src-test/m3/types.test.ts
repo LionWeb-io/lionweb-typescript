@@ -1,6 +1,6 @@
-// import {assertThrows} from "../deps.ts"
-// import {LanguageFactory} from "../../src-pkg/m3/factory.ts"
-// import {builtinPrimitives} from "../../src-pkg/m3/builtins.ts"
+// const { throws } = require("chai").assert
+// import {LanguageFactory} from "../../src-pkg/m3/factory.js"
+// import {builtinPrimitives} from "../../src-pkg/m3/builtins.js"
 
 
 /*
@@ -17,17 +17,17 @@ a.with(a)   // would be nice if this produced a compiler error!
  */
 
 
-Deno.test("M3 types", async (_) => {
+describe("M3 types", () => {
 
     /*
-    await tctx.step("adding non-language elements to a language should fail", () => {
+    it("adding non-language elements to a language should fail", () => {
         const factory = new LanguageFactory("TestLanguage", "0")
         const {language} = factory
         const concept = factory.concept("Concept", false)
         const property = factory.property(concept, "property").ofType(builtinPrimitives.intDatatype)
         factory.language.havingEntities(concept)
         // TODO  understand why the following fails to compile after the addition of a getter "language" to LanguageEntity
-        assertThrows(() => {
+        throws(() => {
             language.havingEntities(property),
             Error,
             `trying to add non-LanguageElements to Language: <Property>"property"`
