@@ -7,9 +7,11 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
-      - uses: denoland/setup-deno@v1.1.1
+      - uses: actions/setup-node@v3
         with:
-          deno-version: v1.x  # run with the latest stable version of Deno
-      - name: Run Deno tests
-        run: deno task run-tests
+          node-version: 19
+      - name: Install dependencies
+        run: npm ci
+      - name: Run Mocha tests
+        run: npm test
 

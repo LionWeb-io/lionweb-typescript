@@ -31,7 +31,7 @@
   "scripts": {
     "build": "tsc",
     "pretest": "npm run build",
-    "test": "mocha dist/src-test --recursive",
+    "test": "find dist/src-test -type d | tac | xargs npx mocha",
     "generate-artifacts": "npm run build && node dist/src-build/generate-artifacts.js"
   }
 }
