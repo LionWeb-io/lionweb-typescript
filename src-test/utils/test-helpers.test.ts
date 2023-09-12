@@ -15,7 +15,7 @@ describe("test helpers", () => {
     })
 
    it("undefinedValuesDeletedFrom works", () => {
-        deepEqual(undefinedValuesDeletedFrom({ foo: undefined }), {} as any)
+        deepEqual(undefinedValuesDeletedFrom({ foo: undefined }), {} as unknown)
     })
 
     it("undefinedValuesDeletedFrom leaves null alone (and doesn't fail on it)", () => {

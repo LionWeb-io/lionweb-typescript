@@ -50,8 +50,10 @@ export type SpecialistBookWriter = Writer & BaseNode & {
 export const libraryModelApi: ModelAPI<BaseNode> = {
     conceptOf: (node) => nameBasedConceptDeducerFor(libraryLanguage)(node.concept),
     getFeatureValue: (node, feature) =>
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
         (node as any)[feature.name],
     enumerationLiteralFrom: (value, enumeration) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
         const rtEnum = rtEnums[enumeration.key] as any
         const targetKey = rtEnum[value as number]
         return enumeration.literals.find(({key}) => key === targetKey)
@@ -63,6 +65,7 @@ export const libraryModelApi: ModelAPI<BaseNode> = {
     }),
     setFeatureValue: updateSettings,
     encodingOf: (literal) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
         const rtEnum = rtEnums[literal.enumeration.key] as any
         return rtEnum[literal.key as unknown as number]
     }

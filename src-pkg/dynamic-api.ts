@@ -18,6 +18,7 @@ export type DynamicNode = Node & {
 export const dynamicModelAPI: ModelAPI<DynamicNode> = ({
     conceptOf: (node) => node.concept,
     getFeatureValue: (node, feature) =>
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
         (node.settings as any)[feature.name],
     enumerationLiteralFrom: (value, enumeration) =>
         enumeration.literals.find(({key}) => key === value)

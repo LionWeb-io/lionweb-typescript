@@ -27,6 +27,7 @@ const {inamed_name} = builtinFeatures
 export const lioncoreAPIWithKeyGen = (keyGen: KeyGenerator): ModelAPI<M3Concept> => ({
     conceptOf: classBasedConceptDeducerFor(lioncore),
     getFeatureValue: (node, feature) =>
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
         (node as any)[feature.name],
     enumerationLiteralFrom: (value, _) => value as (EnumerationLiteral | null),
     nodeFor: (parent, concept, id, settings) => {

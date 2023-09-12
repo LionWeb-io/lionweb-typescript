@@ -5,7 +5,7 @@ import {duplicatesAmong} from "../utils/grouping.js"
 
 /**
  * Type definition for an issue corresponding
- * to a violation of a contraint on a {@link M3Concept language object}.
+ * to a violation of a constraint on a {@link M3Concept language object}.
  */
 export type Issue = {
     location: M3Concept
