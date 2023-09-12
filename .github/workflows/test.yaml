@@ -1,4 +1,4 @@
-name: Deno tests
+name: lioncore-typescript tests
 
 on: [push, pull_request]
 

@@ -4,19 +4,15 @@
 /dist/src-cli
 /dist/src-test
 /dist/src-utils
-/documentation
-/lib
 /models
 /schemas
 /src-build
 /src-cli
 /src-test
 /src-utils
-/deno.*
-/TODO.md
+/.eslintrc.cjs
 /tsconfig.json
-
-/lioncore-ts-*.tgz
+/lioncore-typescript-*.tgz
 
 # IntelliJ IDEA:
 /.idea
