@@ -1,6 +1,6 @@
 {
   "name": "lioncore-ts",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "LIonWeb core for {Java|Type}Script",
   "main": "dist/src-pkg/index.js",
   "types": "dist/src-pkg/index.d.ts",
