@@ -4,16 +4,15 @@
 ## Aspects
 
 * [TypeScript type definitions](./types.ts)
-* [factory](./factory.ts) for conveniently creating M3 instances
-* [primitive types built-in (`builtins`) to LIonCore](./builtins.ts)
+* [Factory](./factory.ts) for conveniently creating M3 instances
+* [Built-in (`builtins`) to LIonCore](./builtins.ts)
 * [A model API specific for M3 instances](./api.ts)
-* persistence: [serializer](./serializer.ts) and [deserializer](./deserializer.ts)
-* [constraints checker](./constraints.ts)
-* convenience/helper [functions](./functions.ts) defined on M3 concepts
-* [JSON Schema generator](./schema-generator.ts) that generates a JSON Schema for the serialization format specific to the (the metamodel of the) given language
-* [Ecore importer](./ecore/importer.ts) that converts an Ecore XML file to a M3 instance
-* [PlantUML generator](./diagrams/PlantUML-generator.ts) that generates a PlantUML class diagram from (the metamodel of the) a given language
-* ([reference checker](./reference-checker.ts))
+* Persistence: [serializer](./serializer.ts) and [deserializer](./deserializer.ts)
+* [Constraints checker](./constraints.ts)
+* Convenience/helper [functions](./functions.ts) defined on M3 concepts
+* Rendering an M3 instance in [textual syntax](./textual-syntax.ts)
+* ([Reference checker](./reference-checker.ts))
+* [Generation of keys](./key-generation.ts)
 
-An interesting place to start might be the [self-definition of LIonCore/M3](./self-definition.ts) using its own [TypeScript type definitions](./types.ts).
+An interesting place to start might be the [self-definition of LIonCore/M3](./lioncore.ts) using its own [TypeScript type definitions](./types.ts).
 
