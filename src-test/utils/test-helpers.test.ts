@@ -1,24 +1,26 @@
-import {assertEquals, AssertionError, assertThrows} from "../deps.ts"
-import {undefinedValuesDeletedFrom} from "./test-helpers.ts"
+import {assert} from "chai"
+const {deepEqual, throws} = assert
+
+import {undefinedValuesDeletedFrom} from "./test-helpers.js"
 
 
-Deno.test("test helpers", async (tctx) => {
+describe("test helpers", () => {
 
-    await tctx.step("undefinedValuesDeletedFrom is needed", () => {
-        assertThrows(() => {
-            assertEquals({ foo: undefined }, {})
+    it("undefinedValuesDeletedFrom is needed", () => {
+        throws(() => {
+            deepEqual({ foo: undefined }, {})
         },
-            AssertionError
+            `expected { foo: undefined } to deeply equal {}`
         )
     })
 
-    await tctx.step("undefinedValuesDeletedFrom works", () => {
-        assertEquals(undefinedValuesDeletedFrom({ foo: undefined }), {} as any)
+   it("undefinedValuesDeletedFrom works", () => {
+        deepEqual(undefinedValuesDeletedFrom({ foo: undefined }), {} as unknown)
     })
 
-    await tctx.step("undefinedValuesDeletedFrom leaves null alone (and doesn't fail on it)", () => {
+    it("undefinedValuesDeletedFrom leaves null alone (and doesn't fail on it)", () => {
         const object = { foo: null }
-        assertEquals(undefinedValuesDeletedFrom(object), object)
+        deepEqual(undefinedValuesDeletedFrom(object), object)
     })
 
 })

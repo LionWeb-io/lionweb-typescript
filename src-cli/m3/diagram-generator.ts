@@ -1,16 +1,19 @@
-import {extensionOfPath} from "../deps.ts"
-import {deserializeLanguage} from "../../src/m3/deserializer.ts"
-import {generatePlantUmlForLanguage} from "../../src-utils/m3/diagrams/PlantUML-generator.ts"
-import {generateMermaidForLanguage} from "../../src-utils/m3/diagrams/Mermaid-generator.ts"
+import {writeFileSync} from "fs"
+import {extname} from "path"
+
+import {deserializeLanguage, SerializationChunk} from "../../src-pkg/index.js"
+import {generatePlantUmlForLanguage} from "../../src-utils/m3/diagrams/PlantUML-generator.js"
+import {generateMermaidForLanguage} from "../../src-utils/m3/diagrams/Mermaid-generator.js"
+import {readFileAsJson} from "../../src-utils/json.js"
 
 
 export const diagramFromSerialization = async (path: string) => {
     try {
-        const json = JSON.parse(await Deno.readTextFile(path))
-        const extlessPath = path.substring(0, path.length - extensionOfPath(path).length)
+        const json = readFileAsJson(path) as SerializationChunk
+        const extlessPath = path.substring(0, path.length - extname(path).length)
         const language = deserializeLanguage(json)
-        await Deno.writeTextFileSync(extlessPath + ".puml", generatePlantUmlForLanguage(language))
-        await Deno.writeTextFileSync(extlessPath + ".md", generateMermaidForLanguage(language))
+        writeFileSync(extlessPath + ".puml", generatePlantUmlForLanguage(language))
+        writeFileSync(extlessPath + ".md", generateMermaidForLanguage(language))
         console.log(`generated diagrams: "${path}" -> "${extlessPath}"`)
     } catch (_) {
         console.error(`"${path}" is not a valid JSON file`)

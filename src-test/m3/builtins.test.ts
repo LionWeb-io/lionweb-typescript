@@ -1,22 +1,24 @@
-import {assertEquals} from "../deps.ts"
-import {lioncoreBuiltins} from "../../src/m3/builtins.ts"
-import {checkReferences} from "../../src/m3/reference-checker.ts"
-import {issuesLanguage} from "../../src/m3/constraints.ts"
-import {logIssues, logUnresolvedReferences} from "../utils/test-helpers.ts"
+import {assert} from "chai"
+const {deepEqual} = assert
+
+import {lioncoreBuiltins} from "../../src-pkg/index.js"
+import {checkReferences} from "../../src-pkg/index.js"
+import {issuesLanguage} from "../../src-pkg/index.js"
+import {logIssues, logUnresolvedReferences} from "../utils/test-helpers.js"
 
 
-Deno.test("primitive types built-in to LIonCore", async (tctx) => {
+describe("primitive types built-in to LIonCore", () => {
 
-    await tctx.step("check for unresolved references", () => {
+    it("check for unresolved references", () => {
         const unresolvedReferences = checkReferences(lioncoreBuiltins)
         logUnresolvedReferences(unresolvedReferences)
-        assertEquals(unresolvedReferences, [], "number of expected unresolved references -- see above for the locations")
+        deepEqual(unresolvedReferences, [], "number of expected unresolved references -- see above for the locations")
     })
 
-    await tctx.step("check constraints", () => {
+    it("check constraints", () => {
         const issues = issuesLanguage(lioncoreBuiltins)
         logIssues(issues)
-        assertEquals(issues, [], "number of expected constraint violations -- see above for the issues")
+        deepEqual(issues, [], "number of expected constraint violations -- see above for the issues")
     })
 
 })

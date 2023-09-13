@@ -1,12 +1,11 @@
-import {Issue} from "../../src/m3/constraints.ts"
-import {asIds} from "../../src/functions.ts"
+import {asIds, Issue} from "../../src-pkg/index.js"
 
 
 /**
  * Deletes all {@code undefined} values in objects hanging off of the given root.
  * This makes it possible to compare serializations before and after writing to disk,
  * because:
-<pre>!assertEquals({ foo: undefined }, {})</pre>
+<pre>!deepEqual({ foo: undefined }, {})</pre>
  */
 export const undefinedValuesDeletedFrom = <T>(root: T): T => {
     const visited: Record<string, unknown>[] = []

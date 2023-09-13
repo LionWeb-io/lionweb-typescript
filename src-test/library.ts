@@ -1,8 +1,6 @@
-import {hashingIdGen} from "../src/id-generation.ts"
-import {ModelAPI, updateSettings} from "../src/api.ts"
-import {nameBasedConceptDeducerFor} from "../src/m3/functions.ts"
-import {libraryLanguage} from "./m3/library-language.ts"
-import {Node} from "../src/mod.ts"
+import {ModelAPI, nameBasedConceptDeducerFor, Node, updateSettings} from "../src-pkg/index.js"
+import {hashingIdGen} from "../src-utils/id-generation.js"
+import {libraryLanguage} from "./m3/library-language.js"
 
 
 export enum BookType {
@@ -52,8 +50,10 @@ export type SpecialistBookWriter = Writer & BaseNode & {
 export const libraryModelApi: ModelAPI<BaseNode> = {
     conceptOf: (node) => nameBasedConceptDeducerFor(libraryLanguage)(node.concept),
     getFeatureValue: (node, feature) =>
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
         (node as any)[feature.name],
     enumerationLiteralFrom: (value, enumeration) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
         const rtEnum = rtEnums[enumeration.key] as any
         const targetKey = rtEnum[value as number]
         return enumeration.literals.find(({key}) => key === targetKey)
@@ -65,6 +65,7 @@ export const libraryModelApi: ModelAPI<BaseNode> = {
     }),
     setFeatureValue: updateSettings,
     encodingOf: (literal) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
         const rtEnum = rtEnums[literal.enumeration.key] as any
         return rtEnum[literal.key as unknown as number]
     }

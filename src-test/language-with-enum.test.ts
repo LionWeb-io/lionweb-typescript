@@ -1,21 +1,19 @@
-import {assertEquals} from "./deps.ts"
+import {assert} from "chai"
+const {deepEqual} = assert
 
-import {serializeLanguage} from "../src/m3/serializer.ts"
-import {deserializeLanguage} from "../src/m3/deserializer.ts"
-import {Enumeration} from "../src/m3/types.ts"
-
-import {languageWithEnum} from "./m3/language-with-enum.ts"
+import {deserializeLanguage, Enumeration, serializeLanguage} from "../src-pkg/index.js"
+import {languageWithEnum} from "./m3/language-with-enum.js"
 
 
-Deno.test("Language-with-enum test model", async (tctx) => {
+describe("Language-with-enum test model", () => {
 
-    await tctx.step("roundtrip persistence of M2", () => {
+    it("roundtrip persistence of M2", () => {
         const serialization = serializeLanguage(languageWithEnum)
         const deserialization = deserializeLanguage(serialization)
-        assertEquals(deserialization, languageWithEnum)
+        deepEqual(deserialization, languageWithEnum)
         const enum_ = deserialization.entities[0]
-        assertEquals(enum_ instanceof Enumeration, true)
-        assertEquals((enum_ as Enumeration).literals.length, 2)
+        deepEqual(enum_ instanceof Enumeration, true)
+        deepEqual((enum_ as Enumeration).literals.length, 2)
     })
 
 })

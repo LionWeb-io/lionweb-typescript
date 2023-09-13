@@ -1,0 +1,20 @@
+/.github
+/diagrams
+/dist/src-build
+/dist/src-cli
+/dist/src-test
+/dist/src-utils
+/models
+/schemas
+/src-build
+/src-cli
+/src-test
+/src-utils
+/.eslintrc.cjs
+/tsconfig.json
+/lioncore-typescript-*.tgz
+
+# IntelliJ IDEA:
+/.idea
+/lioncore-typescript.iml
+

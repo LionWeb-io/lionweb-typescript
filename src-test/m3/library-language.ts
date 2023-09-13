@@ -1,6 +1,5 @@
-import {LanguageFactory} from "../../src/m3/factory.ts"
-import {hashingIdGen} from "../../src/id-generation.ts"
-import {builtinPrimitives} from "../../src/m3/builtins.ts"
+import {builtinPrimitives, LanguageFactory} from "../../src-pkg/index.js"
+import {hashingIdGen} from "../../src-utils/id-generation.js"
 
 
 const factory = new LanguageFactory("library", "1", hashingIdGen())
@@ -16,7 +15,7 @@ const specialistBookWriter = factory.concept("SpecialistBookWriter", false, writ
 const bookType = factory.enumeration("BookType")
 bookType.havingLiterals(
         factory.enumerationLiteral(bookType, "Normal"),
-        factory.enumerationLiteral(bookType, "Special"),
+        factory.enumerationLiteral(bookType, "Special")
     )
 
 const library_name = factory.property(library, "name").ofType(stringDatatype).havingKey("library_Library_name")
