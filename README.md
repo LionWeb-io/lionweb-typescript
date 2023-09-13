@@ -31,10 +31,13 @@ Note that this does not catch TypeScript compilation errors.
 
 ### Dev dependencies
 
-* [Node.js](https://nodejs.org/): JavaScript runtime, version (at least) 19.9.0
-* NPM (included in Node.js): version (at least) 9.8.1
+* [Node.js](https://nodejs.org/): JavaScript runtime, version (at least) v18.17.1 (the latest LTS version)
+  * NPM (bundled with Node.js): version (at least) 9.6.7
 * (optional) [PlantUML](https://plantuml.com/).
   An IDE plugin such as the one [for IntelliJ IDEA](https://plugins.jetbrains.com/plugin/7017-plantuml-integration) also does the trick.
+
+Note that development tends to be done with the latest Node.js and NPM versions.
+Currently, these are v19.9.0 and 9.8.1.
 
 
 ## Getting started
