@@ -1,10 +1,9 @@
-import {hashingIdGen} from "../src/id-generation.ts"
-import {ModelAPI} from "../src/api.ts"
-import {multiLanguage} from "./m3/multi-language.ts"
-import {Node} from "../src/mod.ts"
-import {bobLibrary, jackLondon, Library, libraryModelApi} from "./library.ts"
-import {libraryLanguage} from "./m3/library-language.ts"
-import {nameBasedConceptDeducerFor} from "../src/m3/functions.ts"
+import {hashingIdGen} from "../src-utils/id-generation.js"
+import {ModelAPI, nameBasedConceptDeducerFor, Node} from "../src-pkg/index.js"
+import {multiLanguage} from "./m3/multi-language.js"
+import {bobLibrary, jackLondon, Library, libraryModelApi} from "./library.js"
+import {libraryLanguage} from "./m3/library-language.js"
+
 
 export type BaseNode = Node & {
     concept: string

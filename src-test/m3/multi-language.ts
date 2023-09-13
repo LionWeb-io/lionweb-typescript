@@ -1,6 +1,6 @@
-import {LanguageFactory} from "../../src/m3/factory.ts"
-import {hashingIdGen} from "../../src/id-generation.ts"
-import {library, libraryLanguage} from "./library-language.ts"
+import {LanguageFactory} from "../../src-pkg/index.js"
+import {hashingIdGen} from "../../src-utils/id-generation.js"
+import {library, libraryLanguage} from "./library-language.js"
 
 
 const factory = new LanguageFactory("multi", "1", hashingIdGen())
