@@ -2,7 +2,7 @@ import {assert} from "chai"
 const {deepEqual} = assert
 
 import {deserializeLanguage, lioncoreBuiltins, serializeLanguage} from "../../src-pkg/index.js"
-import {libraryLanguage} from "./library-language.js"
+import {libraryLanguage} from "../languages/library.js"
 import {undefinedValuesDeletedFrom} from "../utils/test-helpers.js"
 
 

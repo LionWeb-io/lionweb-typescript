@@ -8,8 +8,8 @@ import {
     nameBasedConceptDeducerFor,
     serializeNodes
 } from "../src-pkg/index.js"
-import {libraryModel, libraryModelApi} from "./library.js"
-import {libraryLanguage} from "./m3/library-language.js"
+import {libraryModel, libraryModelApi} from "./instances/library.js"
+import {libraryLanguage} from "./languages/library.js"
 import {undefinedValuesDeletedFrom} from "./utils/test-helpers.js"
 
 

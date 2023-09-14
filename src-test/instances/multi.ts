@@ -1,8 +1,8 @@
-import {hashingIdGen} from "../src-utils/id-generation.js"
-import {ModelAPI, nameBasedConceptDeducerFor, Node} from "../src-pkg/index.js"
-import {multiLanguage} from "./m3/multi-language.js"
+import {hashingIdGen} from "../../src-utils/id-generation.js"
+import {ModelAPI, nameBasedConceptDeducerFor, Node} from "../../src-pkg/index.js"
+import {multiLanguage} from "../languages/multi.js"
 import {bobLibrary, jackLondon, Library, libraryModelApi} from "./library.js"
-import {libraryLanguage} from "./m3/library-language.js"
+import {libraryLanguage} from "../languages/library.js"
 
 
 export type BaseNode = Node & {

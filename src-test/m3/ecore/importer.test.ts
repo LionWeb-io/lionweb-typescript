@@ -6,7 +6,7 @@ import {parseString} from "xml2js"
 import {checkReferences, issuesLanguage, serializeLanguage} from "../../../src-pkg/index.js"
 import {asLIonCoreLanguage} from "../../../src-utils/m3/ecore/importer.js"
 import {logIssues, logUnresolvedReferences, undefinedValuesDeletedFrom} from "../../utils/test-helpers.js"
-import {libraryLanguage} from "../library-language.js"
+import {libraryLanguage} from "../../languages/library.js"
 import {sortedSerialization} from "../../../src-utils/serialization-utils.js"
 
 

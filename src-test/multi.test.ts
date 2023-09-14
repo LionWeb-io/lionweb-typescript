@@ -3,9 +3,9 @@ const {deepEqual} = assert
 
 import {undefinedValuesDeletedFrom} from "./utils/test-helpers.js"
 import {deserializeChunk, serializeNodes} from "../src-pkg/index.js"
-import {multiLanguage} from "./m3/multi-language.js"
-import {multiModel, multiModelApi} from "./multi.js"
-import {libraryLanguage} from "./m3/library-language.js"
+import {multiLanguage} from "./languages/multi.js"
+import {multiModel, multiModelApi} from "./instances/multi.js"
+import {libraryLanguage} from "./languages/library.js"
 
 
 describe("multi-language test model", () => {

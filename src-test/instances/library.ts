@@ -1,6 +1,6 @@
-import {ModelAPI, nameBasedConceptDeducerFor, Node, updateSettingsNameBased} from "../src-pkg/index.js"
-import {hashingIdGen} from "../src-utils/id-generation.js"
-import {libraryLanguage} from "./m3/library-language.js"
+import {ModelAPI, nameBasedConceptDeducerFor, Node, updateSettingsNameBased} from "../../src-pkg/index.js"
+import {hashingIdGen} from "../../src-utils/id-generation.js"
+import {libraryLanguage} from "../languages/library.js"
 
 
 export enum BookType {
