@@ -5,7 +5,7 @@ import {SerializationChunk, sortByStringKey} from "../src-pkg/index.js"
  * @return A shortened version of a {@link SerializedModel JSON serialization}, which should make it easier to inspect.
  *  Note that the shortened version doesn't contain all information, and could (in theory) be malformed.
  */
-export const shortenSerialization = ({nodes}: SerializationChunk) =>
+export const shortenedSerialization = ({nodes}: SerializationChunk) =>
     nodes.map((node) => ({
         id: node.id,
         concept: node.concept.key,
@@ -24,7 +24,7 @@ export const shortenSerialization = ({nodes}: SerializationChunk) =>
  * @return A sorted version of a {@link SerializedModel JSON serialization}, which should make it easier to inspect.
  *  Note that the sorted version destroy the order of links, which might effectively alter semantics.
  */
-export const sortSerialization = ({serializationFormatVersion, languages, nodes}: SerializationChunk): SerializationChunk =>
+export const sortedSerialization = ({serializationFormatVersion, languages, nodes}: SerializationChunk): SerializationChunk =>
     ({
         serializationFormatVersion,
         languages,

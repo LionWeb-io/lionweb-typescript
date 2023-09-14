@@ -7,7 +7,7 @@ import {checkReferences, issuesLanguage, serializeLanguage} from "../../../src-p
 import {asLIonCoreLanguage} from "../../../src-utils/m3/ecore/importer.js"
 import {logIssues, logUnresolvedReferences, undefinedValuesDeletedFrom} from "../../utils/test-helpers.js"
 import {libraryLanguage} from "../library-language.js"
-import {sortSerialization} from "../../../src-utils/serialization-utils.js"
+import {sortedSerialization} from "../../../src-utils/serialization-utils.js"
 
 
 describe("Ecore importer", () => {
@@ -23,7 +23,7 @@ describe("Ecore importer", () => {
             logIssues(issues)
             deepEqual(issues, [])
             const serialization = serializeLanguage(language)
-            deepEqual(sortSerialization(undefinedValuesDeletedFrom(serialization)), sortSerialization(undefinedValuesDeletedFrom(serializeLanguage(libraryLanguage))))
+            deepEqual(sortedSerialization(undefinedValuesDeletedFrom(serialization)), sortedSerialization(undefinedValuesDeletedFrom(serializeLanguage(libraryLanguage))))
         })
     })
 

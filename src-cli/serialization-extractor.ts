@@ -2,7 +2,7 @@ import {writeFileSync} from "fs"
 import {extname} from "path"
 
 import {asText, deserializeLanguage, lioncoreQName, SerializationChunk} from "../src-pkg/index.js"
-import {shortenSerialization, sortSerialization} from "../src-utils/serialization-utils.js"
+import {shortenedSerialization, sortedSerialization} from "../src-utils/serialization-utils.js"
 import {readFileAsJson, writeJsonAsFile} from "../src-utils/json.js"
 
 
@@ -21,9 +21,9 @@ export const extractFromSerialization = async (path: string) => {
     try {
         const json = readFileAsJson(path) as SerializationChunk
         const extlessPath = path.substring(0, path.length - extname(path).length)
-        const sortedJson = sortSerialization(json)
+        const sortedJson = sortedSerialization(json)
         writeJsonAsFile(extlessPath + ".sorted.json", sortedJson)
-        writeJsonAsFile(extlessPath + ".shortened.json", shortenSerialization(json))   // (could also sort)
+        writeJsonAsFile(extlessPath + ".shortened.json", shortenedSerialization(json))   // (could also sort)
         if (isSerializedLanguage(json)) {
             writeFileSync(extlessPath + ".txt", asText(deserializeLanguage(json)))
         }
