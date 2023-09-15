@@ -22,7 +22,7 @@ const byIdMap = <T extends { id: Id }>(ts: T[]): { [id: Id]: T } => {
 /**
  * @return a deserialization of a {@link SerializationChunk}
  *
- * @param serializationChunk - a {@link SerializedModel model} from its LIonWeb serialization JSON format
+ * @param serializationChunk - a {@link SerializedModel model} from its LionWeb serialization JSON format
  * @param api - a {@link ModelAPI model API} that is used to instantiate nodes and set values on them
  * @param languages - a {@link Language language} that the serialized model is expected to conform to
  * @param dependentNodes - a collection of nodes from dependent models against which all references in the serialized model are supposed to resolve against

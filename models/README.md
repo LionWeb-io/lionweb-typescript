@@ -1,6 +1,6 @@
 # README
 
-This directory contains serializations of models in the LIonWeb JSON format.
+This directory contains serializations of models in the LionWeb JSON format.
 A split is made between [languages](./meta), and [instances](./instance) of those.
 
 

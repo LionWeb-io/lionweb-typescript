@@ -7,7 +7,7 @@ import {diagramFromSerialization} from "./m3/diagram-generator.js"
 const main = (args: string[])=> {
     if (args.length <= 2) {
         console.log(
-`lioncore-cli is a LIonWeb utility around LIonCore-TypeScript
+`lioncore-cli is a LionWeb utility around LIonCore-TypeScript
 
 Usage: $ lioncore-cli <command> <arguments>
 

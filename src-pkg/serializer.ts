@@ -9,7 +9,7 @@ import {BuiltinPrimitive, lioncoreBuiltins, serializeBuiltin} from "./m3/builtin
 
 
 /**
- * @return a {@link SerializationChunk} of the given model (i.e., an array of {@link Node nodes} - the first argument) to the LIonWeb serialization JSON format.
+ * @return a {@link SerializationChunk} of the given model (i.e., an array of {@link Node nodes} - the first argument) to the LionWeb serialization JSON format.
  */
 export const serializeNodes = <NT extends Node>(nodes: NT[], api: ReadModelAPI<NT>): SerializationChunk /* <=> JSON */ => {
     const serializedNodes: SerializedNode[] = []  // keep nodes as much as possible "in order"

@@ -8,7 +8,7 @@ import {lioncoreBuiltins} from "./builtins.js"
 
 
 /**
- * Deserializes a language that's serialized into the LIonWeb serialization JSON format
+ * Deserializes a language that's serialized into the LionWeb serialization JSON format
  * as an instance of the LIonCore/M3 metametamodel, using {@link _M3Concept these type definitions}.
  */
 export const deserializeLanguage = (serializationChunk: SerializationChunk, ...dependentMetamodels: Language[]): Language => {

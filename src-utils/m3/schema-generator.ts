@@ -103,7 +103,7 @@ const schemaForEnumeration = ({literals}: Enumeration): unknown =>
 
 
 /**
- * Generates a JSON Schema for the LIonWeb-compliant serialization JSON format
+ * Generates a JSON Schema for the LionWeb-compliant serialization JSON format
  * specific to the (metamodel in/of the) given language.
  */
 export const schemaFor = (language: Language): unknown /* <=> JSON Schema */ => {
