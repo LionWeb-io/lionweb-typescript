@@ -11,7 +11,7 @@ import {
 } from "../../src-pkg/index.js"
 import {readFileAsJson} from "../../src-utils/json.js"
 import {logIssues, logUnresolvedReferences} from "../utils/test-helpers.js"
-import {serializedLioncorePath} from "../../src-build/paths.js"
+import {lioncorePath} from "../../src-build/paths.js"
 
 
 describe("meta-circularity (LIonCore)", () => {
@@ -30,10 +30,10 @@ describe("meta-circularity (LIonCore)", () => {
     })
 
     it("deserialize LIonCore", async () => {
-        const serialization = await readFileAsJson(serializedLioncorePath) as SerializationChunk
+        const serialization = await readFileAsJson(lioncorePath) as SerializationChunk
         const deserialization = deserializeLanguage(serialization)
         deepEqual(asText(deserialization), asText(lioncore))
-        // deepEqual on object-level is not good enouogh (- maybe because of class JIT'ing?):
+        // deepEqual on object-level is not good enough (- maybe because of class JIT'ing?):
         // deepEqual(deserialization, lioncore)
             // TODO  implement proper equality/comparison
     })

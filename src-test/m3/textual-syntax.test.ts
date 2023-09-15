@@ -2,7 +2,7 @@ import {assert} from "chai"
 const {equal} = assert
 
 import {asText} from "../../src-pkg/index.js"
-import {languageWithEnum} from "./language-with-enum.js"
+import {languageWithEnum} from "../languages/with-enum.js"
 
 
 describe("textual syntax (LIonCore)", () => {

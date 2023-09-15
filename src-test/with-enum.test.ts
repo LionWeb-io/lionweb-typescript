@@ -2,7 +2,7 @@ import {assert} from "chai"
 const {deepEqual} = assert
 
 import {deserializeLanguage, Enumeration, serializeLanguage} from "../src-pkg/index.js"
-import {languageWithEnum} from "./m3/language-with-enum.js"
+import {languageWithEnum} from "./languages/with-enum.js"
 
 
 describe("Language-with-enum test model", () => {

@@ -2,14 +2,14 @@ import {assert} from "chai"
 const {deepEqual} = assert
 
 import {
-    deserializeModel,
+    deserializeChunk,
     dynamicModelAPI,
     DynamicNode,
     nameBasedConceptDeducerFor,
     serializeNodes
 } from "../src-pkg/index.js"
-import {libraryModel, libraryModelApi} from "./library.js"
-import {libraryLanguage} from "./m3/library-language.js"
+import {libraryModel, libraryModelApi} from "./instances/library.js"
+import {libraryLanguage} from "./languages/library.js"
 import {undefinedValuesDeletedFrom} from "./utils/test-helpers.js"
 
 
@@ -17,13 +17,13 @@ describe("Library test model", () => {
 
     it("[de-]serialize example library", () => {
         const serialization = serializeNodes(libraryModel, libraryModelApi)
-        const deserialization = deserializeModel(undefinedValuesDeletedFrom(serialization), libraryModelApi, libraryLanguage, [])
+        const deserialization = deserializeChunk(undefinedValuesDeletedFrom(serialization), libraryModelApi, [libraryLanguage], [])
         deepEqual(deserialization, libraryModel)
     })
 
     it(`"dynamify" example library through serialization and deserialization using the Dynamic Model API`, () => {
         const serialization = serializeNodes(libraryModel, libraryModelApi)
-        const dynamification = deserializeModel(undefinedValuesDeletedFrom(serialization), dynamicModelAPI, libraryLanguage, [])
+        const dynamification = deserializeChunk(undefinedValuesDeletedFrom(serialization), dynamicModelAPI, [libraryLanguage], [])
 
         deepEqual(dynamification.length, 2)
         const lookup = nameBasedConceptDeducerFor(libraryLanguage)
