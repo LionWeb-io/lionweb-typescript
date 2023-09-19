@@ -14,7 +14,7 @@ import {logIssues, logUnresolvedReferences} from "../utils/test-helpers.js"
 import {lioncorePath} from "../../src-build/paths.js"
 
 
-describe("meta-circularity (LIonCore)", () => {
+describe("meta-circularity (LionCore)", () => {
 
     it("check for unresolved references", () => {
         const unresolvedReferences = checkReferences(lioncore)
@@ -24,12 +24,12 @@ describe("meta-circularity (LIonCore)", () => {
 
     it("check constraints", () => {
         const issues = issuesLanguage(lioncore)
-            // TODO  find out why computing issues is slow for a small language like LIonCore
+            // TODO  find out why computing issues is slow for a small language like LionCore
         logIssues(issues)
         deepEqual(issues, [], "number of expected constraint violations -- see above for the issues")
     })
 
-    it("deserialize LIonCore", async () => {
+    it("deserialize LionCore", async () => {
         const serialization = await readFileAsJson(lioncorePath) as SerializationChunk
         const deserialization = deserializeLanguage(serialization)
         deepEqual(asText(deserialization), asText(lioncore))

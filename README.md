@@ -1,6 +1,6 @@
 # README
 
-A TypeScript implementation for LionWeb standards: the serialization JSON format, and the LIonCore meta-metamodel (M3).
+A TypeScript implementation for LionWeb standards: the serialization JSON format, and the LionCore meta-metamodel (M3).
 This implementation is published as the `lioncore-typescript` NPM package.
 This repository also contains documentation, additional artifacts, and utilities.
 
@@ -44,7 +44,7 @@ Currently, these are v19.9.0 and 9.8.1.
 
 The following is a list of links to potential starting points:
 
-* Implementation of the LIonCore meta-metamodel (M3): see the [specific README](src/m3/README.md).
+* Implementation of the LionCore meta-metamodel (M3): see the [specific README](src/m3/README.md).
 * Metamodel-generic/-aspecific code regarding:
   * [TypeScript type definitions](src/types.ts).
   * Representation of [references](src/references.ts).
@@ -56,17 +56,17 @@ The following is a list of links to potential starting points:
 
 * [Diagrams](diagrams/) - various generated diagrams.
   The PlantUML file [`diagrams/metametamodel-gen.puml`](diagrams/metametamodel-gen.puml) is generated from the meta-circular [self-definition of `lioncore`](src-pkg/m3/lioncore.ts).
-  This generated PlantUML file can then be compared with [this one](https://github.com/LIonWeb-org/organization/blob/main/metametamodel/metametamodel.puml): they should have exactly the same contents apart from a couple of obvious differences.
+  This generated PlantUML file can then be compared with [this one](https://github.com/LionWeb-org/organization/blob/main/metametamodel/metametamodel.puml): they should have exactly the same contents apart from a couple of obvious differences.
 * [Models](models/) - various models in their serialized formats (the LionWeb JSON format); see the [specific README](models/README.md).
 * [Schemas](schemas/) - various JSON Schema files for validating models serialized in the LionWeb JSON format against; see the [specific README](schemas/README.md).
 * [Build source](src-build) - TypeScript source that (re-)generates the artifacts in the `diagrams/` and `models/` directories.
   This can be run through the CLI command `npm run generate-artifacts`.
-* [Command-line interface](src-cli/) - TypeScript source that implements a single-entrypoint CLI for utilities around the LIonCore functionality, such as: JSON Schema and diagram generation, textual syntax, extractors for the deserialization format, Ecore import, etc.
+* [Command-line interface](src-cli/) - TypeScript source that implements a single-entrypoint CLI for utilities around the LionCore functionality, such as: JSON Schema and diagram generation, textual syntax, extractors for the deserialization format, Ecore import, etc.
 * [Package source](src-pkg/) - all TypeScript source that - transpiled to JavaScript - makes up the NPM package `lioncore-typescript`.
 * [Test sources](src-test/) - all TypeScript sources with/for (unit) tests.
   Tests are located in files with names ending with `.test.ts`.
   Any such file tests the file under the same path in `src/` that has the same name minus the `.test` part.
-* [Utilities](src-utils/) - TypeScript source that implements utilities around LIonCore, but should not go in the NPM package.
+* [Utilities](src-utils/) - TypeScript source that implements utilities around LionCore, but should not go in the NPM package.
 
 
 ## Extracting essential information from a serialization
@@ -85,7 +85,7 @@ These extractions are:
   * for all nodes, their properties, containments, and references sorted by key (from the meta-pointer),
   * and all containments and references sorted by ID.
 * A "shortened" JSON where keys are used as key names.
-* If the serialization represents a language - i.e.: a LIonCore model - then a textual version is generated as well.
+* If the serialization represents a language - i.e.: a LionCore model - then a textual version is generated as well.
 
 This CLI utility does not perform any explicit validation apart from the file at the given path existing and being valid JSON.
 It does some implicit validation as it can error out on incorrect serializations.

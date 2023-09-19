@@ -4,15 +4,15 @@ import {Classifier, EnumerationLiteral, Feature, lioncoreQNameSeparator} from ".
 import {checkAll} from "../id-generation.js"
 
 
-const lioncoreQName = "LIonCore-M3"
+const lioncoreQName = "LionCore-M3"
 
 
 const factory = new LanguageFactory(
-    "LIonCore.M3",
+    "LionCore.M3",
     "1",
     checkAll((qualifiedName) =>
         "-id-" +
-            (qualifiedName === "LIonCore.M3"
+            (qualifiedName === "LionCore.M3"
                 ? lioncoreQName
                 : qualifiedName!
                     .substring(lioncoreQName.length + 1)
@@ -35,9 +35,9 @@ const factory = new LanguageFactory(
 
 
 /**
- * Definition of LIonCore in terms of itself.
+ * Definition of LionCore in terms of itself.
  */
-export const lioncore = factory.language.havingKey("LIonCore-M3")
+export const lioncore = factory.language.havingKey("LionCore-M3")
 
 
 const {inamed} = builtinClassifiers

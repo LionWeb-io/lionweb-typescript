@@ -1,11 +1,11 @@
-# LIonCore M3 meta-metamodel
+# LionCore M3 meta-metamodel
 
 
 ## Aspects
 
 * [TypeScript type definitions](./types.ts)
 * [Factory](./factory.ts) for conveniently creating M3 instances
-* [Built-in (`builtins`) to LIonCore](./builtins.ts)
+* [Built-in (`builtins`) to LionCore](./builtins.ts)
 * [A model API specific for M3 instances](./api.ts)
 * Persistence: [serializer](./serializer.ts) and [deserializer](./deserializer.ts)
 * [Constraints checker](./constraints.ts)
@@ -14,5 +14,5 @@
 * ([Reference checker](./reference-checker.ts))
 * [Generation of keys](./key-generation.ts)
 
-An interesting place to start might be the [self-definition of LIonCore/M3](./lioncore.ts) using its own [TypeScript type definitions](./types.ts).
+An interesting place to start might be the [self-definition of LionCore/M3](./lioncore.ts) using its own [TypeScript type definitions](./types.ts).
 

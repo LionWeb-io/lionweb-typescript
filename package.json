@@ -1,6 +1,6 @@
 {
   "name": "lioncore-typescript",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "LionWeb core for {Java|Type}Script",
   "main": "dist/src-pkg/index.js",
   "types": "dist/src-pkg/index.d.ts",
@@ -9,10 +9,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/LIonWeb-org/lioncore-typescript.git"
+    "url": "https://github.com/LionWeb-org/lioncore-typescript.git"
   },
   "bugs": {
-    "url": "https://github.com/LIonWeb-org/lioncore-typescript/issues"
+    "url": "https://github.com/LionWeb-org/lioncore-typescript/issues"
   },
   "devDependencies": {
     "@types/chai": "^4.3.6",

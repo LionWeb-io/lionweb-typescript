@@ -14,7 +14,7 @@ type ConceptDeducer<NT extends Node> = (node: NT) => Concept
  * Two interfaces that defines APIs for in-memory models.
  * Instances/implementations of this interface parametrize generic (de-)serialization.
  * Implementations of ModelAPI {w|c}ould be:
- *  - specific to LIoncore (so to match m3/types.ts)
+ *  - specific to Lioncore (so to match m3/types.ts)
  *  - generic just to deserialize into Node & { settings: { [featureName: string]: unknown } } -- á la Federico
  */
 

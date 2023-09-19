@@ -23,7 +23,7 @@ const indented = indentWith(`  `)(1)
 
 /**
  * Generates a string with a PlantUML class diagram
- * representing the given {@link Language LIonCore/M3 instance}.
+ * representing the given {@link Language LionCore/M3 instance}.
  */
 export const generatePlantUmlForLanguage = ({name, entities}: Language) =>
     asString([

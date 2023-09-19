@@ -5,7 +5,7 @@ import {asText} from "../../src-pkg/index.js"
 import {languageWithEnum} from "../languages/with-enum.js"
 
 
-describe("textual syntax (LIonCore)", () => {
+describe("textual syntax (LionCore)", () => {
 
     it("print out language with an enum as text", () => {
         equal(

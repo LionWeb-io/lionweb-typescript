@@ -31,7 +31,7 @@ export const lioncoreReadAPI: ReadModelAPI<M3Concept> = ({
 
 
 /**
- * @return An implementation of {@link WriteModelAPI write-part of the model API} for instances of the LIonCore M3 (so M2s).
+ * @return An implementation of {@link WriteModelAPI write-part of the model API} for instances of the LionCore M3 (so M2s).
  * The returned {@link ModelAPI model API} uses the given {@link KeyGenerator key generator} to generate the keys of all objects in the M2.
  */
 export const lioncoreWriteAPIWithKeyGen = (keyGen: KeyGenerator): WriteModelAPI<M3Concept> => ({
@@ -67,7 +67,7 @@ export const lioncoreWriteAPIWithKeyGen = (keyGen: KeyGenerator): WriteModelAPI<
 
 
 /**
- * An implementation of {@link WriteModelAPI} for instances of the LIonCore M3 (so M2s), where key = name.
+ * An implementation of {@link WriteModelAPI} for instances of the LionCore M3 (so M2s), where key = name.
  *
  * TODO  deprecate this: [de-]serialization of metamodels should be parametrized with key generation throughout
  */

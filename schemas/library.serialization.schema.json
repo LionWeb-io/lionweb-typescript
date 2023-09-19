@@ -76,7 +76,7 @@
         },
         "concept": {
           "const": {
-            "metamodel": "LIonCore_M3",
+            "metamodel": "LionCore_M3",
             "version": "1",
             "key": "Book"
           }
@@ -138,7 +138,7 @@
         },
         "concept": {
           "const": {
-            "metamodel": "LIonCore_M3",
+            "metamodel": "LionCore_M3",
             "version": "1",
             "key": "Library"
           }
@@ -196,7 +196,7 @@
         },
         "concept": {
           "const": {
-            "metamodel": "LIonCore_M3",
+            "metamodel": "LionCore_M3",
             "version": "1",
             "key": "Writer"
           }
@@ -247,7 +247,7 @@
         },
         "concept": {
           "const": {
-            "metamodel": "LIonCore_M3",
+            "metamodel": "LionCore_M3",
             "version": "1",
             "key": "GuideBookWriter"
           }
@@ -302,7 +302,7 @@
         },
         "concept": {
           "const": {
-            "metamodel": "LIonCore_M3",
+            "metamodel": "LionCore_M3",
             "version": "1",
             "key": "SpecialistBookWriter"
           }

@@ -8,7 +8,7 @@ import {undefinedValuesDeletedFrom} from "../utils/test-helpers.js"
 
 describe("Library test metamodel", () => {
 
-    it("LIonCore built-in primitive types are implicit", () => {
+    it("LionCore built-in primitive types are implicit", () => {
         libraryLanguage.dependingOn(lioncoreBuiltins)
         deepEqual(libraryLanguage.dependsOn, [])
     })

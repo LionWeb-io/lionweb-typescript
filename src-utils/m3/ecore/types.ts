@@ -11,7 +11,7 @@ import {AnyNumberOf} from "../../../src-pkg/index.js"
  * import {parseString} from "xml2js"
  *
  * parseString(data, (err, ecoreXml) => {
- *     const language = asLIonCoreLanguage(ecoreXml as EcoreXml, "1")
+ *     const language = asLionCoreLanguage(ecoreXml as EcoreXml, "1")
  * })
  * ```
  * (It's assumed that {@link EcoreXml} is already imported.)

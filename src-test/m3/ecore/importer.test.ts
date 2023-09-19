@@ -4,7 +4,7 @@ import {readFileSync} from "fs"
 import {parseString} from "xml2js"
 
 import {checkReferences, issuesLanguage, serializeLanguage} from "../../../src-pkg/index.js"
-import {asLIonCoreLanguage} from "../../../src-utils/m3/ecore/importer.js"
+import {asLionCoreLanguage} from "../../../src-utils/m3/ecore/importer.js"
 import {logIssues, logUnresolvedReferences, undefinedValuesDeletedFrom} from "../../utils/test-helpers.js"
 import {libraryLanguage} from "../../languages/library.js"
 import {sortedSerialization} from "../../../src-utils/serialization-utils.js"
@@ -15,7 +15,7 @@ describe("Ecore importer", () => {
     it("import 'library' Ecore XML", () => {
         const data = readFileSync("src-test/m3/ecore/library.ecore").toString()
         parseString(data, (err, ecoreXml) => {
-            const language = asLIonCoreLanguage(ecoreXml, "1")
+            const language = asLionCoreLanguage(ecoreXml, "1")
             const unresolvedReferences = checkReferences(language)
             logUnresolvedReferences(unresolvedReferences)
             deepEqual(unresolvedReferences, [])

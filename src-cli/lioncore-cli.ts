@@ -7,7 +7,7 @@ import {diagramFromSerialization} from "./m3/diagram-generator.js"
 const main = (args: string[])=> {
     if (args.length <= 2) {
         console.log(
-`lioncore-cli is a LionWeb utility around LIonCore-TypeScript
+`lioncore-cli is a LionWeb utility around LionCore-TypeScript
 
 Usage: $ lioncore-cli <command> <arguments>
 
@@ -38,7 +38,7 @@ Available commands are:
             if (commandArgs.length === 0) {
                 console.log(
 `The extract command extracts the following from a serialization chunk in the form of files: a sorted JSON, and a shortened JSON.
-If the chunk is the serialization of a LIonCore Language/M2, then a textual rendering is already output.`
+If the chunk is the serialization of a LionCore Language/M2, then a textual rendering is already output.`
                 )
             } else {
                 commandArgs.forEach(extractFromSerialization)
