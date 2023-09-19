@@ -3,7 +3,6 @@ const {deepEqual} = assert
 
 import {deserializeLanguage, lioncoreBuiltins, serializeLanguage} from "../../src-pkg/index.js"
 import {libraryLanguage} from "../languages/library.js"
-import {undefinedValuesDeletedFrom} from "../utils/test-helpers.js"
 
 
 describe("Library test metamodel", () => {
@@ -15,7 +14,7 @@ describe("Library test metamodel", () => {
 
     it("serialize it", () => {
         const serialization = serializeLanguage(libraryLanguage)
-        const deserialization = deserializeLanguage(undefinedValuesDeletedFrom(serialization))
+        const deserialization = deserializeLanguage(serialization)
         deepEqual(deserialization, libraryLanguage)
     })
 

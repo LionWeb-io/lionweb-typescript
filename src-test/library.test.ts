@@ -10,20 +10,20 @@ import {
 } from "../src-pkg/index.js"
 import {libraryModel, libraryReadModelAPI, libraryWriteModelAPI} from "./instances/library.js"
 import {libraryLanguage} from "./languages/library.js"
-import {undefinedValuesDeletedFrom} from "./utils/test-helpers.js"
 
 
 describe("Library test model", () => {
 
     it("[de-]serialize example library", () => {
         const serialization = serializeNodes(libraryModel, libraryReadModelAPI)
-        const deserialization = deserializeChunk(undefinedValuesDeletedFrom(serialization), libraryWriteModelAPI, [libraryLanguage], [])
+        // FIXME  ensure that serialization does not produce key-value pairs with value === undefined
+        const deserialization = deserializeChunk(serialization, libraryWriteModelAPI, [libraryLanguage], [])
         deepEqual(deserialization, libraryModel)
     })
 
     it(`"dynamify" example library through serialization and deserialization using the Dynamic Model API`, () => {
         const serialization = serializeNodes(libraryModel, libraryReadModelAPI)
-        const dynamification = deserializeChunk(undefinedValuesDeletedFrom(serialization), dynamicWriteModelAPI, [libraryLanguage], [])
+        const dynamification = deserializeChunk(serialization, dynamicWriteModelAPI, [libraryLanguage], [])
         deepEqual(dynamification.length, 2)
         const lookup = nameBasedConceptDeducerFor(libraryLanguage)
         deepEqual(dynamification[0].concept, lookup("Library"))

@@ -5,7 +5,7 @@ import {parseString} from "xml2js"
 
 import {checkReferences, issuesLanguage, serializeLanguage} from "../../../src-pkg/index.js"
 import {asLionCoreLanguage} from "../../../src-utils/m3/ecore/importer.js"
-import {logIssues, logUnresolvedReferences, undefinedValuesDeletedFrom} from "../../utils/test-helpers.js"
+import {logIssues, logUnresolvedReferences} from "../../utils/test-helpers.js"
 import {libraryLanguage} from "../../languages/library.js"
 import {sortedSerialization} from "../../../src-utils/serialization-utils.js"
 
@@ -23,7 +23,7 @@ describe("Ecore importer", () => {
             logIssues(issues)
             deepEqual(issues, [])
             const serialization = serializeLanguage(language)
-            deepEqual(sortedSerialization(undefinedValuesDeletedFrom(serialization)), sortedSerialization(undefinedValuesDeletedFrom(serializeLanguage(libraryLanguage))))
+            deepEqual(sortedSerialization(serialization), sortedSerialization(serializeLanguage(libraryLanguage)))
         })
     })
 
