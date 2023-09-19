@@ -38,7 +38,7 @@ const isIKeyed = (node: Node): node is IKeyed =>
 
 
 /**
- * Abstract base class for nodes in an LionCore/M3-instance,
+ * Abstract base class for nodes in an LionCore instance,
  * providing an ID, a key, and the containment hierarchy.
  */
 abstract class M3Node implements IKeyed {

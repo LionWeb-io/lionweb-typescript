@@ -5,7 +5,7 @@ import {lioncoreReadAPI} from "./api.js"
 
 
 /**
- * Serializes a language (i.e., an instance of the LionCore/M3 metametamodel,
+ * Serializes a language (i.e., an instance of the LionCore metametamodel,
  * using {@link M3Concept these type definitions})
  * into the LionWeb serialization JSON format.
  */

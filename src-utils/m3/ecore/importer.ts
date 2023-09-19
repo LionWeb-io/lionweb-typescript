@@ -44,7 +44,7 @@ const typeDesc2primitiveType: Record<string, PrimitiveType> = {
 
 
 /**
- * Converts a parsed Ecore XML metamodel (file) to a {@link Language LionCore/M3 instance}.
+ * Converts a parsed Ecore XML metamodel (file) to a {@link Language LionCore instance}.
  */
 export const asLionCoreLanguage = (ecoreXml: EcoreXml, version: string): Language => {
 

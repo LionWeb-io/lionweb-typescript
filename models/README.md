@@ -6,13 +6,13 @@ A split is made between [languages](./meta), and [instances](./instance) of thos
 
 ## Languages
 
-Serializations of languages, i.e. instances of the `Language` (meta-)concept from LionCore/M3.
+Serializations of languages, i.e. instances of the `Language` (meta-)concept from LionCore.
 
 * [`builtins.json`](./meta/builtins.json): the concepts and primitive types built into LionCore, as [constructed here](../src-pkg/m3/builtins.ts).
 * [`with-enum.json`](./meta/with-enum.json): a language containing just an enumeration.
   This language is used to test whether enumerations work correctly.
 * [`library.json`](./meta/library.json): the "library" language as [constructed here](../src-test/m3/library-language.ts).
-* [`lioncore.json`](./meta/lioncore.json): the [self-definition](../src-pkg/m3/lioncore.ts) of the LionCore/M3.
+* [`lioncore.json`](./meta/lioncore.json): the [self-definition](../src-pkg/m3/lioncore.ts) of LionCore.
 * [`multi.json`](./meta/multi-language.json): the "multi" language that extends the "library" language, as [constructed here](../src-test/multi.ts).
 
 
