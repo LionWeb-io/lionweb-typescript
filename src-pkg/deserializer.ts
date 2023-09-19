@@ -31,6 +31,7 @@ export const deserializeChunk = <NT extends Node>(
     serializationChunk: SerializationChunk,
     api: WriteModelAPI<NT>,
     languages: Language[],
+    // TODO  APIs <--> languages, so it's weird that it looks split up like this
     dependentNodes: Node[]
     // TODO (#13)  see if you can turn this into [nodes: Node[], api: ModelAPI<Node>][] after all
 ): NT[] => {
@@ -85,7 +86,7 @@ export const deserializeChunk = <NT extends Node>(
 
         const allFeatures = allFeaturesOf(concept)
 
-        const settings: { [propertyKey: string]: unknown } = {}
+        const propertySettings: { [propertyKey: string]: unknown } = {}
 
         const serializedPropertiesPerKey =
             properties === undefined ? {} : groupBy(properties, (sp) => sp.property.key)
@@ -97,13 +98,13 @@ export const deserializeChunk = <NT extends Node>(
                     if (property.key in serializedPropertiesPerKey) {
                         const value = serializedPropertiesPerKey[property.key][0].value
                         if (property.type instanceof PrimitiveType) {
-                            settings[property.key] = deserializeBuiltin(value, property as Property)
+                            propertySettings[property.key] = deserializeBuiltin(value, property as Property)
                             return
                         }
                         if (property.type instanceof Enumeration) {
                             const literal = property.type.literals.find((literal) => literal.key = value)
                             if (literal !== undefined) {
-                                settings[property.key] = api.encodingOf(literal)
+                                propertySettings[property.key] = api.encodingOf(literal)
                             }
                             return
                         }
@@ -112,7 +113,7 @@ export const deserializeChunk = <NT extends Node>(
                 })
         }
 
-        const node = api.nodeFor(parent, concept, id, settings)
+        const node = api.nodeFor(parent, concept, id, propertySettings)
 
         const serializedChildrenPerKey =
             children === undefined ? {} : groupBy(children, (sp) => sp.containment.key)
@@ -122,7 +123,7 @@ export const deserializeChunk = <NT extends Node>(
         allFeatures
             .forEach((feature) => {
                 if (feature instanceof Property && properties !== undefined && feature.key in serializedPropertiesPerKey) {
-                    api.setFeatureValue(node, feature, settings[feature.key])
+                    api.setFeatureValue(node, feature, propertySettings[feature.key])
                 } else if (feature instanceof Containment && children !== undefined && feature.key in serializedChildrenPerKey) {
                     const childIds = serializedChildrenPerKey[feature.key].flatMap((serChildren) => serChildren.children) as Id[]
                     if (feature.multiple) {

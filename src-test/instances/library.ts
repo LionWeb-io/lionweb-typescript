@@ -1,6 +1,6 @@
 import {
+    Id,
     nameBasedConceptDeducerFor,
-    Node,
     ReadModelAPI,
     updateSettingsNameBased,
     WriteModelAPI
@@ -20,7 +20,8 @@ const rtEnums: { [enumKey: string]: unknown } = {
     "BookType": BookType
 }
 
-export type BaseNode = Node & {
+export type BaseNode = {
+    id: Id
     concept: string
 }
 
@@ -68,7 +69,7 @@ export const libraryReadModelAPI: ReadModelAPI<BaseNode> = {
 }
 
 export const libraryWriteModelAPI: WriteModelAPI<BaseNode> = {
-    nodeFor: (_parent, concept, id, _settings) => ({
+    nodeFor: (_parent, concept, id, _propertySettings) => ({
         id,
         concept: concept.key
     }),

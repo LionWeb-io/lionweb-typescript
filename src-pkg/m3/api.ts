@@ -35,26 +35,26 @@ export const lioncoreReadAPI: ReadModelAPI<M3Concept> = ({
  * The returned {@link ModelAPI model API} uses the given {@link KeyGenerator key generator} to generate the keys of all objects in the M2.
  */
 export const lioncoreWriteAPIWithKeyGen = (keyGen: KeyGenerator): WriteModelAPI<M3Concept> => ({
-    nodeFor: (parent, concept, id, settings) => {
+    nodeFor: (parent, concept, id, propertySettings) => {
         switch (concept.key) {
             case metaConcepts.concept.key:
-                return new Concept(parent as Language, settings[inamed_name.key] as string, "", id, settings[metaFeatures.concept_abstract.key] as boolean).keyed(keyGen)
+                return new Concept(parent as Language, propertySettings[inamed_name.key] as string, "", id, propertySettings[metaFeatures.concept_abstract.key] as boolean).keyed(keyGen)
             case metaConcepts.conceptInterface.key:
-                return new ConceptInterface(parent as Language, settings[inamed_name.key] as string, "", id).keyed(keyGen)
+                return new ConceptInterface(parent as Language, propertySettings[inamed_name.key] as string, "", id).keyed(keyGen)
             case metaConcepts.containment.key:
-                return new Containment(parent as Classifier, settings[inamed_name.key] as string, "", id).keyed(keyGen)
+                return new Containment(parent as Classifier, propertySettings[inamed_name.key] as string, "", id).keyed(keyGen)
             case metaConcepts.enumeration.key:
-                return new Enumeration(parent as Language, settings[inamed_name.key] as string, "", id).keyed(keyGen)
+                return new Enumeration(parent as Language, propertySettings[inamed_name.key] as string, "", id).keyed(keyGen)
             case metaConcepts.enumerationLiteral.key:
-                return new EnumerationLiteral(parent as Enumeration, settings[inamed_name.key] as string, "", id).keyed(keyGen)
+                return new EnumerationLiteral(parent as Enumeration, propertySettings[inamed_name.key] as string, "", id).keyed(keyGen)
             case metaConcepts.language.key:
-                return new Language(settings[inamed_name.key] as string, settings[metaFeatures.language_version.key] as string, id, settings[metaFeatures.ikeyed_key.key] as string)
+                return new Language(propertySettings[inamed_name.key] as string, propertySettings[metaFeatures.language_version.key] as string, id, propertySettings[metaFeatures.ikeyed_key.key] as string)
             case metaConcepts.primitiveType.key:
-                return new PrimitiveType(parent as Language, settings[inamed_name.key] as string, "", id).keyed(keyGen)
+                return new PrimitiveType(parent as Language, propertySettings[inamed_name.key] as string, "", id).keyed(keyGen)
             case metaConcepts.property.key:
-                return new Property(parent as Classifier, settings[inamed_name.key] as string, "", id).keyed(keyGen)
+                return new Property(parent as Classifier, propertySettings[inamed_name.key] as string, "", id).keyed(keyGen)
             case metaConcepts.reference.key:
-                return new Reference(parent as Classifier, settings[inamed_name.key] as string, "", id).keyed(keyGen)
+                return new Reference(parent as Classifier, propertySettings[inamed_name.key] as string, "", id).keyed(keyGen)
             default:
                 throw new Error(`can't deserialize a node of concept "${qualifiedNameOf(concept)}" with key "${concept.key}"`)
         }

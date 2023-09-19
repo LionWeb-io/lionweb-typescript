@@ -30,6 +30,7 @@ interface ReadModelAPI<NT extends Node> {
      * @return The value of the given {@link Feature feature} on the given node.
      */
     getFeatureValue: (node: NT, feature: Feature) => unknown
+// TODO  split to getPropertyValue, &c.?
 
     /**
      * @return The {@link EnumerationLiteral} corresponding to
@@ -46,13 +47,14 @@ interface WriteModelAPI<NT extends Node> {
      * its ID and the values of the node's properties ("settings").
      * (The latter may be required as arguments for the constructor of a class, whose instances represent nodes.)
      */
-    nodeFor: (parent: NT | undefined, concept: Concept, id: string, settings: { [propertyKey: string]: unknown }) => NT
+    nodeFor: (parent: NT | undefined, concept: Concept, id: string, propertySettings: { [propertyKey: string]: unknown }) => NT
 
     /**
      * Sets the *single* given value of the indicated {@link Feature} on the given node.
      * This means adding it in case the feature is multi-valued, meaning it is a {@link Link} with {@code multiple = true}.
      */
     setFeatureValue: (node: NT, feature: Feature, value: unknown) => void
+// TODO  split to setPropertyValue, &c.?
 
     /**
      * @return The runtime encoding of the given {@link EnumerationLiteral}.
