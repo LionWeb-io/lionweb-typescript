@@ -1,4 +1,4 @@
-# LionCore M3 meta-metamodel
+# LionCore M3 metametamodel
 
 
 ## Aspects
@@ -14,5 +14,5 @@
 * ([Reference checker](./reference-checker.ts))
 * [Generation of keys](./key-generation.ts)
 
-An interesting place to start might be the [self-definition of LionCore/M3](./lioncore.ts) using its own [TypeScript type definitions](./types.ts).
+An interesting place to start might be the [self-definition of LionCore](./lioncore.ts) using its own [TypeScript type definitions](./types.ts).
 

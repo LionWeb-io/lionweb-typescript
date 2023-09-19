@@ -40,7 +40,7 @@ const withNewLine = (content: NestedString): NestedString =>
 
 /**
  * Generates a string with a Mermaid class diagram
- * representing the given {@link Language LionCore/M3 instance}.
+ * representing the given {@link Language LionCore instance}.
  */
 export const generateMermaidForLanguage = ({entities}: Language) =>
     asString([

@@ -1,6 +1,6 @@
 # README
 
-A TypeScript implementation for LionWeb standards: the serialization JSON format, and the LionCore meta-metamodel (M3).
+A TypeScript implementation for LionWeb standards: the serialization JSON format, and the LionCore metametamodel (M3).
 This implementation is published as the `lioncore-typescript` NPM package.
 This repository also contains documentation, additional artifacts, and utilities.
 
@@ -44,7 +44,7 @@ Currently, these are v19.9.0 and 9.8.1.
 
 The following is a list of links to potential starting points:
 
-* Implementation of the LionCore meta-metamodel (M3): see the [specific README](src/m3/README.md).
+* Implementation of the LionCore metametamodel (M3): see the [specific README](src/m3/README.md).
 * Metamodel-generic/-aspecific code regarding:
   * [TypeScript type definitions](src/types.ts).
   * Representation of [references](src/references.ts).
