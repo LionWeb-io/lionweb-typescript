@@ -44,9 +44,9 @@ const typeDesc2primitiveType: Record<string, PrimitiveType> = {
 
 
 /**
- * Converts a parsed Ecore XML metamodel (file) to a {@link Language LIonCore/M3 instance}.
+ * Converts a parsed Ecore XML metamodel (file) to a {@link Language LionCore/M3 instance}.
  */
-export const asLIonCoreLanguage = (ecoreXml: EcoreXml, version: string): Language => {
+export const asLionCoreLanguage = (ecoreXml: EcoreXml, version: string): Language => {
 
     const ePackage = ecoreXml["ecore:EPackage"]
     // TODO (#10)  an Ecore XML can contain multiple EPackage-s

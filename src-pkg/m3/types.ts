@@ -1,5 +1,5 @@
 /**
- * TypeScript type definitions for the `LIonCore` M3 (=meta-meta) model.
+ * TypeScript type definitions for the `LionCore` M3 (=meta-meta) model.
  * A LionWeb language (at the M2 meta level) can be represented as an instance of the {@link Language} type.
  */
 
@@ -11,10 +11,10 @@ import {KeyGenerator} from "./key-generation.js"
 const lioncoreQNameSeparator = "-"
 
 /**
- * The qualified name of the LIonCore language containing the built-in {@link PrimitiveType primitive types}.
- * (It's defined here because its knowledge intrinsic to all LIonCore M3 instances.
+ * The qualified name of the LionCore language containing the built-in {@link PrimitiveType primitive types}.
+ * (It's defined here because its knowledge intrinsic to all LionCore M3 instances.
  */
-const lioncoreBuiltinsQName = "LIonCore-builtins"
+const lioncoreBuiltinsQName = "LionCore-builtins"
 
 
 // Types appear roughly in the order of top-to-down+left-to-right in the diagram at:
@@ -38,7 +38,7 @@ const isIKeyed = (node: Node): node is IKeyed =>
 
 
 /**
- * Abstract base class for nodes in an LIonCore/M3-instance,
+ * Abstract base class for nodes in an LionCore/M3-instance,
  * providing an ID, a key, and the containment hierarchy.
  */
 abstract class M3Node implements IKeyed {
@@ -235,7 +235,7 @@ class Language extends M3Node {
 
 
 /**
- * Sum type of all LIonCore type definitions whose meta-type is a concrete (thus: instantiable) Concept.
+ * Sum type of all LionCore type definitions whose meta-type is a concrete (thus: instantiable) Concept.
  * All the classes in this sum type extend (from) {@link M3Node},
  * so they also implement {@link INamed} and {@link IKeyed}.
  */

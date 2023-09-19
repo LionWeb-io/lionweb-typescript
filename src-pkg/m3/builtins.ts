@@ -12,7 +12,7 @@ const factory = new LanguageFactory(
 )
 
 /**
- * Definition of a LIonCore language that serves as a standard library of built-in primitive types.
+ * Definition of a LionCore language that serves as a standard library of built-in primitive types.
  */
 const lioncoreBuiltins = factory.language
 

@@ -5,7 +5,7 @@ import {Concept, issuesLanguage, Language, LanguageFactory} from "../../src-pkg/
 import {nanoIdGen} from "../../src-utils/id-generation.js"
 
 
-describe("constraints (LIonCore)", () => {
+describe("constraints (LionCore)", () => {
 
     it("check that inheritance cycles are detected", () => {
         const factory = new LanguageFactory("metamodel", "1", nanoIdGen())

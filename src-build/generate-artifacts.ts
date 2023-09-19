@@ -14,13 +14,13 @@ import {builtinsPath, diagramPath, instancePath, languagePath, lioncorePath} fro
 
 
 writeJsonAsFile(builtinsPath, serializeLanguage(lioncoreBuiltins))
-console.log(`serialized LIonCore-builtins`)
+console.log(`serialized LionCore-builtins`)
 writeJsonAsFile(lioncorePath, serializeLanguage(lioncore))
-console.log(`serialized LIonCore-M3`)
+console.log(`serialized LionCore-M3`)
 
 writeFileSync(diagramPath( "metametamodel-gen.puml"), generatePlantUmlForLanguage(lioncore))
 writeFileSync(diagramPath("metametamodel-gen.md"), generateMermaidForLanguage(lioncore))
-console.log(`generated diagrams for LIonCore M3`)
+console.log(`generated diagrams for LionCore M3`)
 
 
 writeJsonAsFile(languagePath("library.json"), serializeLanguage(libraryLanguage))

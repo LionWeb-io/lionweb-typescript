@@ -7,7 +7,7 @@ import {issuesLanguage} from "../../src-pkg/index.js"
 import {logIssues, logUnresolvedReferences} from "../utils/test-helpers.js"
 
 
-describe("primitive types built-in to LIonCore", () => {
+describe("primitive types built-in to LionCore", () => {
 
     it("check for unresolved references", () => {
         const unresolvedReferences = checkReferences(lioncoreBuiltins)

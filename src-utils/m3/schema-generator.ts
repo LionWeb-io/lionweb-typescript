@@ -75,7 +75,7 @@ const schemaForConcept = (concept: Concept): unknown => {
             id: ref("Id"),
             concept: {
                 const: {
-                    metamodel: "LIonCore_M3",
+                    metamodel: "LionCore_M3",
                     version: "1",
                     key: concept.key
                 }
