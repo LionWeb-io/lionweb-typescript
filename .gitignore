@@ -2,10 +2,6 @@
 /.idea
 /lioncore-typescript.iml
 
-# NPM package, built by Node:
+# NPM:
 /node_modules
-/dist
-
-# CLI
-/lib/*
 

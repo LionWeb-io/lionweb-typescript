@@ -1,7 +1,11 @@
 {
-  "name": "lioncore-typescript",
+  "name": "@lionweb/core",
   "version": "0.5.0",
   "description": "LionWeb core for {Java|Type}Script",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "typings": "dist/index.d.ts",
+  "type": "module",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -11,10 +15,9 @@
     "url": "https://github.com/LionWeb-org/lioncore-typescript/issues"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^6.7.0",
-    "@typescript-eslint/parser": "^6.7.0"
+    "typescript": "^5.2.2"
   },
   "scripts": {
-    "lint": "eslint packages/artifacts/src packages/cli/src packages/core/src packages/test/src packages/utilities/src"
+    "build": "tsc"
   }
 }
