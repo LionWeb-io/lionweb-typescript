@@ -5,7 +5,7 @@ npm ci
 
 cd packages
 
-for package in "core" "utilities" "cli" "artifacts" "test"
+for package in "core" "utilities" "cli" "test" "artifacts"
 do
   (cd $package; ./build.sh)
 done
