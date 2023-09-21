@@ -1,5 +1,5 @@
 import {Id, Node} from "./types.js"
-import {SerializationChunk, SerializedNode} from "./serialization.js"
+import {SerializationChunk, serializationFormatVersion, SerializedNode} from "./serialization.js"
 import {WriteModelAPI} from "./api.js"
 import {Concept, Containment, Enumeration, Language, PrimitiveType, Property, Reference} from "./m3/types.js"
 import {allFeaturesOf} from "./m3/functions.js"
@@ -36,7 +36,7 @@ export const deserializeChunk = <NT extends Node>(
     // TODO (#13)  see if you can turn this into [nodes: Node[], api: ModelAPI<Node>][] after all
 ): NT[] => {
 
-    if (serializationChunk.serializationFormatVersion !== "1") {
+    if (serializationChunk.serializationFormatVersion !== serializationFormatVersion) {
         throw new Error(`can't deserialize from serialization format other than version 1`)
     }
 

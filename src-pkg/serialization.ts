@@ -48,6 +48,12 @@ export type SerializedLanguageReference = {
     version: string
 }
 
+
+/**
+ * The <em>current</em> version of the serialization format.
+ */
+export const serializationFormatVersion = "2023.1"
+
 /**
  * Type definition for a serialization of a whole model to JSON.
  */

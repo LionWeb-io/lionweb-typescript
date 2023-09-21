@@ -1,7 +1,13 @@
 import {writeFileSync} from "fs"
 import {extname} from "path"
 
-import {asText, deserializeLanguage, lioncoreQName, SerializationChunk} from "../src-pkg/index.js"
+import {
+    asText,
+    deserializeLanguage,
+    lioncoreQName,
+    SerializationChunk,
+    serializationFormatVersion
+} from "../src-pkg/index.js"
 import {shortenedSerialization, sortedSerialization} from "../src-utils/serialization-utils.js"
 import {readFileAsJson, writeJsonAsFile} from "../src-utils/json.js"
 
@@ -11,7 +17,7 @@ const isRecord = (json: unknown): json is Record<string, unknown> =>
 
 const isSerializedLanguage = (json: unknown): boolean =>
        isRecord(json)
-    && json["serializationFormatVersion"] === "1"
+    && json["serializationFormatVersion"] === serializationFormatVersion
     && "languages" in json
     && Array.isArray(json["languages"])
     && json["languages"].some((language) => isRecord(language) && language["key"] === lioncoreQName)
