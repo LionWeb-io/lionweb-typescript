@@ -12,9 +12,9 @@
     "url": "https://github.com/LionWeb-org/lioncore-typescript/issues"
   },
   "devDependencies": {
-    "@lionweb/core": "file:../core",
+    "@lionweb/core": "0.5.0-beta.0",
     "@lionweb/test": "file:../test",
-    "@lionweb/utilities": "file:../utilities",
+    "@lionweb/utilities": "0.1.0-beta.0",
     "@types/node": "^20.6.3",
     "typescript": "^5.2.2"
   },

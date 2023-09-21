@@ -3,9 +3,7 @@
   "version": "0.1.0",
   "description": "LionWeb test for {Java|Type}Script",
   "private": true,
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "typings": "dist/index.d.ts",
+  "main": "dist/lioncore-cli.js",
   "type": "module",
   "license": "MIT",
   "repository": {
@@ -16,8 +14,8 @@
     "url": "https://github.com/LionWeb-org/lioncore-typescript/issues"
   },
   "devDependencies": {
-    "@lionweb/core": "file:../core",
-    "@lionweb/utilities": "file:../utilities",
+    "@lionweb/core": "0.5.0-beta.0",
+    "@lionweb/utilities": "0.1.0-beta.0",
     "@types/chai": "^4.3.6",
     "@types/mocha": "^10.0.1",
     "@types/node": "^20.6.3",

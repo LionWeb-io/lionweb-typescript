@@ -16,5 +16,12 @@
   },
   "scripts": {
     "lint": "eslint packages/artifacts/src packages/cli/src packages/core/src packages/test/src packages/utilities/src"
-  }
+  },
+  "workspaces": [
+    "packages/artifacts",
+    "packages/cli",
+    "packages/core",
+    "packages/test",
+    "packages/utilities"
+  ]
 }
