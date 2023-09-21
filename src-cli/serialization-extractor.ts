@@ -3,10 +3,10 @@ import {extname} from "path"
 
 import {
     asText,
+    currentSerializationFormatVersion,
     deserializeLanguage,
     lioncoreQName,
-    SerializationChunk,
-    serializationFormatVersion
+    SerializationChunk
 } from "../src-pkg/index.js"
 import {shortenedSerialization, sortedSerialization} from "../src-utils/serialization-utils.js"
 import {readFileAsJson, writeJsonAsFile} from "../src-utils/json.js"
@@ -17,7 +17,7 @@ const isRecord = (json: unknown): json is Record<string, unknown> =>
 
 const isSerializedLanguage = (json: unknown): boolean =>
        isRecord(json)
-    && json["serializationFormatVersion"] === serializationFormatVersion
+    && json["serializationFormatVersion"] === currentSerializationFormatVersion
     && "languages" in json
     && Array.isArray(json["languages"])
     && json["languages"].some((language) => isRecord(language) && language["key"] === lioncoreQName)

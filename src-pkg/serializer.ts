@@ -1,5 +1,5 @@
 import {ReadModelAPI} from "./api.js"
-import {MetaPointer, SerializationChunk, serializationFormatVersion, SerializedNode} from "./serialization.js"
+import {currentSerializationFormatVersion, MetaPointer, SerializationChunk, SerializedNode} from "./serialization.js"
 import {asIds} from "./functions.js"
 import {Node} from "./types.js"
 import {Containment, Enumeration, isINamed, Language, PrimitiveType, Property, Reference} from "./m3/types.js"
@@ -99,7 +99,7 @@ export const serializeNodes = <NT extends Node>(nodes: NT[], api: ReadModelAPI<N
     nodes.forEach((node) => visit(node, undefined))
 
     return {
-        serializationFormatVersion,
+        serializationFormatVersion: currentSerializationFormatVersion,
         languages: languagesUsed
             .filter((language) => !language.equals(lioncoreBuiltins))
             .map(({key, version}) => ({ key, version })),
