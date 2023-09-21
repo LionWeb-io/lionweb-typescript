@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "LionWeb core for {Java|Type}Script",
   "private": true,
+  "type": "module",
   "license": "MIT",
   "repository": {
     "type": "git",
