@@ -1,35 +1,26 @@
 # README
 
-A TypeScript implementation for LionWeb standards: the serialization JSON format, and the LionCore metametamodel (M3).
-This implementation is published as the `lioncore-typescript` NPM package.
-This repository also contains documentation, additional artifacts, and utilities.
+This repository contains TypeScript implementations for parts of the LionWeb standard/specification.
+Those are contained in a number of NPM packages in the directory [`packages`](./packages) (in order of importance):
+
+* `core`
+  The "core stuff" such as: base types, the LionCore M3 (including the `builtins` language), and (de-)serialization.
+* `utilities`
+  Utilities on top of the `core` packages that might be broadly useful, but should not go into the `core` package.
+* `test`
+  A package containing (unit) tests for the packages above.
+* `cli`
+  A package with an executable to trigger some of the functionality in `utilities` through a commandline interface (CLI), i.e. from the commandline.
+* `artifacts`
+  A package that generates artifacts (serialization chunks, diagrams, JSON Schemas) from some of the models constructed in the `core` and `test` packages.
+
+The `core`, `utilities`, and `cli` packages are published in the scope of [the `lionweb[package.json](package.json)` organization](https://www.npmjs.com/org/lionweb), meaning that they're all prefixed with `@lionweb/`.
+The other packages are for internal use only.
+
+Each of these packages have their own `README.md`.
 
 
-## Developing
-
-Run the following command to run all unit tests:
-
-```shell
-$ npm test
-```
-
-(A watch mode is to be configured, still.)
-This command also builds all the source, which can be done separately as follows:
-
-```shell
-$ npm run build
-```
-
-Run the following command to statically _style_-check the source code:
-
-```shell
-$ npm run lint
-```
-
-Note that this does not catch TypeScript compilation errors.
-
-
-### Dev dependencies
+## Development dependencies
 
 * [Node.js](https://nodejs.org/): JavaScript runtime, version (at least) v18.17.1 (the latest LTS version)
   * NPM (bundled with Node.js): version (at least) 9.6.7
@@ -40,53 +31,21 @@ Note that development tends to be done with the latest Node.js and NPM versions.
 Currently, these are v19.9.0 and 9.8.1.
 
 
-## Getting started
+## Installation
 
-The following is a list of links to potential starting points:
-
-* Implementation of the LionCore metametamodel (M3): see the [specific README](src/m3/README.md).
-* Metamodel-generic/-aspecific code regarding:
-  * [TypeScript type definitions](src/types.ts).
-  * Representation of [references](src/references.ts).
-  * [Serialization](src/serialization.ts).
-  * [Generation of IDs](src/id-generation.ts).
-
-
-## Repository organization
-
-* [Diagrams](diagrams/) - various generated diagrams.
-  The PlantUML file [`diagrams/metametamodel-gen.puml`](diagrams/metametamodel-gen.puml) is generated from the meta-circular [self-definition of `lioncore`](src-pkg/m3/lioncore.ts).
-  This generated PlantUML file can then be compared with [this one](https://github.com/LionWeb-org/organization/blob/main/metametamodel/metametamodel.puml): they should have exactly the same contents apart from a couple of obvious differences.
-* [Models](models/) - various models in their serialized formats (the LionWeb JSON format); see the [specific README](models/README.md).
-* [Schemas](schemas/) - various JSON Schema files for validating models serialized in the LionWeb JSON format against; see the [specific README](schemas/README.md).
-* [Build source](src-build) - TypeScript source that (re-)generates the artifacts in the `diagrams/` and `models/` directories.
-  This can be run through the CLI command `npm run generate-artifacts`.
-* [Command-line interface](src-cli/) - TypeScript source that implements a single-entrypoint CLI for utilities around the LionCore functionality, such as: JSON Schema and diagram generation, textual syntax, extractors for the deserialization format, Ecore import, etc.
-* [Package source](src-pkg/) - all TypeScript source that - transpiled to JavaScript - makes up the NPM package `lioncore-typescript`.
-* [Test sources](src-test/) - all TypeScript sources with/for (unit) tests.
-  Tests are located in files with names ending with `.test.ts`.
-  Any such file tests the file under the same path in `src/` that has the same name minus the `.test` part.
-* [Utilities](src-utils/) - TypeScript source that implements utilities around LionCore, but should not go in the NPM package.
-
-
-## Extracting essential information from a serialization
-
-Run the following command to make "extractions" from a serialization chunk (e.g.):
+Run the following command to build each of the packages:
 
 ```shell
-node dist/src-cli/lioncore-cli.js extract models/meta/lioncore.json
+$ ./build.sh
 ```
 
-This is meant as a way to inspect, reason about, and compare serialization because the format is rather verbose.
-These extractions are:
+This includes installing any NPM (dev) dependencies.
 
-* A "sorted" JSON with:
-  * all nodes sorted by ID,
-  * for all nodes, their properties, containments, and references sorted by key (from the meta-pointer),
-  * and all containments and references sorted by ID.
-* A "shortened" JSON where keys are used as key names.
-* If the serialization represents a language - i.e.: a LionCore model - then a textual version is generated as well.
+Run the following command to statically _style_-check the source code  in all the packages:
 
-This CLI utility does not perform any explicit validation apart from the file at the given path existing and being valid JSON.
-It does some implicit validation as it can error out on incorrect serializations.
+```shell
+$ npm run lint
+```
+
+Note that this does not catch TypeScript compilation errors.
 
