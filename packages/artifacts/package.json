@@ -1,0 +1,26 @@
+{
+  "name": "@lionweb/artifacts",
+  "version": "0.1.0",
+  "description": "LionWeb core for {Java|Type}Script",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LionWeb-org/lioncore-typescript.git"
+  },
+  "bugs": {
+    "url": "https://github.com/LionWeb-org/lioncore-typescript/issues"
+  },
+  "devDependencies": {
+    "@lionweb/core": "0.5.0-beta.0",
+    "@lionweb/test": "file:../test",
+    "@lionweb/utilities": "0.1.0-beta.0",
+    "@types/node": "^20.6.3",
+    "typescript": "^5.2.2"
+  },
+  "scripts": {
+    "build": "tsc",
+    "generate": "node dist/generate-artifacts.js"
+  }
+}
