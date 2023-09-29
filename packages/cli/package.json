@@ -6,7 +6,7 @@
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",
   "type": "module",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/LionWeb-org/lionweb-typescript.git"
@@ -17,8 +17,8 @@
   "devDependencies": {
     "@lionweb/core": "0.5.0-beta.0",
     "@lionweb/utilities": "0.1.0-beta.0",
-    "@types/node": "^20.6.3",
-    "typescript": "^5.2.2"
+    "@types/node": "20.6.3",
+    "typescript": "5.2.2"
   },
   "scripts": {
     "build": "tsc"
