@@ -1,4 +1,4 @@
-name: lioncore-typescript tests
+name: lionweb-typescript tests
 
 on: [push, pull_request]
 
