@@ -4,7 +4,7 @@
   "description": "LionWeb json validation for {Java|Type}Script",
   "license":  "Apache 2.0",
   "description": "LionWeb Serialization validation",
-  "author": "joswwarmer@openmodeling.nl",
+  "author": "jos.warmer@openmodeling.nl",
   "main": "index.js",
   "keywords": [
     "lionweb",
