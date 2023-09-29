@@ -1,0 +1,28 @@
+{
+  "name": "@lionweb/validation",
+  "version": "0.5.0-beta.1",
+  "description": "LionWeb json validation for {Java|Type}Script",
+  "license":  "Apache 2.0",
+  "description": "LionWeb Serialization validation",
+  "author": "joswwarmer@openmodeling.nl",
+  "main": "index.js",
+  "keywords": [
+    "lionweb",
+    "serialization",
+    "testing"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "testValid": "ts-node src/runners/RunCheckFolder.ts ../../lionweb/lionweb-integration-testing/testset/valid",
+    "testInvalid": "ts-node src/runners/RunCheckFolder.ts ../../lionweb/lionweb-integration-testing/testset/invalid",
+    "testInvalidWithLanguage": "ts-node src/runners/RunCheckFolderWithLanguage.ts ../../lionweb/lionweb-integration-testing/testset/withLanguage/invalid/ ../../lionweb/lionweb-integration-testing/testset/withLanguage/myLang.language.json",
+    "testValidWithLanguage": "ts-node src/runners/RunCheckFolderWithLanguage.ts ../../lionweb/lionweb-integration-testing/testset/withLanguage/valid/ ../../lionweb/lionweb-integration-testing/testset/withLanguage/myLang.language.json"
+  },
+  "devDependencies": {
+    "@types/node": "18.15.3",
+    "ts-node": "10.9.1",
+    "typescript": "5.2.2"    
+  },
+  "dependencies": {
+  }
+}
