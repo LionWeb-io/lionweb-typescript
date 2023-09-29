@@ -23,22 +23,11 @@ export class LionWebValidator {
 
     constructor(json: unknown, lang: LionwebLanguageDefinition | null) {
         this.object = json;
+        this.language =lang;
         this.validationResult = new ValidationResult();
         this.syntaxValidator = new LionWebSyntaxValidator(this.validationResult);
         this.referenceValidator = new LionWebReferenceValidator(this.validationResult);
     }
-
-    // reset() {
-    //     this.validationResult.reset();
-    //     this.referencesCorrect = false;
-    //     this.syntaxCorrect = false;
-    // }
-
-    // setJson(json: any): void {
-    //     this.object = json;
-    //     this.reset();
-    //     this.chunk = new LionWebJsonChunkWrapper(this.object);
-    // }
 
     validateAll() {
         this.validateSyntax();
@@ -48,9 +37,11 @@ export class LionWebValidator {
 
     validateSyntax() {
         this.syntaxValidator.recursive = true;
-        this.syntaxValidator.reset();
         this.syntaxValidator.validate(this.object);
-        this.syntaxCorrect = !this.validationResult.hasErrors()
+        this.syntaxCorrect = !this.validationResult.hasErrors();
+        if (this.syntaxCorrect) {
+            this.chunk = new LionWebJsonChunkWrapper(this.object as LionWebJsonChunk);
+        }
     }
 
     validateReferences(): void {
@@ -59,7 +50,6 @@ export class LionWebValidator {
             return;
         }
         if (this.language !== null) {
-            this.referenceValidator.reset();
             // when syntax is correct we know the chunk is actually a chunk!
             this.referenceValidator.validate(this.chunk as LionWebJsonChunkWrapper);
             this.referencesCorrect = !this.validationResult.hasErrors()

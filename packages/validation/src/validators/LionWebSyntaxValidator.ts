@@ -66,10 +66,6 @@ export class LionWebSyntaxValidator {
         this.simpleFieldValidator = new SimpleFieldvalidator(this.validationResult);
     }
 
-    reset() {
-        this.validationResult.reset();
-    }
-
     /**
      * Check whether `obj` is a JSON object that conforms to the serialization syntax of LionCore.
      * All errors found will be pushed into the `errors` array, if its length is not 0, the check has failed.

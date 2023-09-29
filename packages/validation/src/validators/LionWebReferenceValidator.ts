@@ -27,11 +27,6 @@ export class LionWebReferenceValidator {
         this.simpleFieldValidator = new SimpleFieldvalidator(this.validationResult);
     }
 
-    reset() {
-        this.validationResult.reset();
-        this.nodesIdMap.clear();
-    }
-
     validateNodeIds(obj: LionWebJsonChunk): void {
         // put all nodes in a map, validate that there are no two nodes with the same id.
         obj.nodes.forEach((node, index) => {

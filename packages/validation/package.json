@@ -13,10 +13,10 @@
   ],
   "scripts": {
     "build": "tsc",
-    "testValid": "ts-node src/runners/RunCheckFolder.ts ../../lionweb/lionweb-integration-testing/testset/valid",
-    "testInvalid": "ts-node src/runners/RunCheckFolder.ts ../../lionweb/lionweb-integration-testing/testset/invalid",
-    "testInvalidWithLanguage": "ts-node src/runners/RunCheckFolderWithLanguage.ts ../../lionweb/lionweb-integration-testing/testset/withLanguage/invalid/ ../../lionweb/lionweb-integration-testing/testset/withLanguage/myLang.language.json",
-    "testValidWithLanguage": "ts-node src/runners/RunCheckFolderWithLanguage.ts ../../lionweb/lionweb-integration-testing/testset/withLanguage/valid/ ../../lionweb/lionweb-integration-testing/testset/withLanguage/myLang.language.json"
+    "testValid": "ts-node src/runners/RunCheckFolder.ts ../../../lionweb-integration-testing/testset/valid",
+    "testInvalid": "ts-node src/runners/RunCheckFolder.ts ../../../lionweb-integration-testing/testset/invalid",
+    "testInvalidWithLanguage": "ts-node src/runners/RunCheckFolderWithLanguage.ts ../../../lionweb-integration-testing/testset/withLanguage/invalid/ ../../../lionweb-integration-testing/testset/withLanguage/myLang.language.json",
+    "testValidWithLanguage": "ts-node src/runners/RunCheckFolderWithLanguage.ts ../../../lionweb-integration-testing/testset/withLanguage/valid/ ../../../lionweb-integration-testing/testset/withLanguage/myLang.language.json"
   },
   "devDependencies": {
     "@types/node": "18.15.3",

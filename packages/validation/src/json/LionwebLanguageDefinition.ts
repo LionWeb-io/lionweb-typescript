@@ -67,6 +67,7 @@ export class LionwebLanguageDefinition {
      * @param chunk
      */
     constructor(chunk: LionWebJsonChunkWrapper) {
+        // console.log("CHUNK " + JSON.stringify(chunk))
         const languageNodes = chunk.findNodesOfConcept("Language");
         if (languageNodes.length !== 1) {
             // TODO Better error handling.
