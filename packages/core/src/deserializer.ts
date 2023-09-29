@@ -37,7 +37,7 @@ export const deserializeChunk = <NT extends Node>(
 ): NT[] => {
 
     if (serializationChunk.serializationFormatVersion !== currentSerializationFormatVersion) {
-        throw new Error(`can't deserialize from serialization format other than version 1`)
+        throw new Error(`can't deserialize from serialization format other than version "${currentSerializationFormatVersion}"`)
     }
 
     const allEntities = languages.flatMap(({entities}) => entities)
