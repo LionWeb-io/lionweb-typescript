@@ -1,6 +1,6 @@
 # IntelliJ IDEA:
 /.idea
-/lioncore-typescript.iml
+/lionweb-typescript.iml
 
 # NPM:
 /node_modules
