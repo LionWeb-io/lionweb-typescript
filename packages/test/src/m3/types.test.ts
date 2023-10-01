@@ -4,7 +4,7 @@
 
 
 /*
- * The following typechecks because all classes are effectively one type “class” as TypeScript is concerned.
+ * The following typechecks because all classes are effectively one type "class" as TypeScript is concerned.
  */
 class A {
     with(_: _B) {}
@@ -13,7 +13,7 @@ class _B {}
 const a = new A()
 a.with(a)   // would be nice if this produced a compiler error!
 /*
- * This means that we have to check arguments of a class-type “manually”.
+ * This means that we have to check arguments of a class-type "manually".
  */
 
 

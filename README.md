@@ -66,6 +66,7 @@ npm run lint
 
 Note that this does not catch TypeScript compilation errors.
 
+
 ## Test the project
 
 Run the following command to run the tests:
@@ -84,3 +85,12 @@ The output should look like this:
 <br />
 <br />
 <img src="./documentation/images/test-output.png" alt="test" width="50%"/>
+
+
+## Code style
+
+All the code in this repository is written in TypeScript.
+The code style can be classified as "mostly FP-lite" and "semicolons (`;`s) elided".
+The last things is slightly controversial, but I (=Meinte Boersma) simply hate semicolons as a statement separator that's virtually always unnecessary.
+The TypeScript compiler simply adds them back in the appropriate places when transpiling to JavaScript.
+
