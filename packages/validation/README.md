@@ -6,17 +6,17 @@ This package is intentionally kept very lightweigt, e.g. it uses type instead of
 
 It assumes that node.js 18 is used, but will propably work with other versions as well.
 
-To run the tests checkout the `lionweb-integration-testing` project in next to the `lionore-typescript` project
+To run the tests checkout the `lionweb-integration-testing` project in next to the `lionweb-typescript` project
 and run
 
     # install ts-node
-    yarn
+    npm install
 
     # run the tests
-    yarn testValid
-    yarn testInvalid
-    yarn testValidWithLanguage
-    yarn testInvalidWithLanguage
+    npm run testValid
+    npm run testInvalid
+    npm run testValidWithLanguage
+    npm run testInvalidWithLanguage
 
 This will run the tests in the respective folders in the `testset` folder in `lionweb-integration-testing`.
 

@@ -40,28 +40,6 @@ export class LwDiff {
         this.lwChecker.recursive = false;
     }
 
-    // lwDiff(obj1: any, obj2: any): void {
-    //     if (this.lwChecker.isLwChunk(obj1) && this.lwChecker.isLwChunk(obj2)) {
-    //         this.diffLwChunk(obj1, obj2);
-    //     } else if (this.lwChecker.isLwNode(obj1) && this.lwChecker.isLwNode(obj2)) {
-    //         this.diffLwNode(obj1, obj2);
-    //     } else if (this.lwChecker.isLwProperty(obj1) && this.lwChecker.isLwProperty(obj2)) {
-    //         this.diffLwProperty(obj1, obj2);
-    //     } else if (this.lwChecker.isLwChild(obj1) && this.lwChecker.isLwChild(obj2)) {
-    //         this.diffLwChild(obj1, obj2);
-    //     } else if (this.lwChecker.isLwReference(obj1) && this.lwChecker.isLwReference(obj2)) {
-    //         this.diffLwReference(obj1, obj2);
-    //     } else if (this.lwChecker.isLwUsedLanguage(obj1) && this.lwChecker.isLwUsedLanguage(obj2)) {
-    //         this.diffLwUsedLanguage(obj1, obj2);
-    //     } else if (this.lwChecker.isLwReferenceTarget(obj1) && this.lwChecker.isLwReferenceTarget(obj2)) {
-    //         // return diffLwReferenceTarget(obj1, obj2)
-    //     } else {
-    //         console.log(`lwDiff: unkown objects: ${JSON.stringify(obj1)} and ${JSON.stringify(obj2)}`);
-    //         this.error(`lwDiff: unkown objects: ${JSON.stringify(obj1)} and ${JSON.stringify(obj2)}`);
-    //     }
-    //     // console.log(JSON.stringify(obj1));
-    // }
-
     error(msg: string) {
         this.errors.push(msg + "\n");
     }

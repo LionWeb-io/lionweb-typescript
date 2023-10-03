@@ -1,7 +1,6 @@
 {
   "name": "@lionweb/validation",
   "version": "0.5.0-beta.1",
-  "description": "LionWeb json validation for {Java|Type}Script",
   "license":  "Apache 2.0",
   "description": "LionWeb Serialization validation",
   "author": "jos.warmer@openmodeling.nl",
