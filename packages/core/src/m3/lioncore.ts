@@ -1,7 +1,6 @@
 import {LanguageFactory} from "./factory.js"
 import {builtinClassifiers, builtinPrimitives} from "./builtins.js"
 import {Classifier, EnumerationLiteral, Feature, lioncoreQNameSeparator} from "./types.js"
-import {checkAll} from "../id-generation.js"
 import {currentReleaseVersion} from "../version.js"
 
 
@@ -11,15 +10,14 @@ const lioncoreQName = "LionCore-M3"
 const factory = new LanguageFactory(
     "LionCore.M3",
     currentReleaseVersion,
-    checkAll((qualifiedName) =>
+    (qualifiedName) =>
         "-id-" +
             (qualifiedName === "LionCore.M3"
                 ? lioncoreQName
                 : qualifiedName!
                     .substring(lioncoreQName.length + 1)
                     .replaceAll(".", lioncoreQNameSeparator)
-            )
-    ),
+            ),
     (node) => {
         if (node instanceof Classifier) {
             return node.name

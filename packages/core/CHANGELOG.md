@@ -2,7 +2,7 @@
 
 ## 0.5.0
 
-* Move `asText` to `@lionweb/utilities`.
+* Move `asText` and ID checking to `@lionweb/utilities`.
 * Expose a helper function `nameSorted`.
 * Rename `ConceptInterface` &rarr; `Interface`.
 * Change names: `ReadModelAPI` &rarr; `ExtractionFacade`, `WriteModelAPI` &rarr; `InstantiationFacade`.
