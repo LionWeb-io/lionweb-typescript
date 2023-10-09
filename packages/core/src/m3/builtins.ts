@@ -1,14 +1,13 @@
 import {LanguageFactory} from "./factory.js"
 import {lioncoreBuiltinsQName, lioncoreQNameSeparator, Property} from "./types.js"
 import {qualifiedNameBasedKeyGenerator} from "./key-generation.js"
-import {checkAll} from "../id-generation.js"
 import {currentReleaseVersion} from "../version.js"
 
 
 const factory = new LanguageFactory(
     lioncoreBuiltinsQName,
     currentReleaseVersion,
-    checkAll((qualifiedName) => qualifiedName!),
+    (qualifiedName) => qualifiedName!,
     qualifiedNameBasedKeyGenerator(lioncoreQNameSeparator)
 )
 
