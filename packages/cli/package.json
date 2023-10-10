@@ -1,6 +1,6 @@
 {
   "name": "@lionweb/cli",
-  "version": "0.1.0-beta.1",
+  "version": "0.1.0-beta.2",
   "description": "LionWeb CLI for {Java|Type}Script",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -15,8 +15,8 @@
     "url": "https://github.com/LionWeb-org/lionweb-typescript/issues"
   },
   "devDependencies": {
-    "@lionweb/core": "0.5.0-beta.0",
-    "@lionweb/utilities": "0.1.0-beta.0",
+    "@lionweb/core": "0.5.0-beta.2",
+    "@lionweb/utilities": "0.1.0-beta.2",
     "@types/node": "20.6.3",
     "typescript": "5.2.2"
   },

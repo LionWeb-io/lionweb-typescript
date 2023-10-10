@@ -1,6 +1,6 @@
 import {
     allFeaturesOf,
-    Concept,
+    Classifier,
     Datatype,
     Enumeration,
     Feature,
@@ -67,17 +67,17 @@ const schemaForProperty = (property: Property): unknown =>
         ? asJSONSchemaType(property.type)
         : {}    // "any"
 
-const schemaForConcept = (concept: Concept): unknown => {
-    const allFeatures = allFeaturesOf(concept)
+const schemaForClassifier = (classifier: Classifier): unknown => {
+    const allFeatures = allFeaturesOf(classifier)
     return {
         type: "object",
         properties: {
             id: ref("Id"),
-            concept: {
+            classifier: {
                 const: {
                     metamodel: "LionCore_M3",
                     version: "1",
-                    key: concept.key
+                    key: classifier.key
                 }
             },
             properties: schemaForFeatures(allFeatures.filter(isProperty), schemaForProperty, true),
@@ -87,7 +87,7 @@ const schemaForConcept = (concept: Concept): unknown => {
         },
         required: [
             "id",
-            "concept",
+            "classifier",
             "properties",
             "children",
             "references"
@@ -107,7 +107,7 @@ const schemaForEnumeration = ({literals}: Enumeration): unknown =>
  * specific to the (metamodel in/of the) given language.
  */
 export const schemaFor = (language: Language): unknown /* <=> JSON Schema */ => {
-    const concreteConcepts = language.entities.filter(isConcrete)
+    const concreteClassifiers = language.entities.filter(isConcrete)
     const enumerations = language.entities.filter(isEnumeration)
     return {
         $schema: "https://json-schema.org/draft/2020-12/schema",
@@ -167,14 +167,14 @@ export const schemaFor = (language: Language): unknown /* <=> JSON Schema */ => 
                 ]
             },
             ...Object.fromEntries(
-                concreteConcepts
+                concreteClassifiers
                     .map((element) => [
                         element.name,
-                        schemaForConcept(element)
+                        schemaForClassifier(element)
                     ])
             ),
             "SerializedNode": {
-                oneOf: concreteConcepts
+                oneOf: concreteClassifiers
                     .map(({name}) => ref(name))
             },
             ...Object.fromEntries(

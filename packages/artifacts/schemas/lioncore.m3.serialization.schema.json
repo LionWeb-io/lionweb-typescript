@@ -124,7 +124,7 @@
       },
       "required": [
         "id",
-        "concept",
+        "classifier",
         "properties",
         "children",
         "references"
@@ -191,7 +191,7 @@
       },
       "required": [
         "id",
-        "concept",
+        "classifier",
         "properties",
         "children",
         "references"
@@ -258,7 +258,7 @@
       },
       "required": [
         "id",
-        "concept",
+        "classifier",
         "properties",
         "children",
         "references"
@@ -330,7 +330,7 @@
       },
       "required": [
         "id",
-        "concept",
+        "classifier",
         "properties",
         "children",
         "references"
@@ -404,7 +404,7 @@
       },
       "required": [
         "id",
-        "concept",
+        "classifier",
         "properties",
         "children",
         "references"
@@ -467,7 +467,7 @@
       },
       "required": [
         "id",
-        "concept",
+        "classifier",
         "properties",
         "children",
         "references"
@@ -522,7 +522,7 @@
       },
       "required": [
         "id",
-        "concept",
+        "classifier",
         "properties",
         "children",
         "references"
@@ -581,7 +581,7 @@
       },
       "required": [
         "id",
-        "concept",
+        "classifier",
         "properties",
         "children",
         "references"
@@ -636,7 +636,7 @@
       },
       "required": [
         "id",
-        "concept",
+        "classifier",
         "properties",
         "children",
         "references"
@@ -703,7 +703,7 @@
       },
       "required": [
         "id",
-        "concept",
+        "classifier",
         "properties",
         "children",
         "references"

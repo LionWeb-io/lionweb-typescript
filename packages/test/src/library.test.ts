@@ -5,7 +5,7 @@ import {
     deserializeChunk,
     DynamicNode,
     dynamicWriteModelAPI,
-    nameBasedConceptDeducerFor,
+    nameBasedClassifierDeducerFor,
     serializeNodes
 } from "@lionweb/core"
 import {libraryModel, libraryReadModelAPI, libraryWriteModelAPI} from "./instances/library.js"
@@ -25,14 +25,14 @@ describe("Library test model", () => {
         const serialization = serializeNodes(libraryModel, libraryReadModelAPI)
         const dynamification = deserializeChunk(serialization, dynamicWriteModelAPI, [libraryLanguage], [])
         deepEqual(dynamification.length, 2)
-        const lookup = nameBasedConceptDeducerFor(libraryLanguage)
-        deepEqual(dynamification[0].concept, lookup("Library"))
-        deepEqual(dynamification[1].concept, lookup("GuideBookWriter"))
+        const lookup = nameBasedClassifierDeducerFor(libraryLanguage)
+        deepEqual(dynamification[0].classifier, lookup("Library"))
+        deepEqual(dynamification[1].classifier, lookup("GuideBookWriter"))
         const [library, writer] = dynamification
         const books = library.settings["books"] as DynamicNode[]
         deepEqual(books.length, 1)
         const book = books[0]
-        deepEqual(book.concept, lookup("Book"))
+        deepEqual(book.classifier, lookup("Book"))
         deepEqual(book.settings["author"], writer)
     })
 

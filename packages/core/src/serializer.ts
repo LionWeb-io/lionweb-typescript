@@ -26,12 +26,12 @@ export const serializeNodes = <NT extends Node>(nodes: NT[], api: ReadModelAPI<N
             return
         }
 
-        const concept = api.conceptOf(node)
+        const concept = api.classifierOf(node)
         const language = concept.language
         registerLanguageUsed(language)
         const serializedNode: SerializedNode = {
             id: node.id,
-            concept: {
+            classifier: {
                 language: language.key,
                 version: language.version,
                 key: concept.key

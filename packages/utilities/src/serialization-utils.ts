@@ -8,7 +8,7 @@ import {SerializationChunk, sortByStringKey} from "@lionweb/core"
 export const shortenedSerialization = ({nodes}: SerializationChunk) =>
     nodes.map((node) => ({
         id: node.id,
-        concept: node.concept.key,
+        classifier: node.classifier.key,
         parent: node.parent ?? undefined,
         ...Object.fromEntries(
             [
@@ -31,7 +31,7 @@ export const sortedSerialization = ({serializationFormatVersion, languages, node
         nodes: sortByStringKey(nodes, ({id}) => id)
             .map((node) => ({
                 id: node.id,
-                concept: node.concept,
+                classifier: node.classifier,
                 parent: node.parent,
                 properties: sortByStringKey(node.properties, ({property}) => property.key),
                 children: sortByStringKey(node.children, ({containment}) => containment.key)

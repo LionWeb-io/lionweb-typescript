@@ -1,6 +1,6 @@
 import {
     Id,
-    nameBasedConceptDeducerFor,
+    nameBasedClassifierDeducerFor,
     ReadModelAPI,
     updateSettingsNameBased,
     WriteModelAPI
@@ -55,7 +55,7 @@ export type SpecialistBookWriter = Writer & BaseNode & {
 
 
 export const libraryReadModelAPI: ReadModelAPI<BaseNode> = {
-    conceptOf: (node) => nameBasedConceptDeducerFor(libraryLanguage)(node.concept),
+    classifierOf: (node) => nameBasedClassifierDeducerFor(libraryLanguage)(node.concept),
     getFeatureValue: (node, feature) =>
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (node as any)[feature.name],    // (mirrors name-based updating of settings)

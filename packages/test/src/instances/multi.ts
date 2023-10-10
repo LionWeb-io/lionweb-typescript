@@ -1,5 +1,5 @@
 import {hashingIdGen} from "@lionweb/utilities"
-import {ReadModelAPI, nameBasedConceptDeducerFor, Node} from "@lionweb/core"
+import {nameBasedClassifierDeducerFor, Node, ReadModelAPI} from "@lionweb/core"
 import {multiLanguage} from "../languages/multi.js"
 import {BaseNode, bobLibrary, jackLondon, Library, libraryReadModelAPI} from "./library.js"
 import {libraryLanguage} from "../languages/library.js"
@@ -13,10 +13,10 @@ export type Container = Node & {
 
 export const multiReadModelAPI: ReadModelAPI<BaseNode> = {
     ...libraryReadModelAPI,
-    /* override */ conceptOf: (node) =>
-        nameBasedConceptDeducerFor(libraryLanguage)(node.concept)
+    /* override */ classifierOf: (node) =>
+        nameBasedClassifierDeducerFor(libraryLanguage)(node.concept)
         ??
-        nameBasedConceptDeducerFor(multiLanguage)(node.concept),
+        nameBasedClassifierDeducerFor(multiLanguage)(node.concept),
 }
 
 
