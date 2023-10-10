@@ -13,7 +13,7 @@
   "nodes": [
     {
       "id": "wsuObcp6U2F4ztbwamjfhoy8R_KOMx6RGiuy40RSC8U",
-      "concept": {
+      "classifier": {
         "language": "S9d8_7DajL2oOe1cqvXUGPGa3cWUF3bocmHgANb5bpM",
         "version": "1",
         "key": "Container"
@@ -36,7 +36,7 @@
     },
     {
       "id": "jkxERSov0TuSh7MMz2D5ciLrZDrU4o_VMOpmBqh_j7E",
-      "concept": {
+      "classifier": {
         "language": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
         "version": "1",
         "key": "Library"
@@ -68,7 +68,7 @@
     },
     {
       "id": "Q1NQ_zXwOF2Pjf1uklMTumJhQH4V1Qnfjnu0gz7Fzzs",
-      "concept": {
+      "classifier": {
         "language": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
         "version": "1",
         "key": "Book"
@@ -119,7 +119,7 @@
     },
     {
       "id": "7RxOqvS1ZIdpk-ao-6Tzy1QQRxl6fp_tGMH_BIK4LzQ",
-      "concept": {
+      "classifier": {
         "language": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
         "version": "1",
         "key": "GuideBookWriter"
