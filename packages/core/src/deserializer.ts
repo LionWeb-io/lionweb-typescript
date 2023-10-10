@@ -73,15 +73,15 @@ export const deserializeChunk = <NT extends Node>(
     /**
      * Instantiates a {@link Node} from its {@link SerializedNode serialization}.
      */
-    const instantiate = ({concept: conceptMetaPointer, id, properties, children, references}: SerializedNode, parent?: NT): NT => {
+    const instantiate = ({classifier: classifierMetaPointer, id, properties, children, references}: SerializedNode, parent?: NT): NT => {
 
         const concept = allEntities
             .find((element) =>
-                element instanceof Concept && element.key === conceptMetaPointer.key
+                element instanceof Concept && element.key === classifierMetaPointer.key
             ) as (Concept | undefined)
 
         if (concept === undefined) {
-            throw new Error(`can't deserialize a node having concept with ID "${conceptMetaPointer.key}"`)
+            throw new Error(`can't deserialize a node having a classifier with key "${classifierMetaPointer.key}"`)
         }
 
         const allFeatures = allFeaturesOf(concept)

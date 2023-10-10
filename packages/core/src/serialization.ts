@@ -34,7 +34,7 @@ export type SerializedReference = {
  * Type definition for an AST node serialized to JSON.
  */
 export type SerializedNode = {
-    concept: MetaPointer
+    classifier: MetaPointer
     id: string
     properties: SerializedProperty[]
     children: SerializedContainment[]

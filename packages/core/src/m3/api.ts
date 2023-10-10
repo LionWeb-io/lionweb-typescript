@@ -14,7 +14,7 @@ import {
 } from "./types.js"
 import {builtinFeatures} from "./builtins.js"
 import {lioncore, metaConcepts, metaFeatures} from "./lioncore.js"
-import {classBasedConceptDeducerFor, qualifiedNameOf} from "./functions.js"
+import {classBasedClassifierDeducerFor, qualifiedNameOf} from "./functions.js"
 import {KeyGenerator, nameIsKeyGenerator} from "./key-generation.js"
 
 
@@ -22,7 +22,7 @@ const {inamed_name} = builtinFeatures
 
 
 export const lioncoreReadAPI: ReadModelAPI<M3Concept> = ({
-    conceptOf: classBasedConceptDeducerFor(lioncore),
+    classifierOf: classBasedClassifierDeducerFor(lioncore),
     getFeatureValue: (node, feature) =>
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (node as any)[feature.name],    // (mirrors name-based update of settings)

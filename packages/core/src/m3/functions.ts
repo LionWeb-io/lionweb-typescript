@@ -4,6 +4,7 @@
 
 
 import {
+    Annotation,
     Classifier,
     Concept,
     ConceptInterface,
@@ -26,7 +27,7 @@ import {sortByStringKey} from "../utils/sorting.js"
 import {cycleWith} from "../utils/cycles.js"
 import {flatMapNonCyclingFollowing} from "../utils/recursion.js"
 import {Id, Node} from "../types.js"
-import {ConceptDeducer} from "../api.js"
+import {ClassifierDeducer} from "../api.js"
 import {containmentChain} from "../functions.js"
 
 
@@ -155,56 +156,54 @@ const entitiesSortedByName = (entities: LanguageEntity[]) =>
     sortByStringKey(entities, nameOf)
 
 
-/**
- * A sum type of {@link Concept} and {@link ConceptInterface}.
- */
-type ConceptType = Concept | ConceptInterface
+type ConcreteClassifier = Concept | Annotation
+
 
 /**
  * Determines whether the given {@link LanguageEntity metamodel element} is
  * *concrete*, i.e. is instantiable.
  */
-const isConcrete = (thing: LanguageEntity): thing is Concept =>
-    thing instanceof Concept && !thing.abstract
+const isConcrete = (thing: LanguageEntity): thing is ConcreteClassifier =>
+    (thing instanceof Concept && !thing.abstract) || (thing instanceof Annotation)
 
-const inheritsFrom = (conceptType: ConceptType): ConceptType[] => {
-    if (conceptType instanceof Concept) {
+const inheritsFrom = (classifier: Classifier): Classifier[] => {
+    if (classifier instanceof Concept || classifier instanceof Annotation) {
         return [
             ...(
-                isRef(conceptType.extends)
-                    ? [conceptType.extends as Concept]
+                isRef(classifier.extends)
+                    ? [classifier.extends as Concept]
                     : []
             ),
-            ...conceptType.implements
+            ...classifier.implements
         ]
     }
-    if (conceptType instanceof ConceptInterface) {
-        return conceptType.extends
+    if (classifier instanceof ConceptInterface) {
+        return classifier.extends
     }
-    throw new Error(`concept type ${typeof conceptType} not handled`)
+    throw new Error(`concept type ${typeof classifier} not handled`)
 }
 
 /**
  * @return an array that's either an inheritance cycle, or empty (meaning: no inheritance cycle).
  */
-const inheritedCycleWith = (conceptType: ConceptType) =>
-    cycleWith(conceptType, inheritsFrom)
+const inheritedCycleWith = (classifier: Classifier) =>
+    cycleWith(classifier, inheritsFrom)
 
 
 /**
  * @return *all* super types (through `extends` or `implements`) of the given
  *  {@link Concept concept} or {@link ConceptInterface concept interface}.
  */
-const allSuperTypesOf = (conceptType: ConceptType): ConceptType[] =>
-    flatMapNonCyclingFollowing(inheritsFrom, inheritsFrom)(conceptType)
+const allSuperTypesOf = (classifier: Classifier): Classifier[] =>
+    flatMapNonCyclingFollowing(inheritsFrom, inheritsFrom)(classifier)
 
 
 /**
  * @return *all* {@link Feature features} of the given {@link Concept concept} or {@link ConceptInterface concept interface},
  * including the inherited ones.
  */
-const allFeaturesOf = (conceptType: ConceptType): Feature[] =>
-    flatMapNonCyclingFollowing((ci) => ci.features, inheritsFrom)(conceptType)
+const allFeaturesOf = (classifier: Classifier): Feature[] =>
+    flatMapNonCyclingFollowing((ci) => ci.features, inheritsFrom)(classifier)
 
 
 /**
@@ -215,26 +214,26 @@ const isEnumeration = (element: LanguageEntity): element is Enumeration =>
 
 
 /**
- * @return a function that looks up a concept from the given {@link Language language} by its ID.
+ * @return a function that looks up a classifier from the given {@link Language language} by its ID.
  */
-const idBasedConceptDeducerFor = (language: Language) =>
+const idBasedClassifierDeducerFor = (language: Language) =>
     (id: Id) =>
-        language.entities.find((element) => element instanceof Concept && element.id === id) as Concept
+        language.entities.find((element) => element instanceof Classifier && element.id === id) as Classifier
 
 /**
- * @return a function that looks up a concept from the given {@link Language language} by its name.
+ * @return a function that looks up a classifier from the given {@link Language language} by its name.
  */
-const nameBasedConceptDeducerFor = (language: Language) =>
+const nameBasedClassifierDeducerFor = (language: Language) =>
     (name: string) =>
-        language.entities.find((element) => element instanceof Concept && element.name === name) as Concept
+        language.entities.find((element) => element instanceof Classifier && element.name === name) as Classifier
 
 
 /**
- * @return a {@link ConceptDeducer concept deducer} that deduces the concept of nodes by looking up
- * the concept in the given {@link Language language} by matching the node object's class name to the concept's name.
+ * @return a {@link ClassifierDeducer classifier deducer} that deduces the classifier of nodes by looking up
+ * the classifier in the given {@link Language language} by matching the node object's class name to classifiers' names.
  */
-const classBasedConceptDeducerFor = <NT extends Node>(language: Language): ConceptDeducer<NT> => {
-    const deducer = nameBasedConceptDeducerFor(language)
+const classBasedClassifierDeducerFor = <NT extends Node>(language: Language): ClassifierDeducer<NT> => {
+    const deducer = nameBasedClassifierDeducerFor(language)
     return (node: NT) => deducer(node.constructor.name)
 }
 
@@ -242,13 +241,13 @@ const classBasedConceptDeducerFor = <NT extends Node>(language: Language): Conce
 export {
     allFeaturesOf,
     allSuperTypesOf,
-    classBasedConceptDeducerFor,
+    classBasedClassifierDeducerFor,
     concatenateNamesOf,
     containeds,
     containmentChain,
     entitiesSortedByName,
     flatMap,
-    idBasedConceptDeducerFor,
+    idBasedClassifierDeducerFor,
     idOf,
     inheritedCycleWith,
     isConcrete,
@@ -257,7 +256,7 @@ export {
     isProperty,
     isReference,
     keyOf,
-    nameBasedConceptDeducerFor,
+    nameBasedClassifierDeducerFor,
     nameOf,
     namedsOf,
     nonRelationalFeatures,
@@ -265,9 +264,5 @@ export {
     relationsOf,
     type,
     qualifiedNameOf
-}
-
-export type {
-    ConceptType
 }
 

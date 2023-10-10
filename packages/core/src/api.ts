@@ -1,13 +1,13 @@
 import {Node} from "./types.js"
-import {Concept, Enumeration, EnumerationLiteral, Feature, Link} from "./m3/types.js"
+import {Classifier, Enumeration, EnumerationLiteral, Feature, Link} from "./m3/types.js"
 import {flatMapNonCyclingFollowing, trivialFlatMapper} from "./utils/recursion.js"
 import {allFeaturesOf, isContainment} from "./m3/functions.js"
 
 
 /**
- * Type def. for functions that deduce the {@link Concept concept} of a given {@link Node node}.
+ * Type def. for functions that deduce the {@link Classifier classifier} of a given {@link Node node}.
  */
-type ConceptDeducer<NT extends Node> = (node: NT) => Concept
+type ClassifierDeducer<NT extends Node> = (node: NT) => Classifier
 
 
 /**
@@ -24,7 +24,7 @@ interface ReadModelAPI<NT extends Node> {
     /**
      * @return The {@link Concept concept} of the given node
      */
-    conceptOf: ConceptDeducer<NT>
+    classifierOf: ClassifierDeducer<NT>
 
     /**
      * @return The value of the given {@link Feature feature} on the given node.
@@ -47,7 +47,7 @@ interface WriteModelAPI<NT extends Node> {
      * its ID and the values of the node's properties ("settings").
      * (The latter may be required as arguments for the constructor of a class, whose instances represent nodes.)
      */
-    nodeFor: (parent: NT | undefined, concept: Concept, id: string, propertySettings: { [propertyKey: string]: unknown }) => NT
+    nodeFor: (parent: NT | undefined, classifier: Classifier, id: string, propertySettings: { [propertyKey: string]: unknown }) => NT
 
     /**
      * Sets the *single* given value of the indicated {@link Feature} on the given node.
@@ -73,7 +73,7 @@ type NodesExtractor<NT extends Node> = (nodes: NT) => NT[]
  */
 const childrenExtractorUsing = <NT extends Node>(api: ReadModelAPI<NT>): NodesExtractor<NT> =>
     (node: NT): NT[] =>
-        allFeaturesOf(api.conceptOf(node))
+        allFeaturesOf(api.classifierOf(node))
             .filter(isContainment)
             .flatMap((containment) => api.getFeatureValue(node, containment) as NT[])
 
@@ -118,7 +118,7 @@ const updateSettingsKeyBased = (settings: Record<string, unknown>, feature: Feat
 }
 
 export type {
-    ConceptDeducer,
+    ClassifierDeducer,
     NodesExtractor,
     ReadModelAPI,
     WriteModelAPI
