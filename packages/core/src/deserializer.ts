@@ -1,6 +1,6 @@
 import {Id, Node} from "./types.js"
 import {currentSerializationFormatVersion, SerializationChunk, SerializedNode} from "./serialization.js"
-import {WriteModelAPI} from "./api.js"
+import {InstantiationFacade} from "./facade.js"
 import {
     Classifier,
     Concept,
@@ -32,17 +32,17 @@ const byIdMap = <T extends { id: Id }>(ts: T[]): { [id: Id]: T } => {
  * @return a deserialization of a {@link SerializationChunk}
  *
  * @param serializationChunk - a {@link SerializedModel model} from its LionWeb serialization JSON format
- * @param api - a {@link ModelAPI model API} that is used to instantiate nodes and set values on them
+ * @param instantiationFacade - a {@link InstantiationFacade} that is used to instantiate nodes and set values on them
  * @param languages - a {@link Language language} that the serialized model is expected to conform to
  * @param dependentNodes - a collection of nodes from dependent models against which all references in the serialized model are supposed to resolve against
  */
 export const deserializeChunk = <NT extends Node>(
     serializationChunk: SerializationChunk,
-    api: WriteModelAPI<NT>,
+    instantiationFacade: InstantiationFacade<NT>,
     languages: Language[],
-    // TODO  APIs <--> languages, so it's weird that it looks split up like this
+    // TODO  facades <--> languages, so it's weird that it looks split up like this
     dependentNodes: Node[]
-    // TODO (#13)  see if you can turn this into [nodes: Node[], api: ModelAPI<Node>][] after all
+    // TODO (#13)  see if you can turn this into [nodes: Node[], instantiationFacade: InstantiationFacade<Node>][] after all
 ): NT[] => {
 
     if (serializationChunk.serializationFormatVersion !== currentSerializationFormatVersion) {
@@ -113,7 +113,7 @@ export const deserializeChunk = <NT extends Node>(
                         if (property.type instanceof Enumeration) {
                             const literal = property.type.literals.find((literal) => literal.key = value)
                             if (literal !== undefined) {
-                                propertySettings[property.key] = api.encodingOf(literal)
+                                propertySettings[property.key] = instantiationFacade.encodingOf(literal)
                             }
                             return
                         }
@@ -122,7 +122,7 @@ export const deserializeChunk = <NT extends Node>(
                 })
         }
 
-        const node = api.nodeFor(parent, classifier, id, propertySettings)
+        const node = instantiationFacade.nodeFor(parent, classifier, id, propertySettings)
 
         const serializedChildrenPerKey =
             children === undefined ? {} : groupBy(children, (sp) => sp.containment.key)
@@ -132,17 +132,17 @@ export const deserializeChunk = <NT extends Node>(
         allFeatures
             .forEach((feature) => {
                 if (feature instanceof Property && properties !== undefined && feature.key in serializedPropertiesPerKey) {
-                    api.setFeatureValue(node, feature, propertySettings[feature.key])
+                    instantiationFacade.setFeatureValue(node, feature, propertySettings[feature.key])
                 } else if (feature instanceof Containment && children !== undefined && feature.key in serializedChildrenPerKey) {
                     const childIds = serializedChildrenPerKey[feature.key].flatMap((serChildren) => serChildren.children) as Id[]
                     if (feature.multiple) {
                         childIds
                             .forEach((childId) => {
-                                api.setFeatureValue(node, feature, instantiateMemoised(serializedNodeById[childId], node))
+                                instantiationFacade.setFeatureValue(node, feature, instantiateMemoised(serializedNodeById[childId], node))
                             })
                     } else {
                         if (childIds.length > 0) {
-                            api.setFeatureValue(node, feature, instantiateMemoised(serializedNodeById[childIds[0]], node))
+                            instantiationFacade.setFeatureValue(node, feature, instantiateMemoised(serializedNodeById[childIds[0]], node))
                         }
                     }
                 } else if (feature instanceof Reference && references !== undefined && feature.key in serializedReferencesPerKey) {
@@ -177,7 +177,7 @@ export const deserializeChunk = <NT extends Node>(
             }
             return target
         }
-        api.setFeatureValue(node, reference, lookUpById())
+        instantiationFacade.setFeatureValue(node, reference, lookUpById())
     })
 
     return rootNodes

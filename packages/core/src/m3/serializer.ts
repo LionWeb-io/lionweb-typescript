@@ -1,7 +1,7 @@
 import {Language} from "./types.js"
 import {SerializationChunk} from "../serialization.js"
 import {serializeNodes} from "../serializer.js"
-import {lioncoreReadAPI} from "./api.js"
+import {lioncoreExtractionFacade} from "./facade.js"
 
 
 /**
@@ -10,5 +10,5 @@ import {lioncoreReadAPI} from "./api.js"
  * into the LionWeb serialization JSON format.
  */
 export const serializeLanguage = (language: Language): SerializationChunk =>
-    serializeNodes([language], lioncoreReadAPI)
+    serializeNodes([language], lioncoreExtractionFacade)
 

@@ -1,7 +1,7 @@
 import {Language} from "./types.js"
 import {SerializationChunk} from "../serialization.js"
-import {lioncoreReadAPI, lioncoreWriteAPI} from "./api.js"
-import {nodesExtractorUsing} from "../api.js"
+import {lioncoreExtractionFacade, lioncoreInstantiationFacade} from "./facade.js"
+import {nodesExtractorUsing} from "../facade.js"
 import {deserializeChunk} from "../deserializer.js"
 import {lioncore} from "./lioncore.js"
 import {lioncoreBuiltins} from "./builtins.js"
@@ -14,9 +14,9 @@ import {lioncoreBuiltins} from "./builtins.js"
 export const deserializeLanguage = (serializationChunk: SerializationChunk, ...dependentMetamodels: Language[]): Language => {
     const language = deserializeChunk(
         serializationChunk,
-        lioncoreWriteAPI,
+        lioncoreInstantiationFacade,
         [lioncore],
-        [lioncoreBuiltins, ...dependentMetamodels].flatMap(nodesExtractorUsing(lioncoreReadAPI))
+        [lioncoreBuiltins, ...dependentMetamodels].flatMap(nodesExtractorUsing(lioncoreExtractionFacade))
     )[0] as Language
     language.dependingOn(...dependentMetamodels)
     return language

@@ -1,4 +1,4 @@
-import {ReadModelAPI} from "./api.js"
+import {ExtractionFacade} from "./facade.js"
 import {currentSerializationFormatVersion, MetaPointer, SerializationChunk, SerializedNode} from "./serialization.js"
 import {asIds} from "./functions.js"
 import {Node} from "./types.js"
@@ -11,7 +11,7 @@ import {BuiltinPrimitive, lioncoreBuiltins, serializeBuiltin} from "./m3/builtin
 /**
  * @return a {@link SerializationChunk} of the given model (i.e., an array of {@link Node nodes} - the first argument) to the LionWeb serialization JSON format.
  */
-export const serializeNodes = <NT extends Node>(nodes: NT[], api: ReadModelAPI<NT>): SerializationChunk /* <=> JSON */ => {
+export const serializeNodes = <NT extends Node>(nodes: NT[], extractionFacade: ExtractionFacade<NT>): SerializationChunk /* <=> JSON */ => {
     const serializedNodes: SerializedNode[] = []  // keep nodes as much as possible "in order"
     const ids: { [id: string]: boolean } = {}   // maintain a map to keep track of IDs of nodes that have been serialized
     const languagesUsed: Language[] = []
@@ -26,7 +26,7 @@ export const serializeNodes = <NT extends Node>(nodes: NT[], api: ReadModelAPI<N
             return
         }
 
-        const classifier = api.classifierOf(node)
+        const classifier = extractionFacade.classifierOf(node)
         const language = classifier.language
         registerLanguageUsed(language)
         const serializedNode: SerializedNode = {
@@ -44,7 +44,7 @@ export const serializeNodes = <NT extends Node>(nodes: NT[], api: ReadModelAPI<N
         serializedNodes.push(serializedNode)
         ids[node.id] = true
         allFeaturesOf(classifier).forEach((feature) => {
-            const value = api.getFeatureValue(node, feature)
+            const value = extractionFacade.getFeatureValue(node, feature)
             const featureLanguage = feature.classifier.language
             registerLanguageUsed(featureLanguage)
             const featureMetaPointer: MetaPointer = {
@@ -59,7 +59,7 @@ export const serializeNodes = <NT extends Node>(nodes: NT[], api: ReadModelAPI<N
                         return serializeBuiltin(value as BuiltinPrimitive)
                     }
                     if (feature.type instanceof Enumeration) {
-                        return api.enumerationLiteralFrom(value, feature.type)?.key
+                        return extractionFacade.enumerationLiteralFrom(value, feature.type)?.key
                             ?? null // (undefined -> null)
                     }
                     return null

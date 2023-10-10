@@ -27,7 +27,7 @@ import {sortByStringKey} from "../utils/sorting.js"
 import {cycleWith} from "../utils/cycles.js"
 import {flatMapNonCyclingFollowing} from "../utils/recursion.js"
 import {Id, Node} from "../types.js"
-import {ClassifierDeducer} from "../api.js"
+import {ClassifierDeducer} from "../facade.js"
 import {containmentChain} from "../functions.js"
 
 

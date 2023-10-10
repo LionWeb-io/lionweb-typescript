@@ -4,8 +4,8 @@ import {Language, lioncore, lioncoreBuiltins, serializeLanguage, serializeNodes}
 import {libraryLanguage} from "@lionweb/test/dist/languages/library.js"
 import {multiLanguage} from "@lionweb/test/dist/languages/multi.js"
 import {languageWithEnum} from "@lionweb/test/dist/languages/with-enum.js"
-import {libraryModel, libraryReadModelAPI} from "@lionweb/test/dist/instances/library.js"
-import {multiModel, multiReadModelAPI} from "@lionweb/test/dist/instances/multi.js"
+import {libraryModel, libraryExtractionFacade} from "@lionweb/test/dist/instances/library.js"
+import {multiModel, multiExtractionFacade} from "@lionweb/test/dist/instances/multi.js"
 import {generateMermaidForLanguage, generatePlantUmlForLanguage, schemaFor, writeJsonAsFile} from "@lionweb/utilities"
 import {builtinsPath, diagramPath, instancePath, languagePath, lioncorePath} from "./paths.js"
 
@@ -27,7 +27,7 @@ writeFileSync(diagramPath("library-gen.puml"), generatePlantUmlForLanguage(libra
 writeFileSync(diagramPath("library-gen.md"), generateMermaidForLanguage(libraryLanguage))
 console.log(`generated diagrams for Library M2`)
 
-writeJsonAsFile(instancePath("library.json"), serializeNodes(libraryModel, libraryReadModelAPI))
+writeJsonAsFile(instancePath("library.json"), serializeNodes(libraryModel, libraryExtractionFacade))
 console.log(`serialized library M1`)
 
 
@@ -37,7 +37,7 @@ writeJsonAsFile(languagePath("with-enum.json"), serializeLanguage(languageWithEn
 writeJsonAsFile(languagePath("multi.json"), serializeLanguage(multiLanguage))
 console.log(`serialized multi-language M2`)
 
-writeJsonAsFile(instancePath("multi.json"), serializeNodes(multiModel, multiReadModelAPI))
+writeJsonAsFile(instancePath("multi.json"), serializeNodes(multiModel, multiExtractionFacade))
 console.log(`serialized multi-language M1`)
 
 

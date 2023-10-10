@@ -11,15 +11,15 @@ type ClassifierDeducer<NT extends Node> = (node: NT) => Classifier
 
 
 /**
- * Two interfaces that defines APIs for in-memory models.
+ * Two interfaces that defines façades for in-memory models.
  * Instances/implementations of this interface parametrize generic (de-)serialization.
- * Implementations of ModelAPI {w|c}ould be:
+ * Implementations of these interfaces {w|c}ould be:
  *  - specific to Lioncore (so to match m3/types.ts)
- *  - generic just to deserialize into Node & { settings: { [featureName: string]: unknown } } -- á la Federico
+ *  - generic to deserialize into @link DynamicNode}
  */
 
 
-interface ReadModelAPI<NT extends Node> {
+interface ExtractionFacade<NT extends Node> {
 
     /**
      * @return The {@link Concept concept} of the given node
@@ -40,7 +40,7 @@ interface ReadModelAPI<NT extends Node> {
 
 }
 
-interface WriteModelAPI<NT extends Node> {
+interface InstantiationFacade<NT extends Node> {
 
     /**
      * @return An instance of the given concept, also given its parent (or {@link undefined} for root nodes),
@@ -71,18 +71,18 @@ type NodesExtractor<NT extends Node> = (nodes: NT) => NT[]
 /**
  * @return A function that extracts the children from a given node.
  */
-const childrenExtractorUsing = <NT extends Node>(api: ReadModelAPI<NT>): NodesExtractor<NT> =>
+const childrenExtractorUsing = <NT extends Node>(extractionFacade: ExtractionFacade<NT>): NodesExtractor<NT> =>
     (node: NT): NT[] =>
-        allFeaturesOf(api.classifierOf(node))
+        allFeaturesOf(extractionFacade.classifierOf(node))
             .filter(isContainment)
-            .flatMap((containment) => api.getFeatureValue(node, containment) as NT[])
+            .flatMap((containment) => extractionFacade.getFeatureValue(node, containment) as NT[])
 
 
 /**
  * @return a function that extracts *all* nodes from a given start node - usually a root node.
  */
-const nodesExtractorUsing = <NT extends Node>(api: ReadModelAPI<NT>): NodesExtractor<NT> =>
-    flatMapNonCyclingFollowing(trivialFlatMapper, childrenExtractorUsing<NT>(api))
+const nodesExtractorUsing = <NT extends Node>(extractionFacade: ExtractionFacade<NT>): NodesExtractor<NT> =>
+    flatMapNonCyclingFollowing(trivialFlatMapper, childrenExtractorUsing<NT>(extractionFacade))
 
 
 /**
@@ -120,8 +120,8 @@ const updateSettingsKeyBased = (settings: Record<string, unknown>, feature: Feat
 export type {
     ClassifierDeducer,
     NodesExtractor,
-    ReadModelAPI,
-    WriteModelAPI
+    ExtractionFacade,
+    InstantiationFacade
 }
 
 export {
