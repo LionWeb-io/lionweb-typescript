@@ -3,7 +3,8 @@ import {
     Id,
     InstantiationFacade,
     nameBasedClassifierDeducerFor,
-    updateSettingsNameBased
+    Node,
+    updateSettingsNameBased,
 } from "@lionweb/core"
 import {hashingIdGen} from "@lionweb/utilities"
 import {libraryLanguage} from "../languages/library.js"
@@ -24,6 +25,12 @@ export type BaseNode = {
     id: Id
     classifier: string
 }
+
+
+export const isBaseNodeOfAnyOfTypes = (...types: string[]) =>
+    (node: Node) =>
+        "classifier" in node && typeof node.classifier === "string" && types.includes(node.classifier)
+
 
 export type Book = BaseNode & {
     classifier: "Book"
@@ -55,6 +62,7 @@ export type SpecialistBookWriter = Writer & BaseNode & {
 
 
 export const libraryExtractionFacade: ExtractionFacade<BaseNode> = {
+    supports: isBaseNodeOfAnyOfTypes("Book", "Library", "GuideBookWriter", "SpecialistBook"),
     classifierOf: (node) => nameBasedClassifierDeducerFor(libraryLanguage)(node.classifier),
     getFeatureValue: (node, feature) =>
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

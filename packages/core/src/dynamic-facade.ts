@@ -28,6 +28,9 @@ export type DynamicINamed = DynamicNode & {
  * An implementation of {@link ExtractionFacade} for {@link DynamicNode dynamic nodes}.
  */
 export const dynamicExtractionFacade: ExtractionFacade<DynamicNode> = ({
+    supports: (node) =>
+           "classifier" in node && node.classifier instanceof Classifier
+        && "settings" in node && typeof node.settings === "object" && !Array.isArray(node.settings),
     classifierOf: (node) => node.classifier,
     getFeatureValue: (node, feature) =>
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

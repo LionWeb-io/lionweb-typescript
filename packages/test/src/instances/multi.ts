@@ -1,8 +1,8 @@
 import {hashingIdGen} from "@lionweb/utilities"
 import {ExtractionFacade, nameBasedClassifierDeducerFor, Node} from "@lionweb/core"
-import {multiLanguage} from "../languages/multi.js"
-import {BaseNode, bobLibrary, jackLondon, Library, libraryExtractionFacade} from "./library.js"
 import {libraryLanguage} from "../languages/library.js"
+import {multiLanguage} from "../languages/multi.js"
+import {BaseNode, bobLibrary, isBaseNodeOfAnyOfTypes, jackLondon, Library, libraryExtractionFacade} from "./library.js"
 
 
 export type Container = Node & {
@@ -13,10 +13,12 @@ export type Container = Node & {
 
 export const multiExtractionFacade: ExtractionFacade<BaseNode> = {
     ...libraryExtractionFacade,
+    /* override */ supports: (node) =>
+        libraryExtractionFacade.supports(node) || isBaseNodeOfAnyOfTypes("Container")(node),
     /* override */ classifierOf: (node) =>
-        nameBasedClassifierDeducerFor(libraryLanguage)(node.classifier)
-        ??
-        nameBasedClassifierDeducerFor(multiLanguage)(node.classifier),
+        libraryExtractionFacade.supports(node)
+            ? nameBasedClassifierDeducerFor(libraryLanguage)(node.classifier)
+            : nameBasedClassifierDeducerFor(multiLanguage)(node.classifier),
 }
 
 

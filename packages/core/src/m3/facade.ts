@@ -8,6 +8,7 @@ import {
     Interface,
     Language,
     M3Concept,
+    M3Node,
     PrimitiveType,
     Property,
     Reference
@@ -22,6 +23,7 @@ const {inamed_name} = builtinFeatures
 
 
 export const lioncoreExtractionFacade: ExtractionFacade<M3Concept> = ({
+    supports: (node) => node instanceof M3Node,
     classifierOf: classBasedClassifierDeducerFor(lioncore),
     getFeatureValue: (node, feature) =>
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -268,6 +268,7 @@ export {
     PrimitiveType,
     Property,
     Reference,
+    M3Node,
     isINamed,
     isIKeyed,
     lioncoreBuiltinsQName,
@@ -277,7 +278,6 @@ export {
 export type {
     IKeyed,
     INamed,
-    M3Concept,
-    M3Node
+    M3Concept
 }
 

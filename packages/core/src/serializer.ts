@@ -26,6 +26,10 @@ export const serializeNodes = <NT extends Node>(nodes: NT[], extractionFacade: E
             return
         }
 
+        if (!extractionFacade.supports(node)) {
+            throw new Error(`node with id "${node.id}" belongs to a language that's not supported by the ReadModelAPI`)
+        }
+
         const classifier = extractionFacade.classifierOf(node)
         const language = classifier.language
         registerLanguageUsed(language)

@@ -22,6 +22,11 @@ type ClassifierDeducer<NT extends Node> = (node: NT) => Classifier
 interface ExtractionFacade<NT extends Node> {
 
     /**
+     * @return Whether the given {@link Node node} belongs to any of the languages supported by this {@link ReadModelAPI API}.
+     */
+    supports: (node: Node) => boolean
+
+    /**
      * @return The {@link Concept concept} of the given node
      */
     classifierOf: ClassifierDeducer<NT>
