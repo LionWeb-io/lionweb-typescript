@@ -113,7 +113,7 @@
         "id": {
           "$ref": "#/$defs/Id"
         },
-        "concept": {
+        "classifier": {
           "$ref": "#/$defs/MetaPointer"
         },
         "properties": {

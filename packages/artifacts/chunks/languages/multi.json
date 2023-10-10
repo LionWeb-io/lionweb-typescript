@@ -9,7 +9,7 @@
   "nodes": [
     {
       "id": "S9d8_7DajL2oOe1cqvXUGPGa3cWUF3bocmHgANb5bpM",
-      "concept": {
+      "classifier": {
         "language": "LionCore-M3",
         "version": "1",
         "key": "Language"
@@ -71,7 +71,7 @@
     },
     {
       "id": "qc3OObx7WI52EBnUJrrzWtbH9d3mXI7V6gTag7FZx0o",
-      "concept": {
+      "classifier": {
         "language": "LionCore-M3",
         "version": "1",
         "key": "Concept"
@@ -144,7 +144,7 @@
     },
     {
       "id": "60eh9gc18v-vyPc8t3zNGWKgKPQ8Pmu85RmAoWlSV8U",
-      "concept": {
+      "classifier": {
         "language": "LionCore-M3",
         "version": "1",
         "key": "Containment"

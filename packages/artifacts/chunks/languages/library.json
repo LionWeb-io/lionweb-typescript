@@ -9,7 +9,7 @@
   "nodes": [
     {
       "id": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
-      "concept": {
+      "classifier": {
         "language": "LionCore-M3",
         "version": "1",
         "key": "Language"
@@ -71,7 +71,7 @@
     },
     {
       "id": "uEoqgTU-BImmpne9vdcqM-o2JWS8yGAveLounJcncVU",
-      "concept": {
+      "classifier": {
         "language": "LionCore-M3",
         "version": "1",
         "key": "Concept"
@@ -147,7 +147,7 @@
     },
     {
       "id": "ydTFbSaxS3-iPy4Z0BXupobIaWIpdtL9c_WfbzpBeOw",
-      "concept": {
+      "classifier": {
         "language": "LionCore-M3",
         "version": "1",
         "key": "Property"
@@ -198,7 +198,7 @@
     },
     {
       "id": "kGSV8eFs5WIxjUKXyNoBIDW7pL4gyszY2LHKmmzvegU",
-      "concept": {
+      "classifier": {
         "language": "LionCore-M3",
         "version": "1",
         "key": "Property"
@@ -249,7 +249,7 @@
     },
     {
       "id": "LGawCEgHtaqYxRhVWTlQSf6NuCpW5MDpi7QWLbGG3DM",
-      "concept": {
+      "classifier": {
         "language": "LionCore-M3",
         "version": "1",
         "key": "Reference"
@@ -308,7 +308,7 @@
     },
     {
       "id": "cOLUxl-SXt_fm3d3FEBhf6XSdeNKo3N9iW7oJpDfx3k",
-      "concept": {
+      "classifier": {
         "language": "LionCore-M3",
         "version": "1",
         "key": "Property"
@@ -359,7 +359,7 @@
     },
     {
       "id": "6S4CvZSArQGBLCO7FvP8hXw2gMpIzIjXGGz6pyTy-rA",
-      "concept": {
+      "classifier": {
         "language": "LionCore-M3",
         "version": "1",
         "key": "Enumeration"
@@ -400,7 +400,7 @@
     },
     {
       "id": "I5CCX1NbCOzV2c_vtCJKrp0iHdqwYgNPeiQfLL4Gejg",
-      "concept": {
+      "classifier": {
         "language": "LionCore-M3",
         "version": "1",
         "key": "EnumerationLiteral"
@@ -429,7 +429,7 @@
     },
     {
       "id": "U5NXStjkSAQJfuMgoi5zUDKJVbckzm_97dtBgm-AVLI",
-      "concept": {
+      "classifier": {
         "language": "LionCore-M3",
         "version": "1",
         "key": "EnumerationLiteral"
@@ -458,7 +458,7 @@
     },
     {
       "id": "J3-V1k6rqq4Ml8qX_SuUOFhhjXoxLkHrt4mShDRJH1g",
-      "concept": {
+      "classifier": {
         "language": "LionCore-M3",
         "version": "1",
         "key": "Concept"
@@ -532,7 +532,7 @@
     },
     {
       "id": "Rfy7VBCRh_jJSNcJTaqprdD1YcQS0OnoCMXnbmLCm8Y",
-      "concept": {
+      "classifier": {
         "language": "LionCore-M3",
         "version": "1",
         "key": "Property"
@@ -583,7 +583,7 @@
     },
     {
       "id": "ZAYPfVsZ-nRe7ICpRe_3LzKufog84Unh9qT4jpT4Izc",
-      "concept": {
+      "classifier": {
         "language": "LionCore-M3",
         "version": "1",
         "key": "Containment"
@@ -642,7 +642,7 @@
     },
     {
       "id": "7GwNCVubFACsj8FdlnwwIOaPbJ-mLJ5UvU5EnZRjLds",
-      "concept": {
+      "classifier": {
         "language": "LionCore-M3",
         "version": "1",
         "key": "Concept"
@@ -715,7 +715,7 @@
     },
     {
       "id": "6ephvryVAYXE1bm1LDlUBl0Ib9MOGcM23RDej6kyuqo",
-      "concept": {
+      "classifier": {
         "language": "LionCore-M3",
         "version": "1",
         "key": "Property"
@@ -766,7 +766,7 @@
     },
     {
       "id": "z4c4dBOvVtSw9UN9T3k5v608cRvRmBgqFIo3nyHo_QA",
-      "concept": {
+      "classifier": {
         "language": "LionCore-M3",
         "version": "1",
         "key": "Concept"
@@ -844,7 +844,7 @@
     },
     {
       "id": "ajxn2_nvTlZaETaH5NBSdjg-4ecBXAz0PLI9ZISNtfo",
-      "concept": {
+      "classifier": {
         "language": "LionCore-M3",
         "version": "1",
         "key": "Property"
@@ -895,7 +895,7 @@
     },
     {
       "id": "rs6OGi3yUdrLwpsDHxfQOFx6cb1GsMDT8XzJhcVK988",
-      "concept": {
+      "classifier": {
         "language": "LionCore-M3",
         "version": "1",
         "key": "Concept"
@@ -973,7 +973,7 @@
     },
     {
       "id": "JH7BxhpDr9L7f6UBOKtFQBr0TV6r2nAK_6NajM1ij2Q",
-      "concept": {
+      "classifier": {
         "language": "LionCore-M3",
         "version": "1",
         "key": "Property"

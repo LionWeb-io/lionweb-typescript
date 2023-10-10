@@ -74,7 +74,7 @@
         "id": {
           "$ref": "#/$defs/Id"
         },
-        "concept": {
+        "classifier": {
           "const": {
             "metamodel": "LionCore_M3",
             "version": "1",
@@ -136,7 +136,7 @@
         "id": {
           "$ref": "#/$defs/Id"
         },
-        "concept": {
+        "classifier": {
           "const": {
             "metamodel": "LionCore_M3",
             "version": "1",
@@ -194,7 +194,7 @@
         "id": {
           "$ref": "#/$defs/Id"
         },
-        "concept": {
+        "classifier": {
           "const": {
             "metamodel": "LionCore_M3",
             "version": "1",
@@ -245,7 +245,7 @@
         "id": {
           "$ref": "#/$defs/Id"
         },
-        "concept": {
+        "classifier": {
           "const": {
             "metamodel": "LionCore_M3",
             "version": "1",
@@ -300,7 +300,7 @@
         "id": {
           "$ref": "#/$defs/Id"
         },
-        "concept": {
+        "classifier": {
           "const": {
             "metamodel": "LionCore_M3",
             "version": "1",

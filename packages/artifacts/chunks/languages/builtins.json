@@ -9,7 +9,7 @@
   "nodes": [
     {
       "id": "LionCore-builtins",
-      "concept": {
+      "classifier": {
         "language": "LionCore-M3",
         "version": "1",
         "key": "Language"
@@ -71,7 +71,7 @@
     },
     {
       "id": "LionCore-builtins-String",
-      "concept": {
+      "classifier": {
         "language": "LionCore-M3",
         "version": "1",
         "key": "PrimitiveType"
@@ -100,7 +100,7 @@
     },
     {
       "id": "LionCore-builtins-Boolean",
-      "concept": {
+      "classifier": {
         "language": "LionCore-M3",
         "version": "1",
         "key": "PrimitiveType"
@@ -129,7 +129,7 @@
     },
     {
       "id": "LionCore-builtins-Integer",
-      "concept": {
+      "classifier": {
         "language": "LionCore-M3",
         "version": "1",
         "key": "PrimitiveType"
@@ -158,7 +158,7 @@
     },
     {
       "id": "LionCore-builtins-JSON",
-      "concept": {
+      "classifier": {
         "language": "LionCore-M3",
         "version": "1",
         "key": "PrimitiveType"
@@ -187,7 +187,7 @@
     },
     {
       "id": "LionCore-builtins-Node",
-      "concept": {
+      "classifier": {
         "language": "LionCore-M3",
         "version": "1",
         "key": "Concept"
@@ -258,7 +258,7 @@
     },
     {
       "id": "LionCore-builtins-INamed",
-      "concept": {
+      "classifier": {
         "language": "LionCore-M3",
         "version": "1",
         "key": "ConceptInterface"
@@ -307,7 +307,7 @@
     },
     {
       "id": "LionCore-builtins-INamed-name",
-      "concept": {
+      "classifier": {
         "language": "LionCore-M3",
         "version": "1",
         "key": "Property"
