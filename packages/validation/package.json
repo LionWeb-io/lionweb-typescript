@@ -15,7 +15,8 @@
     "testValid": "ts-node src/runners/RunCheckFolder.ts ../../../lionweb-integration-testing/testset/valid",
     "testInvalid": "ts-node src/runners/RunCheckFolder.ts ../../../lionweb-integration-testing/testset/invalid",
     "testInvalidWithLanguage": "ts-node src/runners/RunCheckFolderWithLanguage.ts ../../../lionweb-integration-testing/testset/withLanguage/invalid/ ../../../lionweb-integration-testing/testset/withLanguage/myLang.language.json",
-    "testValidWithLanguage": "ts-node src/runners/RunCheckFolderWithLanguage.ts ../../../lionweb-integration-testing/testset/withLanguage/valid/ ../../../lionweb-integration-testing/testset/withLanguage/myLang.language.json"
+    "testValidWithLanguage": "ts-node src/runners/RunCheckFolderWithLanguage.ts ../../../lionweb-integration-testing/testset/withLanguage/valid/ ../../../lionweb-integration-testing/testset/withLanguage/myLang.language.json",
+    "test": "npm run testValid && npm run testInvalid && npm run testInvalidWithLanguage && npm run testValidWithLanguage"
   },
   "devDependencies": {
     "@types/node": "18.15.3",

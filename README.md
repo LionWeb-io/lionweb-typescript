@@ -52,7 +52,7 @@ Run the following command to build each of the packages:
 
 ```shell
 # Build the project
-./build.sh
+./build-all.sh
 ```
 
 This includes installing any NPM (dev) dependencies.
@@ -72,7 +72,6 @@ Note that this does not catch TypeScript compilation errors.
 Run the following command to run the tests:
 
 ```shell
-# Run tests
 cd packages/test
 
 # Run the tests
@@ -85,6 +84,12 @@ The output should look like this:
 <br />
 <br />
 <img src="./documentation/images/test-output.png" alt="test" width="50%"/>
+
+You can test more thoroughly as follows:
+
+```shell
+./test-all.sh
+```
 
 
 ## Code style
