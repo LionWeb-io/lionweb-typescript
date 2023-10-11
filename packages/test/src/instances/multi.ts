@@ -6,7 +6,7 @@ import {libraryLanguage} from "../languages/library.js"
 
 
 export type Container = Node & {
-    concept: "Container",
+    classifier: "Container",
     libraries: Library[]
 }
 
@@ -14,9 +14,9 @@ export type Container = Node & {
 export const multiReadModelAPI: ReadModelAPI<BaseNode> = {
     ...libraryReadModelAPI,
     /* override */ classifierOf: (node) =>
-        nameBasedClassifierDeducerFor(libraryLanguage)(node.concept)
+        nameBasedClassifierDeducerFor(libraryLanguage)(node.classifier)
         ??
-        nameBasedClassifierDeducerFor(multiLanguage)(node.concept),
+        nameBasedClassifierDeducerFor(multiLanguage)(node.classifier),
 }
 
 
@@ -24,7 +24,7 @@ const id = hashingIdGen()
 
 const container: Container = {
     id: id("MyContainer"),
-    concept: "Container",
+    classifier: "Container",
     libraries: [
         bobLibrary
     ]

@@ -32,9 +32,9 @@ export const dynamicReadModelAPI: ReadModelAPI<DynamicNode> = ({
  */
 
 export const dynamicWriteModelAPI: WriteModelAPI<DynamicNode> = ({
-    nodeFor: (_parent, concept, id, _propertySettings) => ({
+    nodeFor: (_parent, classifier, id, _propertySettings) => ({
         id,
-        classifier: concept,
+        classifier,
         settings: {}
     } as DynamicNode),
     setFeatureValue: (node, feature, value) => {

@@ -22,11 +22,11 @@ const rtEnums: { [enumKey: string]: unknown } = {
 
 export type BaseNode = {
     id: Id
-    concept: string
+    classifier: string
 }
 
 export type Book = BaseNode & {
-    concept: "Book"
+    classifier: "Book"
     title: string
     pages: number
     author: Writer
@@ -34,7 +34,7 @@ export type Book = BaseNode & {
 }
 
 export type Library = BaseNode & {
-    concept: "Library"
+    classifier: "Library"
     name: string
     books: Book[]
 }
@@ -44,18 +44,18 @@ export type Writer = {   // abstract
 }
 
 export type GuideBookWriter = Writer & BaseNode & {
-    concept: "GuideBookWriter"
+    classifier: "GuideBookWriter"
     countries: string
 }
 
 export type SpecialistBookWriter = Writer & BaseNode & {
-    concept: "SpecialistBookWriter"
+    classifier: "SpecialistBookWriter"
     subject: string
 }
 
 
 export const libraryReadModelAPI: ReadModelAPI<BaseNode> = {
-    classifierOf: (node) => nameBasedClassifierDeducerFor(libraryLanguage)(node.concept),
+    classifierOf: (node) => nameBasedClassifierDeducerFor(libraryLanguage)(node.classifier),
     getFeatureValue: (node, feature) =>
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (node as any)[feature.name],    // (mirrors name-based updating of settings)
@@ -69,9 +69,9 @@ export const libraryReadModelAPI: ReadModelAPI<BaseNode> = {
 }
 
 export const libraryWriteModelAPI: WriteModelAPI<BaseNode> = {
-    nodeFor: (_parent, concept, id, _propertySettings) => ({
+    nodeFor: (_parent, classifier, id, _propertySettings) => ({
         id,
-        concept: concept.key
+        classifier: classifier.key
     }),
     setFeatureValue: updateSettingsNameBased,
     encodingOf: (literal) => {
@@ -97,14 +97,14 @@ const id = hashingIdGen()
 
 export const jackLondon: GuideBookWriter = {
     id: id("Jack London"),
-    concept: "GuideBookWriter",
+    classifier: "GuideBookWriter",
     name: "Jack London",
     countries: "Alaska" // (not a country...)
 }
 
 const explorerBook: Book = {
     id: id("Explorer Book"),
-    concept: "Book",
+    classifier: "Book",
     title: "Explorer Book",
     author: jackLondon,
     pages: 1337,
@@ -113,7 +113,7 @@ const explorerBook: Book = {
 
 export const bobLibrary: Library = {
     id: id("Bob's Library"),
-    concept: "Library",
+    classifier: "Library",
     name: "Bob's Library",
     books: [
         explorerBook

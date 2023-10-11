@@ -1,7 +1,16 @@
 import {Id, Node} from "./types.js"
 import {currentSerializationFormatVersion, SerializationChunk, SerializedNode} from "./serialization.js"
 import {WriteModelAPI} from "./api.js"
-import {Concept, Containment, Enumeration, Language, PrimitiveType, Property, Reference} from "./m3/types.js"
+import {
+    Classifier,
+    Concept,
+    Containment,
+    Enumeration,
+    Language,
+    PrimitiveType,
+    Property,
+    Reference
+} from "./m3/types.js"
 import {allFeaturesOf} from "./m3/functions.js"
 import {deserializeBuiltin} from "./m3/builtins.js"
 import {groupBy} from "./utils/grouping.js"
@@ -75,16 +84,16 @@ export const deserializeChunk = <NT extends Node>(
      */
     const instantiate = ({classifier: classifierMetaPointer, id, properties, children, references}: SerializedNode, parent?: NT): NT => {
 
-        const concept = allEntities
+        const classifier = allEntities
             .find((element) =>
-                element instanceof Concept && element.key === classifierMetaPointer.key
+                element instanceof Classifier && element.key === classifierMetaPointer.key
             ) as (Concept | undefined)
 
-        if (concept === undefined) {
+        if (classifier === undefined) {
             throw new Error(`can't deserialize a node having a classifier with key "${classifierMetaPointer.key}"`)
         }
 
-        const allFeatures = allFeaturesOf(concept)
+        const allFeatures = allFeaturesOf(classifier)
 
         const propertySettings: { [propertyKey: string]: unknown } = {}
 
@@ -113,7 +122,7 @@ export const deserializeChunk = <NT extends Node>(
                 })
         }
 
-        const node = api.nodeFor(parent, concept, id, propertySettings)
+        const node = api.nodeFor(parent, classifier, id, propertySettings)
 
         const serializedChildrenPerKey =
             children === undefined ? {} : groupBy(children, (sp) => sp.containment.key)

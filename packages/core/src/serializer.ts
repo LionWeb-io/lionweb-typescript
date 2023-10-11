@@ -26,15 +26,15 @@ export const serializeNodes = <NT extends Node>(nodes: NT[], api: ReadModelAPI<N
             return
         }
 
-        const concept = api.classifierOf(node)
-        const language = concept.language
+        const classifier = api.classifierOf(node)
+        const language = classifier.language
         registerLanguageUsed(language)
         const serializedNode: SerializedNode = {
             id: node.id,
             classifier: {
                 language: language.key,
                 version: language.version,
-                key: concept.key
+                key: classifier.key
             },
             properties: [],
             children: [],
@@ -43,7 +43,7 @@ export const serializeNodes = <NT extends Node>(nodes: NT[], api: ReadModelAPI<N
         }
         serializedNodes.push(serializedNode)
         ids[node.id] = true
-        allFeaturesOf(concept).forEach((feature) => {
+        allFeaturesOf(classifier).forEach((feature) => {
             const value = api.getFeatureValue(node, feature)
             const featureLanguage = feature.classifier.language
             registerLanguageUsed(featureLanguage)
