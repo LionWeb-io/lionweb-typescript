@@ -48,7 +48,7 @@ The [`diagrams/` directory](./diagrams/) contains generated PlantUML UML class d
 
 * [`library-gen.puml`](./diagrams/library-gen.puml): the hand-crafted "library" metamodel.
 * [`metametamodel-gen.puml`](./diagrams/metametamodel-gen.puml): the (self-defined) LionCore metametamodel (M3).
-  This generated PlantUML file can then be compared with [this one](https://github.com/LionWeb-org/organization/blob/main/metametamodel/metametamodel.puml): they should have exactly the same contents apart from a couple of obvious differences.
+  This generated PlantUML file can then be compared with [this one](https://github.com/LionWeb-io/specification/blob/main/metametamodel/metametamodel.puml): they should have exactly the same contents apart from a couple of obvious differences.
 
 All of these diagrams also have a corresponding MarkDown document with an embedded [Mermaid diagram](https://mermaid.js.org/).
 

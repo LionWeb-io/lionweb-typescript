@@ -18,7 +18,7 @@ const lioncoreBuiltinsQName = "LionCore-builtins"
 
 
 // Types appear roughly in the order of top-to-down+left-to-right in the diagram at:
-//      https://lionweb-org.github.io/organization/metametamodel/metametamodel.html#_overview
+//      https://lionweb-io.github.io/specification/metametamodel/metametamodel.html#_overview
 
 
 interface INamed extends Node {
