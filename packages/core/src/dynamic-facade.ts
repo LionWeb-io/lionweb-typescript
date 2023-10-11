@@ -1,5 +1,5 @@
 import {Node} from "./types.js"
-import {ReadModelAPI, updateSettingsKeyBased, WriteModelAPI} from "./api.js"
+import {ExtractionFacade, InstantiationFacade, updateSettingsKeyBased} from "./facade.js"
 import {Classifier} from "./m3/types.js"
 
 
@@ -14,9 +14,9 @@ export type DynamicNode = Node & {
 
 
 /**
- * An implementation of {@link ReadModelAPI} for {@link DynamicNode dynamic nodes}.
+ * An implementation of {@link ExtractionFacade} for {@link DynamicNode dynamic nodes}.
  */
-export const dynamicReadModelAPI: ReadModelAPI<DynamicNode> = ({
+export const dynamicExtractionFacade: ExtractionFacade<DynamicNode> = ({
     classifierOf: (node) => node.classifier,
     getFeatureValue: (node, feature) =>
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -28,10 +28,10 @@ export const dynamicReadModelAPI: ReadModelAPI<DynamicNode> = ({
 
 
 /**
- * An implementation of {@link WriteModelAPI} for {@link DynamicNode dynamic nodes}.
+ * An implementation of {@link InstantiationFacade} for {@link DynamicNode dynamic nodes}.
  */
 
-export const dynamicWriteModelAPI: WriteModelAPI<DynamicNode> = ({
+export const dynamicInstantiationFacade: InstantiationFacade<DynamicNode> = ({
     nodeFor: (_parent, classifier, id, _propertySettings) => ({
         id,
         classifier,

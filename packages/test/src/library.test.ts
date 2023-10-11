@@ -4,26 +4,26 @@ const {deepEqual} = assert
 import {
     deserializeChunk,
     DynamicNode,
-    dynamicWriteModelAPI,
+    dynamicInstantiationFacade,
     nameBasedClassifierDeducerFor,
     serializeNodes
 } from "@lionweb/core"
-import {libraryModel, libraryReadModelAPI, libraryWriteModelAPI} from "./instances/library.js"
+import {libraryModel, libraryExtractionFacade, libraryInstantiationFacade} from "./instances/library.js"
 import {libraryLanguage} from "./languages/library.js"
 
 
 describe("Library test model", () => {
 
     it("[de-]serialize example library", () => {
-        const serialization = serializeNodes(libraryModel, libraryReadModelAPI)
+        const serialization = serializeNodes(libraryModel, libraryExtractionFacade)
         // FIXME  ensure that serialization does not produce key-value pairs with value === undefined
-        const deserialization = deserializeChunk(serialization, libraryWriteModelAPI, [libraryLanguage], [])
+        const deserialization = deserializeChunk(serialization, libraryInstantiationFacade, [libraryLanguage], [])
         deepEqual(deserialization, libraryModel)
     })
 
-    it(`"dynamify" example library through serialization and deserialization using the Dynamic Model API`, () => {
-        const serialization = serializeNodes(libraryModel, libraryReadModelAPI)
-        const dynamification = deserializeChunk(serialization, dynamicWriteModelAPI, [libraryLanguage], [])
+    it(`"dynamify" example library through serialization and deserialization using the DynamicNode facades`, () => {
+        const serialization = serializeNodes(libraryModel, libraryExtractionFacade)
+        const dynamification = deserializeChunk(serialization, dynamicInstantiationFacade, [libraryLanguage], [])
         deepEqual(dynamification.length, 2)
         const lookup = nameBasedClassifierDeducerFor(libraryLanguage)
         deepEqual(dynamification[0].classifier, lookup("Library"))

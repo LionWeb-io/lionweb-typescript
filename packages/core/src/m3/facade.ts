@@ -1,4 +1,4 @@
-import {ReadModelAPI, updateSettingsNameBased, WriteModelAPI} from "../api.js"
+import {ExtractionFacade, InstantiationFacade, updateSettingsNameBased} from "../facade.js"
 import {
     Classifier,
     Concept,
@@ -21,7 +21,7 @@ import {KeyGenerator, nameIsKeyGenerator} from "./key-generation.js"
 const {inamed_name} = builtinFeatures
 
 
-export const lioncoreReadAPI: ReadModelAPI<M3Concept> = ({
+export const lioncoreExtractionFacade: ExtractionFacade<M3Concept> = ({
     classifierOf: classBasedClassifierDeducerFor(lioncore),
     getFeatureValue: (node, feature) =>
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -31,12 +31,12 @@ export const lioncoreReadAPI: ReadModelAPI<M3Concept> = ({
 
 
 /**
- * @return An implementation of {@link WriteModelAPI write-part of the model API} for instances of the LionCore M3 (so M2s).
- * The returned {@link ModelAPI model API} uses the given {@link KeyGenerator key generator} to generate the keys of all objects in the M2.
+ * @return An implementation of {@link InstantiationFacade} for instances of the LionCore M3 (so M2s).
+ * The returned {@link InstantiationFacade} uses the given {@link KeyGenerator key generator} to generate the keys of all objects in the M2.
  */
-export const lioncoreWriteAPIWithKeyGen = (keyGen: KeyGenerator): WriteModelAPI<M3Concept> => ({
-    nodeFor: (parent, concept, id, propertySettings) => {
-        switch (concept.key) {
+export const lioncoreInstantiationFacadeWithKeyGen = (keyGen: KeyGenerator): InstantiationFacade<M3Concept> => ({
+    nodeFor: (parent, classifier, id, propertySettings) => {
+        switch (classifier.key) {
             case metaConcepts.concept.key:
                 return new Concept(parent as Language, propertySettings[inamed_name.key] as string, "", id, propertySettings[metaFeatures.concept_abstract.key] as boolean).keyed(keyGen)
             case metaConcepts.conceptInterface.key:
@@ -56,7 +56,7 @@ export const lioncoreWriteAPIWithKeyGen = (keyGen: KeyGenerator): WriteModelAPI<
             case metaConcepts.reference.key:
                 return new Reference(parent as Classifier, propertySettings[inamed_name.key] as string, "", id).keyed(keyGen)
             default:
-                throw new Error(`can't deserialize a node of concept "${qualifiedNameOf(concept)}" with key "${concept.key}"`)
+                throw new Error(`can't deserialize a node of concept "${qualifiedNameOf(classifier)}" with key "${classifier.key}"`)
         }
     },
     setFeatureValue: (node, feature, value) => {
@@ -67,9 +67,9 @@ export const lioncoreWriteAPIWithKeyGen = (keyGen: KeyGenerator): WriteModelAPI<
 
 
 /**
- * An implementation of {@link WriteModelAPI} for instances of the LionCore M3 (so M2s), where key = name.
+ * An implementation of {@link InstantiationFacade} for instances of the LionCore M3 (so M2s), where key = name.
  *
  * TODO  deprecate this: [de-]serialization of metamodels should be parametrized with key generation throughout
  */
-export const lioncoreWriteAPI = lioncoreWriteAPIWithKeyGen(nameIsKeyGenerator)
+export const lioncoreInstantiationFacade = lioncoreInstantiationFacadeWithKeyGen(nameIsKeyGenerator)
 

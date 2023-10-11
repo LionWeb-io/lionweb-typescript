@@ -1,7 +1,7 @@
 import {hashingIdGen} from "@lionweb/utilities"
-import {nameBasedClassifierDeducerFor, Node, ReadModelAPI} from "@lionweb/core"
+import {ExtractionFacade, nameBasedClassifierDeducerFor, Node} from "@lionweb/core"
 import {multiLanguage} from "../languages/multi.js"
-import {BaseNode, bobLibrary, jackLondon, Library, libraryReadModelAPI} from "./library.js"
+import {BaseNode, bobLibrary, jackLondon, Library, libraryExtractionFacade} from "./library.js"
 import {libraryLanguage} from "../languages/library.js"
 
 
@@ -11,8 +11,8 @@ export type Container = Node & {
 }
 
 
-export const multiReadModelAPI: ReadModelAPI<BaseNode> = {
-    ...libraryReadModelAPI,
+export const multiExtractionFacade: ExtractionFacade<BaseNode> = {
+    ...libraryExtractionFacade,
     /* override */ classifierOf: (node) =>
         nameBasedClassifierDeducerFor(libraryLanguage)(node.classifier)
         ??

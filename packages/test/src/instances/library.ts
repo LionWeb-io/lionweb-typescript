@@ -1,9 +1,9 @@
 import {
+    ExtractionFacade,
     Id,
+    InstantiationFacade,
     nameBasedClassifierDeducerFor,
-    ReadModelAPI,
-    updateSettingsNameBased,
-    WriteModelAPI
+    updateSettingsNameBased
 } from "@lionweb/core"
 import {hashingIdGen} from "@lionweb/utilities"
 import {libraryLanguage} from "../languages/library.js"
@@ -54,7 +54,7 @@ export type SpecialistBookWriter = Writer & BaseNode & {
 }
 
 
-export const libraryReadModelAPI: ReadModelAPI<BaseNode> = {
+export const libraryExtractionFacade: ExtractionFacade<BaseNode> = {
     classifierOf: (node) => nameBasedClassifierDeducerFor(libraryLanguage)(node.classifier),
     getFeatureValue: (node, feature) =>
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -68,7 +68,7 @@ export const libraryReadModelAPI: ReadModelAPI<BaseNode> = {
     }
 }
 
-export const libraryWriteModelAPI: WriteModelAPI<BaseNode> = {
+export const libraryInstantiationFacade: InstantiationFacade<BaseNode> = {
     nodeFor: (_parent, classifier, id, _propertySettings) => ({
         id,
         classifier: classifier.key
@@ -88,7 +88,7 @@ export const libraryWriteModelAPI: WriteModelAPI<BaseNode> = {
 }
 
 /*
- * This {@link ModelAPI} implementation shows the problems that enumerations cause with TypeScript (or even: in general).
+ * These facade implementation show the problems that enumerations cause with TypeScript (or even: in general).
  * A TS enum is a type and not an object as far as TS is concerned, which means that reflecting on it requires some jury-rigging through type-casting.
  */
 

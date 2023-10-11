@@ -6,7 +6,7 @@
 * [TypeScript type definitions](./types.ts)
 * [Factory](./factory.ts) for conveniently creating M3 instances
 * [Built-in (`builtins`) to LionCore](./builtins.ts)
-* [A model API specific for M3 instances](./api.ts)
+* [Facades specific for M3 instances](./facade.ts)
 * Persistence: [serializer](./serializer.ts) and [deserializer](./deserializer.ts)
 * [Constraints checker](./constraints.ts)
 * Convenience/helper [functions](./functions.ts) defined on M3 concepts

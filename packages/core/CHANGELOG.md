@@ -2,6 +2,7 @@
 
 ## 0.5.0
 
+* Changed names: `ReadModelAPI` &rarr; `ExtractionFacade`, `WriteModelAPI` &rarr; `InstantiationFacade`.
 * For Change name of `concept` fields to `classifier`, and their types (where applicable) to `Classifier`.
 * Fix `license` field in `package.json` to `"Apache-2.0"`.
 * Replace all occurrences of "LIon" (with uppercase 'I') with "Lion" (with lowercase 'i').
