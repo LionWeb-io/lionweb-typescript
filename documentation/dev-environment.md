@@ -19,7 +19,7 @@ In this section, we will go over the steps to get the development environment up
 ### 1. Clone the repository
 
 ```sh
-git clone https://github.com/LionWeb-org/lionweb-typescript.git
+git clone https://github.com/LionWeb-io/lionweb-typescript.git
 ```
 
 ### 2. Setup a containerized development environment
