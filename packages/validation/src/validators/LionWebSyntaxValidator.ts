@@ -97,7 +97,7 @@ export class LionWebSyntaxValidator {
     validateLwNode = (obj: unknown): void => {
         const expected: PropertyDefinition[] = [
             { property: "id", expectedType: "string", mayBeNull: NOT_NULL, validateValue: this.simpleFieldValidator.validateId },
-            { property: "concept", expectedType: "object", mayBeNull: NOT_NULL, validateValue: this.validateLwMetaPointer },
+            { property: "classifier", expectedType: "object", mayBeNull: NOT_NULL, validateValue: this.validateLwMetaPointer },
             { property: "properties", expectedType: "array", mayBeNull: NOT_NULL, validateValue: this.validateLwProperty },
             { property: "children", expectedType: "array", mayBeNull: NOT_NULL, validateValue: this.validateLwChild },
             { property: "references", expectedType: "array", mayBeNull: NOT_NULL, validateValue: this.validateLwReference },

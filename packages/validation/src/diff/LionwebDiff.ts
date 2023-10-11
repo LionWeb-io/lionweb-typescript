@@ -58,10 +58,10 @@ export class LwDiff {
     diffLwNode(obj1: LionWebJsonNode, obj2: LionWebJsonNode): void {
         // console.log("Comparing nodes")
         if (!isEqualMetaPointer(obj1.classifier, obj2.classifier)) {
-            this.error(`Object ${obj1.id} has concept ${JSON.stringify(obj1.classifier)} vs ${JSON.stringify(obj2.classifier)}`);
+            this.error(`Object ${obj1.id} has classifier ${JSON.stringify(obj1.classifier)} vs. ${JSON.stringify(obj2.classifier)}`);
         }
         if (obj1.parent !== obj2.parent) {
-            this.error(`Object ${obj1.id} has parent ${obj1.parent} vs ${obj2.parent}`);
+            this.error(`Object ${obj1.id} has parent ${obj1.parent} vs. ${obj2.parent}`);
         }
         for (const prop of obj1.properties) {
             const key = prop.property.key;
