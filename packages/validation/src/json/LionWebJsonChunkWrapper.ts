@@ -50,7 +50,7 @@ export class LionWebJsonChunkWrapper {
             }
         }
         return result;
-        // return this.jsonChunk.nodes.filter(node => node.concept.key === conceptKey);
+        // return this.jsonChunk.nodes.filter(node => node.classifier.key === conceptKey);
     }
 
     allProperties(conceptNode: LionWebJsonNode): LionWebJsonProperty[] {
