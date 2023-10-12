@@ -1,4 +1,4 @@
-import { LionWebJsonMetaPointer, LionWebJsonNode, LionWebJsonProperty } from "../json/LionWebJson";
+import { LionWebJsonMetaPointer } from "../json/LionWebJson";
 import { IssueContext, ValidationIssue } from "./ValidationIssue";
 
 export class Language_PropertyValue_Issue extends ValidationIssue {

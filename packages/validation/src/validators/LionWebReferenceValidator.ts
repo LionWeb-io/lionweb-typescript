@@ -9,7 +9,6 @@ import { IssueContext } from "../issues/ValidationIssue";
 import { ChunkUtils } from "../json/ChunkUtils";
 import { LION_CORE_BUILTINS_KEY, LionWebJsonChild, LionWebJsonChunk, LionWebJsonMetaPointer, LionWebJsonNode, LwJsonUsedLanguage } from "../json/LionWebJson";
 import { LionWebJsonChunkWrapper } from "../json/LionWebJsonChunkWrapper";
-import { NodeUtils } from "../json/NodeUtils";
 import { SimpleFieldvalidator } from "./SimpleFieldvalidator";
 import { ValidationResult } from "./ValidationResult";
 
@@ -109,7 +108,7 @@ export class LionWebReferenceValidator {
         if (strings === null || strings === undefined) {
             return;
         }
-        let alreadySeen: Record<string, boolean> = {};
+        const alreadySeen: Record<string, boolean> = {};
         strings.forEach((str) => {
             if (alreadySeen[str]) {
                 // this.validationResult.error(`${context}: Duplicate ${str}`);
@@ -130,10 +129,10 @@ export class LionWebReferenceValidator {
         if (usedLanguages === null || usedLanguages === undefined) {
             return;
         }
-        let alreadySeen = new Map<string, string[]>();
+        const alreadySeen = new Map<string, string[]>();
         usedLanguages.forEach((usedLanguage, index) => {
             const seenKeys = alreadySeen.get(usedLanguage.key);
-            if (!!seenKeys) {
+            if (seenKeys !== null && seenKeys !== undefined) {
                 if (seenKeys.includes(usedLanguage.version)) {
                     // this.validationResult.error(`${context}: Duplicate version "${usedLanguage.version}" for language "${usedLanguage.key}"`);
                     this.validationResult.issue(new Duplicates_Issue(new IssueContext(context + `.language[${index}].version`), usedLanguage.version));
@@ -156,12 +155,12 @@ export class LionWebReferenceValidator {
             return;
         }
         let current: LionWebJsonNode | undefined = node;
-        let seenParents = [node.id];
+        const seenParents = [node.id];
         while (current !== null && current !== undefined && current.parent !== null && current.parent !== undefined) {
             const nextParent = current.parent;
             if (nextParent !== null && nextParent !== undefined && seenParents.includes(nextParent)) {
                 // this.validationResult.error(`${context} Parents circulair: ${seenParents}`);
-                this.validationResult.issue(new Reference_CirculairParent_Issue(new IssueContext("???"), this.nodesIdMap.get(nextParent), seenParents));
+                this.validationResult.issue(new Reference_CirculairParent_Issue(new IssueContext(context + ".???"), this.nodesIdMap.get(nextParent), seenParents));
                 return;
             }
             seenParents.push(nextParent);
@@ -186,7 +185,7 @@ export class LionWebReferenceValidator {
     }
 
     validateChildrenHaveCorrectParent(node: LionWebJsonNode, context: string) {
-        node.children.forEach((child: LionWebJsonChild, childIndex: number) => {
+        node.children.forEach((child: LionWebJsonChild) => {
             child.children.forEach((childId: string, index: number) => {
                 const childNode = this.nodesIdMap.get(childId);
                 if (childNode !== undefined) {

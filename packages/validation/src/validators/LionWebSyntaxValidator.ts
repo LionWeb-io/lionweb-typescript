@@ -40,7 +40,7 @@ export type PropertyDefinition = {
      * @param obj
      * @param ctx
      */
-    validateValue?: (obj: any, ctx: string) => void;
+    validateValue?: (obj: string, ctx: string) => void;
 };
 
 // Make boolean argument more readable.
@@ -75,7 +75,7 @@ export class LionWebSyntaxValidator {
         this.validateLwChunk(obj);
     }
 
-    validateLwChunk = (obj: any): void => {
+    validateLwChunk = (obj: unknown): void => {
         const expected: PropertyDefinition[] = [
             { property: "serializationFormatVersion", expectedType: "string", mayBeNull: NOT_NULL, validateValue: this.simpleFieldValidator.vcalidateSerializationFormatVersion },
             { property: "languages", expectedType: "array", mayBeNull: NOT_NULL, validateValue: this.validateLwUsedLanguage },
@@ -84,7 +84,7 @@ export class LionWebSyntaxValidator {
         this.propertyChecks(obj, expected, "LWCHUNK");
     }
 
-    validateLwUsedLanguage = (obj: any): void => {
+    validateLwUsedLanguage = (obj: unknown): void => {
         const expected: PropertyDefinition[] = [
             { property: "key", expectedType: "string", mayBeNull: NOT_NULL, validateValue: this.simpleFieldValidator.validateKey },
             { property: "version", expectedType: "string", mayBeNull: NOT_NULL, validateValue: this.simpleFieldValidator.validateVersion }
@@ -92,7 +92,7 @@ export class LionWebSyntaxValidator {
         this.propertyChecks(obj, expected, "USED_LANGUAGE ");
     }
 
-    validateLwNode = (obj: any): void => {
+    validateLwNode = (obj: unknown): void => {
         const expected: PropertyDefinition[] = [
             { property: "id", expectedType: "string", mayBeNull: NOT_NULL, validateValue: this.simpleFieldValidator.validateId },
             { property: "concept", expectedType: "object", mayBeNull: NOT_NULL, validateValue: this.validateLwMetaPointer },
@@ -105,11 +105,11 @@ export class LionWebSyntaxValidator {
         this.propertyChecks(obj, expected, "Node");
     }
 
-    validateLwAnnotation = (obj: any) => {
-
+    validateLwAnnotation = (obj: unknown) => {
+        console.log("Annotations not validated yet: " + JSON.stringify(obj));
     }
 
-    validateLwProperty = (obj: any): void => {
+    validateLwProperty = (obj: unknown): void => {
         const expected: PropertyDefinition[] = [
             { property: "property", expectedType: "object", mayBeNull: NOT_NULL, validateValue: this.validateLwMetaPointer },
             { property: "value", expectedType: "string", mayBeNull: MAY_BE_NULL },
@@ -117,7 +117,7 @@ export class LionWebSyntaxValidator {
         this.propertyChecks(obj, expected, "PROPERTY");
     }
 
-    validateLwMetaPointer = (obj: any): void => {
+    validateLwMetaPointer = (obj: unknown): void => {
         const expected: PropertyDefinition[] = [
             { property: "key", expectedType: "string", mayBeNull: NOT_NULL, validateValue: this.simpleFieldValidator.validateKey },
             { property: "version", expectedType: "string", mayBeNull: MAY_BE_NULL, validateValue: this.simpleFieldValidator.validateVersion },
@@ -126,7 +126,7 @@ export class LionWebSyntaxValidator {
         this.propertyChecks(obj, expected, "META_POINTER");
     }
 
-    validateLwChild = (obj: any): void => {
+    validateLwChild = (obj: unknown): void => {
         const expected: PropertyDefinition[] = [
             { property: "containment", expectedType: "object", mayBeNull: NOT_NULL, validateValue: this.validateLwMetaPointer },
             { property: "children", expectedType: "array", mayBeNull: NOT_NULL, validateValue: this.checkChild }
@@ -134,9 +134,9 @@ export class LionWebSyntaxValidator {
         this.propertyChecks(obj, expected, "CHILD");
     }
 
-    private checkChild = (obj: any, context: string) => {
+    private checkChild = (obj: unknown, context: string) => {
         if (this.checkType(obj, "string", context)) {
-            this.simpleFieldValidator.validateId(obj, context);
+            this.simpleFieldValidator.validateId(obj as string, context);
         }
     }
 
@@ -156,7 +156,7 @@ export class LionWebSyntaxValidator {
         return true;
     }
 
-    validateLwReference = (obj: any): void => {
+    validateLwReference = (obj: unknown): void => {
         const expected: PropertyDefinition[] = [
             { property: "reference", expectedType: "object", mayBeNull: NOT_NULL, validateValue: this.validateLwMetaPointer },
             { property: "targets", expectedType: "array", mayBeNull: NOT_NULL, validateValue: this.validateLwReferenceTarget }
@@ -164,7 +164,7 @@ export class LionWebSyntaxValidator {
         this.propertyChecks(obj, expected, "REFERENCE");
     }
 
-    validateLwReferenceTarget = (obj: any): void => {
+    validateLwReferenceTarget = (obj: unknown): void => {
         const expected: PropertyDefinition[] = [
             { property: "resolveInfo", expectedType: "string", mayBeNull: MAY_BE_NULL },
             { property: "reference", expectedType: "string", mayBeNull: MAY_BE_NULL, validateValue: this.simpleFieldValidator.validateId }
@@ -192,12 +192,12 @@ export class LionWebSyntaxValidator {
                             // this.validationResult.error(`${context}.${propDef.property}[${index}]: Array ${propDef.property} contains null value`);
                             this.validationResult.issue(new Syntax_ArrayContainsNull_Issue(new IssueContext(`${context}.${propDef.property}[${index}]`), propDef.property, index));
                         } else {
-                            if (!!propDef.validateValue) {
+                            if (propDef.validateValue !== null && propDef.validateValue !== undefined) {
                                 propDef.validateValue(arrayItem, `${context}.${propDef.property}[${index}]`);
                             }
                         }
                     });
-                } else if (!!propDef.validateValue) {
+                } else if (propDef.validateValue !== null && propDef.validateValue !== undefined) {
                     propDef.validateValue(obj[propDef.property], context);
                 }
             }

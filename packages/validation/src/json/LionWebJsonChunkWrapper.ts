@@ -16,7 +16,7 @@ export class LionWebJsonChunkWrapper {
      */
     protected nodesIdMap: Map<NodeId, LionWebJsonNode> = new Map<NodeId, LionWebJsonNode>();
 
-    constructor(chunk: any) {
+    constructor(chunk: unknown) {
         this.jsonChunk = chunk as LionWebJsonChunk;
         // this.prepareNodeIds();
     }
@@ -26,7 +26,7 @@ export class LionWebJsonChunkWrapper {
      */
     prepareNodeIds() {
         this.nodesIdMap = new Map<NodeId, LionWebJsonNode>();
-        this.jsonChunk.nodes.forEach((node, index) => {
+        this.jsonChunk.nodes.forEach((node) => {
             this.nodesIdMap.set(node.id, node);
         });
     }
@@ -58,13 +58,13 @@ export class LionWebJsonChunkWrapper {
         result.push(...conceptNode.properties);
         const extendsReference = NodeUtils.findLwReference(conceptNode, "Concept-extends");
         if (extendsReference !==null) {
-            extendsReference.targets.forEach(target => {
-                // Find the extended concept
-                if (this.language !== null) {
-                    const targetNode = this.language.languageChunkWrapper.getNode(target.reference);
-                    // TODO etc., but need to cleanup LanguageDefinition first.
-                }
-            });
+            // extendsReference.targets.forEach(target => {
+            //     // Find the extended concept
+            //     if (this.language !== null) {
+            //         // const targetNode = this.language.languageChunkWrapper.getNode(target.reference);
+            //         // TODO etc., but need to cleanup LanguageDefinition first.
+            //     }
+            // });
         }
         return result;
     }

@@ -3,7 +3,6 @@ import { LionWebValidator } from "../validators/LionWebValidator";
 import { printIssues } from "./Utils";
 
 const file1 = process.argv[2];
-const language = process.argv[3];
 
 if (file1 !== null) {
     const jsonString1 = fs.readFileSync(file1, "utf-8");

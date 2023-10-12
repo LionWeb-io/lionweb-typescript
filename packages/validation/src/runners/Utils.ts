@@ -1,7 +1,6 @@
+import fs from "fs";
+import path from "path";
 import { ValidationResult } from "../validators/ValidationResult";
-
-const fs = require("fs");
-const path = require("path");
 
 export function getAllFiles(dirPath: string, arrayOfFiles: string[]) {
     const files = fs.readdirSync(dirPath);

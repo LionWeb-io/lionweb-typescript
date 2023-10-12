@@ -7,7 +7,6 @@ import { getAllFiles, printIssues } from "./Utils";
 const folder = process.argv[2];
 const language = process.argv[3];
 
-let totalErrors = 0;
 let totalSucceed = 0;
 let totalFailed = 0;
 

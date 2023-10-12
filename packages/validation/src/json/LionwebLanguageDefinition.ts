@@ -1,14 +1,11 @@
 import {
     LION_CORE_BUILTINS_INAMED_NAME,
-    LionWebJsonChunk,
     LionWebJsonMetaPointer,
     LionWebJsonNode,
 } from "./LionWebJson";
 import { LionWebJsonChunkWrapper } from "./LionWebJsonChunkWrapper";
 import { NodeUtils } from "./NodeUtils";
-import LionCore_M3 from "./std-builtins-copy.json";
 
-type NodeMap = Map<string, Map<string, Map<string, LionWebJsonNode>>>;
 type LanguageId = {
     name?: string;
     version?: string;
@@ -82,9 +79,9 @@ export class LionwebLanguageDefinition {
 
     protected setLanguage(languageNode: LionWebJsonNode) {
         // Assume LwNode is a concept of type "Language"
-        let nameProp = languageNode.properties.find(prop => prop.property.key === LION_CORE_BUILTINS_INAMED_NAME);
-        let versionProp = languageNode.properties.find(prop => prop.property.key === "Language-version");
-        let keyProp = languageNode.properties.find(prop => prop.property.key === "IKeyed-key");
+        const nameProp = languageNode.properties.find(prop => prop.property.key === LION_CORE_BUILTINS_INAMED_NAME);
+        const versionProp = languageNode.properties.find(prop => prop.property.key === "Language-version");
+        const keyProp = languageNode.properties.find(prop => prop.property.key === "IKeyed-key");
         this.languageId = {
             name: nameProp?.value,
             version: versionProp?.value,

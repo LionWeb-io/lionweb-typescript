@@ -5,8 +5,8 @@ import {
     isEqualMetaPointer,
     LionWebJsonChild,
     LionWebJsonChunk,
-    LionWebJsonNode,
-    LionWebJsonReference,
+    LionWebJsonNode, LionWebJsonProperty,
+    LionWebJsonReference, LwJsonUsedLanguage,
 } from "../json/LionWebJson";
 import { NodeUtils } from "../json/NodeUtils";
 import { ChunkUtils } from "../json/ChunkUtils";
@@ -14,16 +14,16 @@ import { ValidationResult } from "../validators/ValidationResult";
 
 export type ChangedType = {
     path: string;
-    oldValue: any;
-    newValue: any;
+    oldValue: unknown;
+    newValue: unknown;
 };
 export type AddedOrDeletedType = {
     path: string;
-    value: any;
+    value: unknown;
 };
 export type MatchedType = {
     path: string;
-    value: any;
+    value: unknown;
 };
 export type ResultType = {
     matched: MatchedType[];
@@ -71,7 +71,7 @@ export class LwDiff {
                 this.error(`Property with concept key ${key} does not exist in second object`);
                 continue;
             }
-            const tmp = this.diffLwProperty(prop, otherProp);
+            // const tmp = this.diffLwProperty(prop, otherProp);
         }
         for (const child of obj1.children) {
             const key = child.containment.key;
@@ -81,7 +81,7 @@ export class LwDiff {
                 this.error(`Child with containment key ${key} does not exist in second object`);
                 continue;
             }
-            const tmp = this.diffLwChild(child, otherChild);
+            // const tmp = this.diffLwChild(child, otherChild);
         }
         for (const ref of obj1.references) {
             const key = ref.reference.key;
@@ -90,7 +90,7 @@ export class LwDiff {
                 this.error(`Child with containment key ${key} does not exist in second object`);
                 continue;
             }
-            const tmp = this.diffLwReference(ref, otherref);
+            // const tmp = this.diffLwReference(ref, otherref);
         }
     }
 
@@ -106,7 +106,7 @@ export class LwDiff {
                 this.error(`Language with  key ${language.key} does not exist in second object`);
                 continue;
             }
-            const tmp = this.diffLwUsedLanguage(language, otherLanguage);
+            // const tmp = this.diffLwUsedLanguage(language, otherLanguage);
         }
         for (const language of chunk2.languages) {
             console.log("Comparing languages");
@@ -124,7 +124,7 @@ export class LwDiff {
                 this.error(`Node with concept key ${id} does not exist in second object`);
                 continue;
             }
-            const tmp = this.diffLwNode(node, otherNode);
+            // const tmp = this.diffLwNode(node, otherNode);
         }
         for (const node of chunk2.nodes) {
             const id = node.id;
@@ -176,13 +176,13 @@ export class LwDiff {
         }
     }
 
-    private diffLwUsedLanguage(obj1: any, obj2: any) {
+    private diffLwUsedLanguage(obj1: LwJsonUsedLanguage, obj2: LwJsonUsedLanguage) {
         if (obj1.key !== obj2.key || obj1.version !== obj2.version) {
             this.error(`Different used languages ${JSON.stringify(obj1)} vs ${JSON.stringify(obj2)}`);
         }
     }
 
-    private diffLwProperty(obj1: any, obj2: any) {
+    private diffLwProperty(obj1: LionWebJsonProperty, obj2: LionWebJsonProperty) {
         if (!isEqualMetaPointer(obj1.property, obj2.property)) {
             this.error(`Property Object has concept ${JSON.stringify(obj1.property)} vs ${JSON.stringify(obj2.property)}`);
         }

@@ -116,7 +116,7 @@ export class LionWebLanguageReferenceValidator {
         const propertyName = type.properties.find(p => p.property.key === LION_CORE_BUILTINS_INAMED_NAME)?.value;
         // console.log("Fount type should be " + refType.targets[0].reference);
         if (propertyName !== undefined) {
-            if (!!refType) {
+            if (refType !== null && refType !== undefined) {
                 switch (refType.targets[0].reference) {
                     case LIONWEB_BOOLEAN_TYPE:
                         this.simpleFieldValidator.validateBoolean(prop, propertyName, `${context}`);
