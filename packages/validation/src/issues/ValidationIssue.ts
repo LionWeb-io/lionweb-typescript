@@ -24,6 +24,3 @@ class X {
     constructor(public y: string) {
     }
 }
-
-const xx = new X("ppp");
-console.log("=> " + xx.y);
