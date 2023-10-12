@@ -1,7 +1,12 @@
 #!/usr/bin/env sh
 
+# install deps cleanly:
+
 rm -rf node_modules
 npm ci
+
+
+# build all packages:
 
 cd packages
 
@@ -11,4 +16,9 @@ do
 done
 
 cd ..
+
+
+# run linting:
+
+npm run lint
 
