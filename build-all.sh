@@ -3,12 +3,12 @@
 rm -rf node_modules
 npm ci
 
-pushd packages
+cd packages
 
 for package in "validation" "core" "utilities" "cli" "test" "artifacts"
 do
   (cd $package; ./build.sh)
 done
 
-popd
+cd ..
 
