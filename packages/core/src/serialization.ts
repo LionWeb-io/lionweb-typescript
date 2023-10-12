@@ -1,4 +1,5 @@
 import {Id} from "./types.js"
+import {currentReleaseVersion} from "./version.js"
 
 
 export type Ids = Id[]
@@ -50,9 +51,11 @@ export type SerializedLanguageReference = {
 
 
 /**
- * The <em>current</em> version of the serialization format.
+ * The <em>current</em> version of the serialization format -
+ *  should fundamentally equal `currentReleaseVersion`.
  */
-export const currentSerializationFormatVersion = "2023.1"
+export const currentSerializationFormatVersion = currentReleaseVersion
+
 
 /**
  * Type definition for a serialization of a whole model to JSON.
