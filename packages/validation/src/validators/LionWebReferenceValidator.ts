@@ -46,7 +46,7 @@ export class LionWebReferenceValidator {
             if (parentNode !== null) {
                 this.validateExistsAsChild(context, this.nodesIdMap.get(parentNode), node);
             }
-            this.validateLanguageReference(obj, node.concept, context);
+            this.validateLanguageReference(obj, node.classifier, context);
             this.checkParentCircular(node, context);
             this.checkDuplicate(node.annotations, `node[${nodeIndex}].annotations`);
             this.validateChildrenHaveCorrectParent(node, `Node[${nodeIndex}]`);

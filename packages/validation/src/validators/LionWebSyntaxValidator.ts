@@ -9,6 +9,8 @@ import { SimpleFieldvalidator } from "./SimpleFieldvalidator";
 import { IssueContext } from "../issues/ValidationIssue";
 import { ValidationResult } from "./ValidationResult";
 
+export type UnknownObjectType = { [key: string]: unknown };
+
 export type PropertyType =
     "string"
     | "number"
@@ -179,31 +181,36 @@ export class LionWebSyntaxValidator {
      * @param propDefs
      * @param context
      */
-    propertyChecks(obj: any, propDefs: PropertyDefinition[], context: string): void {
+    propertyChecks(obj: unknown, propDefs: PropertyDefinition[], context: string): void {
         if (!this.checkType(obj, "object", context)) {
             return;
         }
+        const object = obj as UnknownObjectType;
         const allProperties: string[] = [];
         propDefs.forEach( (propDef) => {
-            if (this.checkPropertyType(obj, propDef.property, propDef.expectedType, propDef.mayBeNull, `${context}`)) {
-                if (this.recursive && propDef.expectedType === "array" && Array.isArray(obj[propDef.property]) && !!propDef.validateValue) {
-                    obj[propDef.property].forEach((arrayItem: any, index: number) => {
+            if (this.checkPropertyType(object, propDef.property, propDef.expectedType, propDef.mayBeNull, `${context}`)) {
+                const propValue = object[propDef.property];
+                if (this.recursive && propDef.expectedType === "array" && Array.isArray(propValue) && !!propDef.validateValue) {
+                    propValue.forEach((arrayItem: unknown, index: number) => {
                         if (arrayItem === null) {
                             // this.validationResult.error(`${context}.${propDef.property}[${index}]: Array ${propDef.property} contains null value`);
                             this.validationResult.issue(new Syntax_ArrayContainsNull_Issue(new IssueContext(`${context}.${propDef.property}[${index}]`), propDef.property, index));
                         } else {
-                            if (propDef.validateValue !== null && propDef.validateValue !== undefined) {
+                            if (propDef.validateValue !== null && propDef.validateValue !== undefined && typeof arrayItem === "string") {
                                 propDef.validateValue(arrayItem, `${context}.${propDef.property}[${index}]`);
+                            } else {
+                                //  TODO: give an error, whih ine?
                             }
                         }
                     });
                 } else if (propDef.validateValue !== null && propDef.validateValue !== undefined) {
-                    propDef.validateValue(obj[propDef.property], context);
+                    // propValue is niot an array, so it should be aa string
+                    propDef.validateValue(propValue as string, context);
                 }
             }
             allProperties.push(propDef.property);
         });
-        this.checkStrayProperties(obj, allProperties, context);
+        this.checkStrayProperties(object, allProperties, context);
     }
 
     /**
@@ -212,7 +219,8 @@ export class LionWebSyntaxValidator {
      * @param properties
      * @param context
      */
-    checkStrayProperties(obj: any, properties: string[], context: string) {
+    checkStrayProperties(obj: UnknownObjectType, properties: string[], context: string) {
+        
         const own = Object.getOwnPropertyNames(obj);
         own.forEach((ownProp) => {
             if (!properties.includes(ownProp)) {
@@ -235,7 +243,7 @@ export class LionWebSyntaxValidator {
      * @param expectedType
      * @param context
      */
-    checkPropertyType = (obj: any, prop: string, expectedType: PropertyType, mayBeNull: boolean, context: string): boolean => {
+    checkPropertyType = (obj: UnknownObjectType, prop: string, expectedType: PropertyType, mayBeNull: boolean, context: string): boolean => {
         if (obj[prop] === undefined || obj[prop] === null) {
             if (!mayBeNull) {
                 // this.validationResult.error(`${context}: Property "${prop}" is null or undefined`);

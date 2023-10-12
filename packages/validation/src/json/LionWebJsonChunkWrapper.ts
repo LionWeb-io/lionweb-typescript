@@ -45,7 +45,7 @@ export class LionWebJsonChunkWrapper {
     findNodesOfConcept(conceptKey: string): LionWebJsonNode[] {
         const result: LionWebJsonNode[] = [];
         for (const node of this.jsonChunk.nodes) {
-            if (node.concept.key === conceptKey) {
+            if (node.classifier.key === conceptKey) {
                 result.push(node);
             }
         }
