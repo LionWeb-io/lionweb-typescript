@@ -19,8 +19,3 @@ export abstract class ValidationIssue {
         return `${this.id}: ${this.msg()} at ${this.context.location} `
     }
 }
-
-class X {
-    constructor(public y: string) {
-    }
-}
