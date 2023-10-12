@@ -52,7 +52,8 @@ Run the following command to build each of the packages:
 
 ```shell
 # Build the project
-./build-all.sh
+# Location: at the root of the project
+sudo ./build-all.sh
 ```
 
 This includes installing any NPM (dev) dependencies.
@@ -61,21 +62,22 @@ Run the following command to statically _style_-check the source code in all the
 
 ```shell
 # Run lint
+# Location: at the root of the project
 npm run lint
 ```
 
 Note that this does not catch TypeScript compilation errors.
-
 
 ## Test the project
 
 Run the following command to run the tests:
 
 ```shell
+# Location: change to the directory specified below from the root of the project
 cd packages/test
 
 # Run the tests
-npm run test
+sudo npm run test
 ```
 
 <br />
@@ -88,9 +90,10 @@ The output should look like this:
 You can test more thoroughly as follows:
 
 ```shell
-./test-all.sh
+# Test all packages
+# Location: at the root of the project
+sudo ./test-all.sh
 ```
-
 
 ## Code style
 
@@ -98,4 +101,3 @@ All the code in this repository is written in TypeScript.
 The code style can be classified as "mostly FP-lite" and "semicolons (`;`s) elided".
 The last things is slightly controversial, but I (=Meinte Boersma) simply hate semicolons as a statement separator that's virtually always unnecessary.
 The TypeScript compiler simply adds them back in the appropriate places when transpiling to JavaScript.
-
