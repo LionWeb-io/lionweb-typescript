@@ -11,8 +11,7 @@ jobs:
         with:
           node-version: 18
       - name: Build everything
-        run: ./build.sh
-      - name: Run Mocha tests
-        working-directory: packages/test
-        run: npm test
+        run: ./build-all.sh
+      - name: Test everything
+        run: ./test-all.sh
 

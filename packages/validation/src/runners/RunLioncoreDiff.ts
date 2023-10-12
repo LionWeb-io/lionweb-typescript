@@ -12,7 +12,7 @@ if (file1 !== null && file1 !== undefined) {
     const json2 = JSON.parse(jsonString2);
 
     const lwDiff = new LwDiff();
-    const diff = lwDiff.diffLwChunk(json1 as LionWebJsonChunk, json2 as LionWebJsonChunk);
+    lwDiff.diffLwChunk(json1 as LionWebJsonChunk, json2 as LionWebJsonChunk);
     if (lwDiff.errors.length === 0) {
         console.log("LwDiff: equal");
     } else {

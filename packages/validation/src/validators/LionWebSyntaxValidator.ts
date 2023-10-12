@@ -9,6 +9,8 @@ import { SimpleFieldvalidator } from "./SimpleFieldvalidator";
 import { IssueContext } from "../issues/ValidationIssue";
 import { ValidationResult } from "./ValidationResult";
 
+export type UnknownObjectType = { [key: string]: unknown };
+
 export type PropertyType =
     "string"
     | "number"
@@ -40,7 +42,7 @@ export type PropertyDefinition = {
      * @param obj
      * @param ctx
      */
-    validateValue?: (obj: any, ctx: string) => void;
+    validateValue?: (obj: string, ctx: string) => void;
 };
 
 // Make boolean argument more readable.
@@ -75,7 +77,7 @@ export class LionWebSyntaxValidator {
         this.validateLwChunk(obj);
     }
 
-    validateLwChunk = (obj: any): void => {
+    validateLwChunk = (obj: unknown): void => {
         const expected: PropertyDefinition[] = [
             { property: "serializationFormatVersion", expectedType: "string", mayBeNull: NOT_NULL, validateValue: this.simpleFieldValidator.vcalidateSerializationFormatVersion },
             { property: "languages", expectedType: "array", mayBeNull: NOT_NULL, validateValue: this.validateLwUsedLanguage },
@@ -84,7 +86,7 @@ export class LionWebSyntaxValidator {
         this.propertyChecks(obj, expected, "LWCHUNK");
     }
 
-    validateLwUsedLanguage = (obj: any): void => {
+    validateLwUsedLanguage = (obj: unknown): void => {
         const expected: PropertyDefinition[] = [
             { property: "key", expectedType: "string", mayBeNull: NOT_NULL, validateValue: this.simpleFieldValidator.validateKey },
             { property: "version", expectedType: "string", mayBeNull: NOT_NULL, validateValue: this.simpleFieldValidator.validateVersion }
@@ -92,7 +94,7 @@ export class LionWebSyntaxValidator {
         this.propertyChecks(obj, expected, "USED_LANGUAGE ");
     }
 
-    validateLwNode = (obj: any): void => {
+    validateLwNode = (obj: unknown): void => {
         const expected: PropertyDefinition[] = [
             { property: "id", expectedType: "string", mayBeNull: NOT_NULL, validateValue: this.simpleFieldValidator.validateId },
             { property: "concept", expectedType: "object", mayBeNull: NOT_NULL, validateValue: this.validateLwMetaPointer },
@@ -105,11 +107,11 @@ export class LionWebSyntaxValidator {
         this.propertyChecks(obj, expected, "Node");
     }
 
-    validateLwAnnotation = (obj: any) => {
-
+    validateLwAnnotation = (obj: unknown) => {
+        console.log("Annotations not validated yet: " + JSON.stringify(obj));
     }
 
-    validateLwProperty = (obj: any): void => {
+    validateLwProperty = (obj: unknown): void => {
         const expected: PropertyDefinition[] = [
             { property: "property", expectedType: "object", mayBeNull: NOT_NULL, validateValue: this.validateLwMetaPointer },
             { property: "value", expectedType: "string", mayBeNull: MAY_BE_NULL },
@@ -117,7 +119,7 @@ export class LionWebSyntaxValidator {
         this.propertyChecks(obj, expected, "PROPERTY");
     }
 
-    validateLwMetaPointer = (obj: any): void => {
+    validateLwMetaPointer = (obj: unknown): void => {
         const expected: PropertyDefinition[] = [
             { property: "key", expectedType: "string", mayBeNull: NOT_NULL, validateValue: this.simpleFieldValidator.validateKey },
             { property: "version", expectedType: "string", mayBeNull: MAY_BE_NULL, validateValue: this.simpleFieldValidator.validateVersion },
@@ -126,7 +128,7 @@ export class LionWebSyntaxValidator {
         this.propertyChecks(obj, expected, "META_POINTER");
     }
 
-    validateLwChild = (obj: any): void => {
+    validateLwChild = (obj: unknown): void => {
         const expected: PropertyDefinition[] = [
             { property: "containment", expectedType: "object", mayBeNull: NOT_NULL, validateValue: this.validateLwMetaPointer },
             { property: "children", expectedType: "array", mayBeNull: NOT_NULL, validateValue: this.checkChild }
@@ -134,9 +136,9 @@ export class LionWebSyntaxValidator {
         this.propertyChecks(obj, expected, "CHILD");
     }
 
-    private checkChild = (obj: any, context: string) => {
+    private checkChild = (obj: unknown, context: string) => {
         if (this.checkType(obj, "string", context)) {
-            this.simpleFieldValidator.validateId(obj, context);
+            this.simpleFieldValidator.validateId(obj as string, context);
         }
     }
 
@@ -156,7 +158,7 @@ export class LionWebSyntaxValidator {
         return true;
     }
 
-    validateLwReference = (obj: any): void => {
+    validateLwReference = (obj: unknown): void => {
         const expected: PropertyDefinition[] = [
             { property: "reference", expectedType: "object", mayBeNull: NOT_NULL, validateValue: this.validateLwMetaPointer },
             { property: "targets", expectedType: "array", mayBeNull: NOT_NULL, validateValue: this.validateLwReferenceTarget }
@@ -164,7 +166,7 @@ export class LionWebSyntaxValidator {
         this.propertyChecks(obj, expected, "REFERENCE");
     }
 
-    validateLwReferenceTarget = (obj: any): void => {
+    validateLwReferenceTarget = (obj: unknown): void => {
         const expected: PropertyDefinition[] = [
             { property: "resolveInfo", expectedType: "string", mayBeNull: MAY_BE_NULL },
             { property: "reference", expectedType: "string", mayBeNull: MAY_BE_NULL, validateValue: this.simpleFieldValidator.validateId }
@@ -179,31 +181,36 @@ export class LionWebSyntaxValidator {
      * @param propDefs
      * @param context
      */
-    propertyChecks(obj: any, propDefs: PropertyDefinition[], context: string): void {
+    propertyChecks(obj: unknown, propDefs: PropertyDefinition[], context: string): void {
         if (!this.checkType(obj, "object", context)) {
             return;
         }
+        const object = obj as UnknownObjectType;
         const allProperties: string[] = [];
         propDefs.forEach( (propDef) => {
-            if (this.checkPropertyType(obj, propDef.property, propDef.expectedType, propDef.mayBeNull, `${context}`)) {
-                if (this.recursive && propDef.expectedType === "array" && Array.isArray(obj[propDef.property]) && !!propDef.validateValue) {
-                    obj[propDef.property].forEach((arrayItem: any, index: number) => {
+            if (this.checkPropertyType(object, propDef.property, propDef.expectedType, propDef.mayBeNull, `${context}`)) {
+                const propValue = object[propDef.property];
+                if (this.recursive && propDef.expectedType === "array" && Array.isArray(propValue) && !!propDef.validateValue) {
+                    propValue.forEach((arrayItem: unknown, index: number) => {
                         if (arrayItem === null) {
                             // this.validationResult.error(`${context}.${propDef.property}[${index}]: Array ${propDef.property} contains null value`);
                             this.validationResult.issue(new Syntax_ArrayContainsNull_Issue(new IssueContext(`${context}.${propDef.property}[${index}]`), propDef.property, index));
                         } else {
-                            if (!!propDef.validateValue) {
+                            if (propDef.validateValue !== null && propDef.validateValue !== undefined && typeof arrayItem === "string") {
                                 propDef.validateValue(arrayItem, `${context}.${propDef.property}[${index}]`);
+                            } else {
+                                //  TODO: give an error, whih ine?
                             }
                         }
                     });
-                } else if (!!propDef.validateValue) {
-                    propDef.validateValue(obj[propDef.property], context);
+                } else if (propDef.validateValue !== null && propDef.validateValue !== undefined) {
+                    // propValue is niot an array, so it should be aa string
+                    propDef.validateValue(propValue as string, context);
                 }
             }
             allProperties.push(propDef.property);
         });
-        this.checkStrayProperties(obj, allProperties, context);
+        this.checkStrayProperties(object, allProperties, context);
     }
 
     /**
@@ -212,7 +219,8 @@ export class LionWebSyntaxValidator {
      * @param properties
      * @param context
      */
-    checkStrayProperties(obj: any, properties: string[], context: string) {
+    checkStrayProperties(obj: UnknownObjectType, properties: string[], context: string) {
+        
         const own = Object.getOwnPropertyNames(obj);
         own.forEach((ownProp) => {
             if (!properties.includes(ownProp)) {
@@ -235,7 +243,7 @@ export class LionWebSyntaxValidator {
      * @param expectedType
      * @param context
      */
-    checkPropertyType = (obj: any, prop: string, expectedType: PropertyType, mayBeNull: boolean, context: string): boolean => {
+    checkPropertyType = (obj: UnknownObjectType, prop: string, expectedType: PropertyType, mayBeNull: boolean, context: string): boolean => {
         if (obj[prop] === undefined || obj[prop] === null) {
             if (!mayBeNull) {
                 // this.validationResult.error(`${context}: Property "${prop}" is null or undefined`);

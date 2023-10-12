@@ -87,10 +87,10 @@ export class SimpleFieldvalidator {
         }
     }
 
-    vcalidateSerializationFormatVersion = (objElement: any, context: string): void => {
+    vcalidateSerializationFormatVersion = (objElement: unknown, context: string): void => {
         if (typeof objElement !== "string") {
             // this.validationResult.error(`SerializationFormatVersion "${objElement}" is not a string in ${context}`);
-            this.validationResult.issue(new Syntax_SerializationFormatVersion_Issue(new IssueContext(context), objElement));
+            this.validationResult.issue(new Syntax_SerializationFormatVersion_Issue(new IssueContext(context), JSON.stringify(objElement)));
             return;
         }
         if (objElement.length === 0) {

@@ -36,7 +36,7 @@ export type LwJsonUsedLanguage = {
 
 export type LionWebJsonNode = {
     id: Id;
-    concept: LionWebJsonMetaPointer;
+    classifier: LionWebJsonMetaPointer;
     properties: LionWebJsonProperty[];
     children: LionWebJsonChild[];
     references: LionWebJsonReference[];
@@ -47,7 +47,7 @@ export type LionWebJsonNode = {
 export function createLwNode(): LionWebJsonNode {
     return {
         id: "",
-        concept: { language: "", version: "", key: "" },
+        classifier: { language: "", version: "", key: "" },
         properties: [],
         children: [],
         references: [],

@@ -45,9 +45,9 @@ export class LionWebLanguageReferenceValidator {
         }
         obj.jsonChunk.nodes.forEach((node, nodeIndex) => {
             const nodeContext = `node[${nodeIndex}]`;
-            const jsonConcept = this.language.getNodeByMetaPointer(node.concept);
+            const jsonConcept = this.language.getNodeByMetaPointer(node.classifier);
             if (jsonConcept === null || jsonConcept === undefined) {
-                this.validationResult.issue(new Language_UnknownConcept_Issue(new IssueContext(nodeContext), node.concept));
+                this.validationResult.issue(new Language_UnknownConcept_Issue(new IssueContext(nodeContext), node.classifier));
                 return;
             }
             node.children.forEach((child, childIndex) => {
@@ -68,9 +68,9 @@ export class LionWebLanguageReferenceValidator {
             this.validationResult.issue(new Language_UnknownContainment_Issue(new IssueContext(context), child.containment));
             return;
         }
-        if (type.concept.key !== LIONWEB_M3_CONCEPT_KEY) {
+        if (type.classifier.key !== LIONWEB_M3_CONCEPT_KEY) {
             // this.validationResult.error(`${context}: Containment with key "${child.containment.key}" does not refer to a concept, but to a "${type.concept.key}"`)
-            this.validationResult.issue(new Language_IncorrectContainmentMetaPointer_Issue(new IssueContext(context), child.containment, type.concept.key));
+            this.validationResult.issue(new Language_IncorrectContainmentMetaPointer_Issue(new IssueContext(context), child.containment, type.classifier.key));
         }
         // TODO check type of children
     }
@@ -81,9 +81,9 @@ export class LionWebLanguageReferenceValidator {
             this.validationResult.issue(new Language_UnknownReference_Issue(new IssueContext(context), ref.reference));
             return;
         }
-        if (type.concept.key !== LIONWEB_M3_CONCEPT_KEY) {
+        if (type.classifier.key !== LIONWEB_M3_CONCEPT_KEY) {
             // this.validationResult.error(`${context}: Reference with key "${ref.reference.key}" does not refer to a concept, but to a "${type.concept.key}"`)
-            this.validationResult.issue(new Language_IncorrectReferenceMetaPointer_Issue(new IssueContext(context), ref.reference, type.concept.key));
+            this.validationResult.issue(new Language_IncorrectReferenceMetaPointer_Issue(new IssueContext(context), ref.reference, type.classifier.key));
         }
         // TODO Check type of reference (if possible)
 
@@ -105,8 +105,8 @@ export class LionWebLanguageReferenceValidator {
             this.validationResult.issue(new Language_UnknownProperty_Issue(new IssueContext(context), prop.property));
             return;
         }
-        if (type.concept.key !== LIONWEB_M3_PROPERTY_KEY) {
-            this.validationResult.issue(new Language_IncorrectPropertyMetaPointer_Issue(new IssueContext(context), prop.property, type.concept.key));
+        if (type.classifier.key !== LIONWEB_M3_PROPERTY_KEY) {
+            this.validationResult.issue(new Language_IncorrectPropertyMetaPointer_Issue(new IssueContext(context), prop.property, type.classifier.key));
             return;
         }
         // TODO check for property to exist inside the concept in the language
@@ -116,7 +116,7 @@ export class LionWebLanguageReferenceValidator {
         const propertyName = type.properties.find(p => p.property.key === LION_CORE_BUILTINS_INAMED_NAME)?.value;
         // console.log("Fount type should be " + refType.targets[0].reference);
         if (propertyName !== undefined) {
-            if (!!refType) {
+            if (refType !== null && refType !== undefined) {
                 switch (refType.targets[0].reference) {
                     case LIONWEB_BOOLEAN_TYPE:
                         this.simpleFieldValidator.validateBoolean(prop, propertyName, `${context}`);

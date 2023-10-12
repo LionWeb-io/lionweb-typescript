@@ -1,8 +1,6 @@
+import fs from "fs";
 import { LionWebValidator } from "../validators/LionWebValidator";
 import { getAllFiles, printIssues } from "./Utils";
-
-const fs = require("fs");
-const path = require("path");
 
 const folder = process.argv[2];
 let totalErrors = 0;
@@ -28,9 +26,9 @@ for (const f of getAllFiles(folder, [])) {
             totalFailed += 1;
             totalErrors += validator.validationResult.issues.length;
         }
-    } catch(e: any) {
+    } catch(e: unknown) {
         console.log("EXCEPTION in file: " + f);
-        console.log("EXCEPTION " + e.stack);
+        console.log("EXCEPTION " + (e as Error)?.stack);
     }
 }
 
