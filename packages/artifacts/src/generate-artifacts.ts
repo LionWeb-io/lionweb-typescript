@@ -23,10 +23,10 @@ writeFileSync(diagramPath("metametamodel-gen.md"), generateMermaidForLanguage(li
 console.log(`generated diagrams for LionCore M3`)
 
 
-const saveLanguageFiles = (language: Language, name: string) => {
+const saveLanguageFiles = (language: Language, name: string, ...generationOptions: GenerationOptions[]) => {
     writeJsonAsFile(languagePath(`${name}.json`), serializeLanguage(language))
     writeFileSync(languagePath(`${name}.txt`), asText(language))
-    writeFileSync(languagePath(`${name}-types.ts.txt`), tsTypesForLanguage(language, GenerationOptions.assumeSealed))
+    writeFileSync(languagePath(`${name}-types.ts.txt`), tsTypesForLanguage(language, ...generationOptions))
         // (Generate with a '.txt' file extension to avoid it getting picked up by the compiler.)
     console.log(`saved files for ${language.name} M2`)
 }
@@ -36,7 +36,7 @@ saveLanguageFiles(lioncore, "lioncore")
 saveLanguageFiles(lioncoreBuiltins, "builtins")
 
 
-saveLanguageFiles(shapesLanguage, "shapes")
+saveLanguageFiles(shapesLanguage, "shapes", GenerationOptions.assumeSealed)
 
 
 saveLanguageFiles(libraryLanguage, "library")

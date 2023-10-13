@@ -23,7 +23,6 @@ export type Annotation = DynamicNode & {
 };
 
 /** abstract */ export type Classifier = DynamicNode & {
-    classifier: "Annotation" | "Concept" | "ConceptInterface";
     settings: {
         features: Feature[];
     };
@@ -50,9 +49,7 @@ export type Containment = DynamicNode & {
     classifier: "Containment";
 };
 
-/** abstract */ export type DataType = DynamicNode & {
-    classifier: "PrimitiveType" | "Enumeration";
-};
+/** abstract */ export type DataType = DynamicNode;
 
 export type Enumeration = DynamicNode & {
     classifier: "Enumeration";
@@ -66,7 +63,6 @@ export type EnumerationLiteral = DynamicNode & IKeyed & {
 };
 
 /** abstract */ export type Feature = DynamicNode & IKeyed & {
-    classifier: "Property" | "Link";
     settings: {
         optional: boolean;
     };
@@ -87,12 +83,9 @@ export type Language = DynamicNode & IKeyed & {
     };
 };
 
-/** abstract */ export type LanguageEntity = DynamicNode & IKeyed & {
-    classifier: "Classifier" | "DataType";
-};
+/** abstract */ export type LanguageEntity = DynamicNode & IKeyed;
 
 /** abstract */ export type Link = DynamicNode & {
-    classifier: "Containment" | "Reference";
     settings: {
         multiple: boolean;
         type: Classifier;
