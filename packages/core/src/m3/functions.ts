@@ -105,10 +105,18 @@ const flatMap = <T>(language: Language, map: (t: M3Concept) => T[]): T[] =>
 
 
 /**
- * @return the name of the given {@link INamed named thing}.
+ * @return string the name of the given {@link INamed named thing}.
  */
 const nameOf = <T extends INamed>({name}: T): string =>
     name
+
+
+/**
+ * @return the given named things sorted by name
+ */
+export const nameSorted = <T extends INamed>(ts: T[]): T[] =>
+    sortByStringKey(ts, nameOf)
+
 
 /**
  * @return the concatenation of the names of the given nodes using the given separator.

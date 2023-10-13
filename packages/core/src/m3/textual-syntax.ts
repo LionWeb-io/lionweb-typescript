@@ -6,12 +6,12 @@ import {
     EnumerationLiteral,
     INamed,
     Language,
+    Link,
     M3Node,
     PrimitiveType,
-    Property,
-    Reference
+    Property
 } from "./types.js"
-import {nameOf} from "./functions.js"
+import {nameOf, nameSorted} from "./functions.js"
 import {sortByStringKey} from "../utils/sorting.js"
 import {SingleRef, unresolved} from "../references.js"
 
@@ -20,9 +20,6 @@ import {SingleRef, unresolved} from "../references.js"
 const indent = (str: string) =>
     str.split("\n").map((line) => `    ${line}`).join("\n")
 
-
-const nameSorted = <T extends INamed>(ts: T[]): T[] =>
-    sortByStringKey(ts, nameOf)
 
 const descent = <T extends M3Node>(ts: T[], separator: string): string =>
     nameSorted(ts).map((t) => indent(indent(asText(t)))).join(separator)
@@ -40,13 +37,13 @@ ${descent(node.features, "\n")}`}`
     }
 
     if (node instanceof ConceptInterface) {
-        return `concept-interface ${node.name}${node.extends.length === 0 ? `` : ` extends ${sortByStringKey(node.extends, nameOf).map(nameOf).join(", ")}`}${node.features.length === 0 ? `` : `
+        return `concept-interface ${node.name}${node.extends.length === 0 ? `` : ` extends ${nameSorted(node.extends).map(nameOf).join(", ")}`}${node.features.length === 0 ? `` : `
     features (↓name):
 ${descent(node.features, "\n")}`}`
     }
 
-    if (node instanceof Containment) {
-        return `${node.name}: ${refAsText(node.type)}${node.multiple ? `[${node.optional ? `0` : `1`}..*]` : ``}${node.optional && !node.multiple ? `?` : ``}`
+    if (node instanceof Link) {
+        return `${node.name}${node instanceof Containment ? `:` : ` ->`} ${refAsText(node.type)}${node.multiple ? `[${node.optional ? `0` : `1`}..*]` : ``}${node.optional && !node.multiple ? `?` : ``}`
     }
 
     if (node instanceof Enumeration) {
@@ -79,10 +76,6 @@ ${descent(node.entities, "\n\n")}
 
     if (node instanceof Property) {
         return `${node.name}: ${refAsText(node.type)}${node.optional ? `?` : ``}`
-    }
-
-    if (node instanceof Reference) {
-        return `${node.name} -> ${refAsText(node.type)}${node.multiple ? `[${node.optional ? `0` : `1`}..*]` : ``}${node.optional && !node.multiple ? `?` : ``}`
     }
 
     return `node (key=${node.key}, ID=${node.id}) of class ${node.constructor.name} not handled`
