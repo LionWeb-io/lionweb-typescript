@@ -2,6 +2,8 @@
 
 ## 0.5.0
 
+* Move `asText` to `@lionweb/utilities`.
+* Expose a helper function `nameSorted`.
 * Rename `ConceptInterface` &rarr; `Interface`.
 * Change names: `ReadModelAPI` &rarr; `ExtractionFacade`, `WriteModelAPI` &rarr; `InstantiationFacade`.
 * Change name of `concept` fields to `classifier`, and their types (where applicable) to `Classifier`.

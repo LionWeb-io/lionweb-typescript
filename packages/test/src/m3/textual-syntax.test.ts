@@ -1,7 +1,8 @@
 import {assert} from "chai"
 const {equal} = assert
 
-import {asText} from "@lionweb/core"
+import {asText} from "@lionweb/utilities"
+
 import {languageWithEnum} from "../languages/with-enum.js"
 
 
