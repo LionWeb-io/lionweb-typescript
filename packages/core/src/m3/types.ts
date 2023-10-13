@@ -44,7 +44,7 @@ const isIKeyed = (node: Node): node is IKeyed =>
 abstract class M3Node implements IKeyed {
     parent?: M3Node
         /*
-         * Note: every parent in an M2 (i.e., a Language, Concept, ConceptInterface, Enumeration) implements IKeyed.
+         * Note: every parent in an M2 (i.e., a Language, Concept, Interface, Enumeration) implements IKeyed.
          * Because that's just an interface and is implemented by {@link M3Node}.
          */
     readonly id: Id
@@ -136,16 +136,16 @@ class Concept extends Classifier {
     abstract: boolean
     partition: boolean
     extends?: SingleRef<Concept>    // (reference)
-    implements: MultiRef<ConceptInterface> = []  // (reference)
+    implements: MultiRef<Interface> = []  // (reference)
     constructor(language: Language, name: string, key: string, id: Id, abstract: boolean, extends_?: SingleRef<Concept>) {
         super(language, name, key, id)
         this.abstract = abstract
         this.extends = extends_
         this.partition = false
     }
-    implementing(...conceptInterfaces: ConceptInterface[]): Concept {
-        // TODO  check actual types of concept interfaces, or use type shapes/interfaces
-        this.implements.push(...conceptInterfaces)
+    implementing(...interfaces: Interface[]): Concept {
+        // TODO  check actual types of interfaces, or use type shapes/interfaces
+        this.implements.push(...interfaces)
         return this
     }
     isPartition(): Concept {
@@ -157,14 +157,14 @@ class Concept extends Classifier {
 class Annotation extends Classifier {
     multiple /*: boolean */ = false
     extends?: SingleRef<Annotation> // (reference)
-    implements: MultiRef<ConceptInterface> = [] // (reference)
+    implements: MultiRef<Interface> = [] // (reference)
     constructor(language: Language, name: string, key: string, id: Id, extends_?: SingleRef<Annotation>) {
         super(language, name, key, id)
         this.extends = extends_
     }
-    implementing(...conceptInterfaces: ConceptInterface[]): Annotation {
-        // TODO  check actual types of concept interfaces, or use type shapes/interfaces
-        this.implements.push(...conceptInterfaces)
+    implementing(...interfaces: Interface[]): Annotation {
+        // TODO  check actual types of interfaces, or use type shapes/interfaces
+        this.implements.push(...interfaces)
         return this
     }
     isMultiple(): Annotation {
@@ -173,11 +173,11 @@ class Annotation extends Classifier {
     }
 }
 
-class ConceptInterface extends Classifier {
-    extends: MultiRef<ConceptInterface> = []    // (reference)
-    extending(...conceptInterfaces: ConceptInterface[]): ConceptInterface {
-        // TODO  check actual types of concept interfaces, or use type shapes/interfaces
-        this.extends.push(...conceptInterfaces)
+class Interface extends Classifier {
+    extends: MultiRef<Interface> = []    // (reference)
+    extending(...interfaces: Interface[]): Interface {
+        // TODO  check actual types of interfaces, or use type shapes/interfaces
+        this.extends.push(...interfaces)
         return this
     }
 }
@@ -242,10 +242,10 @@ class Language extends M3Node {
 type M3Concept =
     | Annotation
     | Concept
-    | ConceptInterface
     | Containment
     | Enumeration
     | EnumerationLiteral
+    | Interface
     | Language
     | PrimitiveType
     | Property
@@ -256,12 +256,12 @@ export {
     Annotation,
     Classifier,
     Concept,
-    ConceptInterface,
     Containment,
     Datatype,
     Enumeration,
     EnumerationLiteral,
     Feature,
+    Interface,
     Language,
     LanguageEntity,
     Link,

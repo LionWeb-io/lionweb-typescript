@@ -261,7 +261,7 @@
       "classifier": {
         "language": "LionCore-M3",
         "version": "2023.1",
-        "key": "ConceptInterface"
+        "key": "Interface"
       },
       "properties": [
         {
@@ -298,7 +298,7 @@
           "reference": {
             "language": "LionCore-M3",
             "version": "2023.1",
-            "key": "ConceptInterface-extends"
+            "key": "Interface-extends"
           },
           "targets": []
         }

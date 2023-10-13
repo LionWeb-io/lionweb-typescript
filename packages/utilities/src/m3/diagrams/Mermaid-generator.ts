@@ -1,11 +1,11 @@
 import {asString, indentWith, NestedString} from "littoral-templates"
 import {
     Concept,
-    ConceptInterface,
     Containment,
     entitiesSortedByName,
     Enumeration,
     Feature,
+    Interface,
     isRef,
     Language,
     LanguageEntity,
@@ -78,7 +78,7 @@ const generateForConcept = ({name, features, abstract: abstract_, extends: exten
     ]
 
 
-const generateForConceptInterface = ({name, features, extends: extends_}: ConceptInterface) =>
+const generateForInterface = ({name, features, extends: extends_}: Interface) =>
     [
         block(
             `class ${name}`,
@@ -110,11 +110,11 @@ const generateForElement = (element: LanguageEntity) => {
     if (element instanceof Concept) {
         return generateForConcept(element)
     }
-    if (element instanceof ConceptInterface) {
-        return generateForConceptInterface(element)
-    }
     if (element instanceof Enumeration) {
         return generateForEnumeration(element)
+    }
+    if (element instanceof Interface) {
+        return generateForInterface(element)
     }
     if (element instanceof PrimitiveType) {
         return generateForPrimitiveType(element)

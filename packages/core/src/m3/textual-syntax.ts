@@ -1,10 +1,10 @@
 import {
     Concept,
-    ConceptInterface,
     Containment,
     Enumeration,
     EnumerationLiteral,
     INamed,
+    Interface,
     Language,
     M3Node,
     PrimitiveType,
@@ -39,8 +39,8 @@ const asText = (node: M3Node): string => {
 ${descent(node.features, "\n")}`}`
     }
 
-    if (node instanceof ConceptInterface) {
-        return `concept-interface ${node.name}${node.extends.length === 0 ? `` : ` extends ${sortByStringKey(node.extends, nameOf).map(nameOf).join(", ")}`}${node.features.length === 0 ? `` : `
+    if (node instanceof Interface) {
+        return `interface ${node.name}${node.extends.length === 0 ? `` : ` extends ${sortByStringKey(node.extends, nameOf).map(nameOf).join(", ")}`}${node.features.length === 0 ? `` : `
     features (↓name):
 ${descent(node.features, "\n")}`}`
     }

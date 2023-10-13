@@ -27,7 +27,7 @@ const jsonDatatype = factory.primitiveType("JSON")
 const node = factory.concept("Node", true)
 
 
-const inamed = factory.conceptInterface("INamed")
+const inamed = factory.interface("INamed")
 
 const inamed_name = factory.property(inamed, "name")
     .ofType(stringDatatype)

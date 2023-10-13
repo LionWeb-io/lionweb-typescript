@@ -2,10 +2,10 @@ import {
     Annotation,
     Classifier,
     Concept,
-    ConceptInterface,
     Containment,
     Enumeration,
     EnumerationLiteral,
+    Interface,
     Language,
     lioncoreQNameSeparator,
     PrimitiveType,
@@ -55,8 +55,8 @@ export class LanguageFactory {
         return new Concept(this.language, name, unkeyed, this.id(concat(this.language.name, name)), abstract, extends_).keyed(this.key)
     }
 
-    conceptInterface(name: string) {
-        return new ConceptInterface(this.language, name, unkeyed, this.id(concat(this.language.name, name))).keyed(this.key)
+    interface(name: string) {
+        return new Interface(this.language, name, unkeyed, this.id(concat(this.language.name, name))).keyed(this.key)
     }
 
     enumeration(name: string) {

@@ -75,7 +75,7 @@ export const asLionCoreLanguage = (ecoreXml: EcoreXml, version: string): Languag
         }
         throw new Error(`don't know how to convert an EClassifier with descriptor "${xsiType}"`)
     }
-    // TODO (#10)  ConceptInterface?
+    // TODO (#10)  Interface?
 
     const convertedEClassifiers: [eClassifier: EClassifier, element: LanguageEntity][] =
         ePackage["eClassifiers"]

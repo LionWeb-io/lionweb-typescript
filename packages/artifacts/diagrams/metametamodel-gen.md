@@ -16,9 +16,6 @@ classDiagram
   }
   Classifier <|-- Concept
 
-  class ConceptInterface
-  Classifier <|-- ConceptInterface
-
   class Containment
   Link <|-- Containment
 
@@ -41,6 +38,9 @@ classDiagram
   }
   <<Interface>> IKeyed
   INamed <|-- IKeyed
+
+  class Interface
+  Classifier <|-- Interface
 
   class <<partition>> Language {
     +String version
@@ -67,17 +67,17 @@ classDiagram
 
   Annotation "*" -- "0..1" Classifier: annotates
   Annotation "*" -- "0..1" Annotation: extends
-  Annotation "*" -- "*" ConceptInterface: implements
+  Annotation "*" -- "*" Interface: implements
   Classifier "1" o-- "*" Feature: features
   Concept "*" -- "0..1" Concept: extends
-  Concept "*" -- "*" ConceptInterface: implements
-  ConceptInterface "*" -- "*" ConceptInterface: extends
+  Concept "*" -- "*" Interface: implements
 
 
   Enumeration "1" o-- "*" EnumerationLiteral: literals
 
 
 
+  Interface "*" -- "*" Interface: extends
   Language "1" o-- "*" LanguageEntity: entities
   Language "*" -- "*" Language: dependsOn
 
