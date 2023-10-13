@@ -1,0 +1,65 @@
+language LionCore.M3
+    version: 2023.1
+    entities (↓name):
+
+        concept Annotation extends Classifier
+            features (↓name):
+                annotates -> Classifier?
+                extends -> Annotation?
+                implements -> ConceptInterface[0..*]
+                multiple: Boolean?
+
+        abstract concept Classifier extends LanguageEntity
+            features (↓name):
+                features: Feature[0..*]
+
+        concept Concept extends Classifier
+            features (↓name):
+                abstract: Boolean
+                extends -> Concept?
+                implements -> ConceptInterface[0..*]
+                partition: Boolean
+
+        concept ConceptInterface extends Classifier
+            features (↓name):
+                extends -> ConceptInterface[0..*]
+
+        concept Containment extends Link
+
+        abstract concept DataType extends LanguageEntity
+
+        concept Enumeration extends DataType
+            features (↓name):
+                literals: EnumerationLiteral[0..*]
+
+        concept EnumerationLiteral implements IKeyed
+
+        abstract concept Feature implements IKeyed
+            features (↓name):
+                optional: Boolean
+
+        concept-interface IKeyed extends INamed
+            features (↓name):
+                key: String
+
+        <<partition>> concept Language implements IKeyed
+            features (↓name):
+                dependsOn -> Language[0..*]
+                entities: LanguageEntity[0..*]
+                version: String
+
+        abstract concept LanguageEntity implements IKeyed
+
+        abstract concept Link extends Feature
+            features (↓name):
+                multiple: Boolean
+                type -> Classifier
+
+        concept PrimitiveType extends DataType
+
+        concept Property extends Feature
+            features (↓name):
+                type -> DataType
+
+        concept Reference extends Link
+

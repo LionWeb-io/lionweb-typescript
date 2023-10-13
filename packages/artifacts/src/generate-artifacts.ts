@@ -1,27 +1,41 @@
 import {writeFileSync} from "fs"
 
-import {Language, lioncore, lioncoreBuiltins, serializeLanguage, serializeNodes} from "@lionweb/core"
+import {asText, Language, lioncore, lioncoreBuiltins, serializeLanguage, serializeNodes} from "@lionweb/core"
 import {libraryLanguage} from "@lionweb/test/dist/languages/library.js"
 import {multiLanguage} from "@lionweb/test/dist/languages/multi.js"
 import {languageWithEnum} from "@lionweb/test/dist/languages/with-enum.js"
-import {libraryModel, libraryExtractionFacade} from "@lionweb/test/dist/instances/library.js"
-import {multiModel, multiExtractionFacade} from "@lionweb/test/dist/instances/multi.js"
-import {generateMermaidForLanguage, generatePlantUmlForLanguage, schemaFor, writeJsonAsFile} from "@lionweb/utilities"
-import {builtinsPath, diagramPath, instancePath, languagePath, lioncorePath} from "./paths.js"
+import {libraryExtractionFacade, libraryModel} from "@lionweb/test/dist/instances/library.js"
+import {multiExtractionFacade, multiModel} from "@lionweb/test/dist/instances/multi.js"
+import {
+    generateMermaidForLanguage,
+    generatePlantUmlForLanguage,
+    schemaFor,
+    writeJsonAsFile
+} from "@lionweb/utilities"
+import {diagramPath, instancePath, languagePath} from "./paths.js"
+import {shapesLanguage} from "@lionweb/test/dist/languages/shapes.js"
 
-
-writeJsonAsFile(builtinsPath, serializeLanguage(lioncoreBuiltins))
-console.log(`serialized LionCore-builtins`)
-writeJsonAsFile(lioncorePath, serializeLanguage(lioncore))
-console.log(`serialized LionCore-M3`)
 
 writeFileSync(diagramPath( "metametamodel-gen.puml"), generatePlantUmlForLanguage(lioncore))
 writeFileSync(diagramPath("metametamodel-gen.md"), generateMermaidForLanguage(lioncore))
 console.log(`generated diagrams for LionCore M3`)
 
 
-writeJsonAsFile(languagePath("library.json"), serializeLanguage(libraryLanguage))
-console.log(`serialized Library M2`)
+const saveLanguageFiles = (language: Language, name: string) => {
+    writeJsonAsFile(languagePath(`${name}.json`), serializeLanguage(language))
+    writeFileSync(languagePath(`${name}.txt`), asText(language))
+    console.log(`saved files for ${language.name} M2`)
+}
+
+
+saveLanguageFiles(lioncore, "lioncore")
+saveLanguageFiles(lioncoreBuiltins, "builtins")
+
+
+saveLanguageFiles(shapesLanguage, "shapes")
+
+
+saveLanguageFiles(libraryLanguage, "library")
 
 writeFileSync(diagramPath("library-gen.puml"), generatePlantUmlForLanguage(libraryLanguage))
 writeFileSync(diagramPath("library-gen.md"), generateMermaidForLanguage(libraryLanguage))
@@ -31,11 +45,10 @@ writeJsonAsFile(instancePath("library.json"), serializeNodes(libraryModel, libra
 console.log(`serialized library M1`)
 
 
-writeJsonAsFile(languagePath("with-enum.json"), serializeLanguage(languageWithEnum))
+saveLanguageFiles(languageWithEnum, "with-enum")
 
 
-writeJsonAsFile(languagePath("multi.json"), serializeLanguage(multiLanguage))
-console.log(`serialized multi-language M2`)
+saveLanguageFiles(multiLanguage, "multi")
 
 writeJsonAsFile(instancePath("multi.json"), serializeNodes(multiModel, multiExtractionFacade))
 console.log(`serialized multi-language M1`)

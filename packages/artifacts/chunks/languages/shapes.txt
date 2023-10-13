@@ -1,0 +1,26 @@
+language ShapesLanguage
+    version: 1
+    entities (↓name):
+
+        concept Circle extends Shape
+            features (↓name):
+                center: Coord
+                r: Integer
+
+        concept Coord
+            features (↓name):
+                x: Integer
+                y: Integer
+                z: Integer
+
+        concept Geometry
+            features (↓name):
+                shapes: Shape[0..*]
+
+        concept Line extends Shape
+            features (↓name):
+                end: Coord
+                start: Coord
+
+        abstract concept Shape implements INamed
+
