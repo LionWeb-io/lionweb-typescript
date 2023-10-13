@@ -69,7 +69,6 @@ export class LionWebLanguageReferenceValidator {
             return;
         }
         if (type.classifier.key !== LIONWEB_M3_CONCEPT_KEY) {
-            // this.validationResult.error(`${context}: Containment with key "${child.containment.key}" does not refer to a concept, but to a "${type.concept.key}"`)
             this.validationResult.issue(new Language_IncorrectContainmentMetaPointer_Issue(new IssueContext(context), child.containment, type.classifier.key));
         }
         // TODO check type of children
@@ -82,7 +81,6 @@ export class LionWebLanguageReferenceValidator {
             return;
         }
         if (type.classifier.key !== LIONWEB_M3_CONCEPT_KEY) {
-            // this.validationResult.error(`${context}: Reference with key "${ref.reference.key}" does not refer to a concept, but to a "${type.concept.key}"`)
             this.validationResult.issue(new Language_IncorrectReferenceMetaPointer_Issue(new IssueContext(context), ref.reference, type.classifier.key));
         }
         // TODO Check type of reference (if possible)
@@ -101,7 +99,6 @@ export class LionWebLanguageReferenceValidator {
         }
         const type = this.language.getNodeByMetaPointer(prop.property);
         if (type === null || type === undefined) {
-            // this.validationResult.error(`${context}: Property with key ${prop.property.key} is unknown in the language`);
             this.validationResult.issue(new Language_UnknownProperty_Issue(new IssueContext(context), prop.property));
             return;
         }
