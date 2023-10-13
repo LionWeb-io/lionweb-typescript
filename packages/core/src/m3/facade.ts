@@ -2,10 +2,10 @@ import {ExtractionFacade, InstantiationFacade, updateSettingsNameBased} from "..
 import {
     Classifier,
     Concept,
-    ConceptInterface,
     Containment,
     Enumeration,
     EnumerationLiteral,
+    Interface,
     Language,
     M3Concept,
     PrimitiveType,
@@ -39,8 +39,8 @@ export const lioncoreInstantiationFacadeWithKeyGen = (keyGen: KeyGenerator): Ins
         switch (classifier.key) {
             case metaConcepts.concept.key:
                 return new Concept(parent as Language, propertySettings[inamed_name.key] as string, "", id, propertySettings[metaFeatures.concept_abstract.key] as boolean).keyed(keyGen)
-            case metaConcepts.conceptInterface.key:
-                return new ConceptInterface(parent as Language, propertySettings[inamed_name.key] as string, "", id).keyed(keyGen)
+            case metaConcepts.interface.key:
+                return new Interface(parent as Language, propertySettings[inamed_name.key] as string, "", id).keyed(keyGen)
             case metaConcepts.containment.key:
                 return new Containment(parent as Classifier, propertySettings[inamed_name.key] as string, "", id).keyed(keyGen)
             case metaConcepts.enumeration.key:
