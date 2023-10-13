@@ -6,23 +6,21 @@ import {
     INamed,
     Interface,
     Language,
+    Link,
     M3Node,
+    nameOf,
+    nameSorted,
     PrimitiveType,
     Property,
-    Reference
-} from "./types.js"
-import {nameOf} from "./functions.js"
-import {sortByStringKey} from "../utils/sorting.js"
-import {SingleRef, unresolved} from "../references.js"
+    SingleRef,
+    unresolved
+} from "@lionweb/core"
 
 
 // TODO  use littoral-templates?
 const indent = (str: string) =>
     str.split("\n").map((line) => `    ${line}`).join("\n")
 
-
-const nameSorted = <T extends INamed>(ts: T[]): T[] =>
-    sortByStringKey(ts, nameOf)
 
 const descent = <T extends M3Node>(ts: T[], separator: string): string =>
     nameSorted(ts).map((t) => indent(indent(asText(t)))).join(separator)
@@ -34,19 +32,19 @@ const refAsText = <T extends INamed>(ref: SingleRef<T>): string =>
 const asText = (node: M3Node): string => {
 
     if (node instanceof Concept) {
-        return `${node.partition ? `<<partition>> ` : ``}${node.abstract ? `abstract ` : ``}concept ${node.name}${node.extends === undefined ? `` : ` extends ${refAsText(node.extends)}`}${node.implements.length === 0 ? `` : ` implements ${sortByStringKey(node.implements, nameOf).map(nameOf).join(", ")}`}${node.features.length === 0 ? `` : `
+        return `${node.partition ? `<<partition>> ` : ``}${node.abstract ? `abstract ` : ``}concept ${node.name}${node.extends === undefined ? `` : ` extends ${refAsText(node.extends)}`}${node.implements.length === 0 ? `` : ` implements ${nameSorted(node.implements).map(nameOf).join(", ")}`}${node.features.length === 0 ? `` : `
     features (↓name):
 ${descent(node.features, "\n")}`}`
     }
 
     if (node instanceof Interface) {
-        return `interface ${node.name}${node.extends.length === 0 ? `` : ` extends ${sortByStringKey(node.extends, nameOf).map(nameOf).join(", ")}`}${node.features.length === 0 ? `` : `
+        return `interface ${node.name}${node.extends.length === 0 ? `` : ` extends ${nameSorted(node.extends).map(nameOf).join(", ")}`}${node.features.length === 0 ? `` : `
     features (↓name):
 ${descent(node.features, "\n")}`}`
     }
 
-    if (node instanceof Containment) {
-        return `${node.name}: ${refAsText(node.type)}${node.multiple ? `[${node.optional ? `0` : `1`}..*]` : ``}${node.optional && !node.multiple ? `?` : ``}`
+    if (node instanceof Link) {
+        return `${node.name}${node instanceof Containment ? `:` : ` ->`} ${refAsText(node.type)}${node.multiple ? `[${node.optional ? `0` : `1`}..*]` : ``}${node.optional && !node.multiple ? `?` : ``}`
     }
 
     if (node instanceof Enumeration) {
@@ -79,10 +77,6 @@ ${descent(node.entities, "\n\n")}
 
     if (node instanceof Property) {
         return `${node.name}: ${refAsText(node.type)}${node.optional ? `?` : ``}`
-    }
-
-    if (node instanceof Reference) {
-        return `${node.name} -> ${refAsText(node.type)}${node.multiple ? `[${node.optional ? `0` : `1`}..*]` : ``}${node.optional && !node.multiple ? `?` : ``}`
     }
 
     return `node (key=${node.key}, ID=${node.id}) of class ${node.constructor.name} not handled`
