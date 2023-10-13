@@ -4,6 +4,8 @@ import { IssueContext } from "../issues/ValidationIssue";
 import { LionWebJsonProperty } from "../json/LionWebJson";
 import { ValidationResult } from "./ValidationResult";
 
+export type ValidatorFunction = <T>(obj: T, ctx: string) => void;
+
 export class SimpleFieldvalidator {
     validationResult: ValidationResult;
 
@@ -16,19 +18,18 @@ export class SimpleFieldvalidator {
      * @param id
      * @param context
      */
-    validateId = (id: string, context: string): void => {
+    validateId: ValidatorFunction = <String>(id: String, context: string): void => {
         if (id === null || id === undefined) {
             return;
         }
-        if (typeof id !== "string") {
-            // this.validationResult.error(`${context}: Type of id "${id}" is not a string`);
-            this.validationResult.issue(new Syntax_IdFormat_Issue(new IssueContext(context), id));
+        const idString: string = id.toString();
+        if (typeof idString !== "string") {
+            this.validationResult.issue(new Syntax_IdFormat_Issue(new IssueContext(context), idString));
             return;
         }
         const egexp = /^[a-zA-Z0-9$_-][a-zA-Z0-9$_-]*$/;
-        if (!egexp.test(id)) {
-            // this.validationResult.error(`${context}: Id "${id}" has incorrect format in`);
-            this.validationResult.issue(new Syntax_IdFormat_Issue(new IssueContext(context), id));
+        if (!egexp.test(idString)) {
+            this.validationResult.issue(new Syntax_IdFormat_Issue(new IssueContext(context), idString));
         }
     }
 
@@ -38,34 +39,31 @@ export class SimpleFieldvalidator {
      * @param context   The context for the error message in errors.
      * @return          true if `key` is a correct LionWeb key.
      */
-    validateKey = (key: string, context: string): void => {
-        if (typeof key !== "string") {
-            // this.validationResult.error(`${context}: Type of key "${key}" is not a string`);
-            this.validationResult.issue(new Syntax_KeyFormat_Issue(new IssueContext(context), key));
+    validateKey: ValidatorFunction = <String>(key: String, context: string): void => {
+        const keyString: string = "" + key;
+        if (typeof keyString !== "string") {
+            this.validationResult.issue(new Syntax_KeyFormat_Issue(new IssueContext(context), keyString));
             return;
         }
         const egexp = /^[a-zA-Z0-9$_-][a-zA-Z$_0-9-]*$/;
-        if (!egexp.test(key)) {
-            // this.validationResult.error(`${context}: Key "${key}" has incorrect format`);
-            this.validationResult.issue(new Syntax_KeyFormat_Issue(new IssueContext(context), key));
+        if (!egexp.test(keyString)) {
+            this.validationResult.issue(new Syntax_KeyFormat_Issue(new IssueContext(context), keyString));
         }
     }
 
-    validateVersion = (version: string, context: string): void => {
-        if (typeof version !== "string") {
-            // this.validationResult.error(`${context}: Type of version "${version}" is not a string`);
-            this.validationResult.issue(new Syntax_VersionFormat_Issue(new IssueContext(context), version));
+    validateVersion: ValidatorFunction = <String>(version: String, context: string): void => {
+        const versionString: string = "" + version;
+        if (typeof versionString !== "string") {
+            this.validationResult.issue(new Syntax_VersionFormat_Issue(new IssueContext(context), versionString));
             return;
         }
-        if (version.length === 0) {
-            // this.validationResult.error(`${context}: Version "${version}" is empty`);
-            this.validationResult.issue(new Syntax_VersionFormat_Issue(new IssueContext(context), version));
+        if (versionString.length === 0) {
+            this.validationResult.issue(new Syntax_VersionFormat_Issue(new IssueContext(context), versionString));
         }
     }
 
     validateBoolean = (property: LionWebJsonProperty, propName: string, context: string): void => {
         if (property.value !== "true" && property.value !== "false") {
-            // this.validationResult.error(`${context}: Type of propery "${property.value}" should be boolean ("false" or "true")`);
             this.validationResult.issue(new Language_PropertyValue_Issue(new IssueContext(context), propName, property.value, "boolean"));
         }
     }
@@ -73,7 +71,6 @@ export class SimpleFieldvalidator {
     validateInteger = (property: LionWebJsonProperty, propName: string, context: string): void => {
         const egexp = /^[+-]?(0|[1-9][0-9]*)$/;
         if (!egexp.test(property.value)) {
-            // this.validationResult.error(`${context}: Value "${property.value}" is not an integer`);
             this.validationResult.issue(new Language_PropertyValue_Issue(new IssueContext(context), propName, property.value, "integer"));
         }
     }
@@ -82,26 +79,18 @@ export class SimpleFieldvalidator {
         try {
             JSON.parse(property.value);
         } catch (e) {
-            // this.validationResult.error(`${context}: Value "${property.value}" is not a JSON, parsing error: ${e.message}`);
             this.validationResult.issue(new Language_PropertyValue_Issue(new IssueContext(context), propName, property.value, "JSON"));
         }
     }
 
-    vcalidateSerializationFormatVersion = (objElement: unknown, context: string): void => {
+    validateSerializationFormatVersion = (objElement: unknown, context: string): void => {
         if (typeof objElement !== "string") {
-            // this.validationResult.error(`SerializationFormatVersion "${objElement}" is not a string in ${context}`);
             this.validationResult.issue(new Syntax_SerializationFormatVersion_Issue(new IssueContext(context), JSON.stringify(objElement)));
             return;
         }
         if (objElement.length === 0) {
-            // this.validationResult.error(`SerializationFormatVersion "${objElement}" is empty in ${context}`);
             this.validationResult.issue(new Syntax_SerializationFormatVersion_Issue(new IssueContext(context), objElement));
             return;
-        }
-        const egexp = /^[0-9]+$/;
-        if (!egexp.test(objElement)) {
-            // this.validationResult.error(`SerializationFormatVersion "${objElement}" has incorrect format in ${context}`);
-            this.validationResult.issue(new Syntax_SerializationFormatVersion_Issue(new IssueContext(context), objElement));
         }
     }
 }

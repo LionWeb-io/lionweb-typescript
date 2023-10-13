@@ -57,10 +57,10 @@ export class LionWebReferenceValidator {
                     const childNode = this.nodesIdMap.get(childId);
                     if (childNode !== undefined) {
                         if (childNode.parent !== null && childNode.parent !== undefined && childNode.parent !== node.id) {
-                            // this.validationResult.error(`Child "${childId}" with parent "${childNode.parent}" is defined as child in node "${node.id}"`);
+                            // TODO this.validationResult.error(`Child "${childId}" with parent "${childNode.parent}" is defined as child in node "${node.id}"`);
                         }
                         if (childNode.parent === null || childNode.parent === undefined) {
-                            // this.validationResult.error(`Child "${childId}" of node "${node.id}" has different parent "${childNode.parent}"`);
+                            // TODO this.validationResult.error(`Child "${childId}" of node "${node.id}" has different parent "${childNode.parent}"`);
                         }
                     }
                 });
@@ -89,11 +89,9 @@ export class LionWebReferenceValidator {
             return;
         }
         if (lang === undefined || lang === null) {
-            // this.validationResult.error(`${context}: Language ${metaPointer.language} used but not declared in used languages`);
             this.validationResult.issue(new Reference_LanguageUnknown_Issue(new IssueContext(context), metaPointer))
         } else {
             if (lang.version !== metaPointer.version) {
-                // this.validationResult.error(`${context}: Language version ${metaPointer.language}.${metaPointer.version} used but is ${lang.version} in used languages`);
                 this.validationResult.issue(new Reference_LanguageUnknown_Issue(new IssueContext(context), metaPointer))
             }
         }
@@ -111,7 +109,6 @@ export class LionWebReferenceValidator {
         const alreadySeen: Record<string, boolean> = {};
         strings.forEach((str) => {
             if (alreadySeen[str]) {
-                // this.validationResult.error(`${context}: Duplicate ${str}`);
                 this.validationResult.issue(new Duplicates_Issue(new IssueContext(context), str))
             } else {
                 alreadySeen[str] = true;
@@ -134,7 +131,6 @@ export class LionWebReferenceValidator {
             const seenKeys = alreadySeen.get(usedLanguage.key);
             if (seenKeys !== null && seenKeys !== undefined) {
                 if (seenKeys.includes(usedLanguage.version)) {
-                    // this.validationResult.error(`${context}: Duplicate version "${usedLanguage.version}" for language "${usedLanguage.key}"`);
                     this.validationResult.issue(new Duplicates_Issue(new IssueContext(context + `.language[${index}].version`), usedLanguage.version));
                 }
             } else {
@@ -159,7 +155,6 @@ export class LionWebReferenceValidator {
         while (current !== null && current !== undefined && current.parent !== null && current.parent !== undefined) {
             const nextParent = current.parent;
             if (nextParent !== null && nextParent !== undefined && seenParents.includes(nextParent)) {
-                // this.validationResult.error(`${context} Parents circulair: ${seenParents}`);
                 this.validationResult.issue(new Reference_CirculairParent_Issue(new IssueContext(context + ".???"), this.nodesIdMap.get(nextParent), seenParents));
                 return;
             }
@@ -180,7 +175,6 @@ export class LionWebReferenceValidator {
         if (parent.annotations.includes(child.id)) {
             return;
         }
-        // this.validationResult.error(`Child with id ${child} has parent ${parent["id"]} but parent does not contains it as a child.`);
         this.validationResult.issue(new Reference_ChildMissingInParent_Issue(new IssueContext(context), child, parent));
     }
 
@@ -191,10 +185,9 @@ export class LionWebReferenceValidator {
                 if (childNode !== undefined) {
                     if (childNode.parent !== node.id) {
                         // TODO Check that this is already tested from the child in vaidateExistsAsChild().
-                        // this.validationResult.error(`PP Parent of ${context}.${child.containment.key}[${index}] with id "${childId}" is "${childNode.parent}", but should be "${node.id}"`);
+                        //      this.validationResult.error(`PP Parent of ${context}.${child.containment.key}[${index}] with id "${childId}" is "${childNode.parent}", but should be "${node.id}"`);
                     }
                     if (childNode.parent === null || childNode.parent === undefined) {
-                        // this.validationResult.error(`PP Parent of ${context}.${child.containment.key}[${index}] with id "${childId}" is "${childNode.parent}", but should be "${node.id}"`);
                         this.validationResult.issue(new Reference_ParentMissingInChild_Issue(new IssueContext(`${context}.${child.containment.key}[${index}]`), node, childNode));
                     }
                 }
@@ -204,7 +197,6 @@ export class LionWebReferenceValidator {
             const childNode = this.nodesIdMap.get(annotationId);
             if (childNode !== undefined) {
                 if (childNode.parent === null || childNode.parent === undefined) {
-                    // this.validationResult.error(`AA Parent of ${context}.annotations[${annotationIndex}] with id "${annotationId}" is "${childNode.parent}", but should be "${node.id}"`);
                     this.validationResult.issue(new Reference_ParentMissingInChild_Issue(new IssueContext(`${context}.annotations[${annotationIndex}] `), node, childNode));
                 }
             }

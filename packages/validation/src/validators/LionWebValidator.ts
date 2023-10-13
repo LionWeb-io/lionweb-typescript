@@ -49,11 +49,9 @@ export class LionWebValidator {
             // console.log("validateReferences not executed because there are syntax errors.")
             return;
         }
-        if (this.language !== null) {
-            // when syntax is correct we know the chunk is actually a chunk!
-            this.referenceValidator.validate(this.chunk as LionWebJsonChunkWrapper);
-            this.referencesCorrect = !this.validationResult.hasErrors()
-        }
+        // when syntax is correct we know the chunk is actually a chunk!
+        this.referenceValidator.validate(this.chunk as LionWebJsonChunkWrapper);
+        this.referencesCorrect = !this.validationResult.hasErrors()
     }
 
     validateForLanguage(): void {

@@ -5,7 +5,7 @@ import {
     Syntax_PropertyTypeIssue,
     Syntax_PropertyUnknownIssue
 } from "../issues/SyntaxIssues";
-import { SimpleFieldvalidator } from "./SimpleFieldvalidator";
+import { SimpleFieldvalidator, ValidatorFunction } from "./SimpleFieldvalidator";
 import { IssueContext } from "../issues/ValidationIssue";
 import { ValidationResult } from "./ValidationResult";
 
@@ -42,7 +42,7 @@ export type PropertyDefinition = {
      * @param obj
      * @param ctx
      */
-    validateValue?: (obj: string, ctx: string) => void;
+    validateValue?: ValidatorFunction;
 };
 
 // Make boolean argument more readable.
@@ -79,7 +79,7 @@ export class LionWebSyntaxValidator {
 
     validateLwChunk = (obj: unknown): void => {
         const expected: PropertyDefinition[] = [
-            { property: "serializationFormatVersion", expectedType: "string", mayBeNull: NOT_NULL, validateValue: this.simpleFieldValidator.vcalidateSerializationFormatVersion },
+            { property: "serializationFormatVersion", expectedType: "string", mayBeNull: NOT_NULL, validateValue: this.simpleFieldValidator.validateSerializationFormatVersion },
             { property: "languages", expectedType: "array", mayBeNull: NOT_NULL, validateValue: this.validateLwUsedLanguage },
             { property: "nodes", expectedType: "array", mayBeNull: NOT_NULL, validateValue: this.validateLwNode },
         ];
@@ -107,8 +107,10 @@ export class LionWebSyntaxValidator {
         this.propertyChecks(obj, expected, "Node");
     }
 
-    validateLwAnnotation = (obj: unknown) => {
-        console.log("Annotations not validated yet: " + JSON.stringify(obj));
+    validateLwAnnotation = (obj: unknown, context: string) => {
+        if (this.checkType(obj, "string", context)) {
+            this.simpleFieldValidator.validateId(obj as string, context);
+        }
     }
 
     validateLwProperty = (obj: unknown): void => {
@@ -146,11 +148,9 @@ export class LionWebSyntaxValidator {
      */
     private checkType = (obj: unknown, expectedType: PropertyType, context: string): boolean => {
         if (obj === null || obj === undefined) {
-            // this.validationResult.error(`${context}: Object is ${obj}`);
             this.validationResult.issue(new Syntax_PropertyTypeIssue(new IssueContext(context), "obj", expectedType, typeof obj));
             return false;
         } else if (typeof obj !== expectedType) {
-            // this.validationResult.error(`${context}: Object has type "${typeof obj}" instead of "${expectedType}"`);
             // TODO Better context: where does obj come from
             this.validationResult.issue(new Syntax_PropertyTypeIssue(new IssueContext(context), "obj", expectedType, typeof obj));
             return false;
@@ -193,10 +193,9 @@ export class LionWebSyntaxValidator {
                 if (this.recursive && propDef.expectedType === "array" && Array.isArray(propValue) && !!propDef.validateValue) {
                     propValue.forEach((arrayItem: unknown, index: number) => {
                         if (arrayItem === null) {
-                            // this.validationResult.error(`${context}.${propDef.property}[${index}]: Array ${propDef.property} contains null value`);
                             this.validationResult.issue(new Syntax_ArrayContainsNull_Issue(new IssueContext(`${context}.${propDef.property}[${index}]`), propDef.property, index));
                         } else {
-                            if (propDef.validateValue !== null && propDef.validateValue !== undefined && typeof arrayItem === "string") {
+                            if (propDef.validateValue !== null && propDef.validateValue !== undefined ) {
                                 propDef.validateValue(arrayItem, `${context}.${propDef.property}[${index}]`);
                             } else {
                                 //  TODO: give an error, whih ine?
@@ -224,13 +223,11 @@ export class LionWebSyntaxValidator {
         const own = Object.getOwnPropertyNames(obj);
         own.forEach((ownProp) => {
             if (!properties.includes(ownProp)) {
-                // this.validationResult.error(`${context}: Unknown extra property "${ownProp}"`);
                 this.validationResult.issue(new Syntax_PropertyUnknownIssue(new IssueContext(context), ownProp));
             }
         });
         properties.forEach((prop) => {
             if (!own.includes(prop)) {
-                // this.validationResult.error(`${context}: Missing property "${prop}"`);
                 this.validationResult.issue(new Syntax_PropertyMissingIssue(new IssueContext(context), prop));
             }
         });
@@ -246,7 +243,6 @@ export class LionWebSyntaxValidator {
     checkPropertyType = (obj: UnknownObjectType, prop: string, expectedType: PropertyType, mayBeNull: boolean, context: string): boolean => {
         if (obj[prop] === undefined || obj[prop] === null) {
             if (!mayBeNull) {
-                // this.validationResult.error(`${context}: Property "${prop}" is null or undefined`);
                 this.validationResult.issue(new Syntax_PropertyNullIssue(new IssueContext(context), prop));
                 return false;
             } else {
@@ -258,14 +254,12 @@ export class LionWebSyntaxValidator {
                 if (expectedType === "array" && actualType === "object") {
                     // typeof returns an object for an array, so we need to check this separately.
                     if (!Array.isArray(obj[prop])) {
-                        // this.validationResult.error(`${context}: Type of property "${prop}" is not an array`);
                         this.validationResult.issue(new Syntax_PropertyTypeIssue(new IssueContext(context), prop, "array", typeof obj[prop]));
                         return false;
                     } else {
                         return true;
                     }
                 } else {
-                    // this.validationResult.error(`${context}: Property "${prop}" has type "${actualType}", should be "${expectedType}"`);
                     this.validationResult.issue(new Syntax_PropertyTypeIssue(new IssueContext(context), prop, expectedType, actualType));
                     return false;
                 }
@@ -273,7 +267,6 @@ export class LionWebSyntaxValidator {
                 if (expectedType === "object") {
                     // typeof returns an object for an array, so we need to check this separately.
                     if (Array.isArray(obj[prop])) {
-                        // this.validationResult.error(`${context}: Property "${prop}" has type array, should be "${expectedType}"`);
                         this.validationResult.issue(new Syntax_PropertyTypeIssue(new IssueContext(context), prop, expectedType, "array"));
                         return false;
                     }

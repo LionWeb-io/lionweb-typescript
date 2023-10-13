@@ -21,7 +21,7 @@ for (const f of getAllFiles(folder, [])) {
             console.log("V PASSED " + f) ;
             printIssues(validator.validationResult)
         } else {
-            console.log("V FAILED " + f);
+            // console.log("V FAILED " + f);
             printIssues(validator.validationResult)
             totalFailed += 1;
             totalErrors += validator.validationResult.issues.length;
