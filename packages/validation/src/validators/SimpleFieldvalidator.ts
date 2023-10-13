@@ -18,15 +18,12 @@ export class SimpleFieldvalidator {
      * @param id
      * @param context
      */
+    // eslint-disable-next-line @typescript-eslint/ban-types
     validateId: ValidatorFunction = <String>(id: String, context: string): void => {
         if (id === null || id === undefined) {
             return;
         }
         const idString: string = id.toString();
-        if (typeof idString !== "string") {
-            this.validationResult.issue(new Syntax_IdFormat_Issue(new IssueContext(context), idString));
-            return;
-        }
         const egexp = /^[a-zA-Z0-9$_-][a-zA-Z0-9$_-]*$/;
         if (!egexp.test(idString)) {
             this.validationResult.issue(new Syntax_IdFormat_Issue(new IssueContext(context), idString));
@@ -39,24 +36,18 @@ export class SimpleFieldvalidator {
      * @param context   The context for the error message in errors.
      * @return          true if `key` is a correct LionWeb key.
      */
+        // eslint-disable-next-line @typescript-eslint/ban-types
     validateKey: ValidatorFunction = <String>(key: String, context: string): void => {
         const keyString: string = "" + key;
-        if (typeof keyString !== "string") {
-            this.validationResult.issue(new Syntax_KeyFormat_Issue(new IssueContext(context), keyString));
-            return;
-        }
         const egexp = /^[a-zA-Z0-9$_-][a-zA-Z$_0-9-]*$/;
         if (!egexp.test(keyString)) {
             this.validationResult.issue(new Syntax_KeyFormat_Issue(new IssueContext(context), keyString));
         }
     }
-
+    
+    // eslint-disable-next-line @typescript-eslint/ban-types
     validateVersion: ValidatorFunction = <String>(version: String, context: string): void => {
         const versionString: string = "" + version;
-        if (typeof versionString !== "string") {
-            this.validationResult.issue(new Syntax_VersionFormat_Issue(new IssueContext(context), versionString));
-            return;
-        }
         if (versionString.length === 0) {
             this.validationResult.issue(new Syntax_VersionFormat_Issue(new IssueContext(context), versionString));
         }
