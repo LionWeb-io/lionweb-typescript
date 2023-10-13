@@ -83,7 +83,7 @@ export class LionWebReferenceValidator {
      * @param context
      */
     validateLanguageReference(chunk: LionWebJsonChunkWrapper, metaPointer: LionWebJsonMetaPointer, context: string) {
-        const lang = ChunkUtils.findLwUsedLanguage(chunk.jsonChunk, metaPointer.language);
+        const lang = ChunkUtils.findLwUsedLanguageWithVersion(chunk.jsonChunk, metaPointer.language, metaPointer.version);
         if (metaPointer.language === LION_CORE_BUILTINS_KEY) {
             // Ok, builtin
             return;
