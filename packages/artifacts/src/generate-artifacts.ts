@@ -9,7 +9,9 @@ import {multiExtractionFacade, multiModel} from "@lionweb/test/dist/instances/mu
 import {
     generateMermaidForLanguage,
     generatePlantUmlForLanguage,
+    GenerationOptions,
     schemaFor,
+    tsTypesForLanguage,
     writeJsonAsFile
 } from "@lionweb/utilities"
 import {diagramPath, instancePath, languagePath} from "./paths.js"
@@ -24,6 +26,8 @@ console.log(`generated diagrams for LionCore M3`)
 const saveLanguageFiles = (language: Language, name: string) => {
     writeJsonAsFile(languagePath(`${name}.json`), serializeLanguage(language))
     writeFileSync(languagePath(`${name}.txt`), asText(language))
+    writeFileSync(languagePath(`${name}-types.ts.txt`), tsTypesForLanguage(language, GenerationOptions.assumeSealed))
+        // (Generate with a '.txt' file extension to avoid it getting picked up by the compiler.)
     console.log(`saved files for ${language.name} M2`)
 }
 

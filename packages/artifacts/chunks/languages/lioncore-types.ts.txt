@@ -1,0 +1,116 @@
+// Warning: this file is generated!
+// Modifying it by hand it useless at best, and sabotage at worst.
+
+
+/*
+ * language's metadata:
+ *     name:    LionCore.M3
+ *     version: 2023.1
+ */
+
+
+import {DynamicNode, DynamicINamed as INamed} from "@lionweb/core";
+
+
+export type Annotation = DynamicNode & {
+    classifier: "Annotation";
+    settings: {
+        multiple?: boolean;
+        annotates?: Classifier;
+        extends?: Annotation;
+        implements: ConceptInterface[];
+    };
+};
+
+/** abstract */ export type Classifier = DynamicNode & {
+    classifier: "Annotation" | "Concept" | "ConceptInterface";
+    settings: {
+        features: Feature[];
+    };
+};
+
+export type Concept = DynamicNode & {
+    classifier: "Concept";
+    settings: {
+        abstract: boolean;
+        partition: boolean;
+        extends?: Concept;
+        implements: ConceptInterface[];
+    };
+};
+
+export type ConceptInterface = DynamicNode & {
+    classifier: "ConceptInterface";
+    settings: {
+        extends: ConceptInterface[];
+    };
+};
+
+export type Containment = DynamicNode & {
+    classifier: "Containment";
+};
+
+/** abstract */ export type DataType = DynamicNode & {
+    classifier: "PrimitiveType" | "Enumeration";
+};
+
+export type Enumeration = DynamicNode & {
+    classifier: "Enumeration";
+    settings: {
+        literals: EnumerationLiteral[];
+    };
+};
+
+export type EnumerationLiteral = DynamicNode & IKeyed & {
+    classifier: "EnumerationLiteral";
+};
+
+/** abstract */ export type Feature = DynamicNode & IKeyed & {
+    classifier: "Property" | "Link";
+    settings: {
+        optional: boolean;
+    };
+};
+
+/** interface */ export type IKeyed = INamed & {
+    settings: {
+        key: string;
+    };
+};
+
+export type Language = DynamicNode & IKeyed & {
+    classifier: "Language";
+    settings: {
+        version: string;
+        entities: LanguageEntity[];
+        dependsOn: Language[];
+    };
+};
+
+/** abstract */ export type LanguageEntity = DynamicNode & IKeyed & {
+    classifier: "Classifier" | "DataType";
+};
+
+/** abstract */ export type Link = DynamicNode & {
+    classifier: "Containment" | "Reference";
+    settings: {
+        multiple: boolean;
+        type: Classifier;
+    };
+};
+
+export type PrimitiveType = DynamicNode & {
+    classifier: "PrimitiveType";
+};
+
+export type Property = DynamicNode & {
+    classifier: "Property";
+    settings: {
+        type: DataType;
+    };
+};
+
+export type Reference = DynamicNode & {
+    classifier: "Reference";
+};
+

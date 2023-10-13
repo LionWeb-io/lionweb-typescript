@@ -14,6 +14,17 @@ export type DynamicNode = Node & {
 
 
 /**
+ * A parallel version of {@link INamed} for dynamic nodes.
+ * (This type def. is predominantly meant for use in generated code.)
+ */
+export type DynamicINamed = DynamicNode & {
+    settings: {
+        name: string
+    }
+}
+
+
+/**
  * An implementation of {@link ExtractionFacade} for {@link DynamicNode dynamic nodes}.
  */
 export const dynamicExtractionFacade: ExtractionFacade<DynamicNode> = ({

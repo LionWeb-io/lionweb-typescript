@@ -2,6 +2,7 @@
 
 ## 0.5.0
 
+* Add a type `DynamicINamed`, primarily for generation purposes.
 * Expose a helper function `nameSorted`.
 * Change names: `ReadModelAPI` &rarr; `ExtractionFacade`, `WriteModelAPI` &rarr; `InstantiationFacade`.
 * Change name of `concept` fields to `classifier`, and their types (where applicable) to `Classifier`.

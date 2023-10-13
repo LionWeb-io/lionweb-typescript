@@ -1,0 +1,57 @@
+// Warning: this file is generated!
+// Modifying it by hand it useless at best, and sabotage at worst.
+
+
+/*
+ * language's metadata:
+ *     name:    library
+ *     version: 1
+ */
+
+
+import {DynamicNode} from "@lionweb/core";
+
+
+export type Book = DynamicNode & {
+    classifier: "Book";
+    settings: {
+        title: string;
+        pages: number;
+        author: Writer;
+        type?: unknown;
+    };
+};
+
+enum BookType {
+    Normal, Special
+}
+
+export type GuideBookWriter = DynamicNode & {
+    classifier: "GuideBookWriter";
+    settings: {
+        countries: string;
+    };
+};
+
+export type Library = DynamicNode & {
+    classifier: "Library";
+    settings: {
+        name: string;
+        books: Book[];
+    };
+};
+
+export type SpecialistBookWriter = DynamicNode & {
+    classifier: "SpecialistBookWriter";
+    settings: {
+        subject: string;
+    };
+};
+
+export type Writer = DynamicNode & {
+    classifier: "Writer";
+    settings: {
+        name: string;
+    };
+};
+
