@@ -1,3 +1,6 @@
+#!/usr/bin/env node
+
+
 import {argv} from "process"
 
 import {extractFromSerialization} from "./serialization-extractor.js"
@@ -7,12 +10,13 @@ import {diagramFromSerialization} from "./m3/diagram-generator.js"
 const main = (args: string[])=> {
     if (args.length <= 2) {
         console.log(
-`lioncore-cli is a LionWeb utility around LionWeb-TypeScript
+`lionweb-cli is a LionWeb utility around LionWeb-TypeScript
 
-Usage: $ lioncore-cli <command> <arguments>
+Usage: $ npx @lionweb/cli <command> <arguments>
 
 Available commands are:
 
+    diagram
     extract
 `
         )
@@ -38,7 +42,8 @@ Available commands are:
             if (commandArgs.length === 0) {
                 console.log(
 `The extract command extracts the following from a serialization chunk in the form of files: a sorted JSON, and a shortened JSON.
-If the chunk is the serialization of a LionCore Language/M2, then a textual rendering is already output.`
+If the chunk is the serialization of a LionCore Language/M2, then a textual rendering is already output.
+(See the README.md for more information.)`
                 )
             } else {
                 commandArgs.forEach(extractFromSerialization)
@@ -46,7 +51,7 @@ If the chunk is the serialization of a LionCore Language/M2, then a textual rend
             return
         }
 
-        // TODO  schema, Ecore import
+        // TODO  generate schema, import Ecore
 
         default: {
             console.error(`command "${command}" is not recognized`)
