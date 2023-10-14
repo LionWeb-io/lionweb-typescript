@@ -1,23 +1,16 @@
 # The `cli` package
 
-An NPM package that can be added to a Node.js/NPM codebase as follows:
+This package exposes an executable for use with a CLI.
+It can be used as follows:
 
 ```shell
-$ npm add @lionweb/cli
+$ npx @lionweb/cli <command> <arguments>
 ```
-It exposes an executable for use with a CLI.
-It works as follows:
-
-```shell
-$ node dist/lionweb-cli.js <command> <arguments>
-```
-
-(Turning this into a proper NPM CLI command is a TODO.)
 
 Just running
 
 ```shell
-$ node dist/lionweb-cli.js
+$ npx @lionweb/cli
 ```
 
 produces information about which commands are available.
@@ -34,7 +27,7 @@ $ ./build.sh
 Run the following command to make "extractions" from a serialization chunk (e.g.):
 
 ```shell
-node dist/lionweb-cli.js extract ../artifacts/chunks/languages/lioncore.json
+npx @lionweb/cli extract ../artifacts/chunks/languages/lioncore.json
 ```
 
 This is meant as a way to inspect, reason about, and compare serialization because the format is rather verbose.
