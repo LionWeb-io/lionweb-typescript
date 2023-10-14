@@ -20,16 +20,9 @@ import {
     SingleRef,
     unresolved
 } from "@lionweb/core"
-import {asString, indentWith, NestedString} from "littoral-templates"
-
-
-const indent = indentWith("    ")(1)
-
-/**
- * Include the given `result` only when the `expr` is `true`.
- */
-const cond = (expr: boolean, result: NestedString) =>
-    expr ? [result] : []
+import {asString} from "littoral-templates"
+import {cond, indent} from "./text-generation-utils.js"
+import {Field, tsFromTypeDef, TypeDefModifier} from "./type-def.js"
 
 
 const fieldForFeature = (feature: Feature) => {
@@ -39,13 +32,21 @@ const fieldForFeature = (feature: Feature) => {
     if (feature instanceof Property) {
         return fieldForProperty(feature)
     }
-    return `${feature.name}: unknown;`
+    return {
+        name: feature.name,
+        optional: false,
+        type: `unknown`
+    }
 }
 
 
-const fieldForLink = ({name, type, optional, multiple}: Link) =>
-    `${name}${optional && !multiple ? `?` : ``}: ${type === unresolved ? `unknown` : type.name}${multiple ? `[]` : ``};`
-        // FIXME  this doesn't work cross-language
+const fieldForLink = ({name, type, optional, multiple}: Link): Field =>
+    ({
+        name,
+        optional: optional && !multiple,
+        type: `${type === unresolved ? `unknown` : type.name}${multiple ? `[]` : ``}`
+    })
+    // FIXME  this doesn't work cross-language
 
 
 const tsTypeFor = (datatype: SingleRef<Datatype>) => {
@@ -62,8 +63,12 @@ const tsTypeFor = (datatype: SingleRef<Datatype>) => {
 }
 
 
-const fieldForProperty = ({name, type, optional}: Property) =>
-    `${name}${optional ? `?` : ``}: ${tsTypeFor(type)};`
+const fieldForProperty = ({name, type, optional}: Property): Field =>
+    ({
+        name,
+        optional,
+        type: tsTypeFor(type)
+    })
 
 
 const isINamed = (entity: LanguageEntity) =>
@@ -89,6 +94,7 @@ const typeForEnumeration = (enumeration: Enumeration) =>
         ``
     ]
 
+
 const typeForPrimitiveType = (datatype: PrimitiveType) =>
     [
         `export type ${datatype.name} = ${tsTypeFor(datatype)};`,
@@ -109,12 +115,10 @@ export const tsTypesForLanguage = (language: Language, ...generationOptions: Gen
 
     const typeForConcept = (concept: Concept) => {
 
-        const {name} = concept
         const superTypes = [
             ...(concept.extends ? [concept.extends] : []),
             ...concept.implements
         ]
-        const mixinNames = superTypes.length === 0 ? [`DynamicNode`] : superTypes.map(nameOf)
         const subClassifiers =
             concept.abstract
                 ? (
@@ -123,54 +127,24 @@ export const tsTypesForLanguage = (language: Language, ...generationOptions: Gen
                         : []
                 )
                 : [concept]
-        const hasBody = !concept.abstract || concept.features.length > 0 || subClassifiers.length > 0
 
-        return [
-            `${concept.abstract ? `/** abstract */ ` : ``}export type ${name} = ${mixinNames.join(` & `)}${hasBody ? ` & {` : `;`}`,
-            cond(hasBody, [
-                indent([
-                    cond(subClassifiers.length > 0, `// classifier -> ${subClassifiers.map(nameOf).join(` | `)}`),
-                    cond(concept.features.length > 0, [
-                        `settings: {`,
-                        indent(
-                            concept.features.map(fieldForFeature)
-                        ),
-                        `};`
-                    ]),
-                ]),
-                `};`    // (`{` was already rendered as part of the header)
-            ]),
-            ``
-        ]
+        return tsFromTypeDef({
+            modifier: concept.abstract ? TypeDefModifier.abstract : TypeDefModifier.none,
+            name: concept.name,
+            mixinNames: superTypes.length === 0 ? [`DynamicNode`] : superTypes.map(nameOf),
+            bodyComment: subClassifiers.length > 0 ? `classifier -> ${subClassifiers.map(nameOf).join(` | `)}` : undefined,
+            fields: concept.features.map(fieldForFeature)
+        })
 
     }
 
-    const typeForInterface = (intface: Interface) => {
-
-        const {name} = intface
-        const mixinNames = intface.extends.length === 0 ? [`DynamicNode`] : intface.extends.map(nameOf)
-        const hasBody = intface.features.length > 0
-
-        return [
-            `/** interface */ export type ${name} = ${mixinNames.join(` & `)}${hasBody ? ` & {` : `;`}`,
-            cond(hasBody, [
-                indent([
-                    cond(intface.features.length > 0, [
-                        `settings: {`,
-                        indent(
-                            intface.features.map(fieldForFeature)
-                        ),
-                        `};`
-                    ]),
-                ]),
-                `};`    // (`{` was already rendered as part of the header)
-            ]),
-            ``
-        ]
-
-    }
-
-    // TODO  Refactor previous two functions: 1) transform to an instance of a type def. that captures the code to generate, 2) generate from that
+    const typeForInterface = (intface: Interface) =>
+        tsFromTypeDef({
+            modifier: TypeDefModifier.interface,
+            name: intface.name,
+            mixinNames: intface.extends.length === 0 ? [`DynamicNode`] : intface.extends.map(nameOf),
+            fields: intface.features.map(fieldForFeature)
+        })
 
     const typeForLanguageEntity = (entity: LanguageEntity) => {
         // TODO  Annotation
