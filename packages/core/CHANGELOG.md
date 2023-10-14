@@ -3,7 +3,9 @@
 ## 0.5.0
 
 * Add a type `DynamicINamed`, primarily for generation purposes.
+* Move `asText` and ID checking to `@lionweb/utilities`.
 * Expose a helper function `nameSorted`.
+* Rename `ConceptInterface` &rarr; `Interface`.
 * Change names: `ReadModelAPI` &rarr; `ExtractionFacade`, `WriteModelAPI` &rarr; `InstantiationFacade`.
 * Change name of `concept` fields to `classifier`, and their types (where applicable) to `Classifier`.
 * Fix `license` field in `package.json` to `"Apache-2.0"`.

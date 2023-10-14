@@ -7,13 +7,13 @@ import {
     Annotation,
     Classifier,
     Concept,
-    ConceptInterface,
     Containment,
     Datatype,
     Enumeration,
     Feature,
     IKeyed,
     INamed,
+    Interface,
     isINamed,
     Language,
     LanguageEntity,
@@ -185,7 +185,7 @@ const inheritsFrom = (classifier: Classifier): Classifier[] => {
             ...classifier.implements
         ]
     }
-    if (classifier instanceof ConceptInterface) {
+    if (classifier instanceof Interface) {
         return classifier.extends
     }
     throw new Error(`concept type ${typeof classifier} not handled`)
@@ -199,15 +199,14 @@ const inheritedCycleWith = (classifier: Classifier) =>
 
 
 /**
- * @return *all* super types (through `extends` or `implements`) of the given
- *  {@link Concept concept} or {@link ConceptInterface concept interface}.
+ * @return *all* super types (through `extends` or `implements`) of the given {@link Classifier classifier}.
  */
 const allSuperTypesOf = (classifier: Classifier): Classifier[] =>
     flatMapNonCyclingFollowing(inheritsFrom, inheritsFrom)(classifier)
 
 
 /**
- * @return *all* {@link Feature features} of the given {@link Concept concept} or {@link ConceptInterface concept interface},
+ * @return *all* {@link Feature features} of the given {@link Classifier classifier},
  * including the inherited ones.
  */
 const allFeaturesOf = (classifier: Classifier): Feature[] =>

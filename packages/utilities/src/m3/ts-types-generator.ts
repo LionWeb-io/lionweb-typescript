@@ -2,12 +2,12 @@ import {
     builtinClassifiers,
     builtinPrimitives,
     Concept,
-    ConceptInterface,
     Datatype,
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
     DynamicNode,
     Enumeration,
     Feature,
+    Interface,
     Language,
     LanguageEntity,
     Link,
@@ -72,7 +72,7 @@ const usesINamed = (entity: LanguageEntity): boolean => {
     if (entity instanceof Concept) {
         return entity.implements.some(isINamed)
     }
-    if (entity instanceof ConceptInterface) {
+    if (entity instanceof Interface) {
         return entity.extends.some(isINamed)
     }
     return false
@@ -144,23 +144,23 @@ export const tsTypesForLanguage = (language: Language, ...generationOptions: Gen
 
     }
 
-    const typeForConceptInterface = (conceptInterface: ConceptInterface) => {
+    const typeForInterface = (intface: Interface) => {
 
-        const {name} = conceptInterface
+        const {name} = intface
         const mixinNames = [
-            ...cond(!usesINamed(conceptInterface), [`DynamicNode`]),  // (Yes...this is a slight misuse of the cond function...)
-            ...conceptInterface.extends.map(nameOf)
+            ...cond(!usesINamed(intface), [`DynamicNode`]),  // (Yes...this is a slight misuse of the cond function...)
+            ...intface.extends.map(nameOf)
         ]
-        const hasBody = conceptInterface.features.length > 0
+        const hasBody = intface.features.length > 0
 
         return [
             `/** interface */ export type ${name} = ${mixinNames.join(` & `)}${hasBody ? ` & {` : `;`}`,
             cond(hasBody, [
                 indent([
-                    cond(conceptInterface.features.length > 0, [
+                    cond(intface.features.length > 0, [
                         `settings: {`,
                         indent(
-                            conceptInterface.features.map(fieldForFeature)
+                            intface.features.map(fieldForFeature)
                         ),
                         `};`
                     ]),
@@ -178,11 +178,11 @@ export const tsTypesForLanguage = (language: Language, ...generationOptions: Gen
         if (entity instanceof Concept) {
             return typeForConcept(entity)
         }
-        if (entity instanceof ConceptInterface) {
-            return typeForConceptInterface(entity)
-        }
         if (entity instanceof Enumeration) {
             return typeForEnumeration(entity)
+        }
+        if (entity instanceof Interface) {
+            return typeForInterface(entity)
         }
         if (entity instanceof PrimitiveType) {
             return typeForPrimitiveType(entity)

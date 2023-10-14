@@ -1,10 +1,6 @@
 import {
     asArray,
     builtinPrimitives,
-    checkDefinedData,
-    checkUniqueData,
-    checkUniqueId,
-    checkValidId,
     Classifier,
     Concept,
     duplicatesAmong,
@@ -16,10 +12,16 @@ import {
     LanguageFactory,
     namedsOf,
     PrimitiveType,
-    qualifiedNameOf,
-    wrapIdGen
+    qualifiedNameOf
 } from "@lionweb/core"
-import {hashingIdGen} from "../../id-generation.js"
+import {
+    checkDefinedData,
+    checkUniqueData,
+    checkUniqueId,
+    checkValidId,
+    hashingIdGen,
+    wrapIdGen
+} from "../../id-generation.js"
 import {EClass, EClassifier, EcoreXml, EEnum, EStructuralFeature} from "./types.js"
 
 
@@ -75,7 +77,7 @@ export const asLionCoreLanguage = (ecoreXml: EcoreXml, version: string): Languag
         }
         throw new Error(`don't know how to convert an EClassifier with descriptor "${xsiType}"`)
     }
-    // TODO (#10)  ConceptInterface?
+    // TODO (#10)  Interface?
 
     const convertedEClassifiers: [eClassifier: EClassifier, element: LanguageEntity][] =
         ePackage["eClassifiers"]

@@ -1,19 +1,20 @@
 import {
     Concept,
-    ConceptInterface,
     Containment,
     Enumeration,
     EnumerationLiteral,
     INamed,
+    Interface,
     Language,
     Link,
     M3Node,
+    nameOf,
+    nameSorted,
     PrimitiveType,
-    Property
-} from "./types.js"
-import {nameOf, nameSorted} from "./functions.js"
-import {sortByStringKey} from "../utils/sorting.js"
-import {SingleRef, unresolved} from "../references.js"
+    Property,
+    SingleRef,
+    unresolved
+} from "@lionweb/core"
 
 
 // TODO  use littoral-templates?
@@ -31,13 +32,13 @@ const refAsText = <T extends INamed>(ref: SingleRef<T>): string =>
 const asText = (node: M3Node): string => {
 
     if (node instanceof Concept) {
-        return `${node.partition ? `<<partition>> ` : ``}${node.abstract ? `abstract ` : ``}concept ${node.name}${node.extends === undefined ? `` : ` extends ${refAsText(node.extends)}`}${node.implements.length === 0 ? `` : ` implements ${sortByStringKey(node.implements, nameOf).map(nameOf).join(", ")}`}${node.features.length === 0 ? `` : `
+        return `${node.partition ? `<<partition>> ` : ``}${node.abstract ? `abstract ` : ``}concept ${node.name}${node.extends === undefined ? `` : ` extends ${refAsText(node.extends)}`}${node.implements.length === 0 ? `` : ` implements ${nameSorted(node.implements).map(nameOf).join(", ")}`}${node.features.length === 0 ? `` : `
     features (↓name):
 ${descent(node.features, "\n")}`}`
     }
 
-    if (node instanceof ConceptInterface) {
-        return `concept-interface ${node.name}${node.extends.length === 0 ? `` : ` extends ${nameSorted(node.extends).map(nameOf).join(", ")}`}${node.features.length === 0 ? `` : `
+    if (node instanceof Interface) {
+        return `interface ${node.name}${node.extends.length === 0 ? `` : ` extends ${nameSorted(node.extends).map(nameOf).join(", ")}`}${node.features.length === 0 ? `` : `
     features (↓name):
 ${descent(node.features, "\n")}`}`
     }

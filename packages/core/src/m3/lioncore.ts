@@ -1,7 +1,6 @@
 import {LanguageFactory} from "./factory.js"
 import {builtinClassifiers, builtinPrimitives} from "./builtins.js"
 import {Classifier, EnumerationLiteral, Feature, lioncoreQNameSeparator} from "./types.js"
-import {checkAll} from "../id-generation.js"
 import {currentReleaseVersion} from "../version.js"
 
 
@@ -11,15 +10,14 @@ const lioncoreQName = "LionCore-M3"
 const factory = new LanguageFactory(
     "LionCore.M3",
     currentReleaseVersion,
-    checkAll((qualifiedName) =>
+    (qualifiedName) =>
         "-id-" +
             (qualifiedName === "LionCore.M3"
                 ? lioncoreQName
                 : qualifiedName!
                     .substring(lioncoreQName.length + 1)
                     .replaceAll(".", lioncoreQNameSeparator)
-            )
-    ),
+            ),
     (node) => {
         if (node instanceof Classifier) {
             return node.name
@@ -45,7 +43,7 @@ const {inamed} = builtinClassifiers
 const {booleanDatatype, stringDatatype} = builtinPrimitives
 
 
-const ikeyed = factory.conceptInterface("IKeyed")
+const ikeyed = factory.interface("IKeyed")
     .extending(inamed)
 
 const ikeyed_key = factory.property(ikeyed, "key")
@@ -160,17 +158,17 @@ concept.havingFeatures(
 )
 
 
-const conceptInterface = factory.concept("ConceptInterface", false, classifier)
+const interface_ = factory.concept("Interface", false, classifier)
 
-const conceptInterface_extends = factory.reference(conceptInterface, "extends")
+const interface_extends = factory.reference(interface_, "extends")
     .isOptional()
     .isMultiple()
-    .ofType(conceptInterface)
+    .ofType(interface_)
 
-conceptInterface.havingFeatures(conceptInterface_extends)
+interface_.havingFeatures(interface_extends)
 
-annotation_implements.ofType(conceptInterface)
-concept_implements.ofType(conceptInterface)
+annotation_implements.ofType(interface_)
+concept_implements.ofType(interface_)
 
 
 const dataType = factory.concept("DataType", true, languageEntity)
@@ -227,7 +225,7 @@ lioncore.havingEntities(
     classifier,
     annotation,
     concept,
-    conceptInterface,
+    interface_,
     dataType,
     primitiveType,
     enumeration,
@@ -239,7 +237,7 @@ lioncore.havingEntities(
 export const metaConcepts = {
     annotation,
     concept,
-    conceptInterface,
+    interface: interface_,
     containment,
     enumeration,
     enumerationLiteral,
@@ -258,7 +256,7 @@ export const metaFeatures = {
     concept_partition,
     concept_extends,
     concept_implements,
-    conceptInterface_extends,
+    interface_extends,
     enumeration_literals,
     feature_optional,
     ikeyed_key,

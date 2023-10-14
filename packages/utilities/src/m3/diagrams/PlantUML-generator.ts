@@ -1,15 +1,16 @@
 import {asString, indentWith} from "littoral-templates"
 import {
     Concept,
-    ConceptInterface,
     Containment,
     entitiesSortedByName,
     Enumeration,
     Feature,
+    Interface,
     isRef,
     Language,
     LanguageEntity,
     Link,
+    nameOf,
     nonRelationalFeatures,
     PrimitiveType,
     relationsOf,
@@ -70,7 +71,7 @@ const generateForConcept = ({name, features, abstract: abstract_, extends: exten
         fragments.push(`extends`, extends_.name)
     }
     if (implements_.length > 0) {
-        fragments.push(`implements`, implements_.map((conceptInterface) => conceptInterface.name).sort().join(", "))
+        fragments.push(`implements`, implements_.map(nameOf).sort().join(", "))
     }
     return nonRelationalFeatures_.length === 0
         ? [
@@ -86,7 +87,7 @@ const generateForConcept = ({name, features, abstract: abstract_, extends: exten
 }
 
 
-const generateForConceptInterface = ({name, extends: extends_, features}: ConceptInterface) => {
+const generateForInterface = ({name, extends: extends_, features}: Interface) => {
     const nonRelationalFeatures_ = nonRelationalFeatures(features)
     const fragments: string[] = [`interface`, name]
     if (extends_.length > 0) {
@@ -125,8 +126,8 @@ const generateForElement = (element: LanguageEntity) => {
     if (element instanceof Concept) {
         return generateForConcept(element)
     }
-    if (element instanceof ConceptInterface) {
-        return generateForConceptInterface(element)
+    if (element instanceof Interface) {
+        return generateForInterface(element)
     }
     if (element instanceof PrimitiveType) {
         return generateForPrimitiveType(element)

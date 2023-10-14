@@ -411,7 +411,7 @@
       ],
       "additionalProperties": false
     },
-    "ConceptInterface": {
+    "Interface": {
       "type": "object",
       "properties": {
         "id": {
@@ -421,7 +421,7 @@
           "const": {
             "metamodel": "LionCore_M3",
             "version": "1",
-            "key": "ConceptInterface"
+            "key": "Interface"
           }
         },
         "properties": {
@@ -455,7 +455,7 @@
           "type": "array",
           "items": {},
           "properties": {
-            "ConceptInterface-extends": {
+            "Interface-extends": {
               "$ref": "#/$defs/Ids"
             }
           },
@@ -728,7 +728,7 @@
           "$ref": "#/$defs/Concept"
         },
         {
-          "$ref": "#/$defs/ConceptInterface"
+          "$ref": "#/$defs/Interface"
         },
         {
           "$ref": "#/$defs/PrimitiveType"

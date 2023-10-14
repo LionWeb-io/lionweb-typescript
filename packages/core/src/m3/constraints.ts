@@ -1,4 +1,4 @@
-import {Concept, ConceptInterface, isINamed, Language, M3Concept} from "./types.js"
+import {Classifier, isINamed, Language, M3Concept} from "./types.js"
 import {flatMap, inheritedCycleWith, keyOf, namedsOf, qualifiedNameOf} from "./functions.js"
 import {duplicatesAmong} from "../utils/grouping.js"
 
@@ -34,16 +34,18 @@ export const issuesLanguage = (language: Language): Issue[] =>
                     })
                 }
 
-                if (t instanceof Concept || t instanceof ConceptInterface) {
+                if (t instanceof Classifier) {
                     const cycle = inheritedCycleWith(t)
                     if (cycle.length > 0) {
                         issue(`A ${t.constructor.name} can't inherit (directly or indirectly) from itself, but ${qualifiedNameOf(t)} does so through the following cycle: ${cycle.map((t) => qualifiedNameOf(t)).join(" -> ")}`)
+                            // TODO  check whether it needs to be "a" or "an", or just say "An instance of ..."
                     }
                 }
 
                 if (isINamed(t)) {
                     if (t.name.trim().length === 0) {
                         issue(`A ${t.constructor.name} must have a non-whitespace name`)
+                            // TODO  same as above
                     }
                 }
 

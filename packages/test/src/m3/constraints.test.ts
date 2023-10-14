@@ -10,7 +10,7 @@ describe("constraints (LionCore)", () => {
     it("check that inheritance cycles are detected", () => {
         const factory = new LanguageFactory("metamodel", "1", nanoIdGen())
         const {language} = factory
-        const cis = [0, 1, 2].map((i) => factory.conceptInterface(`conceptInterface ${i}`))
+        const cis = [0, 1, 2].map((i) => factory.interface(`interface ${i}`))
         cis[2].extends.push(cis[1])
         cis[1].extends.push(cis[0])
         cis[0].extends.push(cis[2])
@@ -19,13 +19,13 @@ describe("constraints (LionCore)", () => {
         const issues = issuesLanguage(language)
         deepEqual(issues.length, 3)
         const message1 = issues?.find(({location}) => location === cis[0])?.message
-        deepEqual(message1, `A ConceptInterface can't inherit (directly or indirectly) from itself, but metamodel.conceptInterface 0 does so through the following cycle: metamodel.conceptInterface 0 -> metamodel.conceptInterface 2 -> metamodel.conceptInterface 1 -> metamodel.conceptInterface 0`)
+        deepEqual(message1, `A Interface can't inherit (directly or indirectly) from itself, but metamodel.interface 0 does so through the following cycle: metamodel.interface 0 -> metamodel.interface 2 -> metamodel.interface 1 -> metamodel.interface 0`)
     })
 
     it("check that trivial inheritance cycles are detected", () => {
         const factory = new LanguageFactory("metamodel", "1", nanoIdGen())
         const {language} = factory
-        const ci = factory.conceptInterface(`foo`)
+        const ci = factory.interface(`foo`)
         ci.extends.push(ci)
         language.entities.push(ci)
 
@@ -33,7 +33,7 @@ describe("constraints (LionCore)", () => {
         deepEqual(issues.length, 1)
         const {location, message} = issues[0]
         deepEqual(location, ci)
-        deepEqual(message, `A ConceptInterface can't inherit (directly or indirectly) from itself, but metamodel.foo does so through the following cycle: metamodel.foo -> metamodel.foo`)
+        deepEqual(message, `A Interface can't inherit (directly or indirectly) from itself, but metamodel.foo does so through the following cycle: metamodel.foo -> metamodel.foo`)
     })
 
     it("check that things have names", () => {

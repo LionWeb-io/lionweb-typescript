@@ -1,12 +1,8 @@
 import {writeFileSync} from "fs"
 
-import {asText, Language, lioncore, lioncoreBuiltins, serializeLanguage, serializeNodes} from "@lionweb/core"
-import {libraryLanguage} from "@lionweb/test/dist/languages/library.js"
-import {multiLanguage} from "@lionweb/test/dist/languages/multi.js"
-import {languageWithEnum} from "@lionweb/test/dist/languages/with-enum.js"
-import {libraryExtractionFacade, libraryModel} from "@lionweb/test/dist/instances/library.js"
-import {multiExtractionFacade, multiModel} from "@lionweb/test/dist/instances/multi.js"
+import {Language, lioncore, lioncoreBuiltins, serializeLanguage, serializeNodes} from "@lionweb/core"
 import {
+    asText,
     generateMermaidForLanguage,
     generatePlantUmlForLanguage,
     GenerationOptions,
@@ -14,8 +10,13 @@ import {
     tsTypesForLanguage,
     writeJsonAsFile
 } from "@lionweb/utilities"
-import {diagramPath, instancePath, languagePath} from "./paths.js"
+import {libraryLanguage} from "@lionweb/test/dist/languages/library.js"
+import {multiLanguage} from "@lionweb/test/dist/languages/multi.js"
+import {languageWithEnum} from "@lionweb/test/dist/languages/with-enum.js"
+import {libraryExtractionFacade, libraryModel} from "@lionweb/test/dist/instances/library.js"
+import {multiExtractionFacade, multiModel} from "@lionweb/test/dist/instances/multi.js"
 import {shapesLanguage} from "@lionweb/test/dist/languages/shapes.js"
+import {diagramPath, instancePath, languagePath} from "./paths.js"
 
 
 writeFileSync(diagramPath( "metametamodel-gen.puml"), generatePlantUmlForLanguage(lioncore))

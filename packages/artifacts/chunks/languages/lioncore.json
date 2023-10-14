@@ -58,7 +58,7 @@
             "-id-Classifier",
             "-id-Annotation",
             "-id-Concept",
-            "-id-ConceptInterface",
+            "-id-Interface",
             "-id-DataType",
             "-id-PrimitiveType",
             "-id-Enumeration",
@@ -84,7 +84,7 @@
       "classifier": {
         "language": "LionCore-M3",
         "version": "2023.1",
-        "key": "ConceptInterface"
+        "key": "Interface"
       },
       "properties": [
         {
@@ -121,7 +121,7 @@
           "reference": {
             "language": "LionCore-M3",
             "version": "2023.1",
-            "key": "ConceptInterface-extends"
+            "key": "Interface-extends"
           },
           "targets": [
             {
@@ -1305,8 +1305,8 @@
           },
           "targets": [
             {
-              "resolveInfo": "ConceptInterface",
-              "reference": "-id-ConceptInterface"
+              "resolveInfo": "Interface",
+              "reference": "-id-Interface"
             }
           ]
         }
@@ -1606,8 +1606,8 @@
           },
           "targets": [
             {
-              "resolveInfo": "ConceptInterface",
-              "reference": "-id-ConceptInterface"
+              "resolveInfo": "Interface",
+              "reference": "-id-Interface"
             }
           ]
         }
@@ -1615,7 +1615,7 @@
       "parent": "-id-Concept"
     },
     {
-      "id": "-id-ConceptInterface",
+      "id": "-id-Interface",
       "classifier": {
         "language": "LionCore-M3",
         "version": "2023.1",
@@ -1644,7 +1644,7 @@
             "version": "2023.1",
             "key": "IKeyed-key"
           },
-          "value": "ConceptInterface"
+          "value": "Interface"
         },
         {
           "property": {
@@ -1652,7 +1652,7 @@
             "version": "2023.1",
             "key": "LionCore-builtins-INamed-name"
           },
-          "value": "ConceptInterface"
+          "value": "Interface"
         }
       ],
       "children": [
@@ -1663,7 +1663,7 @@
             "key": "Classifier-features"
           },
           "children": [
-            "-id-ConceptInterface-extends"
+            "-id-Interface-extends"
           ]
         }
       ],
@@ -1693,7 +1693,7 @@
       "parent": "-id-LionCore-M3"
     },
     {
-      "id": "-id-ConceptInterface-extends",
+      "id": "-id-Interface-extends",
       "classifier": {
         "language": "LionCore-M3",
         "version": "2023.1",
@@ -1722,7 +1722,7 @@
             "version": "2023.1",
             "key": "IKeyed-key"
           },
-          "value": "ConceptInterface-extends"
+          "value": "Interface-extends"
         },
         {
           "property": {
@@ -1743,13 +1743,13 @@
           },
           "targets": [
             {
-              "resolveInfo": "ConceptInterface",
-              "reference": "-id-ConceptInterface"
+              "resolveInfo": "Interface",
+              "reference": "-id-Interface"
             }
           ]
         }
       ],
-      "parent": "-id-ConceptInterface"
+      "parent": "-id-Interface"
     },
     {
       "id": "-id-DataType",

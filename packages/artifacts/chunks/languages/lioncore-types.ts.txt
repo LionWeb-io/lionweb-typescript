@@ -18,7 +18,7 @@ export type Annotation = DynamicNode & {
         multiple?: boolean;
         annotates?: Classifier;
         extends?: Annotation;
-        implements: ConceptInterface[];
+        implements: Interface[];
     };
 };
 
@@ -34,14 +34,7 @@ export type Concept = DynamicNode & {
         abstract: boolean;
         partition: boolean;
         extends?: Concept;
-        implements: ConceptInterface[];
-    };
-};
-
-export type ConceptInterface = DynamicNode & {
-    classifier: "ConceptInterface";
-    settings: {
-        extends: ConceptInterface[];
+        implements: Interface[];
     };
 };
 
@@ -71,6 +64,13 @@ export type EnumerationLiteral = DynamicNode & IKeyed & {
 /** interface */ export type IKeyed = INamed & {
     settings: {
         key: string;
+    };
+};
+
+export type Interface = DynamicNode & {
+    classifier: "Interface";
+    settings: {
+        extends: Interface[];
     };
 };
 

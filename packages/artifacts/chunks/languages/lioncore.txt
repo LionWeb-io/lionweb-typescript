@@ -6,7 +6,7 @@ language LionCore.M3
             features (↓name):
                 annotates -> Classifier?
                 extends -> Annotation?
-                implements -> ConceptInterface[0..*]
+                implements -> Interface[0..*]
                 multiple: Boolean?
 
         abstract concept Classifier extends LanguageEntity
@@ -17,12 +17,8 @@ language LionCore.M3
             features (↓name):
                 abstract: Boolean
                 extends -> Concept?
-                implements -> ConceptInterface[0..*]
+                implements -> Interface[0..*]
                 partition: Boolean
-
-        concept ConceptInterface extends Classifier
-            features (↓name):
-                extends -> ConceptInterface[0..*]
 
         concept Containment extends Link
 
@@ -38,9 +34,13 @@ language LionCore.M3
             features (↓name):
                 optional: Boolean
 
-        concept-interface IKeyed extends INamed
+        interface IKeyed extends INamed
             features (↓name):
                 key: String
+
+        concept Interface extends Classifier
+            features (↓name):
+                extends -> Interface[0..*]
 
         <<partition>> concept Language implements IKeyed
             features (↓name):

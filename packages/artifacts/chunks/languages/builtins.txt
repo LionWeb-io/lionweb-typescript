@@ -4,7 +4,7 @@ language LionCore-builtins
 
         primitive type Boolean
 
-        concept-interface INamed
+        interface INamed
             features (↓name):
                 name: String
 

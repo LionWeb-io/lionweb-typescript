@@ -1,14 +1,8 @@
 import {writeFileSync} from "fs"
 import {extname} from "path"
 
-import {
-    asText,
-    currentSerializationFormatVersion,
-    deserializeLanguage,
-    lioncoreQName,
-    SerializationChunk
-} from "@lionweb/core"
-import {shortenedSerialization, sortedSerialization, readFileAsJson, writeJsonAsFile} from "@lionweb/utilities"
+import {currentSerializationFormatVersion, deserializeLanguage, lioncoreQName, SerializationChunk} from "@lionweb/core"
+import {asText, readFileAsJson, shortenedSerialization, sortedSerialization, writeJsonAsFile} from "@lionweb/utilities"
 
 
 const isRecord = (json: unknown): json is Record<string, unknown> =>
