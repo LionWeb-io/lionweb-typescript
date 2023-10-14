@@ -6,23 +6,25 @@ import {generateTsTypesWith} from "./m3/ts-types-generator.js"
 
 
 const main = (args: string[])=> {
-    if (args.length <= 2) {
-        console.log(
-`lioncore-cli is a LionWeb utility around LionWeb-TypeScript
-
-Usage: $ lioncore-cli <command> <arguments>
-
-Available commands are:
-
-    extract
-`
-        )
-        return
-    }
 
     const DIAGRAM_COMMAND = "diagram"
     const EXTRACT_COMMAND = "extract"
     const GENERATE_TS_TYPES_COMMAND = "generate-ts-types"
+    const commands = [DIAGRAM_COMMAND, EXTRACT_COMMAND, GENERATE_TS_TYPES_COMMAND]
+
+    if (args.length <= 2) {
+        console.log(
+            `lionweb-cli is a LionWeb utility around LionWeb-TypeScript
+
+Usage: $ npx @lionweb/cli <command> <arguments>
+
+Available commands are:
+
+${commands.map((command) => `    ${command}\n`).join(``)}
+`
+        )
+        return
+    }
 
     const command = args[2]
     const commandArgs = args.slice(3)
