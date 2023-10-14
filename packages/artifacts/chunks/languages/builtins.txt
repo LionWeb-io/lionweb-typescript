@@ -1,0 +1,18 @@
+language LionCore-builtins
+    version: 2023.1
+    entities (↓name):
+
+        primitive type Boolean
+
+        interface INamed
+            features (↓name):
+                name: String
+
+        primitive type Integer
+
+        primitive type JSON
+
+        abstract concept Node
+
+        primitive type String
+

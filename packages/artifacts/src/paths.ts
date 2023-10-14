@@ -11,6 +11,3 @@ const languagesPath = join(chunksPath, "languages")
 export const instancePath = (fileName: string) => join(instancesPath, fileName)
 export const languagePath = (fileName: string) => join(languagesPath, fileName)
 
-export const builtinsPath = languagePath("builtins.json")
-export const lioncorePath = languagePath("lioncore.json")
-
