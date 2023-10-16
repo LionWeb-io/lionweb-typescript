@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "LionCore.M3-serialization",
-  "title": "Serialization format specific to LionCore.M3",
+  "$id": "LionCore_M3-serialization",
+  "title": "Serialization format specific to LionCore_M3",
   "$ref": "#/$defs/SerializedModel",
   "$defs": {
     "SerializedModel": {

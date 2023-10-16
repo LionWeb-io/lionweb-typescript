@@ -37,7 +37,7 @@
             "version": "2023.1",
             "key": "LionCore-builtins-INamed-name"
           },
-          "value": "LionCore-builtins"
+          "value": "LionCore_builtins"
         }
       ],
       "containments": [

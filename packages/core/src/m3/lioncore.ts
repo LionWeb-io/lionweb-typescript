@@ -7,7 +7,7 @@ const lioncoreKey = "LionCore-M3"
 
 
 const factory = new LanguageFactory(
-    "LionCore.M3",
+    "LionCore_M3",
     currentReleaseVersion,
     (...names) =>
         "-id-" + (
@@ -17,6 +17,10 @@ const factory = new LanguageFactory(
         ),
     (...names) => names.slice(1).join("-")
 )
+/*
+ * ID: `-id-${key}`
+ * key: qualified name _without_ "LionCore_M3", dash-separated
+ */
 
 
 /**
