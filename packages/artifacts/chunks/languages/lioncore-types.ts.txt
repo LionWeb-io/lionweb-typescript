@@ -3,7 +3,7 @@
 
 /*
  * language's metadata:
- *     name:    LionCore.M3
+ *     name:    LionCore_M3
  *     version: 2023.1
  */
 
@@ -104,4 +104,4 @@ export type Reference = Link & {
     // classifier -> Reference
 };
 
-export type LionCore.M3Node = Annotation | Concept | Containment | Enumeration | EnumerationLiteral | Interface | Language | PrimitiveType | Property | Reference;
+export type LionCore_M3Node = Annotation | Concept | Containment | Enumeration | EnumerationLiteral | Interface | Language | PrimitiveType | Property | Reference;

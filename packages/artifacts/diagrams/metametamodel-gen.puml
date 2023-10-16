@@ -1,7 +1,7 @@
 @startuml
 hide empty members
 
-' qualified name: "LionCore.M3"
+' qualified name: "LionCore_M3"
 
 
 class Annotation extends Classifier {

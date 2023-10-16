@@ -1,18 +1,23 @@
 import {LanguageFactory} from "./factory.js"
 import {lioncoreBuiltinsKey, Property} from "./types.js"
-import {concatenator} from "../utils/string-mapping.js"
+import {StringsMapper} from "../utils/string-mapping.js"
 import {currentReleaseVersion} from "../version.js"
 
 
-const lioncoreBuiltinsIdAndKeyGenerator = concatenator("-")
+const lioncoreBuiltinsIdAndKeyGenerator: StringsMapper =
+    (...names) => [lioncoreBuiltinsKey, ...names.slice(1)].join("-")
 
 
 const factory = new LanguageFactory(
-    lioncoreBuiltinsKey,
+    "LionCore_builtins",
     currentReleaseVersion,
     lioncoreBuiltinsIdAndKeyGenerator,
     lioncoreBuiltinsIdAndKeyGenerator
 )
+/*
+ * ID == key: `LionCore-builtins-${qualified name _without_ "LionCore-builtins", dash-separated}`
+ */
+
 
 /**
  * Definition of a LionCore language that serves as a standard library of built-in primitive types.

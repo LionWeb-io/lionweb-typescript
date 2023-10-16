@@ -1,4 +1,4 @@
-language LionCore.M3
+language LionCore_M3
     version: 2023.1
     entities (↓name):
 

@@ -1,4 +1,4 @@
-language LionCore-builtins
+language LionCore_builtins
     version: 2023.1
     entities (↓name):
 
