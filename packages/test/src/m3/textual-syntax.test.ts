@@ -15,7 +15,7 @@ describe("textual syntax (LionCore)", () => {
     version: 1
     entities (↓name):
 
-        enumeration enum
+        enumeration MyEnum
             literals:
                 lit1
                 lit2

@@ -2,7 +2,7 @@ language language-with-enum
     version: 1
     entities (↓name):
 
-        enumeration enum
+        enumeration MyEnum
             literals:
                 lit1
                 lit2
