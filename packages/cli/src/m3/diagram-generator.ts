@@ -14,7 +14,7 @@ export const diagramFromSerialization = async (path: string) => {
         writeFileSync(extlessPath + ".md", generateMermaidForLanguage(language))
         console.log(`generated diagrams: "${path}" -> "${extlessPath}"`)
     } catch (_) {
-        console.error(`"${path}" is not a valid JSON file`)
+        console.error(`"${path}" does not point to a valid JSON serialization of a language`)
     }
 }
 

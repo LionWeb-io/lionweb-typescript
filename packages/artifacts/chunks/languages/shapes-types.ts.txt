@@ -1,0 +1,48 @@
+// Warning: this file is generated!
+// Modifying it by hand it useless at best, and sabotage at worst.
+
+/*
+ * language's metadata:
+ *     name:    Shapes
+ *     version: 1
+ */
+
+import {DynamicNode, DynamicINamed as INamed} from "@lionweb/core";
+
+export type Circle = Shape & {
+    // classifier -> Circle
+    settings: {
+        r: number;
+        center: Coord;
+    };
+};
+
+export type Coord = DynamicNode & {
+    // classifier -> Coord
+    settings: {
+        x: number;
+        y: number;
+        z: number;
+    };
+};
+
+export type Geometry = DynamicNode & {
+    // classifier -> Geometry
+    settings: {
+        shapes: Shape[];
+    };
+};
+
+export type Line = Shape & {
+    // classifier -> Line
+    settings: {
+        start: Coord;
+        end: Coord;
+    };
+};
+
+/** abstract */ export type Shape = INamed & {
+    // classifier -> Circle | Line
+};
+
+export type ShapesNode = Circle | Coord | Geometry | Line;

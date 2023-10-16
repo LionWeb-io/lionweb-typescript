@@ -1,0 +1,27 @@
+// Warning: this file is generated!
+// Modifying it by hand it useless at best, and sabotage at worst.
+
+/*
+ * language's metadata:
+ *     name:    LionCore-builtins
+ *     version: 2023.1
+ */
+
+import {DynamicNode} from "@lionweb/core";
+
+export type Boolean = boolean;
+
+/** interface */ export type INamed = DynamicNode & {
+    settings: {
+        name: string;
+    };
+};
+
+export type Integer = number;
+
+export type JSON = unknown;
+
+/** abstract */ export type Node = DynamicNode;
+
+export type String = string;
+

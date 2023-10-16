@@ -245,11 +245,21 @@ const classBasedClassifierDeducerFor = <NT extends Node>(language: Language): Cl
 }
 
 
+/**
+ * @return all {@link Concept concepts} defined in the given {@link Language language}.
+ */
+const conceptsOf = (language: Language): Concept[] =>
+    language.entities
+        .filter((entity) => entity instanceof Concept)
+        .map((entity) => entity as Concept)
+
+
 export {
     allFeaturesOf,
     allSuperTypesOf,
     classBasedClassifierDeducerFor,
     concatenateNamesOf,
+    conceptsOf,
     containeds,
     containmentChain,
     entitiesSortedByName,

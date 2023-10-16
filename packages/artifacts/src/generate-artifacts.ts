@@ -1,18 +1,21 @@
 import {writeFileSync} from "fs"
 
 import {Language, lioncore, lioncoreBuiltins, serializeLanguage, serializeNodes} from "@lionweb/core"
+import {
+    asText,
+    generateMermaidForLanguage,
+    generatePlantUmlForLanguage,
+    GenerationOptions,
+    schemaFor,
+    tsTypesForLanguage,
+    writeJsonAsFile
+} from "@lionweb/utilities"
 import {libraryLanguage} from "@lionweb/test/dist/languages/library.js"
 import {multiLanguage} from "@lionweb/test/dist/languages/multi.js"
 import {languageWithEnum} from "@lionweb/test/dist/languages/with-enum.js"
 import {libraryExtractionFacade, libraryModel} from "@lionweb/test/dist/instances/library.js"
 import {multiExtractionFacade, multiModel} from "@lionweb/test/dist/instances/multi.js"
-import {
-    asText,
-    generateMermaidForLanguage,
-    generatePlantUmlForLanguage,
-    schemaFor,
-    writeJsonAsFile
-} from "@lionweb/utilities"
+import {shapesLanguage} from "@lionweb/test/dist/languages/shapes.js"
 import {diagramPath, instancePath, languagePath} from "./paths.js"
 
 
@@ -21,15 +24,20 @@ writeFileSync(diagramPath("metametamodel-gen.md"), generateMermaidForLanguage(li
 console.log(`generated diagrams for LionCore M3`)
 
 
-const saveLanguageFiles = (language: Language, name: string) => {
+const saveLanguageFiles = (language: Language, name: string, ...generationOptions: GenerationOptions[]) => {
     writeJsonAsFile(languagePath(`${name}.json`), serializeLanguage(language))
     writeFileSync(languagePath(`${name}.txt`), asText(language))
+    writeFileSync(languagePath(`${name}-types.ts.txt`), tsTypesForLanguage(language, ...generationOptions))
+        // (Generate with a '.txt' file extension to avoid it getting picked up by the compiler.)
     console.log(`saved files for ${language.name} M2`)
 }
 
 
 saveLanguageFiles(lioncore, "lioncore")
 saveLanguageFiles(lioncoreBuiltins, "builtins")
+
+
+saveLanguageFiles(shapesLanguage, "shapes", GenerationOptions.assumeSealed)
 
 
 saveLanguageFiles(libraryLanguage, "library")

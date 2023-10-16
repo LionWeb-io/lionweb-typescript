@@ -2,6 +2,7 @@
 
 ## 0.5.0
 
+* Add a type `DynamicINamed` and an M3-function `conceptsOf`, primarily for generation purposes.
 * Move `asText` and ID checking to `@lionweb/utilities`.
 * Expose a helper function `nameSorted`.
 * Rename `ConceptInterface` &rarr; `Interface`.

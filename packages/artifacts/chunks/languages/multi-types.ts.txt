@@ -1,0 +1,19 @@
+// Warning: this file is generated!
+// Modifying it by hand it useless at best, and sabotage at worst.
+
+/*
+ * language's metadata:
+ *     name:    multi
+ *     version: 1
+ */
+
+import {DynamicNode} from "@lionweb/core";
+
+export type Container = DynamicNode & {
+    // classifier -> Container
+    settings: {
+        libraries: Library[];
+    };
+};
+
+export type multiNode = Container;

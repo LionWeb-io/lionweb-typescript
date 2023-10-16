@@ -1,0 +1,15 @@
+// Warning: this file is generated!
+// Modifying it by hand it useless at best, and sabotage at worst.
+
+/*
+ * language's metadata:
+ *     name:    language-with-enum
+ *     version: 1
+ */
+
+import {DynamicNode} from "@lionweb/core";
+
+enum MyEnum {
+    lit1, lit2
+}
+
