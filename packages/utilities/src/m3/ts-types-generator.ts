@@ -2,6 +2,7 @@ import {
     builtinClassifiers,
     builtinPrimitives,
     Concept,
+    conceptsOf,
     Datatype,
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
     DynamicNode,
@@ -69,7 +70,7 @@ const isINamed = (entity: LanguageEntity) =>
     entity === builtinClassifiers.inamed
 
 
-const usesINamed = (entity: LanguageEntity): boolean => {
+const usesINamedDirectly = (entity: LanguageEntity): boolean => {
     if (entity instanceof Concept) {
         return entity.implements.some(isINamed)
     }
@@ -109,18 +110,17 @@ export const tsTypesForLanguage = (language: Language, ...generationOptions: Gen
     const typeForConcept = (concept: Concept) => {
 
         const {name} = concept
-        const mixinNames = [
-            ...cond(!usesINamed(concept), [`DynamicNode`]),  // (Yes...this is a slight misuse of the cond function...)
-            ...concept.implements.map(nameOf)
+        const superTypes = [
+            ...(concept.extends ? [concept.extends] : []),
+            ...concept.implements
         ]
+        const mixinNames = superTypes.length === 0 ? [`DynamicNode`] : superTypes.map(nameOf)
         const subClassifiers =
             concept.abstract
                 ? (
-                    generationOptions.indexOf(GenerationOptions.assumeSealed) === -1
-                        ? []
-                        : language.entities
-                            .filter((entity) => entity instanceof Concept && entity.extends === concept)
-                                // TODO  (move to an appropriate function in core/src/m3/functions.ts)
+                    generationOptions.indexOf(GenerationOptions.assumeSealed) > -1
+                        ? conceptsOf(language).filter((entity) => entity.extends === concept)
+                        : []
                 )
                 : [concept]
         const hasBody = !concept.abstract || concept.features.length > 0 || subClassifiers.length > 0
@@ -148,10 +148,7 @@ export const tsTypesForLanguage = (language: Language, ...generationOptions: Gen
     const typeForInterface = (intface: Interface) => {
 
         const {name} = intface
-        const mixinNames = [
-            ...cond(!usesINamed(intface), [`DynamicNode`]),  // (Yes...this is a slight misuse of the cond function...)
-            ...intface.extends.map(nameOf)
-        ]
+        const mixinNames = intface.extends.length === 0 ? [`DynamicNode`] : intface.extends.map(nameOf)
         const hasBody = intface.features.length > 0
 
         return [
@@ -196,8 +193,8 @@ export const tsTypesForLanguage = (language: Language, ...generationOptions: Gen
     }
 
     const globalImports = [
-        ...cond(!language.entities.every(usesINamed), `DynamicNode`),
-        ...cond(language.entities.some(usesINamed), `DynamicINamed as INamed`)     // (rename import so we don't have to map just the one)
+        ...cond(!language.entities.every(usesINamedDirectly), `DynamicNode`),
+        ...cond(language.entities.some(usesINamedDirectly), `DynamicINamed as INamed`)     // (rename import so we don't have to map just the one)
     ]
 
     return asString(

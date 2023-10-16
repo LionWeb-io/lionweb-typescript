@@ -23,7 +23,7 @@ enum BookType {
     Normal, Special
 }
 
-export type GuideBookWriter = DynamicNode & {
+export type GuideBookWriter = Writer & {
     // classifier -> GuideBookWriter
     settings: {
         countries: string;
@@ -38,7 +38,7 @@ export type Library = DynamicNode & {
     };
 };
 
-export type SpecialistBookWriter = DynamicNode & {
+export type SpecialistBookWriter = Writer & {
     // classifier -> SpecialistBookWriter
     settings: {
         subject: string;

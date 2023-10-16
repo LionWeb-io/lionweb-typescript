@@ -9,7 +9,7 @@
 
 import {DynamicNode, DynamicINamed as INamed} from "@lionweb/core";
 
-export type Annotation = DynamicNode & {
+export type Annotation = Classifier & {
     // classifier -> Annotation
     settings: {
         multiple?: boolean;
@@ -19,13 +19,13 @@ export type Annotation = DynamicNode & {
     };
 };
 
-/** abstract */ export type Classifier = DynamicNode & {
+/** abstract */ export type Classifier = LanguageEntity & {
     settings: {
         features: Feature[];
     };
 };
 
-export type Concept = DynamicNode & {
+export type Concept = Classifier & {
     // classifier -> Concept
     settings: {
         abstract: boolean;
@@ -35,24 +35,24 @@ export type Concept = DynamicNode & {
     };
 };
 
-export type Containment = DynamicNode & {
+export type Containment = Link & {
     // classifier -> Containment
 };
 
-/** abstract */ export type DataType = DynamicNode;
+/** abstract */ export type DataType = LanguageEntity;
 
-export type Enumeration = DynamicNode & {
+export type Enumeration = DataType & {
     // classifier -> Enumeration
     settings: {
         literals: EnumerationLiteral[];
     };
 };
 
-export type EnumerationLiteral = DynamicNode & IKeyed & {
+export type EnumerationLiteral = IKeyed & {
     // classifier -> EnumerationLiteral
 };
 
-/** abstract */ export type Feature = DynamicNode & IKeyed & {
+/** abstract */ export type Feature = IKeyed & {
     settings: {
         optional: boolean;
     };
@@ -64,14 +64,14 @@ export type EnumerationLiteral = DynamicNode & IKeyed & {
     };
 };
 
-export type Interface = DynamicNode & {
+export type Interface = Classifier & {
     // classifier -> Interface
     settings: {
         extends: Interface[];
     };
 };
 
-export type Language = DynamicNode & IKeyed & {
+export type Language = IKeyed & {
     // classifier -> Language
     settings: {
         version: string;
@@ -80,27 +80,27 @@ export type Language = DynamicNode & IKeyed & {
     };
 };
 
-/** abstract */ export type LanguageEntity = DynamicNode & IKeyed;
+/** abstract */ export type LanguageEntity = IKeyed;
 
-/** abstract */ export type Link = DynamicNode & {
+/** abstract */ export type Link = Feature & {
     settings: {
         multiple: boolean;
         type: Classifier;
     };
 };
 
-export type PrimitiveType = DynamicNode & {
+export type PrimitiveType = DataType & {
     // classifier -> PrimitiveType
 };
 
-export type Property = DynamicNode & {
+export type Property = Feature & {
     // classifier -> Property
     settings: {
         type: DataType;
     };
 };
 
-export type Reference = DynamicNode & {
+export type Reference = Link & {
     // classifier -> Reference
 };
 

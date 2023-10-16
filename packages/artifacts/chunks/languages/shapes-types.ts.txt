@@ -9,7 +9,7 @@
 
 import {DynamicNode, DynamicINamed as INamed} from "@lionweb/core";
 
-export type Circle = DynamicNode & {
+export type Circle = Shape & {
     // classifier -> Circle
     settings: {
         r: number;
@@ -33,7 +33,7 @@ export type Geometry = DynamicNode & {
     };
 };
 
-export type Line = DynamicNode & {
+export type Line = Shape & {
     // classifier -> Line
     settings: {
         start: Coord;
