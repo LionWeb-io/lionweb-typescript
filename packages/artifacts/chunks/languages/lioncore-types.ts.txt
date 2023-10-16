@@ -1,19 +1,16 @@
 // Warning: this file is generated!
 // Modifying it by hand it useless at best, and sabotage at worst.
 
-
 /*
  * language's metadata:
  *     name:    LionCore.M3
  *     version: 2023.1
  */
 
-
 import {DynamicNode, DynamicINamed as INamed} from "@lionweb/core";
 
-
 export type Annotation = DynamicNode & {
-    classifier: "Annotation";
+    // classifier -> Annotation
     settings: {
         multiple?: boolean;
         annotates?: Classifier;
@@ -29,7 +26,7 @@ export type Annotation = DynamicNode & {
 };
 
 export type Concept = DynamicNode & {
-    classifier: "Concept";
+    // classifier -> Concept
     settings: {
         abstract: boolean;
         partition: boolean;
@@ -39,20 +36,20 @@ export type Concept = DynamicNode & {
 };
 
 export type Containment = DynamicNode & {
-    classifier: "Containment";
+    // classifier -> Containment
 };
 
 /** abstract */ export type DataType = DynamicNode;
 
 export type Enumeration = DynamicNode & {
-    classifier: "Enumeration";
+    // classifier -> Enumeration
     settings: {
         literals: EnumerationLiteral[];
     };
 };
 
 export type EnumerationLiteral = DynamicNode & IKeyed & {
-    classifier: "EnumerationLiteral";
+    // classifier -> EnumerationLiteral
 };
 
 /** abstract */ export type Feature = DynamicNode & IKeyed & {
@@ -68,14 +65,14 @@ export type EnumerationLiteral = DynamicNode & IKeyed & {
 };
 
 export type Interface = DynamicNode & {
-    classifier: "Interface";
+    // classifier -> Interface
     settings: {
         extends: Interface[];
     };
 };
 
 export type Language = DynamicNode & IKeyed & {
-    classifier: "Language";
+    // classifier -> Language
     settings: {
         version: string;
         entities: LanguageEntity[];
@@ -93,17 +90,18 @@ export type Language = DynamicNode & IKeyed & {
 };
 
 export type PrimitiveType = DynamicNode & {
-    classifier: "PrimitiveType";
+    // classifier -> PrimitiveType
 };
 
 export type Property = DynamicNode & {
-    classifier: "Property";
+    // classifier -> Property
     settings: {
         type: DataType;
     };
 };
 
 export type Reference = DynamicNode & {
-    classifier: "Reference";
+    // classifier -> Reference
 };
 
+export type LionCore.M3Node = Annotation | Concept | Containment | Enumeration | EnumerationLiteral | Interface | Language | PrimitiveType | Property | Reference;

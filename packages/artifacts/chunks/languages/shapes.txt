@@ -1,4 +1,4 @@
-language ShapesLanguage
+language Shapes
     version: 1
     entities (↓name):
 

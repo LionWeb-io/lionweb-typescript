@@ -2,7 +2,7 @@ import {builtinClassifiers, builtinPrimitives, LanguageFactory} from "@lionweb/c
 import {hashingIdGen} from "@lionweb/utilities"
 
 
-const factory = new LanguageFactory("ShapesLanguage", "1", hashingIdGen({encoding: "base64"}))
+const factory = new LanguageFactory("Shapes", "1", hashingIdGen({ encoding: "base64" }))
 export const shapesLanguage = factory.language
 
 const Geometry = factory.concept("Geometry", false)

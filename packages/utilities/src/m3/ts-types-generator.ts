@@ -8,6 +8,7 @@ import {
     Enumeration,
     Feature,
     Interface,
+    isConcrete,
     Language,
     LanguageEntity,
     Link,
@@ -128,7 +129,7 @@ export const tsTypesForLanguage = (language: Language, ...generationOptions: Gen
             `${concept.abstract ? `/** abstract */ ` : ``}export type ${name} = ${mixinNames.join(` & `)}${hasBody ? ` & {` : `;`}`,
             cond(hasBody, [
                 indent([
-                    cond(subClassifiers.length > 0, `classifier: ${subClassifiers.map((classifier) => `"${classifier.name}"`).join(` | `)};`),
+                    cond(subClassifiers.length > 0, `// classifier -> ${subClassifiers.map(nameOf).join(` | `)}`),
                     cond(concept.features.length > 0, [
                         `settings: {`,
                         indent(
@@ -175,6 +176,7 @@ export const tsTypesForLanguage = (language: Language, ...generationOptions: Gen
     // TODO  Refactor previous two functions: 1) transform to an instance of a type def. that captures the code to generate, 2) generate from that
 
     const typeForLanguageEntity = (entity: LanguageEntity) => {
+        // TODO  Annotation
         if (entity instanceof Concept) {
             return typeForConcept(entity)
         }
@@ -187,7 +189,6 @@ export const tsTypesForLanguage = (language: Language, ...generationOptions: Gen
         if (entity instanceof PrimitiveType) {
             return typeForPrimitiveType(entity)
         }
-        // TODO  Annotation, ConceptInterface
         return [
             `// unhandled language entity <${entity.constructor.name}>"${entity.name}"`,
             ``
@@ -204,18 +205,16 @@ export const tsTypesForLanguage = (language: Language, ...generationOptions: Gen
             `// Warning: this file is generated!`,
             `// Modifying it by hand it useless at best, and sabotage at worst.`,
             ``,
-            ``,
             `/*
  * language's metadata:
  *     name:    ${language.name}
  *     version: ${language.version}
  */`,
             ``,
-            ``,
             cond(globalImports.length > 0, `import {${globalImports.join(`, `)}} from "@lionweb/core";`),
             ``,
-            ``,
-            nameSorted(language.entities).map(typeForLanguageEntity)
+            nameSorted(language.entities).map(typeForLanguageEntity),
+            `export type ${language.name}Node = ${nameSorted(language.entities.filter(isConcrete)).map(nameOf).join(` | `)};`
         ]
     )
 }
