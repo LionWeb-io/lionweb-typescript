@@ -170,6 +170,7 @@ export const tsTypesForLanguage = (language: Language, ...generationOptions: Gen
         ...cond(!language.entities.every(usesINamedDirectly), `DynamicNode`),
         ...cond(language.entities.some(usesINamedDirectly), `DynamicINamed as INamed`)     // (rename import so we don't have to map just the one)
     ]
+    const concreteClassifiers = language.entities.filter(isConcrete)
 
     return asString(
         [
@@ -185,7 +186,10 @@ export const tsTypesForLanguage = (language: Language, ...generationOptions: Gen
             cond(globalImports.length > 0, `import {${globalImports.join(`, `)}} from "@lionweb/core";`),
             ``,
             nameSorted(language.entities).map(typeForLanguageEntity),
-            `export type ${language.name}Node = ${nameSorted(language.entities.filter(isConcrete)).map(nameOf).join(` | `)};`
+            cond(
+                concreteClassifiers.length > 0,
+                `export type ${language.name}Node = ${nameSorted(concreteClassifiers).map(nameOf).join(` | `)};`
+            )
         ]
     )
 }

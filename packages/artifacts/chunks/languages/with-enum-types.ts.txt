@@ -9,8 +9,7 @@
 
 import {DynamicNode} from "@lionweb/core";
 
-enum enum {
+enum MyEnum {
     lit1, lit2
 }
 
-export type language-with-enumNode = ;

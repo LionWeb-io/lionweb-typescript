@@ -4,7 +4,7 @@ import {hashingIdGen} from "@lionweb/utilities"
 
 const factory = new LanguageFactory("language-with-enum", "1", hashingIdGen())
 
-const enum_ = factory.enumeration("enum")
+const enum_ = factory.enumeration("MyEnum")
 enum_.havingLiterals(
         factory.enumerationLiteral(enum_, "lit1"),
         factory.enumerationLiteral(enum_, "lit2"),

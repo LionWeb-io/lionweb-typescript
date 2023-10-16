@@ -48,7 +48,7 @@
             "key": "Language-entities"
           },
           "children": [
-            "Qi7Wpg6M_NYxbkYHsjMNAM0WOQe37Y5HAQtYekPdoIY"
+            "bQIrsWfaMLVtBh8a8ukY6TAD4dkFSv-wbfM2AsM2oUA"
           ]
         }
       ],
@@ -65,7 +65,7 @@
       "parent": null
     },
     {
-      "id": "Qi7Wpg6M_NYxbkYHsjMNAM0WOQe37Y5HAQtYekPdoIY",
+      "id": "bQIrsWfaMLVtBh8a8ukY6TAD4dkFSv-wbfM2AsM2oUA",
       "classifier": {
         "language": "LionCore-M3",
         "version": "2023.1",
@@ -78,7 +78,7 @@
             "version": "2023.1",
             "key": "IKeyed-key"
           },
-          "value": "enum"
+          "value": "MyEnum"
         },
         {
           "property": {
@@ -86,7 +86,7 @@
             "version": "2023.1",
             "key": "LionCore-builtins-INamed-name"
           },
-          "value": "enum"
+          "value": "MyEnum"
         }
       ],
       "children": [
@@ -97,8 +97,8 @@
             "key": "Enumeration-literals"
           },
           "children": [
-            "bfdoazbCiEXFHVQ3Ei5Nh-IbR-sWl-7yHscJlpJywdM",
-            "I0IVus3fEHpPA-fLQFw10H7T9L271O7W3aG3LWXatXY"
+            "m3ZuMuDJesqyfoOt-YWNEl4dSsvJF3tWa4qwwPYJJCY",
+            "lVtBhTKObHcCWgDHaSVZPR61dT1iBaOQMC35NMxUA9w"
           ]
         }
       ],
@@ -106,7 +106,7 @@
       "parent": "UfCEoQh-4-t4S9dmDP2-zHdaPk6qqsAO6VUMYfawa1g"
     },
     {
-      "id": "bfdoazbCiEXFHVQ3Ei5Nh-IbR-sWl-7yHscJlpJywdM",
+      "id": "m3ZuMuDJesqyfoOt-YWNEl4dSsvJF3tWa4qwwPYJJCY",
       "classifier": {
         "language": "LionCore-M3",
         "version": "2023.1",
@@ -132,10 +132,10 @@
       ],
       "children": [],
       "references": [],
-      "parent": "Qi7Wpg6M_NYxbkYHsjMNAM0WOQe37Y5HAQtYekPdoIY"
+      "parent": "bQIrsWfaMLVtBh8a8ukY6TAD4dkFSv-wbfM2AsM2oUA"
     },
     {
-      "id": "I0IVus3fEHpPA-fLQFw10H7T9L271O7W3aG3LWXatXY",
+      "id": "lVtBhTKObHcCWgDHaSVZPR61dT1iBaOQMC35NMxUA9w",
       "classifier": {
         "language": "LionCore-M3",
         "version": "2023.1",
@@ -161,7 +161,7 @@
       ],
       "children": [],
       "references": [],
-      "parent": "Qi7Wpg6M_NYxbkYHsjMNAM0WOQe37Y5HAQtYekPdoIY"
+      "parent": "bQIrsWfaMLVtBh8a8ukY6TAD4dkFSv-wbfM2AsM2oUA"
     }
   ]
 }
