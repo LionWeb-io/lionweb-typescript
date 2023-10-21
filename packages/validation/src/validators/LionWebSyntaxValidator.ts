@@ -5,7 +5,7 @@ import {
     Syntax_PropertyTypeIssue,
     Syntax_PropertyUnknownIssue
 } from "../issues/SyntaxIssues";
-import { SimpleFieldvalidator, ValidatorFunction } from "./SimpleFieldvalidator";
+import { SimpleFieldValidator, ValidatorFunction } from "./SimpleFieldValidator";
 import { JsonContext } from "../issues/ValidationIssue";
 import { ValidationResult } from "./ValidationResult";
 
@@ -55,7 +55,7 @@ const NOT_NULL = false;
  */
 export class LionWebSyntaxValidator {
     validationResult: ValidationResult;
-    simpleFieldValidator: SimpleFieldvalidator;
+    simpleFieldValidator: SimpleFieldValidator;
     /**
      * When true, each function will work recursively on the given object.
      * When false, will only check the given object.
@@ -65,7 +65,7 @@ export class LionWebSyntaxValidator {
 
     constructor(validationResult: ValidationResult) {
         this.validationResult = validationResult;
-        this.simpleFieldValidator = new SimpleFieldvalidator(this.validationResult);
+        this.simpleFieldValidator = new SimpleFieldValidator(this.validationResult);
     }
 
     /**

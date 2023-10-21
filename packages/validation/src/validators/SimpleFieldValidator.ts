@@ -6,7 +6,7 @@ import { ValidationResult } from "./ValidationResult";
 
 export type ValidatorFunction = <T>(obj: T, ctx: JsonContext) => void;
 
-export class SimpleFieldvalidator {
+export class SimpleFieldValidator {
     validationResult: ValidationResult;
 
     constructor(validationResult: ValidationResult) {
@@ -63,8 +63,8 @@ export class SimpleFieldvalidator {
     }
 
     validateInteger = (property: LionWebJsonProperty, propName: string, context: JsonContext): void => {
-        const egexp = /^[+-]?(0|[1-9][0-9]*)$/;
-        if (!egexp.test(property.value)) {
+        const regexp = /^[+-]?(0|[1-9][0-9]*)$/;
+        if (!regexp.test(property.value)) {
             this.validationResult.issue(new Language_PropertyValue_Issue(context, propName, property.value, "integer"));
         }
     }

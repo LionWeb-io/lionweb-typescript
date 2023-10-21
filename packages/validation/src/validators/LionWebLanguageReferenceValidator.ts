@@ -17,7 +17,7 @@ import {
 } from "../json/LionWebJson";
 import { LionWebJsonChunkWrapper } from "../json/LionWebJsonChunkWrapper";
 import { LIONWEB_M3_CONCEPT_KEY, LIONWEB_M3_PROPERTY_KEY, LIONWEB_M3_PROPERTY_TYPE_KEY, LionwebLanguageDefinition } from "../json/LionwebLanguageDefinition";
-import { SimpleFieldvalidator } from "./SimpleFieldvalidator";
+import { SimpleFieldValidator } from "./SimpleFieldValidator";
 import { ValidationResult } from "./ValidationResult";
 
 /**
@@ -26,12 +26,12 @@ import { ValidationResult } from "./ValidationResult";
 export class LionWebLanguageReferenceValidator {
     validationResult: ValidationResult;
     language: LionwebLanguageDefinition;
-    simpleFieldValidator: SimpleFieldvalidator;
+    simpleFieldValidator: SimpleFieldValidator;
 
     constructor(validationResult: ValidationResult, lang: LionwebLanguageDefinition) {
         this.validationResult = validationResult;
         this.language = lang;
-        this.simpleFieldValidator = new SimpleFieldvalidator(this.validationResult);
+        this.simpleFieldValidator = new SimpleFieldValidator(this.validationResult);
     }
 
     // reset() {

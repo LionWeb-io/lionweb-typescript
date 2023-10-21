@@ -9,7 +9,7 @@ import { JsonContext } from "../issues/ValidationIssue";
 import { ChunkUtils } from "../json/ChunkUtils";
 import { LION_CORE_BUILTINS_KEY, LionWebJsonChild, LionWebJsonChunk, LionWebJsonMetaPointer, LionWebJsonNode, LwJsonUsedLanguage } from "../json/LionWebJson";
 import { LionWebJsonChunkWrapper } from "../json/LionWebJsonChunkWrapper";
-import { SimpleFieldvalidator } from "./SimpleFieldvalidator";
+import { SimpleFieldValidator } from "./SimpleFieldValidator";
 import { ValidationResult } from "./ValidationResult";
 
 /**
@@ -19,11 +19,11 @@ import { ValidationResult } from "./ValidationResult";
 export class LionWebReferenceValidator {
     validationResult: ValidationResult;
     nodesIdMap: Map<string, LionWebJsonNode> = new Map<string, LionWebJsonNode>();
-    simpleFieldValidator: SimpleFieldvalidator;
+    simpleFieldValidator: SimpleFieldValidator;
 
     constructor(validationResult: ValidationResult) {
         this.validationResult = validationResult;
-        this.simpleFieldValidator = new SimpleFieldvalidator(this.validationResult);
+        this.simpleFieldValidator = new SimpleFieldValidator(this.validationResult);
     }
 
     validateNodeIds(obj: LionWebJsonChunk, ctx: JsonContext): void {
@@ -186,7 +186,6 @@ export class LionWebReferenceValidator {
                 if (childNode !== undefined) {
                     if (childNode.parent !== node.id) {
                         // TODO Check that this is already tested from the child in vaidateExistsAsChild().
-                        //      this.validationResult.error(`PP Parent of ${context}.${child.containment.key}[${index}] with id "${childId}" is "${childNode.parent}", but should be "${node.id}"`);
                     }
                     if (childNode.parent === null || childNode.parent === undefined) {
                         this.validationResult.issue(new Reference_ParentMissingInChild_Issue(context.concat("child", "containment", "key", index), node, childNode));
