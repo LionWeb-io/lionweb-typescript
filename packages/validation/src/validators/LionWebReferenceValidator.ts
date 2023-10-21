@@ -5,7 +5,7 @@ import {
     Reference_DuplicateNodeId_Issue, Reference_LanguageUnknown_Issue,
     Reference_ParentMissingInChild_Issue
 } from "../issues/ReferenceIssues";
-import { IssueContext } from "../issues/ValidationIssue";
+import { JsonContext } from "../issues/ValidationIssue";
 import { ChunkUtils } from "../json/ChunkUtils";
 import { LION_CORE_BUILTINS_KEY, LionWebJsonChild, LionWebJsonChunk, LionWebJsonMetaPointer, LionWebJsonNode, LwJsonUsedLanguage } from "../json/LionWebJson";
 import { LionWebJsonChunkWrapper } from "../json/LionWebJsonChunkWrapper";
@@ -26,33 +26,34 @@ export class LionWebReferenceValidator {
         this.simpleFieldValidator = new SimpleFieldvalidator(this.validationResult);
     }
 
-    validateNodeIds(obj: LionWebJsonChunk): void {
+    validateNodeIds(obj: LionWebJsonChunk, ctx: JsonContext): void {
         // put all nodes in a map, validate that there are no two nodes with the same id.
         obj.nodes.forEach((node, index) => {
             // this.validationResult.check(this.nodesIdMap.get(node.id) === undefined, `Node number ${index} has duplicate id "${node.id}"`);
             if (! (this.nodesIdMap.get(node.id) === undefined)) {
-                this.validationResult.issue(new Reference_DuplicateNodeId_Issue(new IssueContext(`nodes[${index}]`), node.id));
+                this.validationResult.issue(new Reference_DuplicateNodeId_Issue(ctx.concat("nodes", index), node.id));
             }
             this.nodesIdMap.set(node.id, node);
         });
     }
 
     validate(obj: LionWebJsonChunkWrapper): void {
-        this.checkDuplicateUsedLanguage(obj.jsonChunk.languages, "Chunk");
-        this.validateNodeIds(obj.jsonChunk);
+        const rootCtx =  new JsonContext(null, ["$"]);
+        this.checkDuplicateUsedLanguage(obj.jsonChunk.languages, rootCtx);
+        this.validateNodeIds(obj.jsonChunk, rootCtx);
         obj.jsonChunk.nodes.forEach((node, nodeIndex) => {
-            const context = `node[${nodeIndex}].concept[${nodeIndex}]`;
+            const context = rootCtx.concat(`node`, nodeIndex);
             const parentNode = node.parent;
             if (parentNode !== null) {
                 this.validateExistsAsChild(context, this.nodesIdMap.get(parentNode), node);
             }
             this.validateLanguageReference(obj, node.classifier, context);
             this.checkParentCircular(node, context);
-            this.checkDuplicate(node.annotations, `node[${nodeIndex}].annotations`);
-            this.validateChildrenHaveCorrectParent(node, `Node[${nodeIndex}]`);
+            this.checkDuplicate(node.annotations, rootCtx.concat("node", nodeIndex, "annotations"));
+            this.validateChildrenHaveCorrectParent(node, rootCtx.concat("node", nodeIndex));
             node.children.forEach((child, childIndex) => {
-                this.validateLanguageReference(obj, child.containment, `node[${nodeIndex}].child[${childIndex}]`);
-                this.checkDuplicate(child.children, `node[${nodeIndex}].child[${childIndex}]`);
+                this.validateLanguageReference(obj, child.containment, rootCtx.concat("node", nodeIndex, "children", childIndex));
+                this.checkDuplicate(child.children, rootCtx.concat("node", nodeIndex, "children", childIndex));
                 child.children.forEach((childId) => {
                     const childNode = this.nodesIdMap.get(childId);
                     if (childNode !== undefined) {
@@ -66,12 +67,12 @@ export class LionWebReferenceValidator {
                 });
             });
             node.references.forEach((ref, refIndex) => {
-                this.validateLanguageReference(obj, ref.reference, `node[${nodeIndex}].reference[${refIndex}]`);
+                this.validateLanguageReference(obj, ref.reference, rootCtx.concat("node", nodeIndex, "reference", refIndex));
                 // TODO Check for duplicate targets?
                 // If so, what to check because there can be either or both a `resolveInfo` and a `reference`
             });
-            node.properties.forEach((prop, index) => {
-                this.validateLanguageReference(obj, prop.property, `node[${nodeIndex}].property[${index}]`);
+            node.properties.forEach((prop, propertyIndex) => {
+                this.validateLanguageReference(obj, prop.property, rootCtx.concat("node", nodeIndex, "property", propertyIndex));
             });
         });
     }
@@ -82,17 +83,17 @@ export class LionWebReferenceValidator {
      * @param metaPointer
      * @param context
      */
-    validateLanguageReference(chunk: LionWebJsonChunkWrapper, metaPointer: LionWebJsonMetaPointer, context: string) {
+    validateLanguageReference(chunk: LionWebJsonChunkWrapper, metaPointer: LionWebJsonMetaPointer, context: JsonContext) {
         const lang = ChunkUtils.findLwUsedLanguageWithVersion(chunk.jsonChunk, metaPointer.language, metaPointer.version);
         if (metaPointer.language === LION_CORE_BUILTINS_KEY) {
             // Ok, builtin
             return;
         }
         if (lang === undefined || lang === null) {
-            this.validationResult.issue(new Reference_LanguageUnknown_Issue(new IssueContext(context), metaPointer))
+            this.validationResult.issue(new Reference_LanguageUnknown_Issue(context, metaPointer))
         } else {
             if (lang.version !== metaPointer.version) {
-                this.validationResult.issue(new Reference_LanguageUnknown_Issue(new IssueContext(context), metaPointer))
+                this.validationResult.issue(new Reference_LanguageUnknown_Issue(context, metaPointer))
             }
         }
     }
@@ -102,14 +103,14 @@ export class LionWebReferenceValidator {
      * @param strings
      * @param context
      */
-    checkDuplicate(strings: string[], context: string) {
+    checkDuplicate(strings: string[], context: JsonContext) {
         if (strings === null || strings === undefined) {
             return;
         }
         const alreadySeen: Record<string, boolean> = {};
         strings.forEach((str) => {
             if (alreadySeen[str]) {
-                this.validationResult.issue(new Duplicates_Issue(new IssueContext(context), str))
+                this.validationResult.issue(new Duplicates_Issue(context, str))
             } else {
                 alreadySeen[str] = true;
             }
@@ -122,7 +123,7 @@ export class LionWebReferenceValidator {
      * @param usedLanguages
      * @param context
      */
-    checkDuplicateUsedLanguage(usedLanguages: LwJsonUsedLanguage[], context: string) {
+    checkDuplicateUsedLanguage(usedLanguages: LwJsonUsedLanguage[], context: JsonContext) {
         if (usedLanguages === null || usedLanguages === undefined) {
             return;
         }
@@ -131,7 +132,7 @@ export class LionWebReferenceValidator {
             const seenKeys = alreadySeen.get(usedLanguage.key);
             if (seenKeys !== null && seenKeys !== undefined) {
                 if (seenKeys.includes(usedLanguage.version)) {
-                    this.validationResult.issue(new Duplicates_Issue(new IssueContext(context + `.language[${index}].version`), usedLanguage.version));
+                    this.validationResult.issue(new Duplicates_Issue(context.concat("language", index, "version"), usedLanguage.version));
                 }
             } else {
                 alreadySeen.set(usedLanguage.key, [usedLanguage.version]);
@@ -143,7 +144,7 @@ export class LionWebReferenceValidator {
      * Checks whether the parent of node recursively points to `node` itself.
      * @param node
      */
-    checkParentCircular(node: LionWebJsonNode, context: string) {
+    checkParentCircular(node: LionWebJsonNode, context: JsonContext) {
         if (node === null || node === undefined) {
             return;
         }
@@ -155,7 +156,7 @@ export class LionWebReferenceValidator {
         while (current !== null && current !== undefined && current.parent !== null && current.parent !== undefined) {
             const nextParent = current.parent;
             if (nextParent !== null && nextParent !== undefined && seenParents.includes(nextParent)) {
-                this.validationResult.issue(new Reference_CirculairParent_Issue(new IssueContext(context + ".???"), this.nodesIdMap.get(nextParent), seenParents));
+                this.validationResult.issue(new Reference_CirculairParent_Issue(context.concat("???"), this.nodesIdMap.get(nextParent), seenParents));
                 return;
             }
             seenParents.push(nextParent);
@@ -163,7 +164,7 @@ export class LionWebReferenceValidator {
         }
     }
 
-    validateExistsAsChild(context: string, parent: LionWebJsonNode | undefined, child: LionWebJsonNode) {
+    validateExistsAsChild(context: JsonContext, parent: LionWebJsonNode | undefined, child: LionWebJsonNode) {
         if (parent === undefined || parent === null) {
             return;
         }
@@ -175,10 +176,10 @@ export class LionWebReferenceValidator {
         if (parent.annotations.includes(child.id)) {
             return;
         }
-        this.validationResult.issue(new Reference_ChildMissingInParent_Issue(new IssueContext(context), child, parent));
+        this.validationResult.issue(new Reference_ChildMissingInParent_Issue(context, child, parent));
     }
 
-    validateChildrenHaveCorrectParent(node: LionWebJsonNode, context: string) {
+    validateChildrenHaveCorrectParent(node: LionWebJsonNode, context: JsonContext) {
         node.children.forEach((child: LionWebJsonChild) => {
             child.children.forEach((childId: string, index: number) => {
                 const childNode = this.nodesIdMap.get(childId);
@@ -188,7 +189,7 @@ export class LionWebReferenceValidator {
                         //      this.validationResult.error(`PP Parent of ${context}.${child.containment.key}[${index}] with id "${childId}" is "${childNode.parent}", but should be "${node.id}"`);
                     }
                     if (childNode.parent === null || childNode.parent === undefined) {
-                        this.validationResult.issue(new Reference_ParentMissingInChild_Issue(new IssueContext(`${context}.${child.containment.key}[${index}]`), node, childNode));
+                        this.validationResult.issue(new Reference_ParentMissingInChild_Issue(context.concat("child", "containment", "key", index), node, childNode));
                     }
                 }
             });
@@ -197,7 +198,7 @@ export class LionWebReferenceValidator {
             const childNode = this.nodesIdMap.get(annotationId);
             if (childNode !== undefined) {
                 if (childNode.parent === null || childNode.parent === undefined) {
-                    this.validationResult.issue(new Reference_ParentMissingInChild_Issue(new IssueContext(`${context}.annotations[${annotationIndex}] `), node, childNode));
+                    this.validationResult.issue(new Reference_ParentMissingInChild_Issue(context.concat("annotations", annotationIndex), node, childNode));
                 }
             }
         });

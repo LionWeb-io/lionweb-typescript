@@ -1,10 +1,10 @@
 import { LionWebJsonMetaPointer } from "../json/LionWebJson";
-import { IssueContext, ValidationIssue } from "./ValidationIssue";
+import { JsonContext, ValidationIssue } from "./ValidationIssue";
 
 export class Language_PropertyValue_Issue extends ValidationIssue {
     readonly id = "PropertyValue";
 
-    constructor(context: IssueContext, public property: string, public value: string,public expectedType: string  ) {
+    constructor(context: JsonContext, public property: string, public value: string,public expectedType: string  ) {
         super(context);
     }
 
@@ -15,7 +15,7 @@ export class Language_PropertyValue_Issue extends ValidationIssue {
 export abstract class Language_IncorrectMetaPointerType_Issue extends ValidationIssue {
     abstract readonly metaType: string;
 
-    constructor(context: IssueContext, public metaPointer: LionWebJsonMetaPointer, public incorrectType: string) {
+    constructor(context: JsonContext, public metaPointer: LionWebJsonMetaPointer, public incorrectType: string) {
         super(context);
     }
 
@@ -43,7 +43,7 @@ export class Language_IncorrectContainmentMetaPointer_Issue extends Language_Inc
 export abstract class Language_UnknownMetaPointer_Issue extends ValidationIssue {
     abstract readonly metaType: string;
 
-    constructor(context: IssueContext, public metaPointer: LionWebJsonMetaPointer) {
+    constructor(context: JsonContext, public metaPointer: LionWebJsonMetaPointer) {
         super(context);
     }
 
@@ -70,21 +70,21 @@ export class Language_UnknownConcept_Issue extends Language_UnknownMetaPointer_I
 // Actual Language checks on M2
 export class NumberOfLanguagesUsed_Issue extends ValidationIssue {
     readonly id = "NumberOfLanguagesUsed";
-    constructor(context: IssueContext, public nrOfLanguages: number) {
+    constructor(context: JsonContext, public nrOfLanguages: number) {
         super(context);
     }
     msg = () => `Is not a language: number of used languages should be 1, is ${this.nrOfLanguages}`
 }
 export class NotLionCoreLanguageKey_Issue extends ValidationIssue {
     readonly id = "NotLionCoreLanguageKey";
-    constructor(context: IssueContext, public incorrectKey: string) {
+    constructor(context: JsonContext, public incorrectKey: string) {
         super(context);
     }
     msg = () => `Is not a language: the used language key is not LionCore-M3, but ${this.incorrectKey}`
 }
 export class IncorrectLionCoreVersion_Issue extends ValidationIssue {
     readonly id = "IncorrectLionCoreVersion";
-    constructor(context: IssueContext, public incorrectVersion: string) {
+    constructor(context: JsonContext, public incorrectVersion: string) {
         super(context);
     }
     msg = () => `Is not a language: the used language version is not 1, but ${this.incorrectVersion}`
