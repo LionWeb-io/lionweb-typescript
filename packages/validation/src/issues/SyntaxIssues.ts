@@ -54,7 +54,7 @@ export class Syntax_SerializationFormatVersion_Issue extends Syntax_IncorrectFor
 
 export class Syntax_VersionFormat_Issue extends Syntax_IncorrectFormat_Issue {
     readonly id = "VersionFormat";
-    protected msg = () => `Version "${this.value}" is not a string.`
+    protected msg = () => `Version "${this.value}" is an empty string.`
 }
 
 export class Syntax_KeyFormat_Issue extends Syntax_IncorrectFormat_Issue {
