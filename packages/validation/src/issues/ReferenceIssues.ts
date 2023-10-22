@@ -1,10 +1,10 @@
 import { LionWebJsonMetaPointer, LionWebJsonNode } from "../json/LionWebJson";
-import { IssueContext, ValidationIssue } from "./ValidationIssue";
+import { JsonContext, ValidationIssue } from "./ValidationIssue";
 
 export class Reference_DuplicateNodeId_Issue extends ValidationIssue {
     readonly id = "DuplicateNodeId";
     
-    constructor(context: IssueContext, public nodeId: string) {
+    constructor(context: JsonContext, public nodeId: string) {
         super(context);
     }
     
@@ -14,7 +14,7 @@ export class Reference_DuplicateNodeId_Issue extends ValidationIssue {
 export class Reference_ChildMissingInParent_Issue extends ValidationIssue {
     readonly id = "ChildMissingInParent";
 
-    constructor(context: IssueContext, public child: LionWebJsonNode, public parent: LionWebJsonNode) {
+    constructor(context: JsonContext, public child: LionWebJsonNode, public parent: LionWebJsonNode) {
         super(context);
     }
 
@@ -24,7 +24,7 @@ export class Reference_ChildMissingInParent_Issue extends ValidationIssue {
 export class Reference_ParentMissingInChild_Issue extends ValidationIssue {
     readonly id = "ParentMissingInChild";
 
-    constructor(context: IssueContext, public parent: LionWebJsonNode, public child: LionWebJsonNode) {
+    constructor(context: JsonContext, public parent: LionWebJsonNode, public child: LionWebJsonNode) {
         super(context);
     }
 
@@ -34,7 +34,7 @@ export class Reference_ParentMissingInChild_Issue extends ValidationIssue {
 export class Reference_CirculairParent_Issue extends ValidationIssue {
     readonly id = "CirculairParent";
 
-    constructor(context: IssueContext, public node: LionWebJsonNode | undefined, public parentPath: string[]) {
+    constructor(context: JsonContext, public node: LionWebJsonNode | undefined, public parentPath: string[]) {
         super(context);
     }
 
@@ -44,7 +44,7 @@ export class Reference_CirculairParent_Issue extends ValidationIssue {
 export class Reference_LanguageUnknown_Issue extends ValidationIssue {
     readonly id = "LanguageUnknown";
     
-    constructor(context: IssueContext, public languageRef: LionWebJsonMetaPointer) {
+    constructor(context: JsonContext, public languageRef: LionWebJsonMetaPointer) {
         super(context);
     }
     msg = () => `Node uses language { language = ${this.languageRef.language}, version = ${this.languageRef.version} } which is not declared in used languages`
@@ -53,7 +53,7 @@ export class Reference_LanguageUnknown_Issue extends ValidationIssue {
 export class Duplicates_Issue extends ValidationIssue {
     readonly id = "Duplicates";
 
-    constructor(context: IssueContext, public nodeid: string) {
+    constructor(context: JsonContext, public nodeid: string) {
         super(context);
     }
     msg = () => `Duplicate value "${this.nodeid}"`

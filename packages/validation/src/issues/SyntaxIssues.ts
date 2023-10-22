@@ -1,7 +1,7 @@
-import { IssueContext, ValidationIssue } from "./ValidationIssue";
+import { JsonContext, ValidationIssue } from "./ValidationIssue";
 
 export abstract class Syntax_PropertyIssue extends ValidationIssue {
-    constructor(public context: IssueContext, protected property: string) {
+    constructor(public context: JsonContext, protected property: string) {
         super(context);
     }
 }
@@ -24,7 +24,7 @@ export class Syntax_PropertyNullIssue extends Syntax_PropertyIssue {
 export class Syntax_PropertyTypeIssue extends Syntax_PropertyIssue {
     readonly id = 'PropertyTypeIncorrect';
 
-    constructor(context: IssueContext, property: string, protected expectedType: string, protected actualType: string) {
+    constructor(context: JsonContext, property: string, protected expectedType: string, protected actualType: string) {
         super(context, property);
     }
 
@@ -34,7 +34,7 @@ export class Syntax_PropertyTypeIssue extends Syntax_PropertyIssue {
 export class Syntax_ArrayContainsNull_Issue extends Syntax_PropertyIssue {
     readonly id = "ArrayContainsNull";
 
-    constructor(context: IssueContext, property: string, public index: number) {
+    constructor(context: JsonContext, property: string, public index: number) {
         super(context, property);
     }
 
@@ -42,7 +42,7 @@ export class Syntax_ArrayContainsNull_Issue extends Syntax_PropertyIssue {
 }
 
 export abstract class Syntax_IncorrectFormat_Issue extends ValidationIssue {
-    constructor(context: IssueContext, public value: string) {
+    constructor(context: JsonContext, public value: string) {
         super(context);
     }
 }
@@ -54,7 +54,7 @@ export class Syntax_SerializationFormatVersion_Issue extends Syntax_IncorrectFor
 
 export class Syntax_VersionFormat_Issue extends Syntax_IncorrectFormat_Issue {
     readonly id = "VersionFormat";
-    protected msg = () => `Version "${this.value}" is not a string.`
+    protected msg = () => `Version "${this.value}" is an empty string.`
 }
 
 export class Syntax_KeyFormat_Issue extends Syntax_IncorrectFormat_Issue {
