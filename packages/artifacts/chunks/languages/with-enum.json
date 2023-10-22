@@ -40,7 +40,7 @@
           "value": "language-with-enum"
         }
       ],
-      "children": [
+      "containments": [
         {
           "containment": {
             "language": "LionCore-M3",
@@ -89,7 +89,7 @@
           "value": "MyEnum"
         }
       ],
-      "children": [
+      "containments": [
         {
           "containment": {
             "language": "LionCore-M3",
@@ -130,7 +130,7 @@
           "value": "lit1"
         }
       ],
-      "children": [],
+      "containments": [],
       "references": [],
       "parent": "bQIrsWfaMLVtBh8a8ukY6TAD4dkFSv-wbfM2AsM2oUA"
     },
@@ -159,7 +159,7 @@
           "value": "lit2"
         }
       ],
-      "children": [],
+      "containments": [],
       "references": [],
       "parent": "bQIrsWfaMLVtBh8a8ukY6TAD4dkFSv-wbfM2AsM2oUA"
     }

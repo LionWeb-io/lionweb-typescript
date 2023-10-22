@@ -38,7 +38,7 @@ export type SerializedNode = {
     classifier: MetaPointer
     id: string
     properties: SerializedProperty[]
-    children: SerializedContainment[]
+    containments: SerializedContainment[]
     references: SerializedReference[]
     parent: Id | null
 }

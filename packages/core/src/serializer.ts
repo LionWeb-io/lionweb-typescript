@@ -37,7 +37,7 @@ export const serializeNodes = <NT extends Node>(nodes: NT[], extractionFacade: E
                 key: classifier.key
             },
             properties: [],
-            children: [],
+            containments: [],
             references: [],
             parent: null
         }
@@ -74,7 +74,7 @@ export const serializeNodes = <NT extends Node>(nodes: NT[], extractionFacade: E
             }
             if (feature instanceof Containment) {
                 const children = asArray(value) as NT[]
-                serializedNode.children.push({
+                serializedNode.containments.push({
                     containment: featureMetaPointer,
                     children: asIds(children)
                 })

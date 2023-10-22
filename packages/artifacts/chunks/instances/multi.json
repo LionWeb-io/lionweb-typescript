@@ -19,7 +19,7 @@
         "key": "Container"
       },
       "properties": [],
-      "children": [
+      "containments": [
         {
           "containment": {
             "language": "S9d8_7DajL2oOe1cqvXUGPGa3cWUF3bocmHgANb5bpM",
@@ -51,7 +51,7 @@
           "value": "Bob's Library"
         }
       ],
-      "children": [
+      "containments": [
         {
           "containment": {
             "language": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
@@ -99,7 +99,7 @@
           "value": "Special"
         }
       ],
-      "children": [],
+      "containments": [],
       "references": [
         {
           "reference": {
@@ -142,7 +142,7 @@
           "value": "Jack London"
         }
       ],
-      "children": [],
+      "containments": [],
       "references": [],
       "parent": null
     }

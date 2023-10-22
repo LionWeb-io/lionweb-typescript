@@ -40,7 +40,7 @@
           "value": "multi"
         }
       ],
-      "children": [
+      "containments": [
         {
           "containment": {
             "language": "LionCore-M3",
@@ -110,7 +110,7 @@
           "value": "Container"
         }
       ],
-      "children": [
+      "containments": [
         {
           "containment": {
             "language": "LionCore-M3",
@@ -183,7 +183,7 @@
           "value": "libraries"
         }
       ],
-      "children": [],
+      "containments": [],
       "references": [
         {
           "reference": {

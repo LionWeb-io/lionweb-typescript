@@ -40,7 +40,7 @@
           "value": "Shapes"
         }
       ],
-      "children": [
+      "containments": [
         {
           "containment": {
             "language": "LionCore-M3",
@@ -109,7 +109,7 @@
           "value": "Coord"
         }
       ],
-      "children": [
+      "containments": [
         {
           "containment": {
             "language": "LionCore-M3",
@@ -176,7 +176,7 @@
           "value": "x"
         }
       ],
-      "children": [],
+      "containments": [],
       "references": [
         {
           "reference": {
@@ -227,7 +227,7 @@
           "value": "y"
         }
       ],
-      "children": [],
+      "containments": [],
       "references": [
         {
           "reference": {
@@ -278,7 +278,7 @@
           "value": "z"
         }
       ],
-      "children": [],
+      "containments": [],
       "references": [
         {
           "reference": {
@@ -337,7 +337,7 @@
           "value": "Geometry"
         }
       ],
-      "children": [
+      "containments": [
         {
           "containment": {
             "language": "LionCore-M3",
@@ -410,7 +410,7 @@
           "value": "shapes"
         }
       ],
-      "children": [],
+      "containments": [],
       "references": [
         {
           "reference": {
@@ -469,7 +469,7 @@
           "value": "Shape"
         }
       ],
-      "children": [
+      "containments": [
         {
           "containment": {
             "language": "LionCore-M3",
@@ -545,7 +545,7 @@
           "value": "Circle"
         }
       ],
-      "children": [
+      "containments": [
         {
           "containment": {
             "language": "LionCore-M3",
@@ -616,7 +616,7 @@
           "value": "r"
         }
       ],
-      "children": [],
+      "containments": [],
       "references": [
         {
           "reference": {
@@ -675,7 +675,7 @@
           "value": "center"
         }
       ],
-      "children": [],
+      "containments": [],
       "references": [
         {
           "reference": {
@@ -734,7 +734,7 @@
           "value": "Line"
         }
       ],
-      "children": [
+      "containments": [
         {
           "containment": {
             "language": "LionCore-M3",
@@ -813,7 +813,7 @@
           "value": "start"
         }
       ],
-      "children": [],
+      "containments": [],
       "references": [
         {
           "reference": {
@@ -872,7 +872,7 @@
           "value": "end"
         }
       ],
-      "children": [],
+      "containments": [],
       "references": [
         {
           "reference": {
