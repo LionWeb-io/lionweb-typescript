@@ -7,6 +7,8 @@ Those are contained in a number of NPM packages in the directory [`packages`](./
   The "core stuff" such as: base types, the LionCore M3 (including the `builtins` language), and (de-)serialization.
 - `utilities`
   Utilities on top of the `core` packages that might be broadly useful, but should not go into the `core` package.
+- `validation`
+  Validators that validate a JSON serialization.
 - `test`
   A package containing (unit) tests for the packages above.
 - `cli`
@@ -14,10 +16,11 @@ Those are contained in a number of NPM packages in the directory [`packages`](./
 - `artifacts`
   A package that generates artifacts (serialization chunks, diagrams, JSON Schemas) from some of the models constructed in the `core` and `test` packages.
 
+Each of these packages have their own `README.md`.
 The `core`, `utilities`, and `cli` packages are published in the scope of [the `lionweb[package.json](package.json)` organization](https://www.npmjs.com/org/lionweb), meaning that they're all prefixed with `@lionweb/`.
 The other packages are for internal use only.
+<!-- TODO  publish validation as well -->
 
-Each of these packages have their own `README.md`.
 
 ## Environment dependencies
 
@@ -28,6 +31,7 @@ Each of these packages have their own `README.md`.
 
 Note that development tends to be done with the latest Node.js and NPM versions.
 Currently, these are v19.9.0 and 9.8.1.
+
 
 ## Containerized development environment
 
@@ -46,6 +50,7 @@ docker run -it --rm --net host --name working-container -v ${PWD}:/work indamuts
 - `indamutsa/lionweb-devenv:v1.0.0`: Specifies the Docker image.
 - `/bin/zsh`: Starts a Zsh shell inside the container.
 
+
 ## Install Project Dev Dependencies
 
 Run the following command to build each of the packages:
@@ -55,7 +60,7 @@ Run the following command to build each of the packages:
 ./build-all.sh
 ```
 
-This includes installing any NPM (dev) dependencies.
+This includes cleaning up and installing any NPM (dev) dependencies.
 
 Run the following command to statically _style_-check the source code in all the packages:
 
@@ -92,10 +97,26 @@ You can test more thoroughly as follows:
 ```
 
 
+## Development
+
+During development, you can run the following command to build all packages
+
+```shell
+./quick-build-and-test-all.sh
+```
+
+This does the same as running the `build-all.sh` and `test-all.sh` scripts, except for that it doesn't clean up and (re-)install the NPM (dev) dependencies, which is usually the costliest step.
+
+
 ## Code style
 
-All the code in this repository is written in TypeScript.
-The code style can be classified as "mostly FP-lite" and "semicolons (`;`s) elided".
-The last things is slightly controversial, but I (=Meinte Boersma) simply hate semicolons as a statement separator that's virtually always unnecessary.
-The TypeScript compiler simply adds them back in the appropriate places when transpiling to JavaScript.
+All the code in this repository is written in TypeScript, with the following code style conventions:
+
+* Indentation is: **4 spaces**.
+
+* **No semicolons** (`;`s).
+    This is slightly controversial, but I (=Meinte Boersma) simply hate semicolons as a statement separator that's virtually always unnecessary.
+    The TypeScript compiler simply adds them back in the appropriate places when transpiling to JavaScript.
+
+* Use **"FP-lite"**, meaning using `Array.map` and such functions over more imperative ways to compute results.
 
