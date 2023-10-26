@@ -41,6 +41,12 @@ export const issuesLanguage = (language: Language): Issue[] =>
                             // TODO  check whether it needs to be "a" or "an", or just say "An instance of ..."
                     }
                 }
+              
+                if (t instanceof Language) {
+                  const version = t.version.trim();
+                  version.length === 0 && issue(`A Language version must be a non-empty string`)
+                }
+
 
                 if (isINamed(t)) {
                     if (t.name.trim().length === 0) {

@@ -54,5 +54,23 @@ describe("constraints (LionCore)", () => {
         })
     })
 
+    it("check that version is empty", () => {
+        const language = new Language("myLang", "", "x", "x")
+        const issues = issuesLanguage(language)
+        deepEqual(issues.length, 1)
+
+        deepEqual(issues[0], {
+            location: language,
+            message: "A Language version must be a non-empty string",
+            secondaries: [],
+      })
+    })
+  
+  
+    it("check that version is non-empty", () => {
+        const language = new Language("myLang", "version-name", "x", "x")
+        const issues = issuesLanguage(language)
+        deepEqual(issues.length, 0)
+    })
 })
 
