@@ -1,6 +1,6 @@
 import { LionWebJsonChunk } from "../json/LionWebJson";
 import { LionWebJsonChunkWrapper } from "../json/LionWebJsonChunkWrapper";
-import { LionwebLanguageDefinition } from "../json/LionwebLanguageDefinition";
+import { LionWebLanguageDefinition } from "../json/LionwebLanguageDefinition";
 import { LionWebLanguageReferenceValidator } from "./LionWebLanguageReferenceValidator";
 import { LionWebReferenceValidator } from "./LionWebReferenceValidator";
 import { LionWebSyntaxValidator } from "./LionWebSyntaxValidator";
@@ -12,7 +12,7 @@ import { ValidationResult } from "./ValidationResult";
  */
 export class LionWebValidator {
     object: unknown;
-    language: LionwebLanguageDefinition | null = null;
+    language: LionWebLanguageDefinition | null = null;
 
     chunk: unknown;
     validationResult: ValidationResult;
@@ -21,7 +21,7 @@ export class LionWebValidator {
     syntaxCorrect: boolean = false;
     referencesCorrect: boolean = false;
 
-    constructor(json: unknown, lang: LionwebLanguageDefinition | null) {
+    constructor(json: unknown, lang: LionWebLanguageDefinition | null) {
         this.object = json;
         this.language =lang;
         this.validationResult = new ValidationResult();

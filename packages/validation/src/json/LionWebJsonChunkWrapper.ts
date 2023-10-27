@@ -1,5 +1,5 @@
 import { LionWebJsonChunk, LionWebJsonNode, LionWebJsonProperty } from "./LionWebJson";
-import { LionwebLanguageDefinition } from "./LionwebLanguageDefinition";
+import { LionWebLanguageDefinition } from "./LionwebLanguageDefinition";
 import { NodeUtils } from "./NodeUtils";
 
 export type NodeId = string;
@@ -9,7 +9,7 @@ export type NodeId = string;
  */
 export class LionWebJsonChunkWrapper {
     jsonChunk: LionWebJsonChunk;
-    language: LionwebLanguageDefinition  | null = null;
+    language: LionWebLanguageDefinition  | null = null;
     /**
      * Map to get quick access to nodes by id.
      * @protected

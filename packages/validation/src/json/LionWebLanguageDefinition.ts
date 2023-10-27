@@ -25,21 +25,21 @@ export const LIONWEB_M3_PROPERTY_TYPE_KEY = "Property-type";
 //
 //     languageMap = new Map<string, Map<string, Map<string, LionwebLanguageDefinition>>>();
 //
-//     setLanguage(lionwebLanguage: LionwebLanguageDefinition) {
+//     setLanguage(lionWebLanguage: LionwebLanguageDefinition) {
 //         // Assume LwNode is a concept of type "Language"
-//         let language = this.languageMap.get(lionwebLanguage.languageId.name);
+//         let language = this.languageMap.get(lionWebLanguage.languageId.name);
 //         if (language === undefined) {
 //             language = new Map<string, Map<string, LionwebLanguageDefinition>>();
-//             this.languageMap.set(lionwebLanguage.languageId.name, language);
+//             this.languageMap.set(lionWebLanguage.languageId.name, language);
 //         }
-//         let version = language.get(lionwebLanguage.languageId.version);
+//         let version = language.get(lionWebLanguage.languageId.version);
 //         if (version === undefined) {
 //             version = new Map<string, LionwebLanguageDefinition>();
-//             language.set(lionwebLanguage.languageId.version, version);
+//             language.set(lionWebLanguage.languageId.version, version);
 //         }
-//         let key = version.get(lionwebLanguage.languageId.key);
+//         let key = version.get(lionWebLanguage.languageId.key);
 //         if (key === undefined) {
-//             version.set(lionwebLanguage.languageId.key, lionwebLanguage);
+//             version.set(lionWebLanguage.languageId.key, lionWebLanguage);
 //         }
 //     }
 //
@@ -49,9 +49,9 @@ export const LIONWEB_M3_PROPERTY_TYPE_KEY = "Property-type";
 // }
 
 /**
- * Represents a lionweb chunk which represents a language definition / metamodel
+ * Represents a LionWeb serialiation chunk which represents a language definition / metamodel
  */
-export class LionwebLanguageDefinition {
+export class LionWebLanguageDefinition {
     languageId: LanguageId | null = null;
     /**
      * All nodes in the language

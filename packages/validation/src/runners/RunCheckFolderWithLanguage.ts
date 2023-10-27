@@ -1,6 +1,6 @@
 import fs from "fs";
 import { LionWebJsonChunkWrapper } from "../json/LionWebJsonChunkWrapper";
-import { LionwebLanguageDefinition} from "../json/LionwebLanguageDefinition";
+import { LionWebLanguageDefinition} from "../json/LionwebLanguageDefinition";
 import { LionWebValidator } from "../validators/LionWebValidator";
 import { getAllFiles, printIssues } from "./Utils";
 
@@ -26,7 +26,7 @@ if (languageValidator.validationResult.hasErrors()) {
 for (const modelFile of getAllFiles(folder, [])) {
     const jsonString1 = fs.readFileSync(modelFile, "utf-8");
     const jsonModel = JSON.parse(jsonString1);
-    const modelValidator = new LionWebValidator(jsonModel, new LionwebLanguageDefinition(languageValidator.chunk as LionWebJsonChunkWrapper));
+    const modelValidator = new LionWebValidator(jsonModel, new LionWebLanguageDefinition(languageValidator.chunk as LionWebJsonChunkWrapper));
 
     modelValidator.validateAll();
     if (modelValidator.validationResult.hasErrors()) {
