@@ -19,9 +19,9 @@ for (const f of getAllFiles(folder, [])) {
         if (!validator.validationResult.hasErrors()) {
             totalSucceed += 1;
             console.log("V PASSED " + f) ;
-            printIssues(validator.validationResult)
+            printIssues(validator.validationResult, f)
         } else {
-            printIssues(validator.validationResult)
+            printIssues(validator.validationResult, f)
             totalFailed += 1;
             totalErrors += validator.validationResult.issues.length;
         }
