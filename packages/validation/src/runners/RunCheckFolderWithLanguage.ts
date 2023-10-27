@@ -31,8 +31,8 @@ for (const modelFile of getAllFiles(folder, [])) {
     modelValidator.validateAll();
     if (modelValidator.validationResult.hasErrors()) {
         totalFailed++;
-        console.log("FAILED: " + modelFile)
-        printIssues(modelValidator.validationResult);
+        // console.log("FAILED: " + modelFile)
+        printIssues(modelValidator.validationResult, modelFile);
     } else {
         console.log("SUCCEEDED: " + modelFile);
         totalSucceed++;
