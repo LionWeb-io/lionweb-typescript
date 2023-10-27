@@ -99,7 +99,7 @@ export class LionWebSyntaxValidator {
             { property: "id", expectedType: "string", mayBeNull: NOT_NULL, validateValue: this.simpleFieldValidator.validateId },
             { property: "classifier", expectedType: "object", mayBeNull: NOT_NULL, validateValue: this.validateLwMetaPointer },
             { property: "properties", expectedType: "array", mayBeNull: NOT_NULL, validateValue: this.validateLwProperty },
-            { property: "children", expectedType: "array", mayBeNull: NOT_NULL, validateValue: this.validateLwChild },
+            { property: "containments", expectedType: "array", mayBeNull: NOT_NULL, validateValue: this.validateLwChild },
             { property: "references", expectedType: "array", mayBeNull: NOT_NULL, validateValue: this.validateLwReference },
             { property: "annotations", expectedType: "array", mayBeNull: NOT_NULL, validateValue: this.validateLwAnnotation },
             { property: "parent", expectedType: "string", mayBeNull: MAY_BE_NULL, validateValue: this.simpleFieldValidator.validateId },

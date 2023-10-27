@@ -54,10 +54,10 @@ export class LionWebReferenceValidator {
             node.properties.forEach((prop, propertyIndex) => {
                 this.validateLanguageReference(obj, prop.property, rootCtx.concat("node", nodeIndex, "property", propertyIndex));
             });
-            node.containments.forEach((child, childIndex) => {
-                this.validateLanguageReference(obj, child.containment, rootCtx.concat("node", nodeIndex, "containment", childIndex));
-                this.checkDuplicate(child.children, rootCtx.concat("node", nodeIndex, "children", childIndex));
-                child.children.forEach((childId) => {
+            node.containments.forEach((containment, childIndex) => {
+                this.validateLanguageReference(obj, containment.containment, rootCtx.concat("node", nodeIndex, "containments", childIndex));
+                this.checkDuplicate(containment.children, rootCtx.concat("node", nodeIndex, "containments", childIndex));
+                containment.children.forEach((childId) => {
                     const childNode = this.nodesIdMap.get(childId);
                     if (childNode !== undefined) {
                         if (childNode.parent !== null && childNode.parent !== undefined && childNode.parent !== node.id) {
@@ -70,7 +70,7 @@ export class LionWebReferenceValidator {
                 });
             });
             node.references.forEach((ref, refIndex) => {
-                this.validateLanguageReference(obj, ref.reference, rootCtx.concat("node", nodeIndex, "reference", refIndex));
+                this.validateLanguageReference(obj, ref.reference, rootCtx.concat("node", nodeIndex, "references", refIndex));
                 // TODO Check for duplicate targets?
                 // If so, what to check because there can be either or both a `resolveInfo` and a `reference`
             });
