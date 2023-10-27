@@ -1053,7 +1053,6 @@
             "key": "Classifier-features"
           },
           "children": [
-            "-id-Annotation-multiple",
             "-id-Annotation-annotates",
             "-id-Annotation-extends",
             "-id-Annotation-implements"
@@ -1084,57 +1083,6 @@
         }
       ],
       "parent": "-id-LionCore-M3"
-    },
-    {
-      "id": "-id-Annotation-multiple",
-      "classifier": {
-        "language": "LionCore-M3",
-        "version": "2023.1",
-        "key": "Property"
-      },
-      "properties": [
-        {
-          "property": {
-            "language": "LionCore-M3",
-            "version": "2023.1",
-            "key": "Feature-optional"
-          },
-          "value": "true"
-        },
-        {
-          "property": {
-            "language": "LionCore-M3",
-            "version": "2023.1",
-            "key": "IKeyed-key"
-          },
-          "value": "Annotation-multiple"
-        },
-        {
-          "property": {
-            "language": "LionCore-builtins",
-            "version": "2023.1",
-            "key": "LionCore-builtins-INamed-name"
-          },
-          "value": "multiple"
-        }
-      ],
-      "containments": [],
-      "references": [
-        {
-          "reference": {
-            "language": "LionCore-M3",
-            "version": "2023.1",
-            "key": "Property-type"
-          },
-          "targets": [
-            {
-              "resolveInfo": "Boolean",
-              "reference": "LionCore-builtins-Boolean"
-            }
-          ]
-        }
-      ],
-      "parent": "-id-Annotation"
     },
     {
       "id": "-id-Annotation-annotates",

@@ -7,7 +7,6 @@ language LionCore_M3
                 annotates -> Classifier?
                 extends -> Annotation?
                 implements -> Interface[0..*]
-                multiple: Boolean?
 
         abstract concept Classifier extends LanguageEntity
             features (↓name):

@@ -4,9 +4,7 @@ hide empty members
 ' qualified name: "LionCore_M3"
 
 
-class Annotation extends Classifier {
-  multiple: Boolean <<optional>>
-}
+class Annotation extends Classifier
 
 abstract class Classifier extends LanguageEntity
 

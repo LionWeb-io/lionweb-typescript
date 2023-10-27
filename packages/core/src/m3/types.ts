@@ -142,7 +142,6 @@ class Concept extends Classifier {
 }
 
 class Annotation extends Classifier {
-    multiple /*: boolean */ = false
     extends?: SingleRef<Annotation> // (reference)
     implements: MultiRef<Interface> = [] // (reference)
     constructor(language: Language, name: string, key: string, id: Id, extends_?: SingleRef<Annotation>) {
@@ -152,10 +151,6 @@ class Annotation extends Classifier {
     implementing(...interfaces: Interface[]): Annotation {
         // TODO  check actual types of interfaces, or use type shapes/interfaces
         this.implements.push(...interfaces)
-        return this
-    }
-    isMultiple(): Annotation {
-        this.multiple = true
         return this
     }
 }
