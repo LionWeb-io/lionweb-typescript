@@ -1,5 +1,5 @@
 import { LionWebJsonChunk, LionWebJsonNode, LionWebJsonProperty } from "./LionWebJson";
-import { LionWebLanguageDefinition } from "./LionwebLanguageDefinition";
+import { LionWebLanguageDefinition } from "./LionWebLanguageDefinition";
 import { NodeUtils } from "./NodeUtils";
 
 export type NodeId = string;

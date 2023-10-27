@@ -1,6 +1,6 @@
 import fs from "fs";
 import { LionWebJsonChunkWrapper } from "../json/LionWebJsonChunkWrapper";
-import { LionWebLanguageDefinition} from "../json/LionwebLanguageDefinition";
+import { LionWebLanguageDefinition} from "../json/LionWebLanguageDefinition";
 import { LionWebValidator } from "../validators/LionWebValidator";
 import { printIssues } from "./Utils";
 

@@ -1,6 +1,6 @@
 import { LionWebJsonChunk } from "../json/LionWebJson";
 import { LionWebJsonChunkWrapper } from "../json/LionWebJsonChunkWrapper";
-import { LionWebLanguageDefinition } from "../json/LionwebLanguageDefinition";
+import { LionWebLanguageDefinition } from "../json/LionWebLanguageDefinition";
 import { LionWebLanguageReferenceValidator } from "./LionWebLanguageReferenceValidator";
 import { LionWebReferenceValidator } from "./LionWebReferenceValidator";
 import { LionWebSyntaxValidator } from "./LionWebSyntaxValidator";

@@ -16,7 +16,7 @@ import {
     LionWebJsonProperty, LionWebJsonReference
 } from "../json/LionWebJson";
 import { LionWebJsonChunkWrapper } from "../json/LionWebJsonChunkWrapper";
-import { LIONWEB_M3_CONCEPT_KEY, LIONWEB_M3_PROPERTY_KEY, LIONWEB_M3_PROPERTY_TYPE_KEY, LionWebLanguageDefinition } from "../json/LionwebLanguageDefinition";
+import { LIONWEB_M3_CONCEPT_KEY, LIONWEB_M3_PROPERTY_KEY, LIONWEB_M3_PROPERTY_TYPE_KEY, LionWebLanguageDefinition } from "../json/LionWebLanguageDefinition";
 import { SimpleFieldValidator } from "./SimpleFieldValidator";
 import { ValidationResult } from "./ValidationResult";
 
