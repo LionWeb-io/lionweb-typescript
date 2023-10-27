@@ -16,6 +16,6 @@ export function getAllFiles(dirPath: string, arrayOfFiles: string[]) {
     return arrayOfFiles;
 }
 
-export function printIssues(result: ValidationResult): void {
-    result.issues.forEach(issue => console.log(issue.errorMsg()));
+export function printIssues(result: ValidationResult, file?: string): void {
+    result.issues.forEach(issue => console.log((file == undefined ? "" : `File ${file}: `) + issue.errorMsg()));
 }
