@@ -89,7 +89,7 @@ const schemaForClassifier = (classifier: Classifier): unknown => {
             "id",
             "classifier",
             "properties",
-            "children",
+            "containments",
             "references"
         ],
         additionalProperties: false
