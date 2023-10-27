@@ -38,7 +38,7 @@ export type LionWebJsonNode = {
     id: Id;
     classifier: LionWebJsonMetaPointer;
     properties: LionWebJsonProperty[];
-    children: LionWebJsonChild[];
+    containments: LionWebJsonChild[];
     references: LionWebJsonReference[];
     annotations: Id[];
     parent: Id | null;
@@ -49,7 +49,7 @@ export function createLwNode(): LionWebJsonNode {
         id: "",
         classifier: { language: "", version: "", key: "" },
         properties: [],
-        children: [],
+        containments: [],
         references: [],
         annotations: [],
         parent: null,

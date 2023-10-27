@@ -30,18 +30,18 @@ export class NodeUtils {
      * @param key
      */
     static findLwChild(node: LionWebJsonNode, key: string): LionWebJsonChild | null {
-        for (const lwChild of node.children) {
-            if (lwChild.containment.key === key) {
-                return lwChild;
+        for (const containment of node.containments) {
+            if (containment.containment.key === key) {
+                return containment;
             }
         }
         return null;
     }
 
     static findLwReference(node: LionWebJsonNode, key: string): LionWebJsonReference | null {
-        for (const ref of node.references) {
-            if (ref.reference.key === key) {
-                return ref;
+        for (const reference of node.references) {
+            if (reference.reference.key === key) {
+                return reference;
             }
         }
         return null;
@@ -62,8 +62,8 @@ export class NodeUtils {
      */
     static allChildren(node: LionWebJsonNode): string[] {
         const result: string[] = [];
-        for (const children of node.children) {
-            result.push(...children.children);
+        for (const containment of node.containments) {
+            result.push(...containment.children);
         }
         result.push(...node.annotations);
         return result;

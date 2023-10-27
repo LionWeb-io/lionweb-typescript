@@ -50,14 +50,14 @@ export class LionWebLanguageReferenceValidator {
                 this.validationResult.issue(new Language_UnknownConcept_Issue(nodeContext, node.classifier));
                 return;
             }
-            node.children.forEach((child, childIndex) => {
-                this.validateContainment(child, nodeContext.concat("children", childIndex));
+            node.properties.forEach((property, propIndex) => {
+                this.validateProperty(property, nodeContext.concat("properties", propIndex));
             });
-            node.references.forEach((ref, refIndex) => {
-                this.validateReference(ref, nodeContext.concat("children", refIndex));
+            node.containments.forEach((containment, childIndex) => {
+                this.validateContainment(containment, nodeContext.concat("containments", childIndex));
             });
-            node.properties.forEach((prop, propIndex) => {
-                this.validateProperty(prop, nodeContext.concat("children", propIndex));
+            node.references.forEach((reference, refIndex) => {
+                this.validateReference(reference, nodeContext.concat("references", refIndex));
             });
         });
     }
