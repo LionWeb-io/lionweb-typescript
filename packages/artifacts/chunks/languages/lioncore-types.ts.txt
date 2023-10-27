@@ -12,7 +12,6 @@ import {DynamicNode, DynamicINamed as INamed} from "@lionweb/core";
 export type Annotation = Classifier & {
     // classifier -> Annotation
     settings: {
-        multiple?: boolean;
         annotates?: Classifier;
         extends?: Annotation;
         implements: Interface[];
