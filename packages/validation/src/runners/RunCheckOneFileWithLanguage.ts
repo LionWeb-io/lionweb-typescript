@@ -1,6 +1,6 @@
 import fs from "fs";
 import { LionWebJsonChunkWrapper } from "../json/LionWebJsonChunkWrapper";
-import { LionwebLanguageDefinition} from "../json/LionwebLanguageDefinition";
+import { LionWebLanguageDefinition} from "../json/LionWebLanguageDefinition";
 import { LionWebValidator } from "../validators/LionWebValidator";
 import { printIssues } from "./Utils";
 
@@ -21,7 +21,7 @@ if (modelFile !== null) {
     console.log("===== Language errors ======")
     printIssues(languageValidator.validationResult);
 
-    const modelValidator = new LionWebValidator(jsonModel, new LionwebLanguageDefinition(languageValidator.chunk as LionWebJsonChunkWrapper));
+    const modelValidator = new LionWebValidator(jsonModel, new LionWebLanguageDefinition(languageValidator.chunk as LionWebJsonChunkWrapper));
     modelValidator.validateAll();
     console.log("===== Model errors ======")
     printIssues(modelValidator.validationResult);

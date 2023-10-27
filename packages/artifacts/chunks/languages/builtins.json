@@ -40,7 +40,7 @@
           "value": "LionCore-builtins"
         }
       ],
-      "children": [
+      "containments": [
         {
           "containment": {
             "language": "LionCore-M3",
@@ -94,7 +94,7 @@
           "value": "String"
         }
       ],
-      "children": [],
+      "containments": [],
       "references": [],
       "parent": "LionCore-builtins"
     },
@@ -123,7 +123,7 @@
           "value": "Boolean"
         }
       ],
-      "children": [],
+      "containments": [],
       "references": [],
       "parent": "LionCore-builtins"
     },
@@ -152,7 +152,7 @@
           "value": "Integer"
         }
       ],
-      "children": [],
+      "containments": [],
       "references": [],
       "parent": "LionCore-builtins"
     },
@@ -181,7 +181,7 @@
           "value": "JSON"
         }
       ],
-      "children": [],
+      "containments": [],
       "references": [],
       "parent": "LionCore-builtins"
     },
@@ -226,7 +226,7 @@
           "value": "Node"
         }
       ],
-      "children": [
+      "containments": [
         {
           "containment": {
             "language": "LionCore-M3",
@@ -281,7 +281,7 @@
           "value": "INamed"
         }
       ],
-      "children": [
+      "containments": [
         {
           "containment": {
             "language": "LionCore-M3",
@@ -338,7 +338,7 @@
           "value": "name"
         }
       ],
-      "children": [],
+      "containments": [],
       "references": [
         {
           "reference": {

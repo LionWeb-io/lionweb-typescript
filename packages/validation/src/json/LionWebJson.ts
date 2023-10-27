@@ -1,5 +1,5 @@
 /**
- * The types defining the structure of the lionweb JSON format.
+ * The types defining the structure of the LionWeb JSON format.
  * @see https://lionweb-io.github.io/specification/serialization/serialization.html
  * We use types instead of classes, because the purpose is to define the Lionweb JSON to be sent over the line.
  */
@@ -38,7 +38,7 @@ export type LionWebJsonNode = {
     id: Id;
     classifier: LionWebJsonMetaPointer;
     properties: LionWebJsonProperty[];
-    children: LionWebJsonChild[];
+    containments: LionWebJsonChild[];
     references: LionWebJsonReference[];
     annotations: Id[];
     parent: Id | null;
@@ -49,7 +49,7 @@ export function createLwNode(): LionWebJsonNode {
         id: "",
         classifier: { language: "", version: "", key: "" },
         properties: [],
-        children: [],
+        containments: [],
         references: [],
         annotations: [],
         parent: null,

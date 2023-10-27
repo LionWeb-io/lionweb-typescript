@@ -51,10 +51,13 @@ export class LionWebReferenceValidator {
             this.checkParentCircular(node, context);
             this.checkDuplicate(node.annotations, rootCtx.concat("node", nodeIndex, "annotations"));
             this.validateChildrenHaveCorrectParent(node, rootCtx.concat("node", nodeIndex));
-            node.children.forEach((child, childIndex) => {
-                this.validateLanguageReference(obj, child.containment, rootCtx.concat("node", nodeIndex, "children", childIndex));
-                this.checkDuplicate(child.children, rootCtx.concat("node", nodeIndex, "children", childIndex));
-                child.children.forEach((childId) => {
+            node.properties.forEach((prop, propertyIndex) => {
+                this.validateLanguageReference(obj, prop.property, rootCtx.concat("node", nodeIndex, "property", propertyIndex));
+            });
+            node.containments.forEach((containment, childIndex) => {
+                this.validateLanguageReference(obj, containment.containment, rootCtx.concat("node", nodeIndex, "containments", childIndex));
+                this.checkDuplicate(containment.children, rootCtx.concat("node", nodeIndex, "containments", childIndex));
+                containment.children.forEach((childId) => {
                     const childNode = this.nodesIdMap.get(childId);
                     if (childNode !== undefined) {
                         if (childNode.parent !== null && childNode.parent !== undefined && childNode.parent !== node.id) {
@@ -67,12 +70,9 @@ export class LionWebReferenceValidator {
                 });
             });
             node.references.forEach((ref, refIndex) => {
-                this.validateLanguageReference(obj, ref.reference, rootCtx.concat("node", nodeIndex, "reference", refIndex));
+                this.validateLanguageReference(obj, ref.reference, rootCtx.concat("node", nodeIndex, "references", refIndex));
                 // TODO Check for duplicate targets?
                 // If so, what to check because there can be either or both a `resolveInfo` and a `reference`
-            });
-            node.properties.forEach((prop, propertyIndex) => {
-                this.validateLanguageReference(obj, prop.property, rootCtx.concat("node", nodeIndex, "property", propertyIndex));
             });
         });
     }
@@ -168,8 +168,8 @@ export class LionWebReferenceValidator {
         if (parent === undefined || parent === null) {
             return;
         }
-        for (const children of parent.children) {
-            if (children.children.includes(child.id)) {
+        for (const containment of parent.containments) {
+            if (containment.children.includes(child.id)) {
                 return;
             }
         }
@@ -180,7 +180,7 @@ export class LionWebReferenceValidator {
     }
 
     validateChildrenHaveCorrectParent(node: LionWebJsonNode, context: JsonContext) {
-        node.children.forEach((child: LionWebJsonChild) => {
+        node.containments.forEach((child: LionWebJsonChild) => {
             child.children.forEach((childId: string, index: number) => {
                 const childNode = this.nodesIdMap.get(childId);
                 if (childNode !== undefined) {

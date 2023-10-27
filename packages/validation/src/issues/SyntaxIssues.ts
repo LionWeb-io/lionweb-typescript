@@ -13,7 +13,7 @@ export class Syntax_PropertyMissingIssue extends Syntax_PropertyIssue {
 
 export class Syntax_PropertyUnknownIssue extends Syntax_PropertyIssue {
     readonly id = 'PropertyUnknown';
-    protected msg = () => `Property "${this.property}" is not defined as a lionweb property`;
+    protected msg = () => `Property "${this.property}" is not defined as a LionWeb property`;
 }
 
 export class Syntax_PropertyNullIssue extends Syntax_PropertyIssue {

@@ -82,7 +82,7 @@ export const deserializeChunk = <NT extends Node>(
     /**
      * Instantiates a {@link Node} from its {@link SerializedNode serialization}.
      */
-    const instantiate = ({classifier: classifierMetaPointer, id, properties, children, references}: SerializedNode, parent?: NT): NT => {
+    const instantiate = ({classifier: classifierMetaPointer, id, properties, containments, references}: SerializedNode, parent?: NT): NT => {
 
         const classifier = allEntities
             .find((element) =>
@@ -125,7 +125,7 @@ export const deserializeChunk = <NT extends Node>(
         const node = instantiationFacade.nodeFor(parent, classifier, id, propertySettings)
 
         const serializedChildrenPerKey =
-            children === undefined ? {} : groupBy(children, (sp) => sp.containment.key)
+            containments === undefined ? {} : groupBy(containments, (sp) => sp.containment.key)
         const serializedReferencesPerKey =
             references === undefined ? {} : groupBy(references, (sp) => sp.reference.key)
 
@@ -133,7 +133,7 @@ export const deserializeChunk = <NT extends Node>(
             .forEach((feature) => {
                 if (feature instanceof Property && properties !== undefined && feature.key in serializedPropertiesPerKey) {
                     instantiationFacade.setFeatureValue(node, feature, propertySettings[feature.key])
-                } else if (feature instanceof Containment && children !== undefined && feature.key in serializedChildrenPerKey) {
+                } else if (feature instanceof Containment && containments !== undefined && feature.key in serializedChildrenPerKey) {
                     const childIds = serializedChildrenPerKey[feature.key].flatMap((serChildren) => serChildren.children) as Id[]
                     if (feature.multiple) {
                         childIds

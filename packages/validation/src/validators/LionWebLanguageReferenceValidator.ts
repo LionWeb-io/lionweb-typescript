@@ -16,7 +16,7 @@ import {
     LionWebJsonProperty, LionWebJsonReference
 } from "../json/LionWebJson";
 import { LionWebJsonChunkWrapper } from "../json/LionWebJsonChunkWrapper";
-import { LIONWEB_M3_CONCEPT_KEY, LIONWEB_M3_PROPERTY_KEY, LIONWEB_M3_PROPERTY_TYPE_KEY, LionwebLanguageDefinition } from "../json/LionwebLanguageDefinition";
+import { LIONWEB_M3_CONCEPT_KEY, LIONWEB_M3_PROPERTY_KEY, LIONWEB_M3_PROPERTY_TYPE_KEY, LionWebLanguageDefinition } from "../json/LionWebLanguageDefinition";
 import { SimpleFieldValidator } from "./SimpleFieldValidator";
 import { ValidationResult } from "./ValidationResult";
 
@@ -25,10 +25,10 @@ import { ValidationResult } from "./ValidationResult";
  */
 export class LionWebLanguageReferenceValidator {
     validationResult: ValidationResult;
-    language: LionwebLanguageDefinition;
+    language: LionWebLanguageDefinition;
     simpleFieldValidator: SimpleFieldValidator;
 
-    constructor(validationResult: ValidationResult, lang: LionwebLanguageDefinition) {
+    constructor(validationResult: ValidationResult, lang: LionWebLanguageDefinition) {
         this.validationResult = validationResult;
         this.language = lang;
         this.simpleFieldValidator = new SimpleFieldValidator(this.validationResult);
@@ -50,14 +50,14 @@ export class LionWebLanguageReferenceValidator {
                 this.validationResult.issue(new Language_UnknownConcept_Issue(nodeContext, node.classifier));
                 return;
             }
-            node.children.forEach((child, childIndex) => {
-                this.validateContainment(child, nodeContext.concat("children", childIndex));
+            node.properties.forEach((property, propIndex) => {
+                this.validateProperty(property, nodeContext.concat("properties", propIndex));
             });
-            node.references.forEach((ref, refIndex) => {
-                this.validateReference(ref, nodeContext.concat("children", refIndex));
+            node.containments.forEach((containment, childIndex) => {
+                this.validateContainment(containment, nodeContext.concat("containments", childIndex));
             });
-            node.properties.forEach((prop, propIndex) => {
-                this.validateProperty(prop, nodeContext.concat("children", propIndex));
+            node.references.forEach((reference, refIndex) => {
+                this.validateReference(reference, nodeContext.concat("references", refIndex));
             });
         });
     }

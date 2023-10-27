@@ -125,7 +125,7 @@
         "id",
         "classifier",
         "properties",
-        "children",
+        "containments",
         "references"
       ],
       "additionalProperties": false
@@ -183,7 +183,7 @@
         "id",
         "classifier",
         "properties",
-        "children",
+        "containments",
         "references"
       ],
       "additionalProperties": false
@@ -234,7 +234,7 @@
         "id",
         "classifier",
         "properties",
-        "children",
+        "containments",
         "references"
       ],
       "additionalProperties": false
@@ -289,7 +289,7 @@
         "id",
         "classifier",
         "properties",
-        "children",
+        "containments",
         "references"
       ],
       "additionalProperties": false
@@ -344,7 +344,7 @@
         "id",
         "classifier",
         "properties",
-        "children",
+        "containments",
         "references"
       ],
       "additionalProperties": false

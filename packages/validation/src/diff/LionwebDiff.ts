@@ -63,8 +63,8 @@ export class LwDiff {
         if (obj1.parent !== obj2.parent) {
             this.error(`Object ${obj1.id} has parent ${obj1.parent} vs. ${obj2.parent}`);
         }
-        for (const prop of obj1.properties) {
-            const key = prop.property.key;
+        for (const property of obj1.properties) {
+            const key = property.property.key;
             // console.log(`    property ${key} of node ${obj1.id}`)
             const otherProp = NodeUtils.findLwProperty(obj2, key);
             if (otherProp === null) {
@@ -73,8 +73,8 @@ export class LwDiff {
             }
             // const tmp = this.diffLwProperty(prop, otherProp);
         }
-        for (const child of obj1.children) {
-            const key = child.containment.key;
+        for (const containment of obj1.containments) {
+            const key = containment.containment.key;
             // console.log(`    property ${key} of node ${obj1.id}`)
             const otherChild = NodeUtils.findLwChild(obj2, key);
             if (otherChild === null) {
@@ -83,8 +83,8 @@ export class LwDiff {
             }
             // const tmp = this.diffLwChild(child, otherChild);
         }
-        for (const ref of obj1.references) {
-            const key = ref.reference.key;
+        for (const reference of obj1.references) {
+            const key = reference.reference.key;
             const otherref = NodeUtils.findLwReference(obj2, key);
             if (otherref === null) {
                 this.error(`Child with containment key ${key} does not exist in second object`);

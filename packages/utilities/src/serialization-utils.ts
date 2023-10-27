@@ -13,7 +13,7 @@ export const shortenedSerialization = ({nodes}: SerializationChunk) =>
         ...Object.fromEntries(
             [
                 ...node.properties.map((serProp) => [serProp.property.key, serProp.value]),
-                ...node.children.map((serContainment) => [serContainment.containment.key, serContainment.children]),
+                ...node.containments.map((serContainment) => [serContainment.containment.key, serContainment.children]),
                 ...node.references.map((serReference) => [serReference.reference.key, serReference.targets.map(({reference}) => reference)])
             ]
         )
@@ -34,7 +34,7 @@ export const sortedSerialization = ({serializationFormatVersion, languages, node
                 classifier: node.classifier,
                 parent: node.parent,
                 properties: sortByStringKey(node.properties, ({property}) => property.key),
-                children: sortByStringKey(node.children, ({containment}) => containment.key)
+                containments: sortByStringKey(node.containments, ({containment}) => containment.key)
                         .map(({containment, children}) => ({
                             containment,
                             children: children.sort()
