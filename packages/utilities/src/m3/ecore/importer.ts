@@ -1,7 +1,9 @@
 import {
     asArray,
     builtinPrimitives,
+    chain,
     Classifier,
+    concatenator,
     Concept,
     duplicatesAmong,
     Enumeration,
@@ -10,18 +12,19 @@ import {
     Language,
     LanguageEntity,
     LanguageFactory,
+    lastOf,
     namedsOf,
     PrimitiveType,
     qualifiedNameOf
 } from "@lionweb/core"
 import {
+    chain as chainHashers,
     checkDefinedData,
     checkUniqueData,
     checkUniqueId,
     checkValidId,
-    hashingIdGen,
-    wrapIdGen
-} from "../../id-generation.js"
+    hasher
+} from "../../hashing.js"
 import {EClass, EClassifier, EcoreXml, EEnum, EStructuralFeature} from "./types.js"
 
 
@@ -50,18 +53,22 @@ const typeDesc2primitiveType: Record<string, PrimitiveType> = {
  */
 export const asLionCoreLanguage = (ecoreXml: EcoreXml, version: string): Language => {
 
-    const ePackage = ecoreXml["ecore:EPackage"]
-    // TODO (#10)  an Ecore XML can contain multiple EPackage-s
-    const factory = new LanguageFactory(
-        ePackage["$"]["name"],
-        version,
-        wrapIdGen(
-            hashingIdGen(),
+    const idGen =
+        chainHashers(
+            hasher(),
             checkDefinedData,
             checkUniqueData,
             checkValidId,
             checkUniqueId
         )
+
+    const ePackage = ecoreXml["ecore:EPackage"]
+    // TODO (#10)  an Ecore XML can contain multiple EPackage-s
+    const factory = new LanguageFactory(
+        ePackage["$"]["name"],
+        version,
+        chain(concatenator("-"), idGen),
+        lastOf
     )
 
 

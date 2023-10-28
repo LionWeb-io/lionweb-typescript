@@ -15,10 +15,10 @@ import {
 import {builtinFeatures} from "./builtins.js"
 import {lioncore, metaConcepts, metaFeatures} from "./lioncore.js"
 import {classBasedClassifierDeducerFor, qualifiedNameOf} from "./functions.js"
-import {KeyGenerator, nameIsKeyGenerator} from "./key-generation.js"
 
 
 const {inamed_name} = builtinFeatures
+const {ikeyed_key} = metaFeatures
 
 
 export const lioncoreExtractionFacade: ExtractionFacade<M3Concept> = ({
@@ -32,29 +32,28 @@ export const lioncoreExtractionFacade: ExtractionFacade<M3Concept> = ({
 
 /**
  * @return An implementation of {@link InstantiationFacade} for instances of the LionCore M3 (so M2s).
- * The returned {@link InstantiationFacade} uses the given {@link KeyGenerator key generator} to generate the keys of all objects in the M2.
  */
-export const lioncoreInstantiationFacadeWithKeyGen = (keyGen: KeyGenerator): InstantiationFacade<M3Concept> => ({
+export const lioncoreInstantiationFacade: InstantiationFacade<M3Concept> = ({
     nodeFor: (parent, classifier, id, propertySettings) => {
         switch (classifier.key) {
             case metaConcepts.concept.key:
-                return new Concept(parent as Language, propertySettings[inamed_name.key] as string, "", id, propertySettings[metaFeatures.concept_abstract.key] as boolean).keyed(keyGen)
+                return new Concept(parent as Language, propertySettings[inamed_name.key] as string, propertySettings[ikeyed_key.key] as string, id, propertySettings[metaFeatures.concept_abstract.key] as boolean)
             case metaConcepts.interface.key:
-                return new Interface(parent as Language, propertySettings[inamed_name.key] as string, "", id).keyed(keyGen)
+                return new Interface(parent as Language, propertySettings[inamed_name.key] as string, propertySettings[ikeyed_key.key] as string, id)
             case metaConcepts.containment.key:
-                return new Containment(parent as Classifier, propertySettings[inamed_name.key] as string, "", id).keyed(keyGen)
+                return new Containment(parent as Classifier, propertySettings[inamed_name.key] as string, propertySettings[ikeyed_key.key] as string, id)
             case metaConcepts.enumeration.key:
-                return new Enumeration(parent as Language, propertySettings[inamed_name.key] as string, "", id).keyed(keyGen)
+                return new Enumeration(parent as Language, propertySettings[inamed_name.key] as string, propertySettings[ikeyed_key.key] as string, id)
             case metaConcepts.enumerationLiteral.key:
-                return new EnumerationLiteral(parent as Enumeration, propertySettings[inamed_name.key] as string, "", id).keyed(keyGen)
+                return new EnumerationLiteral(parent as Enumeration, propertySettings[inamed_name.key] as string, propertySettings[ikeyed_key.key] as string, id)
             case metaConcepts.language.key:
                 return new Language(propertySettings[inamed_name.key] as string, propertySettings[metaFeatures.language_version.key] as string, id, propertySettings[metaFeatures.ikeyed_key.key] as string)
             case metaConcepts.primitiveType.key:
-                return new PrimitiveType(parent as Language, propertySettings[inamed_name.key] as string, "", id).keyed(keyGen)
+                return new PrimitiveType(parent as Language, propertySettings[inamed_name.key] as string, propertySettings[ikeyed_key.key] as string, id)
             case metaConcepts.property.key:
-                return new Property(parent as Classifier, propertySettings[inamed_name.key] as string, "", id).keyed(keyGen)
+                return new Property(parent as Classifier, propertySettings[inamed_name.key] as string, propertySettings[ikeyed_key.key] as string, id)
             case metaConcepts.reference.key:
-                return new Reference(parent as Classifier, propertySettings[inamed_name.key] as string, "", id).keyed(keyGen)
+                return new Reference(parent as Classifier, propertySettings[inamed_name.key] as string, propertySettings[ikeyed_key.key] as string, id)
             default:
                 throw new Error(`can't deserialize a node of concept "${qualifiedNameOf(classifier)}" with key "${classifier.key}"`)
         }
@@ -64,12 +63,4 @@ export const lioncoreInstantiationFacadeWithKeyGen = (keyGen: KeyGenerator): Ins
     },
     encodingOf: (literal) => literal
 })
-
-
-/**
- * An implementation of {@link InstantiationFacade} for instances of the LionCore M3 (so M2s), where key = name.
- *
- * TODO  deprecate this: [de-]serialization of metamodels should be parametrized with key generation throughout
- */
-export const lioncoreInstantiationFacade = lioncoreInstantiationFacadeWithKeyGen(nameIsKeyGenerator)
 

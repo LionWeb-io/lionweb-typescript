@@ -2,6 +2,12 @@
 
 ## 0.5.0
 
+* _Breaking change:_ Rework ID and key generation in the LionCore `LanguageFactory`.
+    As part of that:
+    * Add `String[s]Mapper` types, a `StringsMapper` instance `last`, and functions `concatenator` and `chain` to produce instances of them.
+    * Remove `M3Node.keyed` and the "awkward" key generation in the `InstantiationFacade` for the LionCore language.
+    * Remove types `IdGenerator`, and `KeyGenerator` and everything related to that.
+    * Expose keys (instead of qualified names) for LionCore M3 and the LionCore built-ins.
 * Add a type `DynamicINamed` and an M3-function `conceptsOf`, primarily for generation purposes.
 * Move `asText` and ID checking to `@lionweb/utilities`.
 * Expose a helper function `nameSorted`.

@@ -1,14 +1,17 @@
 import {LanguageFactory} from "./factory.js"
-import {lioncoreBuiltinsQName, lioncoreQNameSeparator, Property} from "./types.js"
-import {qualifiedNameBasedKeyGenerator} from "./key-generation.js"
+import {lioncoreBuiltinsKey, Property} from "./types.js"
+import {concatenator} from "../utils/string-mapping.js"
 import {currentReleaseVersion} from "../version.js"
 
 
+const lioncoreBuiltinsIdAndKeyGenerator = concatenator("-")
+
+
 const factory = new LanguageFactory(
-    lioncoreBuiltinsQName,
+    lioncoreBuiltinsKey,
     currentReleaseVersion,
-    (qualifiedName) => qualifiedName!,
-    qualifiedNameBasedKeyGenerator(lioncoreQNameSeparator)
+    lioncoreBuiltinsIdAndKeyGenerator,
+    lioncoreBuiltinsIdAndKeyGenerator
 )
 
 /**

@@ -1,8 +1,13 @@
-import {builtinClassifiers, builtinPrimitives, LanguageFactory} from "@lionweb/core"
-import {hashingIdGen} from "@lionweb/utilities"
+import {builtinClassifiers, builtinPrimitives, chain, concatenator, LanguageFactory, lastOf} from "@lionweb/core"
+import {hasher} from "@lionweb/utilities"
 
 
-const factory = new LanguageFactory("Shapes", "1", hashingIdGen({ encoding: "base64" }))
+const factory = new LanguageFactory(
+    "Shapes",
+    "1",
+    chain(concatenator("-"), hasher({ encoding: "base64" })),
+    lastOf
+)
 export const shapesLanguage = factory.language
 
 const Geometry = factory.concept("Geometry", false)

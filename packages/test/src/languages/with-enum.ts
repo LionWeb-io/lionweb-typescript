@@ -1,8 +1,13 @@
-import {LanguageFactory} from "@lionweb/core"
-import {hashingIdGen} from "@lionweb/utilities"
+import {chain, concatenator, LanguageFactory, lastOf} from "@lionweb/core"
+import {hasher} from "@lionweb/utilities"
 
 
-const factory = new LanguageFactory("language-with-enum", "1", hashingIdGen())
+const factory = new LanguageFactory(
+    "language-with-enum",
+    "1",
+    chain(concatenator("-"), hasher()),
+    lastOf
+)
 
 const enum_ = factory.enumeration("MyEnum")
 enum_.havingLiterals(

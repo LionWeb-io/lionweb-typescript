@@ -5,7 +5,7 @@ import {
     nameBasedClassifierDeducerFor,
     updateSettingsNameBased
 } from "@lionweb/core"
-import {hashingIdGen} from "@lionweb/utilities"
+import {hasher} from "@lionweb/utilities"
 import {libraryLanguage} from "../languages/library.js"
 
 
@@ -93,17 +93,17 @@ export const libraryInstantiationFacade: InstantiationFacade<BaseNode> = {
  */
 
 
-const id = hashingIdGen()
+const hash = hasher()
 
 export const jackLondon: GuideBookWriter = {
-    id: id("Jack London"),
+    id: hash("Jack London"),
     classifier: "GuideBookWriter",
     name: "Jack London",
     countries: "Alaska" // (not a country...)
 }
 
 const explorerBook: Book = {
-    id: id("Explorer Book"),
+    id: hash("Explorer Book"),
     classifier: "Book",
     title: "Explorer Book",
     author: jackLondon,
@@ -112,7 +112,7 @@ const explorerBook: Book = {
 }
 
 export const bobLibrary: Library = {
-    id: id("Bob's Library"),
+    id: hash("Bob's Library"),
     classifier: "Library",
     name: "Bob's Library",
     books: [

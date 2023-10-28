@@ -1,4 +1,4 @@
-import {hashingIdGen} from "@lionweb/utilities"
+import {hasher} from "@lionweb/utilities"
 import {ExtractionFacade, nameBasedClassifierDeducerFor, Node} from "@lionweb/core"
 import {multiLanguage} from "../languages/multi.js"
 import {BaseNode, bobLibrary, jackLondon, Library, libraryExtractionFacade} from "./library.js"
@@ -20,10 +20,10 @@ export const multiExtractionFacade: ExtractionFacade<BaseNode> = {
 }
 
 
-const id = hashingIdGen()
+const hash = hasher()
 
 const container: Container = {
-    id: id("MyContainer"),
+    id: hash("MyContainer"),
     classifier: "Container",
     libraries: [
         bobLibrary

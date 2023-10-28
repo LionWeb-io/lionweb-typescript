@@ -1,13 +1,17 @@
 import {nanoid} from "nanoid"
 import {createHash} from "crypto"
 
-import {GenData, IdGenerator} from "@lionweb/core"
+
+/**
+ * Type def. for a hashing function string &rarr; string.
+ */
+export type StringHasher = (str: string) => string
 
 
 /**
- * ID generator based on the {@link https://zelark.github.io/nano-id-cc/ `nanoid` NPM package}.
+ * Hasher based on the {@link https://zelark.github.io/nano-id-cc/ `nanoid` NPM package}.
  */
-export const nanoIdGen = (): IdGenerator =>
+export const nanoIdGen = (): StringHasher =>
     () => nanoid()
 
 
@@ -15,23 +19,22 @@ const defaultHashAlgorithm = "SHA256"
 
 /**
  * Type definition for objects that configure a
- * {@link hashingIdGen hashing ID generator}.
+ * {@link StringHasher hasher}.
  */
-export type HashingIdGenConfig = {
+export type StringHasherConfig = {
     algorithm?: typeof defaultHashAlgorithm | string
     salt?: string
     encoding?: "base64url" | "base64"
 }
 
 /**
- * Creates a {@link IdGenerator hashing ID generator},
- * optionally using a {@link HashingIdGenConfig configuration object}.
+ * Creates a {@link StringHasher hasher},
+ * optionally using a {@link StringHasherConfig configuration object}.
  * The default is:
  *   - uses the *SHA256* hashing algorithm
  *   - without salt prefix string
- * Note that the created ID generator must be given data in the form of a string (`!== undefined`).
  */
-export const hashingIdGen = (config?: HashingIdGenConfig): IdGenerator => {
+export const hasher = (config?: StringHasherConfig): StringHasher => {
     const algorithm = config?.algorithm ?? defaultHashAlgorithm
     const salt = config?.salt ?? ""
     const encoding = config?.encoding ?? "base64url"
@@ -49,45 +52,45 @@ export const hashingIdGen = (config?: HashingIdGenConfig): IdGenerator => {
 
 
 /**
- * Augments the given {@link IdGenerator ID generator} by checking
- * whether it's been given unique {@link GenData data},
+ * Augments the given {@link StringHasher hasher} by checking
+ * whether it's been given unique strings,
  * throwing an error when not.
  */
-export const checkUniqueData = (idGen: IdGenerator): IdGenerator => {
-    const datas: GenData[] = []
+export const checkUniqueData = (hasher: StringHasher): StringHasher => {
+    const datas: string[] = []
     return (data) => {
         if (datas.indexOf(data) > -1) {
             throw new Error(`duplicate data encountered: "${data}"`)
         }
         datas.push(data)
-        return idGen(data)
+        return hasher(data)
     }
 }
 
 
 /**
- * Augments the given {@link IdGenerator ID generator} by checking
+ * Augments the given {@link StringHasher hasher} by checking
  * whether it's been given defined ({@code !== undefined}) data,
  * throwing an error when not.
  */
-export const checkDefinedData = (idGen: IdGenerator): IdGenerator =>
+export const checkDefinedData = (hasher: StringHasher): StringHasher =>
     (data) => {
         if (data === undefined) {
             throw new Error(`expected data`)
         }
-        return idGen(data)
+        return hasher(data)
     }
 
 
 /**
- * Augments the given {@link IdGenerator ID generator} by checking
+ * Augments the given {@link StringHasher hasher} by checking
  * whether that returns unique IDs, throwing an error when not.
  */
-export const checkUniqueId = (idGen: IdGenerator): IdGenerator => {
+export const checkUniqueId = (hasher: StringHasher): StringHasher => {
     const ids: string[] = []
 
     return (data) => {
-        const id = idGen(data)
+        const id = hasher(data)
         if (ids.indexOf(id) > -1) {
             throw new Error(`duplicate ID generated: "${id}"`)
         }
@@ -98,14 +101,14 @@ export const checkUniqueId = (idGen: IdGenerator): IdGenerator => {
 
 
 /**
- * Augments the given {@link IdGenerator ID generator} by checking
+ * Augments the given {@link StringHasher hasher} by checking
  * whether it returns valid IDs, meaning [Base64URL](https://www.base64url.com/).
  * (See also [Wikipedia](https://en.wikipedia.org/wiki/Base64#Variants_summary_table).)
  * If a generated ID is not valid, an error is thrown.
  */
-export const checkValidId = (idGen: IdGenerator): IdGenerator =>
+export const checkValidId = (hasher: StringHasher): StringHasher =>
     (data) => {
-        const id = idGen(data)
+        const id = hasher(data)
         if (!id.match(/^[A-Za-z0-9_-]+$/)) {
             throw new Error(`generated ID is not valid: ${id}`)
         }
@@ -114,28 +117,28 @@ export const checkValidId = (idGen: IdGenerator): IdGenerator =>
 
 
 /**
- * Type definition for transformers of {@link IdGenerator ID generators}.
+ * Type definition for transformers of {@link StringHasher hashers}.
  */
-export type IdGenTransformer = (idGen: IdGenerator) => IdGenerator
+export type StringHasherTransformer = (hasher: StringHasher) => StringHasher
 
 /**
- * Wraps the given ("initial") {@link IdGenerator ID generator}
- * with the given {@link IdGenTransformer ID generator transformers}.
+ * Wraps the given ("initial") {@link StringHasher hasher}
+ * with the given {@link HasherTransformer hasher transfomers}.
  * In other words:
  *
- *      wrap(idGen, trafo1, trafo2, ..., trafoN) === trafoN(...trafo2(trafo1(idGen)))
+ *      chain(hasher, trafo1, trafo2, ..., trafoN) === trafoN(...trafo2(trafo1(hasher)))
  */
-export const wrapIdGen = (idGen: IdGenerator, ...idGenTransformers: IdGenTransformer[]): IdGenerator =>
-    idGenTransformers.reduce((acc, current) => current(acc), idGen)
+export const chain = (hasher: StringHasher, ...hasherTransformers: StringHasherTransformer[]): StringHasher =>
+    hasherTransformers.reduce((acc, current) => current(acc), hasher)
 
 
 /**
- * Wraps the given ("initial") {@link IdGenerator ID generator} with all
- * {@link IdGenTransformer ID generator checkers} defined above.
+ * Wraps the given ("initial") {@link StringHasher hasher} with all
+ * {@link HasherTransformer hasher transfomers} defined above.
  */
-export const checkAll = (idGen: IdGenerator): IdGenerator =>
-    wrapIdGen(
-        idGen,
+export const checkAll = (hasher: StringHasher): StringHasher =>
+    chain(
+        hasher,
         checkDefinedData,
         checkUniqueData,
         checkValidId,

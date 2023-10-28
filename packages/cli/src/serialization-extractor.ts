@@ -1,7 +1,7 @@
 import {writeFileSync} from "fs"
 import {extname} from "path"
 
-import {currentSerializationFormatVersion, deserializeLanguage, lioncoreQName, SerializationChunk} from "@lionweb/core"
+import {currentSerializationFormatVersion, deserializeLanguage, lioncoreKey, SerializationChunk} from "@lionweb/core"
 import {asText, readFileAsJson, shortenedSerialization, sortedSerialization, writeJsonAsFile} from "@lionweb/utilities"
 
 
@@ -13,7 +13,7 @@ const isSerializedLanguage = (json: unknown): boolean =>
     && json["serializationFormatVersion"] === currentSerializationFormatVersion
     && "languages" in json
     && Array.isArray(json["languages"])
-    && json["languages"].some((language) => isRecord(language) && language["key"] === lioncoreQName)
+    && json["languages"].some((language) => isRecord(language) && language["key"] === lioncoreKey)
 
 
 export const extractFromSerialization = async (path: string) => {

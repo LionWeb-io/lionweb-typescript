@@ -5,16 +5,13 @@
 
 import {MultiRef, SingleRef, unresolved} from "../references.js"
 import {Id, Node} from "../types.js"
-import {KeyGenerator} from "./key-generation.js"
 
-
-const lioncoreQNameSeparator = "-"
 
 /**
- * The qualified name of the LionCore language containing the built-in {@link PrimitiveType primitive types}.
- * (It's defined here because its knowledge intrinsic to all LionCore M3 instances.
+ * The key of the LionCore language containing the built-ins.
+ * (It's defined here because of instantiation order.)
  */
-const lioncoreBuiltinsQName = "LionCore-builtins"
+const lioncoreBuiltinsKey = "LionCore-builtins"
 
 
 // Types appear roughly in the order of top-to-down+left-to-right in the diagram at:
@@ -58,16 +55,6 @@ abstract class M3Node implements IKeyed {
     }
     havingKey(key: Id) {
         this.key = key
-        return this
-    }
-
-    /**
-     * Sets the key of this {@link M3Node} using the given {@link KeyGenerator key generator}.
-     * Note: this doesn't need to be idempotent!
-     */
-    keyed(keyGenerator: KeyGenerator) {
-        this.key = keyGenerator(this as unknown as M3Concept)
-        // FIXME  the cast smells like a hack...
         return this
     }
 }
@@ -224,7 +211,7 @@ class Language extends M3Node {
         // TODO  check actual types of metamodels, or use type shapes/interfaces
         this.dependsOn.push(
             ...metamodels
-                .filter((metamodel) => metamodel.name !== lioncoreBuiltinsQName)
+                .filter((language) => language.key !== lioncoreBuiltinsKey)
         )
         return this
     }
@@ -270,8 +257,7 @@ export {
     Reference,
     isINamed,
     isIKeyed,
-    lioncoreBuiltinsQName,
-    lioncoreQNameSeparator
+    lioncoreBuiltinsKey
 }
 
 export type {

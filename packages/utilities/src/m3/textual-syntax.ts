@@ -60,7 +60,7 @@ ${descent(node.literals, "\n")}`}`
     if (node instanceof Language) {
         return `language ${node.name}
     version: ${node.version}${node.dependsOn.length > 0
-        ? `    dependsOn:
+        ? `\n    dependsOn:
 ${node.dependsOn.map((language) => `        ${language.key} (${language.version})`).join("\n")}
 `
         : ``}

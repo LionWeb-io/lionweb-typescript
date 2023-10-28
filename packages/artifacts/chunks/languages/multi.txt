@@ -1,6 +1,7 @@
 language multi
-    version: 1    dependsOn:
-        txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow (1)
+    version: 1
+    dependsOn:
+        library (1)
 
     entities (↓name):
 

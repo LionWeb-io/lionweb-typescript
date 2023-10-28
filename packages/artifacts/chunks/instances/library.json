@@ -2,7 +2,7 @@
   "serializationFormatVersion": "2023.1",
   "languages": [
     {
-      "key": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
+      "key": "library",
       "version": "1"
     }
   ],
@@ -10,14 +10,14 @@
     {
       "id": "jkxERSov0TuSh7MMz2D5ciLrZDrU4o_VMOpmBqh_j7E",
       "classifier": {
-        "language": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
+        "language": "library",
         "version": "1",
         "key": "Library"
       },
       "properties": [
         {
           "property": {
-            "language": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
+            "language": "library",
             "version": "1",
             "key": "library_Library_name"
           },
@@ -27,7 +27,7 @@
       "containments": [
         {
           "containment": {
-            "language": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
+            "language": "library",
             "version": "1",
             "key": "books"
           },
@@ -42,14 +42,14 @@
     {
       "id": "Q1NQ_zXwOF2Pjf1uklMTumJhQH4V1Qnfjnu0gz7Fzzs",
       "classifier": {
-        "language": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
+        "language": "library",
         "version": "1",
         "key": "Book"
       },
       "properties": [
         {
           "property": {
-            "language": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
+            "language": "library",
             "version": "1",
             "key": "title"
           },
@@ -57,7 +57,7 @@
         },
         {
           "property": {
-            "language": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
+            "language": "library",
             "version": "1",
             "key": "pages"
           },
@@ -65,7 +65,7 @@
         },
         {
           "property": {
-            "language": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
+            "language": "library",
             "version": "1",
             "key": "type"
           },
@@ -76,7 +76,7 @@
       "references": [
         {
           "reference": {
-            "language": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
+            "language": "library",
             "version": "1",
             "key": "author"
           },
@@ -93,14 +93,14 @@
     {
       "id": "7RxOqvS1ZIdpk-ao-6Tzy1QQRxl6fp_tGMH_BIK4LzQ",
       "classifier": {
-        "language": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
+        "language": "library",
         "version": "1",
         "key": "GuideBookWriter"
       },
       "properties": [
         {
           "property": {
-            "language": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
+            "language": "library",
             "version": "1",
             "key": "countries"
           },
@@ -108,7 +108,7 @@
         },
         {
           "property": {
-            "language": "txjxNU9yRzEuyghtmgJK_l-nF93qWt7d1vErz5RbLow",
+            "language": "library",
             "version": "1",
             "key": "library_Writer_name"
           },

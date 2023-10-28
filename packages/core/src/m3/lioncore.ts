@@ -1,35 +1,21 @@
-import {LanguageFactory} from "./factory.js"
 import {builtinClassifiers, builtinPrimitives} from "./builtins.js"
-import {Classifier, EnumerationLiteral, Feature, lioncoreQNameSeparator} from "./types.js"
+import {LanguageFactory} from "./factory.js"
 import {currentReleaseVersion} from "../version.js"
 
 
-const lioncoreQName = "LionCore-M3"
+const lioncoreKey = "LionCore-M3"
 
 
 const factory = new LanguageFactory(
     "LionCore.M3",
     currentReleaseVersion,
-    (qualifiedName) =>
-        "-id-" +
-            (qualifiedName === "LionCore.M3"
-                ? lioncoreQName
-                : qualifiedName!
-                    .substring(lioncoreQName.length + 1)
-                    .replaceAll(".", lioncoreQNameSeparator)
-            ),
-    (node) => {
-        if (node instanceof Classifier) {
-            return node.name
-        }
-        if (node instanceof EnumerationLiteral) {
-            return `${node.enumeration.name}-${node.name}`
-        }
-        if (node instanceof Feature) {
-            return `${node.classifier.name}-${node.name}`
-        }
-        throw Error(`cannot compute key for node "${node.name}" of runtime-type "${node.constructor.name}"`)
-    }
+    (...names) =>
+        "-id-" + (
+            names.length === 1
+                ? lioncoreKey
+                : names.slice(1).join("-")
+        ),
+    (...names) => names.slice(1).join("-")
 )
 
 
@@ -268,5 +254,5 @@ export const metaFeatures = {
     property_type
 }
 
-export {lioncoreQName}
+export {lioncoreKey}
 

@@ -7,82 +7,66 @@ import {
     EnumerationLiteral,
     Interface,
     Language,
-    lioncoreQNameSeparator,
     PrimitiveType,
     Property,
     Reference
 } from "./types.js"
 import {SingleRef} from "../references.js"
-import {IdGenerator} from "../id-generation.js"
-import {qualifiedNameOf} from "./functions.js"
-import {KeyGenerator, nameIsKeyGenerator} from "./key-generation.js"
-
-
-const concat = (...names: string[]): string =>
-    names.join(lioncoreQNameSeparator)
-
-
-const unkeyed = "!--no key generated--!"
+import {StringsMapper} from "../utils/string-mapping.js"
 
 
 /**
  * A factory that produces a {@link Language} instance,
  * as well as elements contained by that instance.
- * The {@link https://zelark.github.io/nano-id-cc/ `nanoid`-based} ID generator
- * is used, unless specified otherwise.
  */
 export class LanguageFactory {
 
-    readonly id: IdGenerator
-    readonly key: KeyGenerator
+    readonly id: StringsMapper
+    readonly key: StringsMapper
     readonly language: Language
 
-    constructor(name: string, version: string, id: IdGenerator, key: KeyGenerator = nameIsKeyGenerator) {
+    constructor(name: string, version: string, id: StringsMapper, key: StringsMapper) {
         this.id = id
         this.key = key
-        const idAndKey = this.id(name)  // need to call this.id just once
-        this.language = new Language(name, version, idAndKey, idAndKey)
+        this.language = new Language(name, version, this.id(name), this.key(name))
     }
 
-
-    // TODO  this pattern (post-re-setting the key) is not nice: improve...
-
     annotation(name: string, extends_?: SingleRef<Annotation>) {
-        return new Annotation(this.language, name, unkeyed, this.id(concat(this.language.name, name)), extends_).keyed(this.key)
+        return new Annotation(this.language, name, this.key(this.language.name, name), this.id(this.language.name, name), extends_)
     }
 
     concept(name: string, abstract: boolean, extends_?: SingleRef<Concept>) {
-        return new Concept(this.language, name, unkeyed, this.id(concat(this.language.name, name)), abstract, extends_).keyed(this.key)
+        return new Concept(this.language, name, this.key(this.language.name, name), this.id(this.language.name, name), abstract, extends_)
     }
 
     interface(name: string) {
-        return new Interface(this.language, name, unkeyed, this.id(concat(this.language.name, name))).keyed(this.key)
+        return new Interface(this.language, name, this.key(this.language.name, name), this.id(this.language.name, name))
     }
 
     enumeration(name: string) {
-        return new Enumeration(this.language, name, unkeyed, this.id(concat(this.language.name, name))).keyed(this.key)
+        return new Enumeration(this.language, name, this.key(this.language.name, name), this.id(this.language.name, name))
     }
 
     primitiveType(name: string) {
-        return new PrimitiveType(this.language, name, unkeyed, this.id(concat(this.language.name, name))).keyed(this.key)
+        return new PrimitiveType(this.language, name, this.key(this.language.name, name), this.id(this.language.name, name))
     }
 
 
     containment(classifier: Classifier, name: string) {
-        return new Containment(classifier, name, unkeyed, this.id(concat(qualifiedNameOf(classifier, lioncoreQNameSeparator), name))).keyed(this.key)
+        return new Containment(classifier, name, this.key(this.language.name, classifier.name, name), this.id(this.language.name, classifier.name, name))
     }
 
     property(classifier: Classifier, name: string) {
-        return new Property(classifier, name, unkeyed, this.id(concat(qualifiedNameOf(classifier, lioncoreQNameSeparator), name))).keyed(this.key)
+        return new Property(classifier, name, this.key(this.language.name, classifier.name, name), this.id(this.language.name, classifier.name, name))
     }
 
     reference(classifier: Classifier, name: string) {
-        return new Reference(classifier, name, unkeyed, this.id(concat(qualifiedNameOf(classifier, lioncoreQNameSeparator), name))).keyed(this.key)
+        return new Reference(classifier, name, this.key(this.language.name, classifier.name, name), this.id(this.language.name, classifier.name, name))
     }
 
 
     enumerationLiteral(enumeration: Enumeration, name: string) {
-        return new EnumerationLiteral(enumeration, name, unkeyed, this.id(concat(qualifiedNameOf(enumeration, lioncoreQNameSeparator), name))).keyed(this.key)
+        return new EnumerationLiteral(enumeration, name, this.key(this.language.name, enumeration.name, name), this.id(this.language.name, enumeration.name, name))
     }
 
 }
