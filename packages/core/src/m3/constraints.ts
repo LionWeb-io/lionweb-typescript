@@ -1,4 +1,4 @@
-import {Classifier, isINamed, Language, M3Concept} from "./types.js"
+import { Classifier, isINamed, Language, M3Concept } from "./types.js"
 import {flatMap, inheritedCycleWith, keyOf, namedsOf, qualifiedNameOf} from "./functions.js"
 import {duplicatesAmong} from "../utils/grouping.js"
 
@@ -34,6 +34,38 @@ export const issuesLanguage = (language: Language): Issue[] =>
                     })
                 }
 
+                // The name should not be non-empty string
+                if(isINamed(t)) {
+                    t.name.trim().length === 0 && issue(`A Language name must not be empty`)                   
+                }
+
+                // The name should not start with a number
+                if (t instanceof Language) {
+                    const name = t.name.trim()                
+                    !isNaN(parseInt(name[0])) && issue(`A Language name cannot start with a number`)
+                }
+
+                // The version is a non-empty string
+                if (t instanceof Language) {
+                  const version = t.version.trim();
+                  version.length === 0 && issue(`A Language version must be a non-empty string`)
+                }
+
+                // The name should not contain whitespace characters"
+                if (t instanceof Language) {
+                    const name = t.name.trim()
+                    name.includes(" ") && issue(`A Language name cannot contain whitespace characters`)
+                }
+
+                // The name should support Unicode characters, numbers, and underscores
+
+                // The concept should not have non-whitespace name
+                // if (t instanceof Concept) {
+                //     t.language.name.includes(" ") && issue(`A Concept name cannot contain whitespace characters`)
+                // }
+
+
+                // The classifier should not inherit from itself (directly or indirectly) // TODO
                 if (t instanceof Classifier) {
                     const cycle = inheritedCycleWith(t)
                     if (cycle.length > 0) {
@@ -42,18 +74,6 @@ export const issuesLanguage = (language: Language): Issue[] =>
                     }
                 }
               
-                if (t instanceof Language) {
-                  const version = t.version.trim();
-                  version.length === 0 && issue(`A Language version must be a non-empty string`)
-                }
-
-
-                if (isINamed(t)) {
-                    if (t.name.trim().length === 0) {
-                        issue(`A ${t.constructor.name} must have a non-whitespace name`)
-                            // TODO  same as above
-                    }
-                }
 
                 return issues
             }
