@@ -1,6 +1,6 @@
-import {assert} from "chai"
 import {chain, concatenator, Concept, issuesLanguage, Language, LanguageFactory, lastOf} from "@lionweb/core"
 import {nanoIdGen} from "@lionweb/utilities"
+import { deepEqual } from "assert"
 
 /**
  * Constraints (LionCore)
@@ -97,7 +97,7 @@ describe("Concept Constraints", () => {
     it("should not allow self-extension or circular extends", () => { })
     it("should have root nodes with the partition flag set to true", () => { })
     it("check that inheritance cycles are detected", () => {
-        const factory = new LanguageFactory("metamodel", "1", nanoIdGen())
+        const factory = new LanguageFactory("metamodel", "1", chain(concatenator("-"), nanoIdGen()), lastOf)
         const {language} = factory
         const cis = [0, 1, 2].map((i) => factory.interface(`interface_${i}`))
         cis[2].extends.push(cis[1])
@@ -115,7 +115,7 @@ describe("Concept Constraints", () => {
     })
 
     it("check that trivial inheritance cycles are detected", () => {
-        const factory = new LanguageFactory("metamodel", "1", nanoIdGen())
+        const factory = new LanguageFactory("metamodel", "1", chain(concatenator("-"), nanoIdGen()), lastOf)
         const {language} = factory
         const ci = factory.interface(`foo`)
         ci.extends.push(ci)
