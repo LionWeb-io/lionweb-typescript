@@ -1,5 +1,5 @@
 import { Classifier, isINamed, Language, M3Concept } from "./types.js"
-import {flatMap, inheritedCycleWith, keyOf, namedsOf, qualifiedNameOf} from "./functions.js"
+import {containeds, flatMap, idOf, inheritedCycleWith, keyOf, namedsOf, qualifiedNameOf} from "./functions.js"
 import {duplicatesAmong} from "../utils/grouping.js"
 
 
@@ -57,12 +57,7 @@ export const issuesLanguage = (language: Language): Issue[] =>
                     name.includes(" ") && issue(`A Language name cannot contain whitespace characters`)
                 }
 
-                // The name should support Unicode characters, numbers, and underscores
 
-                // The concept should not have non-whitespace name
-                // if (t instanceof Concept) {
-                //     t.language.name.includes(" ") && issue(`A Concept name cannot contain whitespace characters`)
-                // }
 
 
                 // The classifier should not inherit from itself (directly or indirectly) // TODO
@@ -82,6 +77,12 @@ export const issuesLanguage = (language: Language): Issue[] =>
             .flatMap(
                 ([key, ts]) => ts.map(
                     (t) => ({ location: t, message: `Multiple (nested) language elements with the same key "${key}" exist in this language`, secondaries: ts.filter((otherT) => t !== otherT) })
+                )
+            ),
+        ...Object.entries(duplicatesAmong(containeds(language), idOf))
+            .flatMap(
+                ([id, ts]) => ts.map(
+                    (t) => ({ location: t, message: `Multiple (nested) language elements with the same ID "${id}" exist in this language`, secondaries: ts.filter((otherT) => t !== otherT) })
                 )
             ),
         ...Object.entries(duplicatesAmong(namedsOf(language), qualifiedNameOf))

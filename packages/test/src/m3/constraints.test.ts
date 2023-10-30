@@ -44,7 +44,30 @@ describe("General Constraints - Name/Version" , () => {
 })
 
 describe("Identifiers and Keys", () => {
-    it("should be unique within its id-space", () => { })
+    it("should (Key) be unique within its id-space", () => {
+        const language = new Language("myLang", "0", "x", "x")
+        const concept1 = new Concept(language, "myConcept1", "key_y", "id_1", false)
+        const concept2 = new Concept(language, "myConcept2", "key_y", "id_2", false)
+        language.havingEntities(concept1, concept2)
+
+        const issues = issuesLanguage(language)
+        // console.log(issues)
+        deepEqual(issues.length, 2)
+
+     })
+
+    it("should (Identifiers) be unique within its id-space", () => {
+        const language = new Language("myLang", "0", "x", "x")
+        const concept1 = new Concept(language, "myConcept1", "key_1", "id_y", false)
+        const concept2 = new Concept(language, "myConcept2", "key_2", "id_y", false)
+        language.havingEntities(concept1, concept2)
+
+        const issues = issuesLanguage(language)
+        // console.log(issues)
+        deepEqual(issues.length, 2)
+
+    })
+    
     it("should consist only of latin characters (upper/lowercase), numbers, underscores, and hyphens", () => { })
     it("should be a globally unique identifier that also satisfies id constraints", () => { })
     it("should be identical and stable for built-in elements", () => { })
@@ -106,8 +129,6 @@ describe("Concept Constraints", () => {
         language.entities.push(...cis)
 
         const issues = issuesLanguage(language)
-        // console.dir(issues, {depth: 3})
-        console.log(issues)
 
         deepEqual(issues.length, 3)
         const message1 = issues?.find(({location}) => location === cis[0])?.message
