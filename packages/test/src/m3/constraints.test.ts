@@ -59,7 +59,7 @@ describe("Multiplicity", () => {
 describe("Language Constraints", () => {
     it("should (entities, concept,...) have names", () => {
         const language = new Language("", "0", "x", "x")
-        const concept = new Concept(language, "   ", "y", "y", false)
+        const concept = new Concept(language, " my lang  ", "y", "y", false)
         language.havingEntities(concept)
         const issues = issuesLanguage(language)
         deepEqual(issues.length, 2)
@@ -73,8 +73,8 @@ describe("Language Constraints", () => {
 
         deepEqual(issues[1], {
             location: concept,
-            // message: "A Concept name cannot contain whitespace characters",
-            message: "A Language name must not be empty",
+            message: "A Language name cannot contain whitespace characters",
+            // message: "A Language name must not be empty",
             secondaries: []
         })
     })
@@ -99,16 +99,19 @@ describe("Concept Constraints", () => {
     it("check that inheritance cycles are detected", () => {
         const factory = new LanguageFactory("metamodel", "1", nanoIdGen())
         const {language} = factory
-        const cis = [0, 1, 2].map((i) => factory.interface(`interface ${i}`))
+        const cis = [0, 1, 2].map((i) => factory.interface(`interface_${i}`))
         cis[2].extends.push(cis[1])
         cis[1].extends.push(cis[0])
         cis[0].extends.push(cis[2])
         language.entities.push(...cis)
 
         const issues = issuesLanguage(language)
+        // console.dir(issues, {depth: 3})
+        console.log(issues)
+
         deepEqual(issues.length, 3)
         const message1 = issues?.find(({location}) => location === cis[0])?.message
-        deepEqual(message1, `A Interface can't inherit (directly or indirectly) from itself, but metamodel.interface 0 does so through the following cycle: metamodel.interface 0 -> metamodel.interface 2 -> metamodel.interface 1 -> metamodel.interface 0`)
+        deepEqual(message1, `A Interface can't inherit (directly or indirectly) from itself, but metamodel.interface_0 does so through the following cycle: metamodel.interface_0 -> metamodel.interface_2 -> metamodel.interface_1 -> metamodel.interface_0`)
     })
 
     it("check that trivial inheritance cycles are detected", () => {

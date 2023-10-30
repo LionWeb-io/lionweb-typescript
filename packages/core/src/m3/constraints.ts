@@ -52,7 +52,7 @@ export const issuesLanguage = (language: Language): Issue[] =>
                 }
 
                 // The name should not contain whitespace characters"
-                if (t instanceof Language) {
+                if(isINamed(t)) {// //if (t instanceof Language) {
                     const name = t.name.trim()
                     name.includes(" ") && issue(`A Language name cannot contain whitespace characters`)
                 }
