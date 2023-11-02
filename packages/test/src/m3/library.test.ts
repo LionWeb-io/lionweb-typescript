@@ -1,7 +1,7 @@
 import {assert} from "chai"
 const {deepEqual} = assert
 
-import {deserializeLanguage, lioncoreBuiltins, serializeLanguage} from "@lionweb/core"
+import {deserializeLanguages, lioncoreBuiltins, serializeLanguages} from "@lionweb/core"
 import {libraryLanguage} from "../languages/library.js"
 
 
@@ -13,9 +13,10 @@ describe("Library test metamodel", () => {
     })
 
     it("serialize it", () => {
-        const serialization = serializeLanguage(libraryLanguage)
-        const deserialization = deserializeLanguage(serialization)
-        deepEqual(deserialization, libraryLanguage)
+        const serialization = serializeLanguages(libraryLanguage)
+        const deserialization = deserializeLanguages(serialization)
+        deepEqual(deserialization.length, 1)
+        deepEqual(deserialization[0], libraryLanguage)
     })
 
 })
