@@ -5,10 +5,9 @@ import {lioncoreExtractionFacade} from "./facade.js"
 
 
 /**
- * Serializes a language (i.e., an instance of the LionCore metametamodel,
- * using {@link M3Concept these type definitions})
+ * Serializes languages (i.e., instances of the LionCore metametamodel, using {@link M3Concept these type definitions})
  * into the LionWeb serialization JSON format.
  */
-export const serializeLanguage = (language: Language): SerializationChunk =>
-    serializeNodes([language], lioncoreExtractionFacade)
+export const serializeLanguages = (...languages: Language[]): SerializationChunk =>
+    serializeNodes(languages, lioncoreExtractionFacade)
 

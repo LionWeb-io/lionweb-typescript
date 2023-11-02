@@ -8,18 +8,17 @@ import {lioncoreBuiltins} from "./builtins.js"
 
 
 /**
- * Deserializes a language that's serialized into the LionWeb serialization JSON format
+ * Deserializes languages that have been serialized into the LionWeb serialization JSON format
  * as an instance of the LionCore metametamodel, using {@link _M3Concept these type definitions}.
  */
-export const deserializeLanguage = (serializationChunk: SerializationChunk, ...dependentMetamodels: Language[]): Language => {
-    const language = deserializeChunk(
+export const deserializeLanguages = (serializationChunk: SerializationChunk, ...dependentLanguages: Language[]): Language[] =>
+    deserializeChunk(
         serializationChunk,
         lioncoreInstantiationFacade,
         [lioncore],
-        [lioncoreBuiltins, ...dependentMetamodels].flatMap(nodesExtractorUsing(lioncoreExtractionFacade))
-    )[0] as Language
-    language.dependingOn(...dependentMetamodels)
-    return language
-}
+        [lioncoreBuiltins, ...dependentLanguages].flatMap(nodesExtractorUsing(lioncoreExtractionFacade))
+    )
+        .filter((rootNode) => rootNode instanceof Language)
+        .map((language) => (language as Language).dependingOn(...dependentLanguages))
 // TODO  pass a function that can resolve dependent metamodels, since they'd generally only known in the serialization
 
