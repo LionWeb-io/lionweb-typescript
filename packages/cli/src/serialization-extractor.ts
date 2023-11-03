@@ -2,7 +2,7 @@ import {writeFileSync} from "fs"
 import {extname} from "path"
 
 import {currentSerializationFormatVersion, deserializeLanguages, lioncoreKey, SerializationChunk} from "@lionweb/core"
-import {asText, readFileAsJson, shortenedSerialization, sortedSerialization, writeJsonAsFile} from "@lionweb/utilities"
+import {languagesAsText, readFileAsJson, shortenedSerialization, sortedSerialization, writeJsonAsFile} from "@lionweb/utilities"
 
 
 const isRecord = (json: unknown): json is Record<string, unknown> =>
@@ -32,7 +32,7 @@ export const extractFromSerialization = async (path: string) => {
     writeJsonAsFile(extlessPath + ".sorted.json", sortedJson)
     writeJsonAsFile(extlessPath + ".shortened.json", shortenedSerialization(json))   // (could also sort)
     if (isSerializedLanguages(json)) {
-        writeFileSync(extlessPath + ".txt", deserializeLanguages(json).map(asText).join("\n\n"))
+        writeFileSync(extlessPath + ".txt", languagesAsText(deserializeLanguages(json)))
     }
     console.log(`extracted: "${path}" -> "${extlessPath}"`)
 }

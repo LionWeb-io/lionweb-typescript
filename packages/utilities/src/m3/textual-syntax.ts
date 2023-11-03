@@ -91,7 +91,12 @@ ${descent(node.entities, "\n\n")}
 }
 
 
+const languagesAsText = (languages: Language[]): string =>
+    nameSorted(languages).map(asText).join("\n\n")
+
+
 export {
-    asText
+    asText,
+    languagesAsText
 }
 
