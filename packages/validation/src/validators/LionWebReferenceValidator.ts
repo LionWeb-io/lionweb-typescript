@@ -61,6 +61,7 @@ export class LionWebReferenceValidator {
                     const childNode = this.nodesIdMap.get(childId);
                     if (childNode !== undefined) {
                         if (childNode.parent !== null && childNode.parent !== undefined && childNode.parent !== node.id) {
+                            this.validationResult.issue(new Reference_ChildMissingInParent_Issue(context, childNode, node))
                             // TODO this.validationResult.error(`Child "${childId}" with parent "${childNode.parent}" is defined as child in node "${node.id}"`);
                         }
                         if (childNode.parent === null || childNode.parent === undefined) {
@@ -68,6 +69,18 @@ export class LionWebReferenceValidator {
                         }
                     }
                 });
+            });
+            node.annotations.forEach((annotationId) => {
+                const annotation = this.nodesIdMap.get(annotationId);
+                if (annotation !== undefined) {
+                    if (annotation.parent !== null && annotation.parent !== undefined && annotation.parent !== node.id) {
+                        this.validationResult.issue(new Reference_ChildMissingInParent_Issue(context, annotation, node))
+                        // TODO this.validationResult.error(`Child "${annotationId}" with parent "${childNode.parent}" is defined as child in node "${node.id}"`);
+                    }
+                    if (annotation.parent === null || annotation.parent === undefined) {
+                        // TODO this.validationResult.error(`Child "${annotationId}" of node "${node.id}" has different parent "${childNode.parent}"`);
+                    }
+                }
             });
             node.references.forEach((ref, refIndex) => {
                 this.validateLanguageReference(obj, ref.reference, rootCtx.concat("node", nodeIndex, "references", refIndex));
