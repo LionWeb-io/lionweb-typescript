@@ -1,8 +1,8 @@
 import fs from "fs";
-import { LionWebJsonChunkWrapper } from "../json/LionWebJsonChunkWrapper";
-import { LionWebLanguageDefinition} from "../json/LionWebLanguageDefinition";
-import { LionWebValidator } from "../validators/LionWebValidator";
-import { getAllFiles, printIssues } from "./Utils";
+import { LionWebJsonChunkWrapper } from "../json/LionWebJsonChunkWrapper.js";
+import { LionWebLanguageDefinition} from "../json/LionWebLanguageDefinition.js";
+import { LionWebValidator } from "../validators/LionWebValidator.js";
+import { getFilesRecursive, printIssues } from "./Utils.js";
 
 const folder = process.argv[2];
 const language = process.argv[3];
@@ -23,7 +23,7 @@ if (languageValidator.validationResult.hasErrors()) {
     process.exit(1);
 }
 
-for (const modelFile of getAllFiles(folder, [])) {
+for (const modelFile of getFilesRecursive(folder, [])) {
     const jsonString1 = fs.readFileSync(modelFile, "utf-8");
     const jsonModel = JSON.parse(jsonString1);
     const modelValidator = new LionWebValidator(jsonModel, new LionWebLanguageDefinition(languageValidator.chunk as LionWebJsonChunkWrapper));

@@ -1,6 +1,6 @@
 import fs from "fs";
-import { LwDiff } from "../diff/LionwebDiff";
-import { LionWebJsonChunk } from "../json/LionWebJson";
+import { LwDiff } from "../diff/LionwebDiff.js";
+import { LionWebJsonChunk } from "../json/LionWebJson.js";
 
 const file1 = process.argv[2];
 const file2 = process.argv[3];

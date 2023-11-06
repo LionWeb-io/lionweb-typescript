@@ -4,7 +4,7 @@ import {
     LionWebJsonProperty,
     LionWebJsonReference,
     LionWebJsonReferenceTarget
-} from "./LionWebJson";
+} from "./LionWebJson.js";
 
 /**
  * Utility functions for LionWebJsonNode's

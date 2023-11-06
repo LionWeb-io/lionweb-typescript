@@ -1,10 +1,10 @@
-import { LionWebJsonChunk } from "../json/LionWebJson";
-import { LionWebJsonChunkWrapper } from "../json/LionWebJsonChunkWrapper";
-import { LionWebLanguageDefinition } from "../json/LionWebLanguageDefinition";
-import { LionWebLanguageReferenceValidator } from "./LionWebLanguageReferenceValidator";
-import { LionWebReferenceValidator } from "./LionWebReferenceValidator";
-import { LionWebSyntaxValidator } from "./LionWebSyntaxValidator";
-import { ValidationResult } from "./ValidationResult";
+import { LionWebJsonChunk } from "../json/LionWebJson.js";
+import { LionWebJsonChunkWrapper } from "../json/LionWebJsonChunkWrapper.js";
+import { LionWebLanguageDefinition } from "../json/LionWebLanguageDefinition.js";
+import { LionWebLanguageReferenceValidator } from "./LionWebLanguageReferenceValidator.js";
+import { LionWebReferenceValidator } from "./LionWebReferenceValidator.js";
+import { LionWebSyntaxValidator } from "./LionWebSyntaxValidator.js";
+import { ValidationResult } from "./ValidationResult.js";
 
 /**
  * Combined validator that calls all available validators.

@@ -4,13 +4,13 @@ import {
     Reference_CirculairParent_Issue,
     Reference_DuplicateNodeId_Issue, Reference_LanguageUnknown_Issue,
     Reference_ParentMissingInChild_Issue
-} from "../issues/ReferenceIssues";
-import { JsonContext } from "../issues/ValidationIssue";
-import { ChunkUtils } from "../json/ChunkUtils";
-import { LION_CORE_BUILTINS_KEY, LionWebJsonChild, LionWebJsonChunk, LionWebJsonMetaPointer, LionWebJsonNode, LwJsonUsedLanguage } from "../json/LionWebJson";
-import { LionWebJsonChunkWrapper } from "../json/LionWebJsonChunkWrapper";
-import { SimpleFieldValidator } from "./SimpleFieldValidator";
-import { ValidationResult } from "./ValidationResult";
+} from "../issues/ReferenceIssues.js";
+import { JsonContext } from "./../issues/JsonContext.js";
+import { ChunkUtils } from "../json/ChunkUtils.js";
+import { LION_CORE_BUILTINS_KEY, LionWebJsonChild, LionWebJsonChunk, LionWebJsonMetaPointer, LionWebJsonNode, LwJsonUsedLanguage } from "../json/LionWebJson.js";
+import { LionWebJsonChunkWrapper } from "../json/LionWebJsonChunkWrapper.js";
+import { SimpleFieldValidator } from "./SimpleFieldValidator.js";
+import { ValidationResult } from "./ValidationResult.js";
 
 /**
  * Assuming that the syntax is correct, check whether all LionWeb references are correct,

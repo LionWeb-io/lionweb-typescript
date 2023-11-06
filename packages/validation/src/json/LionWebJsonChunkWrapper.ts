@@ -1,6 +1,6 @@
-import { LionWebJsonChunk, LionWebJsonNode, LionWebJsonProperty } from "./LionWebJson";
-import { LionWebLanguageDefinition } from "./LionWebLanguageDefinition";
-import { NodeUtils } from "./NodeUtils";
+import { LionWebJsonChunk, LionWebJsonNode, LionWebJsonProperty } from "./LionWebJson.js";
+import { LionWebLanguageDefinition } from "./LionWebLanguageDefinition.js";
+import { NodeUtils } from "./NodeUtils.js";
 
 export type NodeId = string;
 
@@ -43,14 +43,7 @@ export class LionWebJsonChunkWrapper {
     }
 
     findNodesOfConcept(conceptKey: string): LionWebJsonNode[] {
-        const result: LionWebJsonNode[] = [];
-        for (const node of this.jsonChunk.nodes) {
-            if (node.classifier.key === conceptKey) {
-                result.push(node);
-            }
-        }
-        return result;
-        // return this.jsonChunk.nodes.filter(node => node.classifier.key === conceptKey);
+        return this.jsonChunk.nodes.filter(node => node.classifier.key === conceptKey);
     }
 
     allProperties(conceptNode: LionWebJsonNode): LionWebJsonProperty[] {

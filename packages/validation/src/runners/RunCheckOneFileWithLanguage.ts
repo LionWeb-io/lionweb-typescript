@@ -1,8 +1,8 @@
 import fs from "fs";
-import { LionWebJsonChunkWrapper } from "../json/LionWebJsonChunkWrapper";
-import { LionWebLanguageDefinition} from "../json/LionWebLanguageDefinition";
-import { LionWebValidator } from "../validators/LionWebValidator";
-import { printIssues } from "./Utils";
+import { LionWebJsonChunkWrapper } from "../json/LionWebJsonChunkWrapper.js";
+import { LionWebLanguageDefinition} from "../json/LionWebLanguageDefinition.js";
+import { LionWebValidator } from "../validators/LionWebValidator.js";
+import { printIssues } from "./Utils.js";
 
 
 const modelFile = process.argv[2];

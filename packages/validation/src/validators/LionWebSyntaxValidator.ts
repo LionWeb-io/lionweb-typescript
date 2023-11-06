@@ -4,10 +4,10 @@ import {
     Syntax_PropertyNullIssue,
     Syntax_PropertyTypeIssue,
     Syntax_PropertyUnknownIssue
-} from "../issues/SyntaxIssues";
-import { SimpleFieldValidator, ValidatorFunction } from "./SimpleFieldValidator";
-import { JsonContext } from "../issues/ValidationIssue";
-import { ValidationResult } from "./ValidationResult";
+} from "../issues/SyntaxIssues.js";
+import { SimpleFieldValidator, ValidatorFunction } from "./SimpleFieldValidator.js";
+import { JsonContext } from "./../issues/JsonContext.js";
+import { ValidationResult } from "./ValidationResult.js";
 
 export type UnknownObjectType = { [key: string]: unknown };
 
@@ -188,7 +188,7 @@ export class LionWebSyntaxValidator {
      */
     propertyChecks(obj: unknown, propDefs: PropertyDefinition[], context: JsonContext): void {
         if (!this.checkType(obj, "object", context)) {
-            // console.log("UNEXPECTED NULL OBJECT");
+            console.log("UNEXPECTED NULL OBJECT");
             return;
         }
         const object = obj as UnknownObjectType;

@@ -1,16 +1,16 @@
 // TODO The diff is outdated and need work to become ffully functional again.
 
-import { LionWebSyntaxValidator } from "../validators/LionWebSyntaxValidator";
+import { LionWebSyntaxValidator } from "../validators/LionWebSyntaxValidator.js";
 import {
     isEqualMetaPointer,
     LionWebJsonChild,
     LionWebJsonChunk,
     LionWebJsonNode, LionWebJsonProperty,
     LionWebJsonReference, LwJsonUsedLanguage,
-} from "../json/LionWebJson";
-import { NodeUtils } from "../json/NodeUtils";
-import { ChunkUtils } from "../json/ChunkUtils";
-import { ValidationResult } from "../validators/ValidationResult";
+} from "../json/LionWebJson.js";
+import { NodeUtils } from "../json/NodeUtils.js";
+import { ChunkUtils } from "../json/ChunkUtils.js";
+import { ValidationResult } from "../validators/ValidationResult.js";
 
 export type ChangedType = {
     path: string;

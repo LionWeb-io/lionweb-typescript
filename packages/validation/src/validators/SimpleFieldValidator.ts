@@ -1,8 +1,8 @@
-import { Language_PropertyValue_Issue } from "../issues/LanguageIssues";
-import { Syntax_IdFormat_Issue, Syntax_KeyFormat_Issue, Syntax_SerializationFormatVersion_Issue, Syntax_VersionFormat_Issue } from "../issues/SyntaxIssues";
-import { JsonContext } from "../issues/ValidationIssue";
-import { LionWebJsonProperty } from "../json/LionWebJson";
-import { ValidationResult } from "./ValidationResult";
+import { Language_PropertyValue_Issue } from "../issues/LanguageIssues.js";
+import { Syntax_IdFormat_Issue, Syntax_KeyFormat_Issue, Syntax_SerializationFormatVersion_Issue, Syntax_VersionFormat_Issue } from "../issues/SyntaxIssues.js";
+import { JsonContext } from "./../issues/JsonContext.js";
+import { LionWebJsonProperty } from "../json/LionWebJson.js";
+import { ValidationResult } from "./ValidationResult.js";
 
 export type ValidatorFunction = <T>(obj: T, ctx: JsonContext) => void;
 
