@@ -7,38 +7,57 @@ import { deepEqual } from "assert"
  *----------------------
  */
 
-
 // ## General Constraints
 // Constraints (LionCore)
 describe("General Constraints - Name/Version" , () => {
     it("should (name) be non-empty", () => { 
         const language = new Language("", "0", "x", "x")
         const issues = issuesLanguage(language)
-        deepEqual(issues.length, 1)
+        // deepEqual(issues.length, 1)
+        deepEqual(issues[0], {
+            location: language,
+            message: "A Language name must not be empty",
+            secondaries: []
+        })
     })  
     
     it("should (name) not start with a number", () => { 
         const language = new Language("1myLang", "0", "x", "x")
         const issues = issuesLanguage(language)
-        deepEqual(issues.length, 1)
+        // deepEqual(issues.length, 1)
+        deepEqual(issues[0], {
+            location: language,
+            message: "A Language name cannot start with a number",
+            secondaries: []
+        })
     })    
 
     it("should (version) be non-empty", () => {
         const language = new Language("myLang", "", "x", "x")
         const issues = issuesLanguage(language)
-        deepEqual(issues.length, 1)
+        // deepEqual(issues.length, 1)
+        deepEqual(issues[0], {
+            location: language,
+            message: "A Language version must be a non-empty string",
+            secondaries: []
+        })
     })
 
     it("should not contain whitespace characters", () => {
         const language = new Language("my Lang", "0", "x", "x")
         const issues = issuesLanguage(language)
-        deepEqual(issues.length, 1)
+        // deepEqual(issues.length, 1)
+        deepEqual(issues[0], {
+            location: language,
+            message: "A Language name cannot contain whitespace characters",
+            secondaries: []
+        })
      })
 
     it("should support Unicode characters, numbers, and underscores", () => { 
-    const languageName = "myLang_123_𝟜𝟝𝟞";
-    const language = new Language(languageName, "0", "x", "x");
-    const issues = issuesLanguage(language);
+        const languageName = "myLang_123_𝟜𝟝𝟞";
+        const language = new Language(languageName, "0", "x", "x");
+        const issues = issuesLanguage(language);
         deepEqual(issues.length, 0)
     })
 })
@@ -52,7 +71,18 @@ describe("Identifiers and Keys", () => {
 
         const issues = issuesLanguage(language)
         // console.log(issues)
-        deepEqual(issues.length, 2)
+        // deepEqual(issues.length, 2)
+        deepEqual(issues[0], {
+            location: concept1,
+            message: 'Multiple (nested) language elements with the same key "key_y" exist in this language',
+            secondaries: [concept2]
+        })
+
+        deepEqual(issues[1], {
+            location: concept2,
+            message: 'Multiple (nested) language elements with the same key "key_y" exist in this language',
+            secondaries: [concept1]
+        })
 
      })
 
@@ -64,11 +94,23 @@ describe("Identifiers and Keys", () => {
 
         const issues = issuesLanguage(language)
         // console.log(issues)
-        deepEqual(issues.length, 2)
+        // deepEqual(issues.length, 2)
+        deepEqual(issues[0], {
+            location: concept1,
+            message: 'Multiple (nested) language elements with the same ID "id_y" exist in this language',
+            secondaries: [concept2]
+        })
 
+        deepEqual(issues[1], {
+            location: concept2,
+            message: 'Multiple (nested) language elements with the same ID "id_y" exist in this language',
+            secondaries: [concept1]
+        })
     })
     
-    it("should consist only of latin characters (upper/lowercase), numbers, underscores, and hyphens", () => { })
+    it("should consist only of latin characters (upper/lowercase), numbers, underscores, and hyphens", () => { 
+
+    })
     it("should be a globally unique identifier that also satisfies id constraints", () => { })
     it("should be identical and stable for built-in elements", () => { })
 })
