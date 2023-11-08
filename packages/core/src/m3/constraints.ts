@@ -1,3 +1,4 @@
+import { isValidIdKey } from '../utils/adhoc.js';
 import { Classifier, isINamed, Language, M3Concept } from "./types.js"
 import {containeds, flatMap, idOf, inheritedCycleWith, keyOf, namedsOf, qualifiedNameOf} from "./functions.js"
 import {duplicatesAmong} from "../utils/grouping.js"
@@ -57,8 +58,17 @@ export const issuesLanguage = (language: Language): Issue[] =>
                     name.includes(" ") && issue(`A Language name cannot contain whitespace characters`)
                 }
 
+                // The id consists only of latin characters (upper/lowercase), numbers, underscores, and hyphens
+                if (t instanceof Language) {
+                    const id = t.id.trim()
+                    !isValidIdKey(id) && issue(`A Language ID must consist only of latin characters (upper/lowercase), numbers, underscores, and hyphens`)
+                }
 
-
+                // The key consists only of latin characters (upper/lowercase), numbers, underscores, and hyphens
+                if (t instanceof Language) {
+                    const key = t.key.trim()
+                    !isValidIdKey(key) && issue(`A Language KEY must consist only of latin characters (upper/lowercase), numbers, underscores, and hyphens`)
+                }
 
                 // The classifier should not inherit from itself (directly or indirectly) // TODO
                 if (t instanceof Classifier) {

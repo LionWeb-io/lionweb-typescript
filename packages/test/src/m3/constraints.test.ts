@@ -108,11 +108,32 @@ describe("Identifiers and Keys", () => {
         })
     })
     
-    it("should consist only of latin characters (upper/lowercase), numbers, underscores, and hyphens", () => { 
-
+    it("should (id) consist only of latin characters (upper/lowercase), numbers, underscores, and hyphens", () => { 
+        const language = new Language("myLang", "0", "*/", "x")
+        const issues = issuesLanguage(language)
+        // console.log(issues)
+        // deepEqual(issues.length, 1)
+        deepEqual(issues[0], {
+            location: language,
+            message: 'A Language ID must consist only of latin characters (upper/lowercase), numbers, underscores, and hyphens',
+            secondaries: []
+        })
     })
-    it("should be a globally unique identifier that also satisfies id constraints", () => { })
-    it("should be identical and stable for built-in elements", () => { })
+    
+    it("should (key) consist only of latin characters (upper/lowercase), numbers, underscores, and hyphens", () => { 
+        const language = new Language("myLang", "0", "0", "*/x")
+        const issues = issuesLanguage(language)
+        // console.log(issues)
+        // deepEqual(issues.length, 1)
+        deepEqual(issues[0], {
+            location: language,
+            message: 'A Language KEY must consist only of latin characters (upper/lowercase), numbers, underscores, and hyphens',
+            secondaries: []
+        })
+        
+    })
+    // it("should be a globally unique identifier that also satisfies id constraints", () => { })
+    // it("should be identical and stable for built-in elements", () => { })
 })
 
 describe("Multiplicity", () => {
