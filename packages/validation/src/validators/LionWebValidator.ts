@@ -63,7 +63,7 @@ export class LionWebValidator {
             // console.log("validateForLanguage not executed because there are reference errors.")
             return;
         }
-        if (this.language !== null) {
+        if (this.language !== null && this.language !== undefined) {
             const languageReferenceValidator = new LionWebLanguageReferenceValidator(this.validationResult, this.language);
             // when syntax is correct we know the chunk is actually a chunk!
             languageReferenceValidator.validate(this.chunk as LionWebJsonChunkWrapper);
