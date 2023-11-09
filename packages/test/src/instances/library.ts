@@ -83,7 +83,8 @@ export const libraryInstantiationFacade: InstantiationFacade<BaseNode> = {
      * This is a trick that uses TypeScript's reverse mappings for enumerations
      * (@see https://www.typescriptlang.org/docs/handbook/enums.html#reverse-mappings).
      * Unfortunately, it requires some "fugly" type casting to compile:
-     *  'key' really is a string containing the enumeration literal's name.
+     *  'key' really is a string containing the enumeration literal's _name_
+     *  (so this relies on the TypeScript's literal _name_ and the M3 enumeration literal's _key_ being identical).
      */
 }
 

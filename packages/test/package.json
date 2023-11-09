@@ -29,6 +29,6 @@
   "scripts": {
     "build": "tsc",
     "pretest": "npm run build",
-    "test": "find dist/ -type d | sed '1!G;h;$!d' | xargs npx mocha"
+    "test": "find dist -type d | sed '1!G;h;$!d' | xargs npx mocha"
   }
 }

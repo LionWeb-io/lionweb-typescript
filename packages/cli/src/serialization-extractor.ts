@@ -1,8 +1,9 @@
 import {writeFileSync} from "fs"
 import {extname} from "path"
 
-import {currentSerializationFormatVersion, deserializeLanguages, lioncoreKey, SerializationChunk} from "@lionweb/core"
-import {languagesAsText, readFileAsJson, shortenedSerialization, sortedSerialization, writeJsonAsFile} from "@lionweb/utilities"
+import {currentSerializationFormatVersion, deserializeLanguages, lioncoreKey} from "@lionweb/core"
+import {languagesAsText, shortenedSerialization, sortedSerialization, writeJsonAsFile} from "@lionweb/utilities"
+import {readChunk} from "./chunk.js"
 
 
 const isRecord = (json: unknown): json is Record<string, unknown> =>
@@ -16,24 +17,15 @@ const isSerializedLanguages = (json: unknown): boolean =>
     && json["languages"].some((language) => isRecord(language) && language["key"] === lioncoreKey)
 
 
-const readChunk = async (path: string) => {
-    try {
-        return readFileAsJson(path) as SerializationChunk
-    } catch (e) {
-        console.error(`"${path}" is not a valid JSON file`)
-        throw e
-    }
-}
-
 export const extractFromSerialization = async (path: string) => {
-    const json = await readChunk(path)
-    const extlessPath = path.substring(0, path.length - extname(path).length)
-    const sortedJson = sortedSerialization(json)
-    writeJsonAsFile(extlessPath + ".sorted.json", sortedJson)
-    writeJsonAsFile(extlessPath + ".shortened.json", shortenedSerialization(json))   // (could also sort)
-    if (isSerializedLanguages(json)) {
-        writeFileSync(extlessPath + ".txt", languagesAsText(deserializeLanguages(json)))
+    const chunk = await readChunk(path)
+    const extLessPath = path.substring(0, path.length - extname(path).length)
+    const sortedJson = sortedSerialization(chunk)
+    writeJsonAsFile(extLessPath + ".sorted.json", sortedJson)
+    writeJsonAsFile(extLessPath + ".shortened.json", shortenedSerialization(chunk))   // (could also sort)
+    if (isSerializedLanguages(chunk)) {
+        writeFileSync(extLessPath + ".txt", languagesAsText(deserializeLanguages(chunk)))
     }
-    console.log(`extracted: "${path}" -> "${extlessPath}"`)
+    console.log(`extracted: "${path}" -> "${extLessPath}"`)
 }
 

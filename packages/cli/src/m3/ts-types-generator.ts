@@ -1,20 +1,22 @@
 import {extname} from "path"
 import {writeFileSync} from "fs"
 
-import {GenerationOptions, readFileAsJson, tsTypesForLanguage} from "@lionweb/utilities"
-import {deserializeLanguages, SerializationChunk} from "@lionweb/core"
+import {GenerationOptions, tsTypesForLanguage} from "@lionweb/utilities"
+import {deserializeLanguages} from "@lionweb/core"
+import {readChunk} from "../chunk.js"
 
 
 const generateTsTypesFromSerialization = async (path: string, generationOptions: GenerationOptions[]) => {
     try {
-        const json = readFileAsJson(path) as SerializationChunk
-        const extlessPath = path.substring(0, path.length - extname(path).length)
-        const languages = deserializeLanguages(json)
-        const tsFilePath = extlessPath + "-types.ts"
+        const languages = deserializeLanguages(await readChunk(path))
+        const extLessPath = path.substring(0, path.length - extname(path).length)
+        const tsFilePath = extLessPath + "-types.ts"
+        // TODO  generate 1 file per Language:
         writeFileSync(tsFilePath, languages.map((language) => tsTypesForLanguage(language, ...generationOptions)).join("\n\n"))
         console.log(`generated TS types: "${path}" -> "${tsFilePath}"`)
-    } catch (_) {
+    } catch (e) {
         console.error(`"${path}" does not point to a valid JSON serialization of a language`)
+        throw e
     }
 }
 

@@ -1,4 +1,10 @@
-import {SerializationChunk, sortByStringKey} from "@lionweb/core"
+import {
+    MetaPointer,
+    SerializationChunk,
+    SerializedLanguageReference,
+    SerializedReferenceTarget,
+    sortByStringKey
+} from "@lionweb/core"
 
 
 /**
@@ -9,16 +15,39 @@ export const shortenedSerialization = ({nodes}: SerializationChunk) =>
     nodes.map((node) => ({
         id: node.id,
         classifier: node.classifier.key,
-        parent: node.parent ?? undefined,
         ...Object.fromEntries(
             [
                 ...node.properties.map((serProp) => [serProp.property.key, serProp.value]),
                 ...node.containments.map((serContainment) => [serContainment.containment.key, serContainment.children]),
                 ...node.references.map((serReference) => [serReference.reference.key, serReference.targets.map(({reference}) => reference)])
             ]
-        )
+        ),
+        parent: node.parent ?? undefined
     }))
 
+
+const sortedMetaPointer = ({language, version, key}: MetaPointer): MetaPointer =>
+    ({
+        language,
+        version,
+        key
+    })
+
+const sortedSerializedLanguageReference = ({key, version}: SerializedLanguageReference): SerializedLanguageReference =>
+    ({
+        key,
+        version
+    })
+
+const sortedSerializedReferenceTarget = ({reference, resolveInfo}: SerializedReferenceTarget): SerializedReferenceTarget =>
+    ({
+        reference,
+        resolveInfo
+    })
+
+const pick = <T, K extends keyof T>(key: K): (t: T) => T[K] =>
+    (t: T) => t[key]
+// TODO  (find a nice way to compose such things)
 
 /**
  * @return A sorted version of a {@link SerializedModel JSON serialization}, which should make it easier to inspect.
@@ -27,12 +56,11 @@ export const shortenedSerialization = ({nodes}: SerializationChunk) =>
 export const sortedSerialization = ({serializationFormatVersion, languages, nodes}: SerializationChunk): SerializationChunk =>
     ({
         serializationFormatVersion,
-        languages,
-        nodes: sortByStringKey(nodes, ({id}) => id)
+        languages: sortByStringKey(languages, pick("key")).map(sortedSerializedLanguageReference),
+        nodes: sortByStringKey(nodes, pick("id"))
             .map((node) => ({
                 id: node.id,
-                classifier: node.classifier,
-                parent: node.parent,
+                classifier: sortedMetaPointer(node.classifier),
                 properties: sortByStringKey(node.properties, ({property}) => property.key),
                 containments: sortByStringKey(node.containments, ({containment}) => containment.key)
                         .map(({containment, children}) => ({
@@ -42,8 +70,9 @@ export const sortedSerialization = ({serializationFormatVersion, languages, node
                 references: sortByStringKey(node.references, ({reference}) => reference.key)
                         .map(({reference, targets}) => ({
                             reference,
-                            targets: sortByStringKey(targets, ({reference}) => reference)
-                        }))
+                            targets: sortByStringKey(targets, pick("reference")).map(sortedSerializedReferenceTarget)
+                        })),
+                parent: node.parent
             }))
     })
 

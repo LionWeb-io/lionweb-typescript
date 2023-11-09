@@ -18,6 +18,8 @@ It contains utilities on top of the `core` package, such as:
 
 This is the first version corresponding to a release of LionWeb (version: 2023.1) as a whole.
 
+* Also generate TypeScript type definitions for `Annotation`s.
+* Sort _everything_ in `sortedSerialization`.
 * Extend textual syntax for "multi-linguality".
 * Implement textual syntax for `Annotation`s.
 * _Breaking change:_ Change ID generation to hashing (`hasher` function).

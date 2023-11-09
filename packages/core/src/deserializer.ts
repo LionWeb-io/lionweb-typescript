@@ -82,11 +82,14 @@ export const deserializeChunk = <NT extends Node>(
     /**
      * Instantiates a {@link Node} from its {@link SerializedNode serialization}.
      */
-    const instantiate = ({classifier: classifierMetaPointer, id, properties, containments, references}: SerializedNode, parent?: NT): NT => {
+    const instantiate = ({id, classifier: classifierMetaPointer, properties, containments, references}: SerializedNode, parent?: NT): NT => {
 
         const classifier = allEntities
             .find((element) =>
-                element instanceof Classifier && element.key === classifierMetaPointer.key
+                   element instanceof Classifier
+                && element.key === classifierMetaPointer.key
+                && element.language.key === classifierMetaPointer.language
+                && element.language.version === classifierMetaPointer.version
             ) as (Concept | undefined)
 
         if (classifier === undefined) {
@@ -98,7 +101,7 @@ export const deserializeChunk = <NT extends Node>(
         const propertySettings: { [propertyKey: string]: unknown } = {}
 
         const serializedPropertiesPerKey =
-            properties === undefined ? {} : groupBy(properties, (sp) => sp.property.key)
+            properties === undefined ? {} : groupBy(properties, (sp) => sp.property.key)    // (this assumes no duplicate keys among properties!)
         if (properties !== undefined) {
             allFeatures
                 .filter((feature) => feature instanceof Property)
@@ -124,17 +127,17 @@ export const deserializeChunk = <NT extends Node>(
 
         const node = instantiationFacade.nodeFor(parent, classifier, id, propertySettings)
 
-        const serializedChildrenPerKey =
-            containments === undefined ? {} : groupBy(containments, (sp) => sp.containment.key)
+        const serializedContainmentsPerKey =
+            containments === undefined ? {} : groupBy(containments, (sp) => sp.containment.key)    // (this assumes no duplicate keys among containments!)
         const serializedReferencesPerKey =
-            references === undefined ? {} : groupBy(references, (sp) => sp.reference.key)
+            references === undefined ? {} : groupBy(references, (sp) => sp.reference.key)    // (this assumes no duplicate keys among references!)
 
         allFeatures
             .forEach((feature) => {
                 if (feature instanceof Property && properties !== undefined && feature.key in serializedPropertiesPerKey) {
                     instantiationFacade.setFeatureValue(node, feature, propertySettings[feature.key])
-                } else if (feature instanceof Containment && containments !== undefined && feature.key in serializedChildrenPerKey) {
-                    const childIds = serializedChildrenPerKey[feature.key].flatMap((serChildren) => serChildren.children) as Id[]
+                } else if (feature instanceof Containment && containments !== undefined && feature.key in serializedContainmentsPerKey) {
+                    const childIds = serializedContainmentsPerKey[feature.key].flatMap((serChildren) => serChildren.children) as Id[]
                     if (feature.multiple) {
                         childIds
                             .forEach((childId) => {
@@ -142,7 +145,7 @@ export const deserializeChunk = <NT extends Node>(
                             })
                     } else {
                         if (childIds.length > 0) {
-                            instantiationFacade.setFeatureValue(node, feature, instantiateMemoised(serializedNodeById[childIds[0]], node))
+                            instantiationFacade.setFeatureValue(node, feature, instantiateMemoised(serializedNodeById[childIds[0]], node))  // (just set the 1st one)
                         }
                     }
                 } else if (feature instanceof Reference && references !== undefined && feature.key in serializedReferencesPerKey) {

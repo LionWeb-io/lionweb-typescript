@@ -48,6 +48,7 @@ interface InstantiationFacade<NT extends Node> {
      * (The latter may be required as arguments for the constructor of a class, whose instances represent nodes.)
      */
     nodeFor: (parent: NT | undefined, classifier: Classifier, id: string, propertySettings: { [propertyKey: string]: unknown }) => NT
+// TODO  this prohibits multiple properties with the same key but different language => use a variant of SerializedProperty[] with the value already deserialized
 
     /**
      * Sets the *single* given value of the indicated {@link Feature} on the given node.
@@ -85,37 +86,34 @@ const nodesExtractorUsing = <NT extends Node>(extractionFacade: ExtractionFacade
     flatMapNonCyclingFollowing(trivialFlatMapper, childrenExtractorUsing<NT>(extractionFacade))
 
 
+type SettingsUpdater = (settings: Record<string, unknown>, feature: Feature, value: unknown) => void
+
+const settingsUpdater = (metaKey: string): SettingsUpdater =>
+    (settings: Record<string, unknown>, feature: Feature, value: unknown): void => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const key = (feature as any)[metaKey] as string
+        if (feature instanceof Link && feature.multiple) {
+            if (!Array.isArray(settings[key])) {
+                settings[key] = []
+            }
+            (settings[key] as unknown[]).push(value)
+        } else {
+            settings[key] = value
+        }
+    }
+
+
 /**
  * Updates the value of the given {@link Feature feature} on the given "settings" object
  * (either a {@link Node node} or a sub object of it), using the feature's *name*.
  */
-const updateSettingsNameBased = (settings: Record<string, unknown>, feature: Feature, value: unknown): void => {
-    const fName = feature.name
-    if (feature instanceof Link && feature.multiple) {
-        if (!Array.isArray(settings[fName])) {
-            settings[fName] = []
-        }
-        (settings[fName] as unknown[]).push(value)
-    } else {
-        settings[fName] = value
-    }
-}
+const updateSettingsNameBased: SettingsUpdater = settingsUpdater("name")
 
 /**
  * Updates the value of the given {@link Feature feature} on the given "settings" object
  * (either a {@link Node node} or a sub object of it), using the feature's *key*.
  */
-const updateSettingsKeyBased = (settings: Record<string, unknown>, feature: Feature, value: unknown): void => {
-    const {key} = feature
-    if (feature instanceof Link && feature.multiple) {
-        if (!Array.isArray(settings[key])) {
-            settings[key] = []
-        }
-        (settings[key] as unknown[]).push(value)
-    } else {
-        settings[key] = value
-    }
-}
+const updateSettingsKeyBased = settingsUpdater("key")
 
 export type {
     ClassifierDeducer,
