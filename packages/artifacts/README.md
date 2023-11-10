@@ -4,18 +4,6 @@ An NPM package that generates artifacts (serialization chunks, diagrams, JSON Sc
 These artifacts are purely for introspection, development, and debugging purposes.
 This package is not published.
 
-Build it from source as follows:
-
-```shell
-$ ./build.sh
-```
-
-Generate the artifacts as follows:
-
-```shell
-$ npm run generate
-```
-
 
 ## Chunks
 
@@ -62,4 +50,19 @@ The [`schemas/` directory](./schemas/) contains JSON Schemas:
 * [`lioncore.serialization.schema.json`](./schemas/lioncore.serialization.schema.json): schema that captures the LionWeb serialization JSON format _specifically_ for serialized languages (i.e., instances of LionCore).
 
 **Note**: these schemas are currently unused, and are not updated/re-generated!
+
+
+## Development
+
+Build it from source as follows:
+
+```shell
+$ ./build.sh
+```
+
+Generate the artifacts as follows:
+
+```shell
+$ npm run generate
+```
 

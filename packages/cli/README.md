@@ -15,12 +15,6 @@ $ npx @lionweb/cli
 
 produces information about which commands are available.
 
-Build the executable from source as follows:
-
-```shell
-$ ./build.sh
-```
-
 
 ## Extracting essential information from a serialization chunk
 
@@ -42,4 +36,27 @@ These extractions are:
 
 This CLI utility does not perform any explicit validation apart from the file at the given path existing and being valid JSON.
 It does some implicit validation as it can error out on incorrect serializations.
+
+
+## Changelog
+
+### 0.5.0
+
+This is the first version corresponding to a release of LionWeb (version: 2023.1) as a whole.
+
+* Make language-related functionality "multi-lingual", i.e. a serialization chunk can contain multiple `Language`s.
+  * (Languages will be sorted by name.)
+* Improve extraction functionality: only catch JSON-parsing exceptions.
+* Configure single entrypoint named `lionweb-cli`.
+
+No changelog has been kept for previous versions, regardless of whether these were published or not.
+
+
+## Development
+
+Build the executable from source as follows:
+
+```shell
+$ ./build.sh
+```
 
