@@ -39,6 +39,7 @@ export const serializeNodes = <NT extends Node>(nodes: NT[], extractionFacade: E
             properties: [],
             containments: [],
             references: [],
+            annotations: [],
             parent: null
         }
         serializedNodes.push(serializedNode)
@@ -95,6 +96,7 @@ export const serializeNodes = <NT extends Node>(nodes: NT[], extractionFacade: E
                 return
             }
         })
+        serializedNode.annotations = asArray(node.annotations).map((annotation) => annotation.id)
         serializedNode.parent = parent?.id ?? null  // (undefined -> null)
     }
 

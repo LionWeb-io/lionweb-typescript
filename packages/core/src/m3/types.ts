@@ -61,6 +61,7 @@ abstract class M3Node implements IKeyed {
         this.key = key
         return this
     }
+    annotations: Node[] = [] // (containment)
 }
 
 abstract class Feature extends M3Node {

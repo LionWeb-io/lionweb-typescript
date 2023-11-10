@@ -5,9 +5,8 @@ This repository contains a TypeScript implementation for (parts of) the [LionWeb
 _Note_ that this repo doesn't implement the specification completely.
 In particular:
 
-* No support for annotations yet.
 * Not all constraints on the LionCore M3 have been implemented.
-* The functionality in the `utilities` is provided “as-is”.
+* The functionality in the `utilities` and `validation` packages is provided “as-is”.
 
 The implementation of the JSON serialization format, serialization from in-memory representations to that format, and vice versa, are all pretty solid.
 

@@ -82,7 +82,7 @@ export const deserializeChunk = <NT extends Node>(
     /**
      * Instantiates a {@link Node} from its {@link SerializedNode serialization}.
      */
-    const instantiate = ({id, classifier: classifierMetaPointer, properties, containments, references}: SerializedNode, parent?: NT): NT => {
+    const instantiate = ({id, classifier: classifierMetaPointer, properties, containments, references, annotations}: SerializedNode, parent?: NT): NT => {
 
         const classifier = allEntities
             .find((element) =>
@@ -162,6 +162,8 @@ export const deserializeChunk = <NT extends Node>(
                     ))
                 }
             })
+
+        node.annotations = annotations.map((annotationId) => instantiateMemoised(serializedNodeById[annotationId]))
 
         return node
 

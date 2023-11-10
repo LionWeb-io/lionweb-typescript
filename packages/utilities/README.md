@@ -18,6 +18,7 @@ It contains utilities on top of the `core` package, such as:
 
 This is the first version corresponding to a release of LionWeb (version: 2023.1) as a whole.
 
+* Update for the presence of annotations on a(ny) `Node`.
 * Move the `readChunk` function from `@lionweb/cli` to `@lionweb/utilities`.
 * Also generate TypeScript type definitions for `Annotation`s.
 * Sort _everything_ in `sortedSerialization`.

@@ -53,6 +53,7 @@ export const sortedSerialization = ({serializationFormatVersion, languages, node
                             reference,
                             targets: sortByStringKey(targets, pick("reference")).map(sortedSerializedReferenceTarget)
                         })),
+                annotations: node.annotations.sort(),
                 parent: node.parent
             }))
     })

@@ -1,11 +1,11 @@
 import {hasher} from "@lionweb/utilities"
-import {ExtractionFacade, nameBasedClassifierDeducerFor, Node} from "@lionweb/core"
+import {ExtractionFacade, nameBasedClassifierDeducerFor} from "@lionweb/core"
 import {multiLanguage} from "../languages/multi.js"
 import {BaseNode, bobLibrary, jackLondon, Library, libraryExtractionFacade} from "./library.js"
 import {libraryLanguage} from "../languages/library.js"
 
 
-export type Container = Node & {
+export type Container = BaseNode & {
     classifier: "Container",
     libraries: Library[]
 }
@@ -27,7 +27,8 @@ const container: Container = {
     classifier: "Container",
     libraries: [
         bobLibrary
-    ]
+    ],
+    annotations: []
 }
 
 export const multiModel: BaseNode[] = [
