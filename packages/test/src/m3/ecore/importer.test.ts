@@ -22,8 +22,6 @@ describe("Ecore importer", () => {
             logIssues(issues)
             deepEqual(issues, [])
             const serialization = serializeLanguages(language)
-            // console.log("original\n" + JSON.stringify(sortedSerialization(serialization)))
-            // console.log("expected\n" + JSON.stringify(sortedSerialization(serializeLanguages(libraryLanguage))))
             deepEqual(sortedSerialization(serialization), sortedSerialization(serializeLanguages(libraryLanguage)))
         })
     })

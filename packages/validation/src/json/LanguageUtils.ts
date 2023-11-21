@@ -1,8 +1,5 @@
-// import { Annotation, Classifier, Concept, Interface, isRef } from "@lionweb/core";
 import { LionWebJsonChunk } from "./LionWebJson.js";
-// import { LION_CORE_BUILTINS_INAMED_NAME, LION_CORE_M3_KEY, LionWebJsonChunk, LionWebJsonNode } from "./LionWebJson";
 import { LionWebJsonChunkWrapper } from "./LionWebJsonChunkWrapper.js";
-// import { LIONWEB_M3_ANNOTATION_KEY, LIONWEB_M3_CONCEPT_KEY, LIONWEB_M3_INTERFACE_KEY } from "./LionWebLanguageDefinition";
 
 /**
  * Contains methods for getting information from a LionWebJsonChunk representing a language.
