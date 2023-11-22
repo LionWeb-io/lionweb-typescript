@@ -3,7 +3,7 @@ const {deepEqual} = assert
 import {readFileSync} from "fs"
 import {parseString} from "xml2js"
 
-import {checkReferences, issuesLanguage, serializeLanguage} from "@lionweb/core"
+import {checkReferences, issuesLanguage, serializeLanguages} from "@lionweb/core"
 import {asLionCoreLanguage, sortedSerialization} from "@lionweb/utilities"
 import {logIssues, logUnresolvedReferences} from "../../utils/test-helpers.js"
 import {libraryLanguage} from "../../languages/library.js"
@@ -21,8 +21,8 @@ describe("Ecore importer", () => {
             const issues = issuesLanguage(language)
             logIssues(issues)
             deepEqual(issues, [])
-            const serialization = serializeLanguage(language)
-            deepEqual(sortedSerialization(serialization), sortedSerialization(serializeLanguage(libraryLanguage)))
+            const serialization = serializeLanguages(language)
+            deepEqual(sortedSerialization(serialization), sortedSerialization(serializeLanguages(libraryLanguage)))
         })
     })
 

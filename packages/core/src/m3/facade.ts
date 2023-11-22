@@ -1,5 +1,6 @@
 import {ExtractionFacade, InstantiationFacade, updateSettingsNameBased} from "../facade.js"
 import {
+    Annotation,
     Classifier,
     Concept,
     Containment,
@@ -36,6 +37,8 @@ export const lioncoreExtractionFacade: ExtractionFacade<M3Concept> = ({
 export const lioncoreInstantiationFacade: InstantiationFacade<M3Concept> = ({
     nodeFor: (parent, classifier, id, propertySettings) => {
         switch (classifier.key) {
+            case metaConcepts.annotation.key:
+                return new Annotation(parent as Language, propertySettings[inamed_name.key] as string, propertySettings[ikeyed_key.key] as string, id)
             case metaConcepts.concept.key:
                 return new Concept(parent as Language, propertySettings[inamed_name.key] as string, propertySettings[ikeyed_key.key] as string, id, propertySettings[metaFeatures.concept_abstract.key] as boolean)
             case metaConcepts.interface.key:

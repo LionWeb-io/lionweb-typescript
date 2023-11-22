@@ -2,6 +2,9 @@
 
 ## 0.5.0
 
+* _Breaking change:_ `serializeLanguage` and `deserializeLanguage` are now "multi-lingual" in the sense that a serialization chunk can contain multiple `Language`s.
+    As a result, these functions have been renamed to (the plural) `serializeLanguages` (with varargs), and `deserializeLanguages` (returning `Language[]`).
+* (Bugfix:) Deserialize `Annotation`s.
 * _Breaking change:_ Rework ID and key generation in the LionCore `LanguageFactory`.
     As part of that:
     * Add `String[s]Mapper` types, a `StringsMapper` instance `last`, and functions `concatenator` and `chain` to produce instances of them.

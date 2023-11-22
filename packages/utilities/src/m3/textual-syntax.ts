@@ -1,4 +1,5 @@
 import {
+    Annotation,
     Concept,
     Containment,
     Enumeration,
@@ -30,6 +31,12 @@ const refAsText = <T extends INamed>(ref: SingleRef<T>): string =>
 
 
 const asText = (node: M3Node): string => {
+
+    if (node instanceof Annotation) {
+        return `annotation ${node.name}${node.extends === undefined ? `` : ` extends ${refAsText(node.extends)}`}${node.implements.length === 0 ? `` : ` implements ${nameSorted(node.implements).map(nameOf).join(", ")}`}${node.features.length === 0 ? `` : `
+    features (↓name):
+${descent(node.features, "\n")}`}`
+    }
 
     if (node instanceof Concept) {
         return `${node.partition ? `<<partition>> ` : ``}${node.abstract ? `abstract ` : ``}concept ${node.name}${node.extends === undefined ? `` : ` extends ${refAsText(node.extends)}`}${node.implements.length === 0 ? `` : ` implements ${nameSorted(node.implements).map(nameOf).join(", ")}`}${node.features.length === 0 ? `` : `
@@ -84,7 +91,12 @@ ${descent(node.entities, "\n\n")}
 }
 
 
+const languagesAsText = (languages: Language[]): string =>
+    nameSorted(languages).map(asText).join("\n\n")
+
+
 export {
-    asText
+    asText,
+    languagesAsText
 }
 

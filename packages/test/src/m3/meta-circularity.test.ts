@@ -3,10 +3,10 @@ const {deepEqual} = assert
 
 import {
     checkReferences,
-    deserializeLanguage,
+    deserializeLanguages,
     issuesLanguage,
     lioncore,
-    serializeLanguage
+    serializeLanguages
 } from "@lionweb/core"
 import {asText} from "@lionweb/utilities"
 
@@ -29,9 +29,11 @@ describe("meta-circularity (LionCore)", () => {
     })
 
     it("deserialize LionCore", async () => {
-        const serialization = serializeLanguage(lioncore)
-        const deserialization = deserializeLanguage(serialization)
-        deepEqual(asText(deserialization), asText(lioncore))
+        const serialization = serializeLanguages(lioncore)
+        const deserialization = deserializeLanguages(serialization)
+        deepEqual(deserialization.length, 1)
+        const language = deserialization[0]
+        deepEqual(asText(language), asText(lioncore))
         // deepEqual on object-level is not good enough (- maybe because of class JIT'ing?):
         // deepEqual(deserialization, lioncore)
             // TODO  implement proper equality/comparison

@@ -1,14 +1,14 @@
 import {writeFileSync} from "fs"
 import {extname} from "path"
 
-import {currentSerializationFormatVersion, deserializeLanguage, lioncoreKey, SerializationChunk} from "@lionweb/core"
-import {asText, readFileAsJson, shortenedSerialization, sortedSerialization, writeJsonAsFile} from "@lionweb/utilities"
+import {currentSerializationFormatVersion, deserializeLanguages, lioncoreKey, SerializationChunk} from "@lionweb/core"
+import {languagesAsText, readFileAsJson, shortenedSerialization, sortedSerialization, writeJsonAsFile} from "@lionweb/utilities"
 
 
 const isRecord = (json: unknown): json is Record<string, unknown> =>
     typeof json === "object" && !Array.isArray(json)
 
-const isSerializedLanguage = (json: unknown): boolean =>
+const isSerializedLanguages = (json: unknown): boolean =>
        isRecord(json)
     && json["serializationFormatVersion"] === currentSerializationFormatVersion
     && "languages" in json
@@ -16,19 +16,24 @@ const isSerializedLanguage = (json: unknown): boolean =>
     && json["languages"].some((language) => isRecord(language) && language["key"] === lioncoreKey)
 
 
-export const extractFromSerialization = async (path: string) => {
+const readChunk = async (path: string) => {
     try {
-        const json = readFileAsJson(path) as SerializationChunk
-        const extlessPath = path.substring(0, path.length - extname(path).length)
-        const sortedJson = sortedSerialization(json)
-        writeJsonAsFile(extlessPath + ".sorted.json", sortedJson)
-        writeJsonAsFile(extlessPath + ".shortened.json", shortenedSerialization(json))   // (could also sort)
-        if (isSerializedLanguage(json)) {
-            writeFileSync(extlessPath + ".txt", asText(deserializeLanguage(json)))
-        }
-        console.log(`extracted: "${path}" -> "${extlessPath}"`)
-    } catch (_) {
+        return readFileAsJson(path) as SerializationChunk
+    } catch (e) {
         console.error(`"${path}" is not a valid JSON file`)
+        throw e
     }
+}
+
+export const extractFromSerialization = async (path: string) => {
+    const json = await readChunk(path)
+    const extlessPath = path.substring(0, path.length - extname(path).length)
+    const sortedJson = sortedSerialization(json)
+    writeJsonAsFile(extlessPath + ".sorted.json", sortedJson)
+    writeJsonAsFile(extlessPath + ".shortened.json", shortenedSerialization(json))   // (could also sort)
+    if (isSerializedLanguages(json)) {
+        writeFileSync(extlessPath + ".txt", languagesAsText(deserializeLanguages(json)))
+    }
+    console.log(`extracted: "${path}" -> "${extlessPath}"`)
 }
 

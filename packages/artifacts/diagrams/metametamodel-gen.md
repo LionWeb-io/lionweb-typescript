@@ -1,9 +1,7 @@
 ```mermaid
 classDiagram
 
-  class Annotation {
-    +Boolean? multiple
-  }
+  class Annotation
   Classifier <|-- Annotation
 
   class Classifier
