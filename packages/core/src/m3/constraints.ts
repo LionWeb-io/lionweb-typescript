@@ -1,6 +1,6 @@
-import { isValidIdKey } from '../utils/adhoc.js';
-import { Classifier, isINamed, Language, M3Concept } from "./types.js"
-import {containeds, flatMap, idOf, inheritedCycleWith, keyOf, namedsOf, qualifiedNameOf} from "./functions.js"
+import {isValidIdKey} from "../utils/adhoc.js"
+import {Classifier, isINamed, Language, M3Concept} from "./types.js"
+import {allContaineds, flatMap, idOf, inheritedCycleWith, keyOf, namedsOf, qualifiedNameOf} from "./functions.js"
 import {duplicatesAmong} from "../utils/grouping.js"
 
 
@@ -35,42 +35,34 @@ export const issuesLanguage = (language: Language): Issue[] =>
                     })
                 }
 
-                // The name should not be non-empty string
+                // The id consists only of latin characters (upper/lowercase), numbers, underscores, and hyphens
+                const id = t.id.trim()
+                !isValidIdKey(id) && issue(`An ID must consist only of latin characters (upper/lowercase), numbers, underscores, and hyphens`)
+
+                // The key consists only of latin characters (upper/lowercase), numbers, underscores, and hyphens
+                const key = t.key.trim()
+                !isValidIdKey(key) && issue(`A KEY must consist only of latin characters (upper/lowercase), numbers, underscores, and hyphens`)
+
                 if(isINamed(t)) {
-                    t.name.trim().length === 0 && issue(`A Language name must not be empty`)                   
-                }
+                    // The name should not be non-empty string
+                    t.name.trim().length === 0 && issue(`A Language name must not be empty`)
 
-                // The name should not start with a number
-                if (t instanceof Language) {
-                    const name = t.name.trim()                
-                    !isNaN(parseInt(name[0])) && issue(`A Language name cannot start with a number`)
-                }
-
-                // The version is a non-empty string
-                if (t instanceof Language) {
-                  const version = t.version.trim();
-                  version.length === 0 && issue(`A Language version must be a non-empty string`)
-                }
-
-                // The name should not contain whitespace characters"
-                if(isINamed(t)) {// //if (t instanceof Language) {
+                    // The name should not contain whitespace characters
                     const name = t.name.trim()
                     name.includes(" ") && issue(`A Language name cannot contain whitespace characters`)
                 }
 
-                // The id consists only of latin characters (upper/lowercase), numbers, underscores, and hyphens
                 if (t instanceof Language) {
-                    const id = t.id.trim()
-                    !isValidIdKey(id) && issue(`A Language ID must consist only of latin characters (upper/lowercase), numbers, underscores, and hyphens`)
+                    // The name should not start with a number
+                    const name = t.name.trim()
+                    !isNaN(parseInt(name[0])) && issue(`A Language name cannot start with a number`)
+
+                   // The version is a non-empty string
+                    const version = t.version.trim();
+                    version.length === 0 && issue(`A Language version must be a non-empty string`)
                 }
 
-                // The key consists only of latin characters (upper/lowercase), numbers, underscores, and hyphens
-                if (t instanceof Language) {
-                    const key = t.key.trim()
-                    !isValidIdKey(key) && issue(`A Language KEY must consist only of latin characters (upper/lowercase), numbers, underscores, and hyphens`)
-                }
-
-                // The classifier should not inherit from itself (directly or indirectly) // TODO
+                // The classifier should not inherit from itself (directly or indirectly)
                 if (t instanceof Classifier) {
                     const cycle = inheritedCycleWith(t)
                     if (cycle.length > 0) {
@@ -78,18 +70,17 @@ export const issuesLanguage = (language: Language): Issue[] =>
                             // TODO  check whether it needs to be "a" or "an", or just say "An instance of ..."
                     }
                 }
-              
 
                 return issues
             }
         ),
-        ...Object.entries(duplicatesAmong(namedsOf(language), keyOf))
+        ...Object.entries(duplicatesAmong(namedsOf(language), keyOf))   // all M3Concept-s that are INamed are also IKeyed
             .flatMap(
                 ([key, ts]) => ts.map(
                     (t) => ({ location: t, message: `Multiple (nested) language elements with the same key "${key}" exist in this language`, secondaries: ts.filter((otherT) => t !== otherT) })
                 )
             ),
-        ...Object.entries(duplicatesAmong(containeds(language), idOf))
+        ...Object.entries(duplicatesAmong(allContaineds(language), idOf))
             .flatMap(
                 ([id, ts]) => ts.map(
                     (t) => ({ location: t, message: `Multiple (nested) language elements with the same ID "${id}" exist in this language`, secondaries: ts.filter((otherT) => t !== otherT) })

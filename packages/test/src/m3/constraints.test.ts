@@ -1,6 +1,6 @@
 import {chain, concatenator, Concept, issuesLanguage, Language, LanguageFactory, lastOf} from "@lionweb/core"
 import {nanoIdGen} from "@lionweb/utilities"
-import { deepEqual } from "assert"
+import {deepEqual, fail} from "assert"
 
 /**
  * Constraints (LionCore)
@@ -115,7 +115,7 @@ describe("Identifiers and Keys", () => {
         // deepEqual(issues.length, 1)
         deepEqual(issues[0], {
             location: language,
-            message: 'A Language ID must consist only of latin characters (upper/lowercase), numbers, underscores, and hyphens',
+            message: 'An ID must consist only of latin characters (upper/lowercase), numbers, underscores, and hyphens',
             secondaries: []
         })
     })
@@ -127,18 +127,11 @@ describe("Identifiers and Keys", () => {
         // deepEqual(issues.length, 1)
         deepEqual(issues[0], {
             location: language,
-            message: 'A Language KEY must consist only of latin characters (upper/lowercase), numbers, underscores, and hyphens',
+            message: 'A KEY must consist only of latin characters (upper/lowercase), numbers, underscores, and hyphens',
             secondaries: []
         })
         
     })
-    // it("should be a globally unique identifier that also satisfies id constraints", () => { })
-    // it("should be identical and stable for built-in elements", () => { })
-})
-
-describe("Multiplicity", () => {
-    it("should be a boolean flag indicating if link target is optional", () => { })
-    it("should be a boolean flag indicating if multiple link targets are allowed", () => { })
 })
 
 // ## Language Constraints
@@ -166,22 +159,8 @@ describe("Language Constraints", () => {
     })
 })
 
-// ## Element References
-describe("Element References", () => {
-    it("should reference elements within the same language", () => { })
-    it("should reference elements within declared dependencies", () => { })
-    it("should reference elements within transitive dependencies", () => { })
-})
-
-// ## Dependency Declaration
-describe("Dependency Declaration", () => {
-    it("should be an optional declaration for transitive and built-in dependencies", () => { })
-})
-
 // ## Concept Constraints
 describe("Concept Constraints", () => {
-    it("should not allow self-extension or circular extends", () => { })
-    it("should have root nodes with the partition flag set to true", () => { })
     it("check that inheritance cycles are detected", () => {
         const factory = new LanguageFactory("metamodel", "1", chain(concatenator("-"), nanoIdGen()), lastOf)
         const {language} = factory
@@ -213,27 +192,44 @@ describe("Concept Constraints", () => {
     })
 })
 
+
+// TODO  check the metametamodel specification why that states these as constraints:
+
+// ## Element References
+describe("Element References", () => {
+    it.skip("should reference elements within the same language", () => { fail("not yet implemented") })
+    it.skip("should reference elements within declared dependencies", () => { fail("not yet implemented") })
+    it.skip("should reference elements within transitive dependencies", () => { fail("not yet implemented") })
+})
+
+// ## Dependency Declaration
+describe("Dependency Declaration", () => {
+    it.skip("should be an optional declaration for transitive and built-in dependencies", () => { fail("not yet implemented") })
+})
+
 // ## Annotation Constraints
 describe("Annotation Constraints", () => {
-    it("should not allow multiple and annotates flags to be redefinable in sub-annotations", () => { })
-    it("should be associated only with the concept types they are meant to annotate or their sub-concepts", () => { })
+    it.skip("should not allow multiple and annotates flags to be redefinable in sub-annotations", () => { fail("not yet implemented") })
+    it.skip("should be associated only with the concept types they are meant to annotate or their sub-concepts", () => { fail("not yet implemented") })
 })
 
 // ## Feature Constraints
 describe("Feature Constraints", () => {
-    it("should have feature names that are unique within their Classifier scope, including inherited features", () => { })
-    it("should identify features by id or key in LionWeb in case of name clashes", () => { })
+    it.skip("should have feature names that are unique within their Classifier scope, including inherited features", () => { fail("not yet implemented") })
+    it.skip("should identify features by id or key in LionWeb in case of name clashes", () => { fail("not yet implemented") })
 })
 
 // ## Partition Constraints
 describe("Partition Constraints", () => {
-    it("should have each node exist in one partition, defined by its root node", () => { })
-    it("should not allow partitions to be nested", () => { })
+    it.skip("should have each node exist in one partition, defined by its root node", () => { fail("not yet implemented") })
+    it.skip("should not allow partitions to be nested", () => { fail("not yet implemented") })
 })
 
 // ## Namespace Constraints
 describe("Namespace Constraints", () => {
-    it("should contain INamed descendants and enforce constraints like name uniqueness within the namespace and validity criteria for names", () => { })
+    it.skip("should contain INamed descendants and enforce constraints like name uniqueness within the namespace and validity criteria for names", () => { fail("not yet implemented") })
 })
 
+// TODO  this is a model-level constraint: why is it in the M3 specification?
+// it.skip("should have root nodes with the partition flag set to true", () => { fail("not yet implemented") })
 

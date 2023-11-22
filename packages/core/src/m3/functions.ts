@@ -78,11 +78,12 @@ const relationsOf = (element: LanguageEntity): Link[] =>
 
 
 /**
- * @return The "things", i.e. {@link M3Concept}s, contained by the given "thing".
- *  These can be: {@link LanguageEntity}s, {@link Feature}s, {@link EnumerationLiteral}
+ * @return The "things", i.e. {@link M3Concept}s, directly contained by the given "thing".
+ *  These can be:
+ *  {@link LanguageEntity language entities}, {@link Feature features}, and {@link EnumerationLiteral enumeration literals}
  *  (and all their sub types).
  */
-const containeds = (thing: M3Concept): M3Concept[] => {
+const directlyContaineds = (thing: M3Concept): M3Concept[] => {
     if (thing instanceof Language) {
         return thing.entities
     }
@@ -95,13 +96,21 @@ const containeds = (thing: M3Concept): M3Concept[] => {
     return []
 }
 
+// TODO  document
+const allContaineds = (language: Language): M3Concept[] =>
+    [
+        language,
+        ...directlyContaineds(language),
+        ...directlyContaineds(language).flatMap(directlyContaineds)
+    ]
+
 
 /**
  * Performs a depth-first tree traversal of a language, "flatMapping" the `map` function on every node.
  * It avoids visiting nodes twice (to avoid potential infinite loops), but doesn't report cycles.
  */
 const flatMap = <T>(language: Language, map: (t: M3Concept) => T[]): T[] =>
-    flatMapNonCyclingFollowing(map, containeds)(language)
+    flatMapNonCyclingFollowing(map, directlyContaineds)(language)
 
 
 /**
@@ -140,7 +149,7 @@ const qualifiedNameOf = <T extends INamed>(node: T, separator = "."): string =>
  *  (excluding the language itself)
  */
 const namedsOf = (language: Language): M3Concept[] =>
-    flatMap(language, (t) => isINamed(t) ? [t] : [])
+    allContaineds(language).filter(isINamed)
 
 
 /**
@@ -255,12 +264,13 @@ const conceptsOf = (language: Language): Concept[] =>
 
 
 export {
+    allContaineds,
     allFeaturesOf,
     allSuperTypesOf,
     classBasedClassifierDeducerFor,
     concatenateNamesOf,
     conceptsOf,
-    containeds,
+    directlyContaineds,
     containmentChain,
     entitiesSortedByName,
     flatMap,
