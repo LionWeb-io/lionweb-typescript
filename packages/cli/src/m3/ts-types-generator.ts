@@ -1,9 +1,8 @@
 import {extname} from "path"
 import {writeFileSync} from "fs"
 
-import {GenerationOptions, tsTypesForLanguage} from "@lionweb/utilities"
 import {deserializeLanguages} from "@lionweb/core"
-import {readChunk} from "../chunk.js"
+import {GenerationOptions, readChunk, tsTypesForLanguage} from "@lionweb/utilities"
 
 
 const generateTsTypesFromSerialization = async (path: string, generationOptions: GenerationOptions[]) => {
