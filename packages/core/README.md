@@ -29,6 +29,8 @@ The following is a list of links to potential starting points:
 
 This is the first version corresponding to a release of LionWeb (version: 2023.1) as a whole.
 
+* Added an optional field `resolveInfoFor` to the `ExtractionFacade` type, to compute the field `resolveInfo` field of a serialized reference target.
+  The default used is to check whether a node instance implements `INamed` and takes the value of the `name` field.
 * _Breaking change:_ `serializeLanguage` and `deserializeLanguage` are now "multi-lingual" in the sense that a serialization chunk can contain multiple `Language`s.
   As a result, these functions have been renamed to (the plural) `serializeLanguages` (with varargs), and `deserializeLanguages` (returning `Language[]`).
 * (Bugfix:) Deserialize `Annotation`s.

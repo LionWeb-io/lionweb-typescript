@@ -2,10 +2,10 @@ import {ExtractionFacade} from "./facade.js"
 import {currentSerializationFormatVersion, MetaPointer, SerializationChunk, SerializedNode} from "./serialization.js"
 import {asIds} from "./functions.js"
 import {Node} from "./types.js"
-import {Containment, Enumeration, isINamed, Language, PrimitiveType, Property, Reference} from "./m3/types.js"
-import {allFeaturesOf} from "./m3/functions.js"
-import {asArray} from "./utils/array-helpers.js"
 import {BuiltinPrimitive, lioncoreBuiltins, serializeBuiltin} from "./m3/builtins.js"
+import {allFeaturesOf} from "./m3/functions.js"
+import {Containment, Enumeration, Language, PrimitiveType, Property, Reference, simpleNameDeducer} from "./m3/types.js"
+import {asArray} from "./utils/array-helpers.js"
 
 
 /**
@@ -86,7 +86,9 @@ export const serializeNodes = <NT extends Node>(nodes: NT[], extractionFacade: E
                 serializedNode.references.push({
                     reference: featureMetaPointer,
                     targets: (targets as NT[]).map((t) => ({
-                        resolveInfo: isINamed(t) ? t.name : undefined,
+                        resolveInfo: extractionFacade.resolveInfoFor
+                            ? extractionFacade.resolveInfoFor(t)
+                            : simpleNameDeducer(t),
                         reference: t.id
                     }))
                 })

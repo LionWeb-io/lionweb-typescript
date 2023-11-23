@@ -9,6 +9,13 @@ import {allFeaturesOf, isContainment} from "./m3/functions.js"
  */
 type ClassifierDeducer<NT extends Node> = (node: NT) => Classifier
 
+/**
+ * Type def. for functions that deduce the string value of the `resolveInfo` field of a
+ * {@link SerializedReferenceTarget serialized reference target}, or  {@code undefined}
+ * to indicate that no `resolveInfo` could be derived.
+ */
+type ResolveInfoDeducer<NT extends Node> = (node: NT) => string | undefined
+
 
 /**
  * Two interfaces that defines façades for in-memory models.
@@ -37,6 +44,12 @@ interface ExtractionFacade<NT extends Node> {
      * the given {@link Enumeration} and the runtime encoding of a literal of it,
      */
     enumerationLiteralFrom: (encoding: unknown, enumeration: Enumeration) => EnumerationLiteral | null
+
+    /**
+     * @return The string value of the `resolveInfo` field of a {@link SerializedReferenceTarget serialized reference target},
+     * or {@code undefined} to indicate that no `resolveInfo` could be derived.
+     */
+    resolveInfoFor?: ResolveInfoDeducer<NT>
 
 }
 
@@ -117,9 +130,10 @@ const updateSettingsKeyBased = settingsUpdater("key")
 
 export type {
     ClassifierDeducer,
-    NodesExtractor,
     ExtractionFacade,
-    InstantiationFacade
+    InstantiationFacade,
+    NodesExtractor,
+    ResolveInfoDeducer
 }
 
 export {

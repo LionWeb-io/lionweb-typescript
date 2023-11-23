@@ -1,5 +1,6 @@
 import {Node} from "./types.js"
-import {ExtractionFacade, InstantiationFacade, updateSettingsKeyBased} from "./facade.js"
+import {builtinFeatures} from "./m3/builtins.js"
+import {ExtractionFacade, InstantiationFacade, ResolveInfoDeducer, updateSettingsKeyBased} from "./facade.js"
 import {Classifier} from "./m3/types.js"
 
 
@@ -13,16 +14,11 @@ export type DynamicNode = Node & {
 // TODO  could also have properties, containments, references - mimicking the serialization
 
 
-/**
- * A parallel version of {@link INamed} for dynamic nodes.
- * (This type def. is predominantly meant for use in generated code.)
- */
-export type DynamicINamed = DynamicNode & {
-    settings: {
-        name: string
-    }
-}
-
+const propertyGetterFor = (key: string): ResolveInfoDeducer<DynamicNode> =>
+    (node) =>
+        (key in node.settings && typeof node.settings[key] === "string")
+            ? node.settings[key] as string  // FIXME  type cast shouldn't be necessary
+            : undefined
 
 /**
  * An implementation of {@link ExtractionFacade} for {@link DynamicNode dynamic nodes}.
@@ -34,7 +30,8 @@ export const dynamicExtractionFacade: ExtractionFacade<DynamicNode> = ({
         (node.settings as any)[feature.key],
     enumerationLiteralFrom: (value, enumeration) =>
         enumeration.literals.find(({key}) => key === value)
-        ?? null    // (undefined -> null)
+        ?? null,    // (undefined -> null)
+    resolveInfoFor: propertyGetterFor(builtinFeatures.inamed_name.key)
 })
 
 
