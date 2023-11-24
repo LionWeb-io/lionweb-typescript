@@ -130,3 +130,14 @@ docker run -it --rm --net host --name working-container -v ${PWD}:/work indamuts
 - `indamutsa/lionweb-devenv:v1.0.0`: Specifies the Docker image.
 - `/bin/zsh`: Starts a Zsh shell inside the container.
 
+
+## Contributing
+
+We're happy to receive feedback in the form of
+
+* Issues – see the [issue tracker](https://github.com/LionWeb-io/lionweb-typescript/issues).
+* Pull Requests.
+    We generally prefer to _squash-merge_ PRs, because PRs tend to be a bit of a "wandering journey".
+    If all commits in a PR are essentially "atomic" (in a sense that's at the discretion of the repo's maintainers), then we can consider merging by _fast-forwarding_.
+* Join the [LionWeb Slack](https://join.slack.com/t/lionweb/shared_invite/zt-1zltq8eqv-QJmtsZA8_oscCrO8HOp3FA)!
+
