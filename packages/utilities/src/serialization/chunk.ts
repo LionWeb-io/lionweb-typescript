@@ -1,5 +1,6 @@
 import {SerializationChunk} from "@lionweb/core"
-import {readFileAsJson} from "@lionweb/utilities"
+import {readFileAsJson} from "../json.js"
+
 
 export const readChunk = async (path: string) => {
     try {
