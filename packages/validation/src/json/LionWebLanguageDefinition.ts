@@ -2,9 +2,9 @@ import {
     LION_CORE_BUILTINS_INAMED_NAME,
     LionWebJsonMetaPointer,
     LionWebJsonNode,
-} from "./LionWebJson";
-import { LionWebJsonChunkWrapper } from "./LionWebJsonChunkWrapper";
-import { NodeUtils } from "./NodeUtils";
+} from "./LionWebJson.js";
+import { LionWebJsonChunkWrapper } from "./LionWebJsonChunkWrapper.js";
+import { NodeUtils } from "./NodeUtils.js";
 
 type LanguageId = {
     name?: string;
@@ -14,7 +14,12 @@ type LanguageId = {
 
 export const LIONWEB_M3_PROPERTY_KEY = "Property";
 export const LIONWEB_M3_CONCEPT_KEY = "Concept";
+export const LIONWEB_M3_INTERFACE_KEY = "Interface";
+export const LIONWEB_M3_ANNOTATION_KEY = "Annotation";
 export const LIONWEB_M3_REFERENCE_KEY = "Reference";
+export const LIONWEB_M3_LANGUAGE_KEY = "Language";
+export const LIONWEB_M3_LANGUAGE_VERSION_KEY = "Language-version";
+export const LIONWEB_M3_IKEYED_KEY_KEY = "IKeyed-key";
 export const LIONWEB_M3_PROPERTY_TYPE_KEY = "Property-type";
 /**
  * Collection of language definitions
@@ -65,7 +70,7 @@ export class LionWebLanguageDefinition {
      */
     constructor(chunk: LionWebJsonChunkWrapper) {
         // console.log("CHUNK " + JSON.stringify(chunk))
-        const languageNodes = chunk.findNodesOfConcept("Language");
+        const languageNodes = chunk.findNodesOfConcept(LIONWEB_M3_LANGUAGE_KEY);
         if (languageNodes.length !== 1) {
             // TODO Better error handling.
             console.error("1 Expected exactly one Language node, found " + languageNodes.length + " => " + JSON.stringify(languageNodes));
@@ -80,8 +85,8 @@ export class LionWebLanguageDefinition {
     protected setLanguage(languageNode: LionWebJsonNode) {
         // Assume LwNode is a concept of type "Language"
         const nameProp = languageNode.properties.find(prop => prop.property.key === LION_CORE_BUILTINS_INAMED_NAME);
-        const versionProp = languageNode.properties.find(prop => prop.property.key === "Language-version");
-        const keyProp = languageNode.properties.find(prop => prop.property.key === "IKeyed-key");
+        const versionProp = languageNode.properties.find(prop => prop.property.key === LIONWEB_M3_LANGUAGE_VERSION_KEY);
+        const keyProp = languageNode.properties.find(prop => prop.property.key === LIONWEB_M3_IKEYED_KEY_KEY);
         this.languageId = {
             name: nameProp?.value,
             version: versionProp?.value,
@@ -104,9 +109,11 @@ export class LionWebLanguageDefinition {
 
     getNodeByMetaPointer(metaPointer: LionWebJsonMetaPointer): LionWebJsonNode | undefined {
         // console.log("get metapointer " + JSON.stringify(metaPointer))
-        const result = this.languageChunkWrapper.jsonChunk.nodes.find(node => {
-            const keyProp = NodeUtils.findLwProperty(node, "IKeyed-key");
-            // const versionProp = NodeUtils.findLwProperty(node, "Language-version");
+        const result = this.languageChunkWrapper.jsonChunk.nodes.find(n => {
+            // console.log("   looking into " + JSON.stringify(n));
+            const keyProp = NodeUtils.findLwProperty(n, LIONWEB_M3_IKEYED_KEY_KEY);
+            // const versionProp = NodeUtils.findLwProperty(n, "Language-version");
+
             // return ((!!keyProp) && (keyProp.value === metaPointer.key) && (!!versionProp) && (versionProp.value === metaPointer.version));
 
             // console.log("   getNodeByMetaPointer.looking into " + node.id + " found " + JSON.stringify(keyProp));
@@ -115,24 +122,24 @@ export class LionWebLanguageDefinition {
         return result;
     }
 
-    getPropertyByKey(key: string) {
+    getPropertyByKey(key: string): LionWebJsonNode | undefined {
         // console.log("get property by key " + key)
-        const propertyNode = this.languageChunkWrapper.findNodesOfConcept("Property").find(n => {
-            // console.log("   getPropertyByKey.looking into " + n.id);
+        const propertyNode = this.languageChunkWrapper.findNodesOfConcept(LIONWEB_M3_PROPERTY_KEY).find(n => {
+            // console.log("   looking into " + JSON.stringify(n));
             const keyProp = (n as LionWebJsonNode).properties.find(prop => {
-                return prop.property.key === "IKeyed-key" && prop.value === key;
+                return prop.property.key === LIONWEB_M3_IKEYED_KEY_KEY && prop.value === key;
             });
             return keyProp;
         });
         return propertyNode;
     }
 
-    getConceptByKey(key: string) {
+    getConceptByKey(key: string): LionWebJsonNode | undefined {
         // console.log("get property by key " + key)
-        const conceptNode = this.languageChunkWrapper.findNodesOfConcept("Concept").find(n => {
+        const conceptNode = this.languageChunkWrapper.findNodesOfConcept(LIONWEB_M3_CONCEPT_KEY).find(n => {
             // console.log("   looking into " + JSON.stringify(n));
-            const keyProp = (n as LionWebJsonNode).properties.find(prop => {
-                return prop.property.key === "IKeyed-key" && prop.value === key;
+            const keyProp = n.properties.find(prop => {
+                return prop.property.key === LIONWEB_M3_IKEYED_KEY_KEY && prop.value === key;
             });
             return keyProp;
         });

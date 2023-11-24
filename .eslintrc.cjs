@@ -5,6 +5,8 @@ module.exports = {
     plugins: ["@typescript-eslint"],
     root: true,
     rules: {
-        "@typescript-eslint/no-unused-vars": ["error", {"argsIgnorePattern": "^_"}]
+        "@typescript-eslint/no-unused-vars": ["error", {"argsIgnorePattern": "^_"}],
+        "@typescript-eslint/ban-ts-ignore": "off",
+        "@typescript-eslint/prefer-spread": ["off"]
     }
 }

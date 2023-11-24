@@ -1,8 +1,8 @@
-import { IncorrectLionCoreVersion_Issue, NotLionCoreLanguageKey_Issue, NumberOfLanguagesUsed_Issue } from "../issues/LanguageIssues";
-import { JsonContext } from "../issues/ValidationIssue";
-import { LionWebJsonChunk } from "../json/LionWebJson";
-import { LionWebJsonChunkWrapper } from "../json/LionWebJsonChunkWrapper";
-import { ValidationResult } from "./ValidationResult";
+import { IncorrectLionCoreVersion_Issue, NotLionCoreLanguageKey_Issue, NumberOfLanguagesUsed_Issue } from "../issues/LanguageIssues.js";
+import { JsonContext } from "./../issues/JsonContext.js";
+import { LionWebJsonChunk } from "../json/LionWebJson.js";
+import { LionWebJsonChunkWrapper } from "../json/LionWebJsonChunkWrapper.js";
+import { ValidationResult } from "./ValidationResult.js";
 
 export class LionWebLanguageValidator {
     validationResult: ValidationResult;
@@ -24,10 +24,10 @@ export class LionWebLanguageValidator {
         }
         const usedLanguage = chunk.languages[0];
         if (usedLanguage.key !== "LionCore-M3") {
-            this.validationResult.issue(new NotLionCoreLanguageKey_Issue(new JsonContext(null, ["languages[0]"]), usedLanguage.key))
+            this.validationResult.issue(new NotLionCoreLanguageKey_Issue(new JsonContext(null, ["languages", 0]), usedLanguage.key))
         }
         if (usedLanguage.version !== "1") {
-            this.validationResult.issue(new IncorrectLionCoreVersion_Issue(new JsonContext(null, ["languages[0]"]), usedLanguage.version))
+            this.validationResult.issue(new IncorrectLionCoreVersion_Issue(new JsonContext(null, ["languages", 0]), usedLanguage.version))
         }
         const chunkWrapper = new LionWebJsonChunkWrapper(chunk);
         const languageNodes = chunkWrapper.findNodesOfConcept("Language");

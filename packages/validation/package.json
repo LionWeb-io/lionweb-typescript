@@ -4,7 +4,10 @@
   "license":  "Apache 2.0",
   "description": "LionWeb Serialization validation",
   "author": "jos.warmer@openmodeling.nl",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "typings": "dist/index.d.ts",
+  "type":"module",
   "keywords": [
     "lionweb",
     "serialization",
@@ -12,15 +15,14 @@
   ],
   "scripts": {
     "build": "tsc",
-    "testValid": "ts-node src/runners/RunCheckFolder.ts ../../../lionweb-integration-testing/testset/valid",
-    "testInvalid": "ts-node src/runners/RunCheckFolder.ts ../../../lionweb-integration-testing/testset/invalid",
-    "testInvalidWithLanguage": "ts-node src/runners/RunCheckFolderWithLanguage.ts ../../../lionweb-integration-testing/testset/withLanguage/invalid/ ../../../lionweb-integration-testing/testset/withLanguage/myLang.language.json",
-    "testValidWithLanguage": "ts-node src/runners/RunCheckFolderWithLanguage.ts ../../../lionweb-integration-testing/testset/withLanguage/valid/ ../../../lionweb-integration-testing/testset/withLanguage/myLang.language.json",
-    "test": "npm run testValid && npm run testInvalid && npm run testInvalidWithLanguage && npm run testValidWithLanguage"
+    "testValid": "node dist/runners/RunCheckFolder.js ../../../lionweb-integration-testing/testset/valid",
+    "testInvalid": "node dist/runners/RunCheckFolder.js ../../../lionweb-integration-testing/testset/invalid",
+    "testInvalidWithLanguage": "node dist/runners/RunCheckFolderWithLanguage.js ../../../lionweb-integration-testing/testset/withLanguage/invalid/ ../../../lionweb-integration-testing/testset/withLanguage/myLang.language.json",
+    "testValidWithLanguage": "node dist/runners/RunCheckFolderWithLanguage.js ../../../lionweb-integration-testing/testset/withLanguage/valid/ ../../../lionweb-integration-testing/testset/withLanguage/myLang.language.json",
+    "test": "mocha"
   },
   "devDependencies": {
     "@types/node": "18.15.3",
-    "ts-node": "10.9.1",
     "typescript": "5.2.2"    
   },
   "dependencies": {

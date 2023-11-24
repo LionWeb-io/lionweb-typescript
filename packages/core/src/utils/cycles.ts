@@ -8,24 +8,24 @@ export type NextsFunction<T> = (t: T) => T[]
  */
 export const cycleWith = <T>(thing: T, nextsFunction: NextsFunction<T>): T[] => {
 
-    const visit = (current: T, chain: T[]): T[] => {
-        if (chain.indexOf(current) > -1) {
-            // Add current to end, so we know what sub-array constitutes the actual cycle:
-            return [ ...chain, current ]
-        }
-        const extendedChain = [ ...chain, current ]
-        for (const dependency of nextsFunction(current)) {
-            const recursion = visit(dependency, extendedChain)
-            if (recursion.length > 0) {
-                return recursion
-            }
-        }
-        return []
-    }
-
-    const result = visit(thing, [])
+    const result = visit<T>(thing, [], nextsFunction)
     return result.length > 0 && result[result.length - 1] === thing
         ? result
         : []
+}
+
+const visit = <T>(current: T, chain: T[], nextsFunction: NextsFunction<T>): T[] => {
+    if (chain.indexOf(current) > -1) {
+        // Add current to end, so we know what sub-array constitutes the actual cycle:
+        return [ ...chain, current ]
+    }
+    const extendedChain = [ ...chain, current ]
+    for (const dependency of nextsFunction(current)) {
+        const recursion = visit(dependency, extendedChain, nextsFunction)
+        if (recursion.length > 0) {
+            return recursion
+        }
+    }
+    return []
 }
 

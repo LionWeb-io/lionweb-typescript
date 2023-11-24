@@ -1,0 +1,7 @@
+{
+  "node-option": [
+    "experimental-specifier-resolution=node"
+  ],
+  "recursive": true,
+  "enable-source-maps": true
+}
