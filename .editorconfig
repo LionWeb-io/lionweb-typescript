@@ -1,0 +1,14 @@
+# Help: https://EditorConfig.org`
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+indent_size = 4
+
+[*.json]
+indent_size = 2
+
+[*.sh]
+charset = latin1
