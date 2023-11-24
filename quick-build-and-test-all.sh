@@ -4,7 +4,7 @@
 
 cd packages
 
-for package in "core" "utilities" "cli" "test" "artifacts" "validation"
+for package in "core" "utilities" "cli" "validation" "test" "artifacts"
 do
   (cd $package; npm run build)
 done
