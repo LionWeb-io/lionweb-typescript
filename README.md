@@ -29,7 +29,7 @@ The implementation is divided up in a number of NPM packages in the directory [`
   A package that generates artifacts (serialization chunks, diagrams, JSON Schemas) from some of the models constructed in the `core` and `test` packages.
 
 Each of these packages have their own `README.md`.
-The `core`, `utilities`, `cli`, and `validation` packages are published in the scope of [the `lionweb[package.json](package.json)` organization](https://www.npmjs.com/org/lionweb), meaning that they're all prefixed with `@lionweb/`.
+The `core`, `utilities`, `cli`, and `validation` packages are published in the scope of [the `lionweb` organization](https://www.npmjs.com/org/lionweb), meaning that they're all prefixed with `@lionweb/`.
 The other packages are for internal use only.
 All these packages declare the same NPM semver identification, which isn't directly related to the release version of the LionWeb specification.
 
