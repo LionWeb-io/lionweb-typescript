@@ -6,7 +6,6 @@ import {
     generateMermaidForLanguage,
     generatePlantUmlForLanguage,
     GenerationOptions,
-    schemaFor,
     tsTypesForLanguage,
     writeJsonAsFile
 } from "@lionweb/utilities"
@@ -57,14 +56,4 @@ saveLanguageFiles(multiLanguage, "multi")
 
 writeJsonAsFile(instancePath("multi.json"), serializeNodes(multiModel, multiExtractionFacade))
 console.log(`serialized multi-language M1`)
-
-
-const persistSchemaFor = (language: Language) => {
-    const schema = schemaFor(language)
-    const schemaName = language.name.toLowerCase()
-    writeJsonAsFile(`schemas/${schemaName}.serialization.schema.json`, schema)
-}
-
-persistSchemaFor(lioncore)
-persistSchemaFor(libraryLanguage)
 

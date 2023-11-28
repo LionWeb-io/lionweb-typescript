@@ -29,6 +29,7 @@ The following is a list of links to potential starting points:
 
 This is the first version corresponding to a release of LionWeb (version: 2023.1) as a whole.
 
+* Remove JSON Schema generation functionality – this wasn't up-to-date at all.
 * Implement persistence of annotations on `Node`s, including (de-)serialization.
 * Added an optional field `resolveInfoFor` to the `ExtractionFacade` type, to compute the field `resolveInfo` field of a serialized reference target.
   The default used is to check whether a node instance implements `INamed` and takes the value of the `name` field.
