@@ -4,12 +4,8 @@ import {assert} from "chai"
 import fs from "fs";
 import { TestExpectation } from "./TestExpectation.js";
 
-const validDir = "../../../lionweb-integration-testing/testset/valid";
-const invalidDir = "../../../lionweb-integration-testing/testset/invalid";
-
-// const validDirWithLanguage = "../../../lionweb-integration-testing/testset/withLanguage/valid";
-// const invalidDirWithLanguage = "../../../lionweb-integration-testing/testset/withLanguage/invalid";
-// const languageFile = "../../../lionweb-integration-testing/testset/withLanguage/myLang.language.json";
+const validDir = "testset/valid";
+const invalidDir = "testset/invalid";
 
 type TestDir = { dir: string; lang: string | null | undefined };
 
