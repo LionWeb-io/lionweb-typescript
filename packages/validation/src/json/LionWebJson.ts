@@ -5,6 +5,8 @@
  */
 export const LION_CORE_BUILTINS_KEY = "LionCore-builtins";
 export const LION_CORE_BUILTINS_INAMED_NAME = "LionCore-builtins-INamed-name";
+export const LION_CORE_M3_KEY = "LionCore-M3";
+export const LION_CORE_M3_NAME = "LionCore_M3";
 
 export const LIONWEB_BOOLEAN_TYPE = "LionCore-builtins-Boolean";
 export const LIONWEB_JSON_TYPE = "LionCore-builtins-JSON";

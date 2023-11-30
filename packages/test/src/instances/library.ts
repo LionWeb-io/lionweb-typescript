@@ -23,6 +23,7 @@ const rtEnums: { [enumKey: string]: unknown } = {
 export type BaseNode = {
     id: Id
     classifier: string
+    annotations: BaseNode[]
 }
 
 export type Book = BaseNode & {
@@ -71,7 +72,8 @@ export const libraryExtractionFacade: ExtractionFacade<BaseNode> = {
 export const libraryInstantiationFacade: InstantiationFacade<BaseNode> = {
     nodeFor: (_parent, classifier, id, _propertySettings) => ({
         id,
-        classifier: classifier.key
+        classifier: classifier.key,
+        annotations: []
     }),
     setFeatureValue: updateSettingsNameBased,
     encodingOf: (literal) => {
@@ -83,7 +85,8 @@ export const libraryInstantiationFacade: InstantiationFacade<BaseNode> = {
      * This is a trick that uses TypeScript's reverse mappings for enumerations
      * (@see https://www.typescriptlang.org/docs/handbook/enums.html#reverse-mappings).
      * Unfortunately, it requires some "fugly" type casting to compile:
-     *  'key' really is a string containing the enumeration literal's name.
+     *  'key' really is a string containing the enumeration literal's _name_
+     *  (so this relies on the TypeScript's literal _name_ and the M3 enumeration literal's _key_ being identical).
      */
 }
 
@@ -99,7 +102,8 @@ export const jackLondon: GuideBookWriter = {
     id: hash("Jack London"),
     classifier: "GuideBookWriter",
     name: "Jack London",
-    countries: "Alaska" // (not a country...)
+    countries: "Alaska", // (not a country...)
+    annotations: []
 }
 
 const explorerBook: Book = {
@@ -108,7 +112,8 @@ const explorerBook: Book = {
     title: "Explorer Book",
     author: jackLondon,
     pages: 1337,
-    type: BookType.Special
+    type: BookType.Special,
+    annotations: []
 }
 
 export const bobLibrary: Library = {
@@ -117,7 +122,8 @@ export const bobLibrary: Library = {
     name: "Bob's Library",
     books: [
         explorerBook
-    ]
+    ],
+    annotations: []
 }
 
 export const libraryModel: BaseNode[] = [

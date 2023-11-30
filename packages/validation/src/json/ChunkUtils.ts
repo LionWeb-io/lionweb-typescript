@@ -2,7 +2,7 @@ import {
     LionWebJsonChunk,
     LionWebJsonNode,
     LwJsonUsedLanguage
-} from "./LionWebJson";
+} from "./LionWebJson.js";
 
 /**
  * Utility functions for LionWeb chunks

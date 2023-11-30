@@ -1,4 +1,5 @@
 import {
+    Annotation,
     builtinClassifiers,
     builtinPrimitives,
     Concept,
@@ -113,6 +114,22 @@ export enum GenerationOptions {
  */
 export const tsTypesForLanguage = (language: Language, ...generationOptions: GenerationOptions[]) => {
 
+    const typeForAnnotation = (annotation: Annotation) => {
+
+        const superTypes = [
+            ...(annotation.extends ? [annotation.extends] : []),
+            ...annotation.implements
+        ]
+
+        return tsFromTypeDef({
+            modifier: TypeDefModifier.none,
+            name: annotation.name,
+            mixinNames: superTypes.length === 0 ? [`DynamicNode`] : superTypes.map(nameOf),
+            fields: annotation.features.map(fieldForFeature)
+        })
+
+    }
+
     const typeForConcept = (concept: Concept) => {
 
         const superTypes = [
@@ -147,7 +164,9 @@ export const tsTypesForLanguage = (language: Language, ...generationOptions: Gen
         })
 
     const typeForLanguageEntity = (entity: LanguageEntity) => {
-        // TODO  Annotation
+        if (entity instanceof Annotation) {
+            return typeForAnnotation(entity)
+        }
         if (entity instanceof Concept) {
             return typeForConcept(entity)
         }

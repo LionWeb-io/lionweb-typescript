@@ -22,8 +22,8 @@ export type SerializedContainment = {
 }
 
 export type SerializedReferenceTarget = {
-    resolveInfo?: string
     reference: Id
+    resolveInfo?: string
 }
 
 export type SerializedReference = {
@@ -35,11 +35,12 @@ export type SerializedReference = {
  * Type definition for an AST node serialized to JSON.
  */
 export type SerializedNode = {
-    classifier: MetaPointer
     id: string
+    classifier: MetaPointer
     properties: SerializedProperty[]
     containments: SerializedContainment[]
     references: SerializedReference[]
+    annotations: Id[]
     parent: Id | null
 }
 

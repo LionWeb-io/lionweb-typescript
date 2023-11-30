@@ -5,8 +5,8 @@ import {
     Language_UnknownContainment_Issue,
     Language_UnknownProperty_Issue,
     Language_UnknownReference_Issue
-} from "../issues/LanguageIssues";
-import { JsonContext } from "../issues/ValidationIssue";
+} from "../issues/LanguageIssues.js";
+import { JsonContext } from "./../issues/JsonContext.js";
 import {
     LION_CORE_BUILTINS_INAMED_NAME,
     LIONWEB_BOOLEAN_TYPE,
@@ -14,11 +14,11 @@ import {
     LIONWEB_JSON_TYPE,
     LIONWEB_STRING_TYPE, LionWebJsonChild,
     LionWebJsonProperty, LionWebJsonReference
-} from "../json/LionWebJson";
-import { LionWebJsonChunkWrapper } from "../json/LionWebJsonChunkWrapper";
-import { LIONWEB_M3_CONCEPT_KEY, LIONWEB_M3_PROPERTY_KEY, LIONWEB_M3_PROPERTY_TYPE_KEY, LionWebLanguageDefinition } from "../json/LionWebLanguageDefinition";
-import { SimpleFieldValidator } from "./SimpleFieldValidator";
-import { ValidationResult } from "./ValidationResult";
+} from "../json/LionWebJson.js";
+import { LionWebJsonChunkWrapper } from "../json/LionWebJsonChunkWrapper.js";
+import { LIONWEB_M3_CONCEPT_KEY, LIONWEB_M3_PROPERTY_KEY, LIONWEB_M3_PROPERTY_TYPE_KEY, LionWebLanguageDefinition } from "../json/LionWebLanguageDefinition.js";
+import { SimpleFieldValidator } from "./SimpleFieldValidator.js";
+import { ValidationResult } from "./ValidationResult.js";
 
 /**
  * Check against the language definition

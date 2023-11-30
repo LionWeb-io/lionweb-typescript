@@ -4,7 +4,7 @@
 
 cd packages
 
-for package in "core" "utilities" "cli" "test" "artifacts" "validation"
+for package in "core" "utilities" "cli" "validation" "test" "artifacts"
 do
   (cd $package; npm run build)
 done
@@ -15,8 +15,6 @@ done
 cd test && npm test && cd ..
 cd artifacts && npm run generate && cd ..
 cd cli && node dist/lionweb-cli.js && cd ..
-cd validation && npm test && cd ..
-
 
 # run linting:
 

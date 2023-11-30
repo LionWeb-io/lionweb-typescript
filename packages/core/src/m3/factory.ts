@@ -31,6 +31,9 @@ export class LanguageFactory {
         this.language = new Language(name, version, this.id(name), this.key(name))
     }
 
+
+    // TODO  also take care of containment immediately? (then most calls to .having<X> would be unnecessary/wrong)
+
     annotation(name: string, extends_?: SingleRef<Annotation>) {
         return new Annotation(this.language, name, this.key(this.language.name, name), this.id(this.language.name, name), extends_)
     }

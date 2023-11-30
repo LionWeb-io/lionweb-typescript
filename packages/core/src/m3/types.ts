@@ -3,6 +3,7 @@
  * A LionWeb language (at the M2 meta level) can be represented as an instance of the {@link Language} type.
  */
 
+import {ResolveInfoDeducer} from "../facade.js"
 import {MultiRef, SingleRef, unresolved} from "../references.js"
 import {Id, Node} from "../types.js"
 
@@ -24,6 +25,9 @@ interface INamed extends Node {
 
 const isINamed = (node: Node): node is INamed =>
     "name" in node && typeof node.name === "string"
+
+const simpleNameDeducer: ResolveInfoDeducer<Node> =
+    (node: Node) => isINamed(node) ? node.name : undefined
 
 
 interface IKeyed extends INamed {
@@ -57,6 +61,7 @@ abstract class M3Node implements IKeyed {
         this.key = key
         return this
     }
+    annotations: Node[] = [] // (containment)
 }
 
 abstract class Feature extends M3Node {
@@ -252,7 +257,8 @@ export {
     Reference,
     isINamed,
     isIKeyed,
-    lioncoreBuiltinsKey
+    lioncoreBuiltinsKey,
+    simpleNameDeducer
 }
 
 export type {

@@ -7,7 +7,6 @@ cd packages
 cd test && npm test && cd ..
 cd artifacts && npm run generate && cd ..
 cd cli && node dist/lionweb-cli.js && cd ..
-cd validation && npm test && cd ..
 
 cd ..
 

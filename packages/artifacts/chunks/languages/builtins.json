@@ -67,6 +67,7 @@
           "targets": []
         }
       ],
+      "annotations": [],
       "parent": null
     },
     {
@@ -96,6 +97,7 @@
       ],
       "containments": [],
       "references": [],
+      "annotations": [],
       "parent": "LionCore-builtins"
     },
     {
@@ -125,6 +127,7 @@
       ],
       "containments": [],
       "references": [],
+      "annotations": [],
       "parent": "LionCore-builtins"
     },
     {
@@ -154,6 +157,7 @@
       ],
       "containments": [],
       "references": [],
+      "annotations": [],
       "parent": "LionCore-builtins"
     },
     {
@@ -183,6 +187,7 @@
       ],
       "containments": [],
       "references": [],
+      "annotations": [],
       "parent": "LionCore-builtins"
     },
     {
@@ -254,6 +259,7 @@
           "targets": []
         }
       ],
+      "annotations": [],
       "parent": "LionCore-builtins"
     },
     {
@@ -303,6 +309,7 @@
           "targets": []
         }
       ],
+      "annotations": [],
       "parent": "LionCore-builtins"
     },
     {
@@ -354,6 +361,7 @@
           ]
         }
       ],
+      "annotations": [],
       "parent": "LionCore-builtins-INamed"
     }
   ]
