@@ -1,4 +1,4 @@
-import {Concept, containmentChain, Id, issuesWithFlatMap, Language, Node, Property,} from "@lionweb/core"
+import { containmentChain, Id, issuesWithFlatMap, Language, Node, } from "@lionweb/core"
 import {assert} from "chai"
 const {deepEqual} = assert
 
