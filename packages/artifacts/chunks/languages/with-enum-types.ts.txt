@@ -3,13 +3,21 @@
 
 /*
  * language's metadata:
- *     name:    language-with-enum
+ *     name:    WithEnum
  *     version: 1
  */
 
 import {DynamicNode} from "@lionweb/core";
 
+export type EnumHolder = DynamicNode & {
+    // classifier -> EnumHolder
+    settings: {
+        enumValue: MyEnum;
+    };
+};
+
 enum MyEnum {
     lit1, lit2
 }
 
+export type WithEnumNode = EnumHolder;

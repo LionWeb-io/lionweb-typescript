@@ -1,6 +1,10 @@
-language language-with-enum
+language WithEnum
     version: 1
     entities (↓name):
+
+        concept EnumHolder
+            features (↓name):
+                enumValue: MyEnum
 
         enumeration MyEnum
             literals:

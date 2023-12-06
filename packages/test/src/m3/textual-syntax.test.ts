@@ -11,9 +11,13 @@ describe("textual syntax (LionCore)", () => {
     it("print out language with an enum as text", () => {
         equal(
             asText(languageWithEnum),
-`language language-with-enum
+`language WithEnum
     version: 1
     entities (↓name):
+
+        concept EnumHolder
+            features (↓name):
+                enumValue: MyEnum
 
         enumeration MyEnum
             literals:

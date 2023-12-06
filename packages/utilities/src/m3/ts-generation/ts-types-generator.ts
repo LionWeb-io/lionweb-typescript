@@ -21,7 +21,7 @@ import {
     SingleRef,
     unresolved
 } from "@lionweb/core"
-import {asString} from "littoral-templates"
+import {asString, NestedString} from "littoral-templates"
 import {cond, indent} from "./text-generation-utils.js"
 import {Field, tsFromTypeDef, TypeDefModifier} from "./type-def.js"
 
@@ -50,17 +50,21 @@ const fieldForLink = ({name, type, optional, multiple}: Link): Field =>
     // FIXME  this doesn't work cross-language
 
 
-const tsTypeFor = (datatype: SingleRef<Datatype>) => {
-    switch (datatype) {
-        case builtinPrimitives.booleanDatatype: return `boolean`
-        case builtinPrimitives.stringDatatype: return `string`
-        case builtinPrimitives.integerDatatype: return `number`
-        case builtinPrimitives.jsonDatatype: return `unknown`
-
-        case unresolved:
-        default:
-            return `unknown`
+const tsTypeFor = (datatype: SingleRef<Datatype>): string => {
+    if (datatype instanceof PrimitiveType) {
+        switch (datatype) {
+            case builtinPrimitives.booleanDatatype: return `boolean`
+            case builtinPrimitives.stringDatatype: return `string`
+            case builtinPrimitives.integerDatatype: return `number`
+            case builtinPrimitives.jsonDatatype: return `unknown`
+            default:
+                return `string`
+        }
     }
+    if (datatype instanceof Enumeration) {
+        return datatype.name
+    }
+    return `unknown /* [ERROR] can't compute a TS type for this datatype: ${datatype} */`
 }
 
 
@@ -72,7 +76,7 @@ const fieldForProperty = ({name, type, optional}: Property): Field =>
     })
 
 
-const isINamed = (entity: LanguageEntity) =>
+const isINamed = (entity: LanguageEntity): boolean =>
     entity === builtinClassifiers.inamed
 
 
@@ -87,7 +91,7 @@ const usesINamedDirectly = (entity: LanguageEntity): boolean => {
 }
 
 
-const typeForEnumeration = (enumeration: Enumeration) =>
+const typeForEnumeration = (enumeration: Enumeration): NestedString =>
     [
         `enum ${enumeration.name} {`,
         indent(enumeration.literals.map(nameOf).join(`, `)),
@@ -96,7 +100,7 @@ const typeForEnumeration = (enumeration: Enumeration) =>
     ]
 
 
-const typeForPrimitiveType = (datatype: PrimitiveType) =>
+const typeForPrimitiveType = (datatype: PrimitiveType): NestedString =>
     [
         `export type ${datatype.name} = ${tsTypeFor(datatype)};`,
         ``

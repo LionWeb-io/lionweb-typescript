@@ -15,7 +15,7 @@ export type Book = DynamicNode & {
         title: string;
         pages: number;
         author: Writer;
-        type?: unknown;
+        type?: BookType;
     };
 };
 
