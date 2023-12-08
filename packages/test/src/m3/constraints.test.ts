@@ -106,7 +106,7 @@ describe("Identifiers and Keys", () => {
         const issues = issuesLanguage(language)
         deepEqual(issues[0], {
             location: language,
-            message: `An ID must consist only of latin characters (upper/lowercase), numbers, underscores, and hyphens`,
+            message: "An ID must consist only of latin characters (upper/lowercase), numbers, underscores, and hyphens",
             secondaries: []
         })
     })
@@ -116,7 +116,7 @@ describe("Identifiers and Keys", () => {
         const issues = issuesLanguage(language)
         deepEqual(issues[0], {
             location: language,
-            message: `A KEY must consist only of latin characters (upper/lowercase), numbers, underscores, and hyphens`,
+            message: "A KEY must consist only of latin characters (upper/lowercase), numbers, underscores, and hyphens",
             secondaries: []
         })
     })
@@ -161,13 +161,13 @@ describe("Concept constraints", () => {
         const issues = issuesLanguage(language)
         deepEqual(issues.length, 3)
         const message1 = issues?.find(({location}) => location === cis[0])?.message
-        deepEqual(message1, `A Interface can't inherit (directly or indirectly) from itself, but metamodel.interface_0 does so through the following cycle: metamodel.interface_0 -> metamodel.interface_2 -> metamodel.interface_1 -> metamodel.interface_0`)
+        deepEqual(message1, "A Interface can't inherit (directly or indirectly) from itself, but metamodel.interface_0 does so through the following cycle: metamodel.interface_0 -> metamodel.interface_2 -> metamodel.interface_1 -> metamodel.interface_0")
     })
 
     it("check that trivial inheritance cycles are detected", () => {
         const factory = new LanguageFactory("metamodel", "1", chain(concatenator("-"), nanoIdGen()), lastOf)
         const {language} = factory
-        const ci = factory.interface(`foo`)
+        const ci = factory.interface("foo")
         ci.extends.push(ci)
         language.entities.push(ci)
 
@@ -175,7 +175,7 @@ describe("Concept constraints", () => {
         deepEqual(issues.length, 1)
         const {location, message} = issues[0]
         deepEqual(location, ci)
-        deepEqual(message, `A Interface can't inherit (directly or indirectly) from itself, but metamodel.foo does so through the following cycle: metamodel.foo -> metamodel.foo`)
+        deepEqual(message, "A Interface can't inherit (directly or indirectly) from itself, but metamodel.foo does so through the following cycle: metamodel.foo -> metamodel.foo")
     })
 
 })
