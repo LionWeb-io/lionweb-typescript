@@ -21,8 +21,8 @@ describe("textual syntax (LionCore)", () => {
 
         enumeration MyEnum
             literals:
-                lit1
-                lit2
+                literal1
+                literal2
 
 `
         )

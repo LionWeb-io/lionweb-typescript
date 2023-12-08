@@ -99,8 +99,8 @@
             "key": "Enumeration-literals"
           },
           "children": [
-            "XvQ0ctd2H1f8xPfihKOod8Lh8EpmuubTAYlcFA4rARw",
-            "BvhrEJ1gg6mHK25NnNdcI01lyB3odoB5e6fHOuiJ5iI"
+            "0euWZGmWfx0iPC66yajzWqv3gIv--pvo55hqY82nREc",
+            "ArZRq3V1eIqmZBN88UlVbeRFfp3YVf-_JMd9-s64Yjg"
           ]
         }
       ],
@@ -109,7 +109,7 @@
       "parent": "RkXMUe9zMRUQpw3bzQjSbBX6ju1a0UplEYsVa799WPQ"
     },
     {
-      "id": "XvQ0ctd2H1f8xPfihKOod8Lh8EpmuubTAYlcFA4rARw",
+      "id": "0euWZGmWfx0iPC66yajzWqv3gIv--pvo55hqY82nREc",
       "classifier": {
         "language": "LionCore-M3",
         "version": "2023.1",
@@ -130,7 +130,7 @@
             "version": "2023.1",
             "key": "LionCore-builtins-INamed-name"
           },
-          "value": "lit1"
+          "value": "literal1"
         }
       ],
       "containments": [],
@@ -139,7 +139,7 @@
       "parent": "uLnvTaBlWPqfYfLjfN9HG9Qjt4VQHhFVRorDLFeYhZE"
     },
     {
-      "id": "BvhrEJ1gg6mHK25NnNdcI01lyB3odoB5e6fHOuiJ5iI",
+      "id": "ArZRq3V1eIqmZBN88UlVbeRFfp3YVf-_JMd9-s64Yjg",
       "classifier": {
         "language": "LionCore-M3",
         "version": "2023.1",
@@ -160,7 +160,7 @@
             "version": "2023.1",
             "key": "LionCore-builtins-INamed-name"
           },
-          "value": "lit2"
+          "value": "literal2"
         }
       ],
       "containments": [],

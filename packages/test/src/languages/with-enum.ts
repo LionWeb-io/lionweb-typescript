@@ -11,9 +11,10 @@ const factory = new LanguageFactory(
 
 const myEnum = factory.enumeration("MyEnum")
 myEnum.havingLiterals(
-        factory.enumerationLiteral(myEnum, "lit1"),
-        factory.enumerationLiteral(myEnum, "lit2"),
-    )
+    ...([1, 2].map(
+        (i) => factory.enumerationLiteral(myEnum, `literal${i}`).havingKey(`lit${i}`)
+    ))
+)
 
 const enumHolder = factory.concept("EnumHolder", false)
 const enumHolder_enumValue = factory.property(enumHolder, "enumValue").ofType(myEnum)

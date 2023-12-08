@@ -17,7 +17,7 @@ export type EnumHolder = DynamicNode & {
 };
 
 enum MyEnum {
-    lit1, lit2
+    literal1, literal2
 }
 
 export type WithEnumNode = EnumHolder;
