@@ -31,11 +31,6 @@ import {ClassifierDeducer} from "../facade.js"
 import {containmentChain} from "../functions.js"
 
 
-type Issue = {
-    location: Language | M3Concept,
-    message: string
-}
-
 /**
  * @return The type of the given {@link Feature}
  */
@@ -101,7 +96,11 @@ const directlyContaineds = (thing: M3Concept): M3Concept[] => {
     return []
 }
 
-// TODO  document
+
+/**
+ * @return All {@link M3Concept nodes} contained in this {@link Language language},
+ * including the language itself.
+ */
 const allContaineds = (language: Language): M3Concept[] =>
     [
         language,
@@ -116,50 +115,6 @@ const allContaineds = (language: Language): M3Concept[] =>
  */
 const flatMap = <T>(language: Language, map: (t: M3Concept) => T[]): T[] =>
     flatMapNonCyclingFollowing(map, directlyContaineds)(language)
-
-const issuesWithFlatMap = (language: Language): Issue => {
-    const issues: Issue = {
-        location: language,
-        message: ''
-    }
-    const visited = new Set<M3Concept>()
-
-    // Check for an empty language object
-    if (isEmptyLanguage(language)) {
-        return { ...issues, message: 'flatMap --> Empty language object' }
-    }
-
-    flatMap(language, (node: M3Concept): unknown[] => {
-        console.log("first node: ", node)
-        // Detect cyclic references
-        if (visited.has(node)) {
-            if (!issues.message) issues.message = 'flatMap --> Cyclic reference detected'
-            return []
-        }
-        visited.add(node)
-
-        // Additional logic can be added here for more constraints
-
-        return []
-    })
-
-    // Handle edge cases
-    handleEdgeCases(issues, visited)
-
-    return issues
-}
-
-function isEmptyLanguage(language: Language): boolean {
-    return !language.id && !language.key && !language.name && !language.version && language.entities.length === 0 && language.dependsOn.length === 0
-}
-
-function handleEdgeCases(issues: Issue, visited: Set<M3Concept>): void {
-    if (!issues.message && visited.size === 0) {
-        issues.message = 'No nodes present'
-    } else if (!issues.message && visited.size === 1) {
-        issues.message = 'Single node present'
-    }
-}
 
 
 /**
@@ -319,11 +274,10 @@ export {
     classBasedClassifierDeducerFor,
     concatenateNamesOf,
     conceptsOf,
-    directlyContaineds,
     containmentChain,
+    directlyContaineds,
     entitiesSortedByName,
     flatMap,
-    issuesWithFlatMap,
     idBasedClassifierDeducerFor,
     idOf,
     inheritedCycleWith,

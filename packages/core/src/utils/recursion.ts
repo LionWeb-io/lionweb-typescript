@@ -21,7 +21,6 @@ const flatMapNonCyclingFollowing = <T, R>(
             visited.push(t)
             rs.push(...mapper(t))
             edges(t).forEach(recurse)
-
         }
         recurse(startVertex)
         return rs
@@ -39,5 +38,4 @@ export {
     flatMapNonCyclingFollowing,
     trivialFlatMapper
 }
-
 
