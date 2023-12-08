@@ -1,7 +1,7 @@
-import {isValidIdKey} from "../utils/adhoc.js"
 import {Classifier, isINamed, Language, M3Concept} from "./types.js"
 import {allContaineds, flatMap, idOf, inheritedCycleWith, keyOf, namedsOf, qualifiedNameOf} from "./functions.js"
 import {duplicatesAmong} from "../utils/grouping.js"
+import {isValidIdentifier} from "../types.js"
 
 
 /**
@@ -37,53 +37,51 @@ export const issuesLanguage = (language: Language): Issue[] =>
 
                 // The id consists only of latin characters (upper/lowercase), numbers, underscores, and hyphens
                 const id = t.id.trim()
-                !isValidIdKey(id) && issue(`An ID must consist only of latin characters (upper/lowercase), numbers, underscores, and hyphens`)
+                !isValidIdentifier(id) && issue(`An ID must consist only of latin characters (upper/lowercase), numbers, underscores, and hyphens`)
 
                 // The key consists only of latin characters (upper/lowercase), numbers, underscores, and hyphens
                 const key = t.key.trim()
-                !isValidIdKey(key) && issue(`A KEY must consist only of latin characters (upper/lowercase), numbers, underscores, and hyphens`)
+                !isValidIdentifier(key) && issue(`A KEY must consist only of latin characters (upper/lowercase), numbers, underscores, and hyphens`)
 
                 if(isINamed(t)) {
-                    // The name should not be non-empty string
-                    t.name.trim().length === 0 && issue(`A Language name must not be empty`)
+                    const trimmedName = t.name.trim()
+                    // The name should be a non-empty string
+                    trimmedName.length === 0 && issue(`A ${t.constructor.name}'s name must not be empty`)
 
                     // The name should not contain whitespace characters
-                    const name = t.name.trim()
-                    name.includes(" ") && issue(`A Language name cannot contain whitespace characters`)
+                    trimmedName.includes(" ") && issue(`A ${t.constructor.name}'s name cannot contain whitespace characters`)
                 }
 
                 if (t instanceof Language) {
                     // The name should not start with a number
                     const name = t.name.trim()
-                    !isNaN(parseInt(name[0])) && issue(`A Language name cannot start with a number`)
+                    !isNaN(parseInt(name[0])) && issue(`A Language's name cannot start with a number`)
 
                    // The version is a non-empty string
                     const version = t.version.trim();
-                    version.length === 0 && issue(`A Language version must be a non-empty string`)
+                    version.length === 0 && issue(`A Language's version must be a non-empty string`)
                 }
 
                 // The classifier should not inherit from itself (directly or indirectly)
                 if (t instanceof Classifier) {
-                    const cycle = inheritedCycleWith(t)
-                    if (cycle.length > 0) {
-                        issue(`A ${t.constructor.name} can't inherit (directly or indirectly) from itself, but ${qualifiedNameOf(t)} does so through the following cycle: ${cycle.map((t) => qualifiedNameOf(t)).join(" -> ")}`)
+                    const cycle = inheritedCycleWith(t);
+                    (cycle.length > 0) && issue(`A ${t.constructor.name} can't inherit (directly or indirectly) from itself, but ${qualifiedNameOf(t)} does so through the following cycle: ${cycle.map((t) => qualifiedNameOf(t)).join(" -> ")}`)
                             // TODO  check whether it needs to be "a" or "an", or just say "An instance of ..."
-                    }
                 }
 
                 return issues
             }
         ),
-        ...Object.entries(duplicatesAmong(namedsOf(language), keyOf))   // all M3Concept-s that are INamed are also IKeyed
-            .flatMap(
-                ([key, ts]) => ts.map(
-                    (t) => ({ location: t, message: `Multiple (nested) language elements with the same key "${key}" exist in this language`, secondaries: ts.filter((otherT) => t !== otherT) })
-                )
-            ),
         ...Object.entries(duplicatesAmong(allContaineds(language), idOf))
             .flatMap(
                 ([id, ts]) => ts.map(
                     (t) => ({ location: t, message: `Multiple (nested) language elements with the same ID "${id}" exist in this language`, secondaries: ts.filter((otherT) => t !== otherT) })
+                )
+            ),
+        ...Object.entries(duplicatesAmong(namedsOf(language), keyOf))   // all M3Concept-s that are INamed are also IKeyed
+            .flatMap(
+                ([key, ts]) => ts.map(
+                    (t) => ({ location: t, message: `Multiple (nested) language elements with the same key "${key}" exist in this language`, secondaries: ts.filter((otherT) => t !== otherT) })
                 )
             ),
         ...Object.entries(duplicatesAmong(namedsOf(language), qualifiedNameOf))
@@ -95,7 +93,7 @@ export const issuesLanguage = (language: Language): Issue[] =>
     ]
 
 
-// not here: duplicate IDs and unresolved references are a problem on a lower level
-// TODO (#8)  check uniqueness of IDs
+// not here: unresolved references are a problem on a lower level
 // TODO (#8)  check whether references are resolved
+// Same goes for duplicate IDs, but for completeness' and symmetry's sake, we're also checking it here.
 

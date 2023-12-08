@@ -1,4 +1,4 @@
-// TODO The diff is outdated and need work to become ffully functional again.
+// TODO The diff is outdated and need work to become fully functional again.
 
 import { LionWebSyntaxValidator } from "../validators/LionWebSyntaxValidator.js";
 import {

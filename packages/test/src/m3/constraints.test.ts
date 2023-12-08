@@ -2,21 +2,16 @@ import {chain, concatenator, Concept, issuesLanguage, Language, LanguageFactory,
 import {nanoIdGen} from "@lionweb/utilities"
 import {deepEqual, fail} from "assert"
 
-/**
- * Constraints (LionCore)
- *----------------------
- */
 
-// ## General Constraints
-// Constraints (LionCore)
-describe("General Constraints - Name/Version" , () => {
-    it("should (name) be non-empty", () => { 
+describe("general LionCore constraints - name/version" , () => {
+
+    it("should (name) be non-empty", () => {
         const language = new Language("", "0", "x", "x")
         const issues = issuesLanguage(language)
         // deepEqual(issues.length, 1)
         deepEqual(issues[0], {
             location: language,
-            message: "A Language name must not be empty",
+            message: "A Language's name must not be empty",
             secondaries: []
         })
     })  
@@ -27,7 +22,7 @@ describe("General Constraints - Name/Version" , () => {
         // deepEqual(issues.length, 1)
         deepEqual(issues[0], {
             location: language,
-            message: "A Language name cannot start with a number",
+            message: "A Language's name cannot start with a number",
             secondaries: []
         })
     })    
@@ -38,7 +33,7 @@ describe("General Constraints - Name/Version" , () => {
         // deepEqual(issues.length, 1)
         deepEqual(issues[0], {
             location: language,
-            message: "A Language version must be a non-empty string",
+            message: "A Language's version must be a non-empty string",
             secondaries: []
         })
     })
@@ -49,7 +44,7 @@ describe("General Constraints - Name/Version" , () => {
         // deepEqual(issues.length, 1)
         deepEqual(issues[0], {
             location: language,
-            message: "A Language name cannot contain whitespace characters",
+            message: "A Language's name cannot contain whitespace characters",
             secondaries: []
         })
      })
@@ -60,9 +55,12 @@ describe("General Constraints - Name/Version" , () => {
         const issues = issuesLanguage(language);
         deepEqual(issues.length, 0)
     })
+
 })
 
+
 describe("Identifiers and Keys", () => {
+
     it("should (Key) be unique within its id-space", () => {
         const language = new Language("myLang", "0", "x", "x")
         const concept1 = new Concept(language, "myConcept1", "key_y", "id_1", false)
@@ -70,20 +68,17 @@ describe("Identifiers and Keys", () => {
         language.havingEntities(concept1, concept2)
 
         const issues = issuesLanguage(language)
-        // console.log(issues)
-        // deepEqual(issues.length, 2)
         deepEqual(issues[0], {
             location: concept1,
-            message: 'Multiple (nested) language elements with the same key "key_y" exist in this language',
+            message: `Multiple (nested) language elements with the same key "key_y" exist in this language`,
             secondaries: [concept2]
         })
 
         deepEqual(issues[1], {
             location: concept2,
-            message: 'Multiple (nested) language elements with the same key "key_y" exist in this language',
+            message: `Multiple (nested) language elements with the same key "key_y" exist in this language`,
             secondaries: [concept1]
         })
-
      })
 
     it("should (Identifiers) be unique within its id-space", () => {
@@ -93,17 +88,15 @@ describe("Identifiers and Keys", () => {
         language.havingEntities(concept1, concept2)
 
         const issues = issuesLanguage(language)
-        // console.log(issues)
-        // deepEqual(issues.length, 2)
         deepEqual(issues[0], {
             location: concept1,
-            message: 'Multiple (nested) language elements with the same ID "id_y" exist in this language',
+            message: `Multiple (nested) language elements with the same ID "id_y" exist in this language`,
             secondaries: [concept2]
         })
 
         deepEqual(issues[1], {
             location: concept2,
-            message: 'Multiple (nested) language elements with the same ID "id_y" exist in this language',
+            message: `Multiple (nested) language elements with the same ID "id_y" exist in this language`,
             secondaries: [concept1]
         })
     })
@@ -111,11 +104,9 @@ describe("Identifiers and Keys", () => {
     it("should (id) consist only of latin characters (upper/lowercase), numbers, underscores, and hyphens", () => { 
         const language = new Language("myLang", "0", "*/", "x")
         const issues = issuesLanguage(language)
-        // console.log(issues)
-        // deepEqual(issues.length, 1)
         deepEqual(issues[0], {
             location: language,
-            message: 'An ID must consist only of latin characters (upper/lowercase), numbers, underscores, and hyphens',
+            message: "An ID must consist only of latin characters (upper/lowercase), numbers, underscores, and hyphens",
             secondaries: []
         })
     })
@@ -123,44 +114,41 @@ describe("Identifiers and Keys", () => {
     it("should (key) consist only of latin characters (upper/lowercase), numbers, underscores, and hyphens", () => { 
         const language = new Language("myLang", "0", "0", "*/x")
         const issues = issuesLanguage(language)
-        // console.log(issues)
-        // deepEqual(issues.length, 1)
         deepEqual(issues[0], {
             location: language,
-            message: 'A KEY must consist only of latin characters (upper/lowercase), numbers, underscores, and hyphens',
+            message: "A KEY must consist only of latin characters (upper/lowercase), numbers, underscores, and hyphens",
             secondaries: []
         })
-        
     })
+
 })
 
-// ## Language Constraints
-describe("Language Constraints", () => {
+
+describe("Language constraints", () => {
+
     it("should (entities, concept,...) have names", () => {
         const language = new Language("", "0", "x", "x")
         const concept = new Concept(language, " my lang  ", "y", "y", false)
         language.havingEntities(concept)
         const issues = issuesLanguage(language)
         deepEqual(issues.length, 2)
-        
-        // console.log(issues)
         deepEqual(issues[0], {
             location: language,
-            message: "A Language name must not be empty",
+            message: "A Language's name must not be empty",
             secondaries: []
         })
 
         deepEqual(issues[1], {
             location: concept,
-            message: "A Language name cannot contain whitespace characters",
-            // message: "A Language name must not be empty",
+            message: "A Concept's name cannot contain whitespace characters",
             secondaries: []
         })
     })
 })
 
-// ## Concept Constraints
-describe("Concept Constraints", () => {
+
+describe("Concept constraints", () => {
+
     it("check that inheritance cycles are detected", () => {
         const factory = new LanguageFactory("metamodel", "1", chain(concatenator("-"), nanoIdGen()), lastOf)
         const {language} = factory
@@ -171,16 +159,15 @@ describe("Concept Constraints", () => {
         language.entities.push(...cis)
 
         const issues = issuesLanguage(language)
-
         deepEqual(issues.length, 3)
         const message1 = issues?.find(({location}) => location === cis[0])?.message
-        deepEqual(message1, `A Interface can't inherit (directly or indirectly) from itself, but metamodel.interface_0 does so through the following cycle: metamodel.interface_0 -> metamodel.interface_2 -> metamodel.interface_1 -> metamodel.interface_0`)
+        deepEqual(message1, "A Interface can't inherit (directly or indirectly) from itself, but metamodel.interface_0 does so through the following cycle: metamodel.interface_0 -> metamodel.interface_2 -> metamodel.interface_1 -> metamodel.interface_0")
     })
 
     it("check that trivial inheritance cycles are detected", () => {
         const factory = new LanguageFactory("metamodel", "1", chain(concatenator("-"), nanoIdGen()), lastOf)
         const {language} = factory
-        const ci = factory.interface(`foo`)
+        const ci = factory.interface("foo")
         ci.extends.push(ci)
         language.entities.push(ci)
 
@@ -188,47 +175,49 @@ describe("Concept Constraints", () => {
         deepEqual(issues.length, 1)
         const {location, message} = issues[0]
         deepEqual(location, ci)
-        deepEqual(message, `A Interface can't inherit (directly or indirectly) from itself, but metamodel.foo does so through the following cycle: metamodel.foo -> metamodel.foo`)
+        deepEqual(message, "A Interface can't inherit (directly or indirectly) from itself, but metamodel.foo does so through the following cycle: metamodel.foo -> metamodel.foo")
     })
+
 })
 
 
 // TODO  check the metametamodel specification why that states these as constraints:
 
-// ## Element References
-describe("Element References", () => {
+
+describe("Element references", () => {
     it.skip("should reference elements within the same language", () => { fail("not yet implemented") })
     it.skip("should reference elements within declared dependencies", () => { fail("not yet implemented") })
     it.skip("should reference elements within transitive dependencies", () => { fail("not yet implemented") })
 })
 
-// ## Dependency Declaration
-describe("Dependency Declaration", () => {
+
+describe("dependency declaration", () => {
     it.skip("should be an optional declaration for transitive and built-in dependencies", () => { fail("not yet implemented") })
 })
 
-// ## Annotation Constraints
-describe("Annotation Constraints", () => {
+
+describe("Annotation constraints", () => {
     it.skip("should not allow multiple and annotates flags to be redefinable in sub-annotations", () => { fail("not yet implemented") })
     it.skip("should be associated only with the concept types they are meant to annotate or their sub-concepts", () => { fail("not yet implemented") })
 })
 
-// ## Feature Constraints
-describe("Feature Constraints", () => {
+
+describe("Feature constraints", () => {
     it.skip("should have feature names that are unique within their Classifier scope, including inherited features", () => { fail("not yet implemented") })
     it.skip("should identify features by id or key in LionWeb in case of name clashes", () => { fail("not yet implemented") })
 })
 
-// ## Partition Constraints
-describe("Partition Constraints", () => {
+
+describe("Partition constraints", () => {
     it.skip("should have each node exist in one partition, defined by its root node", () => { fail("not yet implemented") })
     it.skip("should not allow partitions to be nested", () => { fail("not yet implemented") })
 })
 
-// ## Namespace Constraints
-describe("Namespace Constraints", () => {
+
+describe("Namespace constraints", () => {
     it.skip("should contain INamed descendants and enforce constraints like name uniqueness within the namespace and validity criteria for names", () => { fail("not yet implemented") })
 })
+
 
 // TODO  this is a model-level constraint: why is it in the M3 specification?
 // it.skip("should have root nodes with the partition flag set to true", () => { fail("not yet implemented") })
