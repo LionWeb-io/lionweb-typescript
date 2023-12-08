@@ -22,8 +22,8 @@
     "test": "mocha"
   },
   "devDependencies": {
-    "@types/node": "18.15.3",
-    "typescript": "5.2.2"    
+    "@types/node": "20.10.4",
+    "typescript": "5.3.3"
   },
   "dependencies": {
   }
