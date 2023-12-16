@@ -1,5 +1,5 @@
 import { LionWebJsonMetaPointer } from "../json/LionWebJson.js"
-import { JsonContext } from "./JsonContext.js"
+import { JsonContext } from "../json/JsonContext.js"
 import { ValidationIssue } from "./ValidationIssue.js"
 
 export class Language_PropertyValue_Issue extends ValidationIssue {

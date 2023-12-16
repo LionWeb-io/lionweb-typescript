@@ -1,4 +1,4 @@
-import { JsonContext } from "./JsonContext.js"
+import { JsonContext } from "../json/JsonContext.js"
 import { ValidationIssue } from "./ValidationIssue.js"
 
 export abstract class Syntax_PropertyIssue extends ValidationIssue {

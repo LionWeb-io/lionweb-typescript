@@ -1,4 +1,4 @@
-import { JsonContext } from "./JsonContext.js"
+import { JsonContext } from "../json/JsonContext.js"
 
 export abstract class ValidationIssue {
     abstract readonly id: string

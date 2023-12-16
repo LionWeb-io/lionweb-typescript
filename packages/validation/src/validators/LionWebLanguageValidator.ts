@@ -1,5 +1,5 @@
 import { IncorrectLionCoreVersion_Issue, NotLionCoreLanguageKey_Issue, NumberOfLanguagesUsed_Issue } from "../issues/LanguageIssues.js"
-import { JsonContext } from "./../issues/JsonContext.js"
+import { JsonContext } from "../json/JsonContext.js"
 import { LionWebJsonChunk } from "../json/LionWebJson.js"
 import { LionWebJsonChunkWrapper } from "../json/LionWebJsonChunkWrapper.js"
 import { ValidationResult } from "./ValidationResult.js"
