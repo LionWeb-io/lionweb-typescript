@@ -1,18 +1,17 @@
-import { ValidationIssue } from "../issues/ValidationIssue.js";
+import { ValidationIssue } from "../issues/ValidationIssue.js"
 
 export class ValidationResult {
-    issues: ValidationIssue[] = [];
+    issues: ValidationIssue[] = []
 
     issue(issue: ValidationIssue) {
-        this.issues.push(issue);
+        this.issues.push(issue)
     }
 
     reset() {
-        this.issues = [];
+        this.issues = []
     }
 
     hasErrors(): boolean {
-        return this.issues.length !== 0;
+        return this.issues.length !== 0
     }
-
 }

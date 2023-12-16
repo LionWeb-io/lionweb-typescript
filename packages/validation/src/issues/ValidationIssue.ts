@@ -1,15 +1,15 @@
-import { JsonContext } from "./JsonContext.js";
+import { JsonContext } from "./JsonContext.js"
 
 export abstract class ValidationIssue {
-    abstract readonly id: string;
-    context: JsonContext;
-    
+    abstract readonly id: string
+    context: JsonContext
+
     constructor(context: JsonContext) {
-        this.context = context;
+        this.context = context
     }
 
-    protected abstract msg(): string;
-    
+    protected abstract msg(): string
+
     public errorMsg(): string {
         return `${this.id}: ${this.msg()} at ${this.context.toString()} `
     }
