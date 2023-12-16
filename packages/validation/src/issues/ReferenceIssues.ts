@@ -1,5 +1,5 @@
 import { LionWebJsonMetaPointer, LionWebJsonNode } from "../json/LionWebJson.js"
-import { JsonContext } from "./JsonContext.js"
+import { JsonContext } from "../json/JsonContext.js"
 import { ValidationIssue } from "./ValidationIssue.js"
 
 export class Reference_DuplicateNodeId_Issue extends ValidationIssue {

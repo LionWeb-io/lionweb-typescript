@@ -6,7 +6,7 @@ import {
     Reference_LanguageUnknown_Issue,
     Reference_ParentMissingInChild_Issue,
 } from "../issues/ReferenceIssues.js"
-import { JsonContext } from "./../issues/JsonContext.js"
+import { JsonContext } from "../json/JsonContext.js"
 import { ChunkUtils } from "../json/ChunkUtils.js"
 import {
     LION_CORE_BUILTINS_KEY,

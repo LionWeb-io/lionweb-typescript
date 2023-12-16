@@ -5,7 +5,7 @@ import {
     Syntax_SerializationFormatVersion_Issue,
     Syntax_VersionFormat_Issue,
 } from "../issues/SyntaxIssues.js"
-import { JsonContext } from "./../issues/JsonContext.js"
+import { JsonContext } from "../json/JsonContext.js"
 import { LionWebJsonProperty } from "../json/LionWebJson.js"
 import { ValidationResult } from "./ValidationResult.js"
 

@@ -7,7 +7,7 @@ import {
     Language_UnknownProperty_Issue,
     Language_UnknownReference_Issue,
 } from "../issues/LanguageIssues.js"
-import { JsonContext } from "./../issues/JsonContext.js"
+import { JsonContext } from "../json/JsonContext.js"
 import {
     LION_CORE_BUILTINS_INAMED_NAME,
     LIONWEB_BOOLEAN_TYPE,

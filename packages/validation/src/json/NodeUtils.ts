@@ -60,15 +60,19 @@ export class NodeUtils {
     }
 
     /**
-     * Get all nodes that are children for `node`: both the containment and annotaion children
+     * Get all nodes that are children for _node_: both the containment and annotation children
      * @param node
      */
-    static allChildren(node: LionWebJsonNode): string[] {
+    static allDirectChildren(node: LionWebJsonNode): string[] {
         const result: string[] = []
         for (const containment of node.containments) {
             result.push(...containment.children)
         }
         result.push(...node.annotations)
         return result
+    }
+
+    static findContainmentContainingChild(containments: LionWebJsonContainment[], childId: string): LionWebJsonContainment | undefined {
+        return containments.find(cont => cont.children.includes(childId))
     }
 }

@@ -6,7 +6,7 @@ import {
     Syntax_PropertyUnknownIssue,
 } from "../issues/SyntaxIssues.js"
 import { SimpleFieldValidator, ValidatorFunction } from "./SimpleFieldValidator.js"
-import { JsonContext } from "./../issues/JsonContext.js"
+import { JsonContext } from "../json/JsonContext.js"
 import { ValidationResult } from "./ValidationResult.js"
 
 export type UnknownObjectType = { [key: string]: unknown }
