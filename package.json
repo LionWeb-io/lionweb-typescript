@@ -1,6 +1,6 @@
 {
   "name": "lionweb-typescript",
-  "version": "0.6.0",
+  "version": "1.0.0",
   "description": "LionWeb core for {Java|Type}Script",
   "license": "Apache-2.0",
   "repository": {
