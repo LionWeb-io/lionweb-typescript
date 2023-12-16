@@ -12,29 +12,26 @@ import {
 } from "../json/index.js"
 import { Change, GenericChange } from "./changes/Change.js"
 import { LanguageAdded, LanguageRemoved, NodeAdded, NodeRemoved, SerializationFormatChange } from "./changes/ChunkChange.js"
-import { ChildAdded, ChildRemoved, ContainmentAdded, ContainmentRemoved } from "./changes/ContainmentChange.js"
+import { ChildAdded, ChildRemoved } from "./changes/ContainmentChange.js"
+import { TargetAdded, TargetRemoved } from "./changes/index.js"
 import { DiffResult } from "./DiffResult.js"
 import { NodeClassifierChanged, ParentChanged } from "./changes/NodeChange.js"
-import { PropertyAdded, PropertyRemoved, PropertyValueChanged } from "./changes/PropertyChange.js"
-import { ReferenceAdded, ReferenceRemoved } from "./changes/ReferenceChange.js"
+import { PropertyValueChanged } from "./changes/PropertyChange.js"
 
 /**
  * Comparing LionWeb JSON chunks and find all differences
  */
 export class LionWebJsonDiff {
-    diffsAsString: string[] = []
     diffResult = new DiffResult()
 
     constructor() {}
 
     change(change: Change): void {
-        this.diffsAsString.push(change.changeMsg() + "\n")
         this.diffResult.change(change)
     }
 
     diff(ctx: JsonContext, msg: string) {
         const change = new GenericChange(ctx, msg)
-        this.diffsAsString.push("!!!" + change.changeMsg() + "\n")
         this.diffResult.change(change)
     }
 
@@ -58,7 +55,7 @@ export class LionWebJsonDiff {
             const afterProperty = NodeUtils.findLwProperty(afterNode, key)
             if (afterProperty === null) {
                 this.change(
-                    new PropertyRemoved(
+                    new PropertyValueChanged(
                         ctx.concat("properties", index),
                         beforeNode.id,
                         beforeProperty.property.key,
@@ -75,7 +72,7 @@ export class LionWebJsonDiff {
             const beforeProperty = NodeUtils.findLwProperty(beforeNode, key)
             if (beforeProperty === null) {
                 this.change(
-                    new PropertyAdded(
+                    new PropertyValueChanged(
                         ctx.concat("properties", index),
                         beforeNode.id,
                         afterProperty.property.key,
@@ -90,7 +87,12 @@ export class LionWebJsonDiff {
             const beforeKey = beforeContainment.containment.key
             const afterContainment = NodeUtils.findLwChild(afterNode, beforeKey)
             if (afterContainment === null) {
-                this.change(new ContainmentRemoved(ctx.concat("containments", index), beforeNode, beforeContainment))
+                // NB No containment is considered equivalent to a containment with empty _children_
+                if (beforeContainment.children.length !== 0) {
+                    beforeContainment.children.forEach(childId => {
+                        this.change(new ChildRemoved(ctx.concat("containments", index), beforeNode, beforeContainment.containment.key, childId))
+                    })
+                }
             } else {
                 this.diffContainment(ctx.concat("containments", index), beforeNode, beforeContainment, afterContainment)
             }
@@ -99,7 +101,11 @@ export class LionWebJsonDiff {
             const afterKey = afterContainment.containment.key
             const beforeContainment = NodeUtils.findLwChild(beforeNode, afterKey)
             if (beforeContainment === null) {
-                this.change(new ContainmentAdded(ctx.concat("containments", index), afterNode, afterContainment))
+                if (afterContainment.children.length !== 0) {
+                    afterContainment.children.forEach(childId => {
+                        this.change(new ChildAdded(ctx.concat("containments", index), afterNode, afterContainment.containment.key, childId))
+                    })
+                }
             }
             // No else, has already been done
         })
@@ -107,7 +113,11 @@ export class LionWebJsonDiff {
             const key = beforeReference.reference.key
             const afterReference = NodeUtils.findLwReference(afterNode, key)
             if (afterReference === null) {
-                this.change(new ReferenceRemoved(ctx.concat("references", index), afterNode, beforeReference))
+                if (beforeReference.targets.length !== 0) {
+                    beforeReference.targets.forEach(target => {
+                        this.change(new TargetRemoved(ctx.concat("references", index), afterNode, beforeReference.reference.key, target.reference))
+                    })
+                }
             } else {
                 this.diffLwReference(ctx.concat("references", index), beforeReference, afterReference)
             }
@@ -116,7 +126,11 @@ export class LionWebJsonDiff {
             const afterKey = afterReference.reference.key
             const beforeReference = NodeUtils.findLwReference(afterNode, afterKey)
             if (beforeReference === null) {
-                this.change(new ReferenceAdded(ctx.concat("references", index), afterNode, afterReference))
+                if (afterReference.targets.length !== 0) {
+                    afterReference.targets.forEach(target => {
+                        this.change(new TargetAdded(ctx.concat("references", index), afterNode, afterReference.reference.key, target.reference))
+                    })
+                }
             }
         })
     }
