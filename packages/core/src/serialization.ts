@@ -35,11 +35,13 @@ export type SerializedReference = {
  * Type definition for an AST node serialized to JSON.
  */
 export type SerializedNode = {
+    // TODO should be Id
     id: string
     classifier: MetaPointer
     properties: SerializedProperty[]
     containments: SerializedContainment[]
     references: SerializedReference[]
+    // TODO inconsistent with the use of Ids
     annotations: Id[]
     parent: Id | null
 }

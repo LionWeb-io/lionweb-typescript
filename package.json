@@ -11,6 +11,7 @@
     "url": "https://github.com/LionWeb-io/lionweb-typescript/issues"
   },
   "devDependencies": {
+    "prettier": "3.1.0",
     "@typescript-eslint/eslint-plugin": "6.13.2",
     "@typescript-eslint/parser": "6.13.2"
   },

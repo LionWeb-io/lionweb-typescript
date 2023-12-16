@@ -1,20 +1,19 @@
-import { LionWebJsonChunk } from "./LionWebJson.js";
-import { LionWebJsonChunkWrapper } from "./LionWebJsonChunkWrapper.js";
+import { LionWebJsonChunk } from "./LionWebJson.js"
+import { LionWebJsonChunkWrapper } from "./LionWebJsonChunkWrapper.js"
 
 /**
  * Contains methods for getting information from a LionWebJsonChunk representing a language.
  */
 export class LanguageWrapper extends LionWebJsonChunkWrapper {
-   
     constructor(languageJson: LionWebJsonChunk) {
-        super(languageJson);
+        super(languageJson)
     }
-    
+
     // inheritsFrom = (classifier: LionWebJsonNode): LionWebJsonNode[] => {
     //     if (isConcept(classifier) || isAnnotation(classifier)) {
     //         // find the language (have key and version)
     //         // find concept or annotation
-    //         // find extends/inherits property 
+    //         // find extends/inherits property
     //         return [
     //             ...(
     //                 isRef(classifier.extends)

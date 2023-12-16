@@ -1,8 +1,4 @@
-import {
-    LionWebJsonChunk,
-    LionWebJsonNode,
-    LwJsonUsedLanguage
-} from "./LionWebJson.js";
+import { LionWebJsonChunk, LionWebJsonNode, LwJsonUsedLanguage } from "./LionWebJson.js"
 
 /**
  * Utility functions for LionWeb chunks
@@ -16,10 +12,10 @@ export class ChunkUtils {
     static findLwUsedLanguage(chunk: LionWebJsonChunk, key: string): LwJsonUsedLanguage | null {
         for (const language of chunk.languages) {
             if (language.key === key) {
-                return language;
+                return language
             }
         }
-        return null;
+        return null
     }
 
     /**
@@ -31,10 +27,10 @@ export class ChunkUtils {
     static findLwUsedLanguageWithVersion(chunk: LionWebJsonChunk, key: string, version: string): LwJsonUsedLanguage | null {
         for (const language of chunk.languages) {
             if (language.key === key && language.version === version) {
-                return language;
+                return language
             }
         }
-        return null;
+        return null
     }
 
     /**
@@ -45,9 +41,9 @@ export class ChunkUtils {
     static findNode(chunk: LionWebJsonChunk, id: string): LionWebJsonNode | null {
         for (const node of chunk.nodes) {
             if (node.id === id) {
-                return node;
+                return node
             }
         }
-        return null;
+        return null
     }
 }
