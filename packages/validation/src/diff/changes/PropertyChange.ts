@@ -15,7 +15,7 @@ export abstract class PropertyChange extends Change {
 
 export class PropertyValueChanged extends PropertyChange {
     readonly id = "PropertyValueChanged"
-    protected msg = () => `Node "${this.nodeId} changed value of property "${this.propertyKey}"`
+    protected msg = () => `Node "${this.nodeId} changed value of property "${this.propertyKey}" from "${this.oldValue}" to "${this.newValue}"`
 }
 
 export class PropertyAdded extends PropertyChange {
