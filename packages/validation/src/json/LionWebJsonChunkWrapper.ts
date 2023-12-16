@@ -1,10 +1,11 @@
 import {
+    isEqualMetaPointer, LION_CORE_BUILTINS_INAMED_NAME, LION_CORE_BUILTINS_KEY, LION_CORE_M3_VERSION,
     LionWebId,
     LionWebJsonChunk,
     LionWebJsonContainment,
     LionWebJsonMetaPointer,
     LionWebJsonNode,
-    LionWebJsonProperty,
+    LionWebJsonProperty
 } from "./LionWebJson.js"
 import { LionWebLanguageDefinition } from "./LionWebLanguageDefinition.js"
 import { NodeUtils } from "./NodeUtils.js"
@@ -42,19 +43,13 @@ export class LionWebJsonChunkWrapper {
 
     findContainment(node: LionWebJsonNode, containment: LionWebJsonMetaPointer): LionWebJsonContainment | undefined {
         return node.containments.find(
-            cont =>
-                cont.containment.key === containment.key &&
-                cont.containment.language === containment.language &&
-                cont.containment.version === containment.version,
+            cont => isEqualMetaPointer(cont.containment, containment)
         )
     }
 
     findProperty(node: LionWebJsonNode, property: LionWebJsonMetaPointer): LionWebJsonProperty | undefined {
         return node.properties.find(
-            prop =>
-                prop.property.key === property.key &&
-                prop.property.language === property.language &&
-                prop.property.version === property.version,
+            prop => isEqualMetaPointer(prop.property, property)
         )
     }
 
@@ -94,9 +89,9 @@ export class LionWebJsonChunkWrapper {
         }
         let result: string = ""
         const nameProperty = this.findProperty(node, {
-            language: "-default-key-LionCore_builtins",
-            version: "2023.1",
-            key: "-default-key-INamed-name",
+            language: LION_CORE_BUILTINS_KEY,
+            version: LION_CORE_M3_VERSION,
+            key: LION_CORE_BUILTINS_INAMED_NAME,
         })
         const name = nameProperty === undefined ? "" : " " + nameProperty.value
         result += Array(depth).join("    ") + "(" + node.id + ")" + name + "\n"

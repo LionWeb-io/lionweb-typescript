@@ -14,4 +14,8 @@ export class DiffResult {
     hasChanges(): boolean {
         return this.changes.length !== 0
     }
+    
+    asStringArray(): string[] {
+        return this.changes.map(ch => ch.changeMsg())
+    }
 }
