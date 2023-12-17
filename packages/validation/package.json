@@ -20,6 +20,7 @@
     "testInvalidWithLanguage": "node dist/runners/RunCheckFolderWithLanguage.js ../../../lionweb-integration-testing/testset/withLanguage/invalid/ ../../../lionweb-integration-testing/testset/withLanguage/myLang.language.json",
     "testValidWithLanguage": "node dist/runners/RunCheckFolderWithLanguage.js ../../../lionweb-integration-testing/testset/withLanguage/valid/ ../../../lionweb-integration-testing/testset/withLanguage/myLang.language.json",
     "test": "mocha",
+    "release": "npm publish",
     "publish-local": "npm publish --registry http://localhost:4873",
     "unpublish-local": "npm unpublish --force --registry http://localhost:4873",
     "republish-local": "yarn unpublish-local && yarn publish-local"
