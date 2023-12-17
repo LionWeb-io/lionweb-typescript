@@ -1,4 +1,4 @@
-import { LionWebJsonChunk, LionWebJsonChunkWrapper, LionWebJsonDiff } from "@lionweb/validation"
+import { LionWebJsonChunk, LionWebJsonDiff } from "@lionweb/validation"
 import { assert } from "chai"
 import fs from "fs"
 

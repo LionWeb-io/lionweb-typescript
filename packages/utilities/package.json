@@ -25,6 +25,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "clean": "rm -rf dist/ && rm -rf node_modules/"
+    "clean": "rm -rf dist/ && rm -rf node_modules/",
+    "release": "npm publish"
   }
 }
