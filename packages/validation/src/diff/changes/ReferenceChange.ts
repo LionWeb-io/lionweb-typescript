@@ -5,9 +5,9 @@ import { Change } from "./Change.js"
 export abstract class ReferenceChange extends Change {
     constructor(
         public context: JsonContext,
-        public parentNode: LionWebJsonNode,
+        public node: LionWebJsonNode,
         public referenceKey: string,
-        public childId: string,
+        public targetId: string,
     ) {
         super(context)
     }
@@ -15,10 +15,10 @@ export abstract class ReferenceChange extends Change {
 
 export class TargetAdded extends ReferenceChange {
     readonly id = "TargetAdded"
-    protected msg = () => `Node "${this.parentNode.id}" added child "${this.childId}" to reference "${this.referenceKey}"`
+    protected msg = () => `Node "${this.node.id}" added target "${this.targetId}" to reference "${this.referenceKey}"`
 }
 
 export class TargetRemoved extends ReferenceChange {
     readonly id = "TargetRemoved"
-    protected msg = () => `Node "${this.parentNode.id}" removed child "${this.childId}" from reference "${this.referenceKey}"`
+    protected msg = () => `Node "${this.node.id}" removed target "${this.targetId}" from reference "${this.referenceKey}"`
 }
