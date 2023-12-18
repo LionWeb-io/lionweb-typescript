@@ -8,7 +8,7 @@ import {
     lioncore,
     serializeLanguages
 } from "@lionweb/core"
-import {asText} from "@lionweb/utilities"
+import {languageAsText} from "@lionweb/utilities"
 
 import {logIssues, logUnresolvedReferences} from "../utils/test-helpers.js"
 
@@ -33,7 +33,7 @@ describe("meta-circularity (LionCore)", () => {
         const deserialization = deserializeLanguages(serialization)
         deepEqual(deserialization.length, 1)
         const language = deserialization[0]
-        deepEqual(asText(language), asText(lioncore))
+        deepEqual(languageAsText(language), languageAsText(lioncore))
         // deepEqual on object-level is not good enough (- maybe because of class JIT'ing?):
         // deepEqual(deserialization, lioncore)
             // TODO  implement proper equality/comparison

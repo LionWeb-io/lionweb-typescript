@@ -2,7 +2,7 @@ import {writeFileSync} from "fs"
 
 import {Language, lioncore, lioncoreBuiltins, serializeLanguages, serializeNodes} from "@lionweb/core"
 import {
-    asText,
+    languageAsText,
     generateMermaidForLanguage,
     generatePlantUmlForLanguage,
     GenerationOptions,
@@ -25,7 +25,7 @@ console.log(`generated diagrams for LionCore M3`)
 
 const saveLanguageFiles = (language: Language, name: string, ...generationOptions: GenerationOptions[]) => {
     writeJsonAsFile(languagePath(`${name}.json`), serializeLanguages(language))
-    writeFileSync(languagePath(`${name}.txt`), asText(language))
+    writeFileSync(languagePath(`${name}.txt`), languageAsText(language))
     writeFileSync(languagePath(`${name}-types.ts.txt`), tsTypesForLanguage(language, ...generationOptions))
         // (Generate with a '.txt' file extension to avoid it getting picked up by the compiler.)
     console.log(`saved files for ${language.name} M2`)
