@@ -16,9 +16,11 @@ It contains utilities on top of the `core` package, such as:
 
 ### 0.6.0
 
-* _Breaking name changes_: `shortenedSerialization` &rarr; `shortenedSerializationChunk`, `sortedSerialization` &rarr; `sortedSerializationChunk`.
+* _Breaking name changes_: rename `asText` &rarr; `languageAsText`, `shortenedSerialization` &rarr; `shortenedSerializationChunk`, `sortedSerialization` &rarr; `sortedSerializationChunk`.
 * Expose an `isSerializedLanguages` function.
 * Expose an `orderedSerializationChunk` function that aligns the JSON key-value pairs in a serialization chunk according to the specification of the serialization format.
+* Expose a generic textual syntax for serialization chunks.
+
 
 ### 0.5.0
 
