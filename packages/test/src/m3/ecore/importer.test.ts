@@ -4,7 +4,7 @@ import {readFileSync} from "fs"
 import {parseString} from "xml2js"
 
 import {checkReferences, issuesLanguage, serializeLanguages} from "@lionweb/core"
-import {asLionCoreLanguage, sortedSerialization} from "@lionweb/utilities"
+import {asLionCoreLanguage, sortedSerializationChunk} from "@lionweb/utilities"
 import {logIssues, logUnresolvedReferences} from "../../utils/test-helpers.js"
 import {libraryLanguage} from "../../languages/library.js"
 
@@ -22,7 +22,7 @@ describe("Ecore importer", () => {
             logIssues(issues)
             deepEqual(issues, [])
             const serialization = serializeLanguages(language)
-            deepEqual(sortedSerialization(serialization), sortedSerialization(serializeLanguages(libraryLanguage)))
+            deepEqual(sortedSerializationChunk(serialization), sortedSerializationChunk(serializeLanguages(libraryLanguage)))
         })
     })
 

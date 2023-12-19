@@ -1,30 +1,11 @@
+import {SerializationChunk, sortByStringKey} from "@lionweb/core"
 import {
-    MetaPointer,
-    SerializationChunk,
-    SerializedLanguageReference,
-    SerializedReferenceTarget,
-    sortByStringKey
-} from "@lionweb/core"
+    orderedMetaPointer,
+    orderedSerializedLanguageReference,
+    orderedSerializedProperty,
+    orderedSerializedReferenceTarget
+} from "./ordering.js"
 
-
-const sortedMetaPointer = ({language, version, key}: MetaPointer): MetaPointer =>
-    ({
-        language,
-        version,
-        key
-    })
-
-const sortedSerializedLanguageReference = ({key, version}: SerializedLanguageReference): SerializedLanguageReference =>
-    ({
-        key,
-        version
-    })
-
-const sortedSerializedReferenceTarget = ({reference, resolveInfo}: SerializedReferenceTarget): SerializedReferenceTarget =>
-    ({
-        reference,
-        resolveInfo
-    })
 
 const pick = <T, K extends keyof T>(key: K): (t: T) => T[K] =>
     (t: T) => t[key]
@@ -34,24 +15,24 @@ const pick = <T, K extends keyof T>(key: K): (t: T) => T[K] =>
  * @return A sorted version of a {@link SerializedModel JSON serialization}, which should make it easier to inspect.
  *  Note that the sorted version destroy the order of links, which might effectively alter semantics.
  */
-export const sortedSerialization = ({serializationFormatVersion, languages, nodes}: SerializationChunk): SerializationChunk =>
+export const sortedSerializationChunk = ({serializationFormatVersion, languages, nodes}: SerializationChunk): SerializationChunk =>
     ({
         serializationFormatVersion,
-        languages: sortByStringKey(languages, pick("key")).map(sortedSerializedLanguageReference),
+        languages: sortByStringKey(languages, pick("key")).map(orderedSerializedLanguageReference),
         nodes: sortByStringKey(nodes, pick("id"))
             .map((node) => ({
                 id: node.id,
-                classifier: sortedMetaPointer(node.classifier),
-                properties: sortByStringKey(node.properties, ({property}) => property.key),
+                classifier: orderedMetaPointer(node.classifier),
+                properties: sortByStringKey(node.properties, ({property}) => property.key).map(orderedSerializedProperty),
                 containments: sortByStringKey(node.containments, ({containment}) => containment.key)
                         .map(({containment, children}) => ({
-                            containment,
+                            containment: orderedMetaPointer(containment),
                             children: children.sort()
                         })),
                 references: sortByStringKey(node.references, ({reference}) => reference.key)
                         .map(({reference, targets}) => ({
-                            reference,
-                            targets: sortByStringKey(targets, pick("reference")).map(sortedSerializedReferenceTarget)
+                            reference: orderedMetaPointer(reference),
+                            targets: sortByStringKey(targets, pick("reference")).map(orderedSerializedReferenceTarget)
                         })),
                 annotations: node.annotations.sort(),
                 parent: node.parent

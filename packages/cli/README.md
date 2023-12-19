@@ -40,6 +40,11 @@ It does some implicit validation as it can error out on incorrect serializations
 
 ## Changelog
 
+### 0.6.0
+
+* Add a `repair` command that aligns a JSON serialization chunk with the specification.
+
+
 ### 0.5.0
 
 This is the first version corresponding to a release of LionWeb (version: 2023.1) as a whole.
