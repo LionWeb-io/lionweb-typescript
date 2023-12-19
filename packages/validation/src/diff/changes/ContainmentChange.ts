@@ -1,12 +1,12 @@
 import { JsonContext } from "../../issues/index.js"
-import { LionWebJsonNode } from "../../json/index.js"
-import { Change } from "./Change.js"
+import { LionWebJsonContainment, LionWebJsonMetaPointer, LionWebJsonNode } from "../../json/index.js"
+import { Change, ChangeType } from "./Change.js"
 
 export abstract class ContainmentChange extends Change {
     constructor(
         public context: JsonContext,
         public parentNode: LionWebJsonNode,
-        public containmentKey: string,
+        public containment: LionWebJsonMetaPointer,
         public childId: string,
     ) {
         super(context)
@@ -15,7 +15,7 @@ export abstract class ContainmentChange extends Change {
 
 export class ChildAdded extends ContainmentChange {
     readonly id = "ChildAdded"
-    protected msg = () => `Node "${this.parentNode.id}" added child "${this.childId}" to containment ${this.containmentKey}`
+    protected msg = () => `Node "${this.parentNode.id}" added child "${this.childId}" to containment ${this.containment.key}`
 }
 
 export class ChildRemoved extends ContainmentChange {
@@ -23,4 +23,12 @@ export class ChildRemoved extends ContainmentChange {
     protected msg = () => `Node "${this.parentNode.id}" removed child "${this.childId}"`
 }
 
+export class ContainmentAdded extends Change {
+    readonly id = "ContainmentAdded";
+    constructor(ctx: JsonContext, public node: LionWebJsonNode, public containment: LionWebJsonMetaPointer) {
+        super(ctx)
+    }
+
+    protected msg = () => `Node "${this.node.id}" containment added: "${JSON.stringify(this.containment)}"`
+}
 
