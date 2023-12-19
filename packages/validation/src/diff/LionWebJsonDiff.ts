@@ -215,13 +215,14 @@ export class LionWebJsonDiff {
             this.diff(ctx, `Reference has concept ${JSON.stringify(beforeRef.reference)} vs ${JSON.stringify(afterRef.reference)}`)
         }
         beforeRef.targets.forEach((beforeTarget: LionWebJsonReferenceTarget, index: number) => {
-            const otherTarget = NodeUtils.findLwReferenceTarget(afterRef.targets, beforeTarget)
-            if (otherTarget === null) {
+            const afterTarget = NodeUtils.findLwReferenceTarget(afterRef.targets, beforeTarget)
+            if (afterTarget === null) {
                 // this.change(new TargetRemoved(ctx.concat("targets", index), node, target))
-                this.diff(ctx, `REFERENCE Target ${JSON.stringify(beforeTarget)} missing in second `)
+                // this.diff(ctx, `REFERENCE Target ${JSON.stringify(beforeTarget)} missing in second `)
+                this.change(new TargetRemoved(ctx, node, beforeRef.reference, beforeTarget.reference))
             } else {
-                if (beforeTarget.reference !== otherTarget.reference || beforeTarget.resolveInfo !== otherTarget.resolveInfo) {
-                    this.diff(ctx, `REFERENCE target ${JSON.stringify(beforeTarget)} vs ${JSON.stringify(otherTarget)}`)
+                if (beforeTarget.reference !== afterTarget.reference || beforeTarget.resolveInfo !== afterTarget.resolveInfo) {
+                    this.diff(ctx, `REFERENCE target ${JSON.stringify(beforeTarget)} vs ${JSON.stringify(afterTarget)}`)
                 }
             }
         })
