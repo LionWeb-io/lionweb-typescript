@@ -14,6 +14,12 @@ It contains utilities on top of the `core` package, such as:
 
 ## Changelog
 
+### 0.6.0
+
+* _Breaking name changes_: `shortenedSerialization` &rarr; `shortenedSerializationChunk`, `sortedSerialization` &rarr; `sortedSerializationChunk`.
+* Expose an `isSerializedLanguages` function.
+* Expose an `orderedSerializationChunk` function that aligns the JSON key-value pairs in a serialization chunk according to the specification of the serialization format.
+
 ### 0.5.0
 
 This is the first version corresponding to a release of LionWeb (version: 2023.1) as a whole.

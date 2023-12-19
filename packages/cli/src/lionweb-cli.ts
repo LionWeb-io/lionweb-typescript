@@ -3,9 +3,10 @@
 
 import {argv} from "process"
 
-import {extractFromSerialization} from "./serialization-extractor.js"
 import {diagramFromSerialization} from "./m3/diagram-generator.js"
 import {generateTsTypesWith} from "./m3/ts-types-generator.js"
+import {extractFromSerialization} from "./serialization/extractor.js"
+import {repairSerializationChunk} from "./serialization/repairer.js"
 
 
 const main = (args: string[])=> {
@@ -13,7 +14,8 @@ const main = (args: string[])=> {
     const DIAGRAM_COMMAND = "diagram"
     const EXTRACT_COMMAND = "extract"
     const GENERATE_TS_TYPES_COMMAND = "generate-ts-types"
-    const commands = [DIAGRAM_COMMAND, EXTRACT_COMMAND, GENERATE_TS_TYPES_COMMAND]
+    const REPAIR_COMMAND = "repair"
+    const commands = [DIAGRAM_COMMAND, EXTRACT_COMMAND, GENERATE_TS_TYPES_COMMAND, REPAIR_COMMAND]
 
     if (args.length <= 2) {
         console.log(
@@ -68,6 +70,17 @@ If the chunk is the serialization of a LionCore Language/M2, then a textual rend
             return
         }
 
+        case REPAIR_COMMAND: {
+            if (commandArgs.length === 0) {
+                console.log(
+`The ${REPAIR_COMMAND} command "repairs" the given JSON files that represent a serialization chunk.
+Right now, that means that the ordering of the key-value pairs is precisely aligned with the specification.`
+                )
+            } else {
+                commandArgs.forEach(repairSerializationChunk)
+            }
+            return
+        }
         // TODO  generate schema, import Ecore
 
         default: {
