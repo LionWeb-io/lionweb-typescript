@@ -1,5 +1,5 @@
 import { JsonContext } from "../../issues/index.js"
-import { LionWebJsonNode } from "../../json/index.js"
+import { LionWebJsonMetaPointer, LionWebJsonNode } from "../../json/index.js"
 import { Change, ChangeType } from "./Change.js"
 
 export class NodeClassifierChanged extends Change {
@@ -8,12 +8,12 @@ export class NodeClassifierChanged extends Change {
     constructor(
         public context: JsonContext,
         public node: LionWebJsonNode,
-        public oldClassifierKey: string,
-        public newClassifierKey: string,
+        public oldClassifier: LionWebJsonMetaPointer,
+        public newClassifier: LionWebJsonMetaPointer,
     ) {
         super(context)
     }
-    protected msg = () => `Object ${this.node.id} has classifier changed from ${this.oldClassifierKey} to ${this.newClassifierKey}`
+    protected msg = () => `Object ${this.node.id} has classifier changed from ${this.oldClassifier.key} to ${this.newClassifier.key}`
 }
 
 export class ParentChanged extends Change {
