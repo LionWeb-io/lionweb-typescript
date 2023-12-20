@@ -6,7 +6,7 @@ cd packages
 
 for package in "core" "utilities" "cli" "validation" 
 do
-  (cd $package; npm run release)
+  (cd $package; npm publish)
 done
 
 cd ..

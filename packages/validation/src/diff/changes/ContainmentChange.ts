@@ -1,6 +1,6 @@
 import { JsonContext } from "../../issues/index.js"
-import { LionWebJsonContainment, LionWebJsonMetaPointer, LionWebJsonNode } from "../../json/index.js"
-import { Change, ChangeType } from "./Change.js"
+import { LionWebJsonMetaPointer, LionWebJsonNode } from "../../json/index.js"
+import { Change } from "./Change.js"
 
 export abstract class ContainmentChange extends Change {
     constructor(

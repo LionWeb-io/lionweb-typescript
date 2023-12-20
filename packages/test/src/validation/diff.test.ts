@@ -15,8 +15,8 @@ function readModel(filename: string): LionWebJsonChunk | null {
     return null
 }
 
-describe("Library test model", () => {
-    it("[de-]serialize example library", async () => {
+describe("FileSystem mode test", () => {
+    it("compare JSON models", async () => {
         const jsonModel = readModel("./src/validation/Disk_1.json")
         const jsonModel2 = readModel("./src/validation/Disk_2.json")
 
@@ -28,13 +28,5 @@ describe("Library test model", () => {
         diff1.diffLwChunk(jsonModel, jsonModel)
         // No errors expected
         deepEqual(diff1.diffResult.changes, [])
-
-        // const diff = new LionWebJsonDiff()
-        // diff.diffLwChunk(jsonModel, jsonModel2)
-        // console.log(" JsonModel : \n" + new LionWebJsonChunkWrapper(jsonModel).asString())
-        // console.log(" JsonModel2: \n" + new LionWebJsonChunkWrapper(jsonModel2).asString())
-        // console.log(diff.diffResult.changes.map(ch => ch.changeMsg()))
-        // //  errors expected
-        // deepEqual(diff.diffResult.changes.length, 12)
     })
 })

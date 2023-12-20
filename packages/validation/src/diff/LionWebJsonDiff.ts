@@ -219,10 +219,10 @@ export class LionWebJsonDiff {
             if (afterTarget === null) {
                 // this.change(new TargetRemoved(ctx.concat("targets", index), node, target))
                 // this.diff(ctx, `REFERENCE Target ${JSON.stringify(beforeTarget)} missing in second `)
-                this.change(new TargetRemoved(ctx, node, beforeRef.reference, beforeTarget.reference))
+                this.change(new TargetRemoved(ctx.concat("targets", index), node, beforeRef.reference, beforeTarget.reference))
             } else {
                 if (beforeTarget.reference !== afterTarget.reference || beforeTarget.resolveInfo !== afterTarget.resolveInfo) {
-                    this.diff(ctx, `REFERENCE target ${JSON.stringify(beforeTarget)} vs ${JSON.stringify(afterTarget)}`)
+                    this.diff(ctx.concat("targets", index), `REFERENCE target ${JSON.stringify(beforeTarget)} vs ${JSON.stringify(afterTarget)}`)
                 }
             }
         })

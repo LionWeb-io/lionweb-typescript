@@ -1,10 +1,6 @@
 import {Id} from "./types.js"
 import {currentReleaseVersion} from "./version.js"
 
-
-export type Ids = Id[]
-
-
 export type MetaPointer = {
     language: string
     version: string
@@ -18,7 +14,7 @@ export type SerializedProperty = {
 
 export type SerializedContainment = {
     containment: MetaPointer
-    children: Ids
+    children: Id[]
 }
 
 export type SerializedReferenceTarget = {
@@ -35,13 +31,11 @@ export type SerializedReference = {
  * Type definition for an AST node serialized to JSON.
  */
 export type SerializedNode = {
-    // TODO should be Id
-    id: string
+    id: Id
     classifier: MetaPointer
     properties: SerializedProperty[]
     containments: SerializedContainment[]
     references: SerializedReference[]
-    // TODO inconsistent with the use of Ids
     annotations: Id[]
     parent: Id | null
 }
