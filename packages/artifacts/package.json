@@ -1,6 +1,6 @@
 {
   "name": "@lionweb/artifacts",
-  "version": "0.6.0-beta.1",
+  "version": "0.6.0-beta.2",
   "description": "LionWeb core for {Java|Type}Script",
   "private": true,
   "type": "module",
@@ -13,9 +13,9 @@
     "url": "https://github.com/LionWeb-io/lionweb-typescript/issues"
   },
   "devDependencies": {
-    "@lionweb/core": "0.6.0-beta.1",
-    "@lionweb/test": "0.6.0-beta.1",
-    "@lionweb/utilities": "0.6.0-beta.1",
+    "@lionweb/core": "0.6.0-beta.2",
+    "@lionweb/test": "0.6.0-beta.2",
+    "@lionweb/utilities": "0.6.0-beta.2",
     "@types/node": "20.10.4",
     "typescript": "5.3.3"
   },
