@@ -1,23 +1,23 @@
-import fs from "fs";
-import { LwDiff } from "../diff/LionwebDiff.js";
-import { LionWebJsonChunk } from "../json/LionWebJson.js";
+import fs from "fs"
+import { LionWebJsonDiff } from "../diff/index.js"
+import { LionWebJsonChunk } from "../json/LionWebJson.js"
 
-const file1 = process.argv[2];
-const file2 = process.argv[3];
+const file1 = process.argv[2]
+const file2 = process.argv[3]
 
 if (file1 !== null && file1 !== undefined) {
-    const jsonString1 = fs.readFileSync(file1, "utf-8");
-    const json1 = JSON.parse(jsonString1);
-    const jsonString2 = fs.readFileSync(file2, "utf-8");
-    const json2 = JSON.parse(jsonString2);
+    const jsonString1 = fs.readFileSync(file1, "utf-8")
+    const json1 = JSON.parse(jsonString1)
+    const jsonString2 = fs.readFileSync(file2, "utf-8")
+    const json2 = JSON.parse(jsonString2)
 
-    const lwDiff = new LwDiff();
-    lwDiff.diffLwChunk(json1 as LionWebJsonChunk, json2 as LionWebJsonChunk);
-    if (lwDiff.errors.length === 0) {
-        console.log("LwDiff: equal");
+    const lwDiff = new LionWebJsonDiff()
+    lwDiff.diffLwChunk(json1 as LionWebJsonChunk, json2 as LionWebJsonChunk)
+    if (lwDiff.diffResult.changes.length === 0) {
+        console.log("LionWebJsonDiff: equal")
     } else {
-        console.log("LwDiff: " + lwDiff.errors);
+        console.log("LionWebJsonDiff: " + lwDiff.diff)
     }
 } else {
-    console.log("Error in arguments");
+    console.log("Error in arguments")
 }

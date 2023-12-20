@@ -1,5 +1,5 @@
-import { validateFolder } from "./FileUtils.js";
+import { validateFolder } from "./FileUtils.js"
 
-const folder = process.argv[2];
+const folder = process.argv[2]
 
-validateFolder(folder);
+validateFolder(folder)

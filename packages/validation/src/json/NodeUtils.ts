@@ -1,10 +1,10 @@
 import {
-    LionWebJsonChild,
+    LionWebJsonContainment,
     LionWebJsonNode,
     LionWebJsonProperty,
     LionWebJsonReference,
-    LionWebJsonReferenceTarget
-} from "./LionWebJson.js";
+    LionWebJsonReferenceTarget,
+} from "./LionWebJson.js"
 
 /**
  * Utility functions for LionWebJsonNode's
@@ -18,10 +18,10 @@ export class NodeUtils {
     static findLwProperty(node: LionWebJsonNode, key: string): LionWebJsonProperty | null {
         for (const property of node.properties) {
             if (property.property.key === key) {
-                return property;
+                return property
             }
         }
-        return null;
+        return null
     }
 
     /**
@@ -29,44 +29,50 @@ export class NodeUtils {
      * @param node
      * @param key
      */
-    static findLwChild(node: LionWebJsonNode, key: string): LionWebJsonChild | null {
+    static findLwChild(node: LionWebJsonNode, key: string): LionWebJsonContainment | null {
         for (const containment of node.containments) {
             if (containment.containment.key === key) {
-                return containment;
+                return containment
             }
         }
-        return null;
+        return null
     }
 
     static findLwReference(node: LionWebJsonNode, key: string): LionWebJsonReference | null {
         for (const reference of node.references) {
             if (reference.reference.key === key) {
-                return reference;
+                return reference
             }
         }
-        return null;
+        return null
     }
 
-    static findLwReferenceTarget(lwReferenceTargets: LionWebJsonReferenceTarget[], target: LionWebJsonReferenceTarget): LionWebJsonReferenceTarget | null {
+    static findLwReferenceTarget(
+        lwReferenceTargets: LionWebJsonReferenceTarget[],
+        target: LionWebJsonReferenceTarget,
+    ): LionWebJsonReferenceTarget | null {
         for (const refTarget of lwReferenceTargets) {
             if (refTarget.reference === target.reference && refTarget.resolveInfo === target.resolveInfo) {
-                return refTarget;
+                return refTarget
             }
         }
-        return null;
+        return null
     }
 
     /**
-     * Get all nodes that are children for `node`: both the containment and annotaion children
+     * Get all nodes that are children for _node_: both the containment and annotation children
      * @param node
      */
-    static allChildren(node: LionWebJsonNode): string[] {
-        const result: string[] = [];
+    static allDirectChildren(node: LionWebJsonNode): string[] {
+        const result: string[] = []
         for (const containment of node.containments) {
-            result.push(...containment.children);
+            result.push(...containment.children)
         }
-        result.push(...node.annotations);
-        return result;
+        result.push(...node.annotations)
+        return result
     }
 
+    static findContainmentContainingChild(containments: LionWebJsonContainment[], childId: string): LionWebJsonContainment | undefined {
+        return containments.find(cont => cont.children.includes(childId))
+    }
 }

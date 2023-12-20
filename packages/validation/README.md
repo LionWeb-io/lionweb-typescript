@@ -20,6 +20,8 @@ npm run testInvalidWithLanguage
 
 This will run the tests in the respective folders in the `testset/` folder in `lionweb-integration-testing`.
 
+The commands `npm run publish-local` and `npm run unpublish-local` are used to do a release on a _local_ npm registry (in our case `verdaccio`), for use in other local projects. This ensures that we do not have to do contineous releases when we develop two packages depending on aech other'
+
 Notes:
 - Testing with enums is not implemented yet.
 - All tests in the test set with duplicates (which used to be considered invalid), are not invalid anymore, as decided in the meeting on 23-08-2023.
