@@ -54,13 +54,16 @@ export const genericAsTreeText = ({nodes}: SerializationChunk, languages: Langua
         ]
 
 
+    const curry1 = <T1, T2, R>(func: (t1: T1, t2: T2) => R, t1: T1): ((t2: T2) => R) =>
+        (t2: T2) => func(t1, t2)
+
     const asText = ({id, classifier: classifierMetaPointer, properties, containments, references}: SerializedNode): NestedString =>
         [
             `${symbolTable.entityMatching(classifierMetaPointer)?.name ?? `[${classifierMetaPointer.key}]`} (id: ${id}) {`,
             indent([
-                properties.map((property) => propertyAsText(classifierMetaPointer, property)),
-                references.map((reference) => referenceAsText(classifierMetaPointer, reference)),
-                containments.map((containment) => containmentAsText(classifierMetaPointer, containment))
+                properties.map(curry1(propertyAsText, classifierMetaPointer)),
+                references.map(curry1(referenceAsText, classifierMetaPointer)),
+                containments.map(curry1(containmentAsText, classifierMetaPointer))
             ]),
             `}`
         ]
