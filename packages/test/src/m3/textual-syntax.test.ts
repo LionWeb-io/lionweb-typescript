@@ -61,18 +61,18 @@ describe("generic textual syntax", () => {
         equal(
             genericAsTreeText(serializeNodes(libraryModel, libraryExtractionFacade), [libraryLanguage]),
             `Library (id: jkxERSov0TuSh7MMz2D5ciLrZDrU4o_VMOpmBqh_j7E) {
-    name = Bob's Library
+    name = 'Bob's Library'
     books:
         Book (id: Q1NQ_zXwOF2Pjf1uklMTumJhQH4V1Qnfjnu0gz7Fzzs) {
-            title = Explorer Book
+            title = 'Explorer Book'
             pages = 1337
             type = Special
             author -> 7RxOqvS1ZIdpk-ao-6Tzy1QQRxl6fp_tGMH_BIK4LzQ (Jack London)
         }
 }
 GuideBookWriter (id: 7RxOqvS1ZIdpk-ao-6Tzy1QQRxl6fp_tGMH_BIK4LzQ) {
-    countries = Alaska
-    name = Jack London
+    countries = 'Alaska'
+    name = 'Jack London'
 }
 `
         )

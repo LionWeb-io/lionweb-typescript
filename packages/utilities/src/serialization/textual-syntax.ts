@@ -1,8 +1,10 @@
 import {
+    Enumeration,
     Id,
     Language,
     MemoisingSymbolTable,
     MetaPointer,
+    Property,
     SerializationChunk,
     SerializedContainment,
     SerializedNode,
@@ -26,15 +28,26 @@ export const genericAsTreeText = ({nodes}: SerializationChunk, languages: Langua
 
     const symbolTable = new MemoisingSymbolTable(languages)
 
-    const lookUpFeature = (classifier: MetaPointer, feature: MetaPointer) =>
-        symbolTable.featureMatching(classifier, feature)
-
     const nameOrKey = (classifier: MetaPointer, feature: MetaPointer): string =>
-        (classifier && lookUpFeature(classifier, feature)?.name) ?? `[${feature.key}]`
+        symbolTable.featureMatching(classifier, feature)?.name ?? `[${feature.key}]`
 
 
-    const propertyAsText = (classifier: MetaPointer, {property, value}: SerializedProperty) =>
-        `${nameOrKey(classifier, property)} = ${value}`
+    const propertyAsText = (classifier: MetaPointer, {property: propertyMetaPointer, value}: SerializedProperty) => {
+        const property = symbolTable.featureMatching(classifier, propertyMetaPointer)
+        const identification = nameOrKey(classifier, propertyMetaPointer)
+        const displayValue =
+            property instanceof Property
+                ? (property.type instanceof Enumeration
+                    ? (property.type.literals.find((literal) => literal.key === value)?.name ?? value)
+                    : (() => {
+                        switch (property?.type?.name) {
+                            case "String": return `'${value}'`
+                            default: return value
+                        }
+                    })())
+                : value
+        return `${identification} = ${displayValue}`
+    }
 
     const referenceTargetAsText = ({reference: referenceId, resolveInfo}: SerializedReferenceTarget) =>
         `${referenceId}${resolveInfo === undefined ? `` : ` (${resolveInfo})`}`
