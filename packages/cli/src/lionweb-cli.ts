@@ -7,7 +7,7 @@ import {diagramFromSerialization} from "./m3/diagram-generator.js"
 import {generateTsTypesWith} from "./m3/ts-types-generator.js"
 import {extractFromSerialization} from "./serialization/extractor.js"
 import {repairSerializationChunk} from "./serialization/repairer.js"
-import {textualizeSerializationChunk} from "./serialization/textualizor.js"
+import {executeTextualizeCommand} from "./serialization/textualizer.js"
 
 
 const main = (args: string[])=> {
@@ -91,7 +91,7 @@ Right now, that means that the ordering of the key-value pairs is precisely alig
 `The ${TEXTUALIZE_COMMAND} command produces purely textual renderings of the given serialization chunks.`
                 )
             } else {
-                commandArgs.forEach(textualizeSerializationChunk)
+                executeTextualizeCommand(commandArgs)
             }
             return
         }
