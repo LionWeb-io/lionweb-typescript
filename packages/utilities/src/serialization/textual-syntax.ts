@@ -1,6 +1,4 @@
 import {
-    allFeaturesOf,
-    Classifier,
     Id,
     Language,
     MetaPointer,
@@ -28,25 +26,25 @@ export const genericAsTreeText = ({nodes}: SerializationChunk, languages: Langua
 
     const symbolTable = new NaiveSymbolTable(languages)
 
-    const lookUpFeature = (featureKey: string, classifier: Classifier) =>
-        allFeaturesOf(classifier).find((feature) => feature.key === featureKey)
+    const lookUpFeature = (classifier: MetaPointer, feature: MetaPointer) =>
+        symbolTable.featureMatching(classifier, feature)
 
-    const nameOrKey = ({key}: MetaPointer, classifier?: Classifier): string =>
-        (classifier && lookUpFeature(key, classifier)?.name) ?? `[${key}]`
+    const nameOrKey = (classifier: MetaPointer, feature: MetaPointer): string =>
+        (classifier && lookUpFeature(classifier, feature)?.name) ?? `[${feature.key}]`
 
 
-    const propertyAsText = ({property, value}: SerializedProperty, classifier?: Classifier) =>
-        `${nameOrKey(property, classifier)} = ${value}`
+    const propertyAsText = (classifier: MetaPointer, {property, value}: SerializedProperty) =>
+        `${nameOrKey(classifier, property)} = ${value}`
 
     const referenceTargetAsText = ({reference: referenceId, resolveInfo}: SerializedReferenceTarget) =>
         `${referenceId}${resolveInfo === undefined ? `` : ` (${resolveInfo})`}`
 
-    const referenceAsText = ({reference, targets}: SerializedReference, classifier?: Classifier) =>
-        `${nameOrKey(reference, classifier)} -> ${targets.length === 0 ? `<none>` : targets.map(referenceTargetAsText).join(",")}`
+    const referenceAsText = (classifier: MetaPointer, {reference, targets}: SerializedReference) =>
+        `${nameOrKey(classifier, reference)} -> ${targets.length === 0 ? `<none>` : targets.map(referenceTargetAsText).join(",")}`
 
-    const containmentAsText = ({containment, children}: SerializedContainment, classifier?: Classifier) =>
+    const containmentAsText = (classifier: MetaPointer, {containment, children}: SerializedContainment) =>
         [
-            `${nameOrKey(containment, classifier)}:${children.length === 0 ? ` <none>` : ``}`,
+            `${nameOrKey(classifier, containment)}:${children.length === 0 ? ` <none>` : ``}`,
             indent(children.map(
                 (childId) =>
                     childId in nodesById
@@ -56,18 +54,16 @@ export const genericAsTreeText = ({nodes}: SerializationChunk, languages: Langua
         ]
 
 
-    const asText = ({id, classifier: classifierMetaPointer, properties, containments, references}: SerializedNode): NestedString => {
-        const classifier = symbolTable.entityMatching(classifierMetaPointer) as (Classifier | undefined)    // typecast is OK: only (non-abstract) classifiers can have instances
-        return [
-            `${classifier?.name ?? `[${classifierMetaPointer.key}]`} (id: ${id}) {`,
+    const asText = ({id, classifier: classifierMetaPointer, properties, containments, references}: SerializedNode): NestedString =>
+        [
+            `${symbolTable.entityMatching(classifierMetaPointer)?.name ?? `[${classifierMetaPointer.key}]`} (id: ${id}) {`,
             indent([
-                properties.map((property) => propertyAsText(property, classifier)),
-                references.map((reference) => referenceAsText(reference, classifier)),
-                containments.map((containment) => containmentAsText(containment, classifier))
+                properties.map((property) => propertyAsText(classifierMetaPointer, property)),
+                references.map((reference) => referenceAsText(classifierMetaPointer, reference)),
+                containments.map((containment) => containmentAsText(classifierMetaPointer, containment))
             ]),
             `}`
         ]
-    }
 
     return asString(
         nodes

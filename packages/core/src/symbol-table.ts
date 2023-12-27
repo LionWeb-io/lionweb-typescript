@@ -1,4 +1,4 @@
-import {Language, LanguageEntity} from "./m3/index.js"
+import {allFeaturesOf, Classifier, Feature, Language, LanguageEntity} from "./m3/index.js"
 import {MetaPointer} from "./serialization.js"
 
 
@@ -8,13 +8,21 @@ import {MetaPointer} from "./serialization.js"
  * of deserialization.
  */
 interface ISymbolTable {
+
     /**
      *
-     * Looks up the {@link LanguageEntity} pointed to by the given {@link MetaPointer},
+     * Looks up the {@link LanguageEntity}, as pointed to by the given {@link MetaPointer},
      * or {@code undefined} if it couldn't be found.
      */
     entityMatching(entityMetaPointer: MetaPointer): LanguageEntity | undefined
-    // featureMatching(entityMetaPointer: MetaPointer, featureMetaPointer: MetaPointer): Feature | undefined
+
+    /**
+     * Looks up the {@link Feature}, as pointed to by the {@link MetaPointer} given second,
+     * as a feature of the {@link Classifier}, as pointed to by the {@link MetaPointer} given first,
+     * or {@code undefined} it it couldn't be found.
+     */
+    featureMatching(entityMetaPointer: MetaPointer, featureMetaPointer: MetaPointer): Feature | undefined
+
 }
 
 /**
@@ -41,7 +49,6 @@ class NaiveSymbolTable implements ISymbolTable {
             .find((entity) => entity.key === entityMetaPointer.key)
     }
 
-    /*
     featureMatching(classifierMetaPointer: MetaPointer, featureMetaPointer: MetaPointer): Feature | undefined {
         const classifier = this.entityMatching(classifierMetaPointer)
         if (classifier === undefined || !(classifier instanceof Classifier)) {
@@ -50,7 +57,7 @@ class NaiveSymbolTable implements ISymbolTable {
         const allFeatures = allFeaturesOf(classifier)
         return allFeatures.find((feature) => feature.key === featureMetaPointer.key)
     }
-     */
+
 }
 
 
