@@ -8,7 +8,6 @@ import {
     nameBasedClassifierDeducerFor,
     serializeNodes
 } from "@lionweb/core"
-import {genericAsTreeText} from "@lionweb/utilities"
 import {libraryModel, libraryExtractionFacade, libraryInstantiationFacade} from "./instances/library.js"
 import {libraryLanguage} from "./languages/library.js"
 
@@ -24,8 +23,6 @@ describe("Library test model", () => {
 
     it(`"dynamify" example library through serialization and deserialization using the DynamicNode facades`, () => {
         const serialization = serializeNodes(libraryModel, libraryExtractionFacade)
-        console.log(genericAsTreeText(serialization))
-
         const dynamification = deserializeChunk(serialization, dynamicInstantiationFacade, [libraryLanguage], [])
         deepEqual(dynamification.length, 2)
         const lookup = nameBasedClassifierDeducerFor(libraryLanguage)
