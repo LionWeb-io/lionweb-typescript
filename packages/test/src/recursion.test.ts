@@ -43,15 +43,15 @@ describe("directlyContaineds function", () => {
     })
 
     it("should return features for Classifier objects", () => {
-        const language = new Language("ExampleLanguage", "1.0", "lang-001", "key-lang-001");
-        const classifier = new Concept(language, "Classifier1", "key-class1", "class-001", false);
-        const feature1 = new Property(classifier, "Feature1", "key-feat1", "feat-001");
-        const feature2 = new Property(classifier, "Feature2", "key-feat2", "feat-002");
-        classifier.havingFeatures(feature1, feature2);
+        const language = new Language("ExampleLanguage", "1.0", "lang-001", "key-lang-001")
+        const classifier = new Concept(language, "Classifier1", "key-class1", "class-001", false)
+        const feature1 = new Property(classifier, "Feature1", "key-feat1", "feat-001")
+        const feature2 = new Property(classifier, "Feature2", "key-feat2", "feat-002")
+        classifier.havingFeatures(feature1, feature2)
 
-        const result = directlyContaineds(classifier);
-        deepEqual(result, [feature1, feature2]);
-    });
+        const result = directlyContaineds(classifier)
+        deepEqual(result, [feature1, feature2])
+    })
 
     it("should return literals for Enumeration objects", () => {
         const language = new Language("ExampleLanguage", "1.0", "lang-001", "key-lang-001")
