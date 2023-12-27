@@ -20,6 +20,8 @@ interface SymbolTable {
      * Looks up the {@link Feature}, as pointed to by the {@link MetaPointer} given second,
      * as a feature of the {@link Classifier}, as pointed to by the {@link MetaPointer} given first,
      * or {@code undefined} it it couldn't be found.
+     * <em>Note</em> that the {@code language} and {@code version} values of both {@link MetaPointer}-typed arguments should coincide,
+     * although this is typically not checked!
      */
     featureMatching(entityMetaPointer: MetaPointer, featureMetaPointer: MetaPointer): Feature | undefined
 
