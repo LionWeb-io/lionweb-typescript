@@ -1,16 +1,8 @@
 import {Id, Node} from "./types.js"
 import {currentSerializationFormatVersion, SerializationChunk, SerializedNode} from "./serialization.js"
 import {InstantiationFacade} from "./facade.js"
-import {NaiveSymbolTable} from "./symbol-table.js"
-import {
-    Classifier,
-    Containment,
-    Enumeration,
-    Language,
-    PrimitiveType,
-    Property,
-    Reference
-} from "./m3/types.js"
+import {MemoisingSymbolTable} from "./symbol-table.js"
+import {Classifier, Containment, Enumeration, Language, PrimitiveType, Property, Reference} from "./m3/types.js"
 import {allFeaturesOf} from "./m3/functions.js"
 import {deserializeBuiltin} from "./m3/builtins.js"
 import {groupBy} from "./utils/grouping.js"
@@ -49,7 +41,7 @@ export const deserializeChunk = <NT extends Node>(
         throw new Error(`can't deserialize from serialization format other than version "${currentSerializationFormatVersion}"`)
     }
 
-    const symbolTable = new NaiveSymbolTable(languages)
+    const symbolTable = new MemoisingSymbolTable(languages)
 
     const { nodes: serializedNodes } = serializationChunk
 

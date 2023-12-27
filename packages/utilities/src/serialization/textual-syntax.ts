@@ -1,8 +1,8 @@
 import {
     Id,
     Language,
+    MemoisingSymbolTable,
     MetaPointer,
-    NaiveSymbolTable,
     SerializationChunk,
     SerializedContainment,
     SerializedNode,
@@ -24,7 +24,7 @@ export const genericAsTreeText = ({nodes}: SerializationChunk, languages: Langua
     })
 
 
-    const symbolTable = new NaiveSymbolTable(languages)
+    const symbolTable = new MemoisingSymbolTable(languages)
 
     const lookUpFeature = (classifier: MetaPointer, feature: MetaPointer) =>
         symbolTable.featureMatching(classifier, feature)

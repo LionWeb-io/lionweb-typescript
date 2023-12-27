@@ -7,7 +7,7 @@ import {MetaPointer} from "./serialization.js"
  * This is meant to be able to properly encapsulate performance optimizations, also outside of the context
  * of deserialization.
  */
-interface ISymbolTable {
+interface SymbolTable {
 
     /**
      *
@@ -25,10 +25,11 @@ interface ISymbolTable {
 
 }
 
+
 /**
- * Naïve, non-performant implementation of {@link ISymbolTable}.
+ * Naive, non-performant implementation of {@link SymbolTable}.
  */
-class NaiveSymbolTable implements ISymbolTable {
+class NaiveSymbolTable implements SymbolTable {
 
     private readonly languages: Language[]
 
@@ -61,11 +62,76 @@ class NaiveSymbolTable implements ISymbolTable {
 }
 
 
+const lazyMapGet = <T>(map: { [key: string]: T }, key: string, createThunk: () => T): T => {
+    if (key in map) {
+        return map[key]
+    }
+    const value = createThunk()
+    map[key] = value
+    return value
+}
+
+
+type EntityInfo = {
+    entity: LanguageEntity
+    allFeatures: Feature[]                                  // === [] if entity is not a Classifier
+    featureKey2feature: { [featureKey: string]: Feature }   // populated through memoisation
+}
+
+class MemoisingSymbolTable implements SymbolTable {
+
+    private readonly languages: Language[]
+
+    constructor(languages: Language[]) {
+        this.languages = languages
+    }
+    private readonly languageKey2version2entityKey2entityInfo: { [languageKey: string]: { [version: string]: { [entityKey: string]: (EntityInfo | undefined) } } } = {}
+
+    private entityInfoMatching(entityMetaPointer: MetaPointer): undefined | EntityInfo {
+        return lazyMapGet(
+            lazyMapGet(
+                lazyMapGet(this.languageKey2version2entityKey2entityInfo, entityMetaPointer.language, () => ({})),
+                entityMetaPointer.version,
+                () => ({})
+            ),
+            entityMetaPointer.key,
+            () => {
+                const entity = this.languages.find((language) =>
+                            language.key === entityMetaPointer.language
+                            && language.version === entityMetaPointer.version
+                        )
+                    ?.entities
+                    .find((entity) => entity.key === entityMetaPointer.key)
+                return entity && { entity, allFeatures: entity instanceof Classifier ? allFeaturesOf(entity) : [], featureKey2feature: {} }
+            }
+        )
+    }
+
+    entityMatching(entityMetaPointer: MetaPointer): LanguageEntity | undefined {
+        return this.entityInfoMatching(entityMetaPointer)?.entity
+    }
+
+    featureMatching(classifierMetaPointer: MetaPointer, featureMetaPointer: MetaPointer): Feature | undefined {
+        const entityInfo = this.entityInfoMatching(classifierMetaPointer)
+        if (entityInfo === undefined || !(entityInfo.entity instanceof Classifier)) {
+            return undefined
+        }
+        return lazyMapGet(
+            entityInfo.featureKey2feature,
+            featureMetaPointer.key,
+            () => entityInfo.allFeatures.find((feature) => feature.key === featureMetaPointer.key)
+        )
+    }
+
+}
+
+
 export type {
-    ISymbolTable
+    SymbolTable
 }
 
 export {
+    MemoisingSymbolTable,
     NaiveSymbolTable
 }
 
