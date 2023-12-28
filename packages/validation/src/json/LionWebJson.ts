@@ -14,6 +14,11 @@ export const LIONWEB_JSON_TYPE = "LionCore-builtins-JSON"
 export const LIONWEB_INTEGER_TYPE = "LionCore-builtins-Integer"
 export const LIONWEB_STRING_TYPE = "LionCore-builtins-String"
 
+export const LIONWEB_M3_INAMED_PROPERTY = {
+    language: LION_CORE_BUILTINS_KEY,
+    version: LION_CORE_M3_VERSION,
+    key: LION_CORE_BUILTINS_INAMED_NAME
+}
 export type LionWebId = string
 
 export type LionWebJsonMetaPointer = {

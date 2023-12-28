@@ -13,6 +13,7 @@ export class NodeClassifierChanged extends Change {
     ) {
         super(context)
     }
+
     protected msg = () => `Object ${this.node.id} has classifier changed from ${this.oldClassifier.key} to ${this.newClassifier.key}`
 }
 
@@ -29,4 +30,34 @@ export class ParentChanged extends Change {
     }
 
     protected msg = () => `Node "${this.node.id}" changed parent from "${this.beforeParentId}" to "${this.afterParentId}`
+}
+
+export class AnnotationRemoved extends Change {
+    readonly id = "AnnotationRemoved"
+
+    constructor(
+        ctx: JsonContext,
+        public node: LionWebJsonNode,
+        public annotationId: string,
+        public index: number
+    ) {
+        super(ctx)
+    }
+
+    protected msg = () => `Node "${this.node.id}" removed annotation "${this.annotationId}"`
+}
+
+export class AnnotationAdded extends Change {
+    readonly id = "AnnotationAdded"
+
+    constructor(
+        ctx: JsonContext,
+        public node: LionWebJsonNode,
+        public annotationId: string,
+        public index: number
+    ) {
+        super(ctx)
+    }
+
+    protected msg = () => `Node "${this.node.id}" added annotation "${this.annotationId}"`
 }

@@ -17,6 +17,7 @@ export const LIONWEB_M3_LANGUAGE_KEY = "Language"
 export const LIONWEB_M3_LANGUAGE_VERSION_KEY = "Language-version"
 export const LIONWEB_M3_IKEYED_KEY_KEY = "IKeyed-key"
 export const LIONWEB_M3_PROPERTY_TYPE_KEY = "Property-type"
+
 /**
  * Collection of language definitions
  */

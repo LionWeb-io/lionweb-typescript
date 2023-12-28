@@ -95,6 +95,14 @@ export class LionWebJsonChunkWrapper {
         })
         const name = nameProperty === undefined ? "" : " " + nameProperty.value
         result += this.indent(depth) + "(" + node.id + ")" + name + "\n"
+        if (node.annotations !== undefined && node.annotations.length !== 0) {
+            result += this.indent(depth + 1) + "*Annotations*" + "\n"
+            node.annotations.forEach(ann => {
+                result += this.recursiveToString(this.getNode(ann), depth + 1)
+                // result += this.indent(depth) + "[[" + JSON.stringify(ann) + "]]\n"
+            })
+        }
+        result += this.indent(depth + 1) + "*_" + JSON.stringify(node.properties) + "_*" + "\n"
         node.properties.filter(p => p !== nameProperty).forEach(property => {
             result += this.indent(depth + 1) + "*" + property.property.key + "*: " + property.value + "\n"
         })

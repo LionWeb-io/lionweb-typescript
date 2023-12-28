@@ -20,6 +20,8 @@ export type ChangeType =
     | "TargetRemoved"
     | "ReferenceRemoved"
     | "ReferenceAdded"
+    | "AnnotationRemoved"
+    | "AnnotationAdded"
 
 export abstract class Change {
     abstract readonly id: ChangeType

@@ -13,7 +13,7 @@ import {
 import { Change, GenericChange } from "./changes/Change.js"
 import { LanguageAdded, LanguageRemoved, NodeAdded, NodeRemoved, SerializationFormatChange } from "./changes/ChunkChange.js"
 import { ChildAdded, ChildRemoved } from "./changes/ContainmentChange.js"
-import { TargetAdded, TargetRemoved } from "./changes/index.js"
+import { AnnotationAdded, AnnotationRemoved, TargetAdded, TargetRemoved } from "./changes/index.js"
 import { DiffResult } from "./DiffResult.js"
 import { NodeClassifierChanged, ParentChanged } from "./changes/NodeChange.js"
 import { PropertyValueChanged } from "./changes/PropertyChange.js"
@@ -115,7 +115,7 @@ export class LionWebJsonDiff {
             if (afterReference === null) {
                 if (beforeReference.targets.length !== 0) {
                     beforeReference.targets.forEach(target => {
-                        this.change(new TargetRemoved(ctx.concat("references", index), afterNode, beforeReference.reference, target.reference))
+                        this.change(new TargetRemoved(ctx.concat("references", index), afterNode, beforeReference, afterReference, target))
                     })
                 }
             } else {
@@ -128,11 +128,23 @@ export class LionWebJsonDiff {
             if (beforeReference === null) {
                 if (afterReference.targets.length !== 0) {
                     afterReference.targets.forEach(target => {
-                        this.change(new TargetAdded(ctx.concat("references", index), afterNode, afterReference.reference, target.reference))
+                        this.change(new TargetAdded(ctx.concat("references", index), afterNode, beforeReference, afterReference, target))
                     })
                 }
             }
         })
+        if (beforeNode.annotations !== undefined && afterNode.annotations !== undefined) {
+            beforeNode.annotations.forEach((beforeAnn: string, index: number) => {
+                if (!afterNode.annotations.includes(beforeAnn)) {
+                    this.change(new AnnotationRemoved(ctx, beforeNode, beforeAnn, index))
+                }
+            })
+            afterNode.annotations.forEach((afterAnn: string, index: number) => {
+                if (!beforeNode.annotations.includes(afterAnn)) {
+                    this.change(new AnnotationAdded(ctx, afterNode, afterAnn, index))
+                }
+            })
+        }
     }
 
     diffLwChunk(beforeChunk: LionWebJsonChunk, afterChunk: LionWebJsonChunk): void {
@@ -217,9 +229,17 @@ export class LionWebJsonDiff {
         beforeRef.targets.forEach((beforeTarget: LionWebJsonReferenceTarget, index: number) => {
             const afterTarget = NodeUtils.findLwReferenceTarget(afterRef.targets, beforeTarget)
             if (afterTarget === null) {
-                // this.change(new TargetRemoved(ctx.concat("targets", index), node, target))
-                // this.diff(ctx, `REFERENCE Target ${JSON.stringify(beforeTarget)} missing in second `)
-                this.change(new TargetRemoved(ctx.concat("targets", index), node, beforeRef.reference, beforeTarget.reference))
+                this.change(new TargetRemoved(ctx.concat("targets", index), node, beforeRef, afterRef, beforeTarget))
+            } else {
+                if (beforeTarget.reference !== afterTarget.reference || beforeTarget.resolveInfo !== afterTarget.resolveInfo) {
+                    this.diff(ctx.concat("targets", index), `REFERENCE target ${JSON.stringify(beforeTarget)} vs ${JSON.stringify(afterTarget)}`)
+                }
+            }
+        })
+        afterRef.targets.forEach((afterTarget: LionWebJsonReferenceTarget, index: number) => {
+            const beforeTarget = NodeUtils.findLwReferenceTarget(beforeRef.targets, afterTarget)
+            if (beforeTarget === null) {
+                this.change(new TargetAdded(ctx.concat("targets", index), node, beforeRef, afterRef, afterTarget))
             } else {
                 if (beforeTarget.reference !== afterTarget.reference || beforeTarget.resolveInfo !== afterTarget.resolveInfo) {
                     this.diff(ctx.concat("targets", index), `REFERENCE target ${JSON.stringify(beforeTarget)} vs ${JSON.stringify(afterTarget)}`)
