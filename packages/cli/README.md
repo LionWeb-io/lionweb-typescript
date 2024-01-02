@@ -43,7 +43,7 @@ It does some implicit validation as it can error out on incorrect serializations
 ### 0.6.0
 
 * Add a `repair` command that aligns a JSON serialization chunk with the specification.
-* Add a `textualize` command to render a JSON serialization chunk as pure text.
+* Add a `textualize` command – that's optionally language-aware – to render a JSON serialization chunk as pure text.
 
 
 ### 0.5.0

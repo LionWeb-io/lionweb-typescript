@@ -1,16 +1,8 @@
 import {Id, Node} from "./types.js"
 import {currentSerializationFormatVersion, SerializationChunk, SerializedNode} from "./serialization.js"
 import {InstantiationFacade} from "./facade.js"
-import {
-    Classifier,
-    Concept,
-    Containment,
-    Enumeration,
-    Language,
-    PrimitiveType,
-    Property,
-    Reference
-} from "./m3/types.js"
+import {MemoisingSymbolTable} from "./symbol-table.js"
+import {Classifier, Containment, Enumeration, Language, PrimitiveType, Property, Reference} from "./m3/types.js"
 import {allFeaturesOf} from "./m3/functions.js"
 import {deserializeBuiltin} from "./m3/builtins.js"
 import {groupBy} from "./utils/grouping.js"
@@ -49,7 +41,7 @@ export const deserializeChunk = <NT extends Node>(
         throw new Error(`can't deserialize from serialization format other than version "${currentSerializationFormatVersion}"`)
     }
 
-    const allEntities = languages.flatMap(({entities}) => entities)
+    const symbolTable = new MemoisingSymbolTable(languages)
 
     const { nodes: serializedNodes } = serializationChunk
 
@@ -84,15 +76,9 @@ export const deserializeChunk = <NT extends Node>(
      */
     const instantiate = ({id, classifier: classifierMetaPointer, properties, containments, references, annotations}: SerializedNode, parent?: NT): NT => {
 
-        const classifier = allEntities
-            .find((element) =>
-                   element instanceof Classifier
-                && element.key === classifierMetaPointer.key
-                && element.language.key === classifierMetaPointer.language
-                && element.language.version === classifierMetaPointer.version
-            ) as (Concept | undefined)
+        const classifier = symbolTable.entityMatching(classifierMetaPointer)
 
-        if (classifier === undefined) {
+        if (classifier === undefined || !(classifier instanceof Classifier)) {
             throw new Error(`can't deserialize a node having a classifier with key "${classifierMetaPointer.key}"`)
         }
 

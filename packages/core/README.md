@@ -25,6 +25,11 @@ The following is a list of links to potential starting points:
 
 ## Changelog
 
+### 0.6.0
+
+* Introduce a type `SymbolTable` to encapsulate lookup of languages' entities and their features.
+  * Provide a naive and a memoising implementation of the `SymbolTable` abstraction, and use the latter in the deserializer to make that (a bit) more performant.
+
 ### 0.5.0
 
 This is the first version corresponding to a release of LionWeb (version: 2023.1) as a whole.

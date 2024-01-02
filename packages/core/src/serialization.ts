@@ -2,9 +2,9 @@ import {Id} from "./types.js"
 import {currentReleaseVersion} from "./version.js"
 
 export type MetaPointer = {
-    language: string
-    version: string
-    key: string
+    language: string    // == key of Language
+    version: string     // == version of Language
+    key: string         // == key of either LanguageEntity or Feature or EnumerationLiteral
 }
 
 export type SerializedProperty = {

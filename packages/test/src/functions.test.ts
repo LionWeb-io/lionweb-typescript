@@ -42,14 +42,13 @@ describe("flatMap function", () => {
 
         // check for an empty language object:
         if (isEmptyLanguage(language)) {
-            return { ...issues, message: "flatMap --> Empty language object" }
+            return { ...issues, message: "flatMap --> empty language object" }
         }
 
         flatMap(language, (node: M3Concept): unknown[] => {
-            console.log("first node: ", node)
-            // Detect cyclic references
+            // detect cyclic references:
             if (visited.has(node)) {
-                if (!issues.message) issues.message = "flatMap --> Cyclic reference detected"
+                if (!issues.message) issues.message = "flatMap --> cyclic reference detected"
                 return []
             }
             visited.add(node)
@@ -80,7 +79,7 @@ describe("flatMap function", () => {
         const issue = issuesWithFlatMap(emptyLanguage)
         deepEqual(issue, {
             location: emptyLanguage,
-            message: "flatMap --> Empty language object"
+            message: "flatMap --> empty language object"
         })
     })
 
