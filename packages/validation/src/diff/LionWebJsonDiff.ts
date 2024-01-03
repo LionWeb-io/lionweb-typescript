@@ -2,21 +2,22 @@ import { JsonContext } from "../issues/index.js"
 import {
     ChunkUtils,
     isEqualMetaPointer,
-    LionWebJsonContainment,
     LionWebJsonChunk,
+    LionWebJsonContainment,
     LionWebJsonNode,
     LionWebJsonProperty,
     LionWebJsonReference,
+    LionWebJsonReferenceTarget,
     LwJsonUsedLanguage,
-    NodeUtils, LionWebJsonReferenceTarget
+    NodeUtils
 } from "../json/index.js"
-import { Change, GenericChange } from "./changes/Change.js"
+import { Change, GenericChange, Missing } from "./changes/Change.js"
 import { LanguageAdded, LanguageRemoved, NodeAdded, NodeRemoved, SerializationFormatChange } from "./changes/ChunkChange.js"
 import { ChildAdded, ChildRemoved } from "./changes/ContainmentChange.js"
 import { AnnotationAdded, AnnotationRemoved, TargetAdded, TargetRemoved } from "./changes/index.js"
-import { DiffResult } from "./DiffResult.js"
 import { NodeClassifierChanged, ParentChanged } from "./changes/NodeChange.js"
 import { PropertyValueChanged } from "./changes/PropertyChange.js"
+import { DiffResult } from "./DiffResult.js"
 
 /**
  * Comparing LionWeb JSON chunks and find all differences
@@ -42,9 +43,7 @@ export class LionWebJsonDiff {
      */
     diffLwNode(ctx: JsonContext, beforeNode: LionWebJsonNode, afterNode: LionWebJsonNode): void {
         if (!isEqualMetaPointer(beforeNode.classifier, afterNode.classifier)) {
-            this.change(
-                new NodeClassifierChanged(ctx.concat("classifier"), beforeNode, beforeNode.classifier, afterNode.classifier),
-            )
+            this.change(new NodeClassifierChanged(ctx.concat("classifier"), beforeNode, beforeNode.classifier, afterNode.classifier))
         }
         if (beforeNode.parent !== afterNode.parent) {
             this.change(new ParentChanged(ctx, beforeNode, beforeNode.parent, afterNode.parent))
@@ -60,7 +59,8 @@ export class LionWebJsonDiff {
                         beforeNode.id,
                         beforeProperty.property,
                         beforeProperty.value,
-                        undefined,
+                        null,
+                        Missing.MissingAfter
                     ),
                 )
             } else {
@@ -76,8 +76,9 @@ export class LionWebJsonDiff {
                         ctx.concat("properties", index),
                         beforeNode.id,
                         afterProperty.property,
-                        undefined,
+                        null,
                         afterProperty.value,
+                        Missing.MissingBefore
                     ),
                 )
             }
@@ -90,7 +91,7 @@ export class LionWebJsonDiff {
                 // NB No containment is considered equivalent to a containment with empty _children_
                 if (beforeContainment.children.length !== 0) {
                     beforeContainment.children.forEach(childId => {
-                        this.change(new ChildRemoved(ctx.concat("containments", index), beforeNode, beforeContainment.containment, childId))
+                        this.change(new ChildRemoved(ctx.concat("containments", index), beforeNode, beforeContainment.containment, childId, Missing.MissingAfter))
                     })
                 }
             } else {
@@ -103,7 +104,7 @@ export class LionWebJsonDiff {
             if (beforeContainment === null) {
                 if (afterContainment.children.length !== 0) {
                     afterContainment.children.forEach(childId => {
-                        this.change(new ChildAdded(ctx.concat("containments", index), afterNode, afterContainment.containment, childId))
+                        this.change(new ChildAdded(ctx.concat("containments", index), afterNode, afterContainment.containment, childId, Missing.MissingBefore))
                     })
                 }
             }
@@ -115,7 +116,7 @@ export class LionWebJsonDiff {
             if (afterReference === null) {
                 if (beforeReference.targets.length !== 0) {
                     beforeReference.targets.forEach(target => {
-                        this.change(new TargetRemoved(ctx.concat("references", index), afterNode, beforeReference, afterReference, target))
+                        this.change(new TargetRemoved(ctx.concat("references", index), afterNode, beforeReference, afterReference, target, Missing.MissingAfter))
                     })
                 }
             } else {
@@ -128,7 +129,7 @@ export class LionWebJsonDiff {
             if (beforeReference === null) {
                 if (afterReference.targets.length !== 0) {
                     afterReference.targets.forEach(target => {
-                        this.change(new TargetAdded(ctx.concat("references", index), afterNode, beforeReference, afterReference, target))
+                        this.change(new TargetAdded(ctx.concat("references", index), afterNode, beforeReference, afterReference, target, Missing.MissingBefore))
                     })
                 }
             }
@@ -136,12 +137,12 @@ export class LionWebJsonDiff {
         if (beforeNode.annotations !== undefined && afterNode.annotations !== undefined) {
             beforeNode.annotations.forEach((beforeAnn: string, index: number) => {
                 if (!afterNode.annotations.includes(beforeAnn)) {
-                    this.change(new AnnotationRemoved(ctx, beforeNode, beforeAnn, index))
+                    this.change(new AnnotationRemoved(ctx, beforeNode, afterNode, beforeAnn, index))
                 }
             })
             afterNode.annotations.forEach((afterAnn: string, index: number) => {
                 if (!beforeNode.annotations.includes(afterAnn)) {
-                    this.change(new AnnotationAdded(ctx, afterNode, afterAnn, index))
+                    this.change(new AnnotationAdded(ctx, beforeNode, afterNode, afterAnn, index))
                 }
             })
         }
@@ -232,7 +233,10 @@ export class LionWebJsonDiff {
                 this.change(new TargetRemoved(ctx.concat("targets", index), node, beforeRef, afterRef, beforeTarget))
             } else {
                 if (beforeTarget.reference !== afterTarget.reference || beforeTarget.resolveInfo !== afterTarget.resolveInfo) {
-                    this.diff(ctx.concat("targets", index), `REFERENCE target ${JSON.stringify(beforeTarget)} vs ${JSON.stringify(afterTarget)}`)
+                    this.diff(
+                        ctx.concat("targets", index),
+                        `REFERENCE target ${JSON.stringify(beforeTarget)} vs ${JSON.stringify(afterTarget)}`,
+                    )
                 }
             }
         })
@@ -242,7 +246,10 @@ export class LionWebJsonDiff {
                 this.change(new TargetAdded(ctx.concat("targets", index), node, beforeRef, afterRef, afterTarget))
             } else {
                 if (beforeTarget.reference !== afterTarget.reference || beforeTarget.resolveInfo !== afterTarget.resolveInfo) {
-                    this.diff(ctx.concat("targets", index), `REFERENCE target ${JSON.stringify(beforeTarget)} vs ${JSON.stringify(afterTarget)}`)
+                    this.diff(
+                        ctx.concat("targets", index),
+                        `REFERENCE target ${JSON.stringify(beforeTarget)} vs ${JSON.stringify(afterTarget)}`,
+                    )
                 }
             }
         })

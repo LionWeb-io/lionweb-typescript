@@ -102,16 +102,15 @@ export class LionWebJsonChunkWrapper {
                 // result += this.indent(depth) + "[[" + JSON.stringify(ann) + "]]\n"
             })
         }
-        result += this.indent(depth + 1) + "*_" + JSON.stringify(node.properties) + "_*" + "\n"
         node.properties.filter(p => p !== nameProperty).forEach(property => {
-            result += Array(depth + 1).join("    ") + "*" + property.property.key + "*: " + property.value + "\n"
+            result += this.indent(depth + 1) + "*property* " + property.property.key + ": " + property.value + "\n"
         })
         node.references.forEach(ref => {
-            result += Array(depth + 1).join("    ") + "*" + ref.reference.key + "*: " + JSON.stringify(ref.targets) + "\n"
+            result += this.indent(depth + 1) + "*" + ref.reference.key + "*: " + JSON.stringify(ref.targets) + "\n"
         })
         node.containments.forEach(cont => {
             if (cont.children.length !== 0) {
-                result += Array(depth + 1).join("    ") + "*" + cont.containment.key + "*" + "\n"
+                result += this.indent(depth + 1) + "*" + cont.containment.key + "*" + "\n"
                 cont.children.forEach(ch => {
                     result += this.recursiveToString(this.getNode(ch), depth + 1)
                 })

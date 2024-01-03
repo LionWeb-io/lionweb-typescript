@@ -3,7 +3,7 @@ import { LionWebJsonMetaPointer, LionWebJsonNode } from "../../json/index.js"
 import { Change, ChangeType } from "./Change.js"
 
 export class NodeClassifierChanged extends Change {
-    readonly id: ChangeType = "NodeClassifierChanged"
+    readonly changeType: ChangeType = "NodeClassifierChanged"
 
     constructor(
         public context: JsonContext,
@@ -18,7 +18,7 @@ export class NodeClassifierChanged extends Change {
 }
 
 export class ParentChanged extends Change {
-    readonly id = "ParentChanged"
+    readonly changeType = "ParentChanged"
 
     constructor(
         public context: JsonContext,
@@ -32,32 +32,26 @@ export class ParentChanged extends Change {
     protected msg = () => `Node "${this.node.id}" changed parent from "${this.beforeParentId}" to "${this.afterParentId}`
 }
 
-export class AnnotationRemoved extends Change {
-    readonly id = "AnnotationRemoved"
-
+export abstract class AnnotationChange extends Change {
     constructor(
         ctx: JsonContext,
-        public node: LionWebJsonNode,
+        public nodeBefore: LionWebJsonNode,
+        public nodeAfter: LionWebJsonNode,
         public annotationId: string,
         public index: number
     ) {
         super(ctx)
     }
-
-    protected msg = () => `Node "${this.node.id}" removed annotation "${this.annotationId}"`
 }
 
-export class AnnotationAdded extends Change {
-    readonly id = "AnnotationAdded"
+export class AnnotationRemoved extends AnnotationChange {
+    readonly changeType = "AnnotationRemoved"
 
-    constructor(
-        ctx: JsonContext,
-        public node: LionWebJsonNode,
-        public annotationId: string,
-        public index: number
-    ) {
-        super(ctx)
-    }
+    protected msg = () => `Node "${this.nodeBefore.id}" removed annotation "${this.annotationId}"`
+}
 
-    protected msg = () => `Node "${this.node.id}" added annotation "${this.annotationId}"`
+export class AnnotationAdded extends AnnotationChange {
+    readonly changeType = "AnnotationAdded"
+
+    protected msg = () => `Node "${this.nodeAfter.id}" added annotation "${this.annotationId}"`
 }

@@ -23,8 +23,27 @@ export type ChangeType =
     | "AnnotationRemoved"
     | "AnnotationAdded"
 
+/**
+ * Additionbal property in property, contauinment and reference changes to state
+ * that the whole property/ containment / reference definition is missing.
+ */
+export enum Missing {
+    /**
+     * Both before and after have a definition for the property / containment / reference
+     */
+    NotMissing,
+    /**
+     * The definition is missing _before_ for the property / containment / reference
+     */
+    MissingBefore,
+    /**
+     * The definition is missing _after_ for the property / containment / reference
+     */
+    MissingAfter
+}
+
 export abstract class Change {
-    abstract readonly id: ChangeType
+    abstract readonly changeType: ChangeType
     context: JsonContext
 
     constructor(context: JsonContext) {
@@ -34,12 +53,12 @@ export abstract class Change {
     protected abstract msg(): string
 
     public changeMsg(): string {
-        return `${this.id}: ${this.msg()} at ${this.context.toString()} `
+        return `${this.changeType}: ${this.msg()} at ${this.context.toString()} `
     }
 }
 
 export class GenericChange extends Change {
-    readonly id = "GenericChange"
+    readonly changeType = "GenericChange"
 
     constructor(
         context: JsonContext,
