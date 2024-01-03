@@ -19,9 +19,8 @@ const orderedMetaPointer = ({language, version, key}: MetaPointer): MetaPointer 
 
 const orderedSerializedLanguageReference = ({key, version}: SerializedLanguageReference): SerializedLanguageReference =>
     ({
-        version,
-        key
-        // FIXME  swap around to align with specification after lionweb-java is aligned as well
+        key,
+        version
     })
 
 const orderedSerializedReferenceTarget = ({reference, resolveInfo}: SerializedReferenceTarget): SerializedReferenceTarget =>
