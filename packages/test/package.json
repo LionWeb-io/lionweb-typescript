@@ -1,6 +1,6 @@
 {
   "name": "@lionweb/test",
-  "version": "0.6.0-beta.2",
+  "version": "0.6.0-beta.3",
   "description": "LionWeb test for {Java|Type}Script",
   "private": true,
   "main": "dist/lioncore-cli.js",
@@ -14,9 +14,9 @@
     "url": "https://github.com/LionWeb-io/lionweb-typescript/issues"
   },
   "devDependencies": {
-    "@lionweb/core": "0.6.0-beta.2",
-    "@lionweb/utilities": "0.6.0-beta.2",
-    "@lionweb/validation": "0.6.0-beta.2",
+    "@lionweb/core": "0.6.0-beta.3",
+    "@lionweb/utilities": "0.6.0-beta.3",
+    "@lionweb/validation": "0.6.0-beta.3",
     "@types/chai": "4.3.11",
     "@types/mocha": "10.0.6",
     "@types/node": "20.10.4",
