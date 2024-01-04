@@ -22,6 +22,9 @@ export type ChangeType =
     | "ReferenceAdded"
     | "AnnotationRemoved"
     | "AnnotationAdded"
+    | "ChildOrderChanged"
+    | "AnnotationOrderChanged"
+    | "TargetOrderChanged"
 
 /**
  * Additionbal property in property, contauinment and reference changes to state

@@ -21,6 +21,11 @@ export class ChildAdded extends ContainmentChange {
 
 export class ChildRemoved extends ContainmentChange {
     readonly changeType = "ChildRemoved"
-    protected msg = () => `Node "${this.parentNode.id}" removed child "${this.childId}"`
+    protected msg = () => `Node "${this.parentNode.id}" removed child "${this.childId}" from containment "${this.containment.key}"`
+}
+
+export class ChildOrderChanged extends ContainmentChange {
+    readonly changeType = "ChildOrderChanged"
+    protected msg = () => `Node "${this.parentNode.id}" changed order of children in containment "${this.containment.key}"`
 }
 

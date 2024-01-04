@@ -26,3 +26,9 @@ export class TargetRemoved extends ReferenceChange {
     protected msg = () =>
         `Node "${this.node.id}" removed target "${this.target.reference}" from reference "${this?.beforeReference?.reference?.key}"`
 }
+
+export class TargetOrderChanged extends ReferenceChange {
+    readonly changeType = "TargetOrderChanged"
+    protected msg = () => `Node "${this.node.id}" changed order of targets in reference "${this.afterReference?.reference?.key}"`
+}
+

@@ -1,6 +1,7 @@
 import { JsonContext } from "../../issues/index.js"
 import { LionWebJsonMetaPointer, LionWebJsonNode } from "../../json/index.js"
 import { Change, ChangeType } from "./Change.js"
+import { ContainmentChange } from "./ContainmentChange.js"
 
 export class NodeClassifierChanged extends Change {
     readonly changeType: ChangeType = "NodeClassifierChanged"
@@ -54,4 +55,10 @@ export class AnnotationAdded extends AnnotationChange {
     readonly changeType = "AnnotationAdded"
 
     protected msg = () => `Node "${this.nodeAfter.id}" added annotation "${this.annotationId}"`
+}
+
+
+export class AnnotationOrderChanged extends AnnotationChange {
+    readonly changeType = "AnnotationOrderChanged"
+    protected msg = () => `Node "${this.nodeAfter.id}" changed order of annotations`
 }

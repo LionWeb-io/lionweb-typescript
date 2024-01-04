@@ -31,6 +31,10 @@ export function isEqualMetaPointer(p1: LionWebJsonMetaPointer, p2: LionWebJsonMe
     return p1.key === p2.key && p1.version === p2.version && p1.language === p2.language
 }
 
+export function isEqualReferenceTarget(first: LionWebJsonReferenceTarget, second: LionWebJsonReferenceTarget): boolean {
+    return first.reference === second.reference && first.resolveInfo === second.resolveInfo
+}
+
 export type LionWebJsonChunk = {
     serializationFormatVersion: string
     languages: LwJsonUsedLanguage[]
