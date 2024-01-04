@@ -210,14 +210,25 @@ export class LionWebJsonDiff {
         }
         // Check whether children exist in both objects (two for loops)
         // TODO Also check for the order that can be changed!!!
+        let changeFound = false
         for (const childId1 of beforeContainment.children) {
             if (!afterContainment.children.includes(childId1)) {
+                changeFound = true
                 this.change(new ChildRemoved(ctx, node, beforeContainment.containment, childId1))
             }
         }
         for (const childId2 of afterContainment.children) {
             if (!beforeContainment.children.includes(childId2)) {
+                changeFound = true
                 this.change(new ChildAdded(ctx, node, beforeContainment.containment, childId2))
+            }
+        }
+        if (!changeFound) {
+            for (let i: number = 0; i < afterContainment.children.length; i++) {
+                if (afterContainment.children[i] !== beforeContainment.children[i]) {
+                    this.change(new GenericChange(ctx, "Order of children has changed"))
+                    break
+                }
             }
         }
     }
