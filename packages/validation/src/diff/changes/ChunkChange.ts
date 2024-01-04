@@ -9,7 +9,7 @@ export abstract class ChunkChange extends Change {
 }
 
 export class SerializationFormatChange extends ChunkChange {
-    readonly id = "SerializationFormatChange"
+    readonly changeType = "SerializationFormatChange"
 
     constructor(
         public context: JsonContext,
@@ -23,7 +23,7 @@ export class SerializationFormatChange extends ChunkChange {
 }
 
 export class NodeRemoved extends ChunkChange {
-    readonly id = "NodeRemoved"
+    readonly changeType = "NodeRemoved"
 
     constructor(
         public context: JsonContext,
@@ -36,7 +36,7 @@ export class NodeRemoved extends ChunkChange {
 }
 
 export class NodeAdded extends ChunkChange {
-    readonly id = "NodeAdded"
+    readonly changeType = "NodeAdded"
 
     constructor(
         public context: JsonContext,
@@ -58,11 +58,11 @@ export abstract class LanguageChange extends ChunkChange {
 }
 
 export class LanguageRemoved extends LanguageChange {
-    readonly id = "LanguageRemoved"
+    readonly changeType = "LanguageRemoved"
     protected msg = () => `Language with  key ${this.language.key} and version ${this.language.version} is removed`
 }
 
 export class LanguageAdded extends LanguageChange {
-    readonly id = "LanguageAdded"
+    readonly changeType = "LanguageAdded"
     protected msg = () => `Language with  key ${this.language.key} and version ${this.language.version} is added`
 }

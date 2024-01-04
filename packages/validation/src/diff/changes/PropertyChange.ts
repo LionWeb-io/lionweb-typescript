@@ -1,26 +1,28 @@
 import { JsonContext } from "../../issues/index.js"
 import { LionWebJsonMetaPointer, LionWebJsonNode } from "../../json/index.js"
-import { Change } from "./Change.js"
+import { Change, Missing } from "./Change.js"
+
 
 export abstract class PropertyChange extends Change {
     constructor(
         public context: JsonContext,
         public nodeId: string,
         public property: LionWebJsonMetaPointer,
-        public oldValue: string | undefined,
-        public newValue: string | undefined,
+        public oldValue: string | null,
+        public newValue: string | null,
+        public missing: Missing = Missing.NotMissing
     ) {
-        super(context)
+        super(context) 
     }
 }
 
 export class PropertyValueChanged extends PropertyChange {
-    readonly id = "PropertyValueChanged"
+    readonly changeType = "PropertyValueChanged"
     protected msg = () => `Node "${this.nodeId} changed value of property "${this.property.key}" from "${this.oldValue}" to "${this.newValue}"`
 }
 
 export class PropertyAdded extends Change {
-    readonly id = "PropertyAdded";
+    readonly changeType = "PropertyAdded";
     constructor(ctx: JsonContext, public node: LionWebJsonNode, public property: LionWebJsonMetaPointer) {
         super(ctx)
     }

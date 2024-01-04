@@ -1,9 +1,10 @@
 import {
+    isEqualReferenceTarget,
     LionWebJsonContainment,
     LionWebJsonNode,
     LionWebJsonProperty,
     LionWebJsonReference,
-    LionWebJsonReferenceTarget,
+    LionWebJsonReferenceTarget
 } from "./LionWebJson.js"
 
 /**
@@ -52,13 +53,13 @@ export class NodeUtils {
         target: LionWebJsonReferenceTarget,
     ): LionWebJsonReferenceTarget | null {
         for (const refTarget of lwReferenceTargets) {
-            if (refTarget.reference === target.reference && refTarget.resolveInfo === target.resolveInfo) {
+            if (isEqualReferenceTarget(refTarget, target)) {
                 return refTarget
             }
         }
         return null
     }
-
+    
     /**
      * Get all nodes that are children for _node_: both the containment and annotation children
      * @param node

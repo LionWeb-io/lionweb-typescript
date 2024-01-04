@@ -1,5 +1,5 @@
 import {
-    isEqualMetaPointer, LION_CORE_BUILTINS_INAMED_NAME, LION_CORE_BUILTINS_KEY, LION_CORE_M3_VERSION,
+    isEqualMetaPointer, LIONWEB_M3_INAMED_PROPERTY,
     LionWebId,
     LionWebJsonChunk,
     LionWebJsonContainment,
@@ -88,27 +88,34 @@ export class LionWebJsonChunkWrapper {
             return "";
         }
         let result: string = ""
-        const nameProperty = this.findProperty(node, {
-            language: LION_CORE_BUILTINS_KEY,
-            version: LION_CORE_M3_VERSION,
-            key: LION_CORE_BUILTINS_INAMED_NAME,
-        })
+        const nameProperty = this.findProperty(node, LIONWEB_M3_INAMED_PROPERTY)
         const name = nameProperty === undefined ? "" : " " + nameProperty.value
-        result += Array(depth).join("    ") + "(" + node.id + ")" + name + "\n"
+        result += this.indent(depth) + "(" + node.id + ")" + name + "\n"
+        if (node.annotations !== undefined && node.annotations.length !== 0) {
+            result += this.indent(depth + 1) + "*Annotations*" + "\n"
+            node.annotations.forEach(ann => {
+                result += this.recursiveToString(this.getNode(ann), depth + 1)
+                // result += this.indent(depth) + "[[" + JSON.stringify(ann) + "]]\n"
+            })
+        }
         node.properties.filter(p => p !== nameProperty).forEach(property => {
-            result += Array(depth + 1).join("    ") + "*" + property.property.key + "*: " + property.value + "\n"
+            result += this.indent(depth + 1) + "*property* " + property.property.key + ": " + property.value + "\n"
         })
         node.references.forEach(ref => {
-            result += Array(depth + 1).join("    ") + "*" + ref.reference.key + "*: " + JSON.stringify(ref.targets) + "\n"
+            result += this.indent(depth + 1) + "*" + ref.reference.key + "*: " + JSON.stringify(ref.targets) + "\n"
         })
         node.containments.forEach(cont => {
             if (cont.children.length !== 0) {
-                result += Array(depth + 1).join("    ") + "*" + cont.containment.key + "*" + "\n"
+                result += this.indent(depth + 1) + "*" + cont.containment.key + "*" + "\n"
                 cont.children.forEach(ch => {
                     result += this.recursiveToString(this.getNode(ch), depth + 1)
                 })
             }
         })
         return result
+    }
+    
+    private indent(depth: number): string {
+        return Array(depth).join("    ")
     }
 }
