@@ -1,5 +1,5 @@
 import {
-    isEqualMetaPointer, LION_CORE_BUILTINS_INAMED_NAME, LION_CORE_BUILTINS_KEY, LION_CORE_M3_VERSION,
+    isEqualMetaPointer, LION_CORE_BUILTINS_INAMED_NAME, LION_CORE_BUILTINS_KEY, LION_CORE_M3_VERSION, LIONWEB_M3_INAMED_PROPERTY,
     LionWebId,
     LionWebJsonChunk,
     LionWebJsonContainment,
@@ -88,11 +88,7 @@ export class LionWebJsonChunkWrapper {
             return "";
         }
         let result: string = ""
-        const nameProperty = this.findProperty(node, {
-            language: LION_CORE_BUILTINS_KEY,
-            version: LION_CORE_M3_VERSION,
-            key: LION_CORE_BUILTINS_INAMED_NAME,
-        })
+        const nameProperty = this.findProperty(node, LIONWEB_M3_INAMED_PROPERTY)
         const name = nameProperty === undefined ? "" : " " + nameProperty.value
         result += this.indent(depth) + "(" + node.id + ")" + name + "\n"
         if (node.annotations !== undefined && node.annotations.length !== 0) {

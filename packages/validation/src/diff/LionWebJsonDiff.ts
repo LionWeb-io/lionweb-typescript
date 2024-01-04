@@ -134,8 +134,8 @@ export class LionWebJsonDiff {
                 }
             }
         })
-        let annotationDiffFound = false
         if (beforeNode.annotations !== undefined && afterNode.annotations !== undefined) {
+            let annotationDiffFound = false
             beforeNode.annotations.forEach((beforeAnn: string, index: number) => {
                 if (!afterNode.annotations.includes(beforeAnn)) {
                     annotationDiffFound = true
@@ -148,12 +148,12 @@ export class LionWebJsonDiff {
                     this.change(new AnnotationAdded(ctx, beforeNode, afterNode, afterAnn, index))
                 }
             })
-        }
-        if (!annotationDiffFound) {
-            for (let i: number = 0; i < afterNode.annotations.length; i++) {
-                if (afterNode.annotations[i] !== beforeNode.annotations[i]) {
-                    this.change(new AnnotationOrderChanged(ctx.concat("annotations"), beforeNode, afterNode, "", i))
-                    break
+            if (!annotationDiffFound) {
+                for (let i: number = 0; i < afterNode.annotations.length; i++) {
+                    if (afterNode.annotations[i] !== beforeNode.annotations[i]) {
+                        this.change(new AnnotationOrderChanged(ctx.concat("annotations"), beforeNode, afterNode, "", i))
+                        break
+                    }
                 }
             }
         }
