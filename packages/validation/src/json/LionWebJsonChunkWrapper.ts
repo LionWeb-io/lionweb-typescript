@@ -1,5 +1,5 @@
 import {
-    isEqualMetaPointer, LION_CORE_BUILTINS_INAMED_NAME, LION_CORE_BUILTINS_KEY, LION_CORE_M3_VERSION, LIONWEB_M3_INAMED_PROPERTY,
+    isEqualMetaPointer, LIONWEB_M3_INAMED_PROPERTY,
     LionWebId,
     LionWebJsonChunk,
     LionWebJsonContainment,

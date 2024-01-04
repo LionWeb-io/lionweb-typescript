@@ -1,7 +1,6 @@
 import { JsonContext } from "../../issues/index.js"
 import { LionWebJsonMetaPointer, LionWebJsonNode } from "../../json/index.js"
 import { Change, ChangeType } from "./Change.js"
-import { ContainmentChange } from "./ContainmentChange.js"
 
 export class NodeClassifierChanged extends Change {
     readonly changeType: ChangeType = "NodeClassifierChanged"
