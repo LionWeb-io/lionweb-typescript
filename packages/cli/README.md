@@ -40,6 +40,11 @@ It does some implicit validation as it can error out on incorrect serializations
 
 ## Changelog
 
+### 0.6.1
+
+* Change the `diagram` command to output PlantUML and Mermaid diagram files _per language_.
+
+
 ### 0.6.0
 
 * Add a `repair` command that aligns a JSON serialization chunk with the specification.

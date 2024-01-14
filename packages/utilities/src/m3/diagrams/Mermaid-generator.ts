@@ -1,5 +1,6 @@
 import {asString, indentWith, NestedString} from "littoral-templates"
 import {
+    Annotation,
     Concept,
     Containment,
     entitiesSortedByName,
@@ -48,7 +49,7 @@ export const generateMermaidForLanguage = ({entities}: Language) =>
         `classDiagram
 
 `,
-        indented(entitiesSortedByName(entities).map(generateForElement)),
+        indented(entitiesSortedByName(entities).map(generateForEntity)),
         ``,
         indented(entitiesSortedByName(entities).map(generateForRelationsOf)),
         ``,
@@ -65,6 +66,16 @@ const generateForEnumeration = ({name, literals}: Enumeration) =>
         ]
     ))
 
+
+const generateForAnnotation = ({name, features, extends: extends_/*, implements: implements_*/}: Annotation) =>
+    [
+        block(
+            `annotation ${name}`,
+            nonRelationalFeatures(features).map(generateForNonRelationalFeature)
+        ),
+        isRef(extends_) ? `${extends_.name} <|-- ${name}` : [],
+        ``
+    ]
 
 const generateForConcept = ({name, features, abstract: abstract_, extends: extends_/*, implements: implements_*/, partition}: Concept) =>
     [
@@ -106,29 +117,32 @@ const generateForPrimitiveType = ({name}: PrimitiveType) =>
 // Note: No construct for PrimitiveType exists in PlantUML.
 
 
-const generateForElement = (element: LanguageEntity) => {
-    if (element instanceof Concept) {
-        return generateForConcept(element)
+const generateForEntity = (entity: LanguageEntity) => {
+    if (entity instanceof Annotation) {
+        return generateForAnnotation(entity)
     }
-    if (element instanceof Enumeration) {
-        return generateForEnumeration(element)
+    if (entity instanceof Concept) {
+        return generateForConcept(entity)
     }
-    if (element instanceof Interface) {
-        return generateForInterface(element)
+    if (entity instanceof Enumeration) {
+        return generateForEnumeration(entity)
     }
-    if (element instanceof PrimitiveType) {
-        return generateForPrimitiveType(element)
+    if (entity instanceof Interface) {
+        return generateForInterface(entity)
     }
-    return `// unhandled metamodel element: ${element.name}`
+    if (entity instanceof PrimitiveType) {
+        return generateForPrimitiveType(entity)
+    }
+    return `// unhandled language entity: <${entity.constructor.name}>${entity.name}`
 }
 
 
-const generateForRelationsOf = (element: LanguageEntity) => {
-    const relations = relationsOf(element)
+const generateForRelationsOf = (entity: LanguageEntity) => {
+    const relations = relationsOf(entity)
     return relations.length === 0
         ? ``
         : relations
-            .map((relation) => generateForRelation(element, relation))
+            .map((relation) => generateForRelation(entity, relation))
 }
 
 
