@@ -14,6 +14,11 @@ It contains utilities on top of the `core` package, such as:
 
 ## Changelog
 
+### 0.6.1
+
+* Implemented support for annotations in diagram generation (PlantUML and Mermaid).
+
+
 ### 0.6.0
 
 * _Breaking name changes_: rename `asText` &rarr; `languageAsText`, `shortenedSerialization` &rarr; `shortenedSerializationChunk`, `sortedSerialization` &rarr; `sortedSerializationChunk`.
