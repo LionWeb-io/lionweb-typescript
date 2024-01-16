@@ -1,6 +1,7 @@
 import {
+    isEqualMetaPointer,
     isEqualReferenceTarget,
-    LionWebJsonContainment,
+    LionWebJsonContainment, LionWebJsonMetaPointer,
     LionWebJsonNode,
     LionWebJsonProperty,
     LionWebJsonReference,
@@ -25,6 +26,12 @@ export class NodeUtils {
         return null
     }
 
+    static findProperty(node: LionWebJsonNode, property: LionWebJsonMetaPointer): LionWebJsonProperty | undefined {
+        return node.properties.find(
+            prop => isEqualMetaPointer(prop.property, property)
+        )
+    }
+
     /**
      * Find containment child with key equals `key` in `node`.
      * @param node
@@ -38,6 +45,13 @@ export class NodeUtils {
         }
         return null
     }
+
+    static findContainment(node: LionWebJsonNode, containment: LionWebJsonMetaPointer): LionWebJsonContainment | undefined {
+        return node.containments.find(
+            cont => isEqualMetaPointer(cont.containment, containment)
+        )
+    }
+
 
     static findLwReference(node: LionWebJsonNode, key: string): LionWebJsonReference | null {
         for (const reference of node.references) {

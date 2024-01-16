@@ -91,7 +91,7 @@ export class LionWebJsonDiff {
                 // NB No containment is considered equivalent to a containment with empty _children_
                 if (beforeContainment.children.length !== 0) {
                     beforeContainment.children.forEach(childId => {
-                        this.change(new ChildRemoved(ctx.concat("containments", index), beforeNode, beforeContainment.containment, childId, Missing.MissingAfter))
+                        this.change(new ChildRemoved(ctx.concat("containments", index), beforeNode, beforeContainment.containment, afterContainment, childId, Missing.MissingAfter))
                     })
                 }
             } else {
@@ -104,7 +104,7 @@ export class LionWebJsonDiff {
             if (beforeContainment === null) {
                 if (afterContainment.children.length !== 0) {
                     afterContainment.children.forEach(childId => {
-                        this.change(new ChildAdded(ctx.concat("containments", index), afterNode, afterContainment.containment, childId, Missing.MissingBefore))
+                        this.change(new ChildAdded(ctx.concat("containments", index), afterNode, afterContainment.containment, afterContainment, childId, Missing.MissingBefore))
                     })
                 }
             }
@@ -225,19 +225,19 @@ export class LionWebJsonDiff {
         for (const childId1 of beforeContainment.children) {
             if (!afterContainment.children.includes(childId1)) {
                 changeFound = true
-                this.change(new ChildRemoved(ctx, node, beforeContainment.containment, childId1))
+                this.change(new ChildRemoved(ctx, node, beforeContainment.containment, afterContainment, childId1))
             }
         }
         for (const childId2 of afterContainment.children) {
             if (!beforeContainment.children.includes(childId2)) {
                 changeFound = true
-                this.change(new ChildAdded(ctx, node, beforeContainment.containment, childId2))
+                this.change(new ChildAdded(ctx, node, beforeContainment.containment, afterContainment, childId2))
             }
         }
         if (!changeFound) {
             for (let i: number = 0; i < afterContainment.children.length; i++) {
                 if (afterContainment.children[i] !== beforeContainment.children[i]) {
-                    this.change(new ChildOrderChanged(ctx.concat("children"), node, afterContainment.containment, ""))
+                    this.change(new ChildOrderChanged(ctx.concat("children"), node, afterContainment.containment, afterContainment, ""))
                     break
                 }
             }
