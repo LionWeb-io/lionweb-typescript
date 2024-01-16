@@ -1,9 +1,7 @@
 import {
-    isEqualMetaPointer, LIONWEB_M3_INAMED_PROPERTY,
+    LIONWEB_M3_INAMED_PROPERTY,
     LionWebId,
     LionWebJsonChunk,
-    LionWebJsonContainment,
-    LionWebJsonMetaPointer,
     LionWebJsonNode,
     LionWebJsonProperty
 } from "./LionWebJson.js"
@@ -41,18 +39,6 @@ export class LionWebJsonChunkWrapper {
         return this.nodesIdMap.get(id)
     }
 
-    findContainment(node: LionWebJsonNode, containment: LionWebJsonMetaPointer): LionWebJsonContainment | undefined {
-        return node.containments.find(
-            cont => isEqualMetaPointer(cont.containment, containment)
-        )
-    }
-
-    findProperty(node: LionWebJsonNode, property: LionWebJsonMetaPointer): LionWebJsonProperty | undefined {
-        return node.properties.find(
-            prop => isEqualMetaPointer(prop.property, property)
-        )
-    }
-
     findNodesOfConcept(conceptKey: string): LionWebJsonNode[] {
         return this.jsonChunk.nodes.filter(node => node.classifier.key === conceptKey)
     }
@@ -88,7 +74,7 @@ export class LionWebJsonChunkWrapper {
             return "";
         }
         let result: string = ""
-        const nameProperty = this.findProperty(node, LIONWEB_M3_INAMED_PROPERTY)
+        const nameProperty = NodeUtils.findProperty(node, LIONWEB_M3_INAMED_PROPERTY)
         const name = nameProperty === undefined ? "" : " " + nameProperty.value
         result += this.indent(depth) + "(" + node.id + ")" + name + "\n"
         if (node.annotations !== undefined && node.annotations.length !== 0) {

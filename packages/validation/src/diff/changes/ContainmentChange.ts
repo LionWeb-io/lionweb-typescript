@@ -1,5 +1,5 @@
 import { JsonContext } from "../../issues/index.js"
-import { LionWebJsonMetaPointer, LionWebJsonNode } from "../../json/index.js"
+import { LionWebJsonContainment, LionWebJsonMetaPointer, LionWebJsonNode } from "../../json/index.js"
 import { Change, Missing } from "./Change.js"
 
 export abstract class ContainmentChange extends Change {
@@ -7,6 +7,7 @@ export abstract class ContainmentChange extends Change {
         public context: JsonContext,
         public parentNode: LionWebJsonNode,
         public containment: LionWebJsonMetaPointer,
+        public afterContainment: LionWebJsonContainment | null,
         public childId: string,
         public missing = Missing.NotMissing
     ) {
