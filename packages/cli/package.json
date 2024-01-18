@@ -26,6 +26,10 @@
     "typescript": "5.3.3"
   },
   "scripts": {
-    "build": "tsc"
+    "clean": "rm -rf dist/ lionweb-cli-*.tgz",
+    "build": "tsc",
+    "lint": "eslint src",
+    "test": "node dist/lionweb-cli.js",
+    "release": "npm publish"
   }
 }

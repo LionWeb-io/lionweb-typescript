@@ -18,6 +18,9 @@
     "typescript": "5.3.3"
   },
   "scripts": {
-    "build": "tsc"
+    "clean": "rm -rf dist/ lionweb-core-*.tgz",
+    "build": "tsc",
+    "lint": "eslint src",
+    "release": "npm publish"
   }
 }

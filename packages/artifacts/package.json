@@ -20,7 +20,9 @@
     "typescript": "5.3.3"
   },
   "scripts": {
-    "build": "tsc",
+    "clean": "rm -rf dist/",
+    "lint": "eslint src",
+    "build": "tsc && npm run generate",
     "generate": "node dist/generate-artifacts.js"
   }
 }

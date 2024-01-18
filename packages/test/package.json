@@ -28,8 +28,11 @@
     "xml2js": "0.6.2"
   },
   "scripts": {
+    "clean": "rm -rf dist/ testset/",
     "build": "tsc",
+    "lint": "eslint src",
     "pretest": "npm run build",
+    "setup": "npx degit https://github.com/LionWeb-io/lionweb-integration-testing/testset/ testset",
     "test": "find dist -type d | sed '1!G;h;$!d' | xargs npx mocha"
   }
 }
