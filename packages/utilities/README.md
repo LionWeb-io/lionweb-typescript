@@ -16,7 +16,7 @@ It contains utilities on top of the `core` package, such as:
 
 ### 0.6.1
 
-* Implemented support for annotations in diagram generation (PlantUML and Mermaid).
+* Added support for annotations in diagram generation (PlantUML and Mermaid), and textualization.
 
 
 ### 0.6.0
