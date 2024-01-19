@@ -31,7 +31,7 @@ The implementation is divided up in a number of NPM packages in the directory [`
 Each of these packages have their own `README.md`.
 The `core`, `utilities`, `cli`, and `validation` packages are published in the scope of [the `lionweb` organization](https://www.npmjs.com/org/lionweb), meaning that they're all prefixed with `@lionweb/`.
 The other packages are for internal use only.
-All these packages declare the same NPM semver identification, which isn't directly related to the release version of the LionWeb specification.
+All these packages declare their own NPM semver identification, which isn't directly related to the release version of the LionWeb specification.
 
 
 ## Environment dependencies
@@ -51,11 +51,18 @@ Currently, these are v19.9.0 and 9.8.1.
 
 ### Commands
 
+Run the following command to setup the project:
+
+```shell
+npm run clean
+npm install
+npm run setup
+```
 Run the following command to **build** each of the packages:
 
 ```shell
 # Build the project
-./build-all.sh
+npm run build
 ```
 
 This includes cleaning up and installing any NPM (dev) dependencies.
@@ -72,33 +79,16 @@ Note that this does not catch TypeScript compilation errors.
 Run the following command to run the tests:
 
 ```shell
-cd packages/test
-
 # Run the tests
 npm run test
 ```
 
 <br />
 
-The output should look similar to this:
+The output should look similar to this (but much longer):
 <br />
 <br />
 <img src="./documentation/images/test-output.png" alt="test" width="50%"/>
-
-You can test more thoroughly as follows:
-
-```shell
-./test-all.sh
-```
-
-You can run the following command to quickly build and test all packages:
-
-```shell
-./quick-build-and-test-all.sh
-```
-
-This does the same as running the `build-all.sh` and `test-all.sh` scripts, except for that it doesn't clean up and (re-)install the NPM (dev) dependencies, which is usually the costliest step.
-
 
 ### Code style
 
@@ -112,6 +102,7 @@ All the code in this repository is written in TypeScript, with the following cod
 
 * Use **"FP-lite"**, meaning using `Array.map` and such functions over more imperative ways to compute results.
 
+We use prettier with parameters defined in `.prettierrc`.
 
 ### Containerized development environment
 

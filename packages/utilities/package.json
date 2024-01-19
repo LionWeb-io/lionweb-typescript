@@ -20,11 +20,12 @@
     "nanoid": "4.0.2"
   },
   "devDependencies": {
-    "@types/node": "20.10.4",
-    "typescript": "5.3.3"
+    "@types/node": "20.10.4"
   },
   "scripts": {
+    "clean": "rm -rf dist/",
     "build": "tsc",
-    "clean": "rm -rf dist/ && rm -rf node_modules/"
+    "lint": "eslint src",
+    "release": "npm publish"
   }
 }

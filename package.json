@@ -13,13 +13,25 @@
   "devDependencies": {
     "prettier": "3.1.1",
     "@typescript-eslint/eslint-plugin": "6.15.0",
-    "@typescript-eslint/parser": "6.15.0"
+    "@typescript-eslint/parser": "6.15.0",
+    "typescript": "5.3.3"
   },
   "scripts": {
-    "lint": "eslint packages/artifacts/src packages/cli/src packages/core/src packages/test/src packages/utilities/src packages/validation/src"
+    "initialize": "npm run clean && npm install && npm run setup && npm run build",
+    "clean": "rm -rf node_modules/ && npm run clean -w packages --if-present",
+    "build": "npm run build -w packages --if-present",
+    "lint": "npm run lint -w packages --if-present",
+    "setup": "npm run setup -w packages --if-present",
+    "test": "npm run test -w packages --if-present",
+    "release": "npm run release -w packages --if-present"
   },
   "private": true,
   "workspaces": [
-    "./packages/*"
+    "./packages/core",
+    "./packages/utilities",
+    "./packages/cli",
+    "./packages/validation",
+    "./packages/test",
+    "./packages/artifacts"
   ]
 }

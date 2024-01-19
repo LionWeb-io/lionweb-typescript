@@ -14,10 +14,10 @@
   "bugs": {
     "url": "https://github.com/LionWeb-io/lionweb-typescript/issues"
   },
-  "devDependencies": {
-    "typescript": "5.3.3"
-  },
   "scripts": {
-    "build": "tsc"
+    "clean": "rm -rf dist/ lionweb-core-*.tgz",
+    "build": "tsc",
+    "lint": "eslint src",
+    "release": "npm publish"
   }
 }

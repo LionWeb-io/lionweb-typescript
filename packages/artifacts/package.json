@@ -16,11 +16,12 @@
     "@lionweb/core": "0.6.0-beta.3",
     "@lionweb/test": "0.6.0-beta.3",
     "@lionweb/utilities": "0.6.0-beta.3",
-    "@types/node": "20.10.4",
-    "typescript": "5.3.3"
+    "@types/node": "20.10.4"
   },
   "scripts": {
-    "build": "tsc",
+    "clean": "rm -rf dist/",
+    "lint": "eslint src",
+    "build": "tsc && npm run generate",
     "generate": "node dist/generate-artifacts.js"
   }
 }

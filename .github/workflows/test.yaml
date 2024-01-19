@@ -10,8 +10,12 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-      - name: Build everything
-        run: ./build-all.sh
-      - name: Test everything
-        run: ./test-all.sh
+      - name: Install dependencies
+        run: npm install
+      - name: Setup all packages
+        run: npm run setup
+      - name: Build all packages
+        run: npm run build
+      - name: Test
+        run: npm run test
 

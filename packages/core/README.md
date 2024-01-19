@@ -68,6 +68,6 @@ No changelog has been kept for previous versions, regardless of whether these we
 Build it from source as follows:
 
 ```shell
-$ ./build.sh
+npm run build
 ```
 

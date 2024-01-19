@@ -14,20 +14,20 @@
     "testing"
   ],
   "scripts": {
+    "clean": "rm -rf dist/ lionweb-validation-*.tgz",
     "build": "tsc",
+    "lint": "eslint src",
+    "test-here": "cd ../test && find dist/validation -type d | sed '1!G;h;$!d' | xargs npx mocha",
+    "release": "npm publish",
     "testValid": "node dist/runners/RunCheckFolder.js ../../../lionweb-integration-testing/testset/valid",
     "testInvalid": "node dist/runners/RunCheckFolder.js ../../../lionweb-integration-testing/testset/invalid",
     "testInvalidWithLanguage": "node dist/runners/RunCheckFolderWithLanguage.js ../../../lionweb-integration-testing/testset/withLanguage/invalid/ ../../../lionweb-integration-testing/testset/withLanguage/myLang.language.json",
     "testValidWithLanguage": "node dist/runners/RunCheckFolderWithLanguage.js ../../../lionweb-integration-testing/testset/withLanguage/valid/ ../../../lionweb-integration-testing/testset/withLanguage/myLang.language.json",
-    "test": "mocha",
     "publish-local": "npm publish --registry http://localhost:4873",
     "unpublish-local": "npm unpublish --force --registry http://localhost:4873",
     "republish-local": "yarn unpublish-local && yarn publish-local"
   },
   "devDependencies": {
-    "@types/node": "20.10.4",
-    "typescript": "5.3.3"
-  },
-  "dependencies": {
+    "@types/node": "20.10.4"
   }
 }
