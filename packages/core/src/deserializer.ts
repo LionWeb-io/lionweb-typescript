@@ -127,11 +127,17 @@ export const deserializeChunk = <NT extends Node>(
                     if (feature.multiple) {
                         childIds
                             .forEach((childId) => {
-                                instantiationFacade.setFeatureValue(node, feature, instantiateMemoised(serializedNodeById[childId], node))
+                                if (childId in serializedNodeById) {
+                                    instantiationFacade.setFeatureValue(node, feature, instantiateMemoised(serializedNodeById[childId], node))
+                                }
                             })
                     } else {
                         if (childIds.length > 0) {
-                            instantiationFacade.setFeatureValue(node, feature, instantiateMemoised(serializedNodeById[childIds[0]], node))  // (just set the 1st one)
+                            // just set the 1st one:
+                            const firstChildId = childIds[0]
+                            if (firstChildId in serializedNodeById) {
+                                instantiationFacade.setFeatureValue(node, feature, instantiateMemoised(serializedNodeById[firstChildId], node))
+                            }
                         }
                     }
                 } else if (feature instanceof Reference && references !== undefined && feature.key in serializedReferencesPerKey) {
@@ -149,7 +155,9 @@ export const deserializeChunk = <NT extends Node>(
                 }
             })
 
-        node.annotations = annotations.map((annotationId) => instantiateMemoised(serializedNodeById[annotationId]))
+        node.annotations = annotations
+            .filter((annotationId) => annotationId in serializedNodeById)
+            .map((annotationId) => instantiateMemoised(serializedNodeById[annotationId]))
 
         return node
 
