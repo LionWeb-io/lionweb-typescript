@@ -17,6 +17,7 @@
     "clean": "rm -rf dist/ lionweb-validation-*.tgz",
     "build": "tsc",
     "lint": "eslint src",
+    "test": "cd ../test && find dist/validation -type d | sed '1!G;h;$!d' | xargs npx mocha",
     "release": "npm publish",
     "testValid": "node dist/runners/RunCheckFolder.js ../../../lionweb-integration-testing/testset/valid",
     "testInvalid": "node dist/runners/RunCheckFolder.js ../../../lionweb-integration-testing/testset/invalid",
@@ -27,9 +28,6 @@
     "republish-local": "yarn unpublish-local && yarn publish-local"
   },
   "devDependencies": {
-    "@types/node": "20.10.4",
-    "typescript": "5.3.3"
-  },
-  "dependencies": {
+    "@types/node": "20.10.4"
   }
 }

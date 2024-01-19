@@ -8,13 +8,13 @@ An NPM package that contains the (unit) tests for the `core` and `utilities` pac
 Build it (cleanly) from source as follows:
 
 ```shell
-$ ./build.sh
+npm run build
 ```
 
 Run all tests as follows:
 
 ```shell
-$ npm test
+npm run test
 ```
 
 Remarks:
