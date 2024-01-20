@@ -17,6 +17,8 @@ import {asString, indentWith, NestedString} from "littoral-templates"
 
 const indent = indentWith("    ")(1)
 
+const prependWith = (nestedString: NestedString, prefix: string): NestedString =>
+    prefix + asString(nestedString)
 
 export const genericAsTreeText = ({nodes}: SerializationChunk, languages: Language[] = []) => {
 
@@ -66,17 +68,22 @@ export const genericAsTreeText = ({nodes}: SerializationChunk, languages: Langua
             ))
         ]
 
+    const annotationAsText = (annotationId: string) =>
+        annotationId in nodesById
+            ? prependWith(asText(nodesById[annotationId]), "@ ")
+            : `<annotation with id=${annotationId} not present in this chunk>`
 
     const curry1 = <T1, T2, R>(func: (t1: T1, t2: T2) => R, t1: T1): ((t2: T2) => R) =>
         (t2: T2) => func(t1, t2)
 
-    const asText = ({id, classifier: classifierMetaPointer, properties, containments, references}: SerializedNode): NestedString =>
+    const asText = ({id, classifier: classifierMetaPointer, properties, containments, references, annotations}: SerializedNode): NestedString =>
         [
             `${symbolTable.entityMatching(classifierMetaPointer)?.name ?? `[${classifierMetaPointer.key}]`} (id: ${id}) {`,
             indent([
                 properties.map(curry1(propertyAsText, classifierMetaPointer)),
                 references.map(curry1(referenceAsText, classifierMetaPointer)),
-                containments.map(curry1(containmentAsText, classifierMetaPointer))
+                containments.map(curry1(containmentAsText, classifierMetaPointer)),
+                annotations.map(annotationAsText)
             ]),
             `}`
         ]
