@@ -68,7 +68,7 @@ ${descent(node.literals, "\n")}`}`
         return `language ${node.name}
     version: ${node.version}${node.dependsOn.length > 0
         ? `\n    dependsOn:
-${node.dependsOn.map((language) => `        ${language.key} (${language.version})`).join("\n")}
+${node.dependsOn.map((language) => `        ${language.name} (${language.version})`).join("\n")}
 `
         : ``}
     entities (↓name):
