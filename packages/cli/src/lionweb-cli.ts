@@ -106,7 +106,7 @@ These languages are then used to try and resolve the keys of languages' entities
 `The ${VALIDATE_COMMAND} command validates a serialization chunk. \nUsage: npx @lionweb/cli validate <path_to_chunk>`
                 )
             } else {
-                runValidation(commandArgs)
+                commandArgs.forEach(runValidation)
             }
             return
         }
