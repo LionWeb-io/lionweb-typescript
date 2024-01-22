@@ -5,21 +5,21 @@ import {argv} from "process"
 
 import {diagramFromSerialization} from "./m3/diagram-generator.js"
 import {generateTsTypesWith} from "./m3/ts-types-generator.js"
-import {extractFromSerialization} from "./serialization/extractor.js"
+import {sortSerialization} from "./serialization/sorter.js"
 import {repairSerializationChunk} from "./serialization/repairer.js"
 import {executeTextualizeCommand} from "./serialization/textualizer.js"
-import {runValidation} from "./validation-runner.js"
+import {runValidation} from "./validator.js"
 
 
-const main = (args: string[])=> {
+const main = async (args: string[])=> {
 
     const DIAGRAM_COMMAND = "diagram"
-    const EXTRACT_COMMAND = "extract"
+    const SORT_COMMAND = "sort"
     const GENERATE_TS_TYPES_COMMAND = "generate-ts-types"
     const REPAIR_COMMAND = "repair"
     const TEXTUALIZE_COMMAND = "textualize"
     const VALIDATE_COMMAND = "validate"
-    const commands = [DIAGRAM_COMMAND, EXTRACT_COMMAND, GENERATE_TS_TYPES_COMMAND, REPAIR_COMMAND, TEXTUALIZE_COMMAND, VALIDATE_COMMAND].sort()
+    const commands = [DIAGRAM_COMMAND, SORT_COMMAND, GENERATE_TS_TYPES_COMMAND, REPAIR_COMMAND, TEXTUALIZE_COMMAND, VALIDATE_COMMAND].sort()
 
     if (args.length <= 2) {
         console.log(
@@ -50,15 +50,14 @@ ${commands.map((command) => `    ${command}\n`).join(``)}
             return
         }
 
-        case EXTRACT_COMMAND: {
+        case SORT_COMMAND: {
             if (commandArgs.length === 0) {
                 console.log(
-`The ${EXTRACT_COMMAND} command extracts the following from a serialization chunk in the form of files: a sorted JSON, and a shortened JSON.
-If the chunk is the serialization of a LionCore Language/M2, then a textual rendering is already output.
+`The ${SORT_COMMAND} command sorts JSON files that are serialization chunk – sorted serialization chunks can be easily compared.
 (See the README.md for more information.)`
                 )
             } else {
-                commandArgs.forEach(extractFromSerialization)
+                commandArgs.forEach(sortSerialization)
             }
             return
         }
@@ -69,7 +68,7 @@ If the chunk is the serialization of a LionCore Language/M2, then a textual rend
 `The ${GENERATE_TS_TYPES_COMMAND} command generates a TypeScript source files with type definitions for the given (JSON serializations of) languages, assuming the use of the dynamic façade.`
                 )
             } else {
-                generateTsTypesWith(commandArgs)
+                await generateTsTypesWith(commandArgs)
             }
             return
         }
@@ -92,10 +91,12 @@ Right now, that means that the ordering of the key-value pairs is precisely alig
 `The ${TEXTUALIZE_COMMAND} command produces purely textual renderings of the given serialization chunks.
 Chunks given after a '--language' or '--languages' flag (which are synonyms) are assumed to be serializations of languages.
 These languages are then used to try and resolve the keys of languages' entities and their features to names.
+If a serialization chunk is the serialization of a language (as instance of LionCore/M3), then the LionCore/M3-specific
+textual syntax is used, unless a flag '--asRegular' is provided.
 `
                 )
             } else {
-                executeTextualizeCommand(commandArgs)
+                await executeTextualizeCommand(commandArgs)
             }
             return
         }
@@ -118,5 +119,5 @@ These languages are then used to try and resolve the keys of languages' entities
 
 }
 
-main(argv)
+await main(argv)
 
