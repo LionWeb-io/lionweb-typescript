@@ -1,5 +1,4 @@
 export {looksLikeSerializedLanguages, readChunk, tryLoadAllAsLanguages, tryLoadAsLanguages} from "./chunk.js"
 export {orderedSerializationChunk} from "./ordering.js"
-export {shortenedSerializationChunk} from "./shortening.js"
 export {sortedSerializationChunk} from "./sorting.js"
-export {genericAsTreeText} from "./textual-syntax.js"
+export {genericAsTreeText} from "./textualizer.js"

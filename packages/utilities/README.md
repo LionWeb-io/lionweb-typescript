@@ -9,15 +9,15 @@ It contains utilities on top of the `core` package, such as:
 
 * diagram generation (PlantUML and Mermaid) from an M2
 * an Ecore &rarr; M2 importer
-* functions to order, sort, shorten, or “textualize” – i.e.: render as text – a serialization to make introspection easier, and to possibly repair it (or at least make it more aligned with the specification)
+* functions to order, sort, or “textualize” – i.e.: render as text – a serialization to make introspection easier, and to possibly repair it (or at least make it more aligned with the specification)
 
 
 ## Changelog
 
 ### 0.6.1
 
-* Added support for annotations in diagram generation (PlantUML and Mermaid), and textualization.
-
+* Add support for annotations in diagram generation (PlantUML and Mermaid), and textualization.
+* **Remove** the `shortenedSerializationChunk` function, as it isn't used, nor very useful compared to the sorting and textualization.
 
 ### 0.6.0
 
@@ -26,7 +26,6 @@ It contains utilities on top of the `core` package, such as:
 * Expose an `orderedSerializationChunk` function that aligns the JSON key-value pairs in a serialization chunk according to the specification of the serialization format.
 * Expose a generic textual syntax for serialization chunks, through the `genericTreeAsText` function.
     This function is optionally language-aware: by providing an array of `Language`s as its second argument, it will try and look up `LanguageEntity` and `Feature` names instead of rendering their keys.
-
 
 ### 0.5.0
 

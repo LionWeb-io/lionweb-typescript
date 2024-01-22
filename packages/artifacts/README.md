@@ -57,7 +57,7 @@ The [`schemas/` directory](./schemas/) contains JSON Schemas:
 Build it from source as follows:
 
 ```shell
-$ ./build.sh
+$ npm run build
 ```
 
 Generate the artifacts as follows:
