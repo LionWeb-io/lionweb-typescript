@@ -29,8 +29,8 @@
   "workspaces": [
     "./packages/core",
     "./packages/utilities",
-    "./packages/cli",
     "./packages/validation",
+    "./packages/cli",
     "./packages/test",
     "./packages/artifacts"
   ]
