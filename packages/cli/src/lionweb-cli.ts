@@ -77,7 +77,8 @@ ${commands.map((command) => `    ${command}\n`).join(``)}
             if (commandArgs.length === 0) {
                 console.log(
 `The ${REPAIR_COMMAND} command "repairs" the given JSON files that represent serialization chunks.
-Right now, that means that the ordering of the key-value pairs is precisely aligned with the specification.`
+Right now, that means that key-value pairs appear in precisely the same order as they do in the specification.
+Missing key-value pairs are put in and get their default values.`
                 )
             } else {
                 commandArgs.forEach(repairSerializationChunk)

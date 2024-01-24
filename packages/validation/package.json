@@ -1,6 +1,6 @@
 {
   "name": "@lionweb/validation",
-  "version": "0.6.0-beta.5",
+  "version": "0.6.0",
   "license":  "Apache 2.0",
   "description": "LionWeb Serialization validation",
   "author": "jos.warmer@openmodeling.nl",
@@ -26,8 +26,5 @@
     "publish-local": "npm publish --registry http://localhost:4873",
     "unpublish-local": "npm unpublish --force --registry http://localhost:4873",
     "republish-local": "yarn unpublish-local && yarn publish-local"
-  },
-  "devDependencies": {
-    "@types/node": "20.10.4"
   }
 }

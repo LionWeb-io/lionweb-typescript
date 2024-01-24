@@ -7,23 +7,22 @@ $ npm add @lionweb/utilities
 ```
 It contains utilities on top of the `core` package, such as:
 
-* diagram generation (PlantUML and Mermaid) from an M2
-* an Ecore &rarr; M2 importer
-* functions to order, sort, or “textualize” – i.e.: render as text – a serialization to make introspection easier, and to possibly repair it (or at least make it more aligned with the specification)
+* Diagram generation (PlantUML and Mermaid) from an M2.
+* “Textualization”, i.e. render a serialization chunk as text.
+* Sort the contents of a serialization chunk as much as possible, for the sake of comparing serialization chunks.
+* An Ecore &rarr; M2 importer.
 
 
 ## Changelog
 
-### 0.6.1
+### 0.6.0
 
 * Add support for annotations in diagram generation (PlantUML and Mermaid), and textualization.
 * **Remove** the `shortenedSerializationChunk` function, as it isn't used, nor very useful compared to the sorting and textualization.
-
-### 0.6.0
-
 * _Breaking name changes_: rename `asText` &rarr; `languageAsText`, `shortenedSerialization` &rarr; `shortenedSerializationChunk`, `sortedSerialization` &rarr; `sortedSerializationChunk`.
 * Expose an `isSerializedLanguages` function.
-* Expose an `orderedSerializationChunk` function that aligns the JSON key-value pairs in a serialization chunk according to the specification of the serialization format.
+* Expose an `orderedSerializationChunk` function that aligns the JSON key-value pairs in a serialization chunk according to the specification of the serialization format. 
+    That means that key-value pairs appear in precisely the same order as they do in the specification, and that missing key-value pairs are put in and get their default values.
 * Expose a generic textual syntax for serialization chunks, through the `genericTreeAsText` function.
     This function is optionally language-aware: by providing an array of `Language`s as its second argument, it will try and look up `LanguageEntity` and `Feature` names instead of rendering their keys.
 
