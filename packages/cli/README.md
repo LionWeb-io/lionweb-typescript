@@ -34,21 +34,19 @@ Sorting a serialization chunk means the following:
 * All containments and references sorted by ID.
 
 The sorting produces a serialization chunk that's also aligned on JSON-level with the specification.
+That means that key-value pairs appear in precisely the same order as they do in the specification, and that missing key-value pairs are put in and get their default values.
 
 
 ## Changelog
 
-### 0.6.1
+### 0.6.0
 
 * Change the `diagram` command to output PlantUML and Mermaid diagram files _per language_.
 * Add a `validation` commmand to validate JSON files as serialization chunks.
 * Remove the shortening functionality from `extract`.
 * Rename the `extract` command &rarr; `sort`, and remove the textualization for chunks that are the serialization of languages.
 * Textualizing a serialization chunk of languages will use the LionCore/M3-specific syntax _unless_ the flag `--languagesAsRegular` is an argument.
-
-### 0.6.0
-
-* Add a `repair` command that aligns a JSON serialization chunk with the specification.
+* Add a `repair` command.
 * Add a `textualize` command – that's optionally language-aware – to render a JSON serialization chunk as pure text.
 
 ### 0.5.0
