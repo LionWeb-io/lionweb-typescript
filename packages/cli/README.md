@@ -39,6 +39,10 @@ That means that key-value pairs appear in precisely the same order as they do in
 
 ## Changelog
 
+### 0.6.1
+
+* Fix that `@lionweb/validation` was not specified as a (non-dev) dependency.
+
 ### 0.6.0
 
 * Change the `diagram` command to output PlantUML and Mermaid diagram files _per language_.
