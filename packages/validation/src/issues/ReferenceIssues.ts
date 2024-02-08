@@ -40,7 +40,7 @@ export class Reference_ParentMissingInChild_Issue extends ValidationIssue {
         super(context)
     }
 
-    msg = (): string => `Node with id "${this.parent.id}" has child with id "${this.child.id}" but child has empty parent.`
+    msg = (): string => `Node with id "${this.parent.id}" has child with id "${this.child.id}" but child has parent ${this.child.parent}.`
 }
 
 export class Reference_CirculairParent_Issue extends ValidationIssue {
