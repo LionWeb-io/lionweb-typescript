@@ -3,7 +3,12 @@
   "version": "0.6.1-beta.0",
   "description": "LionWeb test for {Java|Type}Script",
   "private": true,
-  "main": "dist/lioncore-cli.js",
+  "main": "./dist/index.js",
+  "exports": {
+    "./": "./dist/index.js",
+    "./instances": "./dist/index.js",
+    "./languages": "./dist/index.js"
+  },
   "type": "module",
   "license": "Apache-2.0",
   "repository": {

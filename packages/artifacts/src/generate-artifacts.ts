@@ -2,19 +2,15 @@ import {writeFileSync} from "fs"
 
 import {Language, lioncore, lioncoreBuiltins, serializeLanguages, serializeNodes} from "@lionweb/core"
 import {
-    languageAsText,
     generateMermaidForLanguage,
     generatePlantUmlForLanguage,
     GenerationOptions,
+    languageAsText,
     tsTypesForLanguage,
     writeJsonAsFile
 } from "@lionweb/utilities"
-import {libraryLanguage} from "@lionweb/test/dist/languages/library.js"
-import {multiLanguage} from "@lionweb/test/dist/languages/multi.js"
-import {languageWithEnum} from "@lionweb/test/dist/languages/with-enum.js"
-import {libraryExtractionFacade, libraryModel} from "@lionweb/test/dist/instances/library.js"
-import {multiExtractionFacade, multiModel} from "@lionweb/test/dist/instances/multi.js"
-import {shapesLanguage} from "@lionweb/test/dist/languages/shapes.js"
+import {languageWithEnum, libraryLanguage, multiLanguage, shapesLanguage} from "@lionweb/test/languages"
+import {libraryExtractionFacade, libraryModel, multiExtractionFacade, multiModel} from "@lionweb/test/instances"
 import {diagramPath, instancePath, languagePath} from "./paths.js"
 
 
