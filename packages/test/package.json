@@ -27,7 +27,7 @@
   },
   "scripts": {
     "clean": "rm -rf dist/ testset/",
-    "build": "chmod -R 777 dist/ && rm -rf dist/ && tsc && chmod -R 555 dist/",
+    "build": "tsc",
     "lint": "eslint src",
     "pretest": "npm run build",
     "setup": "npm run checkout-testset && npm run checkout-testchanges", 
