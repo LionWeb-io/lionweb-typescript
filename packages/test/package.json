@@ -16,7 +16,7 @@
   "devDependencies": {
     "@lionweb/core": "0.6.1-beta.0",
     "@lionweb/utilities": "0.6.1-beta.0",
-    "@lionweb/validation": "0.6.1-beta.0",
+    "@lionweb/validation": "0.6.1-beta.1",
     "@types/chai": "4.3.11",
     "@types/mocha": "10.0.6",
     "@types/xml2js": "0.4.14",

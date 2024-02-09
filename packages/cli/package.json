@@ -20,7 +20,7 @@
   "dependencies": {
     "@lionweb/core": "0.6.1-beta.0",
     "@lionweb/utilities": "0.6.1-beta.0",
-    "@lionweb/validation": "0.6.1-beta.0"
+    "@lionweb/validation": "0.6.1-beta.1"
   },
   "scripts": {
     "clean": "rm -rf dist/ lionweb-cli-*.tgz",
