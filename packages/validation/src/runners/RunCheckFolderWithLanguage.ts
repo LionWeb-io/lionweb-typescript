@@ -1,6 +1,6 @@
 import fs from "fs"
-import { LionWebJsonChunkWrapper } from "../json/LionWebJsonChunkWrapper.js"
-import { LionWebLanguageDefinition } from "../json/LionWebLanguageDefinition.js"
+import { LanguageRegistry } from "../languages/index.js"
+import { LionWebLanguageWrapper } from "../languages/LionWebLanguageWrapper.js"
 import { LionWebValidator } from "../validators/LionWebValidator.js"
 import { getFilesRecursive, printIssues } from "./Utils.js"
 
@@ -10,10 +10,13 @@ const language = process.argv[3]
 let totalSucceed = 0
 let totalFailed = 0
 
+const registry = new LanguageRegistry()
 const languageString = fs.readFileSync(language, "utf-8")
 const languageJson = JSON.parse(languageString)
-const languageValidator = new LionWebValidator(languageJson, null)
+const languageValidator = new LionWebValidator(languageJson, registry)
+registry.addLanguage(new LionWebLanguageWrapper(languageJson))
 
+console.log("Language is " + language)
 languageValidator.validateSyntax()
 languageValidator.validateReferences()
 if (languageValidator.validationResult.hasErrors()) {
@@ -25,10 +28,7 @@ if (languageValidator.validationResult.hasErrors()) {
 for (const modelFile of getFilesRecursive(folder, [])) {
     const jsonString1 = fs.readFileSync(modelFile, "utf-8")
     const jsonModel = JSON.parse(jsonString1)
-    const modelValidator = new LionWebValidator(
-        jsonModel,
-        new LionWebLanguageDefinition(languageValidator.chunk as LionWebJsonChunkWrapper),
-    )
+    const modelValidator = new LionWebValidator(jsonModel, registry )
 
     modelValidator.validateAll()
     if (modelValidator.validationResult.hasErrors()) {

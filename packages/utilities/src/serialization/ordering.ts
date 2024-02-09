@@ -12,8 +12,8 @@ import {
 
 const orderedMetaPointer = ({language, version, key}: MetaPointer): MetaPointer =>
     ({
-        language,
-        version,
+        language: language,
+        version: version,
         key
     })
 

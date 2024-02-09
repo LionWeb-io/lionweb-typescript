@@ -1,9 +1,9 @@
-import { LionWebJsonMetaPointer } from "../json/LionWebJson.js"
+import { LionWebJsonMetaPointer, LionWebJsonNode } from "../json/LionWebJson.js"
 import { JsonContext } from "../json/JsonContext.js"
 import { ValidationIssue } from "./ValidationIssue.js"
 
 export class Language_PropertyValue_Issue extends ValidationIssue {
-    readonly id = "PropertyValue"
+    readonly issueType = "PropertyValueIncorrect"
 
     constructor(
         context: JsonContext,
@@ -30,23 +30,49 @@ export abstract class Language_IncorrectMetaPointerType_Issue extends Validation
     }
 
     msg = (): string =>
-        `${this.metaType} with key "${this.metaPointer.key}" does not refer to a ${this.metaType}, but to a "${this.incorrectType}"`
+        `${this.metaType} with key "${this.metaPointer.key}" does not refer to a "${this.metaType}", but to a "${this.incorrectType}"`
 }
 
 export class Language_IncorrectPropertyMetaPointer_Issue extends Language_IncorrectMetaPointerType_Issue {
-    readonly id = "IncorrectPropertyMetaPointer"
+    readonly issueType = "IncorrectPropertyMetaPointer"
     readonly metaType = "Property"
 }
+
+export abstract class Language_FeatureMetaPointerNotInClassifier_Issue extends ValidationIssue {
+    abstract readonly metaType: string
+    constructor(
+        context: JsonContext,
+        public featureMetaPointer: LionWebJsonMetaPointer,
+        public classifierPointer: LionWebJsonNode,
+    ) {
+        super(context)
+    }
+
+    msg = (): string =>
+        `${this.metaType} with key "${this.featureMetaPointer.key}" is not part of classifier "${this.classifierPointer.id}"`
+}
+export class Language_PropertyMetaPointerNotInClass_Issue extends Language_FeatureMetaPointerNotInClassifier_Issue {
+    readonly issueType = "PropertyMetaPointerNotInClass"
+    readonly metaType = "Property"
+}
+export class Language_ReferenceMetaPointerNotInClass_Issue extends Language_FeatureMetaPointerNotInClassifier_Issue {
+    readonly issueType = "ReferenceMetaPointerNotInClass"
+    readonly metaType = "Reference"
+}
+export class Language_ContainmentMetaPointerNotInClass_Issue extends Language_FeatureMetaPointerNotInClassifier_Issue {
+    readonly issueType = "ContainmentMetaPointerNotInClass"
+    readonly metaType = "Containment"
+}
 export class Language_IncorrectConceptMetaPointer_Issue extends Language_IncorrectMetaPointerType_Issue {
-    readonly id = "IncorrectConceptMetaPointer"
+    readonly issueType = "IncorrectConceptMetaPointer"
     readonly metaType = "Concept"
 }
 export class Language_IncorrectReferenceMetaPointer_Issue extends Language_IncorrectMetaPointerType_Issue {
-    readonly id = "IncorrectReferenceMetaPointer"
+    readonly issueType = "IncorrectReferenceMetaPointer"
     readonly metaType = "Reference"
 }
 export class Language_IncorrectContainmentMetaPointer_Issue extends Language_IncorrectMetaPointerType_Issue {
-    readonly id = "IncorrectContainmentMetaPointer"
+    readonly issueType = "IncorrectContainmentMetaPointer"
     readonly metaType = "Containment"
 }
 
@@ -65,25 +91,25 @@ export abstract class Language_UnknownMetaPointer_Issue extends ValidationIssue 
 }
 
 export class Language_UnknownReference_Issue extends Language_UnknownMetaPointer_Issue {
-    readonly id = "UnknownReference"
+    readonly issueType = "UnknownReference"
     readonly metaType = "Reference"
 }
 export class Language_UnknownContainment_Issue extends Language_UnknownMetaPointer_Issue {
-    readonly id = "UnknownContainment"
+    readonly issueType = "UnknownContainment"
     readonly metaType = "Containment"
 }
 export class Language_UnknownProperty_Issue extends Language_UnknownMetaPointer_Issue {
-    readonly id = "UnknownProperty"
+    readonly issueType = "UnknownProperty"
     readonly metaType = "Property"
 }
 export class Language_UnknownConcept_Issue extends Language_UnknownMetaPointer_Issue {
-    readonly id = "UnknownConcept"
+    readonly issueType = "UnknownConcept"
     readonly metaType = "Concept"
 }
 
 // Actual Language checks on M2
 export class NumberOfLanguagesUsed_Issue extends ValidationIssue {
-    readonly id = "NumberOfLanguagesUsed"
+    readonly issueType = "NumberOfLanguagesUsed"
     constructor(
         context: JsonContext,
         public nrOfLanguages: number,
@@ -92,8 +118,17 @@ export class NumberOfLanguagesUsed_Issue extends ValidationIssue {
     }
     msg = () => `Is not a language: number of used languages should be 1, is ${this.nrOfLanguages}`
 }
+export class MissingM3Language_Issue extends ValidationIssue {
+    readonly issueType = "MissingM3Language"
+    constructor(
+        context: JsonContext
+    ) {
+        super(context)
+    }
+    msg = () => `Missing used language LionCore-M3`
+}
 export class NotLionCoreLanguageKey_Issue extends ValidationIssue {
-    readonly id = "NotLionCoreLanguageKey"
+    readonly issueType = "NotLionCoreLanguageKey"
     constructor(
         context: JsonContext,
         public incorrectKey: string,
@@ -103,7 +138,7 @@ export class NotLionCoreLanguageKey_Issue extends ValidationIssue {
     msg = () => `Is not a language: the used language key is not LionCore-M3, but ${this.incorrectKey}`
 }
 export class IncorrectLionCoreVersion_Issue extends ValidationIssue {
-    readonly id = "IncorrectLionCoreVersion"
+    readonly issueType = "IncorrectLionCoreVersion"
     constructor(
         context: JsonContext,
         public incorrectVersion: string,

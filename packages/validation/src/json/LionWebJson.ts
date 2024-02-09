@@ -1,30 +1,21 @@
+import { LION_CORE_M3_KEY, LION_CORE_M3_VERSION } from "./M3definitions.js"
+
 /**
  * The types defining the structure of the LionWeb JSON format.
  * @see https://lionweb-io.github.io/specification/serialization/serialization.html
  * We use types instead of classes, because the purpose is to define the Lionweb JSON to be sent over the line.
  */
-export const LION_CORE_BUILTINS_KEY = "LionCore-builtins"
-export const LION_CORE_BUILTINS_INAMED_NAME = "LionCore-builtins-INamed-name"
-export const LION_CORE_M3_KEY = "LionCore-M3"
-export const LION_CORE_M3_NAME = "LionCore_M3"
-export const LION_CORE_M3_VERSION = "2023.1"
 
-export const LIONWEB_BOOLEAN_TYPE = "LionCore-builtins-Boolean"
-export const LIONWEB_JSON_TYPE = "LionCore-builtins-JSON"
-export const LIONWEB_INTEGER_TYPE = "LionCore-builtins-Integer"
-export const LIONWEB_STRING_TYPE = "LionCore-builtins-String"
 
-export const LIONWEB_M3_INAMED_PROPERTY = {
-    language: LION_CORE_BUILTINS_KEY,
-    version: LION_CORE_M3_VERSION,
-    key: LION_CORE_BUILTINS_INAMED_NAME
+export function isLionWebM3Language(language: LwJsonUsedLanguage): boolean {
+    return language.key === LION_CORE_M3_KEY && language.version === LION_CORE_M3_VERSION
 }
 export type LionWebId = string
 
 export type LionWebJsonMetaPointer = {
     language: string
     version: string
-    key: string
+    key: string             // key of concept, property, containment, referenve or property
 }
 
 export function isEqualMetaPointer(p1: LionWebJsonMetaPointer, p2: LionWebJsonMetaPointer): boolean {

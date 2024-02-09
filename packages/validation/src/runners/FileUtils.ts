@@ -1,58 +1,31 @@
 import fs from "fs"
-import { LionWebJsonChunkWrapper, LionWebLanguageDefinition } from "../json/index.js"
+import { LanguageRegistry } from "../languages/index.js"
 import { LionWebValidator } from "../validators/LionWebValidator.js"
 import { ValidationResult } from "../validators/ValidationResult.js"
 import { getFilesRecursive, printIssues } from "./Utils.js"
 
-export function validateFile(file: string): void {
-    const result = validateFileResult(file)
+export function validateFile(file: string, registry: LanguageRegistry): void {
+    const result = validateFileResult(file, false, registry)
     printIssues(result)
 }
 
-export function validateFileResult(file: string): ValidationResult {
+export function validateFileResult(file: string, validateAgainstLanguage: boolean, registry: LanguageRegistry): ValidationResult {
     if (file !== null) {
         const jsonString1 = fs.readFileSync(file, "utf-8")
         const json1 = JSON.parse(jsonString1)
-        const validator = new LionWebValidator(json1, null)
+        const validator = new LionWebValidator(json1, registry)
 
         validator.validateSyntax()
         validator.validateReferences()
-        validator.validateForLanguage()
-        return validator.validationResult
-    }
-    return new ValidationResult()
-}
-
-export function validateFileResultWithLanguage(file: string, languageFile?: string | null): ValidationResult {
-    let langDef: LionWebLanguageDefinition | null = null
-
-    if (languageFile !== undefined && languageFile !== null) {
-        const jsonString1 = fs.readFileSync(file, "utf-8")
-        const languageJson = JSON.parse(jsonString1)
-        const validator = new LionWebValidator(languageJson, null)
-
-        validator.validateSyntax()
-        validator.validateReferences()
-        validator.validateForLanguage()
-        if (validator.validationResult.hasErrors()) {
-            return validator.validationResult
+        if (validateAgainstLanguage) {
+            validator.validateForLanguage()
         }
-        langDef = new LionWebLanguageDefinition(new LionWebJsonChunkWrapper(languageJson))
-    }
-
-    if (file !== null) {
-        const fileString = fs.readFileSync(file, "utf-8")
-        const fileJson = JSON.parse(fileString)
-        const validator = new LionWebValidator(fileJson, langDef)
-        validator.validateSyntax()
-        validator.validateReferences()
-        validator.validateForLanguage()
         return validator.validationResult
     }
     return new ValidationResult()
 }
 
-export function validateFolder(folder: string): void {
+export function validateFolder(folder: string, registry: LanguageRegistry): void {
     let totalErrors = 0
     let totalSucceed = 0
     let totalFailed = 0
@@ -60,7 +33,7 @@ export function validateFolder(folder: string): void {
     for (const f of getFilesRecursive(folder, [])) {
         const jsonString1 = fs.readFileSync(f, "utf-8")
         const json1 = JSON.parse(jsonString1)
-        const validator = new LionWebValidator(json1, null)
+        const validator = new LionWebValidator(json1, registry)
 
         try {
             validator.validateAll()

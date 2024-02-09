@@ -9,7 +9,6 @@ import {
 import { JsonContext } from "../json/JsonContext.js"
 import { ChunkUtils } from "../json/ChunkUtils.js"
 import {
-    LION_CORE_BUILTINS_KEY,
     LionWebJsonContainment,
     LionWebJsonChunk,
     LionWebJsonMetaPointer,
@@ -106,10 +105,6 @@ export class LionWebReferenceValidator {
      */
     validateLanguageReference(chunk: LionWebJsonChunkWrapper, metaPointer: LionWebJsonMetaPointer, context: JsonContext) {
         const lang = ChunkUtils.findLwUsedLanguageWithVersion(chunk.jsonChunk, metaPointer.language, metaPointer.version)
-        if (metaPointer.language === LION_CORE_BUILTINS_KEY) {
-            // Ok, builtin
-            return
-        }
         if (lang === undefined || lang === null) {
             this.validationResult.issue(new Reference_LanguageUnknown_Issue(context, metaPointer))
         } else {

@@ -8,7 +8,9 @@ indent_style = space
 indent_size = 4
 
 [*.json]
-indent_size = 2
+indent_size = 4
+indent_style = space
+ij_json_property_alignment = align_on_colon
 
 [*.sh]
 charset = utf-8

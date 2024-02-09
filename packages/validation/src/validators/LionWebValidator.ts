@@ -1,6 +1,6 @@
 import { LionWebJsonChunk } from "../json/LionWebJson.js"
 import { LionWebJsonChunkWrapper } from "../json/LionWebJsonChunkWrapper.js"
-import { LionWebLanguageDefinition } from "../json/LionWebLanguageDefinition.js"
+import { LanguageRegistry } from "../languages/index.js"
 import { LionWebLanguageReferenceValidator } from "./LionWebLanguageReferenceValidator.js"
 import { LionWebReferenceValidator } from "./LionWebReferenceValidator.js"
 import { LionWebSyntaxValidator } from "./LionWebSyntaxValidator.js"
@@ -12,7 +12,6 @@ import { ValidationResult } from "./ValidationResult.js"
  */
 export class LionWebValidator {
     object: unknown
-    language: LionWebLanguageDefinition | null = null
 
     chunk: unknown
     validationResult: ValidationResult
@@ -21,9 +20,8 @@ export class LionWebValidator {
     syntaxCorrect: boolean = false
     referencesCorrect: boolean = false
 
-    constructor(json: unknown, lang: LionWebLanguageDefinition | null) {
+    constructor(json: unknown, private registry: LanguageRegistry) {
         this.object = json
-        this.language = lang
         this.validationResult = new ValidationResult()
         this.syntaxValidator = new LionWebSyntaxValidator(this.validationResult)
         this.referenceValidator = new LionWebReferenceValidator(this.validationResult)
@@ -63,11 +61,9 @@ export class LionWebValidator {
             // console.log("validateForLanguage not executed because there are reference errors.")
             return
         }
-        if (this.language !== null && this.language !== undefined) {
-            const languageReferenceValidator = new LionWebLanguageReferenceValidator(this.validationResult, this.language)
-            // when syntax is correct we know the chunk is actually a chunk!
-            languageReferenceValidator.validate(this.chunk as LionWebJsonChunkWrapper)
-        }
+        const languageReferenceValidator = new LionWebLanguageReferenceValidator(this.validationResult, this.registry)
+        // when syntax is correct we know the chunk is actually a chunk!
+        languageReferenceValidator.validate(this.chunk as LionWebJsonChunkWrapper)
     }
 
     // setLanguage(json: LionwebLanguageDefinition) {
