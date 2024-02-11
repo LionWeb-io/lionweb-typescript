@@ -35,7 +35,7 @@ export class LionWebLanguageValidator {
         const languageNodes = this.chunkWrapper.findNodesOfClassifier(MetaPointers.Language)
         if (languageNodes.length !== 1) {
             // TODO Better error handling.
-            console.error("Expected exactly one Language node, found " + languageNodes.length + " => " + JSON.stringify(languageNodes))
+            console.error("Error: xpected exactly one Language node, found " + languageNodes.length + " => " + JSON.stringify(languageNodes))
         }
         chunk.nodes.forEach((node, index) => {
             if (!isConcept(node)) {

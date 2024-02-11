@@ -20,7 +20,7 @@ export class CompositeLionWebLanguageWrapper extends LionWebLanguageWrapper {
         if (version === undefined) {
             language.set(lionWebLanguage.version, lionWebLanguage)
         } else {
-            console.error("Language already known")
+            // console.error("Language already known")
             return
         }
         this.languages.push(lionWebLanguage)

@@ -9,13 +9,12 @@ export class LanguageRegistry {
     languages: CompositeLionWebLanguageWrapper = new CompositeLionWebLanguageWrapper({nodes: [], languages: [], serializationFormatVersion: "2023.1"})
     
     addLanguage(lionWebLanguage: LionWebLanguageWrapper) {
-        console.log("LanguageRegistry.add: " + lionWebLanguage.name + "  " + lionWebLanguage.jsonChunk.nodes.length)
+        // console.log("LanguageRegistry.add: " + lionWebLanguage.name + "  " + lionWebLanguage.jsonChunk.nodes.length)
 
         this.languages.addLanguage(lionWebLanguage)
     }
     
     clear(): void {
-        console.log("LanguageRegistry clear")
         this.languages = new CompositeLionWebLanguageWrapper({nodes: [], languages: [], serializationFormatVersion: "2023.1"})
     }
 
