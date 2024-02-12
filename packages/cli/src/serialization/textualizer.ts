@@ -16,9 +16,9 @@ const languagesAsRegularFlag = "--languagesAsRegular"
 export const executeTextualizeCommand = async (args: string[]) => {
     const languagesAsRegular = args.some((arg) => arg === languagesAsRegularFlag)
     const otherArgs = args.filter((arg) => arg !== languagesAsRegularFlag)
-    const separatedArgs = separate(otherArgs)
-    const languages = await tryLoadAllAsLanguages(separatedArgs[1])
-    separatedArgs[0].forEach((chunkPath) => {
+    const {chunkPaths, languagePaths} = separate(otherArgs)
+    const languages = await tryLoadAllAsLanguages(languagePaths)
+    chunkPaths.forEach((chunkPath) => {
         textualizeSerializationChunk(chunkPath, languagesAsRegular, languages)
     })
 }

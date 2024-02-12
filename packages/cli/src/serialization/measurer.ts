@@ -5,9 +5,9 @@ import {separate} from "../language-aware-args.js"
 
 
 export const executeMeasureCommand = async (args: string[]) => {
-    const separatedArgs = separate(args)
-    const languages = await tryLoadAllAsLanguages(separatedArgs[1])
-    separatedArgs[0].forEach((chunkPath) => {
+    const {chunkPaths, languagePaths} = separate(args)
+    const languages = await tryLoadAllAsLanguages(languagePaths)
+    chunkPaths.forEach((chunkPath) => {
         measureSerializationChunk(chunkPath, languages)
     })
 }
@@ -23,13 +23,15 @@ const measureSerializationChunk = async (path: string, languages: Language[]) =>
 }
 
 
+// TODO  move all of this to @lionweb/utilities (in the end)
+
 type ClassifierInstantiationMetric = {
     name?: string
     key: string         // == key of classifier
     language: string    // == key of language
     version: string
     count: number
-    // TODO  was is a concept, or annotation
+    // TODO  add property to say the classifier is a concept, or annotation (or enum)?
 }
 
 type Metrics = {
