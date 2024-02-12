@@ -9,7 +9,7 @@ export class MetaPointerMap {
     add(languageKey: string, languageVersion: string, node: LionWebJsonNode): void {
         const keyProperty = NodeUtils.findProperty(node, MetaPointers.IKeyedKey)
         if (keyProperty === undefined) {
-            console.log("MetaPointerMap.add: trying to add node without keyn property.")
+            console.log("MetaPointerMap.add: trying to add node without key property.")
             return
         }
         const key = keyProperty.value

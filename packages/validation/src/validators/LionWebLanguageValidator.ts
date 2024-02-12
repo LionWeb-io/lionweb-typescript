@@ -75,10 +75,6 @@ export class LionWebLanguageValidator {
                         `Property ${actualProp.property.key} not found for classifier ${classifier.id}`)
                 )
             }
-            // this.availableLanguages.getClassifierProperty(classifier, propClassifier)
         })
-        // node.containments
-        // node.references
-        // ...
     }
 }

@@ -32,16 +32,6 @@ export class LionWebJsonChunkWrapper {
         this.prepareNodeIds(chunk)
     }
 
-    /**
-     * Merge `chunk` into `this.jsonChunk`
-     * @param addedChunk
-     */
-    // pushChunk(addedChunk: LionWebJsonChunk) {
-    //     this.jsonChunk.languages.push(...addedChunk.languages)
-    //     this.jsonChunk.nodes.push(...addedChunk.nodes)
-    //     this.prepareNodeIds(addedChunk)
-    // }
-
     /** Put all nodes in a map, validate that there are no two nodes with the same id.
      *  The check should logically be in LionWebReferenceValidator, but the created map is needed here.
      */

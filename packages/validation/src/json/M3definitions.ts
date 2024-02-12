@@ -14,20 +14,6 @@ export const LIONWEB_JSON_TYPE = "LionCore-builtins-JSON"
 export const LIONWEB_INTEGER_TYPE = "LionCore-builtins-Integer"
 export const LIONWEB_STRING_TYPE = "LionCore-builtins-String"
 
-// TODO Trial: remove when not used.
-export const m3Map = new Map<string, unknown>([
-    [
-        "Concept",
-        {
-            key: "Concept",
-            properties: new Map<string, unknown>([
-                ["abstract", ""],
-                ["partition", { properties: "" }]
-            ])
-        }
-    ]
-])
-
 export const M3_Keys = {
     Property: "Property",
     Reference: "Reference",

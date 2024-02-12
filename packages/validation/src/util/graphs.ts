@@ -1,3 +1,5 @@
+// NB This is an almost identical copy of packages/core/utils/recursion.ts
+//    Copied to avoid package dependencies
 /**
  * Type def. of a generic "flatMap" function.
  */
