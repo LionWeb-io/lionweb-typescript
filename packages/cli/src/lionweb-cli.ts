@@ -5,8 +5,9 @@ import {argv} from "process"
 
 import {diagramFromSerialization} from "./m3/diagram-generator.js"
 import {generateTsTypesWith} from "./m3/ts-types-generator.js"
-import {sortSerialization} from "./serialization/sorter.js"
+import {executeMeasureCommand} from "./serialization/measurer.js"
 import {repairSerializationChunk} from "./serialization/repairer.js"
+import {sortSerialization} from "./serialization/sorter.js"
 import {executeTextualizeCommand} from "./serialization/textualizer.js"
 import {runValidation} from "./validator.js"
 
@@ -19,7 +20,17 @@ const main = async (args: string[])=> {
     const REPAIR_COMMAND = "repair"
     const TEXTUALIZE_COMMAND = "textualize"
     const VALIDATE_COMMAND = "validate"
-    const commands = [DIAGRAM_COMMAND, SORT_COMMAND, GENERATE_TS_TYPES_COMMAND, REPAIR_COMMAND, TEXTUALIZE_COMMAND, VALIDATE_COMMAND].sort()
+    const MEASURE_COMMAND = "measure"
+
+    const commands = [
+        DIAGRAM_COMMAND,
+        SORT_COMMAND,
+        GENERATE_TS_TYPES_COMMAND,
+        REPAIR_COMMAND,
+        TEXTUALIZE_COMMAND,
+        VALIDATE_COMMAND,
+        MEASURE_COMMAND
+    ].sort()
 
     if (args.length <= 2) {
         console.log(
@@ -47,7 +58,7 @@ ${commands.map((command) => `    ${command}\n`).join(``)}
             } else {
                 commandArgs.forEach(diagramFromSerialization)
             }
-            return
+            break
         }
 
         case SORT_COMMAND: {
@@ -59,7 +70,7 @@ ${commands.map((command) => `    ${command}\n`).join(``)}
             } else {
                 commandArgs.forEach(sortSerialization)
             }
-            return
+            break
         }
 
         case GENERATE_TS_TYPES_COMMAND: {
@@ -70,7 +81,7 @@ ${commands.map((command) => `    ${command}\n`).join(``)}
             } else {
                 await generateTsTypesWith(commandArgs)
             }
-            return
+            break
         }
 
         case REPAIR_COMMAND: {
@@ -83,7 +94,7 @@ Missing key-value pairs are put in and get their default values.`
             } else {
                 commandArgs.forEach(repairSerializationChunk)
             }
-            return
+            break
         }
 
         case TEXTUALIZE_COMMAND: {
@@ -99,18 +110,36 @@ textual syntax is used, unless a flag '--asRegular' is provided.
             } else {
                 await executeTextualizeCommand(commandArgs)
             }
-            return
+            break
         }
 
         case VALIDATE_COMMAND: {
             if (commandArgs.length === 0) {
                 console.log(
-`The ${VALIDATE_COMMAND} command validates a serialization chunk. \nUsage: npx @lionweb/cli validate <path_to_chunk>`
+`The ${VALIDATE_COMMAND} command validates a serialization chunk.
+Usage: npx @lionweb/cli ${VALIDATE_COMMAND} <path_to_chunk>`
                 )
             } else {
                 commandArgs.forEach(runValidation)
             }
-            return
+            break
+        }
+
+        case MEASURE_COMMAND: {
+            if (commandArgs.length === 0) {
+                console.log(
+`The ${MEASURE_COMMAND} command computes statistics on the given serialization chunks,
+such as which concepts are instantiated how often.
+
+Usage: npx @lionweb/cli ${MEASURE_COMMAND} <paths_to_chunks> --language[s] <path_to_chunks_of_languages>
+
+Chunks given after a '--language' or '--languages' flag (which are synonyms) are assumed to be serializations of languages.
+These languages are then used to try and resolve the keys of languages' entities and their features to names.`
+                )
+            } else {
+                await executeMeasureCommand(commandArgs)
+            }
+            break
         }
 
         default: {
