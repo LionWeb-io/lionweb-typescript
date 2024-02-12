@@ -41,7 +41,7 @@ const MAY_BE_NULL = true
 const NOT_NULL = false
 
 /**
- * LionWebCheck can chack whether objects are LionWeb JSON objects.
+ * LionWebCheck can check whether objects are structurally LionWeb JSON objects.
  * The check can be on a single object, or recursively on an object and its children.
  */
 export class LionWebSyntaxValidator {
@@ -62,7 +62,7 @@ export class LionWebSyntaxValidator {
     /**
      * Check whether `obj` is a JSON object that conforms to the serialization syntax of LionCore.
      * All errors found will be pushed into the `errors` array, if its length is not 0, the check has failed.
-     * @param obj
+     * @param obj 
      */
     validate(obj: unknown) {
         this.validateLwChunk(obj, new JsonContext(null, ["$"]))

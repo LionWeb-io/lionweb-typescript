@@ -7,7 +7,7 @@ export abstract class ContainmentChange extends Change {
         public context: JsonContext,
         public parentNode: LionWebJsonNode,
         public containment: LionWebJsonMetaPointer,
-        public afterContainment: LionWebJsonContainment | null,
+        public afterContainment: LionWebJsonContainment | undefined,
         public childId: string,
         public missing = Missing.NotMissing
     ) {

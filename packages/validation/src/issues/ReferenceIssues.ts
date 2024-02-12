@@ -3,7 +3,7 @@ import { JsonContext } from "../json/JsonContext.js"
 import { ValidationIssue } from "./ValidationIssue.js"
 
 export class Reference_DuplicateNodeId_Issue extends ValidationIssue {
-    readonly id = "DuplicateNodeId"
+    readonly issueType = "DuplicateNodeId"
 
     constructor(
         context: JsonContext,
@@ -16,7 +16,7 @@ export class Reference_DuplicateNodeId_Issue extends ValidationIssue {
 }
 
 export class Reference_ChildMissingInParent_Issue extends ValidationIssue {
-    readonly id = "ChildMissingInParent"
+    readonly issueType = "ChildMissingInParent"
 
     constructor(
         context: JsonContext,
@@ -30,7 +30,7 @@ export class Reference_ChildMissingInParent_Issue extends ValidationIssue {
 }
 
 export class Reference_ParentMissingInChild_Issue extends ValidationIssue {
-    readonly id = "ParentMissingInChild"
+    readonly issueType = "ParentMissingInChild"
 
     constructor(
         context: JsonContext,
@@ -44,7 +44,7 @@ export class Reference_ParentMissingInChild_Issue extends ValidationIssue {
 }
 
 export class Reference_CirculairParent_Issue extends ValidationIssue {
-    readonly id = "CirculairParent"
+    readonly issueType = "CirculairParent"
 
     constructor(
         context: JsonContext,
@@ -58,7 +58,7 @@ export class Reference_CirculairParent_Issue extends ValidationIssue {
 }
 
 export class Reference_LanguageUnknown_Issue extends ValidationIssue {
-    readonly id = "LanguageUnknown"
+    readonly issueType = "LanguageUnknown"
 
     constructor(
         context: JsonContext,
@@ -71,7 +71,7 @@ export class Reference_LanguageUnknown_Issue extends ValidationIssue {
 }
 
 export class Duplicates_Issue extends ValidationIssue {
-    readonly id = "Duplicates"
+    readonly issueType = "Duplicates"
 
     constructor(
         context: JsonContext,

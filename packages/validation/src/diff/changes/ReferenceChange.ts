@@ -6,8 +6,8 @@ export abstract class ReferenceChange extends Change {
     constructor(
         public context: JsonContext,
         public node: LionWebJsonNode,
-        public beforeReference: LionWebJsonReference | null,
-        public afterReference: LionWebJsonReference | null,
+        public beforeReference: LionWebJsonReference | undefined,
+        public afterReference: LionWebJsonReference | undefined,
         public target: LionWebJsonReferenceTarget,
         public missing = Missing.NotMissing
     ) {

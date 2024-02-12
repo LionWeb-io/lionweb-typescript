@@ -1,6 +1,6 @@
 {
   "name": "@lionweb/validation",
-  "version": "0.6.1-beta.0",
+  "version": "0.6.1-beta.1",
   "license":  "Apache 2.0",
   "description": "LionWeb Serialization validation",
   "author": "jos.warmer@openmodeling.nl",
@@ -19,10 +19,10 @@
     "lint": "eslint src",
     "test-here": "cd ../test && find dist/validation -type d | sed '1!G;h;$!d' | xargs npx mocha",
     "release": "npm publish",
-    "testValid": "node dist/runners/RunCheckFolder.js ../../../lionweb-integration-testing/testset/valid",
-    "testInvalid": "node dist/runners/RunCheckFolder.js ../../../lionweb-integration-testing/testset/invalid",
-    "testInvalidWithLanguage": "node dist/runners/RunCheckFolderWithLanguage.js ../../../lionweb-integration-testing/testset/withLanguage/invalid/ ../../../lionweb-integration-testing/testset/withLanguage/myLang.language.json",
-    "testValidWithLanguage": "node dist/runners/RunCheckFolderWithLanguage.js ../../../lionweb-integration-testing/testset/withLanguage/valid/ ../../../lionweb-integration-testing/testset/withLanguage/myLang.language.json",
+    "testValid": "node dist/runners/RunCheckFolder.js ../test/testset/valid",
+    "testInvalid": "node dist/runners/RunCheckFolder.js ../test/testset/invalid",
+    "testInvalidWithLanguage": "node dist/runners/RunCheckFolderWithLanguage.js ../test/testset/withLanguage/invalid/ ../test/testset/withLanguage/myLang.language.json",
+    "testValidWithLanguage": "node dist/runners/RunCheckFolderWithLanguage.js ../test/testset/withLanguage/valid/ ../test/testset/withLanguage/myLang.language.json",
     "publish-local": "npm publish --registry http://localhost:4873",
     "unpublish-local": "npm unpublish --force --registry http://localhost:4873",
     "republish-local": "yarn unpublish-local && yarn publish-local"

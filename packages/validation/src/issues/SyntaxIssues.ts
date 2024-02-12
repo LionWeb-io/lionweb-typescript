@@ -11,22 +11,22 @@ export abstract class Syntax_PropertyIssue extends ValidationIssue {
 }
 
 export class Syntax_PropertyMissingIssue extends Syntax_PropertyIssue {
-    readonly id = "PropertyMissing"
+    readonly issueType = "PropertyMissing"
     protected msg = () => `Property "${this.property}" is missing`
 }
 
 export class Syntax_PropertyUnknownIssue extends Syntax_PropertyIssue {
-    readonly id = "PropertyUnknown"
+    readonly issueType = "PropertyUnknown"
     protected msg = () => `Property "${this.property}" is not defined as a LionWeb property`
 }
 
 export class Syntax_PropertyNullIssue extends Syntax_PropertyIssue {
-    readonly id = "PropertyNull"
+    readonly issueType = "PropertyNull"
     protected msg = () => `Property "${this.property}" is null, but it should have a value`
 }
 
 export class Syntax_PropertyTypeIssue extends Syntax_PropertyIssue {
-    readonly id = "PropertyTypeIncorrect"
+    readonly issueType = "PropertyTypeIncorrect"
 
     constructor(
         context: JsonContext,
@@ -41,7 +41,7 @@ export class Syntax_PropertyTypeIssue extends Syntax_PropertyIssue {
 }
 
 export class Syntax_ArrayContainsNull_Issue extends Syntax_PropertyIssue {
-    readonly id = "ArrayContainsNull"
+    readonly issueType = "ArrayContainsNull"
 
     constructor(
         context: JsonContext,
@@ -64,21 +64,21 @@ export abstract class Syntax_IncorrectFormat_Issue extends ValidationIssue {
 }
 
 export class Syntax_SerializationFormatVersion_Issue extends Syntax_IncorrectFormat_Issue {
-    readonly id = "SerializationFormatVersion"
+    readonly issueType = "SerializationFormatVersion"
     protected msg = () => `SerializationFormatVersion "${this.value}" is not a number`
 }
 
 export class Syntax_VersionFormat_Issue extends Syntax_IncorrectFormat_Issue {
-    readonly id = "VersionFormat"
+    readonly issueType = "VersionFormat"
     protected msg = () => `Version "${this.value}" is an empty string.`
 }
 
 export class Syntax_KeyFormat_Issue extends Syntax_IncorrectFormat_Issue {
-    readonly id = "KeyFormat"
+    readonly issueType = "KeyFormat"
     protected msg = () => `Key "${this.value}" has incorrect format.`
 }
 
 export class Syntax_IdFormat_Issue extends Syntax_IncorrectFormat_Issue {
-    readonly id = "IdFormat"
+    readonly issueType = "IdFormat"
     protected msg = () => `Id "${this.value}" has incorrect format.`
 }

@@ -1,0 +1,492 @@
+{
+    "serializationFormatVersion": "2023.1",
+    "languages"                 : [
+        {
+            "key"    : "LionCore-M3",
+            "version": "2023.1"
+        },
+        {
+            "key"    : "LionCore-builtins",
+            "version": "2023.1"
+        }
+    ],
+    "nodes"                     : [
+        {
+            "id"          : "ID-2",
+            "classifier"  : {
+                "language": "LionCore-M3",
+                "version" : "2023.1",
+                "key"     : "Language"
+            },
+            "properties"  : [
+                {
+                    "property": {
+                        "language": "LionCore-M3",
+                        "version" : "2023.1",
+                        "key"     : "Language-version"
+                    },
+                    "value"   : "1"
+                },
+                {
+                    "property": {
+                        "language": "LionCore-M3",
+                        "version" : "2023.1",
+                        "key"     : "IKeyed-key"
+                    },
+                    "value"   : "FileSystem-key"
+                },
+                {
+                    "property": {
+                        "language": "LionCore-builtins",
+                        "version" : "2023.1",
+                        "key"     : "LionCore-builtins-INamed-name"
+                    },
+                    "value"   : "FileSystem"
+                }
+            ],
+            "containments": [
+                {
+                    "containment": {
+                        "language": "LionCore-M3",
+                        "version" : "2023.1",
+                        "key"     : "Language-entities"
+                    },
+                    "children"   : [
+                        "ID-7",
+                        "ID-3",
+                        "ID-4",
+                        "ID-5"
+                    ]
+                }
+            ],
+            "references"  : [
+                {
+                    "reference": {
+                        "language": "LionCore-M3",
+                        "version" : "2023.1",
+                        "key"     : "Language-dependsOn"
+                    },
+                    "targets"  : []
+                }
+            ],
+            "annotations" : [],
+            "parent"      : null
+        },
+        {
+            "id"          : "ID-7",
+            "classifier"  : {
+                "language": "LionCore-M3",
+                "version" : "2023.1",
+                "key"     : "Concept"
+            },
+            "properties"  : [
+                {
+                    "property": {
+                        "language": "LionCore-M3",
+                        "version" : "2023.1",
+                        "key"     : "Concept-abstract"
+                    },
+                    "value"   : "false"
+                },
+                {
+                    "property": {
+                        "language": "LionCore-M3",
+                        "version" : "2023.1",
+                        "key"     : "Concept-partition"
+                    },
+                    "value"   : "true"
+                },
+                {
+                    "property": {
+                        "language": "LionCore-builtins",
+                        "version" : "2023.1",
+                        "key"     : "LionCore-builtins-INamed-name"
+                    },
+                    "value"   : "Disk"
+                },
+                {
+                    "property": {
+                        "language": "LionCore-M3",
+                        "version" : "2023.1",
+                        "key"     : "IKeyed-key"
+                    },
+                    "value"   : "Disk-key"
+                }
+            ],
+            "containments": [
+                {
+                    "containment": {
+                        "language": "LionCore-M3",
+                        "version" : "2023.1",
+                        "key"     : "Classifier-features"
+                    },
+                    "children"   : [
+                        "ID-8"
+                    ]
+                }
+            ],
+            "references"  : [
+                {
+                    "reference": {
+                        "language": "LionCore-M3",
+                        "version" : "2023.1",
+                        "key"     : "Concept-implements"
+                    },
+                    "targets"  : [
+                        {
+                            "resolveInfo": "INamed",
+                            "reference"  : "LionCore-builtins-INamed"
+                        }
+                    ]
+                }
+            ],
+            "annotations" : [],
+            "parent"      : "ID-2"
+        },
+        {
+            "id"          : "ID-8",
+            "classifier"  : {
+                "language": "LionCore-M3",
+                "version" : "2023.1",
+                "key"     : "Containment"
+            },
+            "properties"  : [
+                {
+                    "property": {
+                        "language": "LionCore-M3",
+                        "version" : "2023.1",
+                        "key"     : "Link-multiple"
+                    },
+                    "value"   : "false"
+                },
+                {
+                    "property": {
+                        "language": "LionCore-M3",
+                        "version" : "2023.1",
+                        "key"     : "Feature-optional"
+                    },
+                    "value"   : "false"
+                },
+                {
+                    "property": {
+                        "language": "LionCore-builtins",
+                        "version" : "2023.1",
+                        "key"     : "LionCore-builtins-INamed-name"
+                    },
+                    "value"   : "root"
+                },
+                {
+                    "property": {
+                        "language": "LionCore-M3",
+                        "version" : "2023.1",
+                        "key"     : "IKeyed-key"
+                    },
+                    "value"   : "Disk-root-key"
+                }
+            ],
+            "containments": [],
+            "references"  : [
+                {
+                    "reference": {
+                        "language": "LionCore-M3",
+                        "version" : "2023.1",
+                        "key"     : "Link-type"
+                    },
+                    "targets"  : [
+                        {
+                            "resolveInfo": "FileSystemElement",
+                            "reference"  : "ID-3"
+                        }
+                    ]
+                }
+            ],
+            "annotations" : [],
+            "parent"      : "ID-7"
+        },
+        {
+            "id"          : "ID-3",
+            "classifier"  : {
+                "language": "LionCore-M3",
+                "version" : "2023.1",
+                "key"     : "Concept"
+            },
+            "properties"  : [
+                {
+                    "property": {
+                        "language": "LionCore-M3",
+                        "version" : "2023.1",
+                        "key"     : "Concept-abstract"
+                    },
+                    "value"   : "true"
+                },
+                {
+                    "property": {
+                        "language": "LionCore-M3",
+                        "version" : "2023.1",
+                        "key"     : "Concept-partition"
+                    },
+                    "value"   : "false"
+                },
+                {
+                    "property": {
+                        "language": "LionCore-builtins",
+                        "version" : "2023.1",
+                        "key"     : "LionCore-builtins-INamed-name"
+                    },
+                    "value"   : "FileSystemElement"
+                },
+                {
+                    "property": {
+                        "language": "LionCore-M3",
+                        "version" : "2023.1",
+                        "key"     : "IKeyed-key"
+                    },
+                    "value"   : "FileSystemElement-key"
+                }
+            ],
+            "containments": [
+                {
+                    "containment": {
+                        "language": "LionCore-M3",
+                        "version" : "2023.1",
+                        "key"     : "Classifier-features"
+                    },
+                    "children"   : []
+                }
+            ],
+            "references"  : [
+                {
+                    "reference": {
+                        "language": "LionCore-M3",
+                        "version" : "2023.1",
+                        "key"     : "Concept-implements"
+                    },
+                    "targets"  : [
+                        {
+                            "resolveInfo": "INamed",
+                            "reference"  : "LionCore-builtins-INamed"
+                        }
+                    ]
+                }
+            ],
+            "annotations" : [],
+            "parent"      : "ID-2"
+        },
+        {
+            "id"          : "ID-4",
+            "classifier"  : {
+                "language": "LionCore-M3",
+                "version" : "2023.1",
+                "key"     : "Concept"
+            },
+            "properties"  : [
+                {
+                    "property": {
+                        "language": "LionCore-M3",
+                        "version" : "2023.1",
+                        "key"     : "Concept-abstract"
+                    },
+                    "value"   : "false"
+                },
+                {
+                    "property": {
+                        "language": "LionCore-M3",
+                        "version" : "2023.1",
+                        "key"     : "Concept-partition"
+                    },
+                    "value"   : "false"
+                },
+                {
+                    "property": {
+                        "language": "LionCore-builtins",
+                        "version" : "2023.1",
+                        "key"     : "LionCore-builtins-INamed-name"
+                    },
+                    "value"   : "File"
+                },
+                {
+                    "property": {
+                        "language": "LionCore-M3",
+                        "version" : "2023.1",
+                        "key"     : "IKeyed-key"
+                    },
+                    "value"   : "File-key"
+                }
+            ],
+            "containments": [
+                {
+                    "containment": {
+                        "language": "LionCore-M3",
+                        "version" : "2023.1",
+                        "key"     : "Classifier-features"
+                    },
+                    "children"   : []
+                }
+            ],
+            "references"  : [
+                {
+                    "reference": {
+                        "language": "LionCore-M3",
+                        "version" : "2023.1",
+                        "key"     : "Concept-extends"
+                    },
+                    "targets"  : [
+                        {
+                            "resolveInfo": "FileSystemElement",
+                            "reference"  : "ID-3"
+                        }
+                    ]
+                },
+                {
+                    "reference": {
+                        "language": "LionCore-M3",
+                        "version" : "2023.1",
+                        "key"     : "Concept-implements"
+                    },
+                    "targets"  : []
+                }
+            ],
+            "annotations" : [],
+            "parent"      : "ID-2"
+        },
+        {
+            "id"          : "ID-5",
+            "classifier"  : {
+                "language": "LionCore-M3",
+                "version" : "2023.1",
+                "key"     : "Concept"
+            },
+            "properties"  : [
+                {
+                    "property": {
+                        "language": "LionCore-M3",
+                        "version" : "2023.1",
+                        "key"     : "Concept-abstract"
+                    },
+                    "value"   : "false"
+                },
+                {
+                    "property": {
+                        "language": "LionCore-M3",
+                        "version" : "2023.1",
+                        "key"     : "Concept-partition"
+                    },
+                    "value"   : "false"
+                },
+                {
+                    "property": {
+                        "language": "LionCore-builtins",
+                        "version" : "2023.1",
+                        "key"     : "LionCore-builtins-INamed-name"
+                    },
+                    "value"   : "Folder"
+                },
+                {
+                    "property": {
+                        "language": "LionCore-M3",
+                        "version" : "2023.1",
+                        "key"     : "IKeyed-key"
+                    },
+                    "value"   : "Folder-key"
+                }
+            ],
+            "containments": [
+                {
+                    "containment": {
+                        "language": "LionCore-M3",
+                        "version" : "2023.1",
+                        "key"     : "Classifier-features"
+                    },
+                    "children"   : [
+                        "ID-6"
+                    ]
+                }
+            ],
+            "references"  : [
+                {
+                    "reference": {
+                        "language": "LionCore-M3",
+                        "version" : "2023.1",
+                        "key"     : "Concept-extends"
+                    },
+                    "targets"  : [
+                        {
+                            "resolveInfo": "FileSystemElement",
+                            "reference"  : "ID-3"
+                        }
+                    ]
+                },
+                {
+                    "reference": {
+                        "language": "LionCore-M3",
+                        "version" : "2023.1",
+                        "key"     : "Concept-implements"
+                    },
+                    "targets"  : []
+                }
+            ],
+            "annotations" : [],
+            "parent"      : "ID-2"
+        },
+        {
+            "id"          : "ID-6",
+            "classifier"  : {
+                "language": "LionCore-M3",
+                "version" : "2023.1",
+                "key"     : "Containment"
+            },
+            "properties"  : [
+                {
+                    "property": {
+                        "language": "LionCore-M3",
+                        "version" : "2023.1",
+                        "key"     : "Link-multiple"
+                    },
+                    "value"   : "true"
+                },
+                {
+                    "property": {
+                        "language": "LionCore-M3",
+                        "version" : "2023.1",
+                        "key"     : "Feature-optional"
+                    },
+                    "value"   : "false"
+                },
+                {
+                    "property": {
+                        "language": "LionCore-builtins",
+                        "version" : "2023.1",
+                        "key"     : "LionCore-builtins-INamed-name"
+                    },
+                    "value"   : "listing"
+                },
+                {
+                    "property": {
+                        "language": "LionCore-M3",
+                        "version" : "2023.1",
+                        "key"     : "IKeyed-key"
+                    },
+                    "value"   : "Folder-listing-key"
+                }
+            ],
+            "containments": [],
+            "references"  : [
+                {
+                    "reference": {
+                        "language": "LionCore-M3",
+                        "version" : "2023.1",
+                        "key"     : "Link-type"
+                    },
+                    "targets"  : [
+                        {
+                            "resolveInfo": "FileSystemElement",
+                            "reference"  : "ID-3"
+                        }
+                    ]
+                }
+            ],
+            "annotations" : [],
+            "parent"      : "ID-5"
+        }
+    ]
+}

@@ -17,16 +17,10 @@ export class NodeUtils {
      * @param node
      * @param key
      */
-    static findLwProperty(node: LionWebJsonNode, key: string): LionWebJsonProperty | null {
-        for (const property of node.properties) {
-            if (property.property.key === key) {
-                return property
-            }
-        }
-        return null
-    }
-
     static findProperty(node: LionWebJsonNode, property: LionWebJsonMetaPointer): LionWebJsonProperty | undefined {
+        if (node === undefined) {
+            return undefined
+        }
         return node.properties.find(
             prop => isEqualMetaPointer(prop.property, property)
         )
@@ -37,56 +31,44 @@ export class NodeUtils {
      * @param node
      * @param key
      */
-    static findLwChild(node: LionWebJsonNode, key: string): LionWebJsonContainment | null {
+    static findChild(node: LionWebJsonNode, key: string): LionWebJsonContainment | undefined {
+        if (node === undefined) {
+            return undefined
+        }
         for (const containment of node.containments) {
             if (containment.containment.key === key) {
                 return containment
             }
         }
-        return null
+        return undefined
     }
 
     static findContainment(node: LionWebJsonNode, containment: LionWebJsonMetaPointer): LionWebJsonContainment | undefined {
-        return node.containments.find(
-            cont => isEqualMetaPointer(cont.containment, containment)
-        )
-    }
-
-
-    static findLwReference(node: LionWebJsonNode, key: string): LionWebJsonReference | null {
-        for (const reference of node.references) {
-            if (reference.reference.key === key) {
-                return reference
-            }
+        if (node === undefined) {
+            return undefined
         }
-        return null
+        return node.containments.find(cont => isEqualMetaPointer(cont.containment, containment))
     }
 
-    static findLwReferenceTarget(
-        lwReferenceTargets: LionWebJsonReferenceTarget[],
+    static findReference(node: LionWebJsonNode, reference: LionWebJsonMetaPointer): LionWebJsonReference | undefined {
+        if (node === undefined) {
+            return undefined
+        }
+        return node.references.find(ref => isEqualMetaPointer(ref.reference, reference))
+    }
+
+    static findReferenceTarget(
+        referenceTargets: LionWebJsonReferenceTarget[],
         target: LionWebJsonReferenceTarget,
-    ): LionWebJsonReferenceTarget | null {
-        for (const refTarget of lwReferenceTargets) {
+    ): LionWebJsonReferenceTarget | undefined {
+        for (const refTarget of referenceTargets) {
             if (isEqualReferenceTarget(refTarget, target)) {
                 return refTarget
             }
         }
-        return null
+        return undefined
     }
     
-    /**
-     * Get all nodes that are children for _node_: both the containment and annotation children
-     * @param node
-     */
-    static allDirectChildren(node: LionWebJsonNode): string[] {
-        const result: string[] = []
-        for (const containment of node.containments) {
-            result.push(...containment.children)
-        }
-        result.push(...node.annotations)
-        return result
-    }
-
     static findContainmentContainingChild(containments: LionWebJsonContainment[], childId: string): LionWebJsonContainment | undefined {
         return containments.find(cont => cont.children.includes(childId))
     }

@@ -1,5 +1,7 @@
+import { LanguageRegistry } from "../languages/index.js"
 import { validateFolder } from "./FileUtils.js"
 
 const folder = process.argv[2]
 
-validateFolder(folder)
+const registry = new LanguageRegistry()
+validateFolder(folder, registry)

@@ -9,7 +9,6 @@ export function getFilesRecursive(dirPath: string, arrayOfFiles: string[]) {
     files.forEach(function (file: string) {
         if (fs.statSync(dirPath + "/" + file).isDirectory()) {
             arrayOfFiles = getFilesRecursive(dirPath + "/" + file, arrayOfFiles)
-            // arrayOfFiles.push(path.join(dirPath, "/", file));
         } else {
             arrayOfFiles.push(path.join(dirPath, "/", file))
         }
