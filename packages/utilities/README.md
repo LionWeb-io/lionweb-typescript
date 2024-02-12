@@ -15,6 +15,13 @@ It contains utilities on top of the `core` package, such as:
 
 ## Changelog
 
+### 0.6.1
+
+* Improve PlantUML and Mermaid diagram generation:
+  * Primitive types now rendered as classes marked as "<<primitive type>>".
+  * Concepts or Annotations that extend the "Node" concept built into LionCore don't show that.
+  * Optional (single-valued) features are now shown with a question mark (`?`) directly after the type, instead of being marked as "<<optional>>".
+
 ### 0.6.0
 
 * Add support for annotations in diagram generation (PlantUML and Mermaid), and textualization.

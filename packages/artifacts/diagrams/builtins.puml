@@ -1,0 +1,28 @@
+@startuml
+hide empty members
+
+' qualified name: "LionCore_builtins"
+
+
+class "Boolean" <<primitive type>>
+interface INamed {
+  name: String
+}
+
+class "Integer" <<primitive type>>
+class "JSON" <<primitive type>>
+abstract class Node
+
+class "String" <<primitive type>>
+
+
+' relations:
+
+
+
+
+
+
+
+
+@enduml

@@ -7,6 +7,7 @@ import {
     Enumeration,
     Feature,
     Interface,
+    isBuiltinNodeConcept,
     isRef,
     Language,
     LanguageEntity,
@@ -48,6 +49,7 @@ hide empty members
 `
 ])
 
+
 const generateForEnumeration = ({name, literals}: Enumeration) =>
     [
 `enum ${name} {`,
@@ -61,7 +63,7 @@ const generateForEnumeration = ({name, literals}: Enumeration) =>
 const generateForAnnotation = ({name, features, extends: extends_, implements: implements_}: Annotation) => {
     const fragments: string[] = []
     fragments.push(`annotation`, name)
-    if (isRef(extends_)) {
+    if (isRef(extends_) && !isBuiltinNodeConcept(extends_)) {
         fragments.push(`extends`, extends_.name)
     }
     if (implements_.length > 0) {
@@ -91,7 +93,7 @@ const generateForConcept = ({name, features, abstract: abstract_, extends: exten
     if (partition) {
         fragments.push(`<<partition>>`)
     }
-    if (isRef(extends_)) {
+    if (isRef(extends_) && !isBuiltinNodeConcept(extends_)) {
         fragments.push(`extends`, extends_.name)
     }
     if (implements_.length > 0) {
@@ -133,15 +135,12 @@ const generateForNonRelationalFeature = (feature: Feature) => {
     const {name, optional} = feature
     const multiple = feature instanceof Link && feature.multiple
     const type_ = type(feature)
-    return `${name}: ${multiple ? `List<` : ``}${type_ === unresolved ? `???` : type_.name}${multiple ? `>` : ``}${(optional && !multiple) ? ` <<optional>>` : ``}`
+    return `${name}: ${multiple ? `List<` : ``}${type_ === unresolved ? `???` : type_.name}${(optional && !multiple) ? `?` : ``}${multiple ? `>` : ``}`
 }
 
 
 const generateForPrimitiveType = ({name}: PrimitiveType) =>
-`' primitive type: "${name}"
-
-`
-// Note: No construct for PrimitiveType exists in PlantUML.
+`class "${name}" <<primitive type>>`
 
 
 const generateForEntity = (entity: LanguageEntity) => {

@@ -111,10 +111,10 @@ const generateForNonRelationalFeature = (feature: Feature) => {
 
 
 const generateForPrimitiveType = ({name}: PrimitiveType) =>
-`%% primitive type: "${name}"
+`class ${name}
+<<PrimitiveType>> ${name}
 
 `
-// Note: No construct for PrimitiveType exists in PlantUML.
 
 
 const generateForEntity = (entity: LanguageEntity) => {

@@ -1,5 +1,5 @@
 import {LanguageFactory} from "./factory.js"
-import {lioncoreBuiltinsKey, Property} from "./types.js"
+import {Classifier, Concept, lioncoreBuiltinsKey, Property} from "./types.js"
 import {StringsMapper} from "../utils/string-mapping.js"
 import {currentReleaseVersion} from "../version.js"
 
@@ -32,6 +32,14 @@ const jsonDatatype = factory.primitiveType("JSON")
 
 
 const node = factory.concept("Node", true)
+
+
+const isBuiltinNodeConcept = (classifier: Classifier) =>
+       classifier instanceof Concept
+    && classifier.language.key === lioncoreBuiltinsKey
+    && classifier.language.version === currentReleaseVersion
+    && classifier.key === builtinClassifiers.node.key
+    && (classifier as Concept).abstract
 
 
 const inamed = factory.interface("INamed")
@@ -112,11 +120,12 @@ export type {
 }
 
 export {
-    lioncoreBuiltins,
     builtinPrimitives,
     builtinClassifiers,
     builtinFeatures,
-    serializeBuiltin,
-    deserializeBuiltin
+    deserializeBuiltin,
+    isBuiltinNodeConcept,
+    lioncoreBuiltins,
+    serializeBuiltin
 }
 
