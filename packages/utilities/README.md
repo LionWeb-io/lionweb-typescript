@@ -22,6 +22,7 @@ It contains utilities on top of the `core` package, such as:
   * Concepts or Annotations that extend the "Node" concept built into LionCore don't show that.
   * Optional (single-valued) features are now shown with a question mark (`?`) directly after the type, instead of being marked as "<<optional>>".
   * Fix/add support for annotations.
+* **Remove** all Ecore functionality (=[issue #121](https://github.com/LionWeb-io/lionweb-typescript/issues/121))
 
 ### 0.6.0
 
