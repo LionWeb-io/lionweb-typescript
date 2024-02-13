@@ -3,7 +3,7 @@ classDiagram
 
   class Annotation1
   <<Annotation>> Annotation1
-  Annotation1 --> Node
+  Annotation1 ..> Node
 
   class Annotation2
   <<Annotation>> Annotation2
@@ -23,8 +23,8 @@ classDiagram
 
 
 
-  Concept1 "*" -- "*" Concept1: selfRefs
-  Concept1 "*" -- "1" Node: nodeTargets
+  Concept1 "*" --> "*" Concept1: selfRefs
+  Concept1 "*" --> "1" Node: nodeTargets
 
 
 

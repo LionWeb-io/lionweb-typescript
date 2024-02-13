@@ -73,7 +73,7 @@ const generateForAnnotation = ({name, features, extends: extends_, implements: i
     return nonRelationalFeatures_.length === 0
         ? [
             `${fragments.join(" ")}`,
-            isRef(annotates) ? `${name} --> ${annotates.name}` : [],
+            isRef(annotates) ? `${name} ..> ${annotates.name}` : [],
             ``
         ]
         : [
@@ -180,7 +180,7 @@ const generateForRelation = ({name: leftName}: LanguageEntity, relation: Link) =
     const isContainment = relation instanceof Containment
     const leftMultiplicity = isContainment ? `1` : `*`
     const rightMultiplicity = multiple ? "*" : (optional ? "0..1" : "1")
-    return `${leftName} "${leftMultiplicity}" ${isContainment ? `o` : ``}-- "${rightMultiplicity}" ${rightName}: ${relationName}`
+    return `${leftName} "${leftMultiplicity}" ${isContainment ? `o` : ``}--> "${rightMultiplicity}" ${rightName}: ${relationName}`
 }
 
 

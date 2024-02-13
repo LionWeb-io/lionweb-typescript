@@ -5,7 +5,7 @@ hide empty members
 
 
 annotation Annotation1
-Annotation1 --> Node
+Annotation1 ..> Node
 
 annotation Annotation2 extends Annotation1 implements Interface1
 
@@ -21,8 +21,8 @@ interface Interface1
 
 
 
-Concept1 "*" -- "*" Concept1: selfRefs
-Concept1 "*" -- "1" Node: nodeTargets
+Concept1 "*" --> "*" Concept1: selfRefs
+Concept1 "*" --> "1" Node: nodeTargets
 
 
 
