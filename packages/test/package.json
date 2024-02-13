@@ -3,9 +3,7 @@
   "version": "0.6.1-beta.0",
   "description": "LionWeb test for {Java|Type}Script",
   "private": true,
-  "main": "./dist/index.js",
   "exports": {
-    "./": "./dist/index.js",
     "./instances": "./dist/index.js",
     "./languages": "./dist/index.js"
   },
