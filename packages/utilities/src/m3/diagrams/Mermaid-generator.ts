@@ -23,7 +23,7 @@ import {
 
 const indented = indentWith(`  `)(1)
 
-const block = (header: string, elements: NestedString): NestedString =>
+const block = (header: NestedString, elements: NestedString): NestedString =>
     elements.length === 0
         ? header
         : [
@@ -67,10 +67,14 @@ const generateForEnumeration = ({name, literals}: Enumeration) =>
     ))
 
 
-const generateForAnnotation = ({name, features, extends: extends_/*, implements: implements_*/}: Annotation) =>
+const generateForAnnotation = ({name, features, extends: extends_, annotates/*, implements: implements_*/}: Annotation) =>
     [
         block(
-            `annotation ${name}`,
+            [
+                `class ${name}`,
+                `<<Annotation>> ${name}`,
+                isRef(annotates) ? `${name} --> ${annotates.name}` : []
+            ],
             nonRelationalFeatures(features).map(generateForNonRelationalFeature)
         ),
         isRef(extends_) ? `${extends_.name} <|-- ${name}` : [],

@@ -60,7 +60,7 @@ const generateForEnumeration = ({name, literals}: Enumeration) =>
     ]
 
 
-const generateForAnnotation = ({name, features, extends: extends_, implements: implements_}: Annotation) => {
+const generateForAnnotation = ({name, features, extends: extends_, implements: implements_, annotates}: Annotation) => {
     const fragments: string[] = []
     fragments.push(`annotation`, name)
     if (isRef(extends_) && !isBuiltinNodeConcept(extends_)) {
@@ -73,6 +73,7 @@ const generateForAnnotation = ({name, features, extends: extends_, implements: i
     return nonRelationalFeatures_.length === 0
         ? [
             `${fragments.join(" ")}`,
+            isRef(annotates) ? `${name} --> ${annotates.name}` : [],
             ``
         ]
         : [

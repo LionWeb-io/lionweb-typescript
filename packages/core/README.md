@@ -28,6 +28,7 @@ The following is a list of links to potential starting points:
 ### 0.6.1
 
 * Introduce a `isBuiltinNodeConcept` function that checks whether a classifier happens to be the `Node` concept built into LionCore.
+* Add a reference `annotates` to `Annotation`.
 
 ### 0.6.0
 

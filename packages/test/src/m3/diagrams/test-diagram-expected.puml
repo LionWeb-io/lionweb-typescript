@@ -4,6 +4,9 @@ hide empty members
 ' qualified name: "test"
 
 
+annotation Annotation1
+Annotation1 --> Node
+
 class Concept1 {
   prop1: CustomPrimitive?
 }
@@ -13,7 +16,9 @@ class "CustomPrimitive" <<primitive type>>
 
 ' relations:
 
-Concept1 "*" -- "*" Concept1: refs
+
+Concept1 "*" -- "*" Concept1: selfRefs
+Concept1 "*" -- "1" Node: nodeTargets
 
 
 @enduml

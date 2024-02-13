@@ -21,6 +21,7 @@ It contains utilities on top of the `core` package, such as:
   * Primitive types now rendered as classes marked as "<<primitive type>>".
   * Concepts or Annotations that extend the "Node" concept built into LionCore don't show that.
   * Optional (single-valued) features are now shown with a question mark (`?`) directly after the type, instead of being marked as "<<optional>>".
+  * Fix/add support for annotations.
 
 ### 0.6.0
 
