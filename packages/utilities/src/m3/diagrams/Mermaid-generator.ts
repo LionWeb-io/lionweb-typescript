@@ -7,6 +7,7 @@ import {
     Enumeration,
     Feature,
     Interface,
+    isBuiltinNodeConcept,
     isRef,
     Language,
     LanguageEntity,
@@ -23,7 +24,7 @@ import {
 
 const indented = indentWith(`  `)(1)
 
-const block = (header: string, elements: NestedString): NestedString =>
+const block = (header: NestedString, elements: NestedString): NestedString =>
     elements.length === 0
         ? header
         : [
@@ -67,13 +68,18 @@ const generateForEnumeration = ({name, literals}: Enumeration) =>
     ))
 
 
-const generateForAnnotation = ({name, features, extends: extends_/*, implements: implements_*/}: Annotation) =>
+const generateForAnnotation = ({name, features, extends: extends_, implements: implements_, annotates}: Annotation) =>
     [
         block(
-            `annotation ${name}`,
+            [
+                `class ${name}`,
+                `<<Annotation>> ${name}`,
+                isRef(annotates) ? `${name} ..> ${annotates.name}` : []
+            ],
             nonRelationalFeatures(features).map(generateForNonRelationalFeature)
         ),
-        isRef(extends_) ? `${extends_.name} <|-- ${name}` : [],
+        (isRef(extends_) && !isBuiltinNodeConcept(extends_)) ? `${extends_.name} <|-- ${name}` : [],
+        implements_.filter(isRef).map((interface_) => `${interface_.name} <|.. ${name}`),
         ``
     ]
 
@@ -84,7 +90,7 @@ const generateForConcept = ({name, features, abstract: abstract_, extends: exten
             nonRelationalFeatures(features).map(generateForNonRelationalFeature)
         ),
         abstract_ ? `<<Abstract>> ${name}` : [],
-        isRef(extends_) ? `${extends_.name} <|-- ${name}` : [],
+        (isRef(extends_) && !isBuiltinNodeConcept(extends_)) ? `${extends_.name} <|-- ${name}` : [],
         ``
     ]
 
@@ -111,10 +117,10 @@ const generateForNonRelationalFeature = (feature: Feature) => {
 
 
 const generateForPrimitiveType = ({name}: PrimitiveType) =>
-`%% primitive type: "${name}"
+`class ${name}
+<<PrimitiveType>> ${name}
 
 `
-// Note: No construct for PrimitiveType exists in PlantUML.
 
 
 const generateForEntity = (entity: LanguageEntity) => {
@@ -157,6 +163,6 @@ const generateForRelation = ({name: leftName}: LanguageEntity, relation: Link) =
         }
         return optional ? "0..1" : "1"
     })()
-    return `${leftName} "${leftMultiplicity}" ${isContainment ? `o` : ``}-- "${rightMultiplicity}" ${rightName}: ${relationName}`
+    return `${leftName} "${leftMultiplicity}" ${isContainment ? `o` : ``}--> "${rightMultiplicity}" ${rightName}: ${relationName}`
 }
 

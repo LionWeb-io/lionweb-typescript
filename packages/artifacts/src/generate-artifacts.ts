@@ -22,6 +22,10 @@ writeFileSync(diagramPath( "metametamodel-gen.puml"), generatePlantUmlForLanguag
 writeFileSync(diagramPath("metametamodel-gen.md"), generateMermaidForLanguage(lioncore))
 console.log(`generated diagrams for LionCore M3`)
 
+writeFileSync(diagramPath( "builtins.puml"), generatePlantUmlForLanguage(lioncoreBuiltins))
+writeFileSync(diagramPath("builtins.md"), generateMermaidForLanguage(lioncoreBuiltins))
+console.log(`generated diagrams for LionCore Built-ins`)
+
 
 const saveLanguageFiles = (language: Language, name: string, ...generationOptions: GenerationOptions[]) => {
     writeJsonAsFile(languagePath(`${name}.json`), serializeLanguages(language))

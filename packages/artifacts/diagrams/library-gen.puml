@@ -7,7 +7,7 @@ hide empty members
 class Book {
   title: String
   pages: Integer
-  type: BookType <<optional>>
+  type: BookType?
 }
 
 enum BookType {

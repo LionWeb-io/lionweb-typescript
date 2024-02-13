@@ -25,6 +25,11 @@ The following is a list of links to potential starting points:
 
 ## Changelog
 
+### 0.6.1
+
+* Introduce a `isBuiltinNodeConcept` function that checks whether a classifier happens to be the `Node` concept built into LionCore.
+* Add a reference `annotates` to `Annotation`.
+
 ### 0.6.0
 
 * Introduce a type `SymbolTable` to encapsulate lookup of languages' entities and their features.
