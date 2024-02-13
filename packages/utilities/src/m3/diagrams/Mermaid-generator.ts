@@ -7,6 +7,7 @@ import {
     Enumeration,
     Feature,
     Interface,
+    isBuiltinNodeConcept,
     isRef,
     Language,
     LanguageEntity,
@@ -67,7 +68,7 @@ const generateForEnumeration = ({name, literals}: Enumeration) =>
     ))
 
 
-const generateForAnnotation = ({name, features, extends: extends_, annotates/*, implements: implements_*/}: Annotation) =>
+const generateForAnnotation = ({name, features, extends: extends_, implements: implements_, annotates}: Annotation) =>
     [
         block(
             [
@@ -77,7 +78,8 @@ const generateForAnnotation = ({name, features, extends: extends_, annotates/*, 
             ],
             nonRelationalFeatures(features).map(generateForNonRelationalFeature)
         ),
-        isRef(extends_) ? `${extends_.name} <|-- ${name}` : [],
+        (isRef(extends_) && !isBuiltinNodeConcept(extends_)) ? `${extends_.name} <|-- ${name}` : [],
+        implements_.filter(isRef).map((interface_) => `${interface_.name} <|.. ${name}`),
         ``
     ]
 
@@ -88,7 +90,7 @@ const generateForConcept = ({name, features, abstract: abstract_, extends: exten
             nonRelationalFeatures(features).map(generateForNonRelationalFeature)
         ),
         abstract_ ? `<<Abstract>> ${name}` : [],
-        isRef(extends_) ? `${extends_.name} <|-- ${name}` : [],
+        (isRef(extends_) && !isBuiltinNodeConcept(extends_)) ? `${extends_.name} <|-- ${name}` : [],
         ``
     ]
 

@@ -41,9 +41,14 @@ const testLanguage = (() => {
         factory.reference(concept1, "selfRefs").isMultiple().isOptional().ofType(concept1),
         factory.reference(concept1, "nodeTargets").ofType(builtinClassifiers.node)
     )
+
+    const interface1 = factory.interface("Interface1")
+
     const annotation1 = factory.annotation("Annotation1").annotating(builtinClassifiers.node)
 
-    factory.language.havingEntities(primitive1, concept1, annotation1)
+    const annotation2 = factory.annotation("Annotation2", annotation1).implementing(interface1)
+
+    factory.language.havingEntities(primitive1, concept1, interface1, annotation1, annotation2)
 
     return factory.language
 })()

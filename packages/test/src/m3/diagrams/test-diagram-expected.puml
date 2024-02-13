@@ -7,18 +7,23 @@ hide empty members
 annotation Annotation1
 Annotation1 --> Node
 
+annotation Annotation2 extends Annotation1 implements Interface1
+
 class Concept1 {
   prop1: CustomPrimitive?
 }
 
 class "CustomPrimitive" <<primitive type>>
+interface Interface1
 
 
 ' relations:
 
 
+
 Concept1 "*" -- "*" Concept1: selfRefs
 Concept1 "*" -- "1" Node: nodeTargets
+
 
 
 @enduml
