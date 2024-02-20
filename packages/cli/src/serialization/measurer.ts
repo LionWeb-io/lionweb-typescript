@@ -15,6 +15,8 @@ export const executeMeasureCommand = async (args: string[]) => {
 const measureSerializationChunk = async (path: string, languages: Language[]) => {
     const chunk = await readChunk(path)
     const extLessPath = path.substring(0, path.length - extname(path).length)
+    console.log(measure(chunk));
+       
     writeJsonAsFile(
         extLessPath + ".metrics.json",
         measure(chunk)
@@ -38,9 +40,9 @@ type Metrics = {
     instantiations: ClassifierInstantiationMetric[]
 }
 
-const measure = (serializationChunk: SerializationChunk): Metrics => ({
-    instantiations: []
-})
+// const measure = (serializationChunk: SerializationChunk): Metrics => ({
+//     instantiations: []
+// })
     /*
      * TODO  compute ClassifierInstantiationMetrics
      *
@@ -58,4 +60,34 @@ const measure = (serializationChunk: SerializationChunk): Metrics => ({
      * node dist/lionweb-cli.js measure ../artifacts/chunks/instances/library.json
      *      -> only gives keys of classifiers
      */
+
+const measure = (serializationChunk: SerializationChunk): Metrics => {
+     
+    const classifierCounts: {[key: string]: ClassifierInstantiationMetric} = {};
+
+    serializationChunk.nodes.forEach(node => {
+        const { language, version, key } = node.classifier;
+        const classifierId = `${key}:${language}:${version}`;
+        const namePropertyKey = `${language}_${key}_name`; // Construct name property key
+     
+        if (!classifierCounts[classifierId]) {
+            // Attempt to find a name property among the node's properties
+            // const nameProperty = node.properties.find(prop => prop.property.key === namePropertyKey)?.value;           
+            
+            classifierCounts[classifierId] = {
+                key,
+                language,
+                version,
+                count: 1,
+                // name: nameProperty
+            };
+        } else {
+            classifierCounts[classifierId].count += 1;
+        }
+    });
+
+    const instantiations: ClassifierInstantiationMetric[] = Object.values(classifierCounts);
+
+    return { instantiations };
+}
 
