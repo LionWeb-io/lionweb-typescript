@@ -1,5 +1,5 @@
 import {extname} from "path"
-import {Language, SerializationChunk} from "@lionweb/core"
+import {Language, MetaPointer, SerializationChunk, groupBy} from "@lionweb/core"
 import {readChunk, tryLoadAllAsLanguages, writeJsonAsFile} from "@lionweb/utilities"
 import {separate} from "../language-aware-args.js"
 
@@ -15,13 +15,12 @@ export const executeMeasureCommand = async (args: string[]) => {
 const measureSerializationChunk = async (path: string, languages: Language[]) => {
     const chunk = await readChunk(path)
     const extLessPath = path.substring(0, path.length - extname(path).length)
-    console.log(measure(chunk));
-       
+    const metricsPath = extLessPath + ".metrics.json"   
     writeJsonAsFile(
-        extLessPath + ".metrics.json",
+        metricsPath,
         measure(chunk)
     )
-    console.log(`wrote metrics for: ${path}`)
+    console.log(`Wrote metrics for ${path} --> ${metricsPath}`)
 }
 
 
@@ -40,54 +39,14 @@ type Metrics = {
     instantiations: ClassifierInstantiationMetric[]
 }
 
-// const measure = (serializationChunk: SerializationChunk): Metrics => ({
-//     instantiations: []
-// })
-    /*
-     * TODO  compute ClassifierInstantiationMetrics
-     *
-     * E.g. for library.json:
-     * {
-     *   instantiations: [
-     *    { name: "Library", key: "library", language: "library", version: "1", count: 1 },
-     *    { name: "Book", key: "Book", language: "library", version: "1", count: 1 },
-     *    { name: "GuideBookWriter", key: "GuideBookWriter", language: "library", version: "1", count: 1 },
-     *   ]
-     * }
-     *
-     * node dist/lionweb-cli.js measure ../artifacts/chunks/instances/library.json --language ./artifacts/chunks/languages/library.json
-     *      -> gives names of classifiers
-     * node dist/lionweb-cli.js measure ../artifacts/chunks/instances/library.json
-     *      -> only gives keys of classifiers
-     */
-
 const measure = (serializationChunk: SerializationChunk): Metrics => {
-     
-    const classifierCounts: {[key: string]: ClassifierInstantiationMetric} = {};
+        // Group nodes by classifier key, language, and version
+        const instantiationsPerId = groupBy(serializationChunk.nodes, ({ classifier }) => `${classifier.key}:${classifier.language}:${classifier.version}`)
 
-    serializationChunk.nodes.forEach(node => {
-        const { language, version, key } = node.classifier;
-        const classifierId = `${key}:${language}:${version}`;
-        const namePropertyKey = `${language}_${key}_name`; // Construct name property key
-     
-        if (!classifierCounts[classifierId]) {
-            // Attempt to find a name property among the node's properties
-            // const nameProperty = node.properties.find(prop => prop.property.key === namePropertyKey)?.value;           
-            
-            classifierCounts[classifierId] = {
-                key,
-                language,
-                version,
-                count: 1,
-                // name: nameProperty
-            };
-        } else {
-            classifierCounts[classifierId].count += 1;
-        }
-    });
-
-    const instantiations: ClassifierInstantiationMetric[] = Object.values(classifierCounts);
-
-    return { instantiations };
+        // Map grouped nodes to instantiations with count
+        const instantiations = Object.values(instantiationsPerId).map((nodes) => 
+             ({ ...nodes[0].classifier, count: nodes.length })
+        )
+        // Return the metrics object with instantiations
+        return { instantiations }
 }
-
