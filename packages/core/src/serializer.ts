@@ -105,7 +105,6 @@ export const serializeNodes = <NT extends Node>(nodes: NT[], extractionFacade: E
     return {
         serializationFormatVersion: currentSerializationFormatVersion,
         languages: languagesUsed
-            .filter((language) => !language.equals(lioncoreBuiltins))
             .map(({key, version}) => ({ key, version })),
         nodes: serializedNodes
     }

@@ -54,7 +54,7 @@ const testLanguage = (() => {
 })()
 
 
-describe.only("rendering languages as PlantUML diagrams", () => {
+describe("rendering languages as PlantUML diagrams", () => {
 
     it("is improved", () => {
         rendersEqualToFileOrOverwrite(generatePlantUmlForLanguage, "test-diagram-expected.puml")
@@ -62,7 +62,7 @@ describe.only("rendering languages as PlantUML diagrams", () => {
 
 })
 
-describe.only("rendering languages as Mermaid diagrams", () => {
+describe("rendering languages as Mermaid diagrams", () => {
 
     it("is improved", () => {
         rendersEqualToFileOrOverwrite(generateMermaidForLanguage, "test-diagram-expected.md")
