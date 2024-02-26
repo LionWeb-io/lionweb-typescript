@@ -25,3 +25,13 @@ The commands `npm run publish-local` and `npm run unpublish-local` are used to d
 The test runner runs tests at various levels similar (but probably not quite) as described in the [model correctness document](https://github.com/LionWeb-io/specification/blob/meinte/correctness/documentation/correctness.adoc).
 These two should converge in the future.
 
+
+## Changelog
+
+### 0.6.2
+
+* Don't rely on the JavaScript features – import assertions – that are still marked as experimental.
+    (This necessitates explicitly copying the relevant JSON files.)
+
+(For earlier versions no changelog was maintained.)
+
