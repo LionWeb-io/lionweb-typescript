@@ -4,8 +4,8 @@ import { LION_CORE_M3_KEY, MetaPointers } from "../json/M3definitions.js"
 import { createRequire } from 'module';
 
 const require = createRequire(import.meta.url);
-const LionCore_M3 = require('./LionCore-M3.json'); // now works
-const LionCore_builtins = require('./LionCore-builtins.json'); // now works
+const LionCore_M3 = require('./LionCore-M3.json');
+const LionCore_builtins = require('./LionCore-builtins.json');
 
 export const LionCore_M3_Json = LionCore_M3 as LionWebJsonChunk
 export const LionCore_builtins_Json = LionCore_builtins as LionWebJsonChunk
