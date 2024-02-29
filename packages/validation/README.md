@@ -1,5 +1,8 @@
 # The `validation` package
 
+[![npm](https://img.shields.io/npm/v/%40lionweb%2Fvalidation?label=%40lionweb%2Fvalidation)
+](https://www.npmjs.com/package/@lionweb/validation)
+
 The code in this package implements validators that check serialization chunks against the [serialization specification](https://github.com/LionWeb-io/specification/blob/main/2023.1/serialization/serialization.adoc).
 This package is intentionally kept very lightweight, e.g. it uses types instead of classes and has zero dependencies on external libraries/packages.
 

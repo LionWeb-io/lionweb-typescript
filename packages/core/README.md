@@ -1,5 +1,8 @@
 # The `core` package
 
+[![npm](https://img.shields.io/npm/v/%40lionweb%2Fcore?label=%40lionweb%2Fcore)
+](https://www.npmjs.com/package/@lionweb/core)
+
 An NPM package that can be added to a Node.js/NPM codebase as follows:
 
 ```shell

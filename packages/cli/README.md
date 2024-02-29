@@ -1,5 +1,8 @@
 # The `cli` package
 
+[![npm](https://img.shields.io/npm/v/%40lionweb%2Fcli?label=%40lionweb%2Fcli)
+](https://www.npmjs.com/package/@lionweb/cli)
+
 This package exposes an executable for use with a CLI.
 It can be used as follows:
 

@@ -1,5 +1,14 @@
 # README
 
+[![npm](https://img.shields.io/npm/v/%40lionweb%2Fcore?label=%40lionweb%2Fcore)
+](https://www.npmjs.com/package/@lionweb/core)
+[![npm](https://img.shields.io/npm/v/%40lionweb%2Fcli?label=%40lionweb%2Fcli)
+](https://www.npmjs.com/package/@lionweb/cli)
+[![npm](https://img.shields.io/npm/v/%40lionweb%2Futilities?label=%40lionweb%2Futilities)
+](https://www.npmjs.com/package/@lionweb/utilities)
+[![npm](https://img.shields.io/npm/v/%40lionweb%2Fvalidation?label=%40lionweb%2Fvalidation)
+](https://www.npmjs.com/package/@lionweb/validation)
+
 This repository contains a TypeScript implementation for (parts of) the [LionWeb specification](https://lionweb-io.github.io/specification/) – specifically: release version **2023.1** of the LionWeb specification.
 
 _Note_ that this repo doesn't implement the specification completely.

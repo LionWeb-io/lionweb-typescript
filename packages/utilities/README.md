@@ -1,5 +1,8 @@
 # The `utilities` package
 
+[![npm](https://img.shields.io/npm/v/%40lionweb%2Futilities?label=%40lionweb%2Futilities)
+](https://www.npmjs.com/package/@lionweb/utilities)
+
 An NPM package that can be added to a Node.js/NPM codebase as follows:
 
 ```shell
