@@ -1,5 +1,11 @@
 # README
 
+[![license](https://img.shields.io/badge/License-Apache%202.0-green.svg?style=flat)
+](./LICENSE)
+
+[![CI](https://github.com/LionWeb-io/lionweb-typescript/actions/workflows/test.yaml/badge.svg)
+](https://github.com/LionWeb-io/lionweb-typescript/actions/workflows/test.yaml)
+
 [![npm](https://img.shields.io/npm/v/%40lionweb%2Fcore?label=%40lionweb%2Fcore)
 ](https://www.npmjs.com/package/@lionweb/core)
 [![npm](https://img.shields.io/npm/v/%40lionweb%2Fcli?label=%40lionweb%2Fcli)
@@ -8,6 +14,7 @@
 ](https://www.npmjs.com/package/@lionweb/utilities)
 [![npm](https://img.shields.io/npm/v/%40lionweb%2Fvalidation?label=%40lionweb%2Fvalidation)
 ](https://www.npmjs.com/package/@lionweb/validation)
+
 
 This repository contains a TypeScript implementation for (parts of) the [LionWeb specification](https://lionweb-io.github.io/specification/) – specifically: release version **2023.1** of the LionWeb specification.
 
