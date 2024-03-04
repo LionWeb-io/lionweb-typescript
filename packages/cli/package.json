@@ -5,9 +5,7 @@
   "bin": {
     "lionweb-cli": "./dist/lionweb-cli.js"
   },
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "typings": "dist/index.d.ts",
+  "main": "dist/lionweb-cli.js",
   "type": "module",
   "license": "Apache-2.0",
   "repository": {

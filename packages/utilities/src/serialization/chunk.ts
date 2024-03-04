@@ -53,3 +53,6 @@ export const tryLoadAllAsLanguages = async (paths: string[]): Promise<Language[]
     (await Promise.all(paths.map(tryLoadAsLanguages))).flat()
 // TODO  load languages “in dependency order”, i.e.: later-named languages can be dependent on earlier-named languages -- (this is a foldRight, really)
 
+
+// TODO  make names consistent: "load" vs. "read", "chunk" vs. "serialization chunk"
+
