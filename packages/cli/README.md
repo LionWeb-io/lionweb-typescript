@@ -46,6 +46,10 @@ That means that key-value pairs appear in precisely the same order as they do in
 
 ## Changelog
 
+### 0.6.2
+
+* Expose diffing functionality from `@lionweb/validation`
+
 ### 0.6.1
 
 * Fix that `@lionweb/validation` was not specified as a (non-dev) dependency.

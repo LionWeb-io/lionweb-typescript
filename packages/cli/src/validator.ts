@@ -1,9 +1,9 @@
 import { LanguageRegistry, validateFileResult } from "@lionweb/validation"
 
 
-export function runValidation(file: string): void {
-    console.log(`Validating ${file}`)
-    const validationResult = validateFileResult(file, false, new LanguageRegistry())
+export function runValidationOnSerializationChunkAt(path: string): void {
+    console.log(`Validating ${path}`)
+    const validationResult = validateFileResult(path, false, new LanguageRegistry())
     console.log(
         validationResult.hasErrors()
             ? validationResult.issues.map(issue => issue.errorMsg()).join("\n")

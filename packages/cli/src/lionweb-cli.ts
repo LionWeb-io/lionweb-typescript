@@ -3,23 +3,25 @@
 
 import {argv} from "process"
 
-import {diagramFromSerialization} from "./m3/diagram-generator.js"
+import {diagramFromSerializationChunkAt} from "./m3/diagram-generator.js"
 import {generateTsTypesWith} from "./m3/ts-types-generator.js"
-import {sortSerialization} from "./serialization/sorter.js"
-import {repairSerializationChunk} from "./serialization/repairer.js"
+import {diffSerializationChunks} from "./serialization/differ.js"
+import {repairSerializationChunkAt} from "./serialization/repairer.js"
+import {sortSerializationChunkAt} from "./serialization/sorter.js"
 import {executeTextualizeCommand} from "./serialization/textualizer.js"
-import {runValidation} from "./validator.js"
+import {runValidationOnSerializationChunkAt} from "./validator.js"
 
 
 const main = async (args: string[])=> {
 
     const DIAGRAM_COMMAND = "diagram"
-    const SORT_COMMAND = "sort"
+    const DIFF_COMMAND = "diff"
     const GENERATE_TS_TYPES_COMMAND = "generate-ts-types"
     const REPAIR_COMMAND = "repair"
+    const SORT_COMMAND = "sort"
     const TEXTUALIZE_COMMAND = "textualize"
     const VALIDATE_COMMAND = "validate"
-    const commands = [DIAGRAM_COMMAND, SORT_COMMAND, GENERATE_TS_TYPES_COMMAND, REPAIR_COMMAND, TEXTUALIZE_COMMAND, VALIDATE_COMMAND].sort()
+    const commands = [DIAGRAM_COMMAND, DIFF_COMMAND, GENERATE_TS_TYPES_COMMAND, REPAIR_COMMAND, SORT_COMMAND, TEXTUALIZE_COMMAND, VALIDATE_COMMAND].sort()
 
     if (args.length <= 2) {
         console.log(
@@ -45,23 +47,22 @@ ${commands.map((command) => `    ${command}\n`).join(``)}
 `The ${DIAGRAM_COMMAND} command generates a PlantUML and Mermaid diagram for the language that the given paths point to.`
                 )
             } else {
-                commandArgs.forEach(diagramFromSerialization)
+                commandArgs.forEach(diagramFromSerializationChunkAt)
             }
             return
         }
 
-        case SORT_COMMAND: {
-            if (commandArgs.length === 0) {
+        case DIFF_COMMAND: {
+            if (commandArgs.length !== 3) {
                 console.log(
-`The ${SORT_COMMAND} command sorts JSON files that are serialization chunk – sorted serialization chunks can be easily compared.
-(See the README.md for more information.)`
+`The ${DIFF_COMMAND} command generates the difference between two serialization chunks, in a JSON format.
+The chunks to diff are given as the first two paths, and the path for the diff JSON file as the third.`
                 )
             } else {
-                commandArgs.forEach(sortSerialization)
+                await diffSerializationChunks(commandArgs[0], commandArgs[1], commandArgs[2])
             }
             return
         }
-
         case GENERATE_TS_TYPES_COMMAND: {
             if (commandArgs.length === 0) {
                 console.log(
@@ -81,7 +82,19 @@ Right now, that means that key-value pairs appear in precisely the same order as
 Missing key-value pairs are put in and get their default values.`
                 )
             } else {
-                commandArgs.forEach(repairSerializationChunk)
+                commandArgs.forEach(repairSerializationChunkAt)
+            }
+            return
+        }
+
+        case SORT_COMMAND: {
+            if (commandArgs.length === 0) {
+                console.log(
+                    `The ${SORT_COMMAND} command sorts JSON files that are serialization chunk – sorted serialization chunks can be easily compared.
+(See the README.md for more information.)`
+                )
+            } else {
+                commandArgs.forEach(sortSerializationChunkAt)
             }
             return
         }
@@ -108,7 +121,7 @@ textual syntax is used, unless a flag '--asRegular' is provided.
 `The ${VALIDATE_COMMAND} command validates a serialization chunk. \nUsage: npx @lionweb/cli validate <path_to_chunk>`
                 )
             } else {
-                commandArgs.forEach(runValidation)
+                commandArgs.forEach(runValidationOnSerializationChunkAt)
             }
             return
         }

@@ -1,13 +1,13 @@
 import {writeFileSync} from "fs"
 import {dirname} from "path"
 
-import {deserializeLanguages, SerializationChunk} from "@lionweb/core"
-import {generateMermaidForLanguage, generatePlantUmlForLanguage, readFileAsJson} from "@lionweb/utilities"
+import {deserializeLanguages} from "@lionweb/core"
+import {generateMermaidForLanguage, generatePlantUmlForLanguage, readChunk} from "@lionweb/utilities"
 
 
-export const diagramFromSerialization = async (path: string) => {
+export const diagramFromSerializationChunkAt = async (path: string) => {
     try {
-        const json = readFileAsJson(path) as SerializationChunk
+        const json = await readChunk(path)
         const dir = dirname(path)
         const languages = deserializeLanguages(json)
         languages.forEach((language) => {
