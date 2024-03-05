@@ -1,5 +1,5 @@
 import { extname } from "path"
-import { Language, MetaPointer, SerializationChunk, groupBy, MemoisingSymbolTable } from "@lionweb/core"
+import { Language, MetaPointer, SerializationChunk, groupBy, MemoisingSymbolTable, conceptsOf, Classifier } from "@lionweb/core"
 import { readChunk, tryLoadAllAsLanguages, writeJsonAsFile } from "@lionweb/utilities"
 import { separate } from "../language-aware-args.js"
 
@@ -34,16 +34,14 @@ type ClassifierInstantiationMetric = {
 
 type Metrics = {
     instantiations: ClassifierInstantiationMetric[]
+    unusedConcreteConcepts: MetaPointer[]
 }
 
 const measure = (serializationChunk: SerializationChunk, languages: Language[]): Metrics => {
     const symbolTable = new MemoisingSymbolTable(languages)
 
     // Group nodes by classifier key, language, and version
-    const instantiationsPerId = groupBy(
-        serializationChunk.nodes,
-        ({ classifier }) => `${classifier.key}:${classifier.language}:${classifier.version}`
-    )
+    const instantiationsPerId = groupBy(serializationChunk.nodes, ({ classifier }) => getInstantiationPerId(classifier))
 
     // Map grouped nodes to instantiations with count
     const instantiations = Object.values(instantiationsPerId).map(nodes => ({
@@ -51,6 +49,20 @@ const measure = (serializationChunk: SerializationChunk, languages: Language[]):
         name: symbolTable.entityMatching(nodes[0].classifier)?.name,
         count: nodes.length
     }))
+
+    // Compute all concepts for the language
+    const concreteConcepts = languages.flatMap(language => conceptsOf(language).filter(concept => !concept.abstract))
+    const unusedConcreteConcepts = concreteConcepts.filter(concept => !instantiations.some(({ key }) => key === concept.key))
+
     // Return the metrics object with instantiations
-    return { instantiations }
+    return {
+        instantiations,
+        unusedConcreteConcepts: unusedConcreteConcepts.map(concept => ({
+            language: concept.language.key,
+            key: concept.key,
+            version: concept.language.version
+        }))
+    }
 }
+
+const getInstantiationPerId = (classifier: MetaPointer) => `${classifier.key}:${classifier.language}:${classifier.version}`
