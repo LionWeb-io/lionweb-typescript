@@ -15,6 +15,10 @@ It contains utilities on top of the `core` package, such as:
 
 ## Changelog
 
+### 0.6.2
+
+* Add a function `measure` that computes metrics on a serialization chunk.
+
 ### 0.6.1
 
 * Improve PlantUML and Mermaid diagram generation:
