@@ -5,6 +5,7 @@
 
 import {ResolveInfoDeducer} from "../facade.js"
 import {MultiRef, SingleRef, unresolved} from "../references.js"
+import {MetaPointer} from "../serialization.js"
 import {Id, Node} from "../types.js"
 
 
@@ -121,6 +122,14 @@ abstract class Classifier extends LanguageEntity {
         // TODO  check actual types of features, or use type shapes/interfaces
         this.features.push(...features)
         return this
+    }
+    metaPointer(): MetaPointer {
+        const {language} = this
+        return {
+            language: language.key,
+            version: language.version,
+            key: this.key
+        }
     }
 }
 

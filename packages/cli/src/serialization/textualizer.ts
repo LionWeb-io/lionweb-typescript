@@ -8,6 +8,7 @@ import {
     tryLoadAllAsLanguages
 } from "@lionweb/utilities"
 import {deserializeLanguages, Language} from "@lionweb/core"
+import {separate} from "../language-aware-args.js"
 
 
 const languagesAsRegularFlag = "--languagesAsRegular"
@@ -15,11 +16,8 @@ const languagesAsRegularFlag = "--languagesAsRegular"
 export const executeTextualizeCommand = async (args: string[]) => {
     const languagesAsRegular = args.some((arg) => arg === languagesAsRegularFlag)
     const otherArgs = args.filter((arg) => arg !== languagesAsRegularFlag)
-    const indexLanguageArg = otherArgs.findIndex((arg) => arg === "--language" || arg === "--languages")
-    const languages = indexLanguageArg > -1
-        ? await tryLoadAllAsLanguages(otherArgs.slice(indexLanguageArg + 1))
-        : []
-    const chunkPaths = otherArgs.slice(0, indexLanguageArg > -1 ? indexLanguageArg : undefined)
+    const {chunkPaths, languagePaths} = separate(otherArgs)
+    const languages = await tryLoadAllAsLanguages(languagePaths)
     chunkPaths.forEach((chunkPath) => {
         textualizeSerializationChunk(chunkPath, languagesAsRegular, languages)
     })
