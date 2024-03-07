@@ -39,6 +39,10 @@ That means that key-value pairs appear in precisely the same order as they do in
 
 ## Changelog
 
+### 0.6.3
+
+* Add a command `measure` that computes metrics.
+
 ### 0.6.1
 
 * Fix that `@lionweb/validation` was not specified as a (non-dev) dependency.

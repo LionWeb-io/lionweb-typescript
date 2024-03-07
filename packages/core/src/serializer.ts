@@ -31,11 +31,7 @@ export const serializeNodes = <NT extends Node>(nodes: NT[], extractionFacade: E
         registerLanguageUsed(language)
         const serializedNode: SerializedNode = {
             id: node.id,
-            classifier: {
-                language: language.key,
-                version: language.version,
-                key: classifier.key
-            },
+            classifier: classifier.metaPointer(),
             properties: [],
             containments: [],
             references: [],
