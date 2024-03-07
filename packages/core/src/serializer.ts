@@ -2,7 +2,7 @@ import {ExtractionFacade} from "./facade.js"
 import {currentSerializationFormatVersion, MetaPointer, SerializationChunk, SerializedNode} from "./serialization.js"
 import {asIds} from "./functions.js"
 import {Node} from "./types.js"
-import {BuiltinPrimitive, lioncoreBuiltins, serializeBuiltin} from "./m3/builtins.js"
+import {BuiltinPrimitive, serializeBuiltin} from "./m3/builtins.js"
 import {allFeaturesOf} from "./m3/functions.js"
 import {Containment, Enumeration, Language, PrimitiveType, Property, Reference, simpleNameDeducer} from "./m3/types.js"
 import {asArray} from "./utils/array-helpers.js"
@@ -101,7 +101,6 @@ export const serializeNodes = <NT extends Node>(nodes: NT[], extractionFacade: E
     return {
         serializationFormatVersion: currentSerializationFormatVersion,
         languages: languagesUsed
-            .filter((language) => !language.equals(lioncoreBuiltins))
             .map(({key, version}) => ({ key, version })),
         nodes: serializedNodes
     }

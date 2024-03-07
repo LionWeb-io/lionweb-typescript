@@ -1,6 +1,6 @@
 {
   "name": "@lionweb/validation",
-  "version": "0.6.1-beta.1",
+  "version": "0.6.2-beta.0",
   "license":  "Apache 2.0",
   "description": "LionWeb Serialization validation",
   "author": "jos.warmer@openmodeling.nl",
@@ -15,7 +15,9 @@
   ],
   "scripts": {
     "clean": "rm -rf dist/ lionweb-validation-*.tgz",
-    "build": "tsc",
+    "build": "tsc && npm run copyM3 && npm run copyBuiltins",
+    "copyM3": "node -e \"const fs = require('fs'); fs.copyFileSync('./src/languages/LionCore-M3.json', './dist/languages/LionCore-M3.json');\"",
+    "copyBuiltins": "node -e \"const fs = require('fs'); fs.copyFileSync('./src/languages/LionCore-builtins.json', './dist/languages/LionCore-builtins.json');\"",
     "lint": "eslint src",
     "test-here": "cd ../test && find dist/validation -type d | sed '1!G;h;$!d' | xargs npx mocha",
     "release": "npm publish",

@@ -1,5 +1,12 @@
 # The `validation` package
 
+[![license](https://img.shields.io/badge/License-Apache%202.0-green.svg?style=flat)
+](./LICENSE)
+[![CI](https://github.com/LionWeb-io/lionweb-typescript/actions/workflows/test.yaml/badge.svg)
+](https://github.com/LionWeb-io/lionweb-typescript/actions/workflows/test.yaml)
+[![npm](https://img.shields.io/npm/v/%40lionweb%2Fvalidation?label=%40lionweb%2Fvalidation)
+](https://www.npmjs.com/package/@lionweb/validation)
+
 The code in this package implements validators that check serialization chunks against the [serialization specification](https://github.com/LionWeb-io/specification/blob/main/2023.1/serialization/serialization.adoc).
 This package is intentionally kept very lightweight, e.g. it uses types instead of classes and has zero dependencies on external libraries/packages.
 
@@ -24,4 +31,14 @@ The commands `npm run publish-local` and `npm run unpublish-local` are used to d
 
 The test runner runs tests at various levels similar (but probably not quite) as described in the [model correctness document](https://github.com/LionWeb-io/specification/blob/meinte/correctness/documentation/correctness.adoc).
 These two should converge in the future.
+
+
+## Changelog
+
+### 0.6.2
+
+* Don't rely on the JavaScript features – import assertions – that are still marked as experimental.
+    (This necessitates explicitly copying the relevant JSON files.)
+
+(For earlier versions no changelog was maintained.)
 
