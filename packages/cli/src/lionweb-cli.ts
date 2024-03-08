@@ -11,6 +11,7 @@ import {repairSerializationChunkAt} from "./serialization/repairer.js"
 import {sortSerializationChunkAt} from "./serialization/sorter.js"
 import {executeTextualizeCommand} from "./serialization/textualizer.js"
 import {runValidationOnSerializationChunkAt} from "./validator.js"
+import { inferLanguages } from "./inferer.js"
 
 
 const main = async (args: string[])=> {
@@ -23,8 +24,9 @@ const main = async (args: string[])=> {
     const SORT_COMMAND = "sort"
     const TEXTUALIZE_COMMAND = "textualize"
     const VALIDATE_COMMAND = "validate"
+    const INFER_LANGUAGE_COMMAND = "infer-language"
 
-    const commands = [DIAGRAM_COMMAND, DIFF_COMMAND, GENERATE_TS_TYPES_COMMAND, MEASURE_COMMAND, REPAIR_COMMAND, SORT_COMMAND, TEXTUALIZE_COMMAND, VALIDATE_COMMAND].sort()
+    const commands = [DIAGRAM_COMMAND, DIFF_COMMAND, GENERATE_TS_TYPES_COMMAND, MEASURE_COMMAND, REPAIR_COMMAND, SORT_COMMAND, TEXTUALIZE_COMMAND, VALIDATE_COMMAND, INFER_LANGUAGE_COMMAND].sort()
 
     if (args.length <= 2) {
         console.log(
@@ -145,6 +147,17 @@ These languages are then used to try and resolve the keys of languages' entities
                 await executeMeasureCommand(commandArgs)
             }
             break
+        }
+
+        case INFER_LANGUAGE_COMMAND: {
+            if (commandArgs.length === 0) {
+                console.log(
+`The ${INFER_LANGUAGE_COMMAND} command infer language(s) from a given serialization chunk. \nUsage: npx @lionweb/cli infer-language <path_to_chunk>`
+                )
+            } else {
+                await inferLanguages(commandArgs[0])
+            }
+            return
         }
 
         default: {
