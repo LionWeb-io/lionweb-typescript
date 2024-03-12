@@ -79,6 +79,23 @@ The chunks to diff are given as the first two paths, and the path for the diff J
             break
         }
 
+        case MEASURE_COMMAND: {
+            if (commandArgs.length === 0) {
+                console.log(
+                    `The ${MEASURE_COMMAND} command computes statistics on the given serialization chunks,
+such as which concepts are instantiated how often.
+
+Usage: npx @lionweb/cli ${MEASURE_COMMAND} <paths_to_chunks> --language[s] <path_to_chunks_of_languages>
+
+Chunks given after a '--language' or '--languages' flag (which are synonyms) are assumed to be serializations of languages.
+These languages are then used to try and resolve the keys of languages' entities and their features to names.`
+                )
+            } else {
+                await executeMeasureCommand(commandArgs)
+            }
+            break
+        }
+
         case REPAIR_COMMAND: {
             if (commandArgs.length === 0) {
                 console.log(
@@ -128,23 +145,6 @@ Usage: npx @lionweb/cli ${VALIDATE_COMMAND} <path_to_chunk>`
                 )
             } else {
                 commandArgs.forEach(runValidationOnSerializationChunkAt)
-            }
-            break
-        }
-
-        case MEASURE_COMMAND: {
-            if (commandArgs.length === 0) {
-                console.log(
-`The ${MEASURE_COMMAND} command computes statistics on the given serialization chunks,
-such as which concepts are instantiated how often.
-
-Usage: npx @lionweb/cli ${MEASURE_COMMAND} <paths_to_chunks> --language[s] <path_to_chunks_of_languages>
-
-Chunks given after a '--language' or '--languages' flag (which are synonyms) are assumed to be serializations of languages.
-These languages are then used to try and resolve the keys of languages' entities and their features to names.`
-                )
-            } else {
-                await executeMeasureCommand(commandArgs)
             }
             break
         }
