@@ -24,12 +24,12 @@ type LanguageMetric = {
     instantiations: number
 } & LanguagePointer
 
-// TODO  define order?
+// TODO  order?
 type Metrics = {
     usedLanguages: LanguageMetric[]
     instantiations: ClassifierInstantiationMetric[]
-    unusedConcreteConcepts: ClassifierMetric[]
-    // TODO  also add which languages are mentioned but unused?
+    uninstantiatedInstantiableClassifiers: ClassifierMetric[]
+    languagesWithoutInstantiations: LanguagePointer[]
 }
 
 

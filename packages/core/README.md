@@ -34,7 +34,7 @@ The following is a list of links to potential starting points:
 
 ### 0.6.3
 
-* Add a function `mapValues`.
+* Add functions `mapValues` and `instantiableClassifiers`.
 * Add a method `SymbolTable.languageMatching` to look up a language.
 
 ### 0.6.2
