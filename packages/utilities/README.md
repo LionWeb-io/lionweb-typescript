@@ -25,6 +25,7 @@ It contains utilities on top of the `core` package, such as:
 ### 0.6.3
 
 * Add a `inferLanguagesFromChunk` function that infers a language from a serialization chunk.
+* Extend the functionality of the `measure` metrics function.
 
 ### 0.6.2
 
