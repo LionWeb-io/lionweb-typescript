@@ -5,7 +5,7 @@ import {MemoisingSymbolTable} from "./symbol-table.js"
 import {Classifier, Containment, Enumeration, Language, PrimitiveType, Property, Reference} from "./m3/types.js"
 import {allFeaturesOf} from "./m3/functions.js"
 import {deserializeBuiltin} from "./m3/builtins.js"
-import {groupBy} from "./utils/grouping.js"
+import {groupBy} from "./utils/map-helpers.js"
 
 
 /**

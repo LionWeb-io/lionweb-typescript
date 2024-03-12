@@ -32,3 +32,13 @@ export const filterValues = <V>(map: Record<string, V>, predicate: (v: V) => boo
 export const duplicatesAmong = <T>(ts: T[], keyFunc: (t: T) => string): Record<string, T[]> =>
     filterValues(groupBy(ts, keyFunc), (ts) => ts.length > 1)
 
+
+/**
+ * Maps the values of a map/record according to the given mapping function.
+ */
+export const mapValues = <V, W>(map: Record<string, V>, valFunc: (v: V) => W): Record<string, W> =>
+    Object.fromEntries(
+        Object.entries(map)
+            .map(([key, value]) => [key, valFunc(value)])
+    )
+

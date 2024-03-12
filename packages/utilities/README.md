@@ -22,6 +22,10 @@ It contains utilities on top of the `core` package, such as:
 
 ## Changelog
 
+### 0.6.3
+
+* Extend the functionality of the `measure` metrics function.
+
 ### 0.6.2
 
 * Add a function `measure` that computes metrics on a serialization chunk.

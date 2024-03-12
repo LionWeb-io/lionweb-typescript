@@ -32,6 +32,11 @@ The following is a list of links to potential starting points:
 
 ## Changelog
 
+### 0.6.3
+
+* Add a function `mapValues`.
+* Add a method `SymbolTable.languageMatching` to look up a language.
+
 ### 0.6.2
 
 * Add a method `Classifier.metaPointer`.
