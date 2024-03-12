@@ -1,11 +1,12 @@
 import {
-    conceptsOf,
     groupBy,
+    instantiableClassifiersOf,
     Language,
     mapValues,
     MemoisingSymbolTable,
     MetaPointer,
-    SerializationChunk
+    SerializationChunk,
+    SerializedLanguageReference
 } from "@lionweb/core"
 import { Metrics } from "./metric-types.js"
 
@@ -20,8 +21,8 @@ const sumNumbers = (nums: number[]): number =>
 /**
  * Computes {@link Metrics metrics} on the given {@link SerializationChunk serializationChunk}.
  * Passing it {@link Language languages} make this language-aware:
- *  * classifier names are looked up,
- *  * unused concrete concepts are computed as well.
+ *  * language and classifier names are looked up,
+ *  * unused instantiable classifiers and languages without instantiations are computed as well.
  */
 export const measure = (serializationChunk: SerializationChunk, languages: Language[]): Metrics => {
     const symbolTable = new MemoisingSymbolTable(languages)
@@ -38,6 +39,20 @@ export const measure = (serializationChunk: SerializationChunk, languages: Langu
                 )
             )
         )
+
+
+    const usedLanguages =
+        Object.entries(languageKey2version2classifierKey2info)
+            .flatMap(([languageKey, version2classifierKey2info]) =>
+                Object.entries(version2classifierKey2info)
+                    .flatMap(([version, classifierKey2info]) => ({
+                        key: languageKey,
+                        version,
+                        name: symbolTable.languageMatching(languageKey, version)?.name,
+                        instantiations: sumNumbers(Object.values(classifierKey2info).map((info) => info.instantiations))
+                    }))
+            )
+
 
     // map grouped nodes to info including #instantiations:
     const instantiations =
@@ -59,16 +74,28 @@ export const measure = (serializationChunk: SerializationChunk, languages: Langu
                     )
             )
 
+
+    const doesLanguageHaveInstantiations = (language: SerializedLanguageReference): boolean =>
+           language.key in languageKey2version2classifierKey2info
+        && language.version in languageKey2version2classifierKey2info[language.key]
+
+    const languagesWithoutInstantiations =
+        serializationChunk.languages
+            .filter((language) => !doesLanguageHaveInstantiations(language))
+            .map((language) => ({
+                ...language,
+                name: symbolTable.languageMatching(language.key, language.version)?.name
+            }))
+
+
     const isClassifierUsed = (metaPointer: MetaPointer): boolean =>
-           metaPointer.language in languageKey2version2classifierKey2info
+        metaPointer.language in languageKey2version2classifierKey2info
         && metaPointer.version in languageKey2version2classifierKey2info[metaPointer.language]
         && metaPointer.key in languageKey2version2classifierKey2info[metaPointer.language][metaPointer.version]
 
-    const concreteConcepts = languages.flatMap(conceptsOf).filter((concept) => !concept.abstract)
-
-    const unusedConcreteConcepts =
-        concreteConcepts
-            .map((concept) => concept.metaPointer())
+    const uninstantiatedInstantiableClassifiers =
+        languages.flatMap(instantiableClassifiersOf)
+            .map((classifier) => classifier.metaPointer())
             .filter((metaPointer) => !isClassifierUsed(metaPointer))
             .map((metaPointer) => ({
                 language: {
@@ -80,22 +107,12 @@ export const measure = (serializationChunk: SerializationChunk, languages: Langu
                 name: symbolTable.entityMatching(metaPointer)?.name
             }))
 
-    const usedLanguages =
-        Object.entries(languageKey2version2classifierKey2info)
-            .flatMap(([languageKey, version2classifierKey2info]) =>
-                Object.entries(version2classifierKey2info)
-                    .flatMap(([version, classifierKey2info]) => ({
-                        key: languageKey,
-                        version,
-                        name: symbolTable.languageMatching(languageKey, version)?.name,
-                        instantiations: sumNumbers(Object.values(classifierKey2info).map((info) => info.instantiations))
-                    }))
-            )
 
     return {
         usedLanguages,
         instantiations,
-        unusedConcreteConcepts
+        languagesWithoutInstantiations,
+        uninstantiatedInstantiableClassifiers
     }
 }
 
