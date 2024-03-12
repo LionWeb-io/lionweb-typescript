@@ -25,8 +25,8 @@ type LanguageMetric = {
 
 // TODO  order?
 type Metrics = {
-    usedLanguages: LanguageMetric[]
-    instantiations: ClassifierInstantiationMetric[]
+    languagesWithInstantiations: LanguageMetric[]
+    instantiatedClassifiers: ClassifierInstantiationMetric[]
     uninstantiatedInstantiableClassifiers: ClassifierMetric[]
     languagesWithoutInstantiations: LanguagePointer[]
 }
