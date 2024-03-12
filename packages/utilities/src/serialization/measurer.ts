@@ -45,7 +45,7 @@ export const measure = (serializationChunk: SerializationChunk, languages: Langu
         )
 
 
-    const usedLanguages =
+    const languagesWithInstantiations =
         Object.entries(languageKey2version2classifierKey2info)
             .flatMap(([languageKey, version2classifierKey2info]) =>
                 Object.entries(version2classifierKey2info)
@@ -72,7 +72,7 @@ export const measure = (serializationChunk: SerializationChunk, languages: Langu
     }
 
     // map grouped nodes to info including #instantiations:
-    const instantiations =
+    const instantiatedClassifiers =
         Object.entries(languageKey2version2classifierKey2info)
             .flatMap(([languageKey, version2classifierKey2info]) =>
                 Object.entries(version2classifierKey2info)
@@ -130,8 +130,8 @@ export const measure = (serializationChunk: SerializationChunk, languages: Langu
 
 
     return {
-        usedLanguages,
-        instantiations,
+        languagesWithInstantiations,
+        instantiatedClassifiers,
         languagesWithoutInstantiations,
         uninstantiatedInstantiableClassifiers
     }
