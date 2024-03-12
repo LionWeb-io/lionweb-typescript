@@ -1,14 +1,18 @@
 import {
+    Annotation,
+    Concept,
     groupBy,
     instantiableClassifiersOf,
+    Interface,
     Language,
+    LanguageEntity,
     mapValues,
     MemoisingSymbolTable,
     MetaPointer,
     SerializationChunk,
     SerializedLanguageReference
 } from "@lionweb/core"
-import { Metrics } from "./metric-types.js"
+import { ClassifierMetaTypes, Metrics } from "./metric-types.js"
 
 
 /**
@@ -54,6 +58,19 @@ export const measure = (serializationChunk: SerializationChunk, languages: Langu
             )
 
 
+    const metaTypeOf = (entity?: LanguageEntity): ClassifierMetaTypes | undefined => {
+        if (entity instanceof Annotation) {
+            return "annotation"
+        }
+        if (entity instanceof Concept) {
+            return "concept"
+        }
+        if (entity instanceof Interface) {
+            return "interface"
+        }
+        return undefined
+    }
+
     // map grouped nodes to info including #instantiations:
     const instantiations =
         Object.entries(languageKey2version2classifierKey2info)
@@ -61,16 +78,20 @@ export const measure = (serializationChunk: SerializationChunk, languages: Langu
                 Object.entries(version2classifierKey2info)
                     .flatMap(([version, classifierKey2info]) =>
                         Object.entries(classifierKey2info)
-                            .map(([classifierKey, info]) => ({
-                                language: {
-                                    key: languageKey,
-                                    version,
-                                    name: symbolTable.languageMatching(languageKey, version)?.name
-                                },
-                                key: classifierKey,
-                                name: symbolTable.entityMatching(info.classifier)?.name,
-                                instantiations: info.instantiations
-                            }))
+                            .map(([classifierKey, info]) =>{
+                                const classifier = symbolTable.entityMatching(info.classifier)
+                                return ({
+                                    language: {
+                                        key: languageKey,
+                                        version,
+                                        name: symbolTable.languageMatching(languageKey, version)?.name
+                                    },
+                                    key: classifierKey,
+                                    name: classifier?.name,
+                                    metaType: metaTypeOf(classifier),
+                                    instantiations: info.instantiations
+                                })
+                            })
                     )
             )
 

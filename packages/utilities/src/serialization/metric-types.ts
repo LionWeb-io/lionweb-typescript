@@ -1,6 +1,3 @@
-import {MetaPointer} from "@lionweb/core"
-
-
 type OptionallyNamed = {
     name?: string   // == name when it can be looked up
 }
@@ -15,9 +12,11 @@ type LanguagePointer = {
     key: string         // key of classifier
 } & OptionallyNamed
 
+type ClassifierMetaTypes = "annotation" | "concept" | "interface"
+
 type ClassifierInstantiationMetric = {
+    metaType?: ClassifierMetaTypes
     instantiations: number
-    // TODO  say the classifier is a concept, or annotation (or enum)?
 } & ClassifierMetric
 
 type LanguageMetric = {
@@ -35,6 +34,7 @@ type Metrics = {
 
 export type {
     ClassifierInstantiationMetric,
+    ClassifierMetaTypes,
     LanguagePointer,
     Metrics
 }
