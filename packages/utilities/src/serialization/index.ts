@@ -1,4 +1,4 @@
-export {looksLikeSerializedLanguages, readChunk, tryLoadAllAsLanguages, tryLoadAsLanguages} from "./chunk.js"
+export {looksLikeSerializedLanguages, readSerializationChunk, tryReadAllAsLanguages, tryReadAsLanguages} from "./chunk.js"
 export {measure} from "./measurer.js"
 export {orderedSerializationChunk} from "./ordering.js"
 export {sortedSerializationChunk} from "./sorting.js"
