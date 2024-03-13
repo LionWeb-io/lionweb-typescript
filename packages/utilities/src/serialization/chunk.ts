@@ -3,12 +3,18 @@ import {
     deserializeLanguages,
     Language,
     lioncoreKey,
-    SerializationChunk
+    SerializationChunk,
+    SerializedLanguageReference
 } from "@lionweb/core"
 import {readFileAsJson} from "../json.js"
 
 
-export const readChunk = async (path: string) => {
+/**
+ * Reads the file at the given path as a {@link SerializationChunk serialization chunk}.
+ * **Note** that it's only checked that the file exists and can be parsed as JSON,
+ * _not_ whether it satisfies the specified serialization chunk format!
+ */
+export const readSerializationChunk = async (path: string) => {
     try {
         return readFileAsJson(path) as SerializationChunk
     } catch (e) {
@@ -16,11 +22,15 @@ export const readChunk = async (path: string) => {
         throw e
     }
 }
+// TODO  don't throw, but return some kind of error object (– possibly using Promise.reject)
 
 
 const isRecord = (json: unknown): json is Record<string, unknown> =>
     typeof json === "object" && !Array.isArray(json)
 
+/**
+ * @return whether the given JSON looks like the serialization of languages.
+ */
 export const looksLikeSerializedLanguages = (json: unknown): boolean =>
     isRecord(json)
     && json["serializationFormatVersion"] === currentSerializationFormatVersion
@@ -30,17 +40,18 @@ export const looksLikeSerializedLanguages = (json: unknown): boolean =>
 
 
 /**
- * Check whether the given path exists, is a JSON file containing the serialization of languages,
- * and attempt to deserialize when it is. If any of that fails, return an empty list.
+ * Tries to read the given path as a JSON file containing the serialization of languages,
+ * and attempts to deserialize the serialization chunk when it is.
+ * If any of that fails, return an empty list.
  */
-export const tryLoadAsLanguages = async (path: string): Promise<Language[]> => {
-    const chunk = await readChunk(path)
-    if (!looksLikeSerializedLanguages(chunk)) {
+export const tryReadAsLanguages = async (path: string): Promise<Language[]> => {
+    const serializationChunk = await readSerializationChunk(path)
+    if (!looksLikeSerializedLanguages(serializationChunk)) {
         console.error(`${path} is not a valid JSON serialization chunk of LionCore languages`)
         return []
     }
     try {
-        return deserializeLanguages(chunk)
+        return deserializeLanguages(serializationChunk)
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (e: any) {
         console.error(`${path} is not a valid JSON serialization chunk of LionCore languages: ${e.message}`)
@@ -49,10 +60,52 @@ export const tryLoadAsLanguages = async (path: string): Promise<Language[]> => {
 }
 
 
-export const tryLoadAllAsLanguages = async (paths: string[]): Promise<Language[]> =>
-    (await Promise.all(paths.map(tryLoadAsLanguages))).flat()
-// TODO  load languages “in dependency order”, i.e.: later-named languages can be dependent on earlier-named languages -- (this is a foldRight, really)
+const flatMapDistinct = <T>(tss: (T[])[], equalFunc: (l: T, r: T) => boolean) =>
+    tss.reduce<T[]>(
+        (acc, ts) =>
+            [
+                ...acc,
+                ...(ts.filter((r) => !acc.some((l) => equalFunc(l, r))))
+            ],
+        []
+    )
+
+const areEqual = (left: SerializedLanguageReference, right: SerializedLanguageReference): boolean =>
+    left.key === right.key && left.version === right.version
 
 
-// TODO  make names consistent: "load" vs. "read", "chunk" vs. "serialization chunk"
+/**
+ * @return the combination of the given {@link SerializationChunk serialization chunks} into one.
+ */
+export const combinationOf = (serializationChunks: SerializationChunk[]): SerializationChunk =>
+    ({
+        serializationFormatVersion: currentSerializationFormatVersion,
+        languages: flatMapDistinct(serializationChunks.map(({ languages }) => languages), areEqual),
+        nodes: serializationChunks.flatMap(({ nodes }) => nodes)
+    })
+
+
+/**
+ * Tries to read all the given paths as JSON serialization chunks that are serializations of languages,
+ * and attempts to combine those chunks into one chunk, and deserializes that.
+ */
+export const tryReadAllAsLanguages = async (paths: string[]): Promise<Language[]> => {
+    const serializationChunks =
+        (await Promise.all(paths.map(readSerializationChunk)))
+        .filter((serializationChunk, index) => {
+            const ok = looksLikeSerializedLanguages(serializationChunk)
+            if (!ok) {
+                const path = paths[index]
+                console.error(`${path} is not a valid JSON serialization chunk of LionCore languages`)
+            }
+            return ok
+        })
+    try {
+        return deserializeLanguages(combinationOf(serializationChunks))
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (e: any) {
+        console.error(`couldn't deserialize combined JSON serialization chunk of LionCore languages: ${e.message}`)
+        return []
+    }
+}
 

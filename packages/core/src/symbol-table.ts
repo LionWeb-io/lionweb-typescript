@@ -10,7 +10,11 @@ import {MetaPointer} from "./serialization.js"
 interface SymbolTable {
 
     /**
-     *
+     * Looks up the {@link Language}, as pointed to by the given language key and version.
+     */
+    languageMatching(key: string, version: string): Language | undefined
+
+    /**
      * Looks up the {@link LanguageEntity}, as pointed to by the given {@link MetaPointer},
      * or {@code undefined} if it couldn't be found.
      */
@@ -39,15 +43,15 @@ class NaiveSymbolTable implements SymbolTable {
         this.languages = languages
     }
 
-    private languageMatching(metaPointer: MetaPointer): Language | undefined {
+    languageMatching(key: string, version: string): Language | undefined {
         return this.languages.find((language) =>
-               language.key === metaPointer.language
-            && language.version === metaPointer.version
+               language.key === key
+            && language.version === version
         )
     }
 
     entityMatching(entityMetaPointer: MetaPointer): LanguageEntity | undefined {
-        return this.languageMatching(entityMetaPointer)
+        return this.languageMatching(entityMetaPointer.language, entityMetaPointer.version)
             ?.entities
             .find((entity) => entity.key === entityMetaPointer.key)
     }
@@ -87,6 +91,21 @@ class MemoisingSymbolTable implements SymbolTable {
     constructor(languages: Language[]) {
         this.languages = languages
     }
+
+    private readonly languageKey2version2language: { [languageKey: string]: { [version: string]: Language } } = {}
+
+    languageMatching(languageKey: string, version: string): Language | undefined {
+        return lazyMapGet(
+            lazyMapGet(this.languageKey2version2language, languageKey, () => ({})),
+            version,
+            () => this.languages.find((language) =>
+                   language.key === languageKey
+                && language.version === version
+            )
+        )
+    }
+
+
     private readonly languageKey2version2entityKey2entityInfo: { [languageKey: string]: { [version: string]: { [entityKey: string]: (EntityInfo | undefined) } } } = {}
 
     private entityInfoMatching(entityMetaPointer: MetaPointer): undefined | EntityInfo {
@@ -98,10 +117,7 @@ class MemoisingSymbolTable implements SymbolTable {
             ),
             entityMetaPointer.key,
             () => {
-                const entity = this.languages.find((language) =>
-                            language.key === entityMetaPointer.language
-                            && language.version === entityMetaPointer.version
-                        )
+                const entity = this.languageMatching(entityMetaPointer.language, entityMetaPointer.version)
                     ?.entities
                     .find((entity) => entity.key === entityMetaPointer.key)
                 return entity && { entity, allFeatures: entity instanceof Classifier ? allFeaturesOf(entity) : [], featureKey2feature: {} }

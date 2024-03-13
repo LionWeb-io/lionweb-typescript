@@ -22,6 +22,14 @@ It contains utilities on top of the `core` package, such as:
 
 ## Changelog
 
+### 0.6.3
+
+* Extend the functionality of the `measure` metrics function.
+* Renaming for consistency and clarity:
+  * `readChunk` &rarr; `readSerializationChunk`
+  * `tryLoad[All]AsLanguages` &rarr; `tryRead[All]AsLanguages`
+* `tryReadAllAsLanguages` combines all serialization chunks (that are the result of serializing `Language`s) into one before attempting to deserialize, in order to have cross-language references resolve.
+
 ### 0.6.2
 
 * Add a function `measure` that computes metrics on a serialization chunk.
