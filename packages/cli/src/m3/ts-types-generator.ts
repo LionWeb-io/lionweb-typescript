@@ -2,12 +2,12 @@ import {extname} from "path"
 import {writeFileSync} from "fs"
 
 import {deserializeLanguages} from "@lionweb/core"
-import {GenerationOptions, readChunk, tsTypesForLanguage} from "@lionweb/utilities"
+import {GenerationOptions, readSerializationChunk, tsTypesForLanguage} from "@lionweb/utilities"
 
 
 const generateTsTypesFromSerialization = async (path: string, generationOptions: GenerationOptions[]) => {
     try {
-        const languages = deserializeLanguages(await readChunk(path))
+        const languages = deserializeLanguages(await readSerializationChunk(path))
         const extLessPath = path.substring(0, path.length - extname(path).length)
         const tsFilePath = extLessPath + "-types.ts"
         // TODO  generate 1 file per Language:

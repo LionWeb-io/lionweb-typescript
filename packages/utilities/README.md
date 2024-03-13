@@ -26,6 +26,10 @@ It contains utilities on top of the `core` package, such as:
 
 * Add a `inferLanguagesFromChunk` function that infers a language from a serialization chunk.
 * Extend the functionality of the `measure` metrics function.
+* Renaming for consistency and clarity:
+  * `readChunk` &rarr; `readSerializationChunk`
+  * `tryLoad[All]AsLanguages` &rarr; `tryRead[All]AsLanguages`
+* `tryReadAllAsLanguages` combines all serialization chunks (that are the result of serializing `Language`s) into one before attempting to deserialize, in order to have cross-language references resolve.
 
 ### 0.6.2
 

@@ -1,11 +1,11 @@
 import fs from "fs"
 import path from "path"
 import { serializeLanguages } from "@lionweb/core"
-import { inferLanguagesFromChunk, readChunk } from "@lionweb/utilities"
+import { inferLanguagesFromChunk, readSerializationChunk } from "@lionweb/utilities"
 
 export async function inferLanguages(filePath: string) {
     const dirName = path.dirname(filePath)
-    const chunk = await readChunk(filePath)
+    const chunk = await readSerializationChunk(filePath)
 
     const languages = inferLanguagesFromChunk(chunk)
     for (const language of languages) {
