@@ -1,29 +1,27 @@
 import {
     Annotation,
     Concept,
-    groupBy,
     instantiableClassifiersOf,
     Interface,
     Language,
     LanguageEntity,
-    mapValues,
     MemoisingSymbolTable,
     MetaPointer,
     SerializationChunk,
-    SerializedLanguageReference
+    SerializedLanguageReference,
+    SerializedNode
 } from "@lionweb/core"
 import { ClassifierMetaTypes, Metrics } from "./metric-types.js"
+import { nestedFlatMap2, nestedFlatMap3, nestedGroupingMapper3, sumNumbers } from "./fp-helpers.js"
 
+
+type Info = {
+    classifier: MetaPointer
+    instantiations: number
+}
 
 /**
- * Sum the given array of numbers.
- */
-const sumNumbers = (nums: number[]): number =>
-    nums.reduce((acc, cur) => acc + cur, 0)
-
-
-/**
- * Computes {@link Metrics metrics} on the given {@link SerializationChunk serializationChunk}.
+ * Computes {@link Metrics metrics} on the given {@link SerializationChunk serialization chunk}.
  * Passing it {@link Language languages} make this language-aware:
  *  * language and classifier names are looked up,
  *  * unused instantiable classifiers and languages without instantiations are computed as well.
@@ -33,30 +31,23 @@ export const measure = (serializationChunk: SerializationChunk, languages: Langu
 
     // group nodes by language key, version, and classifier key, mapped to the classifier meta-pointer and #instantiations:
     const languageKey2version2classifierKey2info =
-        mapValues(
-            groupBy(serializationChunk.nodes, ({ classifier }) => classifier.language),
-            (nodes) => mapValues(
-                groupBy(nodes, ({ classifier }) => classifier.version),
-                (nodes) => mapValues(
-                    groupBy(nodes, ({ classifier }) => classifier.key),
-                    (nodes) => ({ classifier: nodes[0].classifier, instantiations: nodes.length })
-                )
-            )
-        )
-
+        nestedGroupingMapper3<SerializedNode, Info>(
+            (nodes) => ({ classifier: nodes[0].classifier, instantiations: nodes.length }),
+            ({ classifier }) => classifier.language,
+            ({ classifier }) => classifier.version,
+            ({ classifier }) => classifier.key
+        )(serializationChunk.nodes)
 
     const languagesWithInstantiations =
-        Object.entries(languageKey2version2classifierKey2info)
-            .flatMap(([languageKey, version2classifierKey2info]) =>
-                Object.entries(version2classifierKey2info)
-                    .flatMap(([version, classifierKey2info]) => ({
-                        key: languageKey,
-                        version,
-                        name: symbolTable.languageMatching(languageKey, version)?.name,
-                        instantiations: sumNumbers(Object.values(classifierKey2info).map((info) => info.instantiations))
-                    }))
-            )
-
+        nestedFlatMap2(
+            languageKey2version2classifierKey2info,
+            (languageKey, version, classifierKey2info) => ({
+                key: languageKey,
+                version,
+                name: symbolTable.languageMatching(languageKey, version)?.name,
+                instantiations: sumNumbers(Object.values(classifierKey2info).map((info) => info.instantiations))
+            })
+        )
 
     const metaTypeOf = (entity?: LanguageEntity): ClassifierMetaTypes | undefined => {
         if (entity instanceof Annotation) {
@@ -73,28 +64,23 @@ export const measure = (serializationChunk: SerializationChunk, languages: Langu
 
     // map grouped nodes to info including #instantiations:
     const instantiatedClassifiers =
-        Object.entries(languageKey2version2classifierKey2info)
-            .flatMap(([languageKey, version2classifierKey2info]) =>
-                Object.entries(version2classifierKey2info)
-                    .flatMap(([version, classifierKey2info]) =>
-                        Object.entries(classifierKey2info)
-                            .map(([classifierKey, info]) =>{
-                                const classifier = symbolTable.entityMatching(info.classifier)
-                                return ({
-                                    language: {
-                                        key: languageKey,
-                                        version,
-                                        name: symbolTable.languageMatching(languageKey, version)?.name
-                                    },
-                                    key: classifierKey,
-                                    name: classifier?.name,
-                                    metaType: metaTypeOf(classifier),
-                                    instantiations: info.instantiations
-                                })
-                            })
-                    )
-            )
-
+        nestedFlatMap3(
+            languageKey2version2classifierKey2info,
+            (languageKey, version, classifierKey, info) => {
+                const classifier = symbolTable.entityMatching(info.classifier)
+                return ({
+                    language: {
+                        key: languageKey,
+                        version,
+                        name: symbolTable.languageMatching(languageKey, version)?.name
+                    },
+                    key: classifierKey,
+                    name: classifier?.name,
+                    metaType: metaTypeOf(classifier),
+                    instantiations: info.instantiations
+                })
+            }
+        )
 
     const doesLanguageHaveInstantiations = (language: SerializedLanguageReference): boolean =>
            language.key in languageKey2version2classifierKey2info
