@@ -6,6 +6,7 @@ import {
     Property,
     Reference,
     SerializationChunk,
+    asArray,
     builtinPrimitives,
     chain,
     concatenator,
@@ -68,18 +69,19 @@ export function inferLanguagesFromChunk(chunk: SerializationChunk): Language[] {
                 continue
             }
 
-            // TODO: Check if the containment is multiple or single
+            const children = asArray(containment.children)
             const feature = new Containment(
                 concept,
                 containmentName,
                 key(languageName, concept.name, containmentName),
                 id(languageName, concept.name, containmentName)
-            ).isMultiple()
+            )
+            if(children.length) {
+                feature.isMultiple()
+            }
             concept.havingFeatures(feature)
 
-            // TODO: What if `children` list is empty?
-            const value = containment.children[0]
-            links.push({ link: feature, conceptId: value })
+            links.push({ link: feature, conceptId: children[0] })
         }
 
         for (const reference of node.references) {
