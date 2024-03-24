@@ -17,7 +17,7 @@ import { hasher } from "./hashing.js"
 const id = chain(concatenator("-"), hasher())
 const key = lastOf
 
-const { stringDatatype } = builtinPrimitives
+const { stringDatatype, booleanDatatype, integerDatatype } = builtinPrimitives
 
 export function inferLanguagesFromChunk(chunk: SerializationChunk): Language[] {
     const languages = new Map<string, Language>()
@@ -49,15 +49,20 @@ export function inferLanguagesFromChunk(chunk: SerializationChunk): Language[] {
                 continue
             }
 
-            // TODO: Infer the property type from the value
             const feature = new Property(
                 concept,
                 propertyName,
                 key(languageName, concept.name, propertyName),
                 id(languageName, concept.name, propertyName)
-            )
-                .ofType(stringDatatype)
-                .havingKey(property.property.key)
+            ).havingKey(property.property.key)
+
+            if (isBoolean(property.value)) {
+                feature.ofType(booleanDatatype)
+            } else if (isNumeric(property.value)) {
+                feature.ofType(integerDatatype)
+            } else {
+                feature.ofType(stringDatatype)
+            }
 
             concept.havingFeatures(feature)
         }
@@ -76,7 +81,7 @@ export function inferLanguagesFromChunk(chunk: SerializationChunk): Language[] {
                 key(languageName, concept.name, containmentName),
                 id(languageName, concept.name, containmentName)
             )
-            if(children.length) {
+            if (children.length) {
                 feature.isMultiple()
             }
             concept.havingFeatures(feature)
@@ -121,4 +126,12 @@ function getLanguage(languages: Map<string, Language>, languageName: string) {
         throw new Error(`Language '${languageName} is not exist in the languages section`)
     }
     return language
+}
+
+function isBoolean(value: string) {
+    return value === "true" || value === "false"
+}
+
+function isNumeric(value: string) {
+    return !isNaN(parseFloat(value))
 }
