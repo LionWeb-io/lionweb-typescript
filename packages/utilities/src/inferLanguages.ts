@@ -14,6 +14,8 @@ import {
 } from "@lionweb/core"
 import { hasher } from "./hashing.js"
 
+const possibleKeySeparators = ["-", "_"]
+
 const id = chain(concatenator("-"), hasher())
 const key = lastOf
 
@@ -44,7 +46,7 @@ export function inferLanguagesFromChunk(chunk: SerializationChunk): Language[] {
         concepts.set(node.id, concept)
 
         for (const property of node.properties) {
-            const propertyName = property.property.key.split("_")[2]
+            const propertyName = getPropertyName(property.property.key)
             if (concept.features.filter(feature => feature.key === propertyName).length) {
                 continue
             }
@@ -126,6 +128,17 @@ function getLanguage(languages: Map<string, Language>, languageName: string) {
         throw new Error(`Language '${languageName} is not exist in the languages section`)
     }
     return language
+}
+
+function getPropertyName(key: string) {
+    for (const separator of possibleKeySeparators) {
+        const name = key.split(separator)[2]
+        if (name) {
+            return name
+        }
+    }
+
+    return key;
 }
 
 function isBoolean(value: string) {
