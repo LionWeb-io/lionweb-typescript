@@ -28,7 +28,7 @@ const byIdMap = <T extends { id: Id }>(ts: T[]): { [id: Id]: T } => {
  * @param languages - a {@link Language language} that the serialized model is expected to conform to
  * @param dependentNodes - a collection of nodes from dependent models against which all references in the serialized model are supposed to resolve against
  */
-export const deserializeChunk = <NT extends Node>(
+export const deserializeChunk = <NT extends Node>(  // FIXME  should be named deserializeSerializationChunk for consistency
     serializationChunk: SerializationChunk,
     instantiationFacade: InstantiationFacade<NT>,
     languages: Language[],
@@ -44,11 +44,6 @@ export const deserializeChunk = <NT extends Node>(
     const symbolTable = new MemoisingSymbolTable(languages)
 
     const { nodes: serializedNodes } = serializationChunk
-
-    const serializedRootNodes = serializedNodes.filter(({parent}) => parent === null)
-    if (serializedRootNodes.length === 0) {
-        throw new Error(`could not deserialize: no root nodes found`)
-    }
 
     const serializedNodeById = byIdMap(serializedNodes)
 
@@ -163,7 +158,9 @@ export const deserializeChunk = <NT extends Node>(
 
     }
 
-    const rootNodes = serializedRootNodes.map((serializedRootNode) => instantiateMemoised(serializedRootNode))
+    const rootLikeNodes = serializedNodes
+        .filter(({ parent }) => parent === null || !(parent in serializedNodeById))
+        .map((node) => instantiateMemoised(node))
 
     const nodesOfDependentModelsById = byIdMap(dependentNodes)
 
@@ -179,6 +176,6 @@ export const deserializeChunk = <NT extends Node>(
         instantiationFacade.setFeatureValue(node, reference, lookUpById())
     })
 
-    return rootNodes
+    return rootLikeNodes
 }
 
