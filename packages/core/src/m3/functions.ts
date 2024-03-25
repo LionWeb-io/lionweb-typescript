@@ -12,6 +12,7 @@ import {
     Enumeration,
     Feature,
     IKeyed,
+    IMetaTyped,
     INamed,
     Interface,
     isINamed,
@@ -251,11 +252,19 @@ const nameBasedClassifierDeducerFor = (language: Language) =>
 /**
  * @return a {@link ClassifierDeducer classifier deducer} that deduces the classifier of nodes by looking up
  * the classifier in the given {@link Language language} by matching the node object's class name to classifiers' names.
+ * **Note** that this is not reliable when using bundlers who might minimize class names, and such.
  */
-const classBasedClassifierDeducerFor = <NT extends Node>(language: Language): ClassifierDeducer<NT> => {
-    const deducer = nameBasedClassifierDeducerFor(language)
-    return (node: NT) => deducer(node.constructor.name)
-}
+const classBasedClassifierDeducerFor = <NT extends Node>(language: Language): ClassifierDeducer<NT> =>
+    (node: NT) => nameBasedClassifierDeducerFor(language)(node.constructor.name)
+
+
+/**
+ * @return a {@link ClassifierDeducer classifier deducer} that deduces the classifier of nodes that implement {@link IMetaTyped}
+ * by looking up the classifier in the given {@link Language language} by matching the result of {@link IMetaTyped#metaType}
+ * to classifiers' names.
+ */
+const metaTypedBasedClassifierDeducerFor = <NT extends Node & IMetaTyped>(language: Language): ClassifierDeducer<NT> =>
+    (node: NT) => nameBasedClassifierDeducerFor(language)(node.metaType())
 
 
 /**
@@ -287,6 +296,7 @@ export {
     isProperty,
     isReference,
     keyOf,
+    metaTypedBasedClassifierDeducerFor,
     nameBasedClassifierDeducerFor,
     nameOf,
     namedsOf,
