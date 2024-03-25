@@ -40,14 +40,27 @@ const isIKeyed = (node: Node): node is IKeyed =>
 
 
 /**
+ * An interface with one method to return a meta type,
+ * independent of the class's name obtained through `<node>.constructor.name`,
+ * which may be brittle when using bundlers.
+ */
+interface IMetaTyped {
+    metaType(): string
+}
+
+/**
  * Abstract base class for nodes in an LionCore instance,
  * providing an ID, a key, and the containment hierarchy.
  */
-abstract class M3Node implements IKeyed {
+abstract class M3Node implements IKeyed, IMetaTyped {
+    metaType(): string {
+        throw new Error("#metaType() not implemented")
+    }
     parent?: M3Node
         /*
          * Note: every parent in an M2 (i.e., a Language, Concept, Interface, Enumeration) implements IKeyed.
-         * Because that's just an interface and is implemented by {@link M3Node}.
+         * Because that's just an interface and is implemented by {@link M3Node},
+         * we can type parent as M3Node?.
          */
     readonly id: Id
     name: string
@@ -81,6 +94,9 @@ abstract class Feature extends M3Node {
 }
 
 class Property extends Feature {
+    metaType(): string {
+        return "Property"
+    }
     type: SingleRef<Datatype> = unresolved   // (reference)
     ofType(type: Datatype): Property {
         this.type = type
@@ -102,9 +118,15 @@ abstract class Link extends Feature {
 }
 
 class Containment extends Link {
+    metaType(): string {
+        return "Containment"
+    }
 }
 
 class Reference extends Link {
+    metaType(): string {
+        return "Reference"
+    }
 }
 
 abstract class LanguageEntity extends M3Node {
@@ -134,6 +156,9 @@ abstract class Classifier extends LanguageEntity {
 }
 
 class Concept extends Classifier {
+    metaType(): string {
+        return "Concept"
+    }
     abstract: boolean
     partition: boolean
     extends?: SingleRef<Concept>    // (reference)
@@ -156,6 +181,9 @@ class Concept extends Classifier {
 }
 
 class Annotation extends Classifier {
+    metaType(): string {
+        return "Annotation"
+    }
     extends?: SingleRef<Annotation> // (reference)
     implements: MultiRef<Interface> = [] // (reference)
     annotates: SingleRef<Classifier> = unresolved   // (reference)
@@ -175,6 +203,9 @@ class Annotation extends Classifier {
 }
 
 class Interface extends Classifier {
+    metaType(): string {
+        return "Interface"
+    }
     extends: MultiRef<Interface> = []    // (reference)
     extending(...interfaces: Interface[]): Interface {
         // TODO  check actual types of interfaces, or use type shapes/interfaces
@@ -185,9 +216,16 @@ class Interface extends Classifier {
 
 abstract class Datatype extends LanguageEntity {}
 
-class PrimitiveType extends Datatype {}
+class PrimitiveType extends Datatype {
+    metaType(): string {
+        return "PrimitiveType"
+    }
+}
 
 class Enumeration extends Datatype {
+    metaType(): string {
+        return "Enumeration"
+    }
     literals: EnumerationLiteral[] = [] // (containment)
     havingLiterals(...literals: EnumerationLiteral[]) {
         this.literals.push(...literals)
@@ -196,6 +234,9 @@ class Enumeration extends Datatype {
 }
 
 class EnumerationLiteral extends M3Node {
+    metaType(): string {
+        return "EnumerationLiteral"
+    }
     constructor(enumeration: Enumeration, name: string, key: string, id: Id) {
         super(id, name, key, enumeration)
     }
@@ -205,6 +246,9 @@ class EnumerationLiteral extends M3Node {
 }
 
 class Language extends M3Node {
+    metaType(): string {
+        return "Language"
+    }
     version: string
     entities: LanguageEntity[] = []   // (containment)
     dependsOn: MultiRef<Language> = []  // special (!) reference
@@ -277,6 +321,7 @@ export {
 
 export type {
     IKeyed,
+    IMetaTyped,
     INamed,
     M3Concept,
     M3Node
