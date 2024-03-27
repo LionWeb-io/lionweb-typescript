@@ -46,6 +46,10 @@ That means that key-value pairs appear in precisely the same order as they do in
 
 ## Changelog
 
+### 0.6.4 - unreleased
+
+* Add a command `infer-language` that infers a language from the given serialization chunk.
+
 ### 0.6.3
 
 * Add a command `measure` that computes metrics.
