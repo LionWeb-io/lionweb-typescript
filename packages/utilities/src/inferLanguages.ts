@@ -46,7 +46,7 @@ export function inferLanguagesFromChunk(chunk: SerializationChunk): Language[] {
         concepts.set(node.id, concept)
 
         for (const property of node.properties) {
-            const propertyName = getPropertyName(property.property.key)
+            const propertyName = deriveLikelyPropertyName(property.property.key)
             if (concept.features.filter(feature => feature.key === propertyName).length) {
                 continue
             }
@@ -130,7 +130,7 @@ function getLanguage(languages: Map<string, Language>, languageName: string) {
     return language
 }
 
-function getPropertyName(key: string) {
+export function deriveLikelyPropertyName(key: string) {
     for (const separator of possibleKeySeparators) {
         const name = key.split(separator)[2]
         if (name) {

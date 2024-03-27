@@ -1,6 +1,6 @@
 import { deepEqual } from "assert"
-import {LanguageEntity, serializeLanguages, serializeNodes } from "@lionweb/core"
-import { inferLanguagesFromChunk } from "@lionweb/utilities"
+import { LanguageEntity, serializeLanguages, serializeNodes } from "@lionweb/core"
+import { inferLanguagesFromChunk, deriveLikelyPropertyName } from "@lionweb/utilities"
 
 import { libraryExtractionFacade, libraryModel } from "../instances/library.js"
 import { minimalLibraryLanguage } from "../languages/minimal-library.js"
@@ -39,6 +39,26 @@ describe("inferLanguagesFromChunk", () => {
 
         deepEqual(serializeLanguages(inferredLibraryLanguage), serializeLanguages(minimalLibraryLanguage))
         deepEqual(serializeLanguages(inferredMultiLanguage), serializeLanguages(multiLanguage))
+    })
+})
+
+describe("deriveLikelyPropertyName", () => {
+    describe("for supported formats", () => {
+        ["-", "_"].forEach(separator => {
+            const propertyKey = ["languageKey", "classifierKey", "propertyKey"].join(separator)
+            it(`should derive the property name when using separator '${separator}'`, () => {
+                const result = deriveLikelyPropertyName(propertyKey)
+                deepEqual(result, "propertyKey")
+            })
+        })
+    })
+
+    describe("for unsupported formats", () => {
+        const propertyKey = "classifierKey$propertyKey"
+        it("should return the entire key", () => {
+            const result = deriveLikelyPropertyName(propertyKey)
+            deepEqual(result, propertyKey)
+        })
     })
 })
 
