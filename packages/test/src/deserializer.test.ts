@@ -1,7 +1,7 @@
 import {assert} from "chai"
 const {deepEqual} = assert
 
-import {currentSerializationFormatVersion, deserializeChunk, SerializationChunk} from "@lionweb/core"
+import {currentSerializationFormatVersion, deserializeSerializationChunk, SerializationChunk} from "@lionweb/core"
 import {libraryInstantiationFacade} from "./instances/library.js"
 import {libraryLanguage} from "./languages/library.js"
 
@@ -33,7 +33,7 @@ describe("deserialization", () => {
                 }
             ]
         }
-        const deserialization = deserializeChunk(serializationChunk, libraryInstantiationFacade, [libraryLanguage], [])
+        const deserialization = deserializeSerializationChunk(serializationChunk, libraryInstantiationFacade, [libraryLanguage], [])
         deepEqual(
             deserialization,
             [
