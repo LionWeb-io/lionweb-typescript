@@ -36,6 +36,7 @@ The following is a list of links to potential starting points:
 
 * The deserializer now deserializes all nodes in the serialization chunk, not just the root nodes (identified as having `parent` set to `null`).
   (This fixes [issue #145](https://github.com/LionWeb-io/lionweb-typescript/issues/145).)
+  * Also: `deserializeChunk` is renamed to `deserializeSerializationChunk` for naming consistency, although `deserializeChunk` is retained as an alias.
 
 ### 0.6.2
 

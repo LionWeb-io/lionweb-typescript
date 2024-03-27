@@ -2,7 +2,7 @@ import {Language} from "./types.js"
 import {SerializationChunk} from "../serialization.js"
 import {lioncoreExtractionFacade, lioncoreInstantiationFacade} from "./facade.js"
 import {nodesExtractorUsing} from "../facade.js"
-import {deserializeChunk} from "../deserializer.js"
+import {deserializeSerializationChunk} from "../deserializer.js"
 import {lioncore} from "./lioncore.js"
 import {lioncoreBuiltins} from "./builtins.js"
 
@@ -12,7 +12,7 @@ import {lioncoreBuiltins} from "./builtins.js"
  * as an instance of the LionCore metametamodel, using {@link _M3Concept these type definitions}.
  */
 export const deserializeLanguages = (serializationChunk: SerializationChunk, ...dependentLanguages: Language[]): Language[] =>
-    deserializeChunk(
+    deserializeSerializationChunk(
         serializationChunk,
         lioncoreInstantiationFacade,
         [lioncore],

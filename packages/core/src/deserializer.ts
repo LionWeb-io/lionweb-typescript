@@ -28,7 +28,7 @@ const byIdMap = <T extends { id: Id }>(ts: T[]): { [id: Id]: T } => {
  * @param languages - a {@link Language language} that the serialized model is expected to conform to
  * @param dependentNodes - a collection of nodes from dependent models against which all references in the serialized model are supposed to resolve against
  */
-export const deserializeChunk = <NT extends Node>(  // FIXME  should be named deserializeSerializationChunk for consistency
+export const deserializeSerializationChunk = <NT extends Node>(
     serializationChunk: SerializationChunk,
     instantiationFacade: InstantiationFacade<NT>,
     languages: Language[],
@@ -178,4 +178,10 @@ export const deserializeChunk = <NT extends Node>(  // FIXME  should be named de
 
     return rootLikeNodes
 }
+
+
+/**
+ * Alias for {@link deserializeSerializationChunk}.
+ */
+export const deserializeChunk = deserializeSerializationChunk
 
