@@ -15,7 +15,7 @@ import {
 } from "./types.js"
 import {builtinFeatures} from "./builtins.js"
 import {lioncore, metaConcepts, metaFeatures} from "./lioncore.js"
-import {classBasedClassifierDeducerFor, qualifiedNameOf} from "./functions.js"
+import {metaTypedBasedClassifierDeducerFor, qualifiedNameOf} from "./functions.js"
 
 
 const {inamed_name} = builtinFeatures
@@ -23,7 +23,7 @@ const {ikeyed_key} = metaFeatures
 
 
 export const lioncoreExtractionFacade: ExtractionFacade<M3Concept> = ({
-    classifierOf: classBasedClassifierDeducerFor(lioncore),
+    classifierOf: metaTypedBasedClassifierDeducerFor(lioncore),
     getFeatureValue: (node, feature) =>
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (node as any)[feature.name],    // (mirrors name-based update of settings)
