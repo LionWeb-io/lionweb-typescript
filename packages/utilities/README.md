@@ -22,7 +22,7 @@ It contains utilities on top of the `core` package, such as:
 
 ## Changelog
 
-### 0.6.3 - unreleased
+### 0.6.3
 
 * Add a `inferLanguagesFromChunk` function that infers a language from a serialization chunk.
 

@@ -46,7 +46,7 @@ That means that key-value pairs appear in precisely the same order as they do in
 
 ## Changelog
 
-### 0.6.4 - unreleased
+### 0.6.4
 
 * Add a command `infer-language` that infers a language from the given serialization chunk.
 
