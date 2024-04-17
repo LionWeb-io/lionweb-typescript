@@ -11,8 +11,8 @@ import {
     SerializedLanguageReference,
     SerializedNode
 } from "@lionweb/core"
-import { ClassifierMetaTypes, Metrics } from "./metric-types.js"
-import { nestedFlatMap2, nestedFlatMap3, nestedGroupingMapper3, sumNumbers } from "./fp-helpers.js"
+import {ClassifierMetaTypes, Metrics} from "./metric-types.js"
+import {nested3Grouper, nested3Mapper, nestedFlatMap2, nestedFlatMap3, sumNumbers} from "./fp-helpers.js"
 
 
 type Info = {
@@ -31,12 +31,15 @@ export const measure = (serializationChunk: SerializationChunk, languages: Langu
 
     // group nodes by language key, version, and classifier key, mapped to the classifier meta-pointer and #instantiations:
     const languageKey2version2classifierKey2info =
-        nestedGroupingMapper3<SerializedNode, Info>(
-            (nodes) => ({ classifier: nodes[0].classifier, instantiations: nodes.length }),
-            ({ classifier }) => classifier.language,
-            ({ classifier }) => classifier.version,
-            ({ classifier }) => classifier.key
-        )(serializationChunk.nodes)
+        nested3Mapper<SerializedNode[], Info>(
+            (nodes) => ({ classifier: nodes[0].classifier, instantiations: nodes.length })
+        )(
+            nested3Grouper<SerializedNode>(
+                ({ classifier }) => classifier.language,
+                ({ classifier }) => classifier.version,
+                ({ classifier }) => classifier.key
+            )(serializationChunk.nodes)
+        )
 
     const languagesWithInstantiations =
         nestedFlatMap2(

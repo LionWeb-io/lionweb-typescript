@@ -7,48 +7,58 @@ export const sumNumbers = (nums: number[]): number =>
     nums.reduce((acc, cur) => acc + cur, 0)
 
 
+export const mapValuesMapper = <T, R>(valueFunc: (t: T) => R) =>
+    (map: Record<string, T>): Record<string, R> =>
+        Object.fromEntries(
+            Object.entries(map)
+                .map(([key, value]) => [key, valueFunc(value)])
+        )
+// === mapValues(map, valueFunc)
+
+export const nested2Mapper = <T, R>(mapFunc: (t: T) => R) =>
+        mapValuesMapper(mapValuesMapper(mapFunc))
+
+export const nested3Mapper = <T, R>(mapFunc: (t: T) => R) =>
+        mapValuesMapper(nested2Mapper(mapFunc))
+
+
 /**
  * Return a function that groups an array of things using a group function as a
- *  map : string (group key) &rarr; array of grouped things mapped using the map function.
+ *  map : string (group key) &rarr; array of grouped things.
  */
-export const groupingMapper = <T, R>(
-    mapFunc: (ts: T[]) => R,
-    groupFunc: (t: T) => string
-): (ts: T[]) => Record<string, R> =>
-    (ts: T[]): Record<string, R> =>
-        mapValues(groupBy(ts, groupFunc), mapFunc)
+export const grouper = <T>(
+    keyFunc: (t: T) => string
+): (ts: T[]) => Record<string, T[]> =>
+    (ts: T[]): Record<string, T[]> =>
+        groupBy(ts, keyFunc)
 
 /**
  * Return a function that groups an array of things using two group functions as a nested map
  *  map : string (group key 1) &rarr;
- *      map : string (group key 2) &rarr; array of grouped things mapped using the map function.
+ *      map : string (group key 2) &rarr; array of grouped things.
  */
-export const nestedGroupingMapper2 = <T, R>(
-    mapFunc: (ts: T[]) => R,
-    groupFunc1: (t: T) => string,
-    groupFunc2: (t: T) => string,
-): (ts: T[]) => Record<string, Record<string, R>> =>
-    groupingMapper<T, Record<string, R>>(
-        groupingMapper<T, R>(mapFunc, groupFunc2),
-        groupFunc1
-    )
+export const nested2Grouper = <T>(
+    key1Func: (t: T) => string,
+    key2Func: (t: T) => string
+): (ts: T[]) => Record<string, Record<string, T[]>> =>
+    (ts: T[]): Record<string, Record<string, T[]>> =>
+        mapValuesMapper(grouper(key2Func))(grouper(key1Func)(ts))
+// === mapValuesMapper((vs) => groupBy(vs, key2Func))(groupBy(ts, key1Func))
 
 /**
  * Return a function that groups an array of things using two group functions as a nested map
  *  map : string (group key 1) &rarr;
  *      map : string (group key 2) &rarr;
- *          map : string (group key 3) &rarr; array of grouped things mapped using the map function.
+ *          map : string (group key 3) &rarr; array of grouped things.
  */
-export const nestedGroupingMapper3 = <T, R>(
-    mapFunc: (ts: T[]) => R,
-    groupFunc1: (t: T) => string,
-    groupFunc2: (t: T) => string,
-    groupFunc3: (t: T) => string
-): (ts: T[]) => Record<string, Record<string, Record<string, R>>> =>
-    groupingMapper<T, Record<string, Record<string, R>>>(
-        nestedGroupingMapper2(mapFunc, groupFunc2, groupFunc3),
-        groupFunc1
-    )
+export const nested3Grouper = <T>(
+    key1Func: (t: T) => string,
+    key2Func: (t: T) => string,
+    key3Func: (t: T) => string
+): (ts: T[]) => Record<string, Record<string, Record<string, T[]>>> =>
+    (ts: T[]): Record<string, Record<string, Record<string, T[]>>> =>
+        mapValuesMapper(nested2Grouper(key2Func, key3Func))(grouper(key1Func)(ts))
+
 
 
 /**

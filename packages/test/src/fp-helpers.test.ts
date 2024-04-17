@@ -3,16 +3,19 @@ const {deepEqual, equal} = assert
 
 import {
     flatMapValues,
-    groupingMapper,
+    grouper,
+    mapValuesMapper,
+    nested2Grouper,
+    nested2Mapper,
+    nested3Grouper,
+    nested3Mapper,
     nestedFlatMap2,
     nestedFlatMap3,
-    nestedGroupingMapper2,
-    nestedGroupingMapper3,
     sumNumbers
 } from "@lionweb/utilities/dist/serialization/fp-helpers.js"
 
 
-describe.only("FP helpers w.r.t. nested maps work", () => {
+describe("FP helpers w.r.t. nested maps work", () => {
 
     it("sum numbers", () => {
         equal(sumNumbers([]), 0)
@@ -21,38 +24,81 @@ describe.only("FP helpers w.r.t. nested maps work", () => {
     })
 
 
-    const arrayLength = <T>(ts: T[]) => ts.length
+    it("mapValuesMapper", () => {
+        deepEqual(
+            mapValuesMapper((num: number) => num+1)({ "x": 0, "y": 1 }),
+            {
+                "x": 1,
+                "y": 2
+            }
+        )
+    })
+
+    it("2-nested mapper", () => {
+        deepEqual(
+            nested2Mapper((num: number) => num + 1)({ "x": { "a": 0, "b": 1 }, "y": { "c": 2 } }),
+            {
+                "x": { "a": 1, "b": 2 },
+                "y": { "c": 3 }
+            }
+        )
+    })
+
+    it("3-nested mapper", () => {
+        deepEqual(
+            nested3Mapper((num: number) => num + 1)({
+                "x": {
+                    "a": { "i": 0 },
+                    "b": { "j": 1 }
+                },
+                "y": {
+                    "c": { "k": 2 }
+                }
+            }),
+            {
+                "x": {
+                    "a": { "i": 1 },
+                    "b": { "j": 2 }
+                },
+                "y": {
+                    "c": { "k": 3 }
+                }
+            }
+        )
+    })
+
+
     const fragmentAt = (index: number) =>
         (str: string) =>
             str.split(":")[index]
 
     it("grouping mapper", () => {
-        const gm = groupingMapper(arrayLength, (str: string) => str)
-        deepEqual(gm([]), {})
-        deepEqual(gm(["x", "y", "x"]), { "x": 2, "y": 1 })
+        const g = grouper((str: string) => str)
+        deepEqual(g([]), {})
+        deepEqual(g(["x", "y", "x"]), { "x": ["x", "x"], "y": ["y"] })
     })
 
-    it("nested grouping mapper 2", () => {
-        const ngm = nestedGroupingMapper2(arrayLength, fragmentAt(0), fragmentAt(1))
-        deepEqual(ngm([]), {})
+    it("2-nested grouper", () => {
+        const n2g = nested2Grouper(fragmentAt(0), fragmentAt(1))
+        deepEqual(n2g([]), {})
         deepEqual(
-            ngm(["x:x", "y:x", "x:x", "x:y"]),
-            { "x": { "x": 2, "y": 1 }, "y": { "x": 1 } }
+            n2g(["x:x", "y:x", "x:x", "x:y"]),
+            { "x": { "x": ["x:x", "x:x"], "y": ["x:y"] }, "y": { "x": ["y:x"] } }
         )
     })
 
-    it("nested grouping mapper 3", () => {
-        const ngm = nestedGroupingMapper3(arrayLength, fragmentAt(0), fragmentAt(1), fragmentAt(2))
-        deepEqual(ngm([]), {})
+    it("3-nested grouper", () => {
+        const n3g = nested3Grouper(fragmentAt(0), fragmentAt(1), fragmentAt(2))
+        deepEqual(n3g([]), {})
         deepEqual(
-            ngm(["x:x:x", "y:x:x", "x:x:x", "x:y:x", "y:x:y", "x:x:y"]),
+            n3g(["x:x:x", "y:x:x", "x:x:x", "x:y:x", "y:x:y", "x:x:y"]),
             {
                 "x": {
-                    "x": { "x": 2, "y": 1 },
-                    "y": { "x": 1 }
+                    "x": { "x": ["x:x:x", "x:x:x"], "y": ["x:x:y"] },
+                    "y": { "x": ["x:y:x"] }
                 },
                 "y": {
-                    "x": { "x": 1, "y": 1 }
+                    "x": { "x": ["y:x:x"], "y": ["y:x:y"] }
                 }
             }
         )
