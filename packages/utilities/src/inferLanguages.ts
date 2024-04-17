@@ -12,7 +12,7 @@ import {
     concatenator,
     lastOf
 } from "@lionweb/core"
-import { hasher } from "./hashing.js"
+import {hasher} from "./hashing.js"
 
 const possibleKeySeparators = ["-", "_"]
 
@@ -21,7 +21,7 @@ const key = lastOf
 
 const { stringDatatype, booleanDatatype, integerDatatype } = builtinPrimitives
 
-export function inferLanguagesFromChunk(chunk: SerializationChunk): Language[] {
+export const inferLanguagesFromSerializationChunk = (chunk: SerializationChunk): Language[] => {
     const languages = new Map<string, Language>()
     const concepts = new Map<string, Concept>()
     const links = new Array<{ link: Link; conceptId: string }>()
@@ -36,7 +36,7 @@ export function inferLanguagesFromChunk(chunk: SerializationChunk): Language[] {
         const languageName = node.classifier.language
         const entityName = node.classifier.key
 
-        const language = getLanguage(languages, languageName)
+        const language = findLanguage(languages, languageName)
         if (language.entities.filter(entity => entity.key === entityName).length) {
             continue
         }
@@ -122,15 +122,15 @@ export function inferLanguagesFromChunk(chunk: SerializationChunk): Language[] {
     return Array.from(languages.values())
 }
 
-function getLanguage(languages: Map<string, Language>, languageName: string) {
+const findLanguage = (languages: Map<string, Language>, languageName: string) => {
     const language = languages.get(languageName)
     if (language === undefined) {
-        throw new Error(`Language '${languageName} is not exist in the languages section`)
+        throw new Error(`Language '${languageName} does not exist in the languages section`)
     }
     return language
 }
 
-export function deriveLikelyPropertyName(key: string) {
+export const deriveLikelyPropertyName = (key: string) => {
     for (const separator of possibleKeySeparators) {
         const name = key.split(separator)[2]
         if (name) {
@@ -141,10 +141,9 @@ export function deriveLikelyPropertyName(key: string) {
     return key;
 }
 
-function isBoolean(value: string) {
-    return value === "true" || value === "false"
-}
+const isBoolean = (value: string) =>
+    value === "true" || value === "false"
 
-function isNumeric(value: string) {
-    return !isNaN(parseFloat(value))
-}
+const isNumeric = (value: string) =>
+    !isNaN(parseFloat(value))
+

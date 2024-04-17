@@ -81,12 +81,12 @@ function registerLanguage(registry: LanguageRegistry, filename: string) {
     registry.addLanguage(new LionWebLanguageWrapper(json))
 }
 
-tests.forEach(async function (testDir) {
+tests.forEach(async (testDir) => {
     console.log("testDir " + JSON.stringify(testDir))
     // await to ensure tests won't go in parallel because the KnownLanguages is static
     const registry = new LanguageRegistry()
     testDir.lang.forEach(lang => registerLanguage(registry, lang))
-    describe("validate " + testDir.dir, function () {
+    describe("validate " + testDir.dir, () => {
         validationTest.apply(null, [testDir, testDir.lang.length !== 0, registry])
     })
 })

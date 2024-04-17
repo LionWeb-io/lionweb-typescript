@@ -1,6 +1,6 @@
 import { deepEqual } from "assert"
 import { LanguageEntity, serializeLanguages, serializeNodes } from "@lionweb/core"
-import { inferLanguagesFromChunk, deriveLikelyPropertyName } from "@lionweb/utilities"
+import { inferLanguagesFromSerializationChunk, deriveLikelyPropertyName } from "@lionweb/utilities"
 
 import { libraryExtractionFacade, libraryModel } from "../instances/library.js"
 import { minimalLibraryLanguage } from "../languages/minimal-library.js"
@@ -11,7 +11,7 @@ describe("inferLanguagesFromChunk", () => {
     it("should correctly infer the minimal library language from the instance", () => {
         const serializationChunk = serializeNodes(libraryModel, libraryExtractionFacade)
 
-        const languages = inferLanguagesFromChunk(serializationChunk)
+        const languages = inferLanguagesFromSerializationChunk(serializationChunk)
         deepEqual(languages.length, 1)
         const inferredLanguage = languages[0]
 
@@ -25,7 +25,7 @@ describe("inferLanguagesFromChunk", () => {
     it("should correctly infer the multi language from the instance", () => {
         const serializationChunk = serializeNodes(multiModel, multiExtractionFacade)
 
-        const languages = inferLanguagesFromChunk(serializationChunk)
+        const languages = inferLanguagesFromSerializationChunk(serializationChunk)
         deepEqual(languages.length, 2)
         const inferredMultiLanguage = languages[0]
         const inferredLibraryLanguage = languages[1]

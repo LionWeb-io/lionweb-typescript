@@ -1,4 +1,4 @@
-import { groupBy, mapValues } from "@lionweb/core"
+import {groupBy, mapValues} from "@lionweb/core"
 
 /**
  * Sum the given array of numbers.
@@ -33,6 +33,7 @@ export const nestedGroupingMapper3 = <T, R>(
         nestedGroupingMapper2(mapFunc, groupFunc2, groupFunc3),
         groupFunc1
     )
+
 
 export const nestedFlatMap1 = <T, R>(
     nestedMap1: Record<string, T>,

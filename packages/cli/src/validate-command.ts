@@ -1,7 +1,7 @@
-import { LanguageRegistry, validateFileResult } from "@lionweb/validation"
+import {LanguageRegistry, validateFileResult} from "@lionweb/validation"
 
 
-export function runValidationOnSerializationChunkAt(path: string): void {
+export const runValidationOnSerializationChunkAt = (path: string): void => {
     console.log(`Validating ${path}`)
     const validationResult = validateFileResult(path, false, new LanguageRegistry())
     console.log(
