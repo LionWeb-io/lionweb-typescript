@@ -107,21 +107,21 @@ describe("FP helpers w.r.t. nested maps work", () => {
 
     it("flatMapValues", () => {
         deepEqual(
-            flatMapValues({ "x": [0, 1], "y": [2, 3] }, (key, nums) => `${key}:${sumNumbers(nums)}`),
+            flatMapValues({ "x": [0, 1], "y": [2, 3] }, (nums, key1) => `${key1}:${sumNumbers(nums)}`),
             ["x:1", "y:5"]
         )
     })
 
     it("nestedFlatMap2", () => {
         deepEqual(
-            nestedFlatMap2({ "x": { "y": [0, 1], "z": [2] }, "a": { "b": [3, 4] } }, (key1, key2, nums) => `${key1}:${key2}:${sumNumbers(nums)}`),
+            nestedFlatMap2({ "x": { "y": [0, 1], "z": [2] }, "a": { "b": [3, 4] } }, (nums, key1, key2 ) => `${key1}:${key2}:${sumNumbers(nums)}`),
             ["x:y:1", "x:z:2", "a:b:7"]
         )
     })
 
     it("nestedFlatMap3", () => {
         deepEqual(
-            nestedFlatMap3({ "x": { "y": { "z": [1] } } }, (key1, key2, key3, nums) => `${key1}:${key2}:${key3}:${sumNumbers(nums)}`),
+            nestedFlatMap3({ "x": { "y": { "z": [1] } } }, (nums, key1, key2, key3) => `${key1}:${key2}:${key3}:${sumNumbers(nums)}`),
             ["x:y:z:1"]
         )
     })

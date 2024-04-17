@@ -44,7 +44,7 @@ export const measure = (serializationChunk: SerializationChunk, languages: Langu
     const languagesWithInstantiations =
         nestedFlatMap2(
             languageKey2version2classifierKey2info,
-            (languageKey, version, classifierKey2info) => ({
+            (classifierKey2info, languageKey, version) => ({
                 key: languageKey,
                 version,
                 name: symbolTable.languageMatching(languageKey, version)?.name,
@@ -69,7 +69,7 @@ export const measure = (serializationChunk: SerializationChunk, languages: Langu
     const instantiatedClassifiers =
         nestedFlatMap3(
             languageKey2version2classifierKey2info,
-            (languageKey, version, classifierKey, info) => {
+            (info, languageKey, version, classifierKey) => {
                 const classifier = symbolTable.entityMatching(info.classifier)
                 return ({
                     language: {

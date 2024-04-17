@@ -66,28 +66,28 @@ export const nested3Grouper = <T>(
 /**
  * Flat-maps over the values of a
  *  map : string (group key) &rarr; values
- * using the map function.
+ * using the map function, which is also provided with the keys.
  */
 export const flatMapValues = <T, R>(
     map: Record<string, T>,
-    mapFunc: (key1: string, t: T) => R
+    mapFunc: (t: T, key1: string) => R
 ): R[] =>
     Object.entries(map)
-        .map(([key1, t]) => mapFunc(key1, t))
+        .map(([key1, t]) => mapFunc(t, key1))
 
 /**
  * Flat-maps over the values of a nested map
  *  map : string (group key 1) &rarr;
  *      map: string (group key 2) &rarr; values
- * using the map function.
+ * using the map function, which is also provided with the keys.
  */
 export const nestedFlatMap2 = <T, R>(
     nested2Map: Nested2Map<T>,
-    map2Func: (key1: string, key2: string, t: T) => R
+    map2Func: (t: T, key1: string, key2: string) => R
 ): R[] =>
     Object.entries(nested2Map)
         .flatMap(([key1, nestedMap1]) =>
-            flatMapValues(nestedMap1, (key2, t) => map2Func(key1, key2, t))
+            flatMapValues(nestedMap1, (t, key2) => map2Func(t, key1, key2))
         )
 
 /**
@@ -95,14 +95,14 @@ export const nestedFlatMap2 = <T, R>(
  *  map : string (group key 1) &rarr;
  *      map: string (group key 2) &rarr;
  *           map: string (group key 3) &rarr; values
- * using the map function.
+ * using the map function, which is also provided with the keys.
  */
 export const nestedFlatMap3 = <T, R>(
     nested3Map: Nested3Map<T>,
-    map3Func: (key1: string, key2: string, key3: string, t: T) => R
+    map3Func: (t: T, key1: string, key2: string, key3: string) => R
 ): R[] =>
     Object.entries(nested3Map)
         .flatMap(([key1, nestedMap2]) =>
-            nestedFlatMap2(nestedMap2, (key2, key3, t) => map3Func(key1, key2, key3, t))
+            nestedFlatMap2(nestedMap2, (t, key2, key3) => map3Func(t, key1, key2, key3))
         )
 
