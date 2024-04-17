@@ -1,9 +1,7 @@
 import {assert} from "chai"
 const {deepEqual} = assert
 
-import {lioncoreBuiltins} from "@lionweb/core"
-import {checkReferences} from "@lionweb/core"
-import {issuesLanguage} from "@lionweb/core"
+import {checkReferences, issuesLanguage, lioncoreBuiltins} from "@lionweb/core"
 import {logIssues, logUnresolvedReferences} from "../utils/test-helpers.js"
 
 
