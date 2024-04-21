@@ -1,51 +1,128 @@
-import {conceptsOf, groupBy, Language, MemoisingSymbolTable, MetaPointer, SerializationChunk} from "@lionweb/core"
+import {
+    Annotation,
+    Concept,
+    instantiableClassifiersOf,
+    Interface,
+    Language,
+    LanguageEntity,
+    MemoisingSymbolTable,
+    MetaPointer,
+    SerializationChunk,
+    SerializedLanguageReference,
+    SerializedNode
+} from "@lionweb/core"
+import {ClassifierMetaTypes, Metrics} from "./metric-types.js"
+import {nested3Grouper, nested3Mapper, nestedFlatMap2, nestedFlatMap3, sumNumbers} from "./fp-helpers.js"
 
 
-type ClassifierInstantiationMetric = {
-    key: string         // key of classifier
-    language: string    // key of language
-    version: string     // version of language
-    name?: string       // name when it can be looked up
-    count: number       // the number of instantiations
-    // TODO  add property to say the classifier is a concept, or annotation (or enum)?
-}
-
-type Metrics = {
-    instantiations: ClassifierInstantiationMetric[]
-    unusedConcreteConcepts: MetaPointer[]
+type Info = {
+    classifier: MetaPointer
+    instantiations: number
 }
 
 /**
- * Computes {@link Metrics metrics} on the given {@link SerializationChunk serializationChunk}.
+ * Computes {@link Metrics metrics} on the given {@link SerializationChunk serialization chunk}.
  * Passing it {@link Language languages} make this language-aware:
- *  * classifier names are looked up,
- *  * unused concrete concepts are computed as well.
+ *  * language and classifier names are looked up,
+ *  * unused instantiable classifiers and languages without instantiations are computed as well.
  */
 export const measure = (serializationChunk: SerializationChunk, languages: Language[]): Metrics => {
     const symbolTable = new MemoisingSymbolTable(languages)
 
-    const metaPointerAsText = (classifier: MetaPointer) => `${classifier.key}:${classifier.language}:${classifier.version}`
+    // group nodes by language key, version, and classifier key, mapped to the classifier meta-pointer and #instantiations:
+    const languageKey2version2classifierKey2info =
+        nested3Mapper<SerializedNode[], Info>(
+            (nodes) => ({ classifier: nodes[0].classifier, instantiations: nodes.length })
+        )(
+            nested3Grouper<SerializedNode>(
+                ({ classifier }) => classifier.language,
+                ({ classifier }) => classifier.version,
+                ({ classifier }) => classifier.key
+            )(serializationChunk.nodes)
+        )
 
-    // group nodes by classifier key, language, and version:
-    const groupedInstantiations = groupBy(serializationChunk.nodes, ({ classifier }) => metaPointerAsText(classifier))
+    const languagesWithInstantiations =
+        nestedFlatMap2(
+            languageKey2version2classifierKey2info,
+            (classifierKey2info, languageKey, version) => ({
+                key: languageKey,
+                version,
+                name: symbolTable.languageMatching(languageKey, version)?.name,
+                instantiations: sumNumbers(Object.values(classifierKey2info).map((info) => info.instantiations))
+            })
+        )
 
-    // map grouped nodes to instantiations with count:
-    const instantiations = Object.values(groupedInstantiations).map((nodes) => ({
-        ...nodes[0].classifier,
-        name: symbolTable.entityMatching(nodes[0].classifier)?.name,
-        count: nodes.length
-    }))
+    const metaTypeOf = (entity?: LanguageEntity): ClassifierMetaTypes | undefined => {
+        if (entity instanceof Annotation) {
+            return "annotation"
+        }
+        if (entity instanceof Concept) {
+            return "concept"
+        }
+        if (entity instanceof Interface) {
+            return "interface"
+        }
+        return undefined
+    }
 
-    // compute all concrete concepts for the language:
-    const concreteConcepts = languages.flatMap(conceptsOf).filter((concept) => !concept.abstract)
-    const unusedConcreteConcepts = concreteConcepts
-        .map((concept) => concept.metaPointer())
-        .filter((metaPointer) => !(metaPointerAsText(metaPointer) in groupedInstantiations))
+    // map grouped nodes to info including #instantiations:
+    const instantiatedClassifiers =
+        nestedFlatMap3(
+            languageKey2version2classifierKey2info,
+            (info, languageKey, version, classifierKey) => {
+                const classifier = symbolTable.entityMatching(info.classifier)
+                return ({
+                    language: {
+                        key: languageKey,
+                        version,
+                        name: symbolTable.languageMatching(languageKey, version)?.name
+                    },
+                    key: classifierKey,
+                    name: classifier?.name,
+                    metaType: metaTypeOf(classifier),
+                    instantiations: info.instantiations
+                })
+            }
+        )
 
-    // return the metrics object:
+    const doesLanguageHaveInstantiations = (language: SerializedLanguageReference): boolean =>
+           language.key in languageKey2version2classifierKey2info
+        && language.version in languageKey2version2classifierKey2info[language.key]
+
+    const languagesWithoutInstantiations =
+        serializationChunk.languages
+            .filter((language) => !doesLanguageHaveInstantiations(language))
+            .map((language) => ({
+                ...language,
+                name: symbolTable.languageMatching(language.key, language.version)?.name
+            }))
+
+
+    const isClassifierUsed = (metaPointer: MetaPointer): boolean =>
+        metaPointer.language in languageKey2version2classifierKey2info
+        && metaPointer.version in languageKey2version2classifierKey2info[metaPointer.language]
+        && metaPointer.key in languageKey2version2classifierKey2info[metaPointer.language][metaPointer.version]
+
+    const uninstantiatedInstantiableClassifiers =
+        languages.flatMap(instantiableClassifiersOf)
+            .map((classifier) => classifier.metaPointer())
+            .filter((metaPointer) => !isClassifierUsed(metaPointer))
+            .map((metaPointer) => ({
+                language: {
+                    key: metaPointer.language,
+                    version: metaPointer.version,
+                    name: symbolTable.languageMatching(metaPointer.language, metaPointer.version)?.name
+                },
+                key: metaPointer.key,
+                name: symbolTable.entityMatching(metaPointer)?.name
+            }))
+
+
     return {
-        instantiations,
-        unusedConcreteConcepts
+        languagesWithInstantiations,
+        instantiatedClassifiers,
+        languagesWithoutInstantiations,
+        uninstantiatedInstantiableClassifiers
     }
 }
 

@@ -271,9 +271,19 @@ const metaTypedBasedClassifierDeducerFor = <NT extends Node & IMetaTyped>(langua
  * @return all {@link Concept concepts} defined in the given {@link Language language}.
  */
 const conceptsOf = (language: Language): Concept[] =>
-    language.entities
-        .filter((entity) => entity instanceof Concept)
-        .map((entity) => entity as Concept)
+    language.entities.filter((entity) => entity instanceof Concept) as Concept[]
+
+
+const isInstantiableClassifier = (entity: LanguageEntity): boolean =>
+       entity instanceof Annotation
+    || (entity instanceof Concept && !entity.abstract)
+    // leaves out Interface and Concept { abstract: true }
+
+/**
+ * @return an array of all instantiable {@link Classifier classifiers} of the given {@link Language language}.
+ */
+const instantiableClassifiersOf = (language: Language): Classifier[] =>
+    language.entities.filter(isInstantiableClassifier) as Classifier[]
 
 
 export {
@@ -290,6 +300,7 @@ export {
     idBasedClassifierDeducerFor,
     idOf,
     inheritedCycleWith,
+    instantiableClassifiersOf,
     isConcrete,
     isContainment,
     isEnumeration,

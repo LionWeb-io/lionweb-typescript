@@ -3,15 +3,15 @@
 
 import {argv} from "process"
 
-import {diagramFromSerializationChunkAt} from "./m3/diagram-generator.js"
-import {generateTsTypesWith} from "./m3/ts-types-generator.js"
-import {diffSerializationChunks} from "./serialization/differ.js"
-import {executeMeasureCommand} from "./serialization/measurer.js"
-import {repairSerializationChunkAt} from "./serialization/repairer.js"
-import {sortSerializationChunkAt} from "./serialization/sorter.js"
-import {executeTextualizeCommand} from "./serialization/textualizer.js"
-import {runValidationOnSerializationChunkAt} from "./validator.js"
-import { inferLanguages } from "./inferer.js"
+import {diagramFromSerializationChunkAt} from "./m3/diagram-command.js"
+import {diffSerializationChunks} from "./serialization/diff-command.js"
+import {generateTsTypesWith} from "./m3/generate-ts-types-command.js"
+import {inferLanguages} from "./infer-language-command.js"
+import {executeMeasureCommand} from "./serialization/measure-command.js"
+import {repairSerializationChunkAt} from "./serialization/repair-command.js"
+import {sortSerializationChunkAt} from "./serialization/sort-command.js"
+import {executeTextualizeCommand} from "./serialization/textualize-command.js"
+import {runValidationOnSerializationChunkAt} from "./validate-command.js"
 
 
 const main = async (args: string[])=> {
@@ -19,14 +19,14 @@ const main = async (args: string[])=> {
     const DIAGRAM_COMMAND = "diagram"
     const DIFF_COMMAND = "diff"
     const GENERATE_TS_TYPES_COMMAND = "generate-ts-types"
+    const INFER_LANGUAGE_COMMAND = "infer-language"
     const MEASURE_COMMAND = "measure"
     const REPAIR_COMMAND = "repair"
     const SORT_COMMAND = "sort"
     const TEXTUALIZE_COMMAND = "textualize"
     const VALIDATE_COMMAND = "validate"
-    const INFER_LANGUAGE_COMMAND = "infer-language"
 
-    const commands = [DIAGRAM_COMMAND, DIFF_COMMAND, GENERATE_TS_TYPES_COMMAND, MEASURE_COMMAND, REPAIR_COMMAND, SORT_COMMAND, TEXTUALIZE_COMMAND, VALIDATE_COMMAND, INFER_LANGUAGE_COMMAND].sort()
+    const commands = [DIAGRAM_COMMAND, DIFF_COMMAND, GENERATE_TS_TYPES_COMMAND, INFER_LANGUAGE_COMMAND, MEASURE_COMMAND, REPAIR_COMMAND, SORT_COMMAND, TEXTUALIZE_COMMAND, VALIDATE_COMMAND].sort()
 
     if (args.length <= 2) {
         console.log(
@@ -75,6 +75,23 @@ The chunks to diff are given as the first two paths, and the path for the diff J
                 )
             } else {
                 await generateTsTypesWith(commandArgs)
+            }
+            break
+        }
+
+        case MEASURE_COMMAND: {
+            if (commandArgs.length === 0) {
+                console.log(
+                    `The ${MEASURE_COMMAND} command computes statistics on the given serialization chunks,
+such as which concepts are instantiated how often.
+
+Usage: npx @lionweb/cli ${MEASURE_COMMAND} <paths_to_chunks> --language[s] <path_to_chunks_of_languages>
+
+Chunks given after a '--language' or '--languages' flag (which are synonyms) are assumed to be serializations of languages.
+These languages are then used to try and resolve the keys of languages' entities and their features to names.`
+                )
+            } else {
+                await executeMeasureCommand(commandArgs)
             }
             break
         }
@@ -128,23 +145,6 @@ Usage: npx @lionweb/cli ${VALIDATE_COMMAND} <path_to_chunk>`
                 )
             } else {
                 commandArgs.forEach(runValidationOnSerializationChunkAt)
-            }
-            break
-        }
-
-        case MEASURE_COMMAND: {
-            if (commandArgs.length === 0) {
-                console.log(
-`The ${MEASURE_COMMAND} command computes statistics on the given serialization chunks,
-such as which concepts are instantiated how often.
-
-Usage: npx @lionweb/cli ${MEASURE_COMMAND} <paths_to_chunks> --language[s] <path_to_chunks_of_languages>
-
-Chunks given after a '--language' or '--languages' flag (which are synonyms) are assumed to be serializations of languages.
-These languages are then used to try and resolve the keys of languages' entities and their features to names.`
-                )
-            } else {
-                await executeMeasureCommand(commandArgs)
             }
             break
         }

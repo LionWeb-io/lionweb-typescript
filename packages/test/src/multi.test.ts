@@ -11,8 +11,8 @@ import {multiModel, multiExtractionFacade} from "./instances/multi.js"
 describe("multi-language test model", () => {
 
     it("[de-]serialize multi-language model", () => {
-        const serialization = serializeNodes(multiModel, multiExtractionFacade)
-        const deserialization = deserializeSerializationChunk(serialization, libraryInstantiationFacade, [libraryLanguage, multiLanguage], [])
+        const serializationChunk = serializeNodes(multiModel, multiExtractionFacade)
+        const deserialization = deserializeSerializationChunk(serializationChunk, libraryInstantiationFacade, [libraryLanguage, multiLanguage], [])
         deepEqual(deserialization, multiModel)
     })
 
