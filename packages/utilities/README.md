@@ -22,10 +22,14 @@ It contains utilities on top of the `core` package, such as:
 
 ## Changelog
 
+### 0.6.4
+
+* Rename `inferLanguagesFromChunk` &rarr; `inferLanguagesFromSerializationChunk` (for consistency).
+* Extend the functionality of the `measure` metrics function.
+
 ### 0.6.3
 
 * Add a `inferLanguagesFromChunk` function that infers a language from a serialization chunk.
-* Extend the functionality of the `measure` metrics function.
 * Renaming for consistency and clarity:
   * `readChunk` &rarr; `readSerializationChunk`
   * `tryLoad[All]AsLanguages` &rarr; `tryRead[All]AsLanguages`

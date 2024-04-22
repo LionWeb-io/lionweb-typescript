@@ -32,6 +32,11 @@ The following is a list of links to potential starting points:
 
 ## Changelog
 
+### 0.6.4
+
+* Add functions `mapValues` and `instantiableClassifiers`.
+* Add a method `SymbolTable.languageMatching` to look up a language.
+
 ### 0.6.3
 
 * The deserializer now deserializes all nodes in the serialization chunk, not just the root nodes (identified as having `parent` set to `null`).
@@ -39,8 +44,6 @@ The following is a list of links to potential starting points:
   * Also: `deserializeChunk` is renamed to `deserializeSerializationChunk` for naming consistency, although `deserializeChunk` is retained as an alias.
 * Add a method `metaType` to M3 types, to deduce classifiers' names from.
   (That fixes [issue #143](https://github.com/LionWeb-io/lionweb-typescript/issues/143).)
-* Add functions `mapValues` and `instantiableClassifiers`.
-* Add a method `SymbolTable.languageMatching` to look up a language.
 
 ### 0.6.2
 
