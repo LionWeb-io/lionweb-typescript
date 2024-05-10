@@ -80,7 +80,7 @@ export class LionWebLanguageReferenceValidator {
             this.validationResult.issue(new Language_IncorrectContainmentMetaPointer_Issue(context, containment.containment, metaConcept.classifier.key))
         }
         if (nodeConcept !== undefined) {
-            const cons = this.registry.languages.allContainments(nodeConcept)
+            const cons = this.registry.languages.allContainmentDefinitions(nodeConcept)
             if (!cons.includes(metaConcept)) {
                 this.validationResult.issue(new Language_ContainmentMetaPointerNotInClass_Issue(context, containment.containment, nodeConcept))
                 return
@@ -131,7 +131,7 @@ export class LionWebLanguageReferenceValidator {
             return
         }
         if (nodeConcept !== undefined) {
-            const props = this.registry.languages.allProperties(nodeConcept)
+            const props = this.registry.languages.allPropertyDefinitions(nodeConcept)
             if (!props.includes(propertyDefinition)) {
                 this.validationResult.issue(new Language_PropertyMetaPointerNotInClass_Issue(context, prop.property, nodeConcept))
                 return

@@ -46,4 +46,17 @@ export class ChunkUtils {
         }
         return null
     }
+    
+    static mergeChunks(mainChunk: LionWebJsonChunk, otherChunks: LionWebJsonChunk[]): void {
+        otherChunks.forEach(chunk => {
+            if (mainChunk.serializationFormatVersion !== chunk.serializationFormatVersion) {
+                throw new Error("Different serializationFormatVersion")
+            }
+            mainChunk.languages.push(...chunk.languages.filter(lang => {
+                const alreadyThere = mainChunk.languages.find(l => l.key === lang.key && l.version === lang.version)
+                return alreadyThere === undefined
+            }))
+            mainChunk.nodes.push(...chunk.nodes)
+        })
+    }
 }

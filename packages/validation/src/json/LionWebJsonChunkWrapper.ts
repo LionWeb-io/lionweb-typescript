@@ -45,15 +45,19 @@ export class LionWebJsonChunkWrapper {
         return this.nodesIdMap.get(id)
     }
 
-    findNodesOfClassifier(concept: LionWebJsonMetaPointer): LionWebJsonNode[] {
-        return this.jsonChunk.nodes.filter(node => isEqualMetaPointer(node.classifier, concept))
+    /**
+     * Find all the which have classifier _classifier_
+     * @param classifier
+     */
+    findNodesOfClassifier(classifier: LionWebJsonMetaPointer): LionWebJsonNode[] {
+        return this.jsonChunk.nodes.filter(node => isEqualMetaPointer(node.classifier, classifier))
     }
 
     /**
      * Return the target nodes inside `reference` as a list of actual nodes (LionWebJsonNode[])
      * @param reference
      */
-    getReferredNodes(reference: LionWebJsonReference | undefined) {
+    getReferredNodes(reference: LionWebJsonReference | undefined): LionWebJsonNode[] {
         if (reference === undefined) {
             return []
         }
@@ -69,10 +73,10 @@ export class LionWebJsonChunkWrapper {
     }
 
     /**
-     * Return the target nodes inside `reference` as a list of actual nodes (LionWebJsonNode[])
+     * Return the contained nodes inside `containment` as a list of actual nodes (LionWebJsonNode[])
      * @param reference
      */
-    getChildrenAsNodes(containment: LionWebJsonContainment | undefined) {
+    getContainedNodes(containment: LionWebJsonContainment | undefined): LionWebJsonNode[] {
         if (containment === undefined) {
             return []
         }

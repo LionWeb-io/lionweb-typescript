@@ -30,11 +30,17 @@ export const M3_Keys = {
     classifierFeatures: "Classifier-features",
     Interface: "Interface",
     InterfaceExtends: "Interface-extends",
+    FeatureOptional: "Feature-optional",
     Containment: "Containment",
     Language: "Language",
     languageVersion: "Language-version",
+    languageEntities: "Language-entities",
+    LanguageDependsOn: "Language-dependsOn",
+    LinkMultiple: "Link-multiple",
+    LinkType: "Link-type",
     IKeyedKey: "IKeyed-key",
     PropertyType: "Property-type",
+    PrimitiveType: "PrimitiveType",
     Enumeration: "Enumeration",
     EnumerationLiterals: "Enumeration-literals",
     EnumerationLiteral: "EnumerationLiteral",
@@ -57,6 +63,16 @@ export const MetaPointers = {
         version: LION_CORE_M3_VERSION,
         language: LION_CORE_M3_KEY,
         key: M3_Keys.languageVersion
+    },
+    LanguageEntities: {
+        version: LION_CORE_M3_VERSION,
+        language: LION_CORE_M3_KEY,
+        key: M3_Keys.languageEntities
+    },
+    LanguageDependsOn: {
+        version: LION_CORE_M3_VERSION,
+        language: LION_CORE_M3_KEY,
+        key: M3_Keys.LanguageDependsOn
     },
     ClassifierFeatures: {
         version: LION_CORE_M3_VERSION,
@@ -133,6 +149,11 @@ export const MetaPointers = {
         language: LION_CORE_M3_KEY,
         key: M3_Keys.EnumerationLiterals
     },
+    FeatureOptional: {
+        version: LION_CORE_M3_VERSION,
+        language: LION_CORE_M3_KEY,
+        key: M3_Keys.FeatureOptional
+    },
     Containment: {
         version: LION_CORE_M3_VERSION,
         language: LION_CORE_M3_KEY,
@@ -148,10 +169,25 @@ export const MetaPointers = {
         language: LION_CORE_M3_KEY,
         key: M3_Keys.PropertyType
     },
+    LinkMultiple: {
+        version: LION_CORE_M3_VERSION,
+        language: LION_CORE_M3_KEY,
+        key: M3_Keys.LinkMultiple
+    },
+    LinkType: {
+        version: LION_CORE_M3_VERSION,
+        language: LION_CORE_M3_KEY,
+        key: M3_Keys.LinkType
+    },
     Reference: {
         version: LION_CORE_M3_VERSION,
         language: LION_CORE_M3_KEY,
         key: M3_Keys.Reference
+    },
+    PrimitiveType: {
+        language: LION_CORE_M3_KEY,
+        version: LION_CORE_M3_VERSION,
+        key: M3_Keys.PrimitiveType
     },
     IKeyedKey: {
         language: LION_CORE_M3_KEY,

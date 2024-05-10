@@ -27,6 +27,33 @@ export class NodeUtils {
     }
 
     /**
+     * Find property with key equals `key` in `node`.
+     * @param node
+     * @param key
+     */
+    static findPropertyValue(node: LionWebJsonNode, property: LionWebJsonMetaPointer): string | undefined {
+        const propertyJson = NodeUtils.findProperty(node, property)
+        if (propertyJson === undefined) {
+            return undefined
+        } else {
+            return propertyJson.value
+        }
+    }
+
+    // /**
+    //  * Find property with key equals `key` in `node`.
+    //  * @param node
+    //  * @param key
+    //  */
+    // static findPropertyInList(property: LionWebJsonProperty, propertiesDefinitions: LionWebJsonNode[]): LionWebJsonProperty | undefined {
+    //     return propertiesDefinitions.find( prop => {
+    //        
+    //         isEqualMetaPointer(prop.classifier, metaPointer)
+    //
+    //     })
+    // }
+
+    /**
      * Find containment child with key equals `key` in `node`.
      * @param node
      * @param key

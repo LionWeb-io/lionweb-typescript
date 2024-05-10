@@ -3,8 +3,8 @@ import { MissingM3Language_Issue } from "../issues/LanguageIssues.js"
 import { isEqualMetaPointer, LionWebJsonNode, MetaPointers } from "../json/index.js"
 import { JsonContext } from "../json/JsonContext.js"
 import { isLionWebM3Language, LionWebJsonChunk } from "../json/LionWebJson.js"
-import { LionWebJsonChunkWrapper } from "../json/LionWebJsonChunkWrapper.js"
-import { isConcept, LanguageRegistry } from "../languages/index.js"
+import { isLionWebM3Node, LanguageRegistry } from "../languages/index.js"
+import { LionWebLanguageWrapper } from "../languages/LionWebLanguageWrapper.js"
 import { ValidationResult } from "./ValidationResult.js"
 
 /**
@@ -12,43 +12,46 @@ import { ValidationResult } from "./ValidationResult.js"
  */
 export class LionWebLanguageValidator {
     validationResult: ValidationResult
-    chunkWrapper: LionWebJsonChunkWrapper | undefined
+    // chunkWrapper: LionWebJsonChunkWrapper 
+    languageWrapper: LionWebLanguageWrapper
     // availableLanguages: LionWebLanguageDefinition[] = []
 
-    constructor(validationResult: ValidationResult, private registry: LanguageRegistry) {
+    constructor(chunk: LionWebJsonChunk, validationResult: ValidationResult, private registry: LanguageRegistry) {
         this.validationResult = validationResult
-        this.chunkWrapper = undefined
+        // this.chunkWrapper = new LionWebJsonChunkWrapper(chunk)
+        this.languageWrapper = new LionWebLanguageWrapper(chunk)
     }
 
     /**
-     * Check whether the metamodel is a Language.
-     * Assumption is that _chunk_ is already validated as a correct :LionWebJsonChunk
-     * @param obj
+     * Check whether the `chunk` represents a (exactly one) Language.
+     * Assumption is that `chunk` is already validated as a correct *LionWebJsonChunk*
+     * @param chunk
      */
-    validateLanguage(chunk: LionWebJsonChunk) {
-        this.chunkWrapper = new LionWebJsonChunkWrapper(chunk)
-        const usedM3Language = chunk.languages.find(lang => isLionWebM3Language(lang))
+    validateLanguage() {
+        // this.chunkWrapper = new LionWebJsonChunkWrapper(chunk)
+        // this.languageWrapper = new LionWebLanguageWrapper(chunk)
+        const usedM3Language = this.languageWrapper.jsonChunk.languages.find(lang => isLionWebM3Language(lang))
         if (usedM3Language === undefined) {
             this.validationResult.issue(new MissingM3Language_Issue(new JsonContext(null, ["languages"])))
         }
 
-        const languageNodes = this.chunkWrapper.findNodesOfClassifier(MetaPointers.Language)
+        const languageNodes = this.languageWrapper.findNodesOfClassifier(MetaPointers.Language)
         if (languageNodes.length !== 1) {
             // TODO Better error handling.
-            console.error("Error: xpected exactly one Language node, found " + languageNodes.length + " => " + JSON.stringify(languageNodes))
+            this.validationResult.issue(new GenericIssue( new JsonContext(null, ["languages"]), `ExactlyOneLanguageExpected: found ${languageNodes.length} languages`))
         }
-        chunk.nodes.forEach((node, index) => {
-            if (!isConcept(node)) {
-                this.validationResult.issue(new GenericIssue(new JsonContext(null, ["nodes", index]), `node ${node.id} is not a concept`))
+        this.languageWrapper.jsonChunk.nodes.forEach((node, index) => {
+            if (!isLionWebM3Node(node)) {
+                this.validationResult.issue(new GenericIssue(new JsonContext(null, ["nodes", index]), `Only expect LionWebM3 nodes: node ${node.id} with classifier "${JSON.stringify(node.classifier)}" is incorrect`))
             } else {
-                this.validateConcept(node)
+                this.validateNode(node)
             }
         })
     }
 
     validateConcept(node: LionWebJsonNode): void {
         node.properties.forEach(prop => {
-            const properties = this.chunkWrapper?.findNodesOfClassifier(MetaPointers.Property)
+            const properties = this.languageWrapper?.findNodesOfClassifier(MetaPointers.Property)
             const matchedProperty = properties?.find(p => isEqualMetaPointer(p.classifier, prop.property))
             // DUMMY
             return matchedProperty !== undefined
@@ -66,15 +69,19 @@ export class LionWebLanguageValidator {
         this.validateProperties(node, classifier)
     }
     
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     validateProperties(node: LionWebJsonNode, classifier: LionWebJsonNode): void {
-        node.properties.forEach(actualProp => {
-            const propClassifier = this.registry.getNodeByMetaPointer(actualProp.property)
-            if (propClassifier === undefined) {
-                this.validationResult.issue(
-                    new GenericIssue(new JsonContext(null, ["nodes", "properties"]), 
-                        `Property ${actualProp.property.key} not found for classifier ${classifier.id}`)
-                )
-            }
-        })
+        // const classifierPropertyDefs = this.languageWrapper?.allPropertyDefinitions(classifier)
+        // node.properties.forEach(actualProp => {
+        //     const propDef = classifierPropertyDefs.find(pdef => {
+        //         classifierPropertyDefs.
+        //     }
+        //     if (propClassifier === undefined) {
+        //         this.validationResult.issue(
+        //             new GenericIssue(new JsonContext(null, ["nodes", "properties"]), 
+        //                 `Property ${actualProp.property.key} not found for classifier ${classifier.id}`)
+        //         )
+        //     }
+        // })
     }
 }
