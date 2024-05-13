@@ -25,6 +25,7 @@
     "build": "tsc",
     "lint": "eslint src",
     "test": "node dist/lionweb-cli.js",
-    "release": "npm publish"
+    "release": "npm publish",
+    "release-beta": "npm publish --tag beta"
   }
 }
