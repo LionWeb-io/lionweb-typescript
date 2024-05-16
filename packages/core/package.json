@@ -18,6 +18,7 @@
     "clean": "rm -rf dist/ lionweb-core-*.tgz",
     "build": "tsc",
     "lint": "eslint src",
-    "release": "npm publish"
+    "release": "npm publish",
+    "release-beta": "npm publish --tag beta"
   }
 }

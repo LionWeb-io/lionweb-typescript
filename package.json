@@ -25,7 +25,8 @@
     "setup": "npm run setup -w packages --if-present",
     "test": "npm run test -w packages --if-present",
     "prerelease": "npm run initialize",
-    "release": "npm run release -w packages --if-present"
+    "release": "npm run release -w packages --if-present",
+    "release-beta": "npm run release-beta -w packages --if-present"
   },
   "private": true,
   "workspaces": [

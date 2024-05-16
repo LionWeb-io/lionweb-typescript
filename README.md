@@ -54,13 +54,12 @@ All these packages declare their own NPM semver identification, which isn't dire
 
 This repo relies on the following tools being installed:
 
-- [Node.js](https://nodejs.org/): JavaScript runtime, version (at least) v18.18.0 (the LTS version as of 2023-09-29)
-  - NPM (bundled with Node.js): version (at least) 9.6.7
+- [Node.js](https://nodejs.org/): JavaScript runtime
+  - NPM (bundled with Node.js)
 - (optional) [PlantUML](https://plantuml.com/).
   An IDE plugin such as the one [for IntelliJ IDEA](https://plugins.jetbrains.com/plugin/7017-plantuml-integration) also does the trick.
 
-Note that development tends to be done with the latest Node.js and NPM versions.
-Currently, these are v19.9.0 and 9.8.1.
+*Note* that development tends to be done against the latest LTS (or even more recent) versions of Node.js and NPM.
 
 
 ## Development
@@ -83,14 +82,21 @@ npm run build
 
 This includes cleaning up and installing any NPM (dev) dependencies.
 
-The previous command includes running the following command to statically _style_-check the source code in all the packages:
+The preceding commands can also be run as follows:
+
+```shell
+npm run initialize
+```
+
+The following command statically _style_-checks the source code in all the packages:
 
 ```shell
 # Run lint
 npm run lint
 ```
 
-Note that this does not catch TypeScript compilation errors.
+*Note* that this does not catch TypeScript compilation errors!
+(That's because linting only does parsing, not full compilation.)
 
 Run the following command to run the tests:
 
@@ -106,6 +112,46 @@ The output should look similar to this (but much longer):
 <br />
 <img src="./documentation/images/test-output.png" alt="test" width="50%"/>
 
+
+### Releasing/publishing packages
+
+Packages are released to the [npm registry (website)](https://www.npmjs.com/): see the badges at the top of this document.
+We'll use the terms “release/releasing” from now on, instead of “publication/publishing” as npm itself does.
+We only release the following packages: `core`, `validation`, `utilities`, `cli`.
+
+Releasing a package involves the following steps:
+
+1. Update the version of the package to release in its own `package.json`.
+   1. Also update _all references_ to that package in any `package.json` in the other packages.
+   2. Ensure that the Changelog section of the package to release has been updated properly and fully.
+   3. Run `npm run initialize` to update `package-lock.json` and catch any (potential) problems.
+   4. Commit all changes to the `main` branch — if necessary, through a PR.
+2. Run the `release` script of the package:
+    ```shell
+    npm run release
+    ```
+    This requires access as a member of the `lionweb` organization on the npm registry — check whether you can access [the packages overview page](https://www.npmjs.com/settings/lionweb/packages).
+    This step also requires a means of authenticating with npm, e.g. using the Google Authenticator app.
+3. Tag the commit from the 1st step as `<package>-<version>`, and push the tag.
+4. Update the version of the released package to its next expected _beta_ version, e.g. to `0.7.0-beta.0`.
+    1. Run `npm run initialize` to update `package-lock.json` again.
+    2. Commit all changes to the `main` branch — if necessary, through a PR.
+
+Note that beta releases are different in a couple of ways:
+
+* Beta releases have versions of the form `<semver>-beta.<beta sequence number>`, e.g.: `0.7.0-beta.0`.
+* They are released using the `release-beta` scripts.
+
+Releasing all (releasable) packages at the same time can be done through the top-level `release` script.
+If you do that, you can perform the manual steps above all at the same time, which might save time and commits.
+
+
+#### Future work
+
+Currently, we're not using a tool like [`changesets`](https://www.npmjs.com/package/changeset) – including [its CLI tool](https://www.npmjs.com/package/@changesets/cli) – to manage the versioning and release/publication.
+That might change in the (near-)future, based on experience with using `changesets` for the [LionWeb repository implementation](https://github.com/LionWeb-io/lionweb-repository/).
+
+
 ### Code style
 
 All the code in this repository is written in TypeScript, with the following code style conventions:
@@ -119,12 +165,14 @@ All the code in this repository is written in TypeScript, with the following cod
 * Use **"FP-lite"**, meaning using `Array.map` and such functions over more imperative ways to compute results.
 
 We use prettier with parameters defined in `.prettierrc`.
+*Note* that currently we don't automatically run `prettier` over the source code.
+
 
 ### Containerized development environment
 
 If you prefer not to install the development dependencies on your machine, you can use our containerized development environment for the LionCore TypeScript project. This environment provides a consistent and isolated development environment that is easy to set up and use. To get started, follow the instructions in our [containerized development environment guide](./documentation/dev-environment.md). However, you can streamline the process by running the following command:
 
-```sh
+```shell
 docker run -it --rm --net host --name working-container -v ${PWD}:/work indamutsa/lionweb-devenv:v1.0.0 /bin/zsh
 ```
 
