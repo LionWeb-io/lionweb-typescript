@@ -59,7 +59,7 @@ This repo relies on the following tools being installed:
 - (optional) [PlantUML](https://plantuml.com/).
   An IDE plugin such as the one [for IntelliJ IDEA](https://plugins.jetbrains.com/plugin/7017-plantuml-integration) also does the trick.
 
-*Note* that development tends to be done with the latest Node.js and NPM versions.
+*Note* that development tends to be done against the latest LTS (or even more recent) versions of Node.js and NPM.
 
 
 ## Development
