@@ -1,5 +1,5 @@
 import {assert} from "chai"
-const {deepEqual, equal} = assert
+const {deepEqual} = assert
 import {join} from "path"
 
 import {serializeNodes} from "@lionweb/core"

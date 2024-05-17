@@ -7,7 +7,7 @@
  *     version: 2023.1
  */
 
-import {DynamicNode, DynamicINamed as INamed} from "@lionweb/core";
+import {DynamicNode, INamed} from "@lionweb/core";
 
 export type Annotation = Classifier & {
     // classifier -> Annotation
@@ -103,4 +103,6 @@ export type Reference = Link & {
     // classifier -> Reference
 };
 
-export type LionCore_M3Node = Annotation | Concept | Containment | Enumeration | EnumerationLiteral | Interface | Language | PrimitiveType | Property | Reference;
+
+/** sum type of all types for all concrete classifiers of LionCore_M3: */
+export type Nodes = Annotation | Concept | Containment | Enumeration | EnumerationLiteral | Interface | Language | PrimitiveType | Property | Reference;

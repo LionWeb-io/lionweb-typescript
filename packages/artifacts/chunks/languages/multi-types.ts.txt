@@ -8,6 +8,7 @@
  */
 
 import {DynamicNode} from "@lionweb/core";
+import {Library} from "./library";
 
 export type Container = DynamicNode & {
     // classifier -> Container
@@ -16,4 +17,6 @@ export type Container = DynamicNode & {
     };
 };
 
-export type multiNode = Container;
+
+/** sum type of all types for all concrete classifiers of multi: */
+export type Nodes = Container;

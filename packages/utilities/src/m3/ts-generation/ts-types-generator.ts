@@ -2,6 +2,7 @@ import {
     Annotation,
     builtinClassifiers,
     builtinPrimitives,
+    Classifier,
     Concept,
     conceptsOf,
     Datatype,
@@ -9,15 +10,18 @@ import {
     DynamicNode,
     Enumeration,
     Feature,
+    groupBy,
     Interface,
     isConcrete,
     Language,
     LanguageEntity,
+    lioncoreBuiltins,
     Link,
     nameOf,
     nameSorted,
     PrimitiveType,
     Property,
+    relationsOf,
     SingleRef,
     unresolved
 } from "@lionweb/core"
@@ -47,7 +51,6 @@ const fieldForLink = ({name, type, optional, multiple}: Link): Field =>
         optional: optional && !multiple,
         type: `${type === unresolved ? `unknown` : type.name}${multiple ? `[]` : ``}`
     })
-    // FIXME  this doesn't work cross-language
 
 
 const tsTypeFor = (datatype: SingleRef<Datatype>): string => {
@@ -81,6 +84,9 @@ const isINamed = (entity: LanguageEntity): boolean =>
 
 
 const usesINamedDirectly = (entity: LanguageEntity): boolean => {
+    if (entity instanceof Annotation) {
+        return entity.implements.some(isINamed)
+    }
     if (entity instanceof Concept) {
         return entity.implements.some(isINamed)
     }
@@ -189,10 +195,38 @@ export const tsTypesForLanguage = (language: Language, ...generationOptions: Gen
         ]
     }
 
-    const globalImports = [
+    const dependenciesOfClassifier = (classifier: Classifier): Classifier[] => {
+        if (classifier instanceof Annotation) {
+            return [ ...classifier.implements, ...(!classifier.extends ? [] : [classifier.extends]) ]
+        }
+        if (classifier instanceof Concept) {
+            return [ ...classifier.implements, ...(!classifier.extends ? [] : [classifier.extends]), ...relationsOf(classifier).flatMap(({type}) => type).filter((type) => type instanceof Classifier).map((classifier) => classifier as Classifier) ]
+        }
+        if (classifier instanceof Interface) {
+            return classifier.extends
+        }
+        return []
+    }
+
+    const unique = <T>(ts: T[]): T[] =>
+        [ ...new Set(ts) ]
+
+    const coreImports = [
         ...cond(!language.entities.every(usesINamedDirectly), `DynamicNode`),
-        ...cond(language.entities.some(usesINamedDirectly), `DynamicINamed as INamed`)     // (rename import so we don't have to map just the one)
+        ...cond(language.entities.some(usesINamedDirectly), `INamed`)
     ]
+
+    const generatedDependencies = unique(
+        language.entities
+            .filter((entity) => entity instanceof Classifier)
+            .flatMap((entity) => dependenciesOfClassifier(entity as Classifier))
+        )
+        .filter((classifier) => classifier.language !== language && classifier.language !== lioncoreBuiltins)
+    const importsPerPackage = groupBy(
+        generatedDependencies,
+        ({language}) => language.name
+    )
+
     const concreteClassifiers = language.entities.filter(isConcrete)
 
     return asString(
@@ -206,12 +240,19 @@ export const tsTypesForLanguage = (language: Language, ...generationOptions: Gen
  *     version: ${language.version}
  */`,
             ``,
-            cond(globalImports.length > 0, `import {${globalImports.join(`, `)}} from "@lionweb/core";`),
+            cond(coreImports.length > 0, `import {${coreImports.join(`, `)}} from "@lionweb/core";`),
+            Object.keys(importsPerPackage)
+                .sort()
+                .map((packageName) => `import {${nameSorted(importsPerPackage[packageName]).map(nameOf)}} from "./${packageName}";`),
             ``,
             nameSorted(language.entities).map(typeForLanguageEntity),
             cond(
                 concreteClassifiers.length > 0,
-                `export type ${language.name}Node = ${nameSorted(concreteClassifiers).map(nameOf).join(` | `)};`
+                [
+                    ``,
+                    `/** sum type of all types for all concrete classifiers of ${language.name}: */`,
+                    `export type Nodes = ${nameSorted(concreteClassifiers).map(nameOf).join(` | `)};`
+                ]
             )
         ]
     )

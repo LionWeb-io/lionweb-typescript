@@ -7,7 +7,7 @@
  *     version: 1
  */
 
-import {DynamicNode, DynamicINamed as INamed} from "@lionweb/core";
+import {DynamicNode, INamed} from "@lionweb/core";
 
 export type Circle = Shape & {
     // classifier -> Circle
@@ -45,4 +45,6 @@ export type Line = Shape & {
     // classifier -> Circle | Line
 };
 
-export type ShapesNode = Circle | Coord | Geometry | Line;
+
+/** sum type of all types for all concrete classifiers of Shapes: */
+export type Nodes = Circle | Coord | Geometry | Line;

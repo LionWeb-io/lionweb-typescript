@@ -6,7 +6,7 @@ import {argv} from "process"
 import {diagramFromSerializationChunkAt} from "./m3/diagram-command.js"
 import {diffSerializationChunks} from "./serialization/diff-command.js"
 import {generateTsTypesWith} from "./m3/generate-ts-types-command.js"
-import {inferLanguages} from "./infer-language-command.js"
+import {inferLanguages} from "./infer-languages-command.js"
 import {executeMeasureCommand} from "./serialization/measure-command.js"
 import {repairSerializationChunkAt} from "./serialization/repair-command.js"
 import {sortSerializationChunkAt} from "./serialization/sort-command.js"
@@ -19,14 +19,14 @@ const main = async (args: string[])=> {
     const DIAGRAM_COMMAND = "diagram"
     const DIFF_COMMAND = "diff"
     const GENERATE_TS_TYPES_COMMAND = "generate-ts-types"
-    const INFER_LANGUAGE_COMMAND = "infer-language"
+    const INFER_LANGUAGES_COMMAND = "infer-languages"
     const MEASURE_COMMAND = "measure"
     const REPAIR_COMMAND = "repair"
     const SORT_COMMAND = "sort"
     const TEXTUALIZE_COMMAND = "textualize"
     const VALIDATE_COMMAND = "validate"
 
-    const commands = [DIAGRAM_COMMAND, DIFF_COMMAND, GENERATE_TS_TYPES_COMMAND, INFER_LANGUAGE_COMMAND, MEASURE_COMMAND, REPAIR_COMMAND, SORT_COMMAND, TEXTUALIZE_COMMAND, VALIDATE_COMMAND].sort()
+    const commands = [DIAGRAM_COMMAND, DIFF_COMMAND, GENERATE_TS_TYPES_COMMAND, INFER_LANGUAGES_COMMAND, MEASURE_COMMAND, REPAIR_COMMAND, SORT_COMMAND, TEXTUALIZE_COMMAND, VALIDATE_COMMAND].sort()
 
     if (args.length <= 2) {
         console.log(
@@ -149,10 +149,10 @@ Usage: npx @lionweb/cli ${VALIDATE_COMMAND} <path_to_chunk>`
             break
         }
 
-        case INFER_LANGUAGE_COMMAND: {
+        case INFER_LANGUAGES_COMMAND: {
             if (commandArgs.length === 0) {
                 console.log(
-`The ${INFER_LANGUAGE_COMMAND} command infer language(s) from a given serialization chunk. \nUsage: npx @lionweb/cli infer-language <path_to_chunk>`
+`The ${INFER_LANGUAGES_COMMAND} command infer language(s) from a given serialization chunk. \nUsage: npx @lionweb/cli infer-language <path_to_chunk>`
                 )
             } else {
                 await inferLanguages(commandArgs[0])

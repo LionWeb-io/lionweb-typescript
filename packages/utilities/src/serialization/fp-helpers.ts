@@ -1,4 +1,4 @@
-import {groupBy, mapValues} from "@lionweb/core"
+import {groupBy} from "@lionweb/core"
 
 /**
  * Sum the given array of numbers.

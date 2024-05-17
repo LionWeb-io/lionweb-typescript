@@ -22,6 +22,10 @@ It contains utilities on top of the `core` package, such as:
 
 ## Changelog
 
+### 0.6.5
+
+* TS types generator now generates 1 file per language
+
 ### 0.6.4
 
 * Rename `inferLanguagesFromChunk` &rarr; `inferLanguagesFromSerializationChunk` (for consistency).

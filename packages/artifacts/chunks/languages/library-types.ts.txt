@@ -52,4 +52,6 @@ export type Writer = DynamicNode & {
     };
 };
 
-export type libraryNode = Book | GuideBookWriter | Library | SpecialistBookWriter | Writer;
+
+/** sum type of all types for all concrete classifiers of library: */
+export type Nodes = Book | GuideBookWriter | Library | SpecialistBookWriter | Writer;

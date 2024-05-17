@@ -46,6 +46,12 @@ That means that key-value pairs appear in precisely the same order as they do in
 
 ## Changelog
 
+### 0.6.6
+
+* TS types generator now generates 1 file per language.
+    The output directory will be `<languages serialization chunk's file name>_gen/`.
+* The `infer-language` command has been renamed to `infer-languages` (without deprecated alias).
+
 ### 0.6.5
 
 * Extend metrics functionality.
