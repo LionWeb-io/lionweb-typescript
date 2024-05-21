@@ -9,6 +9,7 @@
 
 import {DynamicNode, INamed} from "@lionweb/core";
 
+
 export type Annotation = Classifier & {
     // classifier -> Annotation
     settings: {
@@ -106,3 +107,4 @@ export type Reference = Link & {
 
 /** sum type of all types for all concrete classifiers of LionCore_M3: */
 export type Nodes = Annotation | Concept | Containment | Enumeration | EnumerationLiteral | Interface | Language | PrimitiveType | Property | Reference;
+

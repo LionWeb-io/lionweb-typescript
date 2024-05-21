@@ -11,6 +11,7 @@ import {
     Enumeration,
     Feature,
     groupBy,
+    inheritsFrom,
     Interface,
     isConcrete,
     Language,
@@ -118,6 +119,11 @@ export enum GenerationOptions {
 }
 
 
+const unique = <T>(ts: T[]): T[] =>
+    [ ...new Set(ts) ]
+
+
+
 /**
  * @return string generated TypeScript source code that contains type definitions that match the given {@link Language language}
  *  in combination with using the {@link DynamicNode} base type and corresponding facades.
@@ -125,11 +131,7 @@ export enum GenerationOptions {
 export const tsTypesForLanguage = (language: Language, ...generationOptions: GenerationOptions[]) => {
 
     const typeForAnnotation = (annotation: Annotation) => {
-
-        const superTypes = [
-            ...(annotation.extends ? [annotation.extends] : []),
-            ...annotation.implements
-        ]
+        const superTypes = inheritsFrom(annotation)
 
         return tsFromTypeDef({
             modifier: TypeDefModifier.none,
@@ -137,15 +139,10 @@ export const tsTypesForLanguage = (language: Language, ...generationOptions: Gen
             mixinNames: superTypes.length === 0 ? [`DynamicNode`] : superTypes.map(nameOf),
             fields: annotation.features.map(fieldForFeature)
         })
-
     }
 
     const typeForConcept = (concept: Concept) => {
-
-        const superTypes = [
-            ...(concept.extends ? [concept.extends] : []),
-            ...concept.implements
-        ]
+        const superTypes = inheritsFrom(concept)
         const subClassifiers =
             concept.abstract
                 ? (
@@ -162,7 +159,6 @@ export const tsTypesForLanguage = (language: Language, ...generationOptions: Gen
             bodyComment: subClassifiers.length > 0 ? `classifier -> ${subClassifiers.map(nameOf).join(` | `)}` : undefined,
             fields: concept.features.map(fieldForFeature)
         })
-
     }
 
     const typeForInterface = (intface: Interface) =>
@@ -195,21 +191,14 @@ export const tsTypesForLanguage = (language: Language, ...generationOptions: Gen
         ]
     }
 
-    const dependenciesOfClassifier = (classifier: Classifier): Classifier[] => {
-        if (classifier instanceof Annotation) {
-            return [ ...classifier.implements, ...(!classifier.extends ? [] : [classifier.extends]) ]
-        }
-        if (classifier instanceof Concept) {
-            return [ ...classifier.implements, ...(!classifier.extends ? [] : [classifier.extends]), ...relationsOf(classifier).flatMap(({type}) => type).filter((type) => type instanceof Classifier).map((classifier) => classifier as Classifier) ]
-        }
-        if (classifier instanceof Interface) {
-            return classifier.extends
-        }
-        return []
-    }
-
-    const unique = <T>(ts: T[]): T[] =>
-        [ ...new Set(ts) ]
+    const dependenciesOfClassifier = (classifier: Classifier): Classifier[] =>
+        [
+            ...inheritsFrom(classifier),
+            ...relationsOf(classifier)
+                .flatMap(({type}) => type)
+                .filter((type) => type instanceof Classifier)
+                .map((classifier) => classifier as Classifier)
+        ]
 
     const coreImports = [
         ...cond(!language.entities.every(usesINamedDirectly), `DynamicNode`),
@@ -243,7 +232,8 @@ export const tsTypesForLanguage = (language: Language, ...generationOptions: Gen
             cond(coreImports.length > 0, `import {${coreImports.join(`, `)}} from "@lionweb/core";`),
             Object.keys(importsPerPackage)
                 .sort()
-                .map((packageName) => `import {${nameSorted(importsPerPackage[packageName]).map(nameOf)}} from "./${packageName}";`),
+                .map((packageName) => `import {${nameSorted(importsPerPackage[packageName]).map(nameOf).join(", ")}} from "./${packageName}";`),
+            ``,
             ``,
             nameSorted(language.entities).map(typeForLanguageEntity),
             cond(
@@ -251,7 +241,8 @@ export const tsTypesForLanguage = (language: Language, ...generationOptions: Gen
                 [
                     ``,
                     `/** sum type of all types for all concrete classifiers of ${language.name}: */`,
-                    `export type Nodes = ${nameSorted(concreteClassifiers).map(nameOf).join(` | `)};`
+                    `export type Nodes = ${nameSorted(concreteClassifiers).map(nameOf).join(` | `)};`,
+                    ``
                 ]
             )
         ]

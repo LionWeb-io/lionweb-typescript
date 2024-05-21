@@ -193,7 +193,7 @@ const inheritsFrom = (classifier: Classifier): Classifier[] => {
         return [
             ...(
                 isRef(classifier.extends)
-                    ? [classifier.extends as Concept]
+                    ? [classifier.extends as Classifier]
                     : []
             ),
             ...classifier.implements
@@ -300,6 +300,7 @@ export {
     idBasedClassifierDeducerFor,
     idOf,
     inheritedCycleWith,
+    inheritsFrom,
     instantiableClassifiersOf,
     isConcrete,
     isContainment,

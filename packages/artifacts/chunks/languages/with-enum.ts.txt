@@ -9,6 +9,7 @@
 
 import {DynamicNode} from "@lionweb/core";
 
+
 export type EnumHolder = DynamicNode & {
     // classifier -> EnumHolder
     settings: {
@@ -23,3 +24,4 @@ enum MyEnum {
 
 /** sum type of all types for all concrete classifiers of WithEnum: */
 export type Nodes = EnumHolder;
+
