@@ -1,4 +1,5 @@
 import {
+    allFeaturesOf,
     Annotation,
     builtinClassifiers,
     builtinPrimitives,
@@ -22,7 +23,6 @@ import {
     nameSorted,
     PrimitiveType,
     Property,
-    relationsOf,
     SingleRef,
     unresolved
 } from "@lionweb/core"
@@ -137,7 +137,7 @@ export const tsTypesForLanguage = (language: Language, ...generationOptions: Gen
             modifier: TypeDefModifier.none,
             name: annotation.name,
             mixinNames: superTypes.length === 0 ? [`DynamicNode`] : superTypes.map(nameOf),
-            fields: annotation.features.map(fieldForFeature)
+            fields: allFeaturesOf(annotation).map(fieldForFeature)  // FIXME  duplicately-named features
         })
     }
 
@@ -157,7 +157,7 @@ export const tsTypesForLanguage = (language: Language, ...generationOptions: Gen
             name: concept.name,
             mixinNames: superTypes.length === 0 ? [`DynamicNode`] : superTypes.map(nameOf),
             bodyComment: subClassifiers.length > 0 ? `classifier -> ${subClassifiers.map(nameOf).join(` | `)}` : undefined,
-            fields: concept.features.map(fieldForFeature)
+            fields: allFeaturesOf(concept).map(fieldForFeature)  // FIXME  duplicately-named features
         })
     }
 
@@ -166,7 +166,7 @@ export const tsTypesForLanguage = (language: Language, ...generationOptions: Gen
             modifier: TypeDefModifier.interface,
             name: intface.name,
             mixinNames: intface.extends.length === 0 ? [`DynamicNode`] : intface.extends.map(nameOf),
-            fields: intface.features.map(fieldForFeature)
+            fields: allFeaturesOf(intface).map(fieldForFeature)  // FIXME  duplicately-named features
         })
 
     const typeForLanguageEntity = (entity: LanguageEntity) => {
@@ -194,7 +194,9 @@ export const tsTypesForLanguage = (language: Language, ...generationOptions: Gen
     const dependenciesOfClassifier = (classifier: Classifier): Classifier[] =>
         [
             ...inheritsFrom(classifier),
-            ...relationsOf(classifier)
+            ...allFeaturesOf(classifier)
+                .filter((feature) => feature instanceof Link)
+                .map((feature) => feature as Link)
                 .flatMap(({type}) => type)
                 .filter((type) => type instanceof Classifier)
                 .map((classifier) => classifier as Classifier)

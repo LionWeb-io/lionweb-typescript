@@ -15,6 +15,7 @@ export type Circle = Shape & {
     settings: {
         r: number;
         center: Coord;
+        name: string;
     };
 };
 
@@ -39,11 +40,15 @@ export type Line = Shape & {
     settings: {
         start: Coord;
         end: Coord;
+        name: string;
     };
 };
 
 /** abstract */ export type Shape = INamed & {
     // classifier -> Circle | Line
+    settings: {
+        name: string;
+    };
 };
 
 

@@ -28,6 +28,7 @@ export type GuideBookWriter = Writer & {
     // classifier -> GuideBookWriter
     settings: {
         countries: string;
+        name: string;
     };
 };
 
@@ -43,6 +44,7 @@ export type SpecialistBookWriter = Writer & {
     // classifier -> SpecialistBookWriter
     settings: {
         subject: string;
+        name: string;
     };
 };
 
