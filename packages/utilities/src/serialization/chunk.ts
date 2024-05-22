@@ -6,7 +6,8 @@ import {
     SerializationChunk,
     SerializedLanguageReference
 } from "@lionweb/core"
-import {readFileAsJson} from "../json.js"
+import {readFileAsJson} from "../utils/json.js"
+import {picker} from "../utils/object.js"
 
 
 /**
@@ -80,8 +81,8 @@ const areEqual = (left: SerializedLanguageReference, right: SerializedLanguageRe
 export const combinationOf = (serializationChunks: SerializationChunk[]): SerializationChunk =>
     ({
         serializationFormatVersion: currentSerializationFormatVersion,
-        languages: flatMapDistinct(serializationChunks.map(({ languages }) => languages), areEqual),
-        nodes: serializationChunks.flatMap(({ nodes }) => nodes)
+        languages: flatMapDistinct(serializationChunks.map(picker("languages")), areEqual),
+        nodes: serializationChunks.flatMap(picker("nodes"))
     })
 
 

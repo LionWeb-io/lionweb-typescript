@@ -18,6 +18,7 @@ import {
     type,
     unresolved
 } from "@lionweb/core"
+import {picker} from "../../utils/object.js"
 
 
 // define some layouting basics/building algebra:
@@ -63,7 +64,7 @@ const generateForEnumeration = ({name, literals}: Enumeration) =>
         `class ${name}`,
         [
             `<<enumeration>>`,
-            literals.map(({name}) => name)
+            literals.map(picker("name"))
         ]
     ))
 

@@ -12,7 +12,7 @@ import {
     concatenator,
     lastOf
 } from "@lionweb/core"
-import {hasher} from "./hashing.js"
+import {hasher} from "../hashing.js"
 
 const possibleKeySeparators = ["-", "_"]
 

@@ -19,6 +19,7 @@ import {
     type,
     unresolved
 } from "@lionweb/core"
+import {picker} from "../../utils/object.js"
 
 
 const indented = indentWith(`  `)(1)
@@ -53,7 +54,7 @@ hide empty members
 const generateForEnumeration = ({name, literals}: Enumeration) =>
     [
 `enum ${name} {`,
-        indented(literals.map(({name}) => name)),
+        indented(literals.map(picker("name"))),
 `}
 
 `

@@ -29,6 +29,8 @@ import {
 import {asString, NestedString} from "littoral-templates"
 import {cond, indent} from "./text-generation-utils.js"
 import {Field, tsFromTypeDef, TypeDefModifier} from "./type-def.js"
+import {uniquesAmong} from "../../utils/array.js"
+import {picker} from "../../utils/object.js"
 
 
 const fieldForFeature = (feature: Feature) => {
@@ -119,11 +121,6 @@ export enum GenerationOptions {
 }
 
 
-const unique = <T>(ts: T[]): T[] =>
-    [ ...new Set(ts) ]
-
-
-
 /**
  * @return string generated TypeScript source code that contains type definitions that match the given {@link Language language}
  *  in combination with using the {@link DynamicNode} base type and corresponding facades.
@@ -197,7 +194,7 @@ export const tsTypesForLanguage = (language: Language, ...generationOptions: Gen
             ...allFeaturesOf(classifier)
                 .filter((feature) => feature instanceof Link)
                 .map((feature) => feature as Link)
-                .flatMap(({type}) => type)
+                .flatMap(picker("type"))
                 .filter((type) => type instanceof Classifier)
                 .map((classifier) => classifier as Classifier)
         ]
@@ -207,7 +204,7 @@ export const tsTypesForLanguage = (language: Language, ...generationOptions: Gen
         ...cond(language.entities.some(usesINamedDirectly), `INamed`)
     ]
 
-    const generatedDependencies = unique(
+    const generatedDependencies = uniquesAmong(
         language.entities
             .filter((entity) => entity instanceof Classifier)
             .flatMap((entity) => dependenciesOfClassifier(entity as Classifier))

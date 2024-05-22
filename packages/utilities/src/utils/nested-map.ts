@@ -1,11 +1,5 @@
 import {groupBy} from "@lionweb/core"
 
-/**
- * Sum the given array of numbers.
- */
-export const sumNumbers = (nums: number[]): number =>
-    nums.reduce((acc, cur) => acc + cur, 0)
-
 
 export type Nested1Map<T> = Record<string, T>   // (for conceptual continuity)
 export type Nested2Map<T> = Record<string, Record<string, T>>
@@ -105,4 +99,5 @@ export const nestedFlatMap3 = <T, R>(
         .flatMap(([key1, nestedMap2]) =>
             nestedFlatMap2(nestedMap2, (t, key2, key3) => map3Func(t, key1, key2, key3))
         )
+
 
