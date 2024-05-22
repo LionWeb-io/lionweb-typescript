@@ -19,6 +19,7 @@ import {
     LanguageEntity,
     lioncoreBuiltins,
     Link,
+    mapValues,
     nameOf,
     nameSorted,
     PrimitiveType,
@@ -127,6 +128,24 @@ export enum GenerationOptions {
  */
 export const tsTypesForLanguage = (language: Language, ...generationOptions: GenerationOptions[]) => {
 
+    const fieldsForClassifier = (classifier: Classifier) => {
+        const map = mapValues<Feature[], [Feature, Field][]>(
+            groupBy(allFeaturesOf(classifier), nameOf),
+            (features) => features.map((feature) => ([feature, fieldForFeature(feature)]))
+        )
+        Object.values(map)
+            .filter((fieldsWithOrigin) => fieldsWithOrigin.length > 1)
+            .forEach((fieldsWithOrigin) => {
+                fieldsWithOrigin.forEach(([feature, field]) => {
+                    field.name = `${field.name}_${feature.parent!.name}`
+                })
+            })
+        return Object.values(map)
+            .flatMap((fieldsWithOrigin) =>
+                fieldsWithOrigin.map(([_, field]) => field)
+            )
+    }
+
     const typeForAnnotation = (annotation: Annotation) => {
         const superTypes = inheritsFrom(annotation)
 
@@ -134,7 +153,7 @@ export const tsTypesForLanguage = (language: Language, ...generationOptions: Gen
             modifier: TypeDefModifier.none,
             name: annotation.name,
             mixinNames: superTypes.length === 0 ? [`DynamicNode`] : superTypes.map(nameOf),
-            fields: allFeaturesOf(annotation).map(fieldForFeature)  // FIXME  duplicately-named features
+            fields: fieldsForClassifier(annotation)
         })
     }
 
@@ -154,7 +173,7 @@ export const tsTypesForLanguage = (language: Language, ...generationOptions: Gen
             name: concept.name,
             mixinNames: superTypes.length === 0 ? [`DynamicNode`] : superTypes.map(nameOf),
             bodyComment: subClassifiers.length > 0 ? `classifier -> ${subClassifiers.map(nameOf).join(` | `)}` : undefined,
-            fields: allFeaturesOf(concept).map(fieldForFeature)  // FIXME  duplicately-named features
+            fields: fieldsForClassifier(concept)
         })
     }
 
@@ -163,7 +182,7 @@ export const tsTypesForLanguage = (language: Language, ...generationOptions: Gen
             modifier: TypeDefModifier.interface,
             name: intface.name,
             mixinNames: intface.extends.length === 0 ? [`DynamicNode`] : intface.extends.map(nameOf),
-            fields: allFeaturesOf(intface).map(fieldForFeature)  // FIXME  duplicately-named features
+            fields: fieldsForClassifier(intface)
         })
 
     const typeForLanguageEntity = (entity: LanguageEntity) => {
