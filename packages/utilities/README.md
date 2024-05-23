@@ -17,7 +17,9 @@ It contains utilities on top of the `core` package, such as:
 * Diagram generation (PlantUML and Mermaid) from an M2.
 * “Textualization”, i.e. render a serialization chunk as text.
 * Sort the contents of a serialization chunk as much as possible, for the sake of comparing serialization chunks.
-* An Ecore &rarr; M2 importer.
+* Compute metrics for a serialization chunk (also relative to a given M2).
+* Infer a (partial) M2 from a serialization chunk.
+* Generation of TypeScript type definitions from an M2.
 
 
 ## Changelog
