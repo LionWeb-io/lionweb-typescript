@@ -250,7 +250,7 @@ export const tsTypesForLanguage = (language: Language, ...generationOptions: Gen
             cond(coreImports.length > 0, `import {${coreImports.join(`, `)}} from "@lionweb/core";`),
             Object.keys(importsPerPackage)
                 .sort()
-                .map((packageName) => `import {${nameSorted(importsPerPackage[packageName]).map(nameOf).join(", ")}} from "./${packageName}";`),
+                .map((packageName) => `import {${nameSorted(importsPerPackage[packageName]).map(nameOf).join(", ")}} from "./${packageName}.js";`),
             ``,
             ``,
             nameSorted(language.entities).map(typeForLanguageEntity),
