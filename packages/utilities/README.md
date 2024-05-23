@@ -24,7 +24,8 @@ It contains utilities on top of the `core` package, such as:
 
 ### 0.6.5
 
-* TS types generator now generates 1 file per language
+* TS types generator now generates 1 file per language.
+  The generator also has several fixes, and assumes that the generated code will be embedded in an ES6 module.
 
 ### 0.6.4
 
