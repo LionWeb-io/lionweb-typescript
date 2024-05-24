@@ -20,6 +20,9 @@
 
 * Widen type of argument of `idOf` to `Node`.
 
+* Have the `INamed` interface not extend `Node`.
+    Also remove unused `isIKeyed` function.
+
 
 ## 0.6.11
 
