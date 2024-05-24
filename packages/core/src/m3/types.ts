@@ -20,11 +20,11 @@ const lioncoreBuiltinsKey = "LionCore-builtins"
 //      https://lionweb-io.github.io/specification/metametamodel/metametamodel.html#_overview
 
 
-interface INamed extends Node {
+interface INamed {
     name: string
 }
 
-const isINamed = (node: Node): node is INamed =>
+const isINamed = (node: object): node is INamed =>
     "name" in node && typeof node.name === "string"
 
 const simpleNameDeducer: ResolveInfoDeducer<Node> =
@@ -34,9 +34,6 @@ const simpleNameDeducer: ResolveInfoDeducer<Node> =
 interface IKeyed extends INamed {
     key: Id
 }
-
-const isIKeyed = (node: Node): node is IKeyed =>
-    isINamed(node) && "key" in node && typeof node.key === "string"
 
 
 /**
@@ -308,7 +305,6 @@ export {
     Property,
     Reference,
     isINamed,
-    isIKeyed,
     lioncoreBuiltinsKey,
     simpleNameDeducer
 }
