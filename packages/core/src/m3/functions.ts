@@ -145,7 +145,7 @@ const concatenateNamesOf = (separator: string, nodes: M3Concept[]): string =>
 /**
  * @return the qualified name of the given {@link INamed named thing}.
  */
-const qualifiedNameOf = <T extends INamed>(node: T, separator = "."): string =>
+const qualifiedNameOf = <T extends INamed & Node>(node: T, separator = "."): string =>
     concatenateNamesOf(separator, containmentChain(node).reverse() as M3Concept[])
 
 
