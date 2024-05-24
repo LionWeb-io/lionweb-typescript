@@ -1,5 +1,5 @@
-import {extname} from "path"
-import {writeFileSync} from "fs"
+import {extname, join} from "path"
+import {existsSync, mkdirSync, statSync, writeFileSync} from "fs"
 
 import {deserializeLanguages} from "@lionweb/core"
 import {GenerationOptions, readSerializationChunk, tsTypesForLanguage} from "@lionweb/utilities"
@@ -7,12 +7,14 @@ import {GenerationOptions, readSerializationChunk, tsTypesForLanguage} from "@li
 
 const generateTsTypesFromSerialization = async (path: string, generationOptions: GenerationOptions[]) => {
     try {
-        const languages = deserializeLanguages(await readSerializationChunk(path))
-        const extLessPath = path.substring(0, path.length - extname(path).length)
-        const tsFilePath = extLessPath + "-types.ts"
-        // TODO  generate 1 file per Language:
-        writeFileSync(tsFilePath, languages.map((language) => tsTypesForLanguage(language, ...generationOptions)).join("\n\n"))
-        console.log(`generated TS types: "${path}" -> "${tsFilePath}"`)
+        const genPath = path.substring(0, path.length - extname(path).length) + "_gen"
+        if (!(existsSync(genPath) && statSync(genPath).isDirectory())) {
+            mkdirSync(genPath)
+        }
+        deserializeLanguages(await readSerializationChunk(path)).forEach((language) => {
+            writeFileSync(join(genPath, `${language.name}.ts`), tsTypesForLanguage(language, ...generationOptions))
+        })
+        console.log(`generated TS types: "${path}" -> "${genPath}"`)
     } catch (e) {
         console.error(`"${path}" does not point to a valid JSON serialization of a language`)
         throw e

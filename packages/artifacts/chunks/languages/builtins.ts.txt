@@ -9,6 +9,7 @@
 
 import {DynamicNode} from "@lionweb/core";
 
+
 export type Boolean = boolean;
 
 /** interface */ export type INamed = DynamicNode & {

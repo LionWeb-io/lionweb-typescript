@@ -5,11 +5,8 @@ import {
     orderedSerializedProperty,
     orderedSerializedReferenceTarget
 } from "./ordering.js"
+import {picker} from "../utils/object.js"
 
-
-const pick = <T, K extends keyof T>(key: K): (t: T) => T[K] =>
-    (t: T) => t[key]
-// TODO  (find a nice way to compose such things)
 
 /**
  * @return A sorted version of a {@link SerializedModel JSON serialization}, which should make it easier to inspect.
@@ -18,8 +15,8 @@ const pick = <T, K extends keyof T>(key: K): (t: T) => T[K] =>
 export const sortedSerializationChunk = ({serializationFormatVersion, languages, nodes}: SerializationChunk): SerializationChunk =>
     ({
         serializationFormatVersion,
-        languages: sortByStringKey(languages, pick("key")).map(orderedSerializedLanguageReference),
-        nodes: sortByStringKey(nodes, pick("id"))
+        languages: sortByStringKey(languages, picker("key")).map(orderedSerializedLanguageReference),
+        nodes: sortByStringKey(nodes, picker("id"))
             .map((node) => ({
                 id: node.id,
                 classifier: orderedMetaPointer(node.classifier),
@@ -32,7 +29,7 @@ export const sortedSerializationChunk = ({serializationFormatVersion, languages,
                 references: sortByStringKey(node.references, ({reference}) => reference.key)
                         .map(({reference, targets}) => ({
                             reference: orderedMetaPointer(reference),
-                            targets: sortByStringKey(targets, pick("reference")).map(orderedSerializedReferenceTarget)
+                            targets: sortByStringKey(targets, picker("reference")).map(orderedSerializedReferenceTarget)
                         })),
                 annotations: node.annotations.sort(),
                 parent: node.parent

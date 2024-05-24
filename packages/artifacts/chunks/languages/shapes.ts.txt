@@ -7,13 +7,15 @@
  *     version: 1
  */
 
-import {DynamicNode, DynamicINamed as INamed} from "@lionweb/core";
+import {DynamicNode, INamed} from "@lionweb/core";
+
 
 export type Circle = Shape & {
     // classifier -> Circle
     settings: {
         r: number;
         center: Coord;
+        name: string;
     };
 };
 
@@ -38,11 +40,18 @@ export type Line = Shape & {
     settings: {
         start: Coord;
         end: Coord;
+        name: string;
     };
 };
 
 /** abstract */ export type Shape = INamed & {
     // classifier -> Circle | Line
+    settings: {
+        name: string;
+    };
 };
 
-export type ShapesNode = Circle | Coord | Geometry | Line;
+
+/** sum type of all types for all concrete classifiers of Shapes: */
+export type Nodes = Circle | Coord | Geometry | Line;
+

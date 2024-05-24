@@ -17,10 +17,17 @@ It contains utilities on top of the `core` package, such as:
 * Diagram generation (PlantUML and Mermaid) from an M2.
 * “Textualization”, i.e. render a serialization chunk as text.
 * Sort the contents of a serialization chunk as much as possible, for the sake of comparing serialization chunks.
-* An Ecore &rarr; M2 importer.
+* Compute metrics for a serialization chunk (also relative to a given M2).
+* Infer a (partial) M2 from a serialization chunk.
+* Generation of TypeScript type definitions from an M2.
 
 
 ## Changelog
+
+### 0.6.5
+
+* TS types generator now generates 1 file per language.
+  The generator also has several fixes, and assumes that the generated code will be embedded in an ES6 module.
 
 ### 0.6.4
 

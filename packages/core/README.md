@@ -32,6 +32,10 @@ The following is a list of links to potential starting points:
 
 ## Changelog
 
+### 0.6.5
+
+* Expose function `inheritsFrom`.
+
 ### 0.6.4
 
 * Add functions `mapValues` and `instantiableClassifiers`.

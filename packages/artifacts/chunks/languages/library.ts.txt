@@ -9,6 +9,7 @@
 
 import {DynamicNode} from "@lionweb/core";
 
+
 export type Book = DynamicNode & {
     // classifier -> Book
     settings: {
@@ -27,6 +28,7 @@ export type GuideBookWriter = Writer & {
     // classifier -> GuideBookWriter
     settings: {
         countries: string;
+        name: string;
     };
 };
 
@@ -42,6 +44,7 @@ export type SpecialistBookWriter = Writer & {
     // classifier -> SpecialistBookWriter
     settings: {
         subject: string;
+        name: string;
     };
 };
 
@@ -52,4 +55,7 @@ export type Writer = DynamicNode & {
     };
 };
 
-export type libraryNode = Book | GuideBookWriter | Library | SpecialistBookWriter | Writer;
+
+/** sum type of all types for all concrete classifiers of library: */
+export type Nodes = Book | GuideBookWriter | Library | SpecialistBookWriter | Writer;
+

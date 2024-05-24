@@ -7,7 +7,8 @@
  *     version: 2023.1
  */
 
-import {DynamicNode, DynamicINamed as INamed} from "@lionweb/core";
+import {DynamicNode, INamed} from "@lionweb/core";
+
 
 export type Annotation = Classifier & {
     // classifier -> Annotation
@@ -15,12 +16,17 @@ export type Annotation = Classifier & {
         annotates?: Classifier;
         extends?: Annotation;
         implements: Interface[];
+        features: Feature[];
+        key: string;
+        name: string;
     };
 };
 
 /** abstract */ export type Classifier = LanguageEntity & {
     settings: {
         features: Feature[];
+        key: string;
+        name: string;
     };
 };
 
@@ -31,35 +37,59 @@ export type Concept = Classifier & {
         partition: boolean;
         extends?: Concept;
         implements: Interface[];
+        features: Feature[];
+        key: string;
+        name: string;
     };
 };
 
 export type Containment = Link & {
     // classifier -> Containment
+    settings: {
+        multiple: boolean;
+        type: Classifier;
+        optional: boolean;
+        key: string;
+        name: string;
+    };
 };
 
-/** abstract */ export type DataType = LanguageEntity;
+/** abstract */ export type DataType = LanguageEntity & {
+    settings: {
+        key: string;
+        name: string;
+    };
+};
 
 export type Enumeration = DataType & {
     // classifier -> Enumeration
     settings: {
         literals: EnumerationLiteral[];
+        key: string;
+        name: string;
     };
 };
 
 export type EnumerationLiteral = IKeyed & {
     // classifier -> EnumerationLiteral
+    settings: {
+        key: string;
+        name: string;
+    };
 };
 
 /** abstract */ export type Feature = IKeyed & {
     settings: {
         optional: boolean;
+        key: string;
+        name: string;
     };
 };
 
 /** interface */ export type IKeyed = INamed & {
     settings: {
         key: string;
+        name: string;
     };
 };
 
@@ -67,6 +97,9 @@ export type Interface = Classifier & {
     // classifier -> Interface
     settings: {
         extends: Interface[];
+        features: Feature[];
+        key: string;
+        name: string;
     };
 };
 
@@ -76,31 +109,58 @@ export type Language = IKeyed & {
         version: string;
         entities: LanguageEntity[];
         dependsOn: Language[];
+        key: string;
+        name: string;
     };
 };
 
-/** abstract */ export type LanguageEntity = IKeyed;
+/** abstract */ export type LanguageEntity = IKeyed & {
+    settings: {
+        key: string;
+        name: string;
+    };
+};
 
 /** abstract */ export type Link = Feature & {
     settings: {
         multiple: boolean;
         type: Classifier;
+        optional: boolean;
+        key: string;
+        name: string;
     };
 };
 
 export type PrimitiveType = DataType & {
     // classifier -> PrimitiveType
+    settings: {
+        key: string;
+        name: string;
+    };
 };
 
 export type Property = Feature & {
     // classifier -> Property
     settings: {
         type: DataType;
+        optional: boolean;
+        key: string;
+        name: string;
     };
 };
 
 export type Reference = Link & {
     // classifier -> Reference
+    settings: {
+        multiple: boolean;
+        type: Classifier;
+        optional: boolean;
+        key: string;
+        name: string;
+    };
 };
 
-export type LionCore_M3Node = Annotation | Concept | Containment | Enumeration | EnumerationLiteral | Interface | Language | PrimitiveType | Property | Reference;
+
+/** sum type of all types for all concrete classifiers of LionCore_M3: */
+export type Nodes = Annotation | Concept | Containment | Enumeration | EnumerationLiteral | Interface | Language | PrimitiveType | Property | Reference;
+

@@ -12,7 +12,8 @@ import {
     SerializedNode
 } from "@lionweb/core"
 import {ClassifierMetaTypes, Metrics} from "./metric-types.js"
-import {nested3Grouper, nested3Mapper, nestedFlatMap2, nestedFlatMap3, sumNumbers} from "./fp-helpers.js"
+import {sumNumbers} from "../utils/array.js"
+import {nested3Grouper, nested3Mapper, nestedFlatMap2, nestedFlatMap3} from "../utils/nested-map.js"
 
 
 type Info = {

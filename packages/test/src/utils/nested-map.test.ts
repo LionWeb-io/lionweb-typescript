@@ -1,5 +1,5 @@
 import {assert} from "chai"
-const {deepEqual, equal} = assert
+const {deepEqual} = assert
 
 import {
     flatMapValues,
@@ -10,19 +10,12 @@ import {
     nested3Grouper,
     nested3Mapper,
     nestedFlatMap2,
-    nestedFlatMap3,
-    sumNumbers
-} from "@lionweb/utilities/dist/serialization/fp-helpers.js"
+    nestedFlatMap3
+} from "@lionweb/utilities/dist/utils/nested-map.js"
+import {sumNumbers} from "@lionweb/utilities/dist/utils/array.js"
 
 
-describe("FP helpers w.r.t. nested maps work", () => {
-
-    it("sum numbers", () => {
-        equal(sumNumbers([]), 0)
-        equal(sumNumbers([1]), 1)
-        equal(sumNumbers([1, 2, 3]), 6)
-    })
-
+describe("nested map utils work", () => {
 
     it("mapValuesMapper", () => {
         deepEqual(

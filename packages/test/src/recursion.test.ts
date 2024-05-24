@@ -55,22 +55,22 @@ describe("directlyContaineds function", () => {
 
     it("should return literals for Enumeration objects", () => {
         const language = new Language("ExampleLanguage", "1.0", "lang-001", "key-lang-001")
-        const enumeration = new Enumeration( language,"ExampleEnumeration", "enum-001", "key-enum-001");
-        const literal1 = new EnumerationLiteral(enumeration, "Literal1", "key-lit1", "lit-001");
-        const literal2 = new EnumerationLiteral(enumeration, "Literal2", "key-lit2", "lit-002");
-        enumeration.havingLiterals(literal1, literal2);
+        const enumeration = new Enumeration( language,"ExampleEnumeration", "enum-001", "key-enum-001")
+        const literal1 = new EnumerationLiteral(enumeration, "Literal1", "key-lit1", "lit-001")
+        const literal2 = new EnumerationLiteral(enumeration, "Literal2", "key-lit2", "lit-002")
+        enumeration.havingLiterals(literal1, literal2)
 
-        const result = directlyContaineds(enumeration);
-        deepEqual(result, [literal1, literal2]);
-    });
+        const result = directlyContaineds(enumeration)
+        deepEqual(result, [literal1, literal2])
+    })
 
     it("should return an empty array for non-matching M3Concepts", () => {
-        const language = new Language("ExampleLanguage", "1.0", "lang-001", "key-lang-001");
-        const classifier = new Concept(language, "Classifier1", "key-class1", "class-001", false);
-        const nonMatchingConcept = new Property(classifier, "NonMatching", "key-nonmatch", "nonmatch-001");
+        const language = new Language("ExampleLanguage", "1.0", "lang-001", "key-lang-001")
+        const classifier = new Concept(language, "Classifier1", "key-class1", "class-001", false)
+        const nonMatchingConcept = new Property(classifier, "NonMatching", "key-nonmatch", "nonmatch-001")
 
-        const result = directlyContaineds(nonMatchingConcept);
-        deepEqual(result, []);
-    });
+        const result = directlyContaineds(nonMatchingConcept)
+        deepEqual(result, [])
+    })
 
 })
