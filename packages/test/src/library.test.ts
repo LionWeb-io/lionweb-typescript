@@ -6,7 +6,7 @@ import {
     DynamicNode,
     dynamicInstantiationFacade,
     nameBasedClassifierDeducerFor,
-    serializeNodes, PrimitiveTypeSerializer
+    serializeNodes, SimplePrimitiveTypeDeserializer
 } from "@lionweb/core"
 import {libraryModel, libraryExtractionFacade, libraryInstantiationFacade} from "./instances/library.js"
 import {libraryLanguage} from "./languages/library.js"
@@ -18,7 +18,7 @@ describe("Library test model", () => {
         const serializationChunk = serializeNodes(libraryModel, libraryExtractionFacade)
         // FIXME  ensure that serialization does not produce key-value pairs with value === undefined
         const deserialization = deserializeSerializationChunk(serializationChunk, libraryInstantiationFacade,
-                            new PrimitiveTypeSerializer(),
+                            new SimplePrimitiveTypeDeserializer(),
             [libraryLanguage], [])
         deepEqual(deserialization, libraryModel)
     })
@@ -26,7 +26,7 @@ describe("Library test model", () => {
     it(`"dynamify" example library through serialization and deserialization using the DynamicNode facades`, () => {
         const serializationChunk = serializeNodes(libraryModel, libraryExtractionFacade)
         const dynamification = deserializeSerializationChunk(serializationChunk, dynamicInstantiationFacade,
-            new PrimitiveTypeSerializer(),
+            new SimplePrimitiveTypeDeserializer(),
             [libraryLanguage], [])
         deepEqual(dynamification.length, 2)
         const lookup = nameBasedClassifierDeducerFor(libraryLanguage)

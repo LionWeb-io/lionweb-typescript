@@ -4,7 +4,6 @@ import {InstantiationFacade} from "./facade.js"
 import {MemoisingSymbolTable} from "./symbol-table.js"
 import {Classifier, Containment, Enumeration, Language, PrimitiveType, Property, Reference} from "./m3/types.js"
 import {allFeaturesOf} from "./m3/functions.js"
-import { PrimitiveTypeSerializer } from "./m3/builtins.js"
 import {groupBy} from "./utils/map-helpers.js"
 
 
@@ -19,6 +18,9 @@ const byIdMap = <T extends { id: Id }>(ts: T[]): { [id: Id]: T } => {
     return map
 }
 
+export interface PrimitiveTypeDeserializer {
+    deserializeValue(value: string | undefined, property: Property): unknown | undefined
+}
 
 /**
  * @return a deserialization of a {@link SerializationChunk}
@@ -31,7 +33,7 @@ const byIdMap = <T extends { id: Id }>(ts: T[]): { [id: Id]: T } => {
 export const deserializeSerializationChunk = <NT extends Node>(
     serializationChunk: SerializationChunk,
     instantiationFacade: InstantiationFacade<NT>,
-    dataTypeSerializer: PrimitiveTypeSerializer,
+    primitiveTypeDeserializer: PrimitiveTypeDeserializer,
     languages: Language[],
     // TODO  facades <--> languages, so it's weird that it looks split up like this
     dependentNodes: Node[]
@@ -92,7 +94,7 @@ export const deserializeSerializationChunk = <NT extends Node>(
                     if (property.key in serializedPropertiesPerKey) {
                         const value = serializedPropertiesPerKey[property.key][0].value
                         if (property.type instanceof PrimitiveType) {
-                            propertySettings[property.key] = dataTypeSerializer.deserializeValue(value, property as Property);
+                            propertySettings[property.key] = primitiveTypeDeserializer.deserializeValue(value, property as Property);
                             return
                         }
                         if (property.type instanceof Enumeration) {

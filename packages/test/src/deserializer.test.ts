@@ -4,7 +4,7 @@ const {deepEqual} = assert
 import {
     currentSerializationFormatVersion,
     deserializeSerializationChunk, Feature, InstantiationFacade,
-    PrimitiveTypeSerializer,
+    SimplePrimitiveTypeDeserializer,
     SerializationChunk,
 } from "@lionweb/core"
 import { BaseNode, libraryInstantiationFacade } from "./instances/library.js"
@@ -57,7 +57,7 @@ describe("deserialization", () => {
             ]
         }
         const deserialization = deserializeSerializationChunk(serializationChunk, libraryInstantiationFacade,
-                            new PrimitiveTypeSerializer(),
+                            new SimplePrimitiveTypeDeserializer(),
             [libraryLanguage], [])
         deepEqual(
             deserialization,
@@ -106,7 +106,7 @@ describe("deserialization", () => {
             ]
         }
         expect(() => deserializeSerializationChunk(serializationChunk, libraryWithDatesInstantiationFacade,
-            new PrimitiveTypeSerializer(),
+            new SimplePrimitiveTypeDeserializer(),
             [libraryWithDatesLanguage], []))
             .to.throw();
     })
@@ -145,14 +145,14 @@ describe("deserialization", () => {
                 }
             ]
         }
-        const primitiveTypeSerializer = new PrimitiveTypeSerializer();
-        primitiveTypeSerializer.registerDeserializer(dateDatatype, (value)=> {
+        const primitiveTypeDeserializer = new SimplePrimitiveTypeDeserializer();
+        primitiveTypeDeserializer.registerDeserializer(dateDatatype, (value)=> {
             const parts = value.split("-");
             return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]))
         })
 
         const deserialization = deserializeSerializationChunk(serializationChunk, libraryWithDatesInstantiationFacade,
-            primitiveTypeSerializer,
+            primitiveTypeDeserializer,
             [libraryWithDatesLanguage], [])
 
         const node = deserialization[0] as NodeWithProperties;

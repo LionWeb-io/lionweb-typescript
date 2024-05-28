@@ -2,6 +2,7 @@ import {LanguageFactory} from "./factory.js"
 import { Classifier, Concept, Datatype, lioncoreBuiltinsKey, Property } from "./types.js"
 import {StringsMapper} from "../utils/string-mapping.js"
 import {currentReleaseVersion} from "../version.js"
+import { PrimitiveTypeDeserializer } from "../deserializer.js"
 
 
 const lioncoreBuiltinsIdAndKeyGenerator: StringsMapper =
@@ -97,7 +98,7 @@ const serializeBuiltin = (value: BuiltinPrimitive): string => {
     throw new Error(`can't serialize value of built-in primitive type: ${value}`)
 }
 
-export class PrimitiveTypeSerializer {
+export class SimplePrimitiveTypeDeserializer implements PrimitiveTypeDeserializer {
 
     private deserializerByType = new Map<Datatype, SpecificPrimitiveTypeDeserializer>()
 
@@ -131,7 +132,6 @@ export class PrimitiveTypeSerializer {
         }
     }
 }
-
 
 export type {
     BuiltinPrimitive
