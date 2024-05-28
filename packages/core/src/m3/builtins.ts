@@ -61,7 +61,7 @@ lioncoreBuiltins.havingEntities(
 
 
 type BuiltinPrimitive = string | boolean | number | Record<string, unknown> | Array<unknown>
-type PrimitiveTypeValue = BuiltinPrimitive | any
+type PrimitiveTypeValue = BuiltinPrimitive | unknown
 type SpecificPrimitiveTypeDeserializer = (value: string)=>PrimitiveTypeValue
 
 const builtinPrimitives = {
@@ -120,7 +120,10 @@ export class PrimitiveTypeSerializer {
             throw new Error(`can't deserialize undefined as the value of a required property`)
         }
         const { type } = property
-        const specificDeserializer = this.deserializerByType.get(type!!)
+        if (type == null) {
+            throw new Error(`cant't deserialize a property with unspecified type`)
+        }
+        const specificDeserializer = this.deserializerByType.get(type)
         if (specificDeserializer != null) {
             return specificDeserializer(value)
         } else {

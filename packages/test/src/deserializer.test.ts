@@ -11,6 +11,8 @@ import { BaseNode, libraryInstantiationFacade } from "./instances/library.js"
 import {libraryLanguage} from "./languages/library.js"
 import { dateDatatype, libraryWithDatesLanguage } from "./languages/libraryWithDates.js"
 
+type NodeWithProperties = BaseNode & {properties:Record<string, unknown>}
+
 export const libraryWithDatesInstantiationFacade: InstantiationFacade<BaseNode> = {
     nodeFor: (_parent, classifier, id, _propertySettings) => ({
         id,
@@ -18,10 +20,10 @@ export const libraryWithDatesInstantiationFacade: InstantiationFacade<BaseNode> 
         annotations: [],
         properties: {}
     }),
-    setFeatureValue: (node: any, feature: Feature, value: unknown) => {
-        node.properties[feature.name] = value
+    setFeatureValue: (node: BaseNode, feature: Feature, value: unknown) => {
+        (node as NodeWithProperties).properties[feature.name] = value
     },
-    encodingOf: (literal) => {
+    encodingOf: () => {
         throw new Error()
     }
 }
@@ -153,7 +155,7 @@ describe("deserialization", () => {
             primitiveTypeSerializer,
             [libraryWithDatesLanguage], [])
 
-        const node = deserialization[0] as any;
+        const node = deserialization[0] as NodeWithProperties;
         expect(node.properties["creationDate"]).to.eql(new Date(2024, 4, 28))
     })
 
