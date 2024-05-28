@@ -2,7 +2,6 @@ import {LanguageFactory} from "./factory.js"
 import { Classifier, Concept, Datatype, lioncoreBuiltinsKey, Property } from "./types.js"
 import {StringsMapper} from "../utils/string-mapping.js"
 import {currentReleaseVersion} from "../version.js"
-import { LionCore_builtins_Json, LIONWEB_INTEGER_TYPE } from "@lionweb/validation"
 
 
 const lioncoreBuiltinsIdAndKeyGenerator: StringsMapper =
