@@ -5,11 +5,11 @@ import {
     currentSerializationFormatVersion,
     deserializeSerializationChunk, Feature, InstantiationFacade,
     PrimitiveTypeSerializer,
-    SerializationChunk, updateSettingsNameBased
+    SerializationChunk,
 } from "@lionweb/core"
 import { BaseNode, libraryInstantiationFacade } from "./instances/library.js"
 import {libraryLanguage} from "./languages/library.js"
-import { dateDatatype, libraryWithDates, libraryWithDatesLanguage } from "./languages/libraryWithDates.js"
+import { dateDatatype, libraryWithDatesLanguage } from "./languages/libraryWithDates.js"
 
 export const libraryWithDatesInstantiationFacade: InstantiationFacade<BaseNode> = {
     nodeFor: (_parent, classifier, id, _propertySettings) => ({
