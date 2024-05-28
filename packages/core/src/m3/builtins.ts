@@ -1,7 +1,8 @@
 import {LanguageFactory} from "./factory.js"
-import {Classifier, Concept, lioncoreBuiltinsKey, Property} from "./types.js"
+import { Classifier, Concept, Datatype, lioncoreBuiltinsKey, Property } from "./types.js"
 import {StringsMapper} from "../utils/string-mapping.js"
 import {currentReleaseVersion} from "../version.js"
+import { LionCore_builtins_Json, LIONWEB_INTEGER_TYPE } from "@lionweb/validation"
 
 
 const lioncoreBuiltinsIdAndKeyGenerator: StringsMapper =
@@ -61,6 +62,8 @@ lioncoreBuiltins.havingEntities(
 
 
 type BuiltinPrimitive = string | boolean | number | Record<string, unknown> | Array<unknown>
+type PrimitiveTypeValue = BuiltinPrimitive | any
+type SpecificPrimitiveTypeDeserializer = (value: string)=>PrimitiveTypeValue
 
 const builtinPrimitives = {
     stringDatatype,
@@ -95,22 +98,35 @@ const serializeBuiltin = (value: BuiltinPrimitive): string => {
     throw new Error(`can't serialize value of built-in primitive type: ${value}`)
 }
 
+export class PrimitiveTypeSerializer {
 
-const deserializeBuiltin = (value: string | undefined, property: Property): BuiltinPrimitive | undefined => {
-    if (value === undefined) {
-        if (property.optional) {
-            return undefined
-        }
-        throw new Error(`can't deserialize undefined as the value of a required property`)
+    private deserializerByType = new Map<Datatype, SpecificPrimitiveTypeDeserializer>()
+
+    constructor() {
+        this.deserializerByType.set(stringDatatype, (value)=>value)
+        this.deserializerByType.set(booleanDatatype, (value)=>JSON.parse(value))
+        this.deserializerByType.set(integerDatatype, (value)=>Number(value))
+        this.deserializerByType.set(jsonDatatype, (value)=>JSON.parse(value as string))
     }
-    const {type} = property
-    switch (type!.name) {
-        case "String": return value
-        case "Boolean": return JSON.parse(value)
-        case "Integer": return Number(value)
-        case "JSON": return JSON.parse(value as string)
-        default:
+
+    registerDeserializer(dataType: Datatype, deserializer: SpecificPrimitiveTypeDeserializer) {
+        this.deserializerByType.set(dataType, deserializer)
+    }
+
+    deserializeValue(value: string | undefined, property: Property): PrimitiveTypeValue | undefined {
+        if (value === undefined) {
+            if (property.optional) {
+                return undefined
+            }
+            throw new Error(`can't deserialize undefined as the value of a required property`)
+        }
+        const { type } = property
+        const specificDeserializer = this.deserializerByType.get(type!!)
+        if (specificDeserializer != null) {
+            return specificDeserializer(value)
+        } else {
             throw new Error(`can't deserialize value of type "${type!.name}": ${value}`)
+        }
     }
 }
 
@@ -123,7 +139,6 @@ export {
     builtinPrimitives,
     builtinClassifiers,
     builtinFeatures,
-    deserializeBuiltin,
     isBuiltinNodeConcept,
     lioncoreBuiltins,
     serializeBuiltin

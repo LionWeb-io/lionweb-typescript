@@ -4,8 +4,7 @@ import {lioncoreExtractionFacade, lioncoreInstantiationFacade} from "./facade.js
 import {nodesExtractorUsing} from "../facade.js"
 import {deserializeSerializationChunk} from "../deserializer.js"
 import {lioncore} from "./lioncore.js"
-import {lioncoreBuiltins} from "./builtins.js"
-
+import { lioncoreBuiltins, PrimitiveTypeSerializer } from "./builtins.js"
 
 /**
  * Deserializes languages that have been serialized into the LionWeb serialization JSON format
@@ -15,6 +14,7 @@ export const deserializeLanguages = (serializationChunk: SerializationChunk, ...
     deserializeSerializationChunk(
         serializationChunk,
         lioncoreInstantiationFacade,
+        new PrimitiveTypeSerializer(),
         [lioncore],
         [lioncoreBuiltins, ...dependentLanguages].flatMap(nodesExtractorUsing(lioncoreExtractionFacade))
     )
