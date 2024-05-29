@@ -1,7 +1,7 @@
 import {assert} from "chai"
 const {deepEqual} = assert
 
-import { deserializeSerializationChunk, DefaultPrimitiveTypeDeserializer, serializeNodes } from "@lionweb/core"
+import { deserializeSerializationChunk, serializeNodes } from "@lionweb/core"
 import {libraryLanguage} from "./languages/library.js"
 import {multiLanguage} from "./languages/multi.js"
 import {libraryInstantiationFacade} from "./instances/library.js"

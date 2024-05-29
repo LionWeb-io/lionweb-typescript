@@ -57,7 +57,6 @@ describe("deserialization", () => {
             ]
         }
         const deserialization = deserializeSerializationChunk(serializationChunk, libraryInstantiationFacade,
-                            new DefaultPrimitiveTypeDeserializer(),
             [libraryLanguage], [])
         deepEqual(
             deserialization,
@@ -106,7 +105,6 @@ describe("deserialization", () => {
             ]
         }
         expect(() => deserializeSerializationChunk(serializationChunk, libraryWithDatesInstantiationFacade,
-            new DefaultPrimitiveTypeDeserializer(),
             [libraryWithDatesLanguage], []))
             .to.throw();
     })

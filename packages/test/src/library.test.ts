@@ -6,7 +6,7 @@ import {
     DynamicNode,
     dynamicInstantiationFacade,
     nameBasedClassifierDeducerFor,
-    serializeNodes, DefaultPrimitiveTypeDeserializer
+    serializeNodes
 } from "@lionweb/core"
 import {libraryModel, libraryExtractionFacade, libraryInstantiationFacade} from "./instances/library.js"
 import {libraryLanguage} from "./languages/library.js"
@@ -18,7 +18,6 @@ describe("Library test model", () => {
         const serializationChunk = serializeNodes(libraryModel, libraryExtractionFacade)
         // FIXME  ensure that serialization does not produce key-value pairs with value === undefined
         const deserialization = deserializeSerializationChunk(serializationChunk, libraryInstantiationFacade,
-                            new DefaultPrimitiveTypeDeserializer(),
             [libraryLanguage], [])
         deepEqual(deserialization, libraryModel)
     })
