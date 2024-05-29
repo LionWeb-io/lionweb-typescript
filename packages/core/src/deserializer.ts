@@ -4,8 +4,8 @@ import {InstantiationFacade} from "./facade.js"
 import {MemoisingSymbolTable} from "./symbol-table.js"
 import {Classifier, Containment, Enumeration, Language, PrimitiveType, Property, Reference} from "./m3/types.js"
 import {allFeaturesOf} from "./m3/functions.js"
-import {deserializeBuiltin} from "./m3/builtins.js"
 import {groupBy} from "./utils/map-helpers.js"
+import { DefaultPrimitiveTypeDeserializer } from "./m3/index.js"
 
 
 /**
@@ -19,6 +19,9 @@ const byIdMap = <T extends { id: Id }>(ts: T[]): { [id: Id]: T } => {
     return map
 }
 
+export interface PrimitiveTypeDeserializer {
+    deserializeValue(value: string | undefined, property: Property): unknown | undefined
+}
 
 /**
  * @return a deserialization of a {@link SerializationChunk}
@@ -33,8 +36,9 @@ export const deserializeSerializationChunk = <NT extends Node>(
     instantiationFacade: InstantiationFacade<NT>,
     languages: Language[],
     // TODO  facades <--> languages, so it's weird that it looks split up like this
-    dependentNodes: Node[]
+    dependentNodes: Node[],
     // TODO (#13)  see if you can turn this into [nodes: Node[], instantiationFacade: InstantiationFacade<Node>][] after all
+    primitiveTypeDeserializer: PrimitiveTypeDeserializer = new DefaultPrimitiveTypeDeserializer()
 ): NT[] => {
 
     if (serializationChunk.serializationFormatVersion !== currentSerializationFormatVersion) {
@@ -91,7 +95,7 @@ export const deserializeSerializationChunk = <NT extends Node>(
                     if (property.key in serializedPropertiesPerKey) {
                         const value = serializedPropertiesPerKey[property.key][0].value
                         if (property.type instanceof PrimitiveType) {
-                            propertySettings[property.key] = deserializeBuiltin(value, property as Property)
+                            propertySettings[property.key] = primitiveTypeDeserializer.deserializeValue(value, property as Property);
                             return
                         }
                         if (property.type instanceof Enumeration) {
