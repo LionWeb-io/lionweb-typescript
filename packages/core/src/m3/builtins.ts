@@ -98,7 +98,7 @@ const serializeBuiltin = (value: BuiltinPrimitive): string => {
     throw new Error(`can't serialize value of built-in primitive type: ${value}`)
 }
 
-export class SimplePrimitiveTypeDeserializer implements PrimitiveTypeDeserializer {
+export class DefaultPrimitiveTypeDeserializer implements PrimitiveTypeDeserializer {
 
     private deserializerByType = new Map<Datatype, SpecificPrimitiveTypeDeserializer>()
 

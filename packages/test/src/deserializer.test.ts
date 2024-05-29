@@ -4,7 +4,7 @@ const {deepEqual} = assert
 import {
     currentSerializationFormatVersion,
     deserializeSerializationChunk, Feature, InstantiationFacade,
-    SimplePrimitiveTypeDeserializer,
+    DefaultPrimitiveTypeDeserializer,
     SerializationChunk,
 } from "@lionweb/core"
 import { BaseNode, libraryInstantiationFacade } from "./instances/library.js"
@@ -57,7 +57,7 @@ describe("deserialization", () => {
             ]
         }
         const deserialization = deserializeSerializationChunk(serializationChunk, libraryInstantiationFacade,
-                            new SimplePrimitiveTypeDeserializer(),
+                            new DefaultPrimitiveTypeDeserializer(),
             [libraryLanguage], [])
         deepEqual(
             deserialization,
@@ -106,7 +106,7 @@ describe("deserialization", () => {
             ]
         }
         expect(() => deserializeSerializationChunk(serializationChunk, libraryWithDatesInstantiationFacade,
-            new SimplePrimitiveTypeDeserializer(),
+            new DefaultPrimitiveTypeDeserializer(),
             [libraryWithDatesLanguage], []))
             .to.throw();
     })
@@ -145,15 +145,15 @@ describe("deserialization", () => {
                 }
             ]
         }
-        const primitiveTypeDeserializer = new SimplePrimitiveTypeDeserializer();
+        const primitiveTypeDeserializer = new DefaultPrimitiveTypeDeserializer();
         primitiveTypeDeserializer.registerDeserializer(dateDatatype, (value)=> {
             const parts = value.split("-");
             return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]))
         })
 
         const deserialization = deserializeSerializationChunk(serializationChunk, libraryWithDatesInstantiationFacade,
-            primitiveTypeDeserializer,
-            [libraryWithDatesLanguage], [])
+            [libraryWithDatesLanguage], [],
+            primitiveTypeDeserializer)
 
         const node = deserialization[0] as NodeWithProperties;
         expect(node.properties["creationDate"]).to.eql(new Date(2024, 4, 28))

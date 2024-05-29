@@ -5,6 +5,7 @@ import {MemoisingSymbolTable} from "./symbol-table.js"
 import {Classifier, Containment, Enumeration, Language, PrimitiveType, Property, Reference} from "./m3/types.js"
 import {allFeaturesOf} from "./m3/functions.js"
 import {groupBy} from "./utils/map-helpers.js"
+import { DefaultPrimitiveTypeDeserializer } from "./m3/index.js"
 
 
 /**
@@ -33,11 +34,11 @@ export interface PrimitiveTypeDeserializer {
 export const deserializeSerializationChunk = <NT extends Node>(
     serializationChunk: SerializationChunk,
     instantiationFacade: InstantiationFacade<NT>,
-    primitiveTypeDeserializer: PrimitiveTypeDeserializer,
     languages: Language[],
     // TODO  facades <--> languages, so it's weird that it looks split up like this
-    dependentNodes: Node[]
+    dependentNodes: Node[],
     // TODO (#13)  see if you can turn this into [nodes: Node[], instantiationFacade: InstantiationFacade<Node>][] after all
+    primitiveTypeDeserializer: PrimitiveTypeDeserializer = new DefaultPrimitiveTypeDeserializer()
 ): NT[] => {
 
     if (serializationChunk.serializationFormatVersion !== currentSerializationFormatVersion) {
