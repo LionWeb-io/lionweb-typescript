@@ -3,6 +3,7 @@ import {Classifier, Concept, Datatype, lioncoreBuiltinsKey, Property} from "./ty
 import {StringsMapper} from "../utils/string-mapping.js"
 import {currentReleaseVersion} from "../version.js"
 import {PrimitiveTypeDeserializer} from "../deserializer.js"
+import { PrimitiveTypeSerializer } from "../serializer.js"
 
 
 const lioncoreBuiltinsIdAndKeyGenerator: StringsMapper =
@@ -64,6 +65,7 @@ lioncoreBuiltins.havingEntities(
 type BuiltinPrimitive = string | boolean | number | Record<string, unknown> | Array<unknown>
 type PrimitiveTypeValue = BuiltinPrimitive | unknown
 type SpecificPrimitiveTypeDeserializer = (value: string)=>PrimitiveTypeValue
+type SpecificPrimitiveTypeSerializer = (value: unknown)=>string
 
 const builtinPrimitives = {
     stringDatatype,
@@ -79,23 +81,6 @@ const builtinClassifiers = {
 
 const builtinFeatures = {
     inamed_name
-}
-
-
-const serializeBuiltin = (value: BuiltinPrimitive): string => {
-    switch (typeof value) {
-        case "string": return value
-        case "boolean": return `${value}`
-        case "number": return `${value}`    // TODO  check whether integer?
-        case "object": {
-            try {
-                return JSON.stringify(value, null)
-            } catch (_) {
-                // pass-through
-            }
-        }
-    }
-    throw new Error(`can't serialize value of built-in primitive type: ${value}`)
 }
 
 export class DefaultPrimitiveTypeDeserializer implements PrimitiveTypeDeserializer {
@@ -129,6 +114,45 @@ export class DefaultPrimitiveTypeDeserializer implements PrimitiveTypeDeserializ
             return specificDeserializer(value)
         } else {
             throw new Error(`can't deserialize value of type "${type!.name}": ${value}`)
+        }
+    }
+}
+
+export class DefaultPrimitiveTypeSerializer implements PrimitiveTypeSerializer {
+
+    private serializerByType = new Map<Datatype, SpecificPrimitiveTypeSerializer>()
+
+    constructor() {
+        this.serializerByType.set(stringDatatype, (value:string)=>value)
+        this.serializerByType.set(booleanDatatype, (value:boolean)=>`${value}`)
+        this.serializerByType.set(integerDatatype, (value:number)=>`${value}`)
+        this.serializerByType.set(jsonDatatype, (value:unknown)=>{try {
+                return JSON.stringify(value, null)
+            } catch (_) {
+                // pass-through
+            }})
+    }
+
+    registerSerializer(dataType: Datatype, serializer: SpecificPrimitiveTypeSerializer) {
+        this.serializerByType.set(dataType, serializer)
+    }
+
+    serializeValue(value: unknown | undefined, property: Property): string | undefined {
+        if (value === undefined) {
+            if (property.optional) {
+                return undefined
+            }
+            throw new Error(`can't serialize undefined as the value of a required property`)
+        }
+        const { type } = property
+        if (type == null) {
+            throw new Error(`cant't serialize a property with unspecified type`)
+        }
+        const specificSerializer = this.serializerByType.get(type)
+        if (specificSerializer != null) {
+            return specificSerializer(value)
+        } else {
+            throw new Error(`can't serialize value of type "${type!.name}": ${value}`)
         }
     }
 }
