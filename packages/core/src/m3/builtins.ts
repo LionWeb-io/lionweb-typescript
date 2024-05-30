@@ -3,7 +3,7 @@ import {Classifier, Concept, Datatype, lioncoreBuiltinsKey, Property} from "./ty
 import {StringsMapper} from "../utils/string-mapping.js"
 import {currentReleaseVersion} from "../version.js"
 import {PrimitiveTypeDeserializer} from "../deserializer.js"
-import { PrimitiveTypeSerializer } from "../serializer.js"
+import {PrimitiveTypeSerializer} from "../serializer.js"
 
 
 const lioncoreBuiltinsIdAndKeyGenerator: StringsMapper =
@@ -64,8 +64,8 @@ lioncoreBuiltins.havingEntities(
 
 type BuiltinPrimitive = string | boolean | number | Record<string, unknown> | Array<unknown>
 type PrimitiveTypeValue = BuiltinPrimitive | unknown
-type SpecificPrimitiveTypeDeserializer = (value: string)=>PrimitiveTypeValue
-type SpecificPrimitiveTypeSerializer = (value: unknown)=>string
+type SpecificPrimitiveTypeDeserializer = (value: string) => PrimitiveTypeValue
+type SpecificPrimitiveTypeSerializer = (value: unknown) => string
 
 const builtinPrimitives = {
     stringDatatype,
@@ -88,10 +88,10 @@ export class DefaultPrimitiveTypeDeserializer implements PrimitiveTypeDeserializ
     private deserializerByType = new Map<Datatype, SpecificPrimitiveTypeDeserializer>()
 
     constructor() {
-        this.deserializerByType.set(stringDatatype, (value)=>value)
-        this.deserializerByType.set(booleanDatatype, (value)=>JSON.parse(value))
-        this.deserializerByType.set(integerDatatype, (value)=>Number(value))
-        this.deserializerByType.set(jsonDatatype, (value)=>JSON.parse(value as string))
+        this.registerDeserializer(stringDatatype, (value) => value)
+        this.registerDeserializer(booleanDatatype, (value) => JSON.parse(value))
+        this.registerDeserializer(integerDatatype, (value) => Number(value))
+        this.registerDeserializer(jsonDatatype, (value) => JSON.parse(value as string))
     }
 
     registerDeserializer(dataType: Datatype, deserializer: SpecificPrimitiveTypeDeserializer) {
@@ -123,10 +123,11 @@ export class DefaultPrimitiveTypeSerializer implements PrimitiveTypeSerializer {
     private serializerByType = new Map<Datatype, SpecificPrimitiveTypeSerializer>()
 
     constructor() {
-        this.serializerByType.set(stringDatatype, (value:unknown)=>value as string)
-        this.serializerByType.set(booleanDatatype, (value:unknown)=>`${value as boolean}`)
-        this.serializerByType.set(integerDatatype, (value:unknown)=>`${value as number}`)
-        this.serializerByType.set(jsonDatatype, (value:unknown)=> JSON.stringify(value, null))
+        this.registerSerializer(stringDatatype, (value) => value as string);
+        this.registerSerializer(stringDatatype, (value) => value as string)
+        this.registerSerializer(booleanDatatype, (value) => `${value as boolean}`)
+        this.registerSerializer(integerDatatype, (value) => `${value as number}`)
+        this.registerSerializer(jsonDatatype, (value) => JSON.stringify(value, null))
     }
 
     registerSerializer(dataType: Datatype, serializer: SpecificPrimitiveTypeSerializer) {
