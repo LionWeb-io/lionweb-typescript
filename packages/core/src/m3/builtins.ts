@@ -3,6 +3,7 @@ import {Classifier, Concept, Datatype, lioncoreBuiltinsKey, Property} from "./ty
 import {StringsMapper} from "../utils/string-mapping.js"
 import {currentReleaseVersion} from "../version.js"
 import {PrimitiveTypeDeserializer} from "../deserializer.js"
+import {PrimitiveTypeSerializer} from "../serializer.js"
 
 
 const lioncoreBuiltinsIdAndKeyGenerator: StringsMapper =
@@ -63,7 +64,8 @@ lioncoreBuiltins.havingEntities(
 
 type BuiltinPrimitive = string | boolean | number | Record<string, unknown> | Array<unknown>
 type PrimitiveTypeValue = BuiltinPrimitive | unknown
-type SpecificPrimitiveTypeDeserializer = (value: string)=>PrimitiveTypeValue
+type SpecificPrimitiveTypeDeserializer = (value: string) => PrimitiveTypeValue
+type SpecificPrimitiveTypeSerializer = (value: unknown) => string
 
 const builtinPrimitives = {
     stringDatatype,
@@ -81,32 +83,15 @@ const builtinFeatures = {
     inamed_name
 }
 
-
-const serializeBuiltin = (value: BuiltinPrimitive): string => {
-    switch (typeof value) {
-        case "string": return value
-        case "boolean": return `${value}`
-        case "number": return `${value}`    // TODO  check whether integer?
-        case "object": {
-            try {
-                return JSON.stringify(value, null)
-            } catch (_) {
-                // pass-through
-            }
-        }
-    }
-    throw new Error(`can't serialize value of built-in primitive type: ${value}`)
-}
-
 export class DefaultPrimitiveTypeDeserializer implements PrimitiveTypeDeserializer {
 
     private deserializerByType = new Map<Datatype, SpecificPrimitiveTypeDeserializer>()
 
     constructor() {
-        this.deserializerByType.set(stringDatatype, (value)=>value)
-        this.deserializerByType.set(booleanDatatype, (value)=>JSON.parse(value))
-        this.deserializerByType.set(integerDatatype, (value)=>Number(value))
-        this.deserializerByType.set(jsonDatatype, (value)=>JSON.parse(value as string))
+        this.registerDeserializer(stringDatatype, (value) => value)
+        this.registerDeserializer(booleanDatatype, (value) => JSON.parse(value))
+        this.registerDeserializer(integerDatatype, (value) => Number(value))
+        this.registerDeserializer(jsonDatatype, (value) => JSON.parse(value as string))
     }
 
     registerDeserializer(dataType: Datatype, deserializer: SpecificPrimitiveTypeDeserializer) {
@@ -133,6 +118,42 @@ export class DefaultPrimitiveTypeDeserializer implements PrimitiveTypeDeserializ
     }
 }
 
+export class DefaultPrimitiveTypeSerializer implements PrimitiveTypeSerializer {
+
+    private serializerByType = new Map<Datatype, SpecificPrimitiveTypeSerializer>()
+
+    constructor() {
+        this.registerSerializer(stringDatatype, (value) => value as string);
+        this.registerSerializer(stringDatatype, (value) => value as string)
+        this.registerSerializer(booleanDatatype, (value) => `${value as boolean}`)
+        this.registerSerializer(integerDatatype, (value) => `${value as number}`)
+        this.registerSerializer(jsonDatatype, (value) => JSON.stringify(value, null))
+    }
+
+    registerSerializer(dataType: Datatype, serializer: SpecificPrimitiveTypeSerializer) {
+        this.serializerByType.set(dataType, serializer)
+    }
+
+    serializeValue(value: unknown | undefined, property: Property): string | undefined {
+        if (value === undefined) {
+            if (property.optional) {
+                return undefined
+            }
+            throw new Error(`can't serialize undefined as the value of a required property`)
+        }
+        const { type } = property
+        if (type == null) {
+            throw new Error(`cant't serialize a property with unspecified type`)
+        }
+        const specificSerializer = this.serializerByType.get(type)
+        if (specificSerializer != undefined) {
+            return specificSerializer(value)
+        } else {
+            throw new Error(`can't serialize value of type "${type!.name}": ${value}`)
+        }
+    }
+}
+
 export type {
     BuiltinPrimitive
 }
@@ -142,7 +163,6 @@ export {
     builtinClassifiers,
     builtinFeatures,
     isBuiltinNodeConcept,
-    lioncoreBuiltins,
-    serializeBuiltin
+    lioncoreBuiltins
 }
 

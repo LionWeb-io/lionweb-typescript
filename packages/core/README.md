@@ -32,6 +32,15 @@ The following is a list of links to potential starting points:
 
 ## Changelog
 
+### 0.6.6
+
+* Add support for custom primitive types.
+  Specifically:
+    * A new interface type `PrimitiveTypeSerializer`.
+    * A default implementation `DefaultPrimitiveTypeSerializer` of that that's aware of the LionCore built-in primitive types.
+    * `serializeNodes` has an additional argument of type `PrimitiveTypeSerializer` with as default value an instance of `DefaultPrimitiveTypeSerializer`.
+
+
 ### 0.6.5
 
 * Add support for custom primitive types.
