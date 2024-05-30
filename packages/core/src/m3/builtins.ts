@@ -125,12 +125,8 @@ export class DefaultPrimitiveTypeSerializer implements PrimitiveTypeSerializer {
     constructor() {
         this.serializerByType.set(stringDatatype, (value:unknown)=>value as string)
         this.serializerByType.set(booleanDatatype, (value:unknown)=>`${value as boolean}`)
-        this.serializerByType.set(integerDatatype, (value:unknown)=>`${value as Number}`)
-        this.serializerByType.set(jsonDatatype, (value:unknown)=>{try {
-                return JSON.stringify(value, null)
-            } catch (_) {
-                // pass-through
-            }})
+        this.serializerByType.set(integerDatatype, (value:unknown)=>`${value as number}`)
+        this.serializerByType.set(jsonDatatype, (value:unknown)=> JSON.stringify(value, null))
     }
 
     registerSerializer(dataType: Datatype, serializer: SpecificPrimitiveTypeSerializer) {
