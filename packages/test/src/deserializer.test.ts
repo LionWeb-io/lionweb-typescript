@@ -1,4 +1,4 @@
-import { assert, expect } from "chai"
+import {assert, expect} from "chai"
 const {deepEqual} = assert
 
 import {
@@ -7,9 +7,9 @@ import {
     DefaultPrimitiveTypeDeserializer,
     SerializationChunk,
 } from "@lionweb/core"
-import { BaseNode, libraryInstantiationFacade } from "./instances/library.js"
+import {BaseNode, libraryInstantiationFacade} from "./instances/library.js"
 import {libraryLanguage} from "./languages/library.js"
-import { dateDatatype, libraryWithDatesLanguage } from "./languages/libraryWithDates.js"
+import {dateDatatype, libraryWithDatesLanguage} from "./languages/libraryWithDates.js"
 
 type NodeWithProperties = BaseNode & {properties:Record<string, unknown>}
 

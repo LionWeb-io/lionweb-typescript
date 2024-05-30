@@ -1,5 +1,5 @@
-import { Concept, Enumeration, EnumerationLiteral, Language, Property, directlyContaineds, flatMapNonCyclingFollowing, trivialFlatMapper } from "@lionweb/core"
-import { deepEqual } from "assert"
+import {Concept, Enumeration, EnumerationLiteral, Language, Property, directlyContaineds, flatMapNonCyclingFollowing, trivialFlatMapper} from "@lionweb/core"
+import {deepEqual} from "assert"
 
 describe("flatMapNonCyclingFollowing", () => {
 

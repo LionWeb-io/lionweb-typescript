@@ -34,6 +34,11 @@ The following is a list of links to potential starting points:
 
 ### 0.6.5
 
+* Add support for custom primitive types.
+    Specifically:
+  * A new interface type `PrimitiveTypeDeserializer`.
+  * A default implementation `DefaultPrimitiveTypeDeserializer` of that that's aware of the LionCore built-in primitive types.
+  * `deserializeSerializationChunk` has an additional argument of type `PrimitiveTypeDeserializer` with as default value an instance of `DefaultPrimitiveTypeDeserializer`.
 * Expose function `inheritsFrom`.
 
 ### 0.6.4
