@@ -10,7 +10,7 @@ import {Containment, Enumeration, Language, PrimitiveType, Property, Reference, 
 import {asArray} from "./utils/array-helpers.js"
 
 export interface PrimitiveTypeSerializer {
-    serializeValue(value: unknown, property: Property): string
+    serializeValue(value: unknown, property: Property): string | undefined
 }
 
 /**
@@ -71,7 +71,7 @@ export const serializeNodes = <NT extends Node>(nodes: NT[], extractionFacade: E
                 if (encodedValue !== null) {
                     serializedNode.properties.push({
                         property: featureMetaPointer,
-                        value: encodedValue
+                        value: encodedValue as string
                     })
                 }
                 return

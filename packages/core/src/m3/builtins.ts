@@ -123,9 +123,9 @@ export class DefaultPrimitiveTypeSerializer implements PrimitiveTypeSerializer {
     private serializerByType = new Map<Datatype, SpecificPrimitiveTypeSerializer>()
 
     constructor() {
-        this.serializerByType.set(stringDatatype, (value:string)=>value)
-        this.serializerByType.set(booleanDatatype, (value:boolean)=>`${value}`)
-        this.serializerByType.set(integerDatatype, (value:number)=>`${value}`)
+        this.serializerByType.set(stringDatatype, (value:unknown)=>value as string)
+        this.serializerByType.set(booleanDatatype, (value:unknown)=>`${value as boolean}`)
+        this.serializerByType.set(integerDatatype, (value:unknown)=>`${value as Number}`)
         this.serializerByType.set(jsonDatatype, (value:unknown)=>{try {
                 return JSON.stringify(value, null)
             } catch (_) {
@@ -149,7 +149,7 @@ export class DefaultPrimitiveTypeSerializer implements PrimitiveTypeSerializer {
             throw new Error(`cant't serialize a property with unspecified type`)
         }
         const specificSerializer = this.serializerByType.get(type)
-        if (specificSerializer != null) {
+        if (specificSerializer != undefined) {
             return specificSerializer(value)
         } else {
             throw new Error(`can't serialize value of type "${type!.name}": ${value}`)
@@ -166,7 +166,6 @@ export {
     builtinClassifiers,
     builtinFeatures,
     isBuiltinNodeConcept,
-    lioncoreBuiltins,
-    serializeBuiltin
+    lioncoreBuiltins
 }
 
