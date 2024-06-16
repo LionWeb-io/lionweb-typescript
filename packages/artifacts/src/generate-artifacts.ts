@@ -8,7 +8,7 @@ import {
     genericAsTreeText,
     languageAsText,
     readFileAsJson,
-    tsTypesForLanguage,
+    tsTypeDefsForLanguage,
     writeJsonAsFile
 } from "@lionweb/utilities"
 import { writeFileSync } from "fs"
@@ -32,7 +32,7 @@ console.log(`generated diagrams for LionCore Built-ins`)
 const saveLanguageFiles = (language: Language, name: string, ...generationOptions: GenerationOptions[]) => {
     writeJsonAsFile(languagePath(`${name}.json`), serializeLanguages(language))
     writeFileSync(languagePath(`${name}.txt`), languageAsText(language))
-    writeFileSync(languagePath(`${name}.ts.txt`), tsTypesForLanguage(language, ...generationOptions))
+    writeFileSync(languagePath(`${name}.ts.txt`), tsTypeDefsForLanguage(language, ...generationOptions))
     // (Generate with a '.txt' file extension to avoid it getting picked up by the compiler.)
     console.log(`saved files for ${language.name} M2`)
 }

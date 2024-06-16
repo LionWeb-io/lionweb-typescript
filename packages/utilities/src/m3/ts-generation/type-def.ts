@@ -38,4 +38,3 @@ export const tsFromTypeDef = ({ modifier, name, mixinNames, bodyComment, fields 
     ]
 }
 
-// TODO  Idea: expose the TypeDef type, and have the generator generate type-def.s, which can be transformed to code at will.
