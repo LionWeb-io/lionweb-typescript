@@ -1,11 +1,11 @@
 import {
     ExtractionFacade,
-    Id,
     InstantiationFacade,
     nameBasedClassifierDeducerFor,
     updateSettingsNameBased
 } from "@lionweb/core"
 import {hasher} from "@lionweb/utilities"
+import {BaseNode} from "./base.js"
 import {libraryLanguage} from "../languages/library.js"
 
 
@@ -20,11 +20,6 @@ const rtEnums: { [enumKey: string]: unknown } = {
     "BookType": BookType
 }
 
-export type BaseNode = {
-    id: Id
-    classifier: string
-    annotations: BaseNode[]
-}
 
 export type Book = BaseNode & {
     classifier: "Book"

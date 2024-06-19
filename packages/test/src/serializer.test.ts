@@ -1,73 +1,18 @@
-import { expect } from "chai"
+import {expect} from "chai"
 
 import {
+    Annotation,
+    builtinClassifiers,
+    Concept,
     currentSerializationFormatVersion,
-    Feature,
-    SerializationChunk,
-    serializeNodes,
-    Id,
-    ExtractionFacade,
-    Classifier,
-    Enumeration,
-    EnumerationLiteral,
+    DefaultPrimitiveTypeSerializer,
     Language,
-    Property, Containment, DefaultPrimitiveTypeSerializer
+    SerializationChunk,
+    serializeNodes
 } from "@lionweb/core"
-import { BaseNode } from "./instances/library.js"
-import { dateDatatype, libraryWithDatesLanguage } from "./languages/libraryWithDates.js"
+import {dateDatatype, libraryWithDatesLanguage} from "./languages/libraryWithDates.js"
+import {SimpleNodeReader, SimpleNode} from "./instances/simple-node.js"
 
-class SimpleNode implements BaseNode {
-    public properties: Record<string, unknown> = {}
-    public containments: Record<string, SimpleNode[]> = {}
-    public annotations: BaseNode[] = []
-
-    constructor(public id: Id, public classifier: string) {
-    }
-}
-
-
-class MyExtractionFacade implements ExtractionFacade<SimpleNode> {
-
-    constructor(public knownLanguages: Language[] = []) {
-    }
-
-    classifierOf(node: SimpleNode): Classifier {
-        const classifier = this.knownLanguages.map((l) => l.entities.find(e => e instanceof Classifier && e.name == node.classifier)).find((c) => c != null)
-        if (classifier == null) {
-            throw new Error(`Cannot find Classifier with given name ${node.classifier}`)
-        }
-        return classifier as Classifier
-    }
-
-    enumerationLiteralFrom(_encoding: unknown, _enumeration: Enumeration): EnumerationLiteral | null {
-        throw new Error("Not supported")
-    }
-
-    getFeatureValue(node: SimpleNode, feature: Feature): unknown {
-        if (feature instanceof Property) {
-            const value = node.properties[feature.name]
-            return value
-        }
-        if (feature instanceof Containment) {
-            const value = node.containments[feature.name]
-            if (feature.multiple) {
-                if (value === undefined) {
-                    return []
-                } else {
-                    return value as SimpleNode[]
-                }
-            } else {
-                if (value === undefined || value.length == 0) {
-                    return undefined
-                } else {
-                    return value[0]
-                }
-            }
-        }
-        throw new Error(`Not supported: feature ${feature.name}`)
-    }
-
-}
 
 describe("serialization", () => {
 
@@ -77,11 +22,22 @@ describe("serialization", () => {
         myNode.properties["creationDate"] = new Date(30, 4, 2024)
         myNode.containments["books"] = []
 
-        expect(() => serializeNodes([myNode], new MyExtractionFacade([libraryWithDatesLanguage]))).to.throw()
+        expect(() => serializeNodes([myNode], new SimpleNodeReader([libraryWithDatesLanguage]))).to.throw()
     })
 
     it("serializes node with custom primitive type, works when registering custom deserializer", () => {
-        const serializationChunk: SerializationChunk = {
+        const primitiveTypeSerializer = new DefaultPrimitiveTypeSerializer()
+        primitiveTypeSerializer.registerSerializer(dateDatatype, (value: unknown) => {
+            const d = value as Date
+            return `${Number(d.getFullYear()).toString().padStart(4, "0")}-${Number(d.getMonth() + 1).toString().padStart(2, "0")}-${Number(d.getDate()).toString().padStart(2, "0")}`
+        })
+
+        const myNode = new SimpleNode("1", "LibraryWithDates")
+        myNode.properties["name"] = "myLibrary"
+        myNode.properties["creationDate"] = new Date(2024, 4, 28)
+        myNode.containments["books"] = []
+
+        const expectedSerializationChunk: SerializationChunk = {
             serializationFormatVersion: currentSerializationFormatVersion,
             "languages": [
                 {
@@ -131,18 +87,85 @@ describe("serialization", () => {
                 }
             ]
         }
-        const primitiveTypeSerializer = new DefaultPrimitiveTypeSerializer()
-        primitiveTypeSerializer.registerSerializer(dateDatatype, (value: unknown) => {
-            const d = value as Date
-            return `${Number(d.getFullYear()).toString().padStart(4, "0")}-${Number(d.getMonth() + 1).toString().padStart(2, "0")}-${Number(d.getDate()).toString().padStart(2, "0")}`
-        })
+        expect(serializeNodes([myNode], new SimpleNodeReader([libraryWithDatesLanguage]), primitiveTypeSerializer)).to.eql(expectedSerializationChunk)
+    })
 
-        const myNode = new SimpleNode("1", "LibraryWithDates")
-        myNode.properties["name"] = "myLibrary"
-        myNode.properties["creationDate"] = new Date(2024, 4, 28)
-        myNode.containments["books"] = []
+    it("serializes annotations", () => {
+        const language = new Language("test language", "0", "test-language", "test-language")
+        const annotatedConcept = new Concept(language, "Annotated", "Annotated", "Annotated", false)
+        annotatedConcept.implementing(builtinClassifiers.inamed)
+        const testAnnotation = new Annotation(language, "Annotation", "Annotation", "Annotation")
+        testAnnotation.implementing(builtinClassifiers.inamed)
+        language.havingEntities(annotatedConcept, testAnnotation)
 
-        expect(serializeNodes([myNode], new MyExtractionFacade([libraryWithDatesLanguage]), primitiveTypeSerializer)).to.eql(serializationChunk)
+        const annotation = new SimpleNode("0", "Annotation")
+        annotation.properties["name"] = "my annotation node"
+        const annotatedNode = new SimpleNode("1", "Annotated")
+        annotatedNode.properties["name"] = "my annotated node"
+        annotatedNode.annotations.push(annotation)
+
+        const expectedSerializationChunk = {
+            "serializationFormatVersion": "2023.1",
+            "languages": [
+                {
+                    "key": "test-language",
+                    "version": "0"
+                },
+                {
+                    "key": "LionCore-builtins",
+                    "version": "2023.1"
+                }
+            ],
+            "nodes": [
+                {
+                    "id": "1",
+                    "classifier": {
+                        "language": "test-language",
+                        "version": "0",
+                        "key": "Annotated"
+                    },
+                    "properties": [
+                        {
+                            "property": {
+                                "language": "LionCore-builtins",
+                                "version": "2023.1",
+                                "key": "LionCore-builtins-INamed-name"
+                            },
+                            "value": "my annotated node"
+                        }
+                    ],
+                    "containments": [],
+                    "references": [],
+                    "annotations": [
+                        "0"
+                    ],
+                    "parent": null
+                },
+                {
+                    "id": "0",
+                    "classifier": {
+                        "language": "test-language",
+                        "version": "0",
+                        "key": "Annotation"
+                    },
+                    "properties": [
+                        {
+                            "property": {
+                                "language": "LionCore-builtins",
+                                "version": "2023.1",
+                                "key": "LionCore-builtins-INamed-name"
+                            },
+                            "value": "my annotation node"
+                        }
+                    ],
+                    "containments": [],
+                    "references": [],
+                    "annotations": [],
+                    "parent": "1"
+                }
+            ]
+        }
+        expect(serializeNodes([annotatedNode], new SimpleNodeReader([language]))).to.eql(expectedSerializationChunk)
     })
 
 })
