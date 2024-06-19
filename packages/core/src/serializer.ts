@@ -2,11 +2,17 @@ import {ExtractionFacade} from "./facade.js"
 import {currentSerializationFormatVersion, MetaPointer, SerializationChunk, SerializedNode} from "./serialization.js"
 import {asIds} from "./functions.js"
 import {Node} from "./types.js"
-import {
-    DefaultPrimitiveTypeSerializer,
-} from "./m3/builtins.js"
+import {DefaultPrimitiveTypeSerializer} from "./m3/builtins.js"
 import {allFeaturesOf} from "./m3/functions.js"
-import {Containment, Enumeration, Language, PrimitiveType, Property, Reference, simpleNameDeducer} from "./m3/types.js"
+import {
+    Containment,
+    Enumeration,
+    Language,
+    PrimitiveType,
+    Property,
+    Reference,
+    simpleNameDeducer
+} from "./m3/types.js"
 import {asArray} from "./utils/array-helpers.js"
 
 export interface PrimitiveTypeSerializer {
@@ -16,8 +22,10 @@ export interface PrimitiveTypeSerializer {
 /**
  * @return a {@link SerializationChunk} of the given model (i.e., an array of {@link Node nodes} - the first argument) to the LionWeb serialization JSON format.
  */
-export const serializeNodes = <NT extends Node>(nodes: NT[], extractionFacade: ExtractionFacade<NT>,
-                                                primitiveTypeSerializer: PrimitiveTypeSerializer = new DefaultPrimitiveTypeSerializer()
+export const serializeNodes = <NT extends Node>(
+    nodes: NT[],
+    extractionFacade: ExtractionFacade<NT>,
+    primitiveTypeSerializer: PrimitiveTypeSerializer = new DefaultPrimitiveTypeSerializer()
 ): SerializationChunk /* <=> JSON */ => {
     const serializedNodes: SerializedNode[] = []  // keep nodes as much as possible "in order"
     const ids: { [id: string]: boolean } = {}   // maintain a map to keep track of IDs of nodes that have been serialized

@@ -80,7 +80,7 @@ interface InstantiationFacade<NT extends Node> {
 /**
  * Type def. for functions that extract {@link Node nodes} from a given one.
  */
-type NodesExtractor<NT extends Node> = (nodes: NT) => NT[]
+type NodesExtractor<NT extends Node> = (node: NT) => NT[]
 
 /**
  * @return A function that extracts the children from a given node.

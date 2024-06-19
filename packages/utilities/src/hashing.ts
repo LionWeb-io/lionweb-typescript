@@ -12,7 +12,7 @@ export type StringHasher = (str: string) => string
  * Hasher based on the {@link https://zelark.github.io/nano-id-cc/ `nanoid` NPM package}.
  */
 export const nanoIdGen = (): StringHasher =>
-    () => nanoid()
+    (_) => nanoid()
 
 
 const defaultHashAlgorithm = "SHA256"
