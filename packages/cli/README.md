@@ -46,6 +46,10 @@ That means that key-value pairs appear in precisely the same order as they do in
 
 ## Changelog
 
+### 0.6.7
+
+* (Depend on `@lionweb/core` and `@lionweb/utilities` version 0.6.6.)
+
 ### 0.6.6
 
 * TS types generator now generates 1 file per language.

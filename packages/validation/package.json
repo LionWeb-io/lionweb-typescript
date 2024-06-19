@@ -1,13 +1,13 @@
 {
   "name": "@lionweb/validation",
   "version": "0.6.3-beta.0",
-  "license":  "Apache 2.0",
+  "license": "Apache 2.0",
   "description": "LionWeb Serialization validation",
   "author": "jos.warmer@openmodeling.nl",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",
-  "type":"module",
+  "type": "module",
   "keywords": [
     "lionweb",
     "serialization",

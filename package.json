@@ -1,11 +1,11 @@
 {
   "name": "lionweb-typescript",
-  "version": "0.6.6-beta.0",
+  "version": "0.6.6",
   "description": "LionWeb core for {Java|Type}Script",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/LionWeb-io/lionweb-typescript.git"
+    "url": "git+https://github.com/LionWeb-io/lionweb-typescript.git"
   },
   "bugs": {
     "url": "https://github.com/LionWeb-io/lionweb-typescript/issues"
