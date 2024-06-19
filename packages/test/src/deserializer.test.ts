@@ -7,7 +7,8 @@ import {
     DefaultPrimitiveTypeDeserializer,
     SerializationChunk,
 } from "@lionweb/core"
-import {BaseNode, libraryInstantiationFacade} from "./instances/library.js"
+import {BaseNode} from "./instances/base.js"
+import {libraryInstantiationFacade} from "./instances/library.js"
 import {libraryLanguage} from "./languages/library.js"
 import {dateDatatype, libraryWithDatesLanguage} from "./languages/libraryWithDates.js"
 

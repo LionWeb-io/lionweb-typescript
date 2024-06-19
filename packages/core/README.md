@@ -34,6 +34,7 @@ The following is a list of links to potential starting points:
 
 ### 0.6.6
 
+* The serializer now also serializes annotations.
 * Add support for custom primitive types.
   Specifically:
     * A new interface type `PrimitiveTypeSerializer`.

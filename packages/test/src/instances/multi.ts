@@ -1,7 +1,8 @@
 import {hasher} from "@lionweb/utilities"
 import {ExtractionFacade, nameBasedClassifierDeducerFor} from "@lionweb/core"
 import {multiLanguage} from "../languages/multi.js"
-import {BaseNode, bobLibrary, jackLondon, Library, libraryExtractionFacade} from "./library.js"
+import {BaseNode} from "./base.js"
+import {bobLibrary, jackLondon, Library, libraryExtractionFacade} from "./library.js"
 import {libraryLanguage} from "../languages/library.js"
 
 

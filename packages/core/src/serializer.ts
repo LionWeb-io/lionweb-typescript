@@ -107,7 +107,11 @@ export const serializeNodes = <NT extends Node>(
                 return
             }
         })
-        serializedNode.annotations = asArray(node.annotations).map((annotation) => annotation.id)
+
+        const annotations = asArray(node.annotations) as NT[]   // assumes that annotations also all are of type NT (which is not unreasonable)
+        serializedNode.annotations = annotations.map((annotation) => annotation.id)
+        annotations.forEach((annotation) => visit(annotation, node))
+
         serializedNode.parent = parent?.id ?? null  // (undefined -> null)
     }
 
