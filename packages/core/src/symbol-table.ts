@@ -1,5 +1,6 @@
-import {allFeaturesOf, Classifier, Feature, Language, LanguageEntity} from "./m3/index.js"
 import {MetaPointer} from "./serialization.js"
+import {Classifier, Feature, Language, LanguageEntity} from "./m3/types.js"
+import {allFeaturesOf} from "./m3/functions.js"
 
 
 /**
