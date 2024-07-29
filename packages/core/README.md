@@ -32,6 +32,11 @@ The following is a list of links to potential starting points:
 
 ## Changelog
 
+### 0.6.8
+
+* Relax deserialization to just skip serialized nodes for which the corresponding M2 data can't be found.
+
+
 ### 0.6.7
 
 * Fix cycle in imports that some bundlers were having trouble with.

@@ -1,11 +1,11 @@
 import {Id, Node} from "./types.js"
-import {currentSerializationFormatVersion, SerializationChunk, SerializedNode} from "./serialization.js"
 import {InstantiationFacade} from "./facade.js"
+import {currentSerializationFormatVersion, SerializationChunk, SerializedNode} from "./serialization.js"
 import {MemoisingSymbolTable} from "./symbol-table.js"
+import {DefaultPrimitiveTypeDeserializer} from "./m3/builtins.js"
 import {Classifier, Containment, Enumeration, Language, PrimitiveType, Property, Reference} from "./m3/types.js"
 import {allFeaturesOf} from "./m3/functions.js"
 import {groupBy} from "./utils/map-helpers.js"
-import {DefaultPrimitiveTypeDeserializer} from "./m3/builtins.js"
 
 
 /**
@@ -58,27 +58,38 @@ export const deserializeSerializationChunk = <NT extends Node>(
      * and stores it under its ID so references to it can be resolved.
      * For every serialized node, only one instance will ever be constructed (through memoisation).
      */
-    const instantiateMemoised = (serNode: SerializedNode, parent?: NT): NT => {
+    const instantiateMemoised = (serNode: SerializedNode, parent?: NT): (NT | null) => {
         if (serNode.id in deserializedNodeById) {
             return deserializedNodeById[serNode.id]
         }
         const node = instantiate(serNode, parent)
-        deserializedNodeById[node.id] = node
+        if (node !== null) {
+            deserializedNodeById[node.id] = node
+        }
         return node
     }
 
     type ReferenceToInstall = [node: NT, feature: Reference, refId: Id]
     const referencesToInstall: ReferenceToInstall[] = []
 
+    const tryInstantiate = (parent: NT | undefined, classifier: Classifier, id: Id, propertySettings: { [propertyKey: string]: unknown }): (NT | null) => {
+        try {
+            return instantiationFacade.nodeFor(parent, classifier, id, propertySettings)
+        } catch (_) {
+            return null
+        }
+    }
+
     /**
      * Instantiates a {@link Node} from its {@link SerializedNode serialization}.
      */
-    const instantiate = ({id, classifier: classifierMetaPointer, properties, containments, references, annotations}: SerializedNode, parent?: NT): NT => {
+    const instantiate = ({id, classifier: classifierMetaPointer, properties, containments, references, annotations}: SerializedNode, parent?: NT): (NT | null) => {
 
         const classifier = symbolTable.entityMatching(classifierMetaPointer)
 
         if (classifier === undefined || !(classifier instanceof Classifier)) {
-            throw new Error(`can't deserialize a node having a classifier with key "${classifierMetaPointer.key}"`)
+            console.log(`can't deserialize a node having a classifier with key "${classifierMetaPointer.key}"`)
+            return null
         }
 
         const allFeatures = allFeaturesOf(classifier)
@@ -95,7 +106,7 @@ export const deserializeSerializationChunk = <NT extends Node>(
                     if (property.key in serializedPropertiesPerKey) {
                         const value = serializedPropertiesPerKey[property.key][0].value
                         if (property.type instanceof PrimitiveType) {
-                            propertySettings[property.key] = primitiveTypeDeserializer.deserializeValue(value, property as Property);
+                            propertySettings[property.key] = primitiveTypeDeserializer.deserializeValue(value, property as Property)
                             return
                         }
                         if (property.type instanceof Enumeration) {
@@ -110,7 +121,10 @@ export const deserializeSerializationChunk = <NT extends Node>(
                 })
         }
 
-        const node = instantiationFacade.nodeFor(parent, classifier, id, propertySettings)
+        const node = tryInstantiate(parent, classifier, id, propertySettings)
+        if (node === null) {
+            return null
+        }
 
         const serializedContainmentsPerKey =
             containments === undefined ? {} : groupBy(containments, (sp) => sp.containment.key)    // (this assumes no duplicate keys among containments!)
@@ -157,6 +171,8 @@ export const deserializeSerializationChunk = <NT extends Node>(
         node.annotations = annotations
             .filter((annotationId) => annotationId in serializedNodeById)
             .map((annotationId) => instantiateMemoised(serializedNodeById[annotationId]))
+            .filter((annotationOrNull) => annotationOrNull !== null)
+            .map((annotation) => annotation!)
 
         return node
 
@@ -164,7 +180,9 @@ export const deserializeSerializationChunk = <NT extends Node>(
 
     const rootLikeNodes = serializedNodes
         .filter(({ parent }) => parent === null || !(parent in serializedNodeById))
-        .map((node) => instantiateMemoised(node))
+        .map((serializedNode) => instantiateMemoised(serializedNode))
+        .filter((nodeOrNull) => nodeOrNull !== null)
+        .map((node) => node!)
 
     const nodesOfDependentModelsById = byIdMap(dependentNodes)
 
