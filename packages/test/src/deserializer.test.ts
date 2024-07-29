@@ -3,14 +3,17 @@ const {deepEqual} = assert
 
 import {
     currentSerializationFormatVersion,
-    deserializeSerializationChunk, Feature, InstantiationFacade,
     DefaultPrimitiveTypeDeserializer,
-    SerializationChunk,
+    deserializeSerializationChunk, dynamicInstantiationFacade,
+    Feature,
+    InstantiationFacade,
+    SerializationChunk
 } from "@lionweb/core"
 import {BaseNode} from "./instances/base.js"
 import {libraryInstantiationFacade} from "./instances/library.js"
 import {libraryLanguage} from "./languages/library.js"
 import {dateDatatype, libraryWithDatesLanguage} from "./languages/libraryWithDates.js"
+
 
 type NodeWithProperties = BaseNode & {properties:Record<string, unknown>}
 
@@ -25,7 +28,7 @@ export const libraryWithDatesInstantiationFacade: InstantiationFacade<BaseNode> 
         (node as NodeWithProperties).properties[feature.name] = value
     },
     encodingOf: () => {
-        throw new Error()
+        throw new Error("(should not be called)")
     }
 }
 
@@ -35,7 +38,7 @@ describe("deserialization", () => {
     it("deserializes all nodes, also when there are effectively no root nodes", () => {
         const serializationChunk: SerializationChunk = {
             serializationFormatVersion: currentSerializationFormatVersion,
-            "languages": [
+            languages: [
                 {
                     "key": "library",
                     "version": "1"
@@ -71,10 +74,10 @@ describe("deserialization", () => {
         )
     })
 
-    it("deserializes node with custom primitive type, without registering custom deserializer", () => {
+    it("deserializes node with custom primitive type, without registering custom deserializer, leading to empty model (and console messages)", () => {
         const serializationChunk: SerializationChunk = {
             serializationFormatVersion: currentSerializationFormatVersion,
-            "languages": [
+            languages: [
                 {
                     "key": "library-with-dates",
                     "version": "1"
@@ -105,15 +108,16 @@ describe("deserialization", () => {
                 }
             ]
         }
-        expect(() => deserializeSerializationChunk(serializationChunk, libraryWithDatesInstantiationFacade,
-            [libraryWithDatesLanguage], []))
-            .to.throw();
+        deepEqual(
+            deserializeSerializationChunk(serializationChunk, libraryWithDatesInstantiationFacade, [libraryWithDatesLanguage], []),
+            []  // because instantiation fails, but instantiation is effectively a flatmap
+        )
     })
 
     it("deserializes node with custom primitive type, works when registering custom deserializer", () => {
         const serializationChunk: SerializationChunk = {
             serializationFormatVersion: currentSerializationFormatVersion,
-            "languages": [
+            languages: [
                 {
                     "key": "libraryWithDates",
                     "version": "1"
@@ -156,6 +160,29 @@ describe("deserialization", () => {
 
         const node = deserialization[0] as NodeWithProperties;
         expect(node.properties["creationDate"]).to.eql(new Date(2024, 4, 28))
+    })
+
+    it("skips nodes with unknown classifier, leading to an empty model (and console messages)", () => {
+        const serializationChunk: SerializationChunk = {
+            serializationFormatVersion: currentSerializationFormatVersion,
+            languages: [],
+            nodes: [
+                {
+                    id: "foo",
+                    classifier: {
+                        language: "lang",
+                        version: "ver",
+                        key: "unknown-classifier"
+                    },
+                    properties: [],
+                    containments: [],
+                    references: [],
+                    annotations: [],
+                    parent: null
+                }
+            ]
+        }
+        deepEqual(deserializeSerializationChunk(serializationChunk, dynamicInstantiationFacade, [], []), [])
     })
 
 })
