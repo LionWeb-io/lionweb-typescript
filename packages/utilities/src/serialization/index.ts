@@ -1,3 +1,4 @@
+export {withoutAnnotations} from "./annotation-remover.js"
 export {looksLikeSerializedLanguages, readSerializationChunk, tryReadAllAsLanguages, tryReadAsLanguages} from "./chunk.js"
 export {measure} from "./measurer.js"
 export {orderedSerializationChunk} from "./ordering.js"
