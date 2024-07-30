@@ -15,7 +15,12 @@ describe("annotation remover", () => {
 
         const serializationChunk: SerializationChunk = {
             serializationFormatVersion: currentSerializationFormatVersion,
-            languages: [],
+            languages: [
+                {
+                    "key": "annoLanguage",
+                    "version": "0"
+                }
+            ],
             nodes: [
                 {
                     id: "anAnnotation-instance",
@@ -49,10 +54,15 @@ describe("annotation remover", () => {
         }
 
         deepEqual(
-            withoutAnnotations(serializationChunk, [annoLanguage]),
+            withoutAnnotations(serializationChunk),
             {
                 serializationFormatVersion: currentSerializationFormatVersion,
-                languages: [],
+                languages: [
+                    {
+                        "key": "annoLanguage",
+                        "version": "0"
+                    }
+                ],
                 nodes: [
                     {
                         id: "aConcept-instance",
