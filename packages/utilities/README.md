@@ -24,6 +24,10 @@ It contains utilities on top of the `core` package, such as:
 
 ## Changelog
 
+### 0.6.8
+
+* Add a `withoutAnnotations` function that removes all annotations from a serialization chunk.
+
 ### 0.6.7
 
 * (Depend on `@lionweb/core` version 0.6.7.)
