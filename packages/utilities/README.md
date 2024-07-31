@@ -26,7 +26,7 @@ It contains utilities on top of the `core` package, such as:
 
 ### 0.6.8
 
-* Add a `withoutAnnotations` function that removes all annotations from a serialization chunk.
+* Add a `withoutAnnotations` function that removes all annotations, and all their descendatns, from a serialization chunk.
 
 ### 0.6.7
 

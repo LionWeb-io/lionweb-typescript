@@ -5,19 +5,8 @@ import {MemoisingSymbolTable} from "./symbol-table.js"
 import {DefaultPrimitiveTypeDeserializer} from "./m3/builtins.js"
 import {Classifier, Containment, Enumeration, Language, PrimitiveType, Property, Reference} from "./m3/types.js"
 import {allFeaturesOf} from "./m3/functions.js"
-import {groupBy} from "./utils/map-helpers.js"
+import {byIdMap, groupBy} from "./utils/map-helpers.js"
 
-
-/**
- * @return a map id -> thing with id.
- */
-const byIdMap = <T extends { id: Id }>(ts: T[]): { [id: Id]: T } => {
-    const map: { [id: Id]: T } = {}
-    ts.forEach((t) => {
-        map[t.id] = t
-    })
-    return map
-}
 
 export interface PrimitiveTypeDeserializer {
     deserializeValue(value: string | undefined, property: Property): unknown | undefined
