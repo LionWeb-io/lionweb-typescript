@@ -141,8 +141,8 @@ export class LionWebLanguageReferenceValidator {
         const refType = NodeUtils.findReference(propertyDefinition, MetaPointers.PropertyType)
         // const refType = propertyDefinition.references.find(ref => isEqualMetaPointer(ref.reference, MetaPointers.PropertyType))
         const propertyName = propertyDefinition.properties.find(p => p.property.key === LION_CORE_BUILTINS_INAMED_NAME)?.value
-        // console.log("Fount type should be " + refType.targets[0].reference);
-        if (propertyName !== undefined) {
+        // console.log("Found type should be " + refType.targets[0].reference);
+        if (propertyName !== null && propertyName !== undefined) {
             if (refType !== null && refType !== undefined) {
                 const typeReferenceId = refType.targets[0].reference
                 switch (typeReferenceId) {
@@ -153,7 +153,7 @@ export class LionWebLanguageReferenceValidator {
                         this.simpleFieldValidator.validateInteger(prop, propertyName, context)
                         break
                     case LIONWEB_STRING_TYPE:
-                        // Each string is correct and having another JSOn type is already captured
+                        // Each string is correct and having another JSON type is already captured
                         break
                     case LIONWEB_JSON_TYPE:
                         this.simpleFieldValidator.validateJSON(prop, propertyName, context)

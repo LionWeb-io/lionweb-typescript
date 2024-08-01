@@ -37,6 +37,7 @@ The following is a list of links to potential starting points:
 * Relax deserialization to just skip serialized nodes for which the corresponding M2 data can't be found.
 * Export `byIdMap` function, which computes a map id &rarr; thing from an array of things with an `id`, from the package.
 * Made `SerializedProperty.value` `null`-able, to align with the specification.
+* Fix a bug in the deserializer w.r.t. enumeration literals — deserializing changed the keys of enumeration literals in the language's definition.
 
 
 ### 0.6.7

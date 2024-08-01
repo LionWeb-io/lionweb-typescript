@@ -95,11 +95,11 @@ export const deserializeSerializationChunk = <NT extends Node>(
                     if (property.key in serializedPropertiesPerKey) {
                         const value = serializedPropertiesPerKey[property.key][0].value
                         if (property.type instanceof PrimitiveType) {
-                            propertySettings[property.key] = primitiveTypeDeserializer.deserializeValue(value, property as Property)
+                            propertySettings[property.key] = value === null ? undefined : primitiveTypeDeserializer.deserializeValue(value, property as Property)
                             return
                         }
                         if (property.type instanceof Enumeration) {
-                            const literal = property.type.literals.find((literal) => literal.key = value)
+                            const literal = property.type.literals.find((literal) => literal.key === value)
                             if (literal !== undefined) {
                                 propertySettings[property.key] = instantiationFacade.encodingOf(literal)
                             }

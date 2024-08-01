@@ -35,6 +35,10 @@ These two should converge in the future.
 
 ## Changelog
 
+### 0.6.3
+
+* Made validation aware that the `value` field of a property serialization is allowed to be `null`.
+
 ### 0.6.2
 
 * Don't rely on the JavaScript features – import assertions – that are still marked as experimental.
