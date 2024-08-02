@@ -1,8 +1,8 @@
 {
-    "core"      : "0.6.8-beta.0",
-    "utilities" : "0.6.8-beta.0",
-    "validation": "0.6.3-beta.0",
-    "cli"       : "0.6.9-beta.0",
+    "core"      : "0.6.8-beta.3",
+    "utilities" : "0.6.8-beta.3",
+    "validation": "0.6.3-beta.3",
+    "cli"       : "0.6.9-beta.3",
     "test"      : "0.7.0-dev.0",
     "artifacts" : "0.7.0-dev.0"
 }
