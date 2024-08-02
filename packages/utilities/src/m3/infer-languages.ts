@@ -58,12 +58,16 @@ export const inferLanguagesFromSerializationChunk = (chunk: SerializationChunk):
                 id(languageName, concept.name, propertyName)
             ).havingKey(property.property.key)
 
-            if (isBoolean(property.value)) {
-                feature.ofType(booleanDatatype)
-            } else if (isNumeric(property.value)) {
-                feature.ofType(integerDatatype)
+            if (property.value === null) {
+                feature.isOptional()
             } else {
-                feature.ofType(stringDatatype)
+                if (isBoolean(property.value)) {
+                    feature.ofType(booleanDatatype)
+                } else if (isNumeric(property.value)) {
+                    feature.ofType(integerDatatype)
+                } else {
+                    feature.ofType(stringDatatype)
+                }
             }
 
             concept.havingFeatures(feature)

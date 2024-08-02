@@ -24,6 +24,4 @@ Remarks:
 * In addition, the `languages/` directory contains languages defined using the LionCore M3, and `instances/` directory contains instances of those.
     Tests that assert (de-)serialization of these languages and their instances are located at the top-level.
 * The `test` script also compiles the TypeScript code in this package.
-* Note: the `test` script (defined in `package.json`) is defined the way it is, because just running `mocha --recursive dist/` triggers an undiagnosed (and therefore: unsolved) bug.
-    It finds all the directories under `dist/`, sorts them in alphabetic order, and invokes Mocha on each separately.
 

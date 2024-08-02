@@ -8,7 +8,7 @@ export class Language_PropertyValue_Issue extends ValidationIssue {
     constructor(
         context: JsonContext,
         public property: string,
-        public value: string,
+        public value: (string | null),
         public expectedType: string,
     ) {
         super(context)

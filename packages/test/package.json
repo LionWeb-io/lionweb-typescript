@@ -21,7 +21,7 @@
     "setup": "npm run checkout-testset && npm run checkout-testchanges && mkdir -p metrics",
     "checkout-testset": "npx degit https://github.com/LionWeb-io/lionweb-integration-testing/testset/ testset",
     "checkout-testchanges": "npx degit https://github.com/LionWeb-io/lionweb-integration-testing/testchanges/ testchanges",
-    "test": "find dist -type d | sed '1!G;h;$!d' | xargs npx mocha"
+    "test": "mocha --recursive dist/"
   },
   "devDependencies": {
     "@types/chai": "4.3.12",

@@ -44,7 +44,7 @@ export type LionWebJsonNode = {
     containments: LionWebJsonContainment[]
     references: LionWebJsonReference[]
     annotations: LionWebId[]
-    parent: LionWebId | null
+    parent: (LionWebId | null)
 }
 
 export function createLwNode(): LionWebJsonNode {
@@ -61,7 +61,7 @@ export function createLwNode(): LionWebJsonNode {
 
 export type LionWebJsonProperty = {
     property: LionWebJsonMetaPointer
-    value: string
+    value: (string | null)
 }
 
 export type LionWebJsonContainment = {
@@ -75,6 +75,6 @@ export type LionWebJsonReference = {
 }
 
 export type LionWebJsonReferenceTarget = {
-    resolveInfo?: string
+    resolveInfo: (string | null)
     reference: LionWebId
 }

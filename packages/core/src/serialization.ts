@@ -9,7 +9,7 @@ export type MetaPointer = {
 
 export type SerializedProperty = {
     property: MetaPointer
-    value: string
+    value: (string | null)
 }
 
 export type SerializedContainment = {
@@ -37,7 +37,7 @@ export type SerializedNode = {
     containments: SerializedContainment[]
     references: SerializedReference[]
     annotations: Id[]
-    parent: Id | null
+    parent: (Id | null)
 }
 
 

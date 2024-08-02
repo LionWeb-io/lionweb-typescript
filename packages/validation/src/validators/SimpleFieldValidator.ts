@@ -69,13 +69,16 @@ export class SimpleFieldValidator {
 
     validateInteger = (property: LionWebJsonProperty, propName: string, context: JsonContext): void => {
         const regexp = /^[+-]?(0|[1-9][0-9]*)$/
-        if (!regexp.test(property.value)) {
+        if (property.value === null || !regexp.test(property.value)) {
             this.validationResult.issue(new Language_PropertyValue_Issue(context, propName, property.value, "integer"))
         }
     }
 
     validateJSON = (property: LionWebJsonProperty, propName: string, context: JsonContext): void => {
         try {
+            if (property.value === null) {
+                throw Error()
+            }
             JSON.parse(property.value)
         } catch (e) {
             this.validationResult.issue(new Language_PropertyValue_Issue(context, propName, property.value, "JSON"))
