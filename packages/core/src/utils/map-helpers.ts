@@ -1,3 +1,18 @@
+import {Id} from "../types.js"
+
+
+/**
+ * Computes a map id -> thing with id.
+ */
+export const byIdMap = <T extends { id: Id }>(ts: T[]): { [id: Id]: T } => {
+    const map: { [id: Id]: T } = {}
+    ts.forEach((t) => {
+        map[t.id] = t
+    })
+    return map
+}
+
+
 /**
  * Groups a list of items according to a computed key.
  */
