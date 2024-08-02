@@ -59,7 +59,8 @@ describe("annotation remover", () => {
                                 key: "aConcept-subConcepts"
                             },
                             children: [
-                                "aConcept-instance-grandchild"
+                                "aConcept-instance-grandchild",
+                                "another-child-not-in-this-chunk"
                             ]
                         }
                     ],
@@ -81,7 +82,8 @@ describe("annotation remover", () => {
                                 key: "aConcept-subConcepts"
                             },
                             children: [
-                                "aConcept-instance-child"
+                                "aConcept-instance-child",
+                                "a-child-not-in-this-chunk"
                             ]
                         }
                     ],
