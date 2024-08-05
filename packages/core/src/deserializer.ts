@@ -1,5 +1,6 @@
 import {Id, Node} from "./types.js"
 import {InstantiationFacade} from "./facade.js"
+import {unresolved} from "./references.js"
 import {currentSerializationFormatVersion, SerializationChunk, SerializedNode} from "./serialization.js"
 import {MemoisingSymbolTable} from "./symbol-table.js"
 import {DefaultPrimitiveTypeDeserializer} from "./m3/builtins.js"
@@ -180,7 +181,8 @@ export const deserializeSerializationChunk = <NT extends Node>(
             const target = deserializedNodeById[refId] ?? nodesOfDependentModelsById[refId]
             if (target === undefined) {
                 const metaTypeMessage = "concept" in node ? ` and (meta-)type ${node.concept}` : ""
-                throw new Error(`couldn't find the target with id "${refId}" of a "${reference.name}" reference on the node with id "${node.id}"${metaTypeMessage}`)
+                console.log(`[WARNING] couldn't resolve the target with id "${refId}" of a "${reference.name}" reference on the node with id "${node.id}"${metaTypeMessage}`)
+                return unresolved
             }
             return target
         }
