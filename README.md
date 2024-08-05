@@ -113,6 +113,20 @@ The output should look similar to this (but much longer):
 <img src="./documentation/images/test-output.png" alt="test" width="50%"/>
 
 
+### Updating version numbers
+
+To keep the version numbers of the various packages under `packages/` aligned throughout this repository, you can use the Node.js script [`update-package-versions.js`](./update-package-versions.js).
+You execute this script as follows from the repo's root:
+
+```shell
+node update-package-versions.js
+```
+
+This reads the file [`packages/versions.json`](./packages/versions.json) and updates the `package.json` files of all packages under `packages/` according to it.
+This script runs `npm install` afterward to update the `package-lock.json`.
+Inspect the resulting diffs to ensure correctness, and don't forget to run `npm install` to update the `package-lock.json` in case you made corrections.
+
+
 ### Releasing/publishing packages
 
 Packages are released to the [npm registry (website)](https://www.npmjs.com/): see the badges at the top of this document.
