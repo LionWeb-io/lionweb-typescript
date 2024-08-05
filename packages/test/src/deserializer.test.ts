@@ -1,13 +1,14 @@
 import {assert, expect} from "chai"
-const {deepEqual} = assert
+const {deepEqual, equal} = assert
 
 import {
+    Concept,
     currentSerializationFormatVersion,
     DefaultPrimitiveTypeDeserializer,
     deserializeSerializationChunk, dynamicInstantiationFacade,
     Feature,
-    InstantiationFacade,
-    SerializationChunk
+    InstantiationFacade, Language, Reference,
+    SerializationChunk, unresolved
 } from "@lionweb/core"
 import {BaseNode} from "./instances/base.js"
 import {libraryInstantiationFacade} from "./instances/library.js"
@@ -183,6 +184,57 @@ describe("deserialization", () => {
             ]
         }
         deepEqual(deserializeSerializationChunk(serializationChunk, dynamicInstantiationFacade, [], []), [])
+    })
+
+    it("doesn't throw for unresolvable references", () => {
+        const someLanguage = new Language("someLanguage", "0", "someLanguage", "someLanguage")
+        const someConcept = new Concept(someLanguage, "someConcept", "someConcept", "someConcept", false)
+        someLanguage.havingEntities(someConcept)
+        const someConcept_aReference = new Reference(someConcept, "someConcept-aReference", "someConcept-aReference", "someConcept-aReference")
+        someConcept.havingFeatures(someConcept_aReference)
+
+        const serializationChunk: SerializationChunk = {
+            serializationFormatVersion: currentSerializationFormatVersion,
+            languages: [
+                {
+                    key: "someLanguage",
+                    version: "0"
+                }
+            ],
+            nodes: [
+                {
+                    id: "foo",
+                    classifier: {
+                        language: "someLanguage",
+                        version: "0",
+                        key: "someConcept"
+                    },
+                    properties: [],
+                    containments: [],
+                    references: [
+                        {
+                            reference: {
+                                language: "someLanguage",
+                                version: "0",
+                                key: "someConcept-aReference"
+                            },
+                            targets: [
+                                {
+                                    reference: "bar",
+                                    resolveInfo: "unresolvable bar"
+                                }
+                            ]
+                        }
+                    ],
+                    annotations: [],
+                    parent: null
+                }
+            ]
+        }
+
+        const model = deserializeSerializationChunk(serializationChunk, dynamicInstantiationFacade, [someLanguage], [])
+        equal(model.length, 1)
+        deepEqual(model[0].settings, { [someConcept_aReference.key]: unresolved })
     })
 
 })
