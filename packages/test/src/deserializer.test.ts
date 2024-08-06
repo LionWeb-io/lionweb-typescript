@@ -5,10 +5,14 @@ import {
     Concept,
     currentSerializationFormatVersion,
     DefaultPrimitiveTypeDeserializer,
-    deserializeSerializationChunk, dynamicInstantiationFacade,
+    deserializeSerializationChunk,
+    dynamicInstantiationFacade,
     Feature,
-    InstantiationFacade, Language, Reference,
-    SerializationChunk, unresolved
+    InstantiationFacade,
+    Language,
+    Reference,
+    SerializationChunk,
+    unresolved
 } from "@lionweb/core"
 import {BaseNode} from "./instances/base.js"
 import {libraryInstantiationFacade} from "./instances/library.js"
