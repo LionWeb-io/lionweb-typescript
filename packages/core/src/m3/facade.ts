@@ -58,7 +58,7 @@ export const lioncoreInstantiationFacade: InstantiationFacade<M3Concept> = ({
             case metaConcepts.reference.key:
                 return new Reference(parent as Classifier, propertySettings[inamed_name.key] as string, propertySettings[ikeyed_key.key] as string, id)
             default:
-                throw new Error(`can't deserialize a node of concept "${qualifiedNameOf(classifier)}" with key "${classifier.key}"`)
+                throw new Error(`don't know a node of concept ${qualifiedNameOf(classifier)} with key ${classifier.key} that's not in LionCore M3`)
         }
     },
     setFeatureValue: (node, feature, value) => {

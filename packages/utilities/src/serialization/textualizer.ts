@@ -1,4 +1,5 @@
 import {
+    byIdMap,
     Enumeration,
     Id,
     Language,
@@ -22,12 +23,7 @@ const prependWith = (nestedString: NestedString, prefix: string): NestedString =
 
 export const genericAsTreeText = ({nodes}: SerializationChunk, languages: Language[] = []) => {
 
-    const nodesById: { [id: Id]: SerializedNode } = {}
-    nodes.forEach((node) => {
-        nodesById[node.id] = node
-    })
-
-
+    const nodesById: { [id: Id]: SerializedNode } = byIdMap(nodes)
     const symbolTable = new MemoisingSymbolTable(languages)
 
     const nameOrKey = (classifier: MetaPointer, feature: MetaPointer): string =>

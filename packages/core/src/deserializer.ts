@@ -13,6 +13,25 @@ export interface PrimitiveTypeDeserializer {
     deserializeValue(value: string | undefined, property: Property): unknown | undefined
 }
 
+
+/**
+ * A simplistic handler to which problems that arise during deserialization,
+ * are reported as plain text by calling the `reportProblem` function.
+ */
+export interface SimplisticHandler {
+    reportProblem: (message: string) => void
+}
+
+/**
+ * A default simplistic handler that just outputs everything of the console.
+ */
+export const defaultSimplisticHandler: SimplisticHandler = {
+    reportProblem: (message) => {
+        console.log(message)
+    }
+}
+
+
 /**
  * @return a deserialization of a {@link SerializationChunk}
  *
@@ -20,6 +39,8 @@ export interface PrimitiveTypeDeserializer {
  * @param instantiationFacade - a {@link InstantiationFacade} that is used to instantiate nodes and set values on them
  * @param languages - a {@link Language language} that the serialized model is expected to conform to
  * @param dependentNodes - a collection of nodes from dependent models against which all references in the serialized model are supposed to resolve against
+ * @param primitiveTypeDeserializer - a deserializer for values of primitive types (by default a {@link DefaultPrimitiveTypeDeserializer})
+ * @param handler - a handler for reporting problems (by default a {@link defaultSimplisticHandler})
  */
 export const deserializeSerializationChunk = <NT extends Node>(
     serializationChunk: SerializationChunk,
@@ -28,7 +49,8 @@ export const deserializeSerializationChunk = <NT extends Node>(
     // TODO  facades <--> languages, so it's weird that it looks split up like this
     dependentNodes: Node[],
     // TODO (#13)  see if you can turn this into [nodes: Node[], instantiationFacade: InstantiationFacade<Node>][] after all
-    primitiveTypeDeserializer: PrimitiveTypeDeserializer = new DefaultPrimitiveTypeDeserializer()
+    primitiveTypeDeserializer: PrimitiveTypeDeserializer = new DefaultPrimitiveTypeDeserializer(),
+    handler: SimplisticHandler = defaultSimplisticHandler
 ): NT[] => {
 
     if (serializationChunk.serializationFormatVersion !== currentSerializationFormatVersion) {
@@ -65,7 +87,9 @@ export const deserializeSerializationChunk = <NT extends Node>(
     const tryInstantiate = (parent: NT | undefined, classifier: Classifier, id: Id, propertySettings: { [propertyKey: string]: unknown }): (NT | null) => {
         try {
             return instantiationFacade.nodeFor(parent, classifier, id, propertySettings)
-        } catch (_) {
+        } catch (e: unknown) {
+            handler.reportProblem(`error occurred during instantiation of a node for classifier ${classifier.name} with meta-pointer (${classifier.language.key}, ${classifier.language.version}, ${classifier.key}); reason:`);
+            handler.reportProblem((e as Error).toString())
             return null
         }
     }
@@ -78,7 +102,7 @@ export const deserializeSerializationChunk = <NT extends Node>(
         const classifier = symbolTable.entityMatching(classifierMetaPointer)
 
         if (classifier === undefined || !(classifier instanceof Classifier)) {
-            console.log(`can't deserialize a node having a classifier with key "${classifierMetaPointer.key}"`)
+            handler.reportProblem(`can't deserialize node with id=${id}: can't find the classifier with key ${classifierMetaPointer.key} in language (${classifierMetaPointer.language}, ${classifierMetaPointer.version})`)
             return null
         }
 
@@ -181,7 +205,7 @@ export const deserializeSerializationChunk = <NT extends Node>(
             const target = deserializedNodeById[refId] ?? nodesOfDependentModelsById[refId]
             if (target === undefined) {
                 const metaTypeMessage = "concept" in node ? ` and (meta-)type ${node.concept}` : ""
-                console.log(`[WARNING] couldn't resolve the target with id "${refId}" of a "${reference.name}" reference on the node with id "${node.id}"${metaTypeMessage}`)
+                handler.reportProblem(`couldn't resolve the target with id=${refId} of a "${reference.name}" reference on the node with id=${node.id}${metaTypeMessage}`)
                 return unresolved
             }
             return target
