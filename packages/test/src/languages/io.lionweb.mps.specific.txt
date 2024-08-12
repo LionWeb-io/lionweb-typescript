@@ -1,0 +1,57 @@
+Language (id: io-lionweb-mps-specific) {
+    version = '0'
+    key = 'io-lionweb-mps-specific'
+    name = 'io.lionweb.mps.specific'
+    dependsOn -> <none>
+    entities:
+        Annotation (id: ConceptDescription) {
+            key = 'ConceptDescription'
+            name = 'ConceptDescription'
+            annotates -> -id-Classifier (Classifier)
+            extends -> <none>
+            implements -> <none>
+            features:
+                Property (id: ConceptDescription-conceptAlias) {
+                    optional = true
+                    key = 'ConceptDescription-conceptAlias'
+                    name = 'conceptAlias'
+                    type -> LionCore-builtins-String (String)
+                }
+                Property (id: ConceptDescription-conceptShortDescription) {
+                    optional = true
+                    key = 'ConceptDescription-conceptShortDescription'
+                    name = 'conceptShortDescription'
+                    type -> LionCore-builtins-String (String)
+                }
+        }
+        Annotation (id: ShortDescription) {
+            key = 'ShortDescription'
+            name = 'ShortDescription'
+            annotates -> LionCore-builtins-Node (Node)
+            extends -> <none>
+            implements -> <none>
+            features:
+                Property (id: ShortDescription-description) {
+                    optional = true
+                    key = 'ShortDescription-description'
+                    name = 'description'
+                    type -> LionCore-builtins-String (String)
+                }
+            @ [ConceptDescription] (id: ShortDescription-ConceptDescription) {
+                [ConceptDescription-conceptAlias] = short description
+                [ConceptDescription-conceptShortDescription] = null
+            }
+        }
+        Annotation (id: VirtualPackage) {
+            key = 'VirtualPackage'
+            name = 'VirtualPackage'
+            annotates -> LionCore-builtins-Node (Node)
+            extends -> <none>
+            implements -> LionCore-builtins-INamed (INamed)
+            features: <none>
+            @ [ConceptDescription] (id: VirtualPackage-ConceptDescription) {
+                [ConceptDescription-conceptAlias] = virtual package
+                [ConceptDescription-conceptShortDescription] = null
+            }
+        }
+}

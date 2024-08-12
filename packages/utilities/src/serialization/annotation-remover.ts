@@ -3,7 +3,8 @@ import {
     Annotation,
     byIdMap,
     Id,
-    SerializationChunk
+    SerializationChunk,
+    SerializedNode
 } from "@lionweb/core"
 
 /**
@@ -27,15 +28,21 @@ export const withoutAnnotations = (serializationChunk: SerializationChunk) => {
         ...annotationIds,
         ...[...annotationIds].flatMap(descendantIds)
     ]
+    const withoutAnnotations = ({ id, classifier, properties, containments, references, parent }: SerializedNode): SerializedNode => ({
+        id,
+        classifier,
+        properties,
+        containments,
+        references,
+        annotations: [],
+        parent
+    })
     return {
         serializationFormatVersion,
         languages,
         nodes: nodes
             .filter((node) => !idsOfNodesToDelete.includes(node.id)) // removes instances of annotations
-            .map((node) =>  {
-                node.annotations = []   // removes annotations attached to nodes that are instances of concepts
-                return node
-            })
+            .map(withoutAnnotations)
     }
 }
 
