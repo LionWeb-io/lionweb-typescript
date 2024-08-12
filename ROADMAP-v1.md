@@ -21,13 +21,15 @@
 * Give deserialization a better API:
   * Pair up languages and their factories
   * Make deserialization more configurable:
-    * How to deal with unknown classifiers: dynamic instantiation (i.e.: a fall-back factory for the `DynamicNode` type), or ignore
-    * Provide a channel to report back (and possibly even “converse”) about unknown classifiers, in such a way that we can distinguish between annotations and concepts
+      * How to deal with unknown classifiers: dynamic instantiation (i.e.: a fall-back factory for the `DynamicNode` type), or ignore
+      * Provide a channel to report back (and possibly even “converse”) about unknown classifiers, in such a way that we can distinguish between annotations and concepts
+      * Provide a default configuration that is verbose on the console about things missing (like it is now)
   * This is based on the following principles:
     * We can deal with broken models, so a “small” problem in the serialization should not prevent the deserialization as a whole.
       (The GPL types that the model is deserialized into might have a different opinion about it, but that's its problem.)
     * We should uncover _all_ problems during deserialization, not just the first one and then quit.
-    * (“Things should be as FP-style as possible, so effectively a `flatMap` of-sorts.)
+    * I (=MB) find it useful to do things in an FP-style, so effectively everything should be a `flatMap` of-sorts.
+    	In the end, it should be understandable and usable — that's the final criterion.
 
 * Issues:
   * [Implement reference utils](https://github.com/LionWeb-io/lionweb-typescript/issues/165)
