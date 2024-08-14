@@ -1,6 +1,6 @@
 {
-    "core"      : "0.6.9-beta.0",
-    "utilities" : "0.6.9-beta.0",
+    "core"      : "0.6.9-beta.1",
+    "utilities" : "0.6.9-beta.1",
     "validation": "0.6.4-beta.0",
     "cli"       : "0.6.10-beta.0",
     "test"      : "0.7.0-dev.0",
