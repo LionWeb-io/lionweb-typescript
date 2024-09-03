@@ -1,5 +1,6 @@
 import {Id, Node} from "./types.js"
 import {InstantiationFacade} from "./facade.js"
+import {defaultSimplisticHandler, SimplisticHandler} from "./handler.js"
 import {unresolved} from "./references.js"
 import {currentSerializationFormatVersion, SerializationChunk, SerializedNode} from "./serialization.js"
 import {MemoisingSymbolTable} from "./symbol-table.js"
@@ -11,24 +12,6 @@ import {byIdMap, groupBy} from "./utils/map-helpers.js"
 
 export interface PrimitiveTypeDeserializer {
     deserializeValue(value: string | undefined, property: Property): unknown | undefined
-}
-
-
-/**
- * A simplistic handler to which problems that arise during deserialization,
- * are reported as plain text by calling the `reportProblem` function.
- */
-export interface SimplisticHandler {
-    reportProblem: (message: string) => void
-}
-
-/**
- * A default simplistic handler that just outputs everything of the console.
- */
-export const defaultSimplisticHandler: SimplisticHandler = {
-    reportProblem: (message) => {
-        console.log(message)
-    }
 }
 
 
@@ -54,7 +37,7 @@ export const deserializeSerializationChunk = <NT extends Node>(
 ): NT[] => {
 
     if (serializationChunk.serializationFormatVersion !== currentSerializationFormatVersion) {
-        throw new Error(`can't deserialize from serialization format other than version "${currentSerializationFormatVersion}"`)
+        handler.reportProblem(`can't deserialize from serialization format other than version "${currentSerializationFormatVersion}" - assuming that version`)
     }
 
     const symbolTable = new MemoisingSymbolTable(languages)

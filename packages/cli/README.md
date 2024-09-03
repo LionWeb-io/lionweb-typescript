@@ -46,6 +46,15 @@ That means that key-value pairs appear in precisely the same order as they do in
 
 ## Changelog
 
+### 0.6.10
+
+* (Depend on `@lionweb/core` and `@lionweb/utilities` version 0.6.9.)
+* Use the `AggregatingSimplisticHandler` to report on language deserialization problems.
+
+### 0.6.9
+
+* (Depend on `@lionweb/core` and `@lionweb/utilities` version 0.6.8.)
+
 ### 0.6.8
 
 * (Depend on `@lionweb/core` and `@lionweb/utilities` version 0.6.7.)

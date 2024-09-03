@@ -24,7 +24,7 @@ It contains utilities on top of the `core` package, such as:
 
 ## Changelog
 
-### 0.6.9 - unreleased
+### 0.6.9 - not yet officially released
 
 * Made `withoutAnnotations` _not_ modify the original serialization chunk.
 

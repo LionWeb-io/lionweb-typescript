@@ -1,7 +1,7 @@
 import {extname, join} from "path"
 import {existsSync, mkdirSync, statSync, writeFileSync} from "fs"
 
-import {deserializeLanguages} from "@lionweb/core"
+import {AggregatingSimplisticHandler, deserializeLanguagesWithHandler} from "@lionweb/core"
 import {GenerationOptions, readSerializationChunk, tsTypesForLanguage} from "@lionweb/utilities"
 
 
@@ -11,9 +11,12 @@ const generateTsTypesFromSerialization = async (path: string, generationOptions:
         if (!(existsSync(genPath) && statSync(genPath).isDirectory())) {
             mkdirSync(genPath)
         }
-        deserializeLanguages(await readSerializationChunk(path)).forEach((language) => {
-            writeFileSync(join(genPath, `${language.name}.ts`), tsTypesForLanguage(language, ...generationOptions))
-        })
+        const handler = new AggregatingSimplisticHandler()
+        deserializeLanguagesWithHandler(await readSerializationChunk(path), handler)
+            .forEach((language) => {
+                writeFileSync(join(genPath, `${language.name}.ts`), tsTypesForLanguage(language, ...generationOptions))
+            })
+        handler.reportAllProblemsOnConsole()
         console.log(`generated TS types: "${path}" -> "${genPath}"`)
     } catch (e) {
         console.error(`"${path}" does not point to a valid JSON serialization of a language`)

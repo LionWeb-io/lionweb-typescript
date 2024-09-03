@@ -1,10 +1,12 @@
-import {Language} from "./types.js"
-import {SerializationChunk} from "../serialization.js"
-import {lioncoreExtractionFacade, lioncoreInstantiationFacade} from "./facade.js"
+import {deserializeSerializationChunk} from "../deserializer.js"
 import {nodesExtractorUsing} from "../facade.js"
-import {defaultSimplisticHandler, deserializeSerializationChunk, SimplisticHandler} from "../deserializer.js"
-import {lioncore} from "./lioncore.js"
+import {defaultSimplisticHandler, SimplisticHandler} from "../handler.js"
+import {SerializationChunk} from "../serialization.js"
 import {DefaultPrimitiveTypeDeserializer, lioncoreBuiltins} from "./builtins.js"
+import {lioncoreExtractionFacade, lioncoreInstantiationFacade} from "./facade.js"
+import {lioncore} from "./lioncore.js"
+import {Language} from "./types.js"
+
 
 /**
  * Deserializes languages that have been serialized into the LionWeb serialization JSON format

@@ -7,7 +7,7 @@ import {
     readSerializationChunk,
     tryReadAllAsLanguages
 } from "@lionweb/utilities"
-import {deserializeLanguages, Language} from "@lionweb/core"
+import {AggregatingSimplisticHandler, deserializeLanguagesWithHandler, Language} from "@lionweb/core"
 import {separate} from "../language-aware-args.js"
 
 
@@ -27,12 +27,14 @@ export const executeTextualizeCommand = async (args: string[]) => {
 const textualizeSerializationChunk = async (path: string, languagesAsRegular: boolean, languages: Language[] = []) => {
     const chunk = await readSerializationChunk(path)
     const extLessPath = path.substring(0, path.length - extname(path).length)
+    const handler = new AggregatingSimplisticHandler()
     await writeFile(
         extLessPath + ".txt",
         looksLikeSerializedLanguages(chunk) && !languagesAsRegular
-            ? languagesAsText(deserializeLanguages(chunk))
+            ? languagesAsText(deserializeLanguagesWithHandler(chunk, handler))
             : genericAsTreeText(chunk, languages)
     )
+    handler.reportAllProblemsOnConsole()
     console.log(`textualized: ${path}`)
 }
 

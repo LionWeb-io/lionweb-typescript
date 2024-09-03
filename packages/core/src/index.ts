@@ -1,6 +1,7 @@
 export * from "./deserializer.js"
 export * from "./dynamic-facade.js"
 export * from "./facade.js"
+export * from "./handler.js"
 export * from "./functions.js"
 export * from "./references.js"
 export * from "./serializer.js"
