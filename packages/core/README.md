@@ -32,13 +32,16 @@ The following is a list of links to potential starting points:
 
 ## Changelog
 
-### 0.6.9 - not yet released
+### 0.6.9 - not yet officially released
 
 * Improve deserialization:
   * Produce more meaningful messages for problems
   * Configure how problems are reported through an instance of a `SimplisticHandler`, calling a new function `deserializeLanguagesWithHandler`.
     The default value for the handler is `defaultSimplisticHandler` which just reports the problem to the JavaScript console (using `console.log`).
+    The `AccumulatingSimplisticHandler` class accumulates the problems reported, which can be accessed through its `allProblems` method.
+    The `AggregatingSimplisticHandler` class aggregates the problems reported (with count), which can be output using its `reportAllProblemsOnConsole` method, and accessed through its `allProblems` method.
   * Pass dependent languages also _as languages_ from languages deserializer to regular deserializer, not just as referable data (which is only useful for the built-ins)
+
 
 ### 0.6.8
 

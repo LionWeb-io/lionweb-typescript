@@ -35,6 +35,6 @@
   "dependencies": {
     "@lionweb/core": "0.6.9-beta.1",
     "@lionweb/utilities": "0.6.9-beta.1",
-    "@lionweb/validation": "0.6.4-beta.0"
+    "@lionweb/validation": "0.6.3"
   }
 }

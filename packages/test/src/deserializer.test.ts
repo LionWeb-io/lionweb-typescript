@@ -2,9 +2,11 @@ import {assert, expect} from "chai"
 const {deepEqual, equal} = assert
 
 import {
+    AggregatingSimplisticHandler,
     Concept,
     currentSerializationFormatVersion,
     DefaultPrimitiveTypeDeserializer,
+    deserializeChunk,
     deserializeSerializationChunk,
     dynamicInstantiationFacade,
     Feature,
@@ -239,6 +241,22 @@ describe("deserialization", () => {
         const model = deserializeSerializationChunk(serializationChunk, dynamicInstantiationFacade, [someLanguage], [])
         equal(model.length, 1)
         deepEqual(model[0].settings, { [someConcept_aReference.key]: unresolved })
+    })
+
+    it("aggregates problems", () => {
+        const aggregator = new AggregatingSimplisticHandler()
+        deserializeChunk({
+            // misses "serializationFormatVersion"
+            languages: [],
+            nodes: []
+        } as unknown as SerializationChunk, dynamicInstantiationFacade, [], [], undefined, aggregator)
+        aggregator.reportAllProblemsOnConsole(true)
+        deepEqual(
+            Object.entries(aggregator.allProblems()),
+            [
+                [`can't deserialize from serialization format other than version "${currentSerializationFormatVersion}" - assuming that version`, 1]
+            ]
+        )
     })
 
 })

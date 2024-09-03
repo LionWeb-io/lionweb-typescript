@@ -2,11 +2,11 @@ import {assert} from "chai"
 const {deepEqual, equal} = assert
 
 import {
+    AccumulatingSimplisticHandler,
     currentSerializationFormatVersion,
     deserializeLanguagesWithHandler,
     lioncore,
-    SerializationChunk,
-    SimplisticHandler
+    SerializationChunk
 } from "@lionweb/core"
 import {genericAsTreeText, readFileAsJson, withoutAnnotations} from "@lionweb/utilities"
 import {readFileSync} from "fs"
@@ -139,16 +139,6 @@ describe("annotation remover", () => {
 
 describe("deserializing a meta-circular language", () => {
 
-    class ProblemsGatheringHandler implements SimplisticHandler {
-        private _problems: string[] = []
-        reportProblem(message: string) {
-            this._problems.push(message)
-        }
-        get problems() {
-            return this._problems
-        }
-    }
-
     it("works but reports problems", () => {
         const serializationChunk = readFileAsJson("src/languages/io.lionweb.mps.specific.json") as SerializationChunk
         equal(
@@ -156,10 +146,10 @@ describe("deserializing a meta-circular language", () => {
             readFileSync("src/languages/io.lionweb.mps.specific.txt", { encoding: "utf8" })
         )
 
-        const gatherer = new ProblemsGatheringHandler()
+        const gatherer = new AccumulatingSimplisticHandler()
         const languages = deserializeLanguagesWithHandler(serializationChunk, gatherer, lioncore)
         deepEqual(
-            gatherer.problems,
+            gatherer.allProblems,
             [
                 "can't deserialize node with id=ShortDescription-ConceptDescription: can't find the classifier with key ConceptDescription in language (io-lionweb-mps-specific, 0)",
                 "can't deserialize node with id=VirtualPackage-ConceptDescription: can't find the classifier with key ConceptDescription in language (io-lionweb-mps-specific, 0)"
@@ -171,15 +161,15 @@ describe("deserializing a meta-circular language", () => {
 
     it("works without reporting problems after removing annotations", () => {
         const serializationChunk = readFileAsJson("src/languages/io.lionweb.mps.specific.json") as SerializationChunk
-        const preGatherer = new ProblemsGatheringHandler()
+        const preGatherer = new AccumulatingSimplisticHandler()
         const preAnnotationLanguage = deserializeLanguagesWithHandler(withoutAnnotations(serializationChunk), preGatherer, lioncore)[0]
-        deepEqual(preGatherer.problems, [])
+        deepEqual(preGatherer.allProblems, [])
 
-        const postGatherer = new ProblemsGatheringHandler()
+        const postGatherer = new AccumulatingSimplisticHandler()
         // (just run, don't check what comes out:)
         deserializeLanguagesWithHandler(serializationChunk, postGatherer, lioncore, preAnnotationLanguage)
         deepEqual(
-            postGatherer.problems,
+            postGatherer.allProblems,
             [
                 "error occurred during instantiation of a node for classifier ConceptDescription with meta-pointer (io-lionweb-mps-specific, 0, ConceptDescription); reason:",
                 "Error: don't know a node of concept io.lionweb.mps.specific.ConceptDescription with key ConceptDescription that's not in LionCore M3",
