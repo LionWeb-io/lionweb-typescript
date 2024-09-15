@@ -8,6 +8,7 @@ import {
     DefaultPrimitiveTypeSerializer,
     Language,
     SerializationChunk,
+    serializeLanguages,
     serializeNodes
 } from "@lionweb/core"
 import {dateDatatype, libraryWithDatesLanguage} from "./languages/libraryWithDates.js"
@@ -39,10 +40,10 @@ describe("serialization", () => {
 
         const expectedSerializationChunk: SerializationChunk = {
             serializationFormatVersion: currentSerializationFormatVersion,
-            "languages": [
+            languages: [
                 {
-                    "key": "libraryWithDates",
-                    "version": "1"
+                    key: "libraryWithDates",
+                    version: "1"
                 }
             ],
             nodes: [
@@ -73,11 +74,11 @@ describe("serialization", () => {
                     ],
                     containments: [
                         {
-                            "children": [],
-                            "containment": {
-                                "key": "books",
-                                "language": "libraryWithDates",
-                                "version": "1"
+                            children: [],
+                            containment: {
+                                key: "books",
+                                language: "libraryWithDates",
+                                version: "1"
                             }
                         }
                     ],
@@ -105,67 +106,81 @@ describe("serialization", () => {
         annotatedNode.annotations.push(annotation)
 
         const expectedSerializationChunk = {
-            "serializationFormatVersion": "2023.1",
-            "languages": [
+            serializationFormatVersion: "2023.1",
+            languages: [
                 {
-                    "key": "test-language",
-                    "version": "0"
+                    key: "test-language",
+                    version: "0"
                 },
                 {
-                    "key": "LionCore-builtins",
-                    "version": "2023.1"
+                    key: "LionCore-builtins",
+                    version: "2023.1"
                 }
             ],
-            "nodes": [
+            nodes: [
                 {
-                    "id": "1",
-                    "classifier": {
-                        "language": "test-language",
-                        "version": "0",
-                        "key": "Annotated"
+                    id: "1",
+                    classifier: {
+                        language: "test-language",
+                        version: "0",
+                        key: "Annotated"
                     },
-                    "properties": [
+                    properties: [
                         {
-                            "property": {
-                                "language": "LionCore-builtins",
-                                "version": "2023.1",
-                                "key": "LionCore-builtins-INamed-name"
+                            property: {
+                                language: "LionCore-builtins",
+                                version: "2023.1",
+                                key: "LionCore-builtins-INamed-name"
                             },
-                            "value": "my annotated node"
+                            value: "my annotated node"
                         }
                     ],
-                    "containments": [],
-                    "references": [],
-                    "annotations": [
+                    containments: [],
+                    references: [],
+                    annotations: [
                         "0"
                     ],
-                    "parent": null
+                    parent: null
                 },
                 {
-                    "id": "0",
-                    "classifier": {
-                        "language": "test-language",
-                        "version": "0",
-                        "key": "Annotation"
+                    id: "0",
+                    classifier: {
+                        language: "test-language",
+                        version: "0",
+                        key: "Annotation"
                     },
-                    "properties": [
+                    properties: [
                         {
-                            "property": {
-                                "language": "LionCore-builtins",
-                                "version": "2023.1",
-                                "key": "LionCore-builtins-INamed-name"
+                            property: {
+                                language: "LionCore-builtins",
+                                version: "2023.1",
+                                key: "LionCore-builtins-INamed-name"
                             },
-                            "value": "my annotation node"
+                            value: "my annotation node"
                         }
                     ],
-                    "containments": [],
-                    "references": [],
-                    "annotations": [],
-                    "parent": "1"
+                    containments: [],
+                    references: [],
+                    annotations: [],
+                    parent: "1"
                 }
             ]
         }
         expect(serializeNodes([annotatedNode], new SimpleNodeReader([language]))).to.eql(expectedSerializationChunk)
+    })
+
+    it(`doesn't fail on "unconnected" (i.e., unset or previously unresolved) null reference target values`, () => {
+        const language = new Language("test language", "0", "test-language", "test-language")
+        const annotation = new Annotation(language, "Annotation", "Annotation", "Annotation")
+            // don't set annotation.annotates!
+        language.havingEntities(annotation)
+
+        const serializationChunk = serializeLanguages(language) // should not fail
+        const annotationSerNode = serializationChunk.nodes.find((node) => node.id === "Annotation")
+        expect(annotationSerNode).to.not.be.null
+        const referenceSer = annotationSerNode?.references.find((serRef) => serRef.reference.key === "Annotation-annotates")
+        expect(referenceSer).to.not.be.undefined
+        expect(referenceSer!.targets).to.eql([])
     })
 
 })

@@ -2,6 +2,7 @@ import {ExtractionFacade} from "./facade.js"
 import {currentSerializationFormatVersion, MetaPointer, SerializationChunk, SerializedNode} from "./serialization.js"
 import {asIds} from "./functions.js"
 import {Node} from "./types.js"
+import {unresolved} from "./references.js"
 import {DefaultPrimitiveTypeSerializer} from "./m3/builtins.js"
 import {allFeaturesOf} from "./m3/functions.js"
 import {
@@ -14,6 +15,7 @@ import {
     simpleNameDeducer
 } from "./m3/types.js"
 import {asArray} from "./utils/array-helpers.js"
+
 
 export interface PrimitiveTypeSerializer {
     serializeValue(value: unknown, property: Property): string | undefined
@@ -94,15 +96,20 @@ export const serializeNodes = <NT extends Node>(
                 return
             }
             if (feature instanceof Reference) {
-                const targets = asArray(value)
+                // Note: value can be null === typeof unresolved, e.g. on an unset (or previously unresolved) single-valued reference
+                const targets = asArray(value) as (NT | typeof unresolved)[]
                 serializedNode.references.push({
                     reference: featureMetaPointer,
-                    targets: (targets as NT[]).map((t) => ({
-                        resolveInfo: extractionFacade.resolveInfoFor
-                            ? extractionFacade.resolveInfoFor(t)
-                            : simpleNameDeducer(t),
-                        reference: t.id
-                    }))
+                    targets: targets
+                        .filter((tOrNull) => tOrNull !== null)  // (skip "non-connected" targets)
+                        .map((t) => t!)
+                        .map((t) => ({
+                            resolveInfo: extractionFacade.resolveInfoFor
+                                ? extractionFacade.resolveInfoFor(t)
+                                : simpleNameDeducer(t),
+                            reference: t.id
+                        })
+                    )
                 })
                 return
             }
