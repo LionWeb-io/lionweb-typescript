@@ -1,5 +1,6 @@
 import {
     Annotation,
+    Classifier,
     Concept,
     Containment,
     Enumeration,
@@ -16,38 +17,46 @@ import {
     SingleRef,
     unresolved
 } from "@lionweb/core"
+import {asString, indentWith, NestedString} from "littoral-templates"
 
 
-// TODO  use littoral-templates?
-const indent = (str: string) =>
-    str.split("\n").map((line) => `    ${line}`).join("\n")
-
-
-const descent = <T extends M3Node>(ts: T[], separator: string): string =>
-    nameSorted(ts).map((t) => indent(indent(asText(t)))).join(separator)
+const indented = indentWith("    ")(1)
 
 const refAsText = <T extends INamed>(ref: SingleRef<T>): string =>
     ref === unresolved ? `???` : ref.name
 
+const recurse = <T extends M3Node>(ts: T[], header: string, func: (t: T) => NestedString = asText): NestedString =>
+    ts.length === 0
+        ? []
+        : indented([
+            header,
+            indented(ts.map(func))
+        ])
 
-const asText = (node: M3Node): string => {
+const featuresOf = (classifier: Classifier): NestedString =>
+    recurse(nameSorted(classifier.features), `features (↓name):`)
+
+const asText = (node: M3Node): NestedString => {
 
     if (node instanceof Annotation) {
-        return `annotation ${node.name}${node.extends === undefined ? `` : ` extends ${refAsText(node.extends)}`}${node.implements.length === 0 ? `` : ` implements ${nameSorted(node.implements).map(nameOf).join(", ")}`}${node.features.length === 0 ? `` : `
-    features (↓name):
-${descent(node.features, "\n")}`}`
+        return [
+            `annotation ${node.name}${node.extends === undefined ? `` : ` extends ${refAsText(node.extends)}`}${node.implements.length === 0 ? `` : ` implements ${nameSorted(node.implements).map(nameOf).join(", ")}`}`,
+            featuresOf(node)
+        ]
     }
 
     if (node instanceof Concept) {
-        return `${node.partition ? `<<partition>> ` : ``}${node.abstract ? `abstract ` : ``}concept ${node.name}${node.extends === undefined ? `` : ` extends ${refAsText(node.extends)}`}${node.implements.length === 0 ? `` : ` implements ${nameSorted(node.implements).map(nameOf).join(", ")}`}${node.features.length === 0 ? `` : `
-    features (↓name):
-${descent(node.features, "\n")}`}`
+        return [
+            `${node.partition ? `<<partition>> ` : ``}${node.abstract ? `abstract ` : ``}concept ${node.name}${node.extends === undefined ? `` : ` extends ${refAsText(node.extends)}`}${node.implements.length === 0 ? `` : ` implements ${nameSorted(node.implements).map(nameOf).join(", ")}`}`,
+            featuresOf(node)
+        ]
     }
 
     if (node instanceof Interface) {
-        return `interface ${node.name}${node.extends.length === 0 ? `` : ` extends ${nameSorted(node.extends).map(nameOf).join(", ")}`}${node.features.length === 0 ? `` : `
-    features (↓name):
-${descent(node.features, "\n")}`}`
+        return [
+            `interface ${node.name}${node.extends.length === 0 ? `` : ` extends ${nameSorted(node.extends).map(nameOf).join(", ")}`}`,
+            featuresOf(node)
+        ]
     }
 
     if (node instanceof Link) {
@@ -55,9 +64,10 @@ ${descent(node.features, "\n")}`}`
     }
 
     if (node instanceof Enumeration) {
-        return `enumeration ${node.name}${node.literals.length === 0 ? `` : `
-    literals:
-${descent(node.literals, "\n")}`}`
+        return [
+            `enumeration ${node.name}`,
+            recurse(node.literals, `literals:`)
+        ]
     }
 
     if (node instanceof EnumerationLiteral) {
@@ -65,17 +75,17 @@ ${descent(node.literals, "\n")}`}`
     }
 
     if (node instanceof Language) {
-        return `language ${node.name}
-    version: ${node.version}${node.dependsOn.length > 0
-        ? `\n    dependsOn:
-${node.dependsOn.map((language) => `        ${language.name} (${language.version})`).join("\n")}
-`
-        : ``}
-    entities (↓name):
-
-${descent(node.entities, "\n\n")}
-
-`
+        return [
+            `language ${node.name}`,
+            indented([
+                `version: ${node.version}`,
+                recurse(node.dependsOn, `dependsOn`, (language) => `${language.name} (${language.version}`),
+                `entities (↓name):`,
+                ``,
+                indented(nameSorted(node.entities).map((entity) => [asText(entity), ``]))
+            ]),
+            ``
+        ]
     }
 
     if (node instanceof PrimitiveType) {
@@ -91,8 +101,11 @@ ${descent(node.entities, "\n\n")}
 }
 
 
-export const languageAsText = asText
+export const languageAsText = (language: Language) =>
+    asString(asText(language))
 
 export const languagesAsText = (languages: Language[]): string =>
-    nameSorted(languages).map(asText).join("\n\n")
+    asString(
+        nameSorted(languages).map((language) => [asText(language), ``])
+    )
 

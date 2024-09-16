@@ -26,7 +26,8 @@ It contains utilities on top of the `core` package, such as:
 
 ### 0.6.9 - not yet officially released
 
-* Made `withoutAnnotations` _not_ modify the original serialization chunk.
+* Make `withoutAnnotations` _not_ modify the original serialization chunk.
+* (Use the `littoral-templates` package for textualization — of M2s, so far. This is a technical change, not a functional one, except for maybe some extra whitespace.)
 
 ### 0.6.8
 

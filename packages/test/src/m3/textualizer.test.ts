@@ -3,31 +3,21 @@ const {equal} = assert
 
 import {serializeNodes} from "@lionweb/core"
 import {genericAsTreeText, languageAsText} from "@lionweb/utilities"
+import {readFileSync, writeFileSync} from "fs"
 
 import {languageWithEnum} from "../languages/with-enum.js"
 import {libraryExtractionFacade, libraryModel} from "../instances/library.js"
-import {libraryLanguage} from "../languages/library.js";
+import {libraryLanguage} from "../languages/library.js"
 
 
 describe("LionCore-specific textual syntax", () => {
 
     it("textualize language with an enum as text", () => {
+        const actual = languageAsText(languageWithEnum)
+        writeFileSync("src/m3/languageWithEnum.actual.txt", actual)
         equal(
-            languageAsText(languageWithEnum),
-`language WithEnum
-    version: 1
-    entities (↓name):
-
-        concept EnumHolder
-            features (↓name):
-                enumValue: MyEnum
-
-        enumeration MyEnum
-            literals:
-                literal1
-                literal2
-
-`
+            actual,
+            readFileSync("src/m3/languageWithEnum.expected.txt", { encoding: "utf8" })
         )
     })
 
