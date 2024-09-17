@@ -1,7 +1,7 @@
 language multi
     version: 1
-        dependsOn
-            library (1
+    dependsOn:
+        library (1)
     entities (↓name):
 
         concept Container

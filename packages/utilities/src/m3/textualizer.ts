@@ -79,7 +79,12 @@ const asText = (node: M3Node): NestedString => {
             `language ${node.name}`,
             indented([
                 `version: ${node.version}`,
-                recurse(node.dependsOn, `dependsOn`, (language) => `${language.name} (${language.version}`),
+                node.dependsOn.length === 0
+                    ? []
+                    : [
+                        `dependsOn:`,
+                        indented(node.dependsOn.map((language) => `${language.name} (${language.version})`))
+                    ],
                 `entities (↓name):`,
                 ``,
                 indented(nameSorted(node.entities).map((entity) => [asText(entity), ``]))
