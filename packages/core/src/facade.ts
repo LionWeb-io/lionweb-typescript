@@ -90,6 +90,7 @@ const childrenExtractorUsing = <NT extends Node>(extractionFacade: ExtractionFac
         ...(allFeaturesOf(extractionFacade.classifierOf(node))
             .filter(isContainment)
             .flatMap((containment) => extractionFacade.getFeatureValue(node, containment))),
+// FIXME  there's NO guarantee about the result of extractionFacade.getFeatureValue(node, containment) !!!
         ...node.annotations
     ] as NT[]
 
