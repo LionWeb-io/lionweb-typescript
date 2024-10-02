@@ -28,6 +28,10 @@ It contains utilities on top of the `core` package, such as:
 
 * Make `withoutAnnotations` _not_ modify the original serialization chunk.
 * (Use the `littoral-templates` package for textualization — of M2s, so far. This is a technical change, not a functional one, except for maybe some extra whitespace.)
+* Add reference utilities that all return `ReferenceValue` objects:
+    * `referenceValues(<source node>, <extraction facade>)`: all references within the given scope.
+    * `incomingReferences(<target node(s)>, <search scope>, <extraction facade>)`: all (unique) references coming into the given target node(s) from the search scope.
+    * `referencesToOutOfScopeNodes(<scope>, <extraction facade>)` all reference targets that are not in the given scope.
 
 ### 0.6.8
 

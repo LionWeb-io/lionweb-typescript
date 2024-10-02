@@ -1,5 +1,5 @@
 export * from "./hashing.js"
-export * from "./utils/json.js"
+export * from "./m1/reference-utils.js"
 export * from "./m3/index.js"
 export * from "./serialization/index.js"
-export * from "./m3/infer-languages.js"
+export * from "./utils/json.js"
