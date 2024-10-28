@@ -2,7 +2,6 @@ import {ExtractionFacade} from "./facade.js"
 import {currentSerializationFormatVersion, MetaPointer, SerializationChunk, SerializedNode} from "./serialization.js"
 import {asIds} from "./functions.js"
 import {Node} from "./types.js"
-import {unresolved} from "./references.js"
 import {DefaultPrimitiveTypeSerializer} from "./m3/builtins.js"
 import {allFeaturesOf} from "./m3/functions.js"
 import {
@@ -87,22 +86,28 @@ export const serializeNodes = <NT extends Node>(
                 return
             }
             if (feature instanceof Containment) {
-                const children = asArray(value) as NT[]
+                const children = asArray(value) as (NT | null)[]
                 serializedNode.containments.push({
                     containment: featureMetaPointer,
                     children: asIds(children)
+                        .filter((childId) => childId !== null)
+                        .map((childId) => childId as string)
                 })
-                children.forEach((child) => visit(child, node))
+                children.forEach((childOrNull) => {
+                    if (childOrNull !== null) {
+                        visit(childOrNull, node);
+                    }
+                })
                 return
             }
             if (feature instanceof Reference) {
                 // Note: value can be null === typeof unresolved, e.g. on an unset (or previously unresolved) single-valued reference
-                const targets = asArray(value) as (NT | typeof unresolved)[]
+                const targets = asArray(value) as (NT | null)[]
                 serializedNode.references.push({
                     reference: featureMetaPointer,
                     targets: targets
                         .filter((tOrNull) => tOrNull !== null)  // (skip "non-connected" targets)
-                        .map((t) => t!)
+                        .map((t) => t as NT)
                         .map((t) => ({
                             resolveInfo: extractionFacade.resolveInfoFor
                                 ? extractionFacade.resolveInfoFor(t)
