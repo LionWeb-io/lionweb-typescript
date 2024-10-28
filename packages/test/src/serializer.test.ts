@@ -6,6 +6,8 @@ import {
     Concept,
     currentSerializationFormatVersion,
     DefaultPrimitiveTypeSerializer,
+    Enumeration,
+    EnumerationLiteral,
     Language,
     SerializationChunk,
     serializeLanguages,
@@ -181,6 +183,22 @@ describe("serialization", () => {
         const referenceSer = annotationSerNode?.references.find((serRef) => serRef.reference.key === "Annotation-annotates")
         expect(referenceSer).to.not.be.undefined
         expect(referenceSer!.targets).to.eql([])
+    })
+
+    it(`doesn't fail on unresolved, i.e. null-valued child values`, () => {
+        const language = new Language("test language", "0", "test-language", "test-language")
+        const enumeration = new Enumeration(language, "Enumeration", "Enumeration", "Enumeration")
+        enumeration.havingLiterals(null as unknown as EnumerationLiteral)   // some type-trickery
+        language.havingEntities(enumeration)
+
+        const serializationChunk = serializeLanguages(language) // should not fail
+        const enumerationSerNode = serializationChunk.nodes.find((node) => node.id === "Enumeration")
+        expect(enumerationSerNode).to.not.be.null
+        const containmentSer = enumerationSerNode?.containments.find((serContainment) => serContainment.containment.key === "Enumeration-literals")
+        expect(containmentSer).to.not.be.undefined
+        expect(containmentSer!.children).to.eql([])
+
+        // This test should also test a single-valued containment, and should ideally also not use the M3, but a regular M2/M1, because M3's (de-)serialization might be “peculiar”.
     })
 
 })

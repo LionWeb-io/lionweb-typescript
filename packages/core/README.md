@@ -36,9 +36,10 @@ The following is a list of links to potential starting points:
 
 * Made `DefaultPrimitiveTypeDeserializer` and `DefaultPrimitiveTypeSerializer` be able to deal with duplicate definitions of datatypes.
   * Expose a function `shouldBeIdentical` that determines whether two datatypes should be structurally equal based on equality of: meta type, key, and language's key.
+* Made serializer more resilient against unresolved (i.e., `null`-valued) children.
 
 
-### 0.6.9 - not yet officially released
+### 0.6.9
 
 * Improve deserialization:
   * Produce more meaningful messages for problems
