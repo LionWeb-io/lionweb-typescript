@@ -32,6 +32,12 @@ The following is a list of links to potential starting points:
 
 ## Changelog
 
+### 0.6.10 - not officially released yet
+
+* Made `DefaultPrimitiveTypeDeserializer` and `DefaultPrimitiveTypeSerializer` be able to deal with duplicate definitions of datatypes.
+  * Expose a function `shouldBeIdentical` that determines whether two datatypes should be structurally equal based on equality of: meta type, key, and language's key.
+
+
 ### 0.6.9 - not yet officially released
 
 * Improve deserialization:

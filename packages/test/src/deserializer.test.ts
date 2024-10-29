@@ -156,7 +156,7 @@ describe("deserialization", () => {
             ]
         }
         const primitiveTypeDeserializer = new DefaultPrimitiveTypeDeserializer();
-        primitiveTypeDeserializer.registerDeserializer(dateDatatype, (value)=> {
+        primitiveTypeDeserializer.register(dateDatatype, (value) => {
             const parts = value.split("-");
             return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]))
         })
