@@ -28,7 +28,7 @@ describe("serialization", () => {
 
     it("serializes node with custom primitive type, works when registering custom deserializer", () => {
         const primitiveTypeSerializer = new DefaultPrimitiveTypeSerializer()
-        primitiveTypeSerializer.registerSerializer(dateDatatype, (value: unknown) => {
+        primitiveTypeSerializer.register(dateDatatype, (value: unknown) => {
             const d = value as Date
             return `${Number(d.getFullYear()).toString().padStart(4, "0")}-${Number(d.getMonth() + 1).toString().padStart(2, "0")}-${Number(d.getDate()).toString().padStart(2, "0")}`
         })
