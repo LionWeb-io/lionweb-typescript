@@ -9,6 +9,7 @@ import {
     Enumeration,
     EnumerationLiteral,
     Language,
+    Reference,
     SerializationChunk,
     serializeLanguages,
     serializeNodes
@@ -199,6 +200,25 @@ describe("serialization", () => {
         expect(containmentSer!.children).to.eql([])
 
         // This test should also test a single-valued containment, and should ideally also not use the M3, but a regular M2/M1, because M3's (de-)serialization might be “peculiar”.
+    })
+
+    it(`correctly serializes a reference to a target without resolveInfo (serializing that as null)`, () => {
+        const language = new Language("test language", "0", "test-language", "test-language")
+        const concept = new Concept(language, "Concept", "Concept", "Concept", false)
+        const selfRef = new Reference(concept, "selfRef", "Concept-selfRef", "Concept-selfRef").ofType(concept)
+        concept.havingFeatures(selfRef)
+        language.havingEntities(concept)
+
+        const instance = new TestNode("instance", "Concept")
+        instance.references["selfRef"] = [instance]
+        const reader = new TestNodeReader([language])
+        const serializationChunk = serializeNodes([instance], reader)
+
+        const serNode = serializationChunk.nodes[0]
+        expect(serNode).to.not.be.undefined
+        const serSelfRef = serNode.references.find((serRef) => serRef.reference.key === "Concept-selfRef")
+        expect(serSelfRef).to.not.be.undefined
+        expect(serSelfRef!.targets).to.deep.eq([{ reference: "instance", resolveInfo: null }])
     })
 
 })

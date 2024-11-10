@@ -19,7 +19,7 @@ export type SerializedContainment = {
 
 export type SerializedReferenceTarget = {
     reference: Id
-    resolveInfo?: string
+    resolveInfo: string | null
 }
 
 export type SerializedReference = {
