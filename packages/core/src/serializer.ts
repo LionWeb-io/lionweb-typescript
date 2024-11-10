@@ -109,9 +109,9 @@ export const serializeNodes = <NT extends Node>(
                         .filter((tOrNull) => tOrNull !== null)  // (skip "non-connected" targets)
                         .map((t) => t as NT)
                         .map((t) => ({
-                            resolveInfo: extractionFacade.resolveInfoFor
+                            resolveInfo: (extractionFacade.resolveInfoFor
                                 ? extractionFacade.resolveInfoFor(t)
-                                : simpleNameDeducer(t),
+                                : simpleNameDeducer(t)) ?? null,
                             reference: t.id
                         })
                     )

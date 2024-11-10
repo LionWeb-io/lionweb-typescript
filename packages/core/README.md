@@ -34,9 +34,10 @@ The following is a list of links to potential starting points:
 
 ### 0.6.10 - not officially released yet
 
-* Made `DefaultPrimitiveTypeDeserializer` and `DefaultPrimitiveTypeSerializer` be able to deal with duplicate definitions of datatypes.
+* Make `DefaultPrimitiveTypeDeserializer` and `DefaultPrimitiveTypeSerializer` be able to deal with duplicate definitions of datatypes.
   * Expose a function `shouldBeIdentical` that determines whether two datatypes should be structurally equal based on equality of: meta type, key, and language's key.
-* Made serializer more resilient against unresolved (i.e., `null`-valued) children.
+* Make serializer more resilient against unresolved (i.e., `null`-valued) children.
+* Fix that `resolveInfo` of a serialized reference must be `null`, not `undefined`.
 
 
 ### 0.6.9
@@ -59,7 +60,7 @@ The following is a list of links to potential starting points:
   * Fix a bug w.r.t. enumeration literals — deserializing changed the keys of enumeration literals in the language's definition.
   * Deserialization doesn't throw on unresolvable references, but warns on the console and returns `null` (which means “unresolved”).
 * Export `byIdMap` function, which computes a map id &rarr; thing from an array of things with an `id`, from the package.
-* Made `SerializedProperty.value` `null`-able, to align with the specification.
+* Make `SerializedProperty.value` `null`-able, to align with the specification.
 
 
 ### 0.6.7

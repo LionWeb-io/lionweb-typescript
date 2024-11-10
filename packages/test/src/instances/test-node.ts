@@ -8,7 +8,10 @@ import {
     Feature,
     Id,
     Language,
-    Property
+    Link,
+    Property,
+    Reference,
+    unresolved
 } from "@lionweb/core"
 
 
@@ -17,7 +20,8 @@ import {
  */
 export class TestNode implements BaseNode {
     public readonly properties: Record<string, unknown> = {}
-    public readonly containments: Record<string, TestNode[]> = {}
+    public readonly containments: Record<string, (BaseNode | typeof unresolved)[]> = {}
+    public readonly references: Record<string, (BaseNode | typeof unresolved)[]> = {}
     public readonly annotations: BaseNode[] = []
 
     constructor(public readonly id: Id, public readonly classifier: string) {
@@ -48,16 +52,23 @@ export class TestNodeReader implements ExtractionFacade<TestNode> {
 
     getFeatureValue(node: TestNode, feature: Feature): unknown {
         if (feature instanceof Property) {
-            const value = node.properties[feature.name]
-            return value
+            return node.properties[feature.name]
         }
-        if (feature instanceof Containment) {
-            const value = node.containments[feature.name]
+        if (feature instanceof Link) {
+            const value = (() => {
+                if (feature instanceof Containment) {
+                    return node.containments
+                }
+                if (feature instanceof Reference) {
+                    return node.references
+                }
+                throw new Error(`Not supported: feature ${feature.name}`)
+            })()[feature.name];
             return feature.multiple
                 ? (
                     value === undefined
                         ? []
-                        : value as TestNode[]
+                        : value
                 )
                 : (
                     (value === undefined || value.length == 0)
