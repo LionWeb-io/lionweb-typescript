@@ -12,18 +12,18 @@ import {
     serializeNodes
 } from "@lionweb/core"
 import {dateDatatype, libraryWithDatesLanguage} from "./languages/libraryWithDates.js"
-import {SimpleNodeReader, SimpleNode} from "./instances/simple-node.js"
+import {TestNode, TestNodeReader} from "./instances/test-node.js"
 
 
 describe("serialization", () => {
 
     it("serializes node with custom primitive type, without registering custom deserializer", () => {
-        const myNode = new SimpleNode("1", "LibraryWithDates")
+        const myNode = new TestNode("1", "LibraryWithDates")
         myNode.properties["name"] = "myLibrary"
         myNode.properties["creationDate"] = new Date(30, 4, 2024)
         myNode.containments["books"] = []
 
-        expect(() => serializeNodes([myNode], new SimpleNodeReader([libraryWithDatesLanguage]))).to.throw()
+        expect(() => serializeNodes([myNode], new TestNodeReader([libraryWithDatesLanguage]))).to.throw()
     })
 
     it("serializes node with custom primitive type, works when registering custom deserializer", () => {
@@ -33,7 +33,7 @@ describe("serialization", () => {
             return `${Number(d.getFullYear()).toString().padStart(4, "0")}-${Number(d.getMonth() + 1).toString().padStart(2, "0")}-${Number(d.getDate()).toString().padStart(2, "0")}`
         })
 
-        const myNode = new SimpleNode("1", "LibraryWithDates")
+        const myNode = new TestNode("1", "LibraryWithDates")
         myNode.properties["name"] = "myLibrary"
         myNode.properties["creationDate"] = new Date(2024, 4, 28)
         myNode.containments["books"] = []
@@ -88,7 +88,7 @@ describe("serialization", () => {
                 }
             ]
         }
-        expect(serializeNodes([myNode], new SimpleNodeReader([libraryWithDatesLanguage]), primitiveTypeSerializer)).to.eql(expectedSerializationChunk)
+        expect(serializeNodes([myNode], new TestNodeReader([libraryWithDatesLanguage]), primitiveTypeSerializer)).to.eql(expectedSerializationChunk)
     })
 
     it("serializes annotations", () => {
@@ -99,9 +99,9 @@ describe("serialization", () => {
         testAnnotation.implementing(builtinClassifiers.inamed)
         language.havingEntities(annotatedConcept, testAnnotation)
 
-        const annotation = new SimpleNode("0", "Annotation")
+        const annotation = new TestNode("0", "Annotation")
         annotation.properties["name"] = "my annotation node"
-        const annotatedNode = new SimpleNode("1", "Annotated")
+        const annotatedNode = new TestNode("1", "Annotated")
         annotatedNode.properties["name"] = "my annotated node"
         annotatedNode.annotations.push(annotation)
 
@@ -166,7 +166,7 @@ describe("serialization", () => {
                 }
             ]
         }
-        expect(serializeNodes([annotatedNode], new SimpleNodeReader([language]))).to.eql(expectedSerializationChunk)
+        expect(serializeNodes([annotatedNode], new TestNodeReader([language]))).to.eql(expectedSerializationChunk)
     })
 
     it(`doesn't fail on "unconnected" (i.e., unset or previously unresolved) null reference target values`, () => {

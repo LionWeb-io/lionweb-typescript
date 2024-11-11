@@ -1,6 +1,7 @@
 import {BaseNode} from "./base.js"
 import {
-    Classifier, Containment,
+    Classifier,
+    Containment,
     Enumeration,
     EnumerationLiteral,
     ExtractionFacade,
@@ -11,22 +12,25 @@ import {
 } from "@lionweb/core"
 
 
-export class SimpleNode implements BaseNode {
-    public properties: Record<string, unknown> = {}
-    public containments: Record<string, SimpleNode[]> = {}
-    public annotations: BaseNode[] = []
+/**
+ * Simplistic implementation of {@link BaseNode} that's a little bit more convenient than {@link DynamicNode}.
+ */
+export class TestNode implements BaseNode {
+    public readonly properties: Record<string, unknown> = {}
+    public readonly containments: Record<string, TestNode[]> = {}
+    public readonly annotations: BaseNode[] = []
 
     constructor(public readonly id: Id, public readonly classifier: string) {
     }
 }
 
 
-export class SimpleNodeReader implements ExtractionFacade<SimpleNode> {
+export class TestNodeReader implements ExtractionFacade<TestNode> {
 
     constructor(public readonly knownLanguages: Language[] = []) {
     }
 
-    classifierOf(node: SimpleNode): Classifier {
+    classifierOf(node: TestNode): Classifier {
         const classifier = this.knownLanguages
             .map((language) =>
                 language.entities.find(entity => entity instanceof Classifier && entity.name == node.classifier) as Classifier
@@ -42,7 +46,7 @@ export class SimpleNodeReader implements ExtractionFacade<SimpleNode> {
         throw new Error("Not supported")
     }
 
-    getFeatureValue(node: SimpleNode, feature: Feature): unknown {
+    getFeatureValue(node: TestNode, feature: Feature): unknown {
         if (feature instanceof Property) {
             const value = node.properties[feature.name]
             return value
@@ -53,7 +57,7 @@ export class SimpleNodeReader implements ExtractionFacade<SimpleNode> {
                 ? (
                     value === undefined
                         ? []
-                        : value as SimpleNode[]
+                        : value as TestNode[]
                 )
                 : (
                     (value === undefined || value.length == 0)
