@@ -33,8 +33,8 @@
     "xml2js": "0.6.2"
   },
   "dependencies": {
-    "@lionweb/core": "0.6.10-beta.3",
-    "@lionweb/utilities": "0.6.10-beta.3",
+    "@lionweb/core": "0.6.10",
+    "@lionweb/utilities": "0.6.10",
     "@lionweb/validation": "0.6.3"
   }
 }
