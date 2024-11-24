@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@lionweb/core": "0.6.11-beta.0",
-    "littoral-templates": "0.2.2",
+    "littoral-templates": "0.3.0",
     "nanoid": "4.0.2"
   },
   "scripts": {

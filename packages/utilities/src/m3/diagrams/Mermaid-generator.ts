@@ -1,4 +1,4 @@
-import {asString, indentWith, NestedString} from "littoral-templates"
+import {asString, indentWith, Template} from "littoral-templates"
 import {
     Annotation,
     Concept,
@@ -25,7 +25,7 @@ import {picker} from "../../utils/object.js"
 
 const indented = indentWith(`  `)(1)
 
-const block = (header: NestedString, elements: NestedString): NestedString =>
+const block = (header: Template, elements: Template): Template =>
     elements.length === 0
         ? header
         : [
@@ -34,7 +34,7 @@ const block = (header: NestedString, elements: NestedString): NestedString =>
             `}`
         ]
 
-const withNewLine = (content: NestedString): NestedString =>
+const withNewLine = (content: Template): Template =>
     [
         content,
         ``
