@@ -17,8 +17,8 @@ import {
     isConcrete,
     Language,
     LanguageEntity,
-    lioncoreBuiltins,
     Link,
+    lioncoreBuiltins,
     mapValues,
     nameOf,
     nameSorted,
@@ -27,8 +27,8 @@ import {
     SingleRef,
     unresolved
 } from "@lionweb/core"
-import {asString, NestedString} from "littoral-templates"
-import {cond, indent} from "./text-generation-utils.js"
+import {asString, Template, when} from "littoral-templates"
+import {indent} from "./textgen.js"
 import {Field, tsFromTypeDef, TypeDefModifier} from "./type-def.js"
 import {uniquesAmong} from "../../utils/array.js"
 import {picker} from "../../utils/object.js"
@@ -101,7 +101,7 @@ const usesINamedDirectly = (entity: LanguageEntity): boolean => {
 }
 
 
-const typeForEnumeration = (enumeration: Enumeration): NestedString =>
+const typeForEnumeration = (enumeration: Enumeration): Template =>
     [
         `enum ${enumeration.name} {`,
         indent(enumeration.literals.map(nameOf).join(`, `)),
@@ -110,7 +110,7 @@ const typeForEnumeration = (enumeration: Enumeration): NestedString =>
     ]
 
 
-const typeForPrimitiveType = (datatype: PrimitiveType): NestedString =>
+const typeForPrimitiveType = (datatype: PrimitiveType): Template =>
     [
         `export type ${datatype.name} = ${tsTypeFor(datatype)};`,
         ``
@@ -219,8 +219,8 @@ export const tsTypesForLanguage = (language: Language, ...generationOptions: Gen
         ]
 
     const coreImports = [
-        ...cond(!language.entities.every(usesINamedDirectly), `DynamicNode`),
-        ...cond(language.entities.some(usesINamedDirectly), `INamed`)
+        ...when(!language.entities.every(usesINamedDirectly))(`DynamicNode`),
+        ...when(language.entities.some(usesINamedDirectly))(`INamed`)
     ]
 
     const generatedDependencies = uniquesAmong(
@@ -247,22 +247,19 @@ export const tsTypesForLanguage = (language: Language, ...generationOptions: Gen
  *     version: ${language.version}
  */`,
             ``,
-            cond(coreImports.length > 0, `import {${coreImports.join(`, `)}} from "@lionweb/core";`),
+            when(coreImports.length > 0)(`import {${coreImports.join(`, `)}} from "@lionweb/core";`),
             Object.keys(importsPerPackage)
                 .sort()
                 .map((packageName) => `import {${nameSorted(importsPerPackage[packageName]).map(nameOf).join(", ")}} from "./${packageName}.js";`),
             ``,
             ``,
             nameSorted(language.entities).map(typeForLanguageEntity),
-            cond(
-                concreteClassifiers.length > 0,
-                [
-                    ``,
-                    `/** sum type of all types for all concrete classifiers of ${language.name}: */`,
-                    `export type Nodes = ${nameSorted(concreteClassifiers).map(nameOf).join(` | `)};`,
-                    ``
-                ]
-            )
+            when(concreteClassifiers.length > 0)([
+                ``,
+                `/** sum type of all types for all concrete classifiers of ${language.name}: */`,
+                `export type Nodes = ${nameSorted(concreteClassifiers).map(nameOf).join(` | `)};`,
+                ``
+            ])
         ]
     )
 }

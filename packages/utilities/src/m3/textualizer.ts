@@ -17,7 +17,7 @@ import {
     SingleRef,
     unresolved
 } from "@lionweb/core"
-import {asString, indentWith, NestedString} from "littoral-templates"
+import {asString, indentWith, Template} from "littoral-templates"
 
 
 const indented = indentWith("    ")(1)
@@ -25,7 +25,7 @@ const indented = indentWith("    ")(1)
 const refAsText = <T extends INamed>(ref: SingleRef<T>): string =>
     ref === unresolved ? `???` : ref.name
 
-const recurse = <T extends M3Node>(ts: T[], header: string, func: (t: T) => NestedString = asText): NestedString =>
+const recurse = <T extends M3Node>(ts: T[], header: string, func: (t: T) => Template = asText): Template =>
     ts.length === 0
         ? []
         : indented([
@@ -33,10 +33,10 @@ const recurse = <T extends M3Node>(ts: T[], header: string, func: (t: T) => Nest
             indented(ts.map(func))
         ])
 
-const featuresOf = (classifier: Classifier): NestedString =>
+const featuresOf = (classifier: Classifier): Template =>
     recurse(nameSorted(classifier.features), `features (↓name):`)
 
-const asText = (node: M3Node): NestedString => {
+const asText = (node: M3Node): Template => {
 
     if (node instanceof Annotation) {
         return [

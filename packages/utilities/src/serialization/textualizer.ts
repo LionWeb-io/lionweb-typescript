@@ -13,13 +13,13 @@ import {
     SerializedReference,
     SerializedReferenceTarget
 } from "@lionweb/core"
-import {asString, indentWith, NestedString} from "littoral-templates"
+import {asString, indentWith, Template} from "littoral-templates"
 
 
 const indent = indentWith("    ")(1)
 
-const prependWith = (nestedString: NestedString, prefix: string): NestedString =>
-    prefix + asString(nestedString)
+const prependWith = (template: Template, prefix: string): Template =>
+    prefix + asString(template)
 
 export const genericAsTreeText = ({nodes}: SerializationChunk, languages: Language[] = []) => {
 
@@ -72,7 +72,7 @@ export const genericAsTreeText = ({nodes}: SerializationChunk, languages: Langua
     const curry1 = <T1, T2, R>(func: (t1: T1, t2: T2) => R, t1: T1): ((t2: T2) => R) =>
         (t2: T2) => func(t1, t2)
 
-    const asText = ({id, classifier: classifierMetaPointer, properties, containments, references, annotations}: SerializedNode): NestedString =>
+    const asText = ({id, classifier: classifierMetaPointer, properties, containments, references, annotations}: SerializedNode): Template =>
         [
             `${symbolTable.entityMatching(classifierMetaPointer)?.name ?? `[${classifierMetaPointer.key}]`} (id: ${id}) {`,
             indent([
