@@ -1,5 +1,5 @@
-import {NestedString} from "littoral-templates"
-import {cond, indent} from "./text-generation-utils.js"
+import {Template, when} from "littoral-templates"
+import {indent} from "./textgen.js"
 
 
 export enum TypeDefModifier {
@@ -23,31 +23,25 @@ export type Field = {
 }
 
 
-const tsFromField = ({name, optional, type}: Field): NestedString =>
+const tsFromField = ({name, optional, type}: Field): Template =>
     `${name}${optional ? `?` : ``}: ${type};`
 
 
-export const tsFromTypeDef = ({modifier, name, mixinNames, bodyComment, fields}: TypeDef): NestedString => {
+export const tsFromTypeDef = ({modifier, name, mixinNames, bodyComment, fields}: TypeDef): Template => {
     const hasBody = !!bodyComment || fields.length > 0
     return [
         `${modifier === TypeDefModifier.none ? `` : `/** ${TypeDefModifier[modifier]} */ `}export type ${name} = ${mixinNames.join(` & `)}${!hasBody ? `;` : ` & {`}`,
-        cond(
-            hasBody,
-            [
-                indent([
-                    cond(!!bodyComment, `// ${bodyComment}`),
-                    cond(
-                        fields.length > 0,
-                        [
-                            `settings: {`,
-                            indent(fields.map(tsFromField)),
-                            `};`
-                        ]
-                    )
-                ]),
-                `};`    // (`{` was already rendered as part of the header)
-            ]
-        ),
+        when(hasBody)([
+            indent([
+                when(!!bodyComment)(`// ${bodyComment}`),
+                when(fields.length > 0)([
+                    `settings: {`,
+                    indent(fields.map(tsFromField)),
+                    `};`
+                ])
+            ]),
+            `};`    // (`{` was already rendered as part of the header)
+        ]),
         ``
     ]
 }
