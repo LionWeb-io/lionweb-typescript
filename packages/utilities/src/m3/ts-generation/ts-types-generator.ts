@@ -219,8 +219,8 @@ export const tsTypesForLanguage = (language: Language, ...generationOptions: Gen
         ]
 
     const coreImports = [
-        ...when(!language.entities.every(usesINamedDirectly))(`DynamicNode`),
-        ...when(language.entities.some(usesINamedDirectly))(`INamed`)
+        ...when(!language.entities.every(usesINamedDirectly))([`DynamicNode`]),
+        ...when(language.entities.some(usesINamedDirectly))([`INamed`])
     ]
 
     const generatedDependencies = uniquesAmong(
