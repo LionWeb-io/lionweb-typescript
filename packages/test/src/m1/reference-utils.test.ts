@@ -1,8 +1,16 @@
 import {assert} from "chai"
 const {deepEqual} = assert
 
-import {Classifier, dynamicExtractionFacade, dynamicInstantiationFacade, DynamicNode} from "@lionweb/core"
-import {incomingReferences, referencesToOutOfScopeNodes, ReferenceValue, referenceValues} from "@lionweb/utilities"
+import {
+    incomingReferences,
+    referencesToOutOfScopeNodes,
+    ReferenceValue,
+    referenceValues,
+    Classifier,
+    dynamicExtractionFacade,
+    dynamicInstantiationFacade,
+    DynamicNode
+} from "@lionweb/core"
 
 import {AnotherConcept, SomeAnnotation, SomeAnnotation_ref, SomeConcept, SomeConcept_ref} from "../languages/generic.js"
 import {MyConcept, MyConcept_multivaluedRef, MyConcept_singularRef} from "../languages/tiny-ref.js"
