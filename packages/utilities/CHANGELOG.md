@@ -1,12 +1,19 @@
 # Changelog
 
-## 0.6.10 - not officially released yet
+## 0.6.11 - not officially released yet
 
 * Upgrade to `littoral-templates` version 0.3.0.
-* (Depend on `@lionweb/core` version 0.6.10.)
+* (Depend on `@lionweb/core` version 0.6.11.)
 * Move the reference util functions (`referenceValues`, `incomingReferences`, `referencesToOutOfScopeNodes`) and type (class `ReferenceValue`) from the `utilities` package to `core`.
     Aliases (as re-exports) are left in its place to avoid code breaking.
     The move is necessary because not all clients of `@lionweb/utilities` can install the Node.js-specific dependencies of the dependencies that package (such as `crypto`).
+* Upgraded version of `nanoid` dependency to a recent one, which doesn't have a reported security vulnerability.
+* Separate CHANGELOG from README.
+
+
+### 0.6.10
+
+* (Depend on `@lionweb/core` version 0.6.10.)
 
 
 ## 0.6.9

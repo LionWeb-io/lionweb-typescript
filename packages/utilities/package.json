@@ -17,7 +17,7 @@
   "dependencies": {
     "@lionweb/core": "0.6.11-beta.1",
     "littoral-templates": "0.3.0",
-    "nanoid": "4.0.2"
+    "nanoid": "5.0.9"
   },
   "scripts": {
     "clean": "rm -rf dist/ lionweb-utilities-*.tgz",
