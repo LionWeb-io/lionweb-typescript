@@ -8,7 +8,7 @@ import {
     lioncore,
     SerializationChunk
 } from "@lionweb/core"
-import {genericAsTreeText, readFileAsJson, withoutAnnotations} from "@lionweb/utilities"
+import {genericAsTreeText, languageAsText, readFileAsJson, withoutAnnotations} from "@lionweb/utilities"
 import {readFileSync} from "fs"
 
 
@@ -143,7 +143,7 @@ describe("deserializing a meta-circular language", () => {
         const serializationChunk = readFileAsJson("src/languages/io.lionweb.mps.specific.json") as SerializationChunk
         equal(
             genericAsTreeText(serializationChunk, [lioncore]),
-            readFileSync("src/languages/io.lionweb.mps.specific.txt", { encoding: "utf8" })
+            readFileSync("src/languages/io.lionweb.mps.specific.generic.txt", { encoding: "utf8" })
         )
 
         const gatherer = new AccumulatingSimplisticHandler()
@@ -157,6 +157,10 @@ describe("deserializing a meta-circular language", () => {
             ]
         )
         equal(languages.length, 1)
+        equal(
+            languageAsText(languages[0]),
+            readFileSync("src/languages/io.lionweb.mps.specific.m2.txt", { encoding: "utf8" })
+        )
     })
 
     it("works without reporting problems after removing annotations", () => {
