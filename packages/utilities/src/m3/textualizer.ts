@@ -41,6 +41,9 @@ const asText = (node: M3Node): Template => {
     if (node instanceof Annotation) {
         return [
             `annotation ${node.name}${node.extends === undefined ? `` : ` extends ${refAsText(node.extends)}`}${node.implements.length === 0 ? `` : ` implements ${nameSorted(node.implements).map(nameOf).join(", ")}`}`,
+            indented([
+                `annotates: ${refAsText(node.annotates)}`
+            ]),
             featuresOf(node)
         ]
     }

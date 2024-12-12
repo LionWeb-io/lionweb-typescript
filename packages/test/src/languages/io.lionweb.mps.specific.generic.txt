@@ -24,6 +24,26 @@ Language (id: io-lionweb-mps-specific) {
                     type -> LionCore-builtins-String (String)
                 }
         }
+        Annotation (id: Deprecated) {
+            key = 'Deprecated'
+            name = 'Deprecated'
+            annotates -> -id-IKeyed (IKeyed)
+            extends -> <none>
+            implements -> <none>
+            features:
+                Property (id: Deprecated-comment) {
+                    optional = true
+                    key = 'Deprecated-comment'
+                    name = 'comment'
+                    type -> LionCore-builtins-String (String)
+                }
+                Property (id: Deprecated-build) {
+                    optional = true
+                    key = 'Deprecated-build'
+                    name = 'build'
+                    type -> LionCore-builtins-String (String)
+                }
+        }
         Annotation (id: ShortDescription) {
             key = 'ShortDescription'
             name = 'ShortDescription'
