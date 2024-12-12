@@ -9,6 +9,7 @@
     The move is necessary because not all clients of `@lionweb/utilities` can install the Node.js-specific dependencies of the dependencies that package (such as `crypto`).
 * Upgraded version of `nanoid` dependency to a recent one, which doesn't have a reported security vulnerability.
 * Separate CHANGELOG from README.
+* Textualization of languages now also mentions what classifier it annotates.
 
 
 ### 0.6.10
