@@ -2,6 +2,9 @@ language Shapes
     version: 1
     entities (↓name):
 
+        annotation Annotated
+            annotates: Shape
+
         concept Circle extends Shape
             features (↓name):
                 center: Coord
