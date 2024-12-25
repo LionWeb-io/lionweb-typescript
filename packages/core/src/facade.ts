@@ -86,10 +86,12 @@ type NodesExtractor<NT extends Node> = (node: NT) => NT[]
  * @return A function that extracts the children from a given node.
  */
 const childrenExtractorUsing = <NT extends Node>(extractionFacade: ExtractionFacade<NT>): NodesExtractor<NT> =>
-    (node: NT): NT[] =>
-        allFeaturesOf(extractionFacade.classifierOf(node))
+    (node: NT): NT[] => [
+        ...(allFeaturesOf(extractionFacade.classifierOf(node))
             .filter(isContainment)
-            .flatMap((containment) => extractionFacade.getFeatureValue(node, containment) as NT[])
+            .flatMap((containment) => extractionFacade.getFeatureValue(node, containment))),
+        ...node.annotations
+    ] as NT[]
 
 
 /**
