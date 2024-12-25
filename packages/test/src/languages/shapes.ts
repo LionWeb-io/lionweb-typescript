@@ -12,25 +12,26 @@ export const shapesLanguage = factory.language
 
 const Geometry = factory.concept("Geometry", false)
 const Shape = factory.concept("Shape", true).implementing(builtinClassifiers.inamed)
-const Circle = factory.concept("Circle", false, Shape)
+export const Circle = factory.concept("Circle", false, Shape)
 const Line = factory.concept("Line", false, Shape)
-const Coord = factory.concept("Coord", false)
+export const Coord = factory.concept("Coord", false)
 
 const GeometryShapes = factory.containment(Geometry, "shapes").ofType(Shape).isMultiple().isOptional()
 const LineStart = factory.containment(Line, "start").ofType(Coord)
 const LineEnd = factory.containment(Line, "end").ofType(Coord)
 const CircleCenter = factory.containment(Circle, "center").ofType(Coord)
+const CircleRadius = factory.property(Circle, "r").ofType(builtinPrimitives.integerDatatype)
 
 const CoordX = factory.property(Coord, "x").ofType(builtinPrimitives.integerDatatype)
 const CoordY = factory.property(Coord, "y").ofType(builtinPrimitives.integerDatatype)
 const CoordZ = factory.property(Coord, "z").ofType(builtinPrimitives.integerDatatype)
-
-const CircleRadius = factory.property(Circle, "r").ofType(builtinPrimitives.integerDatatype)
 
 Geometry.havingFeatures(GeometryShapes)
 Circle.havingFeatures(CircleRadius, CircleCenter)
 Line.havingFeatures(LineStart, LineEnd)
 Coord.havingFeatures(CoordX, CoordY, CoordZ)
 
-shapesLanguage.havingEntities(Coord, Geometry, Shape, Circle, Line)
+export const Annotated = factory.annotation("Annotated").annotating(Shape)
+
+shapesLanguage.havingEntities(Coord, Geometry, Shape, Circle, Line, Annotated)
 

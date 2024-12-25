@@ -56,7 +56,8 @@
             "6WenyMw62+3cfpFVnR5fHrPuH7W2bbd5ckL/XGqIXvI=",
             "nGVjRMnytakFG6wZCA3z9k/SAT/Cl/s7a9JsUXzmQYA=",
             "Zo2fmW+75SutxNaDoiEVWqizBqWCY9a/GA0kCsyZ+BY=",
-            "gO8PIp6jwFRFGxjhKvUkvqQzPp5tA7uoyq1Ds+++VrE="
+            "gO8PIp6jwFRFGxjhKvUkvqQzPp5tA7uoyq1Ds+++VrE=",
+            "FxWknHgOr0f0trTdHBE5hbUI0opGnlAL445ZPoEZQ7s="
           ]
         }
       ],
@@ -907,6 +908,75 @@
       ],
       "annotations": [],
       "parent": "gO8PIp6jwFRFGxjhKvUkvqQzPp5tA7uoyq1Ds+++VrE="
+    },
+    {
+      "id": "FxWknHgOr0f0trTdHBE5hbUI0opGnlAL445ZPoEZQ7s=",
+      "classifier": {
+        "language": "LionCore-M3",
+        "version": "2023.1",
+        "key": "Annotation"
+      },
+      "properties": [
+        {
+          "property": {
+            "language": "LionCore-M3",
+            "version": "2023.1",
+            "key": "IKeyed-key"
+          },
+          "value": "Annotated"
+        },
+        {
+          "property": {
+            "language": "LionCore-builtins",
+            "version": "2023.1",
+            "key": "LionCore-builtins-INamed-name"
+          },
+          "value": "Annotated"
+        }
+      ],
+      "containments": [
+        {
+          "containment": {
+            "language": "LionCore-M3",
+            "version": "2023.1",
+            "key": "Classifier-features"
+          },
+          "children": []
+        }
+      ],
+      "references": [
+        {
+          "reference": {
+            "language": "LionCore-M3",
+            "version": "2023.1",
+            "key": "Annotation-annotates"
+          },
+          "targets": [
+            {
+              "resolveInfo": "Shape",
+              "reference": "nGVjRMnytakFG6wZCA3z9k/SAT/Cl/s7a9JsUXzmQYA="
+            }
+          ]
+        },
+        {
+          "reference": {
+            "language": "LionCore-M3",
+            "version": "2023.1",
+            "key": "Annotation-extends"
+          },
+          "targets": []
+        },
+        {
+          "reference": {
+            "language": "LionCore-M3",
+            "version": "2023.1",
+            "key": "Annotation-implements"
+          },
+          "targets": []
+        }
+      ],
+      "annotations": [],
+      "parent": "degCinkTmS4XeJW0Zt0gH5vpfm/A1DXx/661McUwJYE="
     }
   ]
 }

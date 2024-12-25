@@ -6,6 +6,7 @@
 * Move the reference util functions (`referenceValues`, `incomingReferences`, `referencesToOutOfScopeNodes`) and type (class `ReferenceValue`) from the `utilities` package to `core`.
     Aliases (as re-exports) are left in its place to avoid code breaking.
     The move is necessary because not all clients of `@lionweb/utilities` can install the Node.js-specific dependencies of the dependencies that package (such as `crypto`).
+* The `childrenExtractorUsing` and `nodesExtractorUsing` functions now also extract annotations — ([issue 181](https://github.com/LionWeb-io/lionweb-typescript/issues/181)).
 
 
 ## 0.6.10
