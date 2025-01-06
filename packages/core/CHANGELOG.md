@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.6.11 - not officially released yet
+## 0.6.11
 
 * Separate CHANGELOG from README.
 * Move the reference util functions (`referenceValues`, `incomingReferences`, `referencesToOutOfScopeNodes`) and type (class `ReferenceValue`) from the `utilities` package to `core`.
