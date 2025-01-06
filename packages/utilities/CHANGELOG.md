@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.6.11 - not officially released yet
+## 0.6.11
 
 * Upgrade to `littoral-templates` version 0.3.0.
 * (Depend on `@lionweb/core` version 0.6.11.)

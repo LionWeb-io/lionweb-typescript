@@ -1,8 +1,9 @@
 # Changelog
 
-## 0.6.12 - not officially released yet
+## 0.6.12
 
 * Separate CHANGELOG from README.
+* (Depend on `@lionweb/core` and `@lionweb/utilities` version 0.6.11.)
 
 
 ## 0.6.11
