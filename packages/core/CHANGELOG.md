@@ -3,6 +3,19 @@
 ## 0.6.12 - not yet released
 
 * `LanguageFactory` instances take care of containment: e.g., creating an entity automatically adds that to the language, and likewise for features (to classifiers) and literals (to enumerations). 
+* Add an object type `SerializationOptions` to configure the `serializeNodes` function.
+    All options (which are all optional) are:
+
+    1. `skipEmptyValues`: a boolean flag that determines whether empty (unset) feature values are skipped during serialization.
+        This potentially reduces the size of the serialization substantially, helping with performance.
+        The default value is `false`, meaning that empty values – currently of containment and reference features – are explicitly serialized.
+    2. `primitiveTypeSerializer`: an implementation of the `PrimitiveTypeSerializer` interface type.
+        The default value is an instance of `DefaultPrimitiveTypeSerializer`.
+
+    A primitive type serializer can be passed to `serializeNodes` in two ways:
+
+    1. Via the `primitiveTypeSerializer` field of the `SerializationOptions` object that's passed as the 3rd argument.
+    2. Directly as the 3rd argument. (*Warning!* This way may become deprecated in the future.)
 
 
 ## 0.6.11
