@@ -1,5 +1,7 @@
 # Changelog
 
+## 0.6.12 - not yet released
+
 ## 0.6.11
 
 * Separate CHANGELOG from README.
