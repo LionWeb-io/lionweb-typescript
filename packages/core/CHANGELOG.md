@@ -6,9 +6,9 @@
 * Add an object type `SerializationOptions` to configure the `serializeNodes` function.
     All options (which are all optional) are:
 
-    1. `skipEmptyValues`: a boolean flag that determines whether empty (unset) feature values are skipped during serialization.
+    1. `serializeEmptyValues`: a boolean flag that determines whether empty (unset) feature values are explicitly serialized or skipped during serialization.
         This potentially reduces the size of the serialization substantially, helping with performance.
-        The default value is `false`, meaning that empty values – currently of containment and reference features – are explicitly serialized.
+        The default value is `true`, meaning that empty values – currently of containment and reference features – are explicitly serialized.
     2. `primitiveTypeSerializer`: an implementation of the `PrimitiveTypeSerializer` interface type.
         The default value is an instance of `DefaultPrimitiveTypeSerializer`.
 

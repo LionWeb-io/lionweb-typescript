@@ -310,9 +310,9 @@ describe("serialization of empty (unset) values", () => {
                 }
             ]
         }
-        const actualSerializationChunk = serializeNodes([node], dynamicExtractionFacade)
+        const actualSerializationChunk = serializeNodes([node], dynamicExtractionFacade)    // (serializeEmptyValues has true as default)
         expect(actualSerializationChunk).to.eql(expectedSerializationChunk)
-        const usingExplicitOption = serializeNodes([node], dynamicExtractionFacade, { skipEmptyValues: false })
+        const usingExplicitOption = serializeNodes([node], dynamicExtractionFacade, { serializeEmptyValues: true })
         expect(usingExplicitOption).to.eql(expectedSerializationChunk)
     })
 
@@ -341,7 +341,7 @@ describe("serialization of empty (unset) values", () => {
                 }
             ]
         }
-        const actualSerializationChunk = serializeNodes([node], dynamicExtractionFacade, { skipEmptyValues: true })
+        const actualSerializationChunk = serializeNodes([node], dynamicExtractionFacade, { serializeEmptyValues: false })
         expect(actualSerializationChunk).to.eql(expectedSerializationChunk)
     })
 

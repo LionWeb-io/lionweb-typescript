@@ -32,12 +32,11 @@ const isPrimitiveTypeSerializer = (value: unknown): value is PrimitiveTypeSerial
  */
 export type SerializationOptions = Partial<{
     /**
-     * Determines whether empty feature values are skipped during serialization.
-     * Default = false, meaning that empty feature values are *not* skipped.
-     * (The specification states that empty feature values SHOULD be serialized,
-     * but not that they MUST be.)
+     * Determines whether empty feature values are explicitly serialized or skipped during serialization.
+     * (The specification states that empty feature values SHOULD be serialized, but not that they MUST be.)
+     * Default = true, meaning that empty feature values are *not* skipped.
      */
-    skipEmptyValues: boolean
+    serializeEmptyValues: boolean
 
     primitiveTypeSerializer: PrimitiveTypeSerializer
 }>
@@ -56,9 +55,9 @@ export const serializeNodes = <NT extends Node>(
             ? primitiveTypeSerializerOrOptions
             : primitiveTypeSerializerOrOptions?.primitiveTypeSerializer
     ) ?? new DefaultPrimitiveTypeSerializer()
-    const skipEmptyValues = isPrimitiveTypeSerializer(primitiveTypeSerializerOrOptions)
-        ? false
-        : primitiveTypeSerializerOrOptions?.skipEmptyValues
+    const serializeEmptyValues = isPrimitiveTypeSerializer(primitiveTypeSerializerOrOptions)
+        ? true
+        : (primitiveTypeSerializerOrOptions?.serializeEmptyValues ?? true)
 
     const serializedNodes: SerializedNode[] = []  // keep nodes as much as possible "in order"
     const ids: { [id: string]: boolean } = {}   // maintain a map to keep track of IDs of nodes that have been serialized
@@ -123,7 +122,7 @@ export const serializeNodes = <NT extends Node>(
             }
             if (feature instanceof Containment) {
                 const children = asArray(value) as (NT | null)[]
-                if (children.length === 0 && skipEmptyValues) {
+                if (children.length === 0 && !serializeEmptyValues) {
                     return
                 }
                 serializedNode.containments.push({
@@ -142,7 +141,7 @@ export const serializeNodes = <NT extends Node>(
             if (feature instanceof Reference) {
                 // Note: value can be null === typeof unresolved, e.g. on an unset (or previously unresolved) single-valued reference
                 const targets = asArray(value) as (NT | null)[]
-                if (targets.length === 0 && skipEmptyValues) {
+                if (targets.length === 0 && !serializeEmptyValues) {
                     return
                 }
                 serializedNode.references.push({
