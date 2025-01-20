@@ -202,7 +202,7 @@ const inheritsFrom = (classifier: Classifier): Classifier[] => {
     if (classifier instanceof Interface) {
         return classifier.extends
     }
-    throw new Error(`concept type ${typeof classifier} not handled`)
+    throw new Error(`classifier type ${typeof classifier} not handled`)
 }
 
 /**
