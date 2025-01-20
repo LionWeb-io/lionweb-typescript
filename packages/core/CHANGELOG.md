@@ -8,7 +8,7 @@
 
     1. `serializeEmptyValues`: a boolean flag that determines whether empty (unset) feature values are explicitly serialized or skipped during serialization.
         This potentially reduces the size of the serialization substantially, helping with performance.
-        The default value is `true`, meaning that empty values – currently of containment and reference features – are explicitly serialized.
+        The default value is `true`, meaning that empty values are explicitly serialized — either as `null` for properties, or `[]` for links.
     2. `primitiveTypeSerializer`: an implementation of the `PrimitiveTypeSerializer` interface type.
         The default value is an instance of `DefaultPrimitiveTypeSerializer`.
 

@@ -268,7 +268,40 @@ describe("serialization of empty (unset) values", () => {
                         version: "0",
                         key: "concept"
                     },
-                    properties: [],
+                    properties: [
+                        {
+                            property: {
+                                key: "stringProperty",
+                                language: "serialization-language",
+                                version: "0"
+                            },
+                            value: null
+                        },
+                        {
+                            property: {
+                                key: "integerProperty",
+                                language: "serialization-language",
+                                version: "0"
+                            },
+                            value: null
+                        },
+                        {
+                            property: {
+                                key: "booleanProperty",
+                                language: "serialization-language",
+                                version: "0"
+                            },
+                            value: null
+                        },
+                        {
+                            property: {
+                                key: "enumProperty",
+                                language: "serialization-language",
+                                version: "0"
+                            },
+                            value: null
+                        }
+                    ],
                     containments: [
                         {
                             containment: {

@@ -97,7 +97,7 @@ export const serializeNodes = <NT extends Node>(
                 key: feature.key
             }
             if (feature instanceof Property) {
-                if (value === undefined) {
+                if (value === undefined && !serializeEmptyValues) {
                     // for immediate backward compatibility: skip empty property values regardless of options?.skipEmptyValues
                     return
                 }
@@ -108,16 +108,13 @@ export const serializeNodes = <NT extends Node>(
                     }
                     if (feature.type instanceof Enumeration) {
                         return extractionFacade.enumerationLiteralFrom(value, feature.type)?.key
-                            ?? null // (undefined -> null)
                     }
-                    return null
+                    return undefined
                 })()
-                if (encodedValue !== null) {
-                    serializedNode.properties.push({
-                        property: featureMetaPointer,
-                        value: encodedValue as string
-                    })
-                }
+                serializedNode.properties.push({
+                    property: featureMetaPointer,
+                    value: (encodedValue as string) ?? null // (undefined -> null)
+                })
                 return
             }
             if (feature instanceof Containment) {
