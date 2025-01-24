@@ -165,13 +165,6 @@ const keyOf = <T extends IKeyed>({key}: T): string =>
 
 
 /**
- * @return the id of the given {@link M3Concept}.
- */
-const idOf = <T extends M3Concept>({id}: T): string =>
-    id
-
-
-/**
  * Sorts the given {@link LanguageEntity language entities} by name.
  */
 const entitiesSortedByName = (entities: LanguageEntity[]) =>
@@ -298,7 +291,6 @@ export {
     entitiesSortedByName,
     flatMap,
     idBasedClassifierDeducerFor,
-    idOf,
     inheritedCycleWith,
     inheritsFrom,
     instantiableClassifiersOf,

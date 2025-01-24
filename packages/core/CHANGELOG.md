@@ -3,6 +3,7 @@
 ## 0.6.12 - not yet released
 
 * `LanguageFactory` instances take care of containment: e.g., creating an entity automatically adds that to the language, and likewise for features (to classifiers) and literals (to enumerations). 
+
 * Add an object type `SerializationOptions` to configure the `serializeNodes` function.
     All options (which are all optional) are:
 
@@ -16,6 +17,8 @@
 
     1. Via the `primitiveTypeSerializer` field of the `SerializationOptions` object that's passed as the 3rd argument.
     2. Directly as the 3rd argument. (*Warning!* This way may become deprecated in the future.)
+
+* Widen type of argument of `idOf` to `Node`.
 
 
 ## 0.6.11
