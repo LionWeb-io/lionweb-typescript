@@ -7,6 +7,7 @@ import {allFeaturesOf} from "./m3/functions.js"
 import {
     Containment,
     Enumeration,
+    Feature,
     Language,
     PrimitiveType,
     Property,
@@ -40,6 +41,19 @@ export type SerializationOptions = Partial<{
 
     primitiveTypeSerializer: PrimitiveTypeSerializer
 }>
+
+
+/**
+ * @return the {@link MetaPointer} for the given {@link Feature}.
+ */
+export const metaPointerFor = (feature: Feature): MetaPointer => {
+    const {language} = feature.classifier
+    return {
+        language: language.key,
+        version: language.version,
+        key: feature.key
+    }
+}
 
 
 /**
@@ -91,11 +105,7 @@ export const serializeNodes = <NT extends Node>(
             const value = extractionFacade.getFeatureValue(node, feature)
             const featureLanguage = feature.classifier.language
             registerLanguageUsed(featureLanguage)
-            const featureMetaPointer: MetaPointer = {
-                language: featureLanguage.key,
-                version: featureLanguage.version,
-                key: feature.key
-            }
+            const featureMetaPointer = metaPointerFor(feature)
             if (feature instanceof Property) {
                 if (value === undefined && !serializeEmptyFeatures) {
                     // for immediate backward compatibility: skip empty property values regardless of options?.skipEmptyValues
