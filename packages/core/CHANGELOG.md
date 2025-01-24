@@ -23,6 +23,12 @@
 * Have the `INamed` interface not extend `Node`.
     Also remove unused `isIKeyed` function.
 
+* Add `featureMetaType` function and `FeatureMetaType` type.
+
+* Expose `metaPointerFor` function that computes the `MetaPointer` for a `Feature`.
+
+* Expose a `IdOrUnresolved` type that expresses a value is either an `Id` or a value to indicate that resolution to a node previously failed.
+
 
 ## 0.6.11
 
