@@ -50,6 +50,31 @@ const isReference = (feature: Feature): feature is Reference =>
 
 
 /**
+ * The (names of the) metatypes of a feature.
+ */
+type FeatureMetaType =
+    | "Containment"
+    | "Property"
+    | "Reference"
+
+/**
+ * @return the (name of the) metatype of the given {@link Feature feature}.
+ */
+const featureMetaType = (feature: Feature): FeatureMetaType => {
+    if (feature instanceof Containment) {
+        return "Containment"
+    }
+    if (feature instanceof Property) {
+        return "Property"
+    }
+    if (feature instanceof Reference) {
+        return "Reference"
+    }
+    throw new Error(`unhandled Feature sub type ${feature.constructor.name}`)
+}
+
+
+/**
  * Determines whether a {@link Feature feature} is "relational",
  * i.e. it's a {@link Link containment or reference}.
  */
@@ -289,6 +314,7 @@ export {
     containmentChain,
     directlyContaineds,
     entitiesSortedByName,
+    featureMetaType,
     flatMap,
     idBasedClassifierDeducerFor,
     inheritedCycleWith,
@@ -309,5 +335,9 @@ export {
     relationsOf,
     type,
     qualifiedNameOf
+}
+
+export type {
+    FeatureMetaType
 }
 
