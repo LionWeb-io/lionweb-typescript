@@ -27,7 +27,9 @@
 
 * Expose `metaPointerFor` function that computes the `MetaPointer` for a `Feature`.
 
-* Expose a `IdOrUnresolved` type that expresses a value is either an `Id` or a value to indicate that resolution to a node previously failed.
+* Expose `IdOrUnresolved` type that expresses a value is either an `Id` or a value to indicate that resolution to a node previously failed.
+
+* Expose `isMultiple` function that determines whether a `Feature` is multi-valued.
 
 
 ## 0.6.11

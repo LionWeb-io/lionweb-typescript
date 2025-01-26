@@ -48,6 +48,9 @@ const isContainment = (feature: Feature): feature is Containment =>
 const isReference = (feature: Feature): feature is Reference =>
     feature instanceof Reference
 
+const isMultiple = (feature: Feature): feature is Link =>
+    feature instanceof Link && feature.multiple
+
 
 /**
  * The (names of the) metatypes of a feature.
@@ -323,6 +326,7 @@ export {
     isConcrete,
     isContainment,
     isEnumeration,
+    isMultiple,
     isProperty,
     isReference,
     keyOf,
