@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.6.12 - not yet released
+## 0.6.12
 
 * `LanguageFactory` instances take care of containment: e.g., creating an entity automatically adds that to the language, and likewise for features (to classifiers) and literals (to enumerations). 
 
