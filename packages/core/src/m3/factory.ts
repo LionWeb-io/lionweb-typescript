@@ -38,57 +38,57 @@ export class LanguageFactory {
     }
 
 
-    annotation(name: string, extends_?: SingleRef<Annotation>) {
+    annotation(name: string, extends_?: SingleRef<Annotation>): Annotation {
         const annotation = new Annotation(this.language, name, this.key(this.language.name, name), this.id(this.language.name, name), extends_)
         this.language.havingEntities(annotation)
         return annotation
     }
 
-    concept(name: string, abstract: boolean, extends_?: SingleRef<Concept>) {
+    concept(name: string, abstract: boolean, extends_?: SingleRef<Concept>): Concept {
         const concept = new Concept(this.language, name, this.key(this.language.name, name), this.id(this.language.name, name), abstract, extends_)
         this.language.havingEntities(concept)
         return concept
     }
 
-    interface(name: string) {
+    interface(name: string): Interface {
         const intface = new Interface(this.language, name, this.key(this.language.name, name), this.id(this.language.name, name))
         this.language.havingEntities(intface)
         return intface
     }
 
-    enumeration(name: string) {
+    enumeration(name: string): Enumeration {
         const enumeration = new Enumeration(this.language, name, this.key(this.language.name, name), this.id(this.language.name, name))
         this.language.havingEntities(enumeration)
         return enumeration
     }
 
-    primitiveType(name: string) {
+    primitiveType(name: string): PrimitiveType {
         const primitiveType = new PrimitiveType(this.language, name, this.key(this.language.name, name), this.id(this.language.name, name))
         this.language.havingEntities(primitiveType)
         return primitiveType
     }
 
 
-    containment(classifier: Classifier, name: string) {
+    containment(classifier: Classifier, name: string): Containment {
         const containment = new Containment(classifier, name, this.key(this.language.name, classifier.name, name), this.id(this.language.name, classifier.name, name))
         classifier.havingFeatures(containment)
         return containment
     }
 
-    property(classifier: Classifier, name: string) {
+    property(classifier: Classifier, name: string): Property {
         const property = new Property(classifier, name, this.key(this.language.name, classifier.name, name), this.id(this.language.name, classifier.name, name))
         classifier.havingFeatures(property)
         return property
     }
 
-    reference(classifier: Classifier, name: string) {
+    reference(classifier: Classifier, name: string): Reference {
         const reference = new Reference(classifier, name, this.key(this.language.name, classifier.name, name), this.id(this.language.name, classifier.name, name))
         classifier.havingFeatures(reference)
         return reference
     }
 
 
-    enumerationLiteral(enumeration: Enumeration, name: string) {
+    enumerationLiteral(enumeration: Enumeration, name: string): EnumerationLiteral {
         const enumerationLiteral = new EnumerationLiteral(enumeration, name, this.key(this.language.name, enumeration.name, name), this.id(this.language.name, enumeration.name, name))
         enumeration.havingLiterals(enumerationLiteral)
         return enumerationLiteral
