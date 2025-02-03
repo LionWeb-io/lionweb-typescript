@@ -2,39 +2,51 @@
 
 ## 0.6.13
 
-* (Depend on `@lionweb/core` and `@lionweb/utilities` version 0.6.12.)
+Dependencies: `@lionweb/core` and `@lionweb/utilities` version 0.6.12
+
+(no changes)
 
 
 ## 0.6.12
 
+Dependencies: `@lionweb/core` and `@lionweb/utilities` version 0.6.11
+
 * Separate CHANGELOG from README.
-* (Depend on `@lionweb/core` and `@lionweb/utilities` version 0.6.11.)
 
 
 ## 0.6.11
 
-* (Depend on `@lionweb/core` and `@lionweb/utilities` version 0.6.10.)
+Dependencies: `@lionweb/core` and `@lionweb/utilities` version 0.6.10
+
+(no changes)
 
 
 ## 0.6.10
 
-* (Depend on `@lionweb/core` and `@lionweb/utilities` version 0.6.9.)
+Dependencies: `@lionweb/core` and `@lionweb/utilities` version 0.6.9
+
 * Use the `AggregatingSimplisticHandler` to report on language deserialization problems.
 
 
 ## 0.6.9
 
-* (Depend on `@lionweb/core` and `@lionweb/utilities` version 0.6.8.)
+Dependencies: `@lionweb/core` and `@lionweb/utilities` version 0.6.8
+
+(no changes)
 
 
 ## 0.6.8
 
-* (Depend on `@lionweb/core` and `@lionweb/utilities` version 0.6.7.)
+Dependencies: `@lionweb/core` and `@lionweb/utilities` version 0.6.7
+
+(no changes)
 
 
 ## 0.6.7
 
-* (Depend on `@lionweb/core` and `@lionweb/utilities` version 0.6.6.)
+Dependencies: `@lionweb/core` and `@lionweb/utilities` version 0.6.6
+
+(no changes)
 
 
 ## 0.6.6

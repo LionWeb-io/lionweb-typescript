@@ -32,7 +32,7 @@ describe("inferLanguagesFromChunk", () => {
         const inferredMultiLanguage = languages[0]
         const inferredLibraryLanguage = languages[1]
 
-        // (we can't infer the language dependency)
+        // we can't infer the language dependency, so we (have to) do it manually:
         inferredMultiLanguage.dependingOn(inferredLibraryLanguage)
 
         deepEqual(sortedSerializationChunk(serializeLanguages(inferredLibraryLanguage)), sortedSerializationChunk(serializeLanguages(minimalLibraryLanguage)))
