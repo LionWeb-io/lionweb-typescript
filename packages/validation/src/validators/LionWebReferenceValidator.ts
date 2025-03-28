@@ -16,8 +16,7 @@ import {
     LwJsonUsedLanguage,
 } from "../json/LionWebJson.js"
 import { LionWebJsonChunkWrapper } from "../json/LionWebJsonChunkWrapper.js"
-import { SimpleFieldValidator } from "./SimpleFieldValidator.js"
-import { ValidationResult } from "./ValidationResult.js"
+import { ValidationResult } from "./generic/ValidationResult.js"
 
 /**
  * Assuming that the syntax is correct, check whether all LionWeb references are correct,
@@ -26,11 +25,9 @@ import { ValidationResult } from "./ValidationResult.js"
 export class LionWebReferenceValidator {
     validationResult: ValidationResult
     nodesIdMap: Map<string, LionWebJsonNode> = new Map<string, LionWebJsonNode>()
-    simpleFieldValidator: SimpleFieldValidator
 
     constructor(validationResult: ValidationResult) {
         this.validationResult = validationResult
-        this.simpleFieldValidator = new SimpleFieldValidator(this.validationResult)
     }
 
     validateNodeIds(obj: LionWebJsonChunk, ctx: JsonContext): void {
@@ -158,7 +155,8 @@ export class LionWebReferenceValidator {
 
     /**
      * Checks whether the parent of node recursively points to `node` itself.
-     * @param node
+     * @param node    The noide being checked
+     * @param context The location in the JSON
      */
     checkParentCircular(node: LionWebJsonNode, context: JsonContext) {
         if (node === null || node === undefined) {

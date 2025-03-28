@@ -4,7 +4,7 @@ import { LanguageRegistry } from "../languages/index.js"
 import { LionWebLanguageReferenceValidator } from "./LionWebLanguageReferenceValidator.js"
 import { LionWebReferenceValidator } from "./LionWebReferenceValidator.js"
 import { LionWebSyntaxValidator } from "./LionWebSyntaxValidator.js"
-import { ValidationResult } from "./ValidationResult.js"
+import { ValidationResult } from "./generic/ValidationResult.js"
 
 /**
  * Combined validator that calls all available validators.
@@ -34,8 +34,7 @@ export class LionWebValidator {
     }
 
     validateSyntax() {
-        this.syntaxValidator.recursive = true
-        this.syntaxValidator.validate(this.object)
+        this.syntaxValidator.validate(this.object, "LionWebChunk")
         this.syntaxCorrect = !this.validationResult.hasErrors()
         if (this.syntaxCorrect) {
             this.chunk = new LionWebJsonChunkWrapper(this.object as LionWebJsonChunk)

@@ -30,19 +30,17 @@ import {
     M3_Keys
 } from "../json/M3definitions.js"
 import { LanguageRegistry } from "../languages/index.js"
-import { SimpleFieldValidator } from "./SimpleFieldValidator.js"
-import { ValidationResult } from "./ValidationResult.js"
+import { validateBoolean, validateInteger, validateJSON } from "./ValidationFunctions.js"
+import { ValidationResult } from "./generic/ValidationResult.js"
 
 /**
  * Check against the language definition
  */
 export class LionWebLanguageReferenceValidator {
     validationResult: ValidationResult
-    simpleFieldValidator: SimpleFieldValidator
 
     constructor(validationResult: ValidationResult, private registry: LanguageRegistry) {
         this.validationResult = validationResult
-        this.simpleFieldValidator = new SimpleFieldValidator(this.validationResult)
     }
 
     // reset() {
@@ -147,16 +145,16 @@ export class LionWebLanguageReferenceValidator {
                 const typeReferenceId = refType.targets[0].reference
                 switch (typeReferenceId) {
                     case LIONWEB_BOOLEAN_TYPE:
-                        this.simpleFieldValidator.validateBoolean(prop, propertyName, context)
+                        validateBoolean(prop.value, this.validationResult, context)
                         break
                     case LIONWEB_INTEGER_TYPE:
-                        this.simpleFieldValidator.validateInteger(prop, propertyName, context)
+                        validateInteger(prop.value, this.validationResult, context)
                         break
                     case LIONWEB_STRING_TYPE:
                         // Each string is correct and having another JSON type is already captured
                         break
                     case LIONWEB_JSON_TYPE:
-                        this.simpleFieldValidator.validateJSON(prop, propertyName, context)
+                        validateJSON(prop.value, this.validationResult, context)
                         break
                     default: {
                         // Check for enumeration

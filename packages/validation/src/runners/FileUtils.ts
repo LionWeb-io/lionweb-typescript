@@ -1,7 +1,7 @@
 import fs from "fs"
 import { LanguageRegistry } from "../languages/index.js"
 import { LionWebValidator } from "../validators/LionWebValidator.js"
-import { ValidationResult } from "../validators/ValidationResult.js"
+import { ValidationResult } from "../validators/generic/ValidationResult.js"
 import { getFilesRecursive, printIssues } from "./Utils.js"
 
 export function validateFile(file: string, registry: LanguageRegistry): void {
