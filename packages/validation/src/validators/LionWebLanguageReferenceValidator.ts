@@ -30,6 +30,7 @@ import { LanguageRegistry } from "../languages/index.js"
 import { ValidationResult } from "./generic/ValidationResult.js"
 import { validateBoolean, validateInteger, validateJSON } from "./ValidationFunctions.js"
 
+
 /**
  * Check against the language definition
  */

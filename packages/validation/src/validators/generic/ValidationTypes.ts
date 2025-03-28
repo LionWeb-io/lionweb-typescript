@@ -27,7 +27,7 @@ export type PropertyDefinition = {
     /**
      * IS this a list property?
      */
-    isList?: boolean
+    isList?: boolean,
     /**
      * Additional validation function
      */

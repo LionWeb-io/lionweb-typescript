@@ -89,9 +89,8 @@ export class SyntaxValidator {
                         if (expectedPropertyDefs !== undefined) {
                             if (expectedPropertyDefs.length === 0) {
                                 // propertyValue should be a primitive as it has no property definitions
-                                if (this.validatePrimitiveValue(pdef, item, jsonContext)) {
-                                    validator.apply(null, [item, this.validationResult, newContext, pdef])
-                                }
+                                this.validatePrimitiveValue(pdef.property, pdef.expectedType, item, jsonContext)
+                                validator.apply(null, [item, this.validationResult, newContext, pdef])
                             } else {
                                 // propertyValue should be an object, validate its properties
                                 this.validateObjectProperties(pdef.property, expectedPropertyDefs, item as UnknownObjectType, newContext)
@@ -112,9 +111,8 @@ export class SyntaxValidator {
                 if (expectedPropertyDefs !== undefined) {
                     if (expectedPropertyDefs.length === 0) {
                         // propertyValue should be a primitive as it has no property definitions
-                        if (this.validatePrimitiveValue(pdef, propertyValue, jsonContext)) {
-                            validator.apply(null, [propertyValue, this.validationResult, newContext, pdef])
-                        }
+                        this.validatePrimitiveValue(pdef.property, pdef.expectedType, propertyValue, jsonContext)
+                        validator.apply(null, [propertyValue, this.validationResult, newContext, pdef])
                     } else {
                         // propertyValue should be an object, validate its properties
                         this.validateObjectProperties(pdef.property, expectedPropertyDefs, propertyValue as UnknownObjectType, newContext)
@@ -128,17 +126,10 @@ export class SyntaxValidator {
         this.checkStrayProperties(object, propertyDef.map(pdef => pdef.property ), jsonContext)
     }
     
-    validatePrimitiveValue(propDef: PropertyDefinition, object: unknown, jsonContext: JsonContext): boolean {
-        if (!propDef.mayBeNull && (object === null || object === undefined)) {
-            this.validationResult.issue(new Syntax_PropertyNullIssue(jsonContext, propDef.property))
-            return false
+    validatePrimitiveValue(originalProperty: string, expectedPrimitive: string, object: unknown, jsonContext: JsonContext) {
+        if (typeof object !== expectedPrimitive) {
+            this.validationResult.issue(new Syntax_PropertyTypeIssue(jsonContext, originalProperty, expectedPrimitive,typeof object))
         }
-
-        if (typeof object !== propDef.expectedType) {
-            this.validationResult.issue(new Syntax_PropertyTypeIssue(jsonContext, propDef.property, propDef.expectedType,typeof object))
-            return false
-        }
-        return true
     }
 
     /**

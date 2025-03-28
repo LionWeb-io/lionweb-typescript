@@ -23,11 +23,11 @@ import { PropertyDefinition } from "./generic/ValidationTypes.js"
 // eslint-disable-next-line @typescript-eslint/ban-types
 export function validateId<String>(value: String, result: ValidationResult, context: JsonContext): void {
     const idString: string = "" + value
-    const regexp = /^[a-zA-Z0-9_-][a-zA-Z0-9_-]*$/
+    const regexp = /^[a-zA-Z0-9$_-][a-zA-Z0-9$_-]*$/
     if (!regexp.test(idString)) {
         result.issue(new Syntax_IdFormat_Issue(context, idString))
     }
-}    
+}
 
 /**
  * Check whether `key` is a valid LionWeb key.
@@ -69,14 +69,7 @@ export function validateVersion<String>(value: String, result: ValidationResult,
 export function validateBoolean<String>(value: String, result: ValidationResult, context: JsonContext, propDef?: PropertyDefinition): void {
     const valueAsPrimitive = "" + value
     if (valueAsPrimitive !== "true" && valueAsPrimitive !== "false") {
-        result.issue(
-            new Language_PropertyValue_Issue(
-                context,
-                propDef ? propDef.property : "unknown",
-                valueAsPrimitive,
-                "boolean " + JSON.stringify(value)
-            )
-        )
+        result.issue(new Language_PropertyValue_Issue(context, (propDef ? propDef.property : "unknown"), valueAsPrimitive, "boolean " + JSON.stringify(value)))
     }
 }
 
@@ -92,7 +85,7 @@ export function validateInteger<String>(value: String, result: ValidationResult,
     const valueAsPrimitive = "" + value
     const regexp = /^[+-]?(0|[1-9][0-9]*)$/
     if (valueAsPrimitive === null || !regexp.test(valueAsPrimitive)) {
-        result.issue(new Language_PropertyValue_Issue(context, propDef ? propDef.property : "unknown", valueAsPrimitive, "integer"))
+        result.issue(new Language_PropertyValue_Issue(context, (propDef ? propDef.property : "unknown"), valueAsPrimitive, "integer"))
     }
 }
 
@@ -112,7 +105,7 @@ export function validateJSON<String>(value: String, result: ValidationResult, co
     try {
         JSON.parse(valueAsPrimitive)
     } catch (e) {
-        result.issue(new Language_PropertyValue_Issue(context, propDef ? propDef.property : "unknown", valueAsPrimitive, "JSON"))
+        result.issue(new Language_PropertyValue_Issue(context, (propDef ? propDef.property : "unknown"), valueAsPrimitive, "JSON"))
     }
 }
 
