@@ -62,10 +62,12 @@ export class SyntaxValidator {
             const validator = pdef.validate!
             const propertyValue = object[pdef.property]
             if (propertyValue === undefined) {
+              //  console.log("  missing")
                 this.validationResult.issue(new Syntax_PropertyMissingIssue(jsonContext, pdef.property + `{ ${typeof object}}{${originalProperty}}`))
                 continue
             }
             if (!pdef.mayBeNull && propertyValue === null) {
+            //    console.log("  nujll")
                 this.validationResult.issue(new Syntax_PropertyNullIssue(jsonContext, pdef.property))
                 continue
             }
@@ -73,6 +75,7 @@ export class SyntaxValidator {
                 // Ok, stop checking, continue with next property def
                 continue
             }
+            // console.log("  => check it, its basically ok")
             if (pdef.isList) {
                 // Check whether value is an array
                 if (!Array.isArray(propertyValue)) {
@@ -89,8 +92,9 @@ export class SyntaxValidator {
                         if (expectedPropertyDefs !== undefined) {
                             if (expectedPropertyDefs.length === 0) {
                                 // propertyValue should be a primitive as it has no property definitions
-                                this.validatePrimitiveValue(pdef.property, pdef.expectedType, item, jsonContext)
-                                validator.apply(null, [item, this.validationResult, newContext, pdef])
+                                if (this.validatePrimitiveValue(pdef, item, jsonContext)) {
+                                    validator.apply(null, [item, this.validationResult, newContext, pdef])
+                                }
                             } else {
                                 // propertyValue should be an object, validate its properties
                                 this.validateObjectProperties(pdef.property, expectedPropertyDefs, item as UnknownObjectType, newContext)
@@ -111,8 +115,9 @@ export class SyntaxValidator {
                 if (expectedPropertyDefs !== undefined) {
                     if (expectedPropertyDefs.length === 0) {
                         // propertyValue should be a primitive as it has no property definitions
-                        this.validatePrimitiveValue(pdef.property, pdef.expectedType, propertyValue, jsonContext)
-                        validator.apply(null, [propertyValue, this.validationResult, newContext, pdef])
+                        if (this.validatePrimitiveValue(pdef, propertyValue, jsonContext)) {
+                            validator.apply(null, [propertyValue, this.validationResult, newContext, pdef])
+                        }
                     } else {
                         // propertyValue should be an object, validate its properties
                         this.validateObjectProperties(pdef.property, expectedPropertyDefs, propertyValue as UnknownObjectType, newContext)
@@ -126,10 +131,17 @@ export class SyntaxValidator {
         this.checkStrayProperties(object, propertyDef.map(pdef => pdef.property ), jsonContext)
     }
     
-    validatePrimitiveValue(originalProperty: string, expectedPrimitive: string, object: unknown, jsonContext: JsonContext) {
-        if (typeof object !== expectedPrimitive) {
-            this.validationResult.issue(new Syntax_PropertyTypeIssue(jsonContext, originalProperty, expectedPrimitive,typeof object))
+    validatePrimitiveValue(propDef: PropertyDefinition, object: unknown, jsonContext: JsonContext): boolean {
+        if (!propDef.mayBeNull && (object === null || object === undefined)) {
+            this.validationResult.issue(new Syntax_PropertyNullIssue(jsonContext, propDef.property))
+            return false
         }
+
+        if (typeof object !== propDef.expectedType) {
+            this.validationResult.issue(new Syntax_PropertyTypeIssue(jsonContext, propDef.property, propDef.expectedType,typeof object))
+            return false
+        }
+        return true
     }
 
     /**
