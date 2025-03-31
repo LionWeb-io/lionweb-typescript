@@ -38,7 +38,7 @@ export function validateId<String>(value: String, result: ValidationResult, cont
 // eslint-disable-next-line @typescript-eslint/ban-types
 export function validateKey<String>(value: String, result: ValidationResult, context: JsonContext): void {
     const keyString: string = "" + value
-    const regexp = /^[a-zA-Z_-][a-zA-Z0-9_-]*$/
+    const regexp = /^[a-zA-Z0-9_-][a-zA-Z0-9_-]*$/
     if (!regexp.test(keyString)) {
         result.issue(new Syntax_KeyFormat_Issue(context, keyString))
     }
