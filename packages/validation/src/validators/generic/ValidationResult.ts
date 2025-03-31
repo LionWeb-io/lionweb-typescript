@@ -1,4 +1,4 @@
-import { ValidationIssue } from "../issues/ValidationIssue.js"
+import { ValidationIssue } from "../../issues/ValidationIssue.js"
 
 export class ValidationResult {
     issues: ValidationIssue[] = []

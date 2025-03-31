@@ -5,7 +5,7 @@ import { JsonContext } from "../json/JsonContext.js"
 import { isLionWebM3Language, LionWebJsonChunk } from "../json/LionWebJson.js"
 import { LionWebJsonChunkWrapper } from "../json/LionWebJsonChunkWrapper.js"
 import { isConcept, LanguageRegistry } from "../languages/index.js"
-import { ValidationResult } from "./ValidationResult.js"
+import { ValidationResult } from "./generic/ValidationResult.js"
 
 /**
  * Validates whether a chunk is a valid language definition
@@ -23,7 +23,7 @@ export class LionWebLanguageValidator {
     /**
      * Check whether the metamodel is a Language.
      * Assumption is that _chunk_ is already validated as a correct :LionWebJsonChunk
-     * @param obj
+     * @param chunk
      */
     validateLanguage(chunk: LionWebJsonChunk) {
         this.chunkWrapper = new LionWebJsonChunkWrapper(chunk)

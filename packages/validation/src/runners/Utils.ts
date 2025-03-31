@@ -1,6 +1,6 @@
 import fs from "fs"
 import path from "path"
-import { ValidationResult } from "../validators/ValidationResult.js"
+import { ValidationResult } from "../validators/generic/ValidationResult.js"
 
 export function getFilesRecursive(dirPath: string, arrayOfFiles: string[]) {
     const files = fs.readdirSync(dirPath)
