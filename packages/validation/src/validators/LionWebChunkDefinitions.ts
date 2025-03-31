@@ -85,7 +85,7 @@ export const expectedTypes: Map<string, PropertyDefinition[]> = new Map([
         ]
     ],
     /**
-     * Elements without properties are assumed to be JSON/JS primitive values, and tsted using `typeof`.
+     * Elements without properties are assumed to be JSON/JS primitive values, and tested using `typeof`.
      */
     [
         "string",

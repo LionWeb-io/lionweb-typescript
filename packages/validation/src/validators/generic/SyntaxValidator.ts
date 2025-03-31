@@ -62,12 +62,10 @@ export class SyntaxValidator {
             const validator = pdef.validate!
             const propertyValue = object[pdef.property]
             if (propertyValue === undefined) {
-              //  console.log("  missing")
                 this.validationResult.issue(new Syntax_PropertyMissingIssue(jsonContext, pdef.property + `{ ${typeof object}}{${originalProperty}}`))
                 continue
             }
             if (!pdef.mayBeNull && propertyValue === null) {
-            //    console.log("  nujll")
                 this.validationResult.issue(new Syntax_PropertyNullIssue(jsonContext, pdef.property))
                 continue
             }
@@ -75,7 +73,6 @@ export class SyntaxValidator {
                 // Ok, stop checking, continue with next property def
                 continue
             }
-            // console.log("  => check it, its basically ok")
             if (pdef.isList) {
                 // Check whether value is an array
                 if (!Array.isArray(propertyValue)) {

@@ -2,14 +2,15 @@
  * A list of functions that are used to validate primitive fields for LionWeb conformance.
  * Used in the LionWebSyntaxValidator.
  */
-import { JsonContext } from "../json/JsonContext.js"
 import { Language_PropertyValue_Issue } from "../issues/LanguageIssues.js"
 import {
     Syntax_IdFormat_Issue,
-    Syntax_KeyFormat_Issue, Syntax_PropertyNullIssue,
+    Syntax_KeyFormat_Issue,
+    Syntax_PropertyNullIssue,
     Syntax_SerializationFormatVersion_Issue,
     Syntax_VersionFormat_Issue
 } from "../issues/SyntaxIssues.js"
+import { JsonContext } from "../json/JsonContext.js"
 import { ValidationResult } from "./generic/ValidationResult.js"
 import { PropertyDefinition } from "./generic/ValidationTypes.js"
 
@@ -20,13 +21,13 @@ import { PropertyDefinition } from "./generic/ValidationTypes.js"
  * @param context   The context for the error message in errors.
  */
 // eslint-disable-next-line @typescript-eslint/ban-types
-export function validateId<String>(value: String, result: ValidationResult, context: JsonContext): void  {
+export function validateId<String>(value: String, result: ValidationResult, context: JsonContext): void {
     const idString: string = "" + value
-    const egexp = /^[a-zA-Z0-9$_-][a-zA-Z0-9$_-]*$/
-    if (!egexp.test(idString)) {
+    const regexp = /^[a-zA-Z0-9_-][a-zA-Z0-9_-]*$/
+    if (!regexp.test(idString)) {
         result.issue(new Syntax_IdFormat_Issue(context, idString))
     }
-}
+}    
 
 /**
  * Check whether `key` is a valid LionWeb key.
@@ -37,8 +38,8 @@ export function validateId<String>(value: String, result: ValidationResult, cont
 // eslint-disable-next-line @typescript-eslint/ban-types
 export function validateKey<String>(value: String, result: ValidationResult, context: JsonContext): void {
     const keyString: string = "" + value
-    const egexp = /^[a-zA-Z0-9$_-][a-zA-Z$_0-9-]*$/
-    if (!egexp.test(keyString)) {
+    const regexp = /^[a-zA-Z_-][a-zA-Z0-9_-]*$/
+    if (!regexp.test(keyString)) {
         result.issue(new Syntax_KeyFormat_Issue(context, keyString))
     }
 }
@@ -68,7 +69,14 @@ export function validateVersion<String>(value: String, result: ValidationResult,
 export function validateBoolean<String>(value: String, result: ValidationResult, context: JsonContext, propDef?: PropertyDefinition): void {
     const valueAsPrimitive = "" + value
     if (valueAsPrimitive !== "true" && valueAsPrimitive !== "false") {
-        result.issue(new Language_PropertyValue_Issue(context, (propDef ? propDef.property : "unknown"), valueAsPrimitive, "boolean " + JSON.stringify(value)))
+        result.issue(
+            new Language_PropertyValue_Issue(
+                context,
+                propDef ? propDef.property : "unknown",
+                valueAsPrimitive,
+                "boolean " + JSON.stringify(value)
+            )
+        )
     }
 }
 
@@ -84,7 +92,7 @@ export function validateInteger<String>(value: String, result: ValidationResult,
     const valueAsPrimitive = "" + value
     const regexp = /^[+-]?(0|[1-9][0-9]*)$/
     if (valueAsPrimitive === null || !regexp.test(valueAsPrimitive)) {
-        result.issue(new Language_PropertyValue_Issue(context, (propDef ? propDef.property : "unknown"), valueAsPrimitive, "integer"))
+        result.issue(new Language_PropertyValue_Issue(context, propDef ? propDef.property : "unknown", valueAsPrimitive, "integer"))
     }
 }
 
@@ -104,7 +112,7 @@ export function validateJSON<String>(value: String, result: ValidationResult, co
     try {
         JSON.parse(valueAsPrimitive)
     } catch (e) {
-        result.issue(new Language_PropertyValue_Issue(context, (propDef ? propDef.property : "unknown"), valueAsPrimitive, "JSON"))
+        result.issue(new Language_PropertyValue_Issue(context, propDef ? propDef.property : "unknown", valueAsPrimitive, "JSON"))
     }
 }
 
@@ -125,4 +133,3 @@ export function validateSerializationFormatVersion<String>(value: String, result
         return
     }
 }
-
