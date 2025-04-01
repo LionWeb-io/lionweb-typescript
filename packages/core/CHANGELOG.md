@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.6.13
+
+* Fix [bug #203](https://github.com/LionWeb-io/lionweb-typescript/issues/203).
+* (Fix that running setup on the test package for a second time fails.)
+
+
 ## 0.6.12
 
 * `LanguageFactory` instances take care of containment: e.g., creating an entity automatically adds that to the language, and likewise for features (to classifiers) and literals (to enumerations). 
