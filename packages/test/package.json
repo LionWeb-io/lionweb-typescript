@@ -19,8 +19,8 @@
     "lint": "eslint src",
     "pretest": "npm run build",
     "setup": "npm run checkout-testset && npm run checkout-testchanges && mkdir -p metrics",
-    "checkout-testset": "npx degit https://github.com/LionWeb-io/lionweb-integration-testing/testset/ testset",
-    "checkout-testchanges": "npx degit https://github.com/LionWeb-io/lionweb-integration-testing/testchanges/ testchanges",
+    "checkout-testset": "npx degit --force https://github.com/LionWeb-io/lionweb-integration-testing/testset/ testset",
+    "checkout-testchanges": "npx degit --force https://github.com/LionWeb-io/lionweb-integration-testing/testchanges/ testchanges",
     "test": "mocha --recursive dist/"
   },
   "devDependencies": {
