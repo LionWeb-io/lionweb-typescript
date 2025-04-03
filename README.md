@@ -33,19 +33,36 @@ The implementation is divided up in a number of NPM packages in the directory [`
 
 - `core`
   The "core stuff" such as: base types, the LionCore M3 (including the `builtins` language), and (de-)serialization.
+
 - `utilities`
   Utilities on top of the `core` packages that might be broadly useful, but should not go into the `core` package.
+
 - `validation`
   Validators that validate a JSON serialization.
+
 - `test`
   A package containing (unit) tests for the packages above.
+
 - `cli`
   A package with an executable to trigger some of the functionality in `utilities` through a commandline interface (CLI), i.e. from the commandline.
+
 - `artifacts`
   A package that generates artifacts (serialization chunks, diagrams, JSON Schemas) from some of the models constructed in the `core` and `test` packages.
 
+- `class-core`
+  A package that contains a framework for the implementation of `INode` that's class-based, and can handle deltas.
+- `class-core-generator`
+  A package that contains a code generator to generate classes based on the `class-core` package from an M2.
+
+- `class-core-build`
+  A package that builds part of the code in `class-core` — specifically the part related to the delta protocol.
+
+  _Note_ that this package – and specifically the `generate-for-class-core.ts` file – depends on `class-core` itself.
+  This constitutes a *circular* dependency, but that only exists at compile+build time, so should not be problematic.
+  To ensure that a “clean clone” of this repository is not impacted, the `make-class-core.sh` script builds `class-core` first, before compiling and running `class-core-build`, and then builds `class-core` again.
+
 Each of these packages have their own `README.md`.
-The `core`, `utilities`, `cli`, and `validation` packages are published in the scope of [the `lionweb` organization](https://www.npmjs.com/org/lionweb), meaning that they're all prefixed with `@lionweb/`.
+The `core`, `utilities`, `cli`, and `validation`, `class-core`, and `class-core-generator` packages are published in the scope of [the `lionweb` organization](https://www.npmjs.com/org/lionweb), meaning that they're all prefixed with `@lionweb/`.
 The other packages are for internal use only.
 All these packages declare their own NPM semver identification, which isn't directly related to the release version of the LionWeb specification.
 
@@ -131,7 +148,7 @@ Inspect the resulting diffs to ensure correctness, and don't forget to run `npm 
 
 Packages are released to the [npm registry (website)](https://www.npmjs.com/): see the badges at the top of this document.
 We'll use the terms “release/releasing” from now on, instead of “publication/publishing” as npm itself does.
-We only release the following packages: `core`, `validation`, `utilities`, `cli`.
+We only release the following packages: `core`, `validation`, `utilities`, `cli`, `class-core`, `class-core-generator`.
 
 Releasing a package involves the following steps:
 
