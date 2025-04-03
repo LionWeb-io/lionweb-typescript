@@ -1,6 +1,5 @@
-import {assert} from "chai"
-const {equal} = assert
 import {sumNumbers} from "@lionweb/utilities/dist/utils/array.js"
+import {equal} from "./assertions.js"
 
 describe("array utils work", () => {
 

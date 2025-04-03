@@ -1,13 +1,11 @@
-import {assert} from "chai"
-const {equal} = assert
-
 import {serializeNodes} from "@lionweb/core"
 import {genericAsTreeText, languageAsText} from "@lionweb/utilities"
 import {readFileSync, writeFileSync} from "fs"
 
-import {languageWithEnum} from "../languages/with-enum.js"
 import {libraryExtractionFacade, libraryModel} from "../instances/library.js"
 import {libraryLanguage} from "../languages/library.js"
+import {languageWithEnum} from "../languages/with-enum.js"
+import {equal} from "../utils/assertions.js"
 
 
 describe("LionCore-specific textual syntax", () => {

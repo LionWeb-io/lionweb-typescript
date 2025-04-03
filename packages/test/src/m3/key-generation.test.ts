@@ -1,8 +1,7 @@
-import {assert} from "chai"
-const {deepEqual} = assert
-
 import {builtinPrimitives, chain, concatenator, LanguageFactory} from "@lionweb/core"
 import {hasher} from "@lionweb/utilities"
+
+import {deepEqual} from "../utils/assertions.js"
 
 
 describe("key generation", () => {

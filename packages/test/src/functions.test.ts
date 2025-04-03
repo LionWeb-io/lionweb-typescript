@@ -1,7 +1,6 @@
-import {assert} from "chai"
-const {deepEqual} = assert
-
 import {containmentChain, flatMap, Id, Language, M3Concept, Node} from "@lionweb/core"
+
+import {deepEqual} from "./utils/assertions.js"
 
 
 describe("containmentChain function", () => {

@@ -1,9 +1,7 @@
 import {childrenExtractorUsing, dynamicExtractionFacade, DynamicNode, Node, nodesExtractorUsing} from "@lionweb/core"
 
-import {assert} from "chai"
-const {deepEqual} = assert
-
 import {Annotated, Circle, Coord} from "./languages/shapes.js"
+import {deepEqual} from "./utils/assertions.js"
 
 
 const center = {

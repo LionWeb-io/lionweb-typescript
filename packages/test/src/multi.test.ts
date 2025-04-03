@@ -1,11 +1,10 @@
-import {assert} from "chai"
-const {deepEqual} = assert
-
 import {deserializeSerializationChunk, serializeNodes} from "@lionweb/core"
+
 import {libraryLanguage} from "./languages/library.js"
 import {multiLanguage} from "./languages/multi.js"
 import {libraryInstantiationFacade} from "./instances/library.js"
 import {multiModel, multiExtractionFacade} from "./instances/multi.js"
+import {deepEqual} from "./utils/assertions.js"
 
 
 describe("multi-language test model", () => {

@@ -1,3 +1,4 @@
+import fs from "fs"
 import {
     ValidationResult,
     getAllDirectories,
@@ -6,10 +7,10 @@ import {
     validateFileResult,
     LanguageRegistry
 } from "@lionweb/validation"
-import { LionWebLanguageWrapper } from "@lionweb/validation/dist/languages/LionWebLanguageWrapper.js"
-import { assert } from "chai"
-import fs from "fs"
-import { TestExpectation } from "./TestExpectation.js"
+import {LionWebLanguageWrapper} from "@lionweb/validation/dist/languages/LionWebLanguageWrapper.js"
+
+import {TestExpectation} from "./TestExpectation.js"
+import {isTrue} from "../utils/assertions.js"
 
 // Directories containing test cases
 const validDir = "testset/valid"
@@ -60,7 +61,7 @@ function validationTest(testDir: TestDir, validateAgainstLanguage: boolean, regi
                         console.log("SUCCESS: " + issuestoString(result, file))
                     }
                 }
-                assert.isTrue(success, issuestoString(result, file))
+                isTrue(success, issuestoString(result, file))
             })
         }
     }

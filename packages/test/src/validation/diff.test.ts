@@ -1,14 +1,14 @@
-import { LionWebJsonChunk, LionWebJsonDiff } from "@lionweb/validation"
-import { assert } from "chai"
-import fs from "fs"
+import {existsSync, readFileSync, statSync} from "fs"
+import {LionWebJsonChunk, LionWebJsonDiff} from "@lionweb/validation"
 
-const { deepEqual } = assert
+import {deepEqual} from "../utils/assertions.js"
+
 
 function readModel(filename: string): LionWebJsonChunk | null {
-    if (fs.existsSync(filename)) {
-        const stats = fs.statSync(filename)
+    if (existsSync(filename)) {
+        const stats = statSync(filename)
         if (stats.isFile()) {
-            const chunk: LionWebJsonChunk = JSON.parse(fs.readFileSync(filename).toString())
+            const chunk: LionWebJsonChunk = JSON.parse(readFileSync(filename).toString())
             return chunk
         }
     }
@@ -30,3 +30,4 @@ describe("FileSystem mode test", () => {
         deepEqual(diff1.diffResult.changes, [])
     })
 })
+

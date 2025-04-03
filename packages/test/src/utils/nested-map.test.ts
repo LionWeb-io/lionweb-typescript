@@ -1,6 +1,3 @@
-import {assert} from "chai"
-const {deepEqual} = assert
-
 import {
     flatMapValues,
     grouper,
@@ -13,6 +10,8 @@ import {
     nestedFlatMap3
 } from "@lionweb/utilities/dist/utils/nested-map.js"
 import {sumNumbers} from "@lionweb/utilities/dist/utils/array.js"
+
+import {deepEqual} from "../utils/assertions.js"
 
 
 describe("nested map utils work", () => {

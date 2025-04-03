@@ -1,7 +1,6 @@
-import {assert} from "chai"
-const {equal} = assert
-
 import {concatenator, LanguageFactory, lastOf} from "@lionweb/core"
+
+import {equal} from "../utils/assertions.js"
 
 
 describe("M3 types", () => {

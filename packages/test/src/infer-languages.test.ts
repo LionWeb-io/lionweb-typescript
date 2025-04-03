@@ -1,4 +1,3 @@
-import {deepEqual, equal} from "assert"
 import {serializeLanguages, serializeNodes} from "@lionweb/core"
 import {
     deriveLikelyPropertyName,
@@ -10,6 +9,7 @@ import {libraryExtractionFacade, libraryModel} from "./instances/library.js"
 import {minimalLibraryLanguage} from "./languages/minimal-library.js"
 import {multiExtractionFacade, multiModel} from "./instances/multi.js"
 import {multiLanguage} from "./languages/multi.js"
+import {deepEqual, equal} from "./utils/assertions.js"
 
 
 describe("inferLanguagesFromChunk", () => {

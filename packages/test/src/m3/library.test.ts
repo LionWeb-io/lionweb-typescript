@@ -1,8 +1,7 @@
-import {assert} from "chai"
-const {deepEqual} = assert
-
 import {deserializeLanguages, lioncoreBuiltins, serializeLanguages} from "@lionweb/core"
+
 import {libraryLanguage} from "../languages/library.js"
+import {deepEqual} from "../utils/assertions.js"
 
 
 describe("Library test metamodel", () => {

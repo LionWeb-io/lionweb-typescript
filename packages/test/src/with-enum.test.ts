@@ -1,8 +1,7 @@
-import {assert} from "chai"
-const {deepEqual} = assert
-
 import {deserializeLanguages, Enumeration, serializeLanguages} from "@lionweb/core"
+
 import {languageWithEnum} from "./languages/with-enum.js"
+import {deepEqual} from "./utils/assertions.js"
 
 
 describe("Language-with-enum test model", () => {
