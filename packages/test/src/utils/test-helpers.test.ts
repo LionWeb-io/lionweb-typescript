@@ -1,5 +1,4 @@
-import {assert} from "chai"
-const {deepEqual, throws} = assert
+import {deepEqual, throws} from "../utils/assertions.js"
 
 
 describe("test helpers", () => {

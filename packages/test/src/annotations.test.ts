@@ -1,6 +1,4 @@
-import {assert} from "chai"
-const {deepEqual, equal} = assert
-
+import {readFileSync} from "fs"
 import {
     AccumulatingSimplisticHandler,
     currentSerializationFormatVersion,
@@ -9,7 +7,8 @@ import {
     SerializationChunk
 } from "@lionweb/core"
 import {genericAsTreeText, languageAsText, readFileAsJson, withoutAnnotations} from "@lionweb/utilities"
-import {readFileSync} from "fs"
+
+import {deepEqual, equal} from "./utils/assertions.js"
 
 
 describe("annotation remover", () => {

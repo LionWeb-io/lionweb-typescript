@@ -1,13 +1,12 @@
-import {assert} from "chai"
-const {deepEqual} = assert
 import {join} from "path"
-
 import {serializeNodes} from "@lionweb/core"
 import {measure, readFileAsJson, writeJsonAsFile} from "@lionweb/utilities"
+
 import {libraryExtractionFacade, libraryModel} from "./instances/library.js"
 import {libraryLanguage} from "./languages/library.js"
 import {multiExtractionFacade, multiModel} from "./instances/multi.js"
 import {multiLanguage} from "./languages/multi.js"
+import {deepEqual} from "./utils/assertions.js"
 
 
 describe("metrics computation", () => {

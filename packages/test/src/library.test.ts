@@ -1,6 +1,3 @@
-import {assert} from "chai"
-const {deepEqual} = assert
-
 import {
     deserializeSerializationChunk,
     DynamicNode,
@@ -8,8 +5,10 @@ import {
     nameBasedClassifierDeducerFor,
     serializeNodes
 } from "@lionweb/core"
+
 import {libraryModel, libraryExtractionFacade, libraryInstantiationFacade} from "./instances/library.js"
 import {libraryLanguage} from "./languages/library.js"
+import {deepEqual} from "./utils/assertions.js"
 
 
 describe("Library test model", () => {

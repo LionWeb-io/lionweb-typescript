@@ -1,6 +1,4 @@
-import {assert, expect} from "chai"
-const {deepEqual, equal} = assert
-
+import {expect} from "chai"
 import {
     AggregatingSimplisticHandler,
     Concept,
@@ -16,10 +14,12 @@ import {
     SerializationChunk,
     unresolved
 } from "@lionweb/core"
+
 import {BaseNode} from "./instances/base.js"
 import {libraryInstantiationFacade} from "./instances/library.js"
 import {libraryLanguage} from "./languages/library.js"
 import {dateDatatype, libraryWithDatesLanguage} from "./languages/libraryWithDates.js"
+import {deepEqual, equal} from "./utils/assertions.js"
 
 
 type NodeWithProperties = BaseNode & {properties:Record<string, unknown>}

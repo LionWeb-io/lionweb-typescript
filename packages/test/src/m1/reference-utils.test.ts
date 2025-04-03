@@ -1,6 +1,3 @@
-import {assert} from "chai"
-const {deepEqual} = assert
-
 import {
     incomingReferences,
     referencesToOutOfScopeNodes,
@@ -14,6 +11,7 @@ import {
 
 import {AnotherConcept, SomeAnnotation, SomeAnnotation_ref, SomeConcept, SomeConcept_ref} from "../languages/generic.js"
 import {MyConcept, MyConcept_multivaluedRef, MyConcept_singularRef} from "../languages/tiny-ref.js"
+import {deepEqual} from "../utils/assertions.js"
 
 
 /*

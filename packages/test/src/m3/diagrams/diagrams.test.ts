@@ -1,7 +1,4 @@
-const {equal} = assert
-import {assert} from "chai"
 import {readFileSync, writeFileSync} from "fs"
-
 import {
     builtinClassifiers,
     chain,
@@ -11,6 +8,8 @@ import {
     lastOf
 } from "@lionweb/core"
 import {generateMermaidForLanguage, generatePlantUmlForLanguage, hasher} from "@lionweb/utilities"
+
+import {equal} from "../../utils/assertions.js"
 
 
 const readTextFile = (fileName: string): string =>

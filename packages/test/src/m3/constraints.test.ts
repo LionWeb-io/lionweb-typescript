@@ -1,7 +1,7 @@
-import {deepEqual, fail} from "assert"
-
 import {chain, concatenator, Concept, issuesLanguage, Language, LanguageFactory, lastOf} from "@lionweb/core"
 import {nanoIdGen} from "@lionweb/utilities"
+
+import {deepEqual, fail} from "../utils/assertions.js"
 
 
 describe("general LionCore constraints - name/version" , () => {

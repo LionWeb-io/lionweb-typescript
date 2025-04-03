@@ -1,7 +1,6 @@
-import {assert} from "chai"
-const {deepEqual, isTrue} = assert
-
 import {cycleWith} from "@lionweb/core"
+
+import {deepEqual, isTrue} from "./assertions.js"
 
 
 describe("cycleWith", () => {
