@@ -24,12 +24,12 @@
     "test": "mocha --recursive dist/"
   },
   "devDependencies": {
-    "@types/chai": "4.3.12",
-    "@types/mocha": "10.0.6",
+    "@types/chai": "5.2.1",
+    "@types/mocha": "10.0.10",
     "@types/xml2js": "0.4.14",
-    "chai": "4.4.1",
+    "chai": "5.2.0",
     "degit": "2.8.4",
-    "mocha": "10.3.0",
+    "mocha": "11.1.0",
     "xml2js": "0.6.2"
   },
   "dependencies": {
