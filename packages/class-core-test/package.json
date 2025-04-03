@@ -1,0 +1,30 @@
+{
+  "name": "@lionweb/class-core-test",
+  "version": "1.0.0-beta.0",
+  "description": "Tests for the LionWeb class-core package",
+  "type": "module",
+  "license": "Apache-2.0",
+  "private": true,
+  "scripts": {
+    "clean": "rimraf dist/ node_modules/",
+    "build": "tsc",
+    "pretest": "npm run build",
+    "test": "mocha --recursive dist/",
+    "lint": "eslint src"
+  },
+  "dependencies": {
+    "@lionweb/class-core": "*",
+    "@lionweb/core": "0.6.12",
+    "@lionweb/utilities": "0.6.12",
+    "@lionweb/validation": "0.6.3",
+    "chai": "5.1.1",
+    "mocha": "10.7.3"
+  },
+  "devDependencies": {
+    "@types/chai": "4.3.20",
+    "@types/mocha": "10.0.9",
+    "mobx": "6.13.5",
+    "rimraf": "6.0.1",
+    "typescript": "5.3.3"
+  }
+}
