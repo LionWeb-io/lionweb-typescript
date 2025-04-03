@@ -1,29 +1,28 @@
 {
   "name": "@lionweb/class-core",
-  "version": "1.0.0-beta.0",
+  "version": "0.6.13-beta.0",
   "description": "Generic, language-aspecific base types for generated TypeScript APIs",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",
   "type": "module",
   "scripts": {
-    "clean": "rimraf dist/ node_modules/",
-    "build": "rimraf dist && tsc",
+    "clean": "rm -rf dist/ node_modules/",
+    "build": "rm -rf dist && tsc",
     "prepack": "npm install && npm run build",
     "lint": "eslint src"
   },
   "license": "Apache-2.0",
   "private": true,
   "dependencies": {
-    "@lionweb/core": "0.6.12",
+    "@lionweb/core": "0.6.13-beta.0",
     "littoral-templates": "0.3.0",
-    "mobx": "6.13.5"
+    "mobx": "6.13.7"
   },
   "peerDependencies": {
-    "@lionweb/core": "0.6.12"
+    "@lionweb/core": "0.6.13-beta.0"
   },
   "devDependencies": {
-    "rimraf": "6.0.1",
     "typescript": "5.3.3"
   }
 }

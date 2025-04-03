@@ -1,11 +1,11 @@
 {
   "name": "@lionweb/class-core-build",
-  "version": "1.0.0-beta.0",
+  "version": "0.6.13-beta.0",
   "description": "Build the deltas language, and the delta types in -class-core from their specification",
   "main": "dist/generate-for-class-core.js",
   "type": "module",
   "scripts": {
-    "clean": "rimraf dist/ node_modules/",
+    "clean": "rm -rf dist/ node_modules/",
     "build": "tsc",
     "pregenerate": "npm run build",
     "generate": "node dist/generate-for-class-core.js",
@@ -14,14 +14,14 @@
   "license": "Apache-2.0",
   "private": true,
   "dependencies": {
-    "@lionweb/class-core-generator": "*",
+    "@lionweb/class-core-generator": "0.6.13-beta.0",
     "littoral-templates": "0.3.0"
   },
   "peerDependencies": {
     "@lionweb/class-core-generator": "*"
   },
   "devDependencies": {
-    "@types/node": "20.17.10",
+    "@types/node": "20.17.30",
     "typescript": "5.3.3"
   }
 }
