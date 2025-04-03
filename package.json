@@ -18,7 +18,7 @@
     "typescript": "5.3.3"
   },
   "scripts": {
-    "initialize": "npm run clean && npm install && npm run setup && npm run build",
+    "initialize": "npm run clean && npm install && npm run setup && npm run build && source make-class-core.sh",
     "clean": "rm -rf node_modules/ && npm run clean -w packages --if-present",
     "build": "npm run build -w packages --if-present",
     "lint": "npm run lint -w packages --if-present",
@@ -36,9 +36,9 @@
     "./packages/cli",
     "./packages/test",
     "./packages/artifacts",
+    "./packages/class-core",
     "./packages/class-core-generator",
     "./packages/class-core-build",
-    "./packages/class-core",
     "./packages/class-core-test"
   ]
 }

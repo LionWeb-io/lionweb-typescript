@@ -90,19 +90,32 @@ npm run clean
 npm install
 npm run setup
 ```
+
 Run the following command to **build** each of the packages:
 
 ```shell
-# Build the project
 npm run build
 ```
 
 This includes cleaning up and installing any NPM (dev) dependencies.
 
-The preceding commands can also be run as follows:
+Run the following command to **re-build** the `class-core`-related packages specifically:
+
+```shell
+source make-class-core.sh
+```
+
+The chain of preceding commands can also be run as follows:
 
 ```shell
 npm run initialize
+```
+
+Run the following command to run the tests:
+
+```shell
+# Run the tests
+npm run test
 ```
 
 The following command statically _style_-checks the source code in all the packages:
@@ -114,13 +127,6 @@ npm run lint
 
 *Note* that this does not catch TypeScript compilation errors!
 (That's because linting only does parsing, not full compilation.)
-
-Run the following command to run the tests:
-
-```shell
-# Run the tests
-npm run test
-```
 
 <br />
 
