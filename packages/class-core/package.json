@@ -9,8 +9,12 @@
   "scripts": {
     "clean": "rm -rf dist/ node_modules/",
     "build": "rm -rf dist && tsc",
-    "prepack": "npm install && npm run build",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "pre-release-either": "npm run clean && npm install && npm run build",
+    "prerelease": "npm run pre-release-either",
+    "release": "npm publish",
+    "prerelease-beta": "npm run pre-release-either",
+    "release-beta": "npm publish --tag beta"
   },
   "license": "Apache-2.0",
   "private": true,
