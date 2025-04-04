@@ -51,6 +51,7 @@ The implementation is divided up in a number of NPM packages in the directory [`
 
 - `class-core`
   A package that contains a framework for the implementation of `INode` that's class-based, and can handle deltas.
+
 - `class-core-generator`
   A package that contains a code generator to generate classes based on the `class-core` package from an M2.
 
