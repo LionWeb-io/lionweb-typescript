@@ -49,7 +49,7 @@ export const megaFactoryFor = (megaFactoryName: string, languages: Language[], m
 
     return asString([
         header ?? [],
-        `import {DeltaHandler} from "@tls/lionweb-class-core";`,
+        `import {DeltaHandler} from "@lionweb/class-core";`,
         ``,
         `import {`,
         indent(commaSeparated(
