@@ -1,6 +1,6 @@
 {
   "name": "@lionweb/class-core-test",
-  "version": "0.6.13-beta.1",
+  "version": "0.6.13-beta.2",
   "description": "Tests for the LionWeb class-core package",
   "private": true,
   "type": "module",
@@ -20,10 +20,10 @@
     "lint": "eslint src"
   },
   "dependencies": {
-    "@lionweb/class-core": "0.6.13-beta.1",
-    "@lionweb/core": "0.6.13-beta.1",
-    "@lionweb/utilities": "0.6.13-beta.1",
-    "@lionweb/validation": "0.6.13-beta.1",
+    "@lionweb/class-core": "0.6.13-beta.2",
+    "@lionweb/core": "0.6.13-beta.2",
+    "@lionweb/utilities": "0.6.13-beta.2",
+    "@lionweb/validation": "0.6.13-beta.2",
     "chai": "5.2.0",
     "mocha": "11.1.0"
   },
