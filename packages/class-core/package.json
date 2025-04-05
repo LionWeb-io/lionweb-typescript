@@ -6,8 +6,16 @@
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",
   "type": "module",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LionWeb-io/lionweb-typescript.git"
+  },
+  "bugs": {
+    "url": "https://github.com/LionWeb-io/lionweb-typescript/issues"
+  },
   "scripts": {
-    "clean": "rm -rf dist/ node_modules/",
+    "clean": "rm -rf dist/ node_modules/ lionweb-class-core-*.tgz",
     "build": "rm -rf dist && tsc",
     "lint": "eslint src",
     "pre-release-either": "npm run clean && npm install && npm run build",
@@ -16,15 +24,10 @@
     "prerelease-beta": "npm run pre-release-either",
     "release-beta": "npm publish --tag beta"
   },
-  "license": "Apache-2.0",
-  "private": true,
   "dependencies": {
     "@lionweb/core": "0.6.13-beta.0",
     "littoral-templates": "0.3.0",
     "mobx": "6.13.7"
-  },
-  "peerDependencies": {
-    "@lionweb/core": "0.6.13-beta.0"
   },
   "devDependencies": {
     "typescript": "5.3.3"

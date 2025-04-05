@@ -2,9 +2,16 @@
   "name": "@lionweb/class-core-test",
   "version": "0.6.13-beta.0",
   "description": "Tests for the LionWeb class-core package",
+  "private": true,
   "type": "module",
   "license": "Apache-2.0",
-  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LionWeb-io/lionweb-typescript.git"
+  },
+  "bugs": {
+    "url": "https://github.com/LionWeb-io/lionweb-typescript/issues"
+  },
   "scripts": {
     "clean": "rm -rf dist/ node_modules/",
     "build": "tsc",
