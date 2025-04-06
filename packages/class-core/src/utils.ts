@@ -15,18 +15,10 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {assert} from "chai";
-
-export const {deepEqual, equal, fail, notEqual, throws} = assert;
-
-export const isTrue = (value: unknown, message?: string): void =>
-    assert.isTrue(value, message);
-
-export const isUndefined = (value: unknown, message?: string): void =>
-    assert.isUndefined(value, message);
-
-export const isSameSet = <T>(actual: T[], expected: T[]): void => {
-    assert.containsSubset(actual, expected, "actual ⊈ expected");
-    assert.containsSubset(expected, actual, "actual ⊉ expected");
-};
+/**
+ * @return a view of the given array of items with duplicates removed.
+ * *Note*: verbatim copy of a function in @lionweb/utilities/utils/array.ts!
+ */
+export const uniquesAmong = <T>(ts: T[]): T[] =>
+    [...new Set(ts)]
 

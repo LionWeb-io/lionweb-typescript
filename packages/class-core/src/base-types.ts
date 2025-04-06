@@ -37,10 +37,13 @@ import {
     DeltaHandler,
     FeatureValueManager,
     MultiContainmentValueManager,
+    MultiReferenceValueManager,
     PropertyValueManager,
     ReferenceValueManager,
-    SingleContainmentValueManager
-} from "./index.js";
+    SingleContainmentValueManager,
+    SingleReferenceValueManager
+} from "./index.js"
+import {uniquesAmong} from "./utils.js"
 
 
 /**
@@ -163,10 +166,17 @@ export interface INodeBase extends Node {
 
     /**
      * @return all children – not all descendants! – of this node, including directly-contained annotations.
-     *Note* that this is (in principle) **for internal use only**!
+     * Children appear uniquely, but their order is *not* guaranteed.
+     * *Note* that this is (in principle) **for internal use only**!
      */
     get children(): INodeBase[];
 
+    /**
+     * @return all nodes targeted by reference values on this node.
+     * Reference targets appear uniquely, but their order is *not* guaranteed.
+     * *Note* that this is (in principle) **for internal use only**!
+     */
+    get referenceTargets(): INodeBase[];
 
     /**
      * An optionally-installed {@link DeltaHandler}.
@@ -262,7 +272,7 @@ export abstract class NodeBase implements INodeBase {
     }
 
     get children(): INodeBase[] {
-        return [
+        return uniquesAmong([
             ...(this.setFeatures
                 .filter((feature) => feature instanceof Containment)
                 .flatMap((feature) => {
@@ -276,9 +286,25 @@ export abstract class NodeBase implements INodeBase {
                     throw new Error(`don't know how to obtain value of feature ${feature.name} of classifier ${this.classifier.name} in language ${this.classifier.language.name}`);
                 })),
             ...this.annotations
-        ];
+        ]);
     }
 
+    get referenceTargets(): INodeBase[] {
+        return uniquesAmong(
+            this.setFeatures
+                .filter((feature) => feature instanceof Reference)
+                .flatMap((feature) => {
+                    const valueManager = this.getReferenceValueManager(feature as Reference);
+                    if (valueManager instanceof SingleReferenceValueManager) {
+                        return valueManager.isSet() ? [valueManager.getDirectly()] : [];
+                    }
+                    if (valueManager instanceof MultiReferenceValueManager) {
+                        return valueManager.get();
+                    }
+                    throw new Error(`don't know how to obtain value of feature ${feature.name} of classifier ${this.classifier.name} in language ${this.classifier.language.name}`);
+                })
+        );
+    }
 
     readonly annotationsValueManager: AnnotationsValueManager = new AnnotationsValueManager(this);
     get annotations(): INodeBase[] {
