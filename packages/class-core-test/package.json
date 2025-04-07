@@ -1,6 +1,6 @@
 {
   "name": "@lionweb/class-core-test",
-  "version": "0.6.13-beta.2",
+  "version": "0.7.0-dev.0",
   "description": "Tests for the LionWeb class-core package",
   "private": true,
   "type": "module",
@@ -20,7 +20,7 @@
     "lint": "eslint src"
   },
   "dependencies": {
-    "@lionweb/class-core": "0.6.13-beta.2",
+    "@lionweb/class-core": "0.6.13-beta.3",
     "@lionweb/core": "0.6.13-beta.2",
     "@lionweb/utilities": "0.6.13-beta.2",
     "@lionweb/validation": "0.6.13-beta.2",

@@ -1,6 +1,6 @@
 {
   "name": "@lionweb/class-core",
-  "version": "0.6.13-beta.2",
+  "version": "0.6.13-beta.3",
   "description": "Generic, language-aspecific base types for generated TypeScript APIs",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

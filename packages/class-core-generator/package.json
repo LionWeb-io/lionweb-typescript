@@ -1,6 +1,6 @@
 {
   "name": "@lionweb/class-core-generator",
-  "version": "0.6.13-beta.2",
+  "version": "0.6.13-beta.3",
   "description": "Generator for implementations of languages based on the class-core package",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
