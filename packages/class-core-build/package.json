@@ -21,7 +21,7 @@
     "lint": "eslint src"
   },
   "dependencies": {
-    "@lionweb/class-core-generator": "0.6.13-beta.3",
+    "@lionweb/class-core-generator": "0.6.13-beta.4",
     "littoral-templates": "0.3.0"
   },
   "devDependencies": {
