@@ -1,6 +1,6 @@
 {
   "name": "@lionweb/class-core-generator",
-  "version": "0.6.13-beta.4",
+  "version": "0.6.13-beta.5",
   "description": "Generator for implementations of languages based on the class-core package",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -25,8 +25,8 @@
     "release-beta": "npm publish --tag beta"
   },
   "devDependencies": {
-    "@lionweb/core": "0.6.13-beta.4",
-    "@lionweb/utilities": "0.6.13-beta.4",
+    "@lionweb/core": "0.6.13-beta.5",
+    "@lionweb/utilities": "0.6.13-beta.5",
     "@types/node": "20.17.30",
     "littoral-templates": "0.3.0",
     "typescript": "5.3.3"
