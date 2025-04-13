@@ -1,5 +1,5 @@
 import { JsonContext } from "../../issues/index.js"
-import { LionWebJsonNode, LionWebJsonReference, LionWebJsonReferenceTarget } from "../../json/index.js"
+import { LionWebJsonNode, LionWebJsonReference, LionWebJsonReferenceTarget } from "@lionweb/json"
 import { Change, Missing } from "./Change.js"
 
 export abstract class ReferenceChange extends Change {

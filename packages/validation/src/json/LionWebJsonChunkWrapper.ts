@@ -6,7 +6,7 @@ import {
     LionWebJsonMetaPointer,
     LionWebJsonNode,
     LionWebJsonReference
-} from "./LionWebJson.js"
+} from "@lionweb/json"
 import { MetaPointers } from "./M3definitions.js"
 import { NodeUtils } from "./NodeUtils.js"
 

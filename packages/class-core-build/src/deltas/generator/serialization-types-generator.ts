@@ -34,7 +34,7 @@ import {isSerializingAsChunk} from "./helpers.js"
 
 const tsTypeForTypeOfSerializationField = (type: Type) => {
     if (type instanceof FeatureType) {
-        return "MetaPointer"
+        return "LionWebJsonMetaPointer"
     }
     if (type instanceof NodeType) {
         return type.serialization instanceof RefOnly
@@ -53,7 +53,7 @@ const tsTypeForTypeOfSerializationField = (type: Type) => {
 const fieldsForSerializationType = ({name, type}: Field) => [
     `${name}: ${tsTypeForTypeOfSerializationField(type)}`,
     when(isSerializingAsChunk(type))(() =>
-        `${((type as NodeType).serialization as SerializeSubTree).fieldName}: SerializationChunk`
+        `${((type as NodeType).serialization as SerializeSubTree).fieldName}: LionWebJsonChunk`
     )
 ]
 
@@ -72,7 +72,7 @@ const typeForDelta = ({name, fields}: Delta) =>
 export const serializationTypesForDeltas = (deltas: Delta[], header?: string) =>
     asString([
         header ?? [],
-        `import {Id, IdOrUnresolved, MetaPointer, SerializationChunk} from "@lionweb/core";`,
+        `import {Id, IdOrUnresolved, LionWebJsonMetaPointer, LionWebJsonChunk} from "@lionweb/core";`,
         ``,
         ``,
         `export type SerializedDelta =`,

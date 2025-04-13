@@ -1,8 +1,8 @@
+import { currentSerializationFormatVersion, LionWebJsonChunk } from "@lionweb/json"
 import {expect} from "chai"
 import {
     AggregatingSimplisticHandler,
     Concept,
-    currentSerializationFormatVersion,
     DefaultPrimitiveTypeDeserializer,
     deserializeChunk,
     deserializeSerializationChunk,
@@ -11,7 +11,6 @@ import {
     InstantiationFacade,
     Language,
     Reference,
-    SerializationChunk,
     unresolved
 } from "@lionweb/core"
 
@@ -43,7 +42,7 @@ export const libraryWithDatesInstantiationFacade: InstantiationFacade<BaseNode> 
 describe("deserialization", () => {
 
     it("deserializes all nodes, also when there are effectively no root nodes", () => {
-        const serializationChunk: SerializationChunk = {
+        const serializationChunk: LionWebJsonChunk = {
             serializationFormatVersion: currentSerializationFormatVersion,
             languages: [
                 {
@@ -82,7 +81,7 @@ describe("deserialization", () => {
     })
 
     it("deserializes node with custom primitive type, without registering custom deserializer, leading to empty model (and console messages)", () => {
-        const serializationChunk: SerializationChunk = {
+        const serializationChunk: LionWebJsonChunk = {
             serializationFormatVersion: currentSerializationFormatVersion,
             languages: [
                 {
@@ -122,7 +121,7 @@ describe("deserialization", () => {
     })
 
     it("deserializes node with custom primitive type, works when registering custom deserializer", () => {
-        const serializationChunk: SerializationChunk = {
+        const serializationChunk: LionWebJsonChunk = {
             serializationFormatVersion: currentSerializationFormatVersion,
             languages: [
                 {
@@ -170,7 +169,7 @@ describe("deserialization", () => {
     })
 
     it("skips nodes with unknown classifier, leading to an empty model (and console messages)", () => {
-        const serializationChunk: SerializationChunk = {
+        const serializationChunk: LionWebJsonChunk = {
             serializationFormatVersion: currentSerializationFormatVersion,
             languages: [],
             nodes: [
@@ -199,7 +198,7 @@ describe("deserialization", () => {
         const someConcept_aReference = new Reference(someConcept, "someConcept-aReference", "someConcept-aReference", "someConcept-aReference")
         someConcept.havingFeatures(someConcept_aReference)
 
-        const serializationChunk: SerializationChunk = {
+        const serializationChunk: LionWebJsonChunk = {
             serializationFormatVersion: currentSerializationFormatVersion,
             languages: [
                 {
@@ -249,7 +248,7 @@ describe("deserialization", () => {
             // misses "serializationFormatVersion"
             languages: [],
             nodes: []
-        } as unknown as SerializationChunk, dynamicInstantiationFacade, [], [], undefined, aggregator)
+        } as unknown as LionWebJsonChunk, dynamicInstantiationFacade, [], [], undefined, aggregator)
         aggregator.reportAllProblemsOnConsole(true)
         deepEqual(
             Object.entries(aggregator.allProblems()),

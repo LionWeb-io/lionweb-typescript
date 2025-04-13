@@ -3,7 +3,7 @@ import {
     MetaPointers,
     NodeUtils
 } from "../json/index.js"
-import { LionWebJsonChunk, LionWebJsonNode } from "../json/LionWebJson.js"
+import { LionWebJsonChunk, LionWebJsonNode } from "@lionweb/json"
 import { visitAndMap } from "../util/graphs.js"
 import { isAnnotation, isConcept, isContainment, isInterface, isProperty, isReference } from "./LanguageUtils.js"
 

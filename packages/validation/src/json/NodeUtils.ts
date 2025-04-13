@@ -1,12 +1,13 @@
 import {
     isEqualMetaPointer,
     isEqualReferenceTarget,
-    LionWebJsonContainment, LionWebJsonMetaPointer,
+    LionWebJsonContainment,
+    LionWebJsonMetaPointer,
     LionWebJsonNode,
     LionWebJsonProperty,
     LionWebJsonReference,
     LionWebJsonReferenceTarget
-} from "./LionWebJson.js"
+} from "@lionweb/json"
 
 /**
  * Utility functions for LionWebJsonNode's

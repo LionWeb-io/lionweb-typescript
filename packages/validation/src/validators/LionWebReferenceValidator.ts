@@ -1,3 +1,4 @@
+import { LionWebJsonChunk, LionWebJsonContainment, LionWebJsonMetaPointer, LionWebJsonNode, LionWebJsonUsedLanguage } from "@lionweb/json"
 import {
     Duplicates_Issue,
     Reference_ChildMissingInParent_Issue,
@@ -8,13 +9,6 @@ import {
 } from "../issues/ReferenceIssues.js"
 import { JsonContext } from "../json/JsonContext.js"
 import { ChunkUtils } from "../json/ChunkUtils.js"
-import {
-    LionWebJsonContainment,
-    LionWebJsonChunk,
-    LionWebJsonMetaPointer,
-    LionWebJsonNode,
-    LwJsonUsedLanguage,
-} from "../json/LionWebJson.js"
 import { LionWebJsonChunkWrapper } from "../json/LionWebJsonChunkWrapper.js"
 import { ValidationResult } from "./generic/ValidationResult.js"
 
@@ -136,7 +130,7 @@ export class LionWebReferenceValidator {
      * @param usedLanguages
      * @param context
      */
-    checkDuplicateUsedLanguage(usedLanguages: LwJsonUsedLanguage[], context: JsonContext) {
+    checkDuplicateUsedLanguage(usedLanguages: LionWebJsonUsedLanguage[], context: JsonContext) {
         if (usedLanguages === null || usedLanguages === undefined) {
             return
         }

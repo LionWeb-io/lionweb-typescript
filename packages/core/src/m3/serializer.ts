@@ -1,13 +1,13 @@
-import {Language} from "./types.js"
-import {SerializationChunk} from "../serialization.js"
-import {serializeNodes} from "../serializer.js"
-import {lioncoreExtractionFacade} from "./facade.js"
+import { LionWebJsonChunk } from "@lionweb/json"
+import { serializeNodes } from "../serializer.js"
+import { lioncoreExtractionFacade } from "./facade.js"
+import { Language } from "./types.js"
 
 
 /**
  * Serializes languages (i.e., instances of the LionCore metametamodel, using {@link M3Concept these type definitions})
  * into the LionWeb serialization JSON format.
  */
-export const serializeLanguages = (...languages: Language[]): SerializationChunk =>
+export const serializeLanguages = (...languages: Language[]): LionWebJsonChunk =>
     serializeNodes(languages, lioncoreExtractionFacade)
 

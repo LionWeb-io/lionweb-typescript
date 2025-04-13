@@ -25,7 +25,8 @@
     "release-beta": "npm publish --tag beta"
   },
   "dependencies": {
-    "@lionweb/core": "0.6.13-beta.4",
+      "@lionweb/core": "0.6.13-beta.4",
+      "@lionweb/json": "0.6.13-beta.4",
     "littoral-templates": "0.3.0",
     "mobx": "6.13.7"
   },

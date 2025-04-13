@@ -1,32 +1,18 @@
-import {ExtractionFacade} from "./facade.js"
-import {currentSerializationFormatVersion, MetaPointer, SerializationChunk, SerializedNode} from "./serialization.js"
-import {asIds} from "./functions.js"
-import {Node} from "./types.js"
-import {DefaultPrimitiveTypeSerializer} from "./m3/builtins.js"
-import {allFeaturesOf} from "./m3/functions.js"
-import {
-    Containment,
-    Enumeration,
-    Feature,
-    Language,
-    PrimitiveType,
-    Property,
-    Reference,
-    simpleNameDeducer
-} from "./m3/types.js"
-import {asArray} from "./utils/array-helpers.js"
-
+import { currentSerializationFormatVersion, LionWebJsonChunk, LionWebJsonMetaPointer, LionWebJsonNode } from "@lionweb/json"
+import { ExtractionFacade } from "./facade.js"
+import { asIds } from "./functions.js"
+import { DefaultPrimitiveTypeSerializer } from "./m3/builtins.js"
+import { allFeaturesOf } from "./m3/functions.js"
+import { Containment, Enumeration, Feature, Language, PrimitiveType, Property, Reference, simpleNameDeducer } from "./m3/types.js"
+import { Node } from "./types.js"
+import { asArray } from "./utils/array-helpers.js"
 
 export interface PrimitiveTypeSerializer {
     serializeValue(value: unknown, property: Property): string | undefined
 }
 
 const isPrimitiveTypeSerializer = (value: unknown): value is PrimitiveTypeSerializer =>
-       typeof value === "object"
-    && value !== null
-    && "serializeValue" in value
-    && typeof value.serializeValue === "function"
-
+    typeof value === "object" && value !== null && "serializeValue" in value && typeof value.serializeValue === "function"
 
 /**
  * Type to provide options to the serializer.
@@ -42,12 +28,11 @@ export type SerializationOptions = Partial<{
     primitiveTypeSerializer: PrimitiveTypeSerializer
 }>
 
-
 /**
- * @return the {@link MetaPointer} for the given {@link Feature}.
+ * @return the {@link LionWebJsonMetaPointer} for the given {@link Feature}.
  */
-export const metaPointerFor = (feature: Feature): MetaPointer => {
-    const {language} = feature.classifier
+export const metaPointerFor = (feature: Feature): LionWebJsonMetaPointer => {
+    const { language } = feature.classifier
     return {
         language: language.key,
         version: language.version,
@@ -55,29 +40,27 @@ export const metaPointerFor = (feature: Feature): MetaPointer => {
     }
 }
 
-
 /**
- * @return a {@link SerializationChunk} of the given model (i.e., an array of {@link Node nodes} - the first argument) to the LionWeb serialization JSON format.
+ * @return a {@link LionWebJsonChunk} of the given model (i.e., an array of {@link Node nodes} - the first argument) to the LionWeb serialization JSON format.
  */
 export const serializeNodes = <NT extends Node>(
     nodes: NT[],
     extractionFacade: ExtractionFacade<NT>,
     primitiveTypeSerializerOrOptions?: PrimitiveTypeSerializer | SerializationOptions
-): SerializationChunk /* <=> JSON */ => {
-    const primitiveTypeSerializer = (
-        isPrimitiveTypeSerializer(primitiveTypeSerializerOrOptions)
+): LionWebJsonChunk /* <=> JSON */ => {
+    const primitiveTypeSerializer =
+        (isPrimitiveTypeSerializer(primitiveTypeSerializerOrOptions)
             ? primitiveTypeSerializerOrOptions
-            : primitiveTypeSerializerOrOptions?.primitiveTypeSerializer
-    ) ?? new DefaultPrimitiveTypeSerializer()
+            : primitiveTypeSerializerOrOptions?.primitiveTypeSerializer) ?? new DefaultPrimitiveTypeSerializer()
     const serializeEmptyFeatures = isPrimitiveTypeSerializer(primitiveTypeSerializerOrOptions)
         ? true
         : (primitiveTypeSerializerOrOptions?.serializeEmptyFeatures ?? true)
 
-    const serializedNodes: SerializedNode[] = []  // keep nodes as much as possible "in order"
-    const ids: { [id: string]: boolean } = {}   // maintain a map to keep track of IDs of nodes that have been serialized
+    const serializedNodes: LionWebJsonNode[] = [] // keep nodes as much as possible "in order"
+    const ids: { [id: string]: boolean } = {} // maintain a map to keep track of IDs of nodes that have been serialized
     const languagesUsed: Language[] = []
     const registerLanguageUsed = (language: Language) => {
-        if (!languagesUsed.some((languageUsed) => language.equals(languageUsed))) {
+        if (!languagesUsed.some(languageUsed => language.equals(languageUsed))) {
             languagesUsed.push(language)
         }
     }
@@ -90,7 +73,7 @@ export const serializeNodes = <NT extends Node>(
         const classifier = extractionFacade.classifierOf(node)
         const language = classifier.language
         registerLanguageUsed(language)
-        const serializedNode: SerializedNode = {
+        const serializedNode: LionWebJsonNode = {
             id: node.id,
             classifier: classifier.metaPointer(),
             properties: [],
@@ -101,7 +84,7 @@ export const serializeNodes = <NT extends Node>(
         }
         serializedNodes.push(serializedNode)
         ids[node.id] = true
-        allFeaturesOf(classifier).forEach((feature) => {
+        allFeaturesOf(classifier).forEach(feature => {
             const value = extractionFacade.getFeatureValue(node, feature)
             const featureLanguage = feature.classifier.language
             registerLanguageUsed(featureLanguage)
@@ -135,12 +118,12 @@ export const serializeNodes = <NT extends Node>(
                 serializedNode.containments.push({
                     containment: featureMetaPointer,
                     children: asIds(children)
-                        .filter((childId) => childId !== null)
-                        .map((childId) => childId as string)
+                        .filter(childId => childId !== null)
+                        .map(childId => childId as string)
                 })
-                children.forEach((childOrNull) => {
+                children.forEach(childOrNull => {
                     if (childOrNull !== null) {
-                        visit(childOrNull, node);
+                        visit(childOrNull, node)
                     }
                 })
                 return
@@ -154,34 +137,30 @@ export const serializeNodes = <NT extends Node>(
                 serializedNode.references.push({
                     reference: featureMetaPointer,
                     targets: targets
-                        .filter((tOrNull) => tOrNull !== null)  // (skip "non-connected" targets)
-                        .map((t) => t as NT)
-                        .map((t) => ({
-                            resolveInfo: (extractionFacade.resolveInfoFor
-                                ? extractionFacade.resolveInfoFor(t)
-                                : simpleNameDeducer(t)) ?? null,
+                        .filter(tOrNull => tOrNull !== null) // (skip "non-connected" targets)
+                        .map(t => t as NT)
+                        .map(t => ({
+                            resolveInfo:
+                                (extractionFacade.resolveInfoFor ? extractionFacade.resolveInfoFor(t) : simpleNameDeducer(t)) ?? null,
                             reference: t.id
-                        })
-                    )
+                        }))
                 })
                 return
             }
         })
 
-        const annotations = asArray(node.annotations) as NT[]   // assumes that annotations also all are of type NT (which is not unreasonable)
-        serializedNode.annotations = annotations.map((annotation) => annotation.id)
-        annotations.forEach((annotation) => visit(annotation, node))
+        const annotations = asArray(node.annotations) as NT[] // assumes that annotations also all are of type NT (which is not unreasonable)
+        serializedNode.annotations = annotations.map(annotation => annotation.id)
+        annotations.forEach(annotation => visit(annotation, node))
 
-        serializedNode.parent = parent?.id ?? null  // (undefined -> null)
+        serializedNode.parent = parent?.id ?? null // (undefined -> null)
     }
 
-    nodes.forEach((node) => visit(node, undefined))
+    nodes.forEach(node => visit(node, undefined))
 
     return {
         serializationFormatVersion: currentSerializationFormatVersion,
-        languages: languagesUsed
-            .map(({key, version}) => ({ key, version })),
+        languages: languagesUsed.map(({ key, version }) => ({ key, version })),
         nodes: serializedNodes
     }
 }
-

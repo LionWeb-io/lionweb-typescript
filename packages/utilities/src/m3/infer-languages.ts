@@ -1,18 +1,18 @@
 import {
-    Concept,
-    Containment,
-    Language,
-    Link,
-    Property,
-    Reference,
-    SerializationChunk,
     asArray,
     builtinPrimitives,
     chain,
     concatenator,
-    lastOf
+    Concept,
+    Containment,
+    Language,
+    lastOf,
+    Link,
+    Property,
+    Reference
 } from "@lionweb/core"
-import {hasher} from "../hashing.js"
+import { LionWebJsonChunk } from "@lionweb/json"
+import { hasher } from "../hashing.js"
 
 const possibleKeySeparators = ["-", "_"]
 
@@ -21,7 +21,7 @@ const key = lastOf
 
 const { stringDatatype, booleanDatatype, integerDatatype } = builtinPrimitives
 
-export const inferLanguagesFromSerializationChunk = (chunk: SerializationChunk): Language[] => {
+export const inferLanguagesFromSerializationChunk = (chunk: LionWebJsonChunk): Language[] => {
     const languages = new Map<string, Language>()
     const concepts = new Map<string, Concept>()
     const links = new Array<{ link: Link; conceptId: string }>()
@@ -142,12 +142,9 @@ export const deriveLikelyPropertyName = (key: string) => {
         }
     }
 
-    return key;
+    return key
 }
 
-const isBoolean = (value: string) =>
-    value === "true" || value === "false"
+const isBoolean = (value: string) => value === "true" || value === "false"
 
-const isNumeric = (value: string) =>
-    !isNaN(parseFloat(value))
-
+const isNumeric = (value: string) => !isNaN(parseFloat(value))

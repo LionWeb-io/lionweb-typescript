@@ -3,6 +3,13 @@
  */
 
 
+import { ClassifierDeducer } from "../facade.js"
+import { containmentChain } from "../functions.js"
+import { isRef, unresolved } from "../references.js"
+import { Id, Node } from "../types.js"
+import { cycleWith } from "../utils/cycles.js"
+import { flatMapNonCyclingFollowing } from "../utils/recursion.js"
+import { sortByStringKey } from "../utils/sorting.js"
 import {
     Annotation,
     Classifier,
@@ -23,13 +30,6 @@ import {
     Property,
     Reference
 } from "./types.js"
-import {isRef, unresolved} from "../references.js"
-import {sortByStringKey} from "../utils/sorting.js"
-import {cycleWith} from "../utils/cycles.js"
-import {flatMapNonCyclingFollowing} from "../utils/recursion.js"
-import {Id, Node} from "../types.js"
-import {ClassifierDeducer} from "../facade.js"
-import {containmentChain} from "../functions.js"
 
 
 /**

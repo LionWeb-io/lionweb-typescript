@@ -1,7 +1,7 @@
-import {Node} from "./types.js"
-import {builtinFeatures} from "./m3/builtins.js"
-import {ExtractionFacade, InstantiationFacade, ResolveInfoDeducer, updateSettingsKeyBased} from "./facade.js"
-import {Classifier} from "./m3/types.js"
+import { ExtractionFacade, InstantiationFacade, ResolveInfoDeducer, updateSettingsKeyBased } from "./facade.js"
+import { builtinFeatures } from "./m3/builtins.js"
+import { Classifier } from "./m3/types.js"
+import { Node } from "./types.js"
 
 
 /**

@@ -3,10 +3,10 @@
  * A LionWeb language (at the M2 meta level) can be represented as an instance of the {@link Language} type.
  */
 
-import {ResolveInfoDeducer} from "../facade.js"
-import {MultiRef, SingleRef, unresolved} from "../references.js"
-import {MetaPointer} from "../serialization.js"
-import {Id, Node} from "../types.js"
+import { ResolveInfoDeducer } from "../facade.js"
+import { MultiRef, SingleRef, unresolved } from "../references.js"
+import { LionWebJsonMetaPointer } from "@lionweb/json"
+import { Id, Node } from "../types.js"
 
 
 /**
@@ -141,7 +141,7 @@ abstract class Classifier extends LanguageEntity {
         this.features.push(...features.filter((feature) => this.features.indexOf(feature) < 0))
         return this
     }
-    metaPointer(): MetaPointer {
+    metaPointer(): LionWebJsonMetaPointer {
         const {language} = this
         return {
             language: language.key,

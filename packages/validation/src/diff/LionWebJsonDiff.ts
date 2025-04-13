@@ -1,6 +1,5 @@
 import { JsonContext } from "../issues/index.js"
 import {
-    ChunkUtils,
     isEqualMetaPointer, isEqualReferenceTarget,
     LionWebJsonChunk,
     LionWebJsonContainment,
@@ -8,9 +7,10 @@ import {
     LionWebJsonProperty,
     LionWebJsonReference,
     LionWebJsonReferenceTarget,
-    LwJsonUsedLanguage,
-    NodeUtils
-} from "../json/index.js"
+    LionWebJsonUsedLanguage,
+} from "@lionweb/json"
+import { ChunkUtils } from "../json/ChunkUtils.js"
+import { NodeUtils } from "../json/NodeUtils.js"
 import { Change, GenericChange, Missing } from "./changes/Change.js"
 import { LanguageAdded, LanguageRemoved, NodeAdded, NodeRemoved, SerializationFormatChange } from "./changes/ChunkChange.js"
 import { ChildAdded, ChildRemoved, ChildOrderChanged } from "./changes/ContainmentChange.js"
@@ -166,7 +166,7 @@ export class LionWebJsonDiff {
                 ),
             )
         }
-        beforeChunk.languages.forEach((beforeLanguage: LwJsonUsedLanguage, index: number) => {
+        beforeChunk.languages.forEach((beforeLanguage: LionWebJsonUsedLanguage, index: number) => {
             const afterLanguage = ChunkUtils.findLwUsedLanguage(afterChunk, beforeLanguage.key)
             if (afterLanguage === null) {
                 this.change(new LanguageRemoved(ctx.concat("languages", index), beforeLanguage))
@@ -174,7 +174,7 @@ export class LionWebJsonDiff {
                 this.diffLwUsedLanguage(ctx.concat("languages", index), beforeLanguage, afterLanguage)
             }
         })
-        afterChunk.languages.forEach((afterLanguage: LwJsonUsedLanguage, index: number) => {
+        afterChunk.languages.forEach((afterLanguage: LionWebJsonUsedLanguage, index: number) => {
             const beforeLanguage = ChunkUtils.findLwUsedLanguage(beforeChunk, afterLanguage.key)
             if (beforeLanguage === null) {
                 this.change(new LanguageAdded(ctx.concat("languages", index), afterLanguage))
@@ -283,7 +283,7 @@ export class LionWebJsonDiff {
         }
     }
 
-    private diffLwUsedLanguage(ctx: JsonContext, obj1: LwJsonUsedLanguage, obj2: LwJsonUsedLanguage) {
+    private diffLwUsedLanguage(ctx: JsonContext, obj1: LionWebJsonUsedLanguage, obj2: LionWebJsonUsedLanguage) {
         if (obj1.key !== obj2.key || obj1.version !== obj2.version) {
             this.diff(ctx, `Different used languages ${JSON.stringify(obj1)} vs ${JSON.stringify(obj2)}`)
         }

@@ -1,5 +1,6 @@
+import { LionWebJsonChunk } from "@lionweb/json"
 import {existsSync, readFileSync, statSync} from "fs"
-import {LionWebJsonChunk, LionWebJsonDiff} from "@lionweb/validation"
+import {LionWebJsonDiff} from "@lionweb/validation"
 
 import {deepEqual} from "../utils/assertions.js"
 

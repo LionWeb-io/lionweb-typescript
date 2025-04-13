@@ -18,7 +18,8 @@
 // Warning: this file is generated!
 // Modifying it by hand is useless at best, and sabotage at worst.
 
-import {Id, IdOrUnresolved, MetaPointer, SerializationChunk} from "@lionweb/core";
+import {Id, IdOrUnresolved} from "@lionweb/core";
+import { LionWebJsonChunk, LionWebJsonMetaPointer } from "@lionweb/json"
 
 
 export type SerializedDelta =
@@ -51,21 +52,21 @@ export type NoOpSerializedDelta = {
 export type PropertyAddedSerializedDelta = {
     kind: "PropertyAdded"
     container: Id
-    property: MetaPointer
+    property: LionWebJsonMetaPointer
     value: string
 }
 
 export type PropertyDeletedSerializedDelta = {
     kind: "PropertyDeleted"
     container: Id
-    property: MetaPointer
+    property: LionWebJsonMetaPointer
     oldValue: string
 }
 
 export type PropertyChangedSerializedDelta = {
     kind: "PropertyChanged"
     container: Id
-    property: MetaPointer
+    property: LionWebJsonMetaPointer
     oldValue: string
     newValue: string
 }
@@ -73,39 +74,39 @@ export type PropertyChangedSerializedDelta = {
 export type ChildAddedSerializedDelta = {
     kind: "ChildAdded"
     parent: Id
-    containment: MetaPointer
+    containment: LionWebJsonMetaPointer
     index: number
     newChild: Id
-    newNodes: SerializationChunk
+    newNodes: LionWebJsonChunk
 }
 
 export type ChildDeletedSerializedDelta = {
     kind: "ChildDeleted"
     parent: Id
-    containment: MetaPointer
+    containment: LionWebJsonMetaPointer
     index: number
     deletedChild: Id
-    deletedNodes: SerializationChunk
+    deletedNodes: LionWebJsonChunk
 }
 
 export type ChildReplacedSerializedDelta = {
     kind: "ChildReplaced"
     parent: Id
-    containment: MetaPointer
+    containment: LionWebJsonMetaPointer
     index: number
     replacedChild: Id
-    replacedNodes: SerializationChunk
+    replacedNodes: LionWebJsonChunk
     newChild: Id
-    newNodes: SerializationChunk
+    newNodes: LionWebJsonChunk
 }
 
 export type ChildMovedSerializedDelta = {
     kind: "ChildMoved"
     oldParent: Id
-    oldContainment: MetaPointer
+    oldContainment: LionWebJsonMetaPointer
     oldIndex: number
     newParent: Id
-    newContainment: MetaPointer
+    newContainment: LionWebJsonMetaPointer
     newIndex: number
     child: Id
 }
@@ -113,7 +114,7 @@ export type ChildMovedSerializedDelta = {
 export type ChildMovedInSameContainmentSerializedDelta = {
     kind: "ChildMovedInSameContainment"
     parent: Id
-    containment: MetaPointer
+    containment: LionWebJsonMetaPointer
     oldIndex: number
     newIndex: number
     child: Id
@@ -122,7 +123,7 @@ export type ChildMovedInSameContainmentSerializedDelta = {
 export type ReferenceAddedSerializedDelta = {
     kind: "ReferenceAdded"
     container: Id
-    reference: MetaPointer
+    reference: LionWebJsonMetaPointer
     index: number
     newTarget: IdOrUnresolved
 }
@@ -130,7 +131,7 @@ export type ReferenceAddedSerializedDelta = {
 export type ReferenceDeletedSerializedDelta = {
     kind: "ReferenceDeleted"
     container: Id
-    reference: MetaPointer
+    reference: LionWebJsonMetaPointer
     index: number
     deletedTarget: IdOrUnresolved
 }
@@ -138,7 +139,7 @@ export type ReferenceDeletedSerializedDelta = {
 export type ReferenceReplacedSerializedDelta = {
     kind: "ReferenceReplaced"
     container: Id
-    reference: MetaPointer
+    reference: LionWebJsonMetaPointer
     index: number
     replacedTarget: IdOrUnresolved
     newTarget: IdOrUnresolved
@@ -147,10 +148,10 @@ export type ReferenceReplacedSerializedDelta = {
 export type ReferenceMovedSerializedDelta = {
     kind: "ReferenceMoved"
     oldContainer: Id
-    oldReference: MetaPointer
+    oldReference: LionWebJsonMetaPointer
     oldIndex: number
     newContainer: Id
-    newReference: MetaPointer
+    newReference: LionWebJsonMetaPointer
     newIndex: number
     target: IdOrUnresolved
 }
@@ -158,7 +159,7 @@ export type ReferenceMovedSerializedDelta = {
 export type ReferenceMovedInSameReferenceSerializedDelta = {
     kind: "ReferenceMovedInSameReference"
     container: Id
-    reference: MetaPointer
+    reference: LionWebJsonMetaPointer
     oldIndex: number
     newIndex: number
     target: IdOrUnresolved
@@ -169,7 +170,7 @@ export type AnnotationAddedSerializedDelta = {
     parent: Id
     index: number
     newAnnotation: Id
-    newAnnotationNodes: SerializationChunk
+    newAnnotationNodes: LionWebJsonChunk
 }
 
 export type AnnotationDeletedSerializedDelta = {
@@ -177,7 +178,7 @@ export type AnnotationDeletedSerializedDelta = {
     parent: Id
     index: number
     deletedAnnotation: Id
-    deletedAnnotationNodes: SerializationChunk
+    deletedAnnotationNodes: LionWebJsonChunk
 }
 
 export type AnnotationReplacedSerializedDelta = {
@@ -185,9 +186,9 @@ export type AnnotationReplacedSerializedDelta = {
     parent: Id
     index: number
     replacedAnnotation: Id
-    replacedAnnotationNodes: SerializationChunk
+    replacedAnnotationNodes: LionWebJsonChunk
     newAnnotation: Id
-    newAnnotationNodes: SerializationChunk
+    newAnnotationNodes: LionWebJsonChunk
 }
 
 export type AnnotationMovedFromOtherParentSerializedDelta = {

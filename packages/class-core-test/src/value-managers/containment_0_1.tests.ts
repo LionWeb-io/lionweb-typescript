@@ -17,8 +17,7 @@
 
 import {
     AccumulatingSimplisticHandler,
-    DefaultPrimitiveTypeDeserializer,
-    MetaPointer
+    DefaultPrimitiveTypeDeserializer
 } from "@lionweb/core";
 import {
     ChildAddedDelta,
@@ -29,6 +28,7 @@ import {
     nodeBaseDeserializer,
     serializeNodeBases
 } from "@lionweb/class-core";
+import { LionWebJsonMetaPointer } from "@lionweb/json"
 
 import {deepEqual, equal, isTrue, isUndefined} from "../assertions.js";
 import {DatatypeTestConcept, LinkTestConcept, TestLanguageBase} from "../gen/TestLanguage.g.js";
@@ -147,7 +147,7 @@ describe("read+write access to a [0..1] containment", () => {
 
 describe("serialization and deserialization w.r.t. a [0..1] containment", () => {
 
-    const metaPointer: MetaPointer = {
+    const metaPointer: LionWebJsonMetaPointer = {
         language: "TestLanguage",
         version: "0",
         key: "LinkTestConcept-containment_0_1"

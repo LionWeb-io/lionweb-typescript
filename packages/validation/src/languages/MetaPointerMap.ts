@@ -1,4 +1,6 @@
-import { LionWebJsonMetaPointer, LionWebJsonNode, MetaPointers, NodeUtils } from "../json/index.js"
+import { LionWebJsonMetaPointer, LionWebJsonNode } from "@lionweb/json"
+import { MetaPointers } from "../json/M3definitions.js"
+import { NodeUtils } from "../json/NodeUtils.js"
 
 export class MetaPointerMap {
     /**

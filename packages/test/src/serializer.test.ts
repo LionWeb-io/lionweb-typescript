@@ -1,3 +1,4 @@
+import { currentSerializationFormatVersion, LionWebJsonChunk } from "@lionweb/json"
 import {expect} from "chai"
 
 import {
@@ -6,7 +7,6 @@ import {
     builtinPrimitives,
     concatenator,
     Concept,
-    currentSerializationFormatVersion,
     DefaultPrimitiveTypeSerializer,
     dynamicExtractionFacade,
     DynamicNode,
@@ -16,7 +16,6 @@ import {
     LanguageFactory,
     lastOf,
     Reference,
-    SerializationChunk,
     serializeLanguages,
     serializeNodes
 } from "@lionweb/core"
@@ -47,7 +46,7 @@ describe("serialization", () => {
         myNode.properties["creationDate"] = new Date(2024, 4, 28)
         myNode.containments["books"] = []
 
-        const expectedSerializationChunk: SerializationChunk = {
+        const expectedSerializationChunk: LionWebJsonChunk = {
             serializationFormatVersion: currentSerializationFormatVersion,
             languages: [
                 {
@@ -252,7 +251,7 @@ describe("serialization of empty (unset) values", () => {
     }
 
     it("with skipEmptyValues = false (=default), empty values are serialized", () => {
-        const expectedSerializationChunk: SerializationChunk = {
+        const expectedSerializationChunk: LionWebJsonChunk = {
             serializationFormatVersion: "2023.1",
             languages: [
                 {
@@ -350,7 +349,7 @@ describe("serialization of empty (unset) values", () => {
     })
 
     it("with skipEmptyValues = true, empty values are not serialized", () => {
-        const expectedSerializationChunk: SerializationChunk = {
+        const expectedSerializationChunk: LionWebJsonChunk = {
             serializationFormatVersion: "2023.1",
             languages: [
                 {

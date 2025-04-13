@@ -15,7 +15,7 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {SerializationChunk} from "@lionweb/core";
+import {LionWebJsonChunk} from "@lionweb/json";
 import {readFileAsJson, writeJsonAsFile} from "@lionweb/utilities";
 import {observe} from "mobx";
 import {join} from "path";
@@ -146,7 +146,7 @@ describe("TestConcept", () => {
     });
 
     it("can be deserialized without sending deltas, but then changes do send deltas", (done) => {
-        const serializationChunk = readFileAsJson(join(artifactsPath, "DatatypeTestConcept-value=bar-enumValue_1=literal3.expected.json")) as SerializationChunk;
+        const serializationChunk = readFileAsJson(join(artifactsPath, "DatatypeTestConcept-value=bar-enumValue_1=literal3.expected.json")) as LionWebJsonChunk;
         const [deltaHandler, deltas] = collectingDeltaHandler();
         const deserialize = nodeBaseDeserializer([testLanguageBase], deltaHandler);
         const nodes = deserialize(serializationChunk, []);

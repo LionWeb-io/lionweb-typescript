@@ -1,5 +1,5 @@
 import { JsonContext } from "../../issues/index.js"
-import { LionWebJsonMetaPointer, LionWebJsonNode } from "../../json/index.js"
+import { LionWebJsonMetaPointer, LionWebJsonNode } from "@lionweb/json"
 import { Change, Missing } from "./Change.js"
 
 

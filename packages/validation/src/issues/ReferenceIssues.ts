@@ -1,4 +1,4 @@
-import { LionWebJsonMetaPointer, LionWebJsonNode } from "../json/LionWebJson.js"
+import { LionWebJsonMetaPointer, LionWebJsonNode } from "@lionweb/json"
 import { JsonContext } from "../json/JsonContext.js"
 import { ValidationIssue } from "./ValidationIssue.js"
 

@@ -34,7 +34,7 @@ The following top-level members of this package are suitable and intended to be 
 
 * `nodeBaseDeserializer` — Returns a `Deserializer` function for the given languages (given as `ILanguageBase`s) that, given a serialization chunk, returns the roots of the model (as `INodeBase`s).
 
-* `serializeNodeBases` — Returns a serialization of the given nodes (of type `INodeBase`) as a `SerializationChunk`.
+* `serializeNodeBases` — Returns a serialization of the given nodes (of type `INodeBase`) as a `LionWebJsonChunk`.
 
 * A version of the LionCore builtins language, compatible with the `class-core` base types:
   * `LionCore_builtinsBase` reflective class – implements `ILanguageBase`,

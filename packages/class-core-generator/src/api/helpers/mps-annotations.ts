@@ -15,16 +15,16 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {Id, SerializationChunk} from "@lionweb/core"
+import {LionWebId, LionWebJsonChunk} from "@lionweb/json"
 
 
 export abstract class MpsAnnotation {
-    constructor(public readonly annotatedNodeId: Id) {
+    constructor(public readonly annotatedNodeId: LionWebId) {
     }
 }
 
 export class ConceptDescription extends MpsAnnotation {
-    constructor(annotatedNodeId: Id, public readonly shortDescription: string | null, public readonly alias: string | null) {
+    constructor(annotatedNodeId: LionWebId, public readonly shortDescription: string | null, public readonly alias: string | null) {
         super(annotatedNodeId)
     }
     toString() {
@@ -33,7 +33,7 @@ export class ConceptDescription extends MpsAnnotation {
 }
 
 export class Deprecated extends MpsAnnotation {
-    constructor(annotatedNodeId: Id, public readonly comment: string | null, public readonly build: string | null) {
+    constructor(annotatedNodeId: LionWebId, public readonly comment: string | null, public readonly build: string | null) {
         super(annotatedNodeId)
     }
     toString() {
@@ -42,7 +42,7 @@ export class Deprecated extends MpsAnnotation {
 }
 
 
-export const extractedMpsAnnotations = ({nodes}: SerializationChunk): MpsAnnotation[] =>
+export const extractedMpsAnnotations = ({nodes}: LionWebJsonChunk): MpsAnnotation[] =>
     nodes.flatMap<MpsAnnotation>(({classifier, properties, parent}) => {
         const propertyValue = (key: string): string | null => {
             const property = properties.find(({property}) => property.key === key)

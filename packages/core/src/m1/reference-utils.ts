@@ -1,6 +1,6 @@
-import {allFeaturesOf, Reference} from "../m3/index.js"
-import {ExtractionFacade} from "../facade.js"
-import {Node} from "../types.js"
+import { ExtractionFacade } from "../facade.js"
+import { allFeaturesOf, Reference } from "../m3/index.js"
+import { Node } from "../types.js"
 
 
 /**

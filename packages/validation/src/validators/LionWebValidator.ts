@@ -1,4 +1,4 @@
-import { LionWebJsonChunk } from "../json/LionWebJson.js"
+import { LionWebJsonChunk } from "@lionweb/json"
 import { LionWebJsonChunkWrapper } from "../json/LionWebJsonChunkWrapper.js"
 import { LanguageRegistry } from "../languages/index.js"
 import { LionWebLanguageReferenceValidator } from "./LionWebLanguageReferenceValidator.js"

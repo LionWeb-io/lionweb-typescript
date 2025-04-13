@@ -1,10 +1,9 @@
+import { currentSerializationFormatVersion, LionWebJsonChunk } from "@lionweb/json"
 import {readFileSync} from "fs"
 import {
     AccumulatingSimplisticHandler,
-    currentSerializationFormatVersion,
     deserializeLanguagesWithHandler,
-    lioncore,
-    SerializationChunk
+    lioncore
 } from "@lionweb/core"
 import {genericAsTreeText, languageAsText, readFileAsJson, withoutAnnotations} from "@lionweb/utilities"
 
@@ -33,7 +32,7 @@ describe("annotation remover", () => {
             key: "aConcept"
         }
 
-        const serializationChunk: SerializationChunk = {
+        const serializationChunk: LionWebJsonChunk = {
             serializationFormatVersion: currentSerializationFormatVersion,
             languages: [
                 {
@@ -129,7 +128,7 @@ describe("annotation remover", () => {
                         parent: null
                     }
                 ]
-            } as SerializationChunk
+            } as LionWebJsonChunk
         )
     })
 
@@ -139,7 +138,7 @@ describe("annotation remover", () => {
 describe("deserializing a meta-circular language", () => {
 
     it("works but reports problems", () => {
-        const serializationChunk = readFileAsJson("src/languages/io.lionweb.mps.specific.json") as SerializationChunk
+        const serializationChunk = readFileAsJson("src/languages/io.lionweb.mps.specific.json") as LionWebJsonChunk
         equal(
             genericAsTreeText(serializationChunk, [lioncore]),
             readFileSync("src/languages/io.lionweb.mps.specific.generic.txt", { encoding: "utf8" })
@@ -163,7 +162,7 @@ describe("deserializing a meta-circular language", () => {
     })
 
     it("works without reporting problems after removing annotations", () => {
-        const serializationChunk = readFileAsJson("src/languages/io.lionweb.mps.specific.json") as SerializationChunk
+        const serializationChunk = readFileAsJson("src/languages/io.lionweb.mps.specific.json") as LionWebJsonChunk
         const preGatherer = new AccumulatingSimplisticHandler()
         const preAnnotationLanguage = deserializeLanguagesWithHandler(withoutAnnotations(serializationChunk), preGatherer, lioncore)[0]
         deepEqual(preGatherer.allProblems, [])

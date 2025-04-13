@@ -29,5 +29,8 @@
     "publish-local": "npm publish --registry http://localhost:4873",
     "unpublish-local": "npm unpublish --force --registry http://localhost:4873",
     "republish-local": "yarn unpublish-local && yarn publish-local"
-  }
+  },
+    "dependencies": {
+        "@lionweb/json": "0.6.13-beta.4"
+    }
 }

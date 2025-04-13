@@ -1,5 +1,5 @@
-import {Id, Node} from "./types.js"
-import {flatMapNonCyclingFollowing, trivialFlatMapper} from "./utils/recursion.js"
+import { Id, Node } from "./types.js"
+import { flatMapNonCyclingFollowing, trivialFlatMapper } from "./utils/recursion.js"
 
 
 /**

@@ -1,5 +1,5 @@
 import { JsonContext } from "../../issues/index.js"
-import { LionWebJsonNode, LwJsonUsedLanguage } from "../../json/index.js"
+import { LionWebJsonNode, LionWebJsonUsedLanguage } from "@lionweb/json"
 import { Change } from "./Change.js"
 
 export abstract class ChunkChange extends Change {
@@ -51,7 +51,7 @@ export class NodeAdded extends ChunkChange {
 export abstract class LanguageChange extends ChunkChange {
     constructor(
         public context: JsonContext,
-        public language: LwJsonUsedLanguage,
+        public language: LionWebJsonUsedLanguage,
     ) {
         super(context)
     }
