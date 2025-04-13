@@ -19,7 +19,7 @@
 // Modifying it by hand is useless at best, and sabotage at worst.
 
 import {Id, IdOrUnresolved} from "@lionweb/core";
-import { LionWebJsonChunk, LionWebJsonMetaPointer } from "@lionweb/json"
+import {LionWebJsonMetaPointer, LionWebJsonChunk} from "@lionweb/json";
 
 
 export type SerializedDelta =
