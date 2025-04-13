@@ -15,11 +15,11 @@
     Don't depend on Node.js here — specifically: don't use `node:fs`!
 * `serialization`: all serialization types (prefixed with `LionWebJson`), and some utility functionality like comparing meta-pointers.
 
->  *Jos: I think we should call this `lionweb-json` instead of 'serialization'?
+>  *Jos: I think we should call this `json` instead of 'serialization'?
    These Json objects are still JavaScript.
    The actual serialization functionality is in other packages.*
 
->  *Jos: And then the next package (serialization-utils) should be called `lionweb-json-utils`.*
+>  *Jos: And then the next package (serialization-utils) should be called `json-utils`.*
 
 
 * `serialization-utils`: utilities that deal exclusively with types from the `serialization` package.
@@ -44,7 +44,7 @@
   
 * `correctness`: validation of serialization chunks, either M2-agnostic or M2-aware — aligned with the correctness document.
 > *Maybe posit that this package is developed, **and unit tested** concurrently with the `serialization` and `core` packages?*
-* `generation`: generation of TS code, diagrams, etc.
+* `generation`: generation of TS code, diagrams, etc. based on language definitions
 * `cli`: an NPM package that exposes command-line access to functionality in `serialization-utils`, `utils`, and `generation` packages.
 
 
