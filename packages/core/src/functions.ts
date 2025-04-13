@@ -23,6 +23,6 @@ export const asIds = (nodeOrNulls: (Node | null)[]): (LionWebId | null)[] =>
 /**
  * @return the id of the given {@link Node node}.
  */
-export const idOf = <T extends Node>({id}: T): string =>
+export const idOf = <T extends Node>({id}: T): LionWebId =>
     id
 

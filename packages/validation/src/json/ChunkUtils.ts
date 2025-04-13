@@ -1,4 +1,4 @@
-import { LionWebJsonChunk, LionWebJsonNode, LionWebJsonUsedLanguage } from "@lionweb/json"
+import { LionWebId, LionWebJsonChunk, LionWebJsonNode, LionWebJsonUsedLanguage, LionWebKey } from "@lionweb/json"
 
 /**
  * Utility functions for LionWeb chunks
@@ -9,7 +9,7 @@ export class ChunkUtils {
      * @param chunk
      * @param key
      */
-    static findLwUsedLanguage(chunk: LionWebJsonChunk, key: string): LionWebJsonUsedLanguage | null {
+    static findLwUsedLanguage(chunk: LionWebJsonChunk, key: LionWebKey): LionWebJsonUsedLanguage | null {
         for (const language of chunk.languages) {
             if (language.key === key) {
                 return language
@@ -24,7 +24,7 @@ export class ChunkUtils {
      * @param key
      * @param version
      */
-    static findLwUsedLanguageWithVersion(chunk: LionWebJsonChunk, key: string, version: string): LionWebJsonUsedLanguage | null {
+    static findLwUsedLanguageWithVersion(chunk: LionWebJsonChunk, key: LionWebKey, version: string): LionWebJsonUsedLanguage | null {
         for (const language of chunk.languages) {
             if (language.key === key && language.version === version) {
                 return language
@@ -38,7 +38,7 @@ export class ChunkUtils {
      * @param chunk
      * @param id
      */
-    static findNode(chunk: LionWebJsonChunk, id: string): LionWebJsonNode | null {
+    static findNode(chunk: LionWebJsonChunk, id: LionWebId): LionWebJsonNode | null {
         for (const node of chunk.nodes) {
             if (node.id === id) {
                 return node

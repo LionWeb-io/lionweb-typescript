@@ -1,3 +1,4 @@
+import { LionWebId } from "@lionweb/json"
 import { createHash } from "crypto"
 import { nanoid } from "nanoid"
 
@@ -87,7 +88,7 @@ export const checkDefinedData = (hasher: StringHasher): StringHasher =>
  * whether that returns unique IDs, throwing an error when not.
  */
 export const checkUniqueId = (hasher: StringHasher): StringHasher => {
-    const ids: string[] = []
+    const ids: LionWebId[] = []
 
     return (data) => {
         const id = hasher(data)

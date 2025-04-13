@@ -3,7 +3,7 @@
  */
 
 
-import { LionWebId } from "@lionweb/json"
+import { LionWebId, LionWebKey } from "@lionweb/json"
 import { ClassifierDeducer } from "../facade.js"
 import { containmentChain } from "../functions.js"
 import { isRef, unresolved } from "../references.js"
@@ -189,7 +189,7 @@ const namedsOf = (language: Language): M3Concept[] =>
 /**
  * @return the key of the given {@link INamed named thing}.
  */
-const keyOf = <T extends IKeyed>({key}: T): string =>
+const keyOf = <T extends IKeyed>({key}: T): LionWebKey =>
     key
 
 

@@ -1,4 +1,4 @@
-import { LionWebJsonChunk, LionWebJsonNode } from "@lionweb/json"
+import { LionWebJsonChunk, LionWebJsonNode, LionWebKey } from "@lionweb/json"
 import { LionWebJsonChunkWrapper, MetaPointers, NodeUtils } from "../json/index.js"
 import { visitAndMap } from "../util/graphs.js"
 import { isAnnotation, isConcept, isContainment, isInterface, isProperty, isReference } from "./LanguageUtils.js"
@@ -20,7 +20,7 @@ interface LionWebLanguageWrapperInterface {
 export class LionWebLanguageWrapper extends LionWebJsonChunkWrapper implements LionWebLanguageWrapperInterface {
     name: string
     version: string
-    key: string
+    key: LionWebKey
 
     constructor(chunk: LionWebJsonChunk) {
         super(chunk)

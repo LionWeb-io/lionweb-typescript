@@ -1,12 +1,12 @@
 import {
     isEqualMetaPointer,
-    isEqualReferenceTarget,
+    isEqualReferenceTarget, LionWebId,
     LionWebJsonContainment,
     LionWebJsonMetaPointer,
     LionWebJsonNode,
     LionWebJsonProperty,
     LionWebJsonReference,
-    LionWebJsonReferenceTarget
+    LionWebJsonReferenceTarget, LionWebKey
 } from "@lionweb/json"
 
 /**
@@ -32,7 +32,7 @@ export class NodeUtils {
      * @param node
      * @param key
      */
-    static findChild(node: LionWebJsonNode, key: string): LionWebJsonContainment | undefined {
+    static findChild(node: LionWebJsonNode, key: LionWebKey): LionWebJsonContainment | undefined {
         if (node === undefined) {
             return undefined
         }
@@ -70,7 +70,7 @@ export class NodeUtils {
         return undefined
     }
     
-    static findContainmentContainingChild(containments: LionWebJsonContainment[], childId: string): LionWebJsonContainment | undefined {
+    static findContainmentContainingChild(containments: LionWebJsonContainment[], childId: LionWebId): LionWebJsonContainment | undefined {
         return containments.find(cont => cont.children.includes(childId))
     }
 }

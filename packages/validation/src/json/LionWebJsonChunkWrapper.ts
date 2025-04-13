@@ -41,7 +41,7 @@ export class LionWebJsonChunkWrapper {
         })
     }
 
-    getNode(id: string): LionWebJsonNode | undefined {
+    getNode(id: LionWebId): LionWebJsonNode | undefined {
         return this.nodesIdMap.get(id)
     }
 

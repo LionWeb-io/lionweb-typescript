@@ -1,3 +1,4 @@
+import { LionWebId, LionWebKey } from "@lionweb/json"
 import { allFeaturesOf, isContainment } from "./m3/functions.js"
 import { Classifier, Enumeration, EnumerationLiteral, Feature, Link } from "./m3/types.js"
 import { Node } from "./types.js"
@@ -60,7 +61,7 @@ interface InstantiationFacade<NT extends Node> {
      * its ID and the values of the node's properties ("settings").
      * (The latter may be required as arguments for the constructor of a class, whose instances represent nodes.)
      */
-    nodeFor: (parent: NT | undefined, classifier: Classifier, id: string, propertySettings: { [propertyKey: string]: unknown }) => NT
+    nodeFor: (parent: NT | undefined, classifier: Classifier, id: LionWebId, propertySettings: { [propertyKey: LionWebKey]: unknown }) => NT
 // TODO  this prohibits multiple properties with the same key but different language => use a variant of LionWebJsonProperty[] with the value already deserialized
 
     /**
@@ -103,7 +104,7 @@ const nodesExtractorUsing = <NT extends Node>(extractionFacade: ExtractionFacade
 
 type SettingsUpdater = (settings: Record<string, unknown>, feature: Feature, value: unknown) => void
 
-const settingsUpdater = (metaKey: string): SettingsUpdater =>
+const settingsUpdater = (metaKey: keyof Feature): SettingsUpdater =>
     (settings: Record<string, unknown>, feature: Feature, value: unknown): void => {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const key = (feature as any)[metaKey] as string

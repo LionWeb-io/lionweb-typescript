@@ -1,4 +1,4 @@
-import { LionWebJsonMetaPointer, LionWebJsonNode } from "@lionweb/json"
+import { LionWebJsonMetaPointer, LionWebJsonNode, LionWebKey } from "@lionweb/json"
 import { MetaPointers } from "../json/M3definitions.js"
 import { NodeUtils } from "../json/NodeUtils.js"
 
@@ -8,7 +8,7 @@ export class MetaPointerMap {
      */
     map: Map<string, Map<string, Map<string, LionWebJsonNode>>> = new Map<string, Map<string, Map<string, LionWebJsonNode>>>()
 
-    add(languageKey: string, languageVersion: string, node: LionWebJsonNode): void {
+    add(languageKey: LionWebKey, languageVersion: string, node: LionWebJsonNode): void {
         const keyProperty = NodeUtils.findProperty(node, MetaPointers.IKeyedKey)
         if (keyProperty === undefined) {
             console.log("MetaPointerMap.add: trying to add node without key property.")

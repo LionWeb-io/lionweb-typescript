@@ -1,4 +1,4 @@
-import { LionWebJsonMetaPointer, LionWebJsonNode } from "@lionweb/json"
+import { LionWebId, LionWebJsonMetaPointer, LionWebJsonNode } from "@lionweb/json"
 import { JsonContext } from "../../issues/index.js"
 import { Change, ChangeType } from "./Change.js"
 
@@ -23,8 +23,8 @@ export class ParentChanged extends Change {
     constructor(
         public context: JsonContext,
         public node: LionWebJsonNode,
-        public beforeParentId: string | null,
-        public afterParentId: string | null
+        public beforeParentId: LionWebId | null,
+        public afterParentId: LionWebId | null
     ) {
         super(context)
     }
@@ -37,7 +37,7 @@ export abstract class AnnotationChange extends Change {
         ctx: JsonContext,
         public nodeBefore: LionWebJsonNode,
         public nodeAfter: LionWebJsonNode,
-        public annotationId: string,
+        public annotationId: LionWebId,
         public index: number
     ) {
         super(ctx)

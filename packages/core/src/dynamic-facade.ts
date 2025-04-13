@@ -1,3 +1,4 @@
+import { LionWebKey } from "@lionweb/json"
 import { ExtractionFacade, InstantiationFacade, ResolveInfoDeducer, updateSettingsKeyBased } from "./facade.js"
 import { builtinFeatures } from "./m3/builtins.js"
 import { Classifier } from "./m3/types.js"
@@ -14,7 +15,7 @@ export type DynamicNode = Node & {
 // TODO  could also have properties, containments, references - mimicking the serialization
 
 
-const propertyGetterFor = (key: string): ResolveInfoDeducer<DynamicNode> =>
+const propertyGetterFor = (key: LionWebKey): ResolveInfoDeducer<DynamicNode> =>
     (node) =>
         (key in node.settings && typeof node.settings[key] === "string")
             ? node.settings[key] as string  // FIXME  type cast shouldn't be necessary

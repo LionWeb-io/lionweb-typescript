@@ -8,6 +8,7 @@ import {
     ReferenceValue,
     referenceValues
 } from "@lionweb/core"
+import { LionWebId } from "@lionweb/json"
 
 import { AnotherConcept, SomeAnnotation, SomeAnnotation_ref, SomeConcept, SomeConcept_ref } from "../languages/generic.js"
 import { MyConcept, MyConcept_multivaluedRef, MyConcept_singularRef } from "../languages/tiny-ref.js"
@@ -19,7 +20,7 @@ import { deepEqual } from "../utils/assertions.js"
  */
 
 describe("reference utils", () => {
-    const createNode = (id: string, classifier: Classifier): DynamicNode => ({
+    const createNode = (id: LionWebId, classifier: Classifier): DynamicNode => ({
         id,
         classifier,
         settings: {},

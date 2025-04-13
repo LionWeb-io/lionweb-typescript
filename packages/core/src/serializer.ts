@@ -1,4 +1,4 @@
-import { currentSerializationFormatVersion, LionWebJsonChunk, LionWebJsonMetaPointer, LionWebJsonNode } from "@lionweb/json"
+import { currentSerializationFormatVersion, LionWebId, LionWebJsonChunk, LionWebJsonMetaPointer, LionWebJsonNode } from "@lionweb/json"
 import { ExtractionFacade } from "./facade.js"
 import { asIds } from "./functions.js"
 import { DefaultPrimitiveTypeSerializer } from "./m3/builtins.js"
@@ -57,7 +57,7 @@ export const serializeNodes = <NT extends Node>(
         : (primitiveTypeSerializerOrOptions?.serializeEmptyFeatures ?? true)
 
     const serializedNodes: LionWebJsonNode[] = [] // keep nodes as much as possible "in order"
-    const ids: { [id: string]: boolean } = {} // maintain a map to keep track of IDs of nodes that have been serialized
+    const ids: { [id: LionWebId]: boolean } = {} // maintain a map to keep track of IDs of nodes that have been serialized
     const languagesUsed: Language[] = []
     const registerLanguageUsed = (language: Language) => {
         if (!languagesUsed.some(languageUsed => language.equals(languageUsed))) {

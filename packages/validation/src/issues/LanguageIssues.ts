@@ -14,7 +14,7 @@ export class Language_PropertyValue_Issue extends ValidationIssue {
         super(context)
     }
 
-    msg = (): string => `Property  "${this.property}" with value "${this.value}" is not of type "${this.expectedType}"`
+    msg = (): string => `Property "${this.property}" with value "${this.value}" is not of type "${this.expectedType}"`
 }
 
 // Incorrect Meta Pointers

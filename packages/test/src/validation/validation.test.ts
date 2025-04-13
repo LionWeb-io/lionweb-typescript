@@ -75,9 +75,9 @@ const tests: TestDir[] = [
     { dir: m3languageDir, lang: [m3languageFile, builtinsLanguageFile] }
 ]
 
-function registerLanguage(registry: LanguageRegistry, filename: string) {
-    // console.log(`ADD LANGUAGE ${filename}`)
-    const languageAsString = fs.readFileSync(filename, "utf-8")
+function registerLanguage(registry: LanguageRegistry, fileName: string) {
+    // console.log(`ADD LANGUAGE ${fileName}`)
+    const languageAsString = fs.readFileSync(fileName, "utf-8")
     const json = JSON.parse(languageAsString)
     registry.addLanguage(new LionWebLanguageWrapper(json))
 }

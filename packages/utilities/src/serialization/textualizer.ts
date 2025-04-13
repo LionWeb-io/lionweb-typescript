@@ -56,7 +56,7 @@ export const genericAsTreeText = ({ nodes }: LionWebJsonChunk, languages: Langua
         )
     ]
 
-    const annotationAsText = (annotationId: string) =>
+    const annotationAsText = (annotationId: LionWebId) =>
         annotationId in nodesById
             ? prependWith(asText(nodesById[annotationId]), "@ ")
             : `<annotation with id=${annotationId} not present in this chunk>`

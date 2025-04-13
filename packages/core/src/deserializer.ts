@@ -1,4 +1,4 @@
-import { currentSerializationFormatVersion, LionWebId, LionWebJsonChunk, LionWebJsonNode } from "@lionweb/json"
+import { currentSerializationFormatVersion, LionWebId, LionWebJsonChunk, LionWebJsonNode, LionWebKey } from "@lionweb/json"
 import { InstantiationFacade } from "./facade.js"
 import { defaultSimplisticHandler, SimplisticHandler } from "./handler.js"
 import { DefaultPrimitiveTypeDeserializer } from "./m3/builtins.js"
@@ -70,7 +70,7 @@ export const deserializeSerializationChunk = <NT extends Node>(
         parent: NT | undefined,
         classifier: Classifier,
         id: LionWebId,
-        propertySettings: { [propertyKey: string]: unknown }
+        propertySettings: { [propertyKey: LionWebKey]: unknown }
     ): NT | null => {
         try {
             return instantiationFacade.nodeFor(parent, classifier, id, propertySettings)
@@ -101,7 +101,7 @@ export const deserializeSerializationChunk = <NT extends Node>(
 
         const allFeatures = allFeaturesOf(classifier)
 
-        const propertySettings: { [propertyKey: string]: unknown } = {}
+        const propertySettings: { [propertyKey: LionWebKey]: unknown } = {}
 
         const serializedPropertiesPerKey = properties === undefined ? {} : groupBy(properties, sp => sp.property.key) // (this assumes no duplicate keys among properties!)
         if (properties !== undefined) {

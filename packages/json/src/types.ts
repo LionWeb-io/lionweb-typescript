@@ -10,13 +10,20 @@
 export type LionWebId = string
 
 /**
- * Key of concept, property, containment, or reference.
+ * Key of classifier or feature.
  */
 export type LionWebKey = string
 
+
+/**
+ * Pointer to a classifier or feature in a version of a language.
+ */
 export type LionWebJsonMetaPointer = {
-    language: string
+    language: LionWebKey
     version: string
+    /**
+     * The key of the classifier or feature pointed to.
+     */
     key: LionWebKey
 }
 
@@ -27,7 +34,7 @@ export type LionWebJsonChunk = {
 }
 
 export type LionWebJsonUsedLanguage = {
-    key: string
+    key: LionWebKey
     version: string
 }
 
@@ -60,3 +67,4 @@ export type LionWebJsonReferenceTarget = {
     reference: LionWebId
     resolveInfo: string | null
 }
+

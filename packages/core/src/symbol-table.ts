@@ -1,4 +1,4 @@
-import { LionWebJsonMetaPointer } from "@lionweb/json"
+import { LionWebJsonMetaPointer, LionWebKey } from "@lionweb/json"
 import { allFeaturesOf } from "./m3/functions.js"
 import { Classifier, Feature, Language, LanguageEntity } from "./m3/types.js"
 
@@ -13,7 +13,7 @@ interface SymbolTable {
     /**
      * Looks up the {@link Language}, as pointed to by the given language key and version.
      */
-    languageMatching(key: string, version: string): Language | undefined
+    languageMatching(key: LionWebKey, version: string): Language | undefined
 
     /**
      * Looks up the {@link LanguageEntity}, as pointed to by the given {@link LionWebJsonMetaPointer},
@@ -44,7 +44,7 @@ class NaiveSymbolTable implements SymbolTable {
         this.languages = languages
     }
 
-    languageMatching(key: string, version: string): Language | undefined {
+    languageMatching(key: LionWebKey, version: string): Language | undefined {
         return this.languages.find((language) =>
                language.key === key
             && language.version === version
@@ -81,8 +81,8 @@ const lazyMapGet = <T>(map: { [key: string]: T }, key: string, createThunk: () =
 
 type EntityInfo = {
     entity: LanguageEntity
-    allFeatures: Feature[]                                  // === [] if entity is not a Classifier
-    featureKey2feature: { [featureKey: string]: Feature }   // populated through memoisation
+    allFeatures: Feature[]                                      // === [] if entity is not a Classifier
+    featureKey2feature: { [featureKey: LionWebKey]: Feature }   // populated through memoisation
 }
 
 class MemoisingSymbolTable implements SymbolTable {
@@ -93,9 +93,9 @@ class MemoisingSymbolTable implements SymbolTable {
         this.languages = languages
     }
 
-    private readonly languageKey2version2language: { [languageKey: string]: { [version: string]: Language } } = {}
+    private readonly languageKey2version2language: { [languageKey: LionWebKey]: { [version: string]: Language } } = {}
 
-    languageMatching(languageKey: string, version: string): Language | undefined {
+    languageMatching(languageKey: LionWebKey, version: string): Language | undefined {
         return lazyMapGet(
             lazyMapGet(this.languageKey2version2language, languageKey, () => ({})),
             version,
@@ -107,7 +107,7 @@ class MemoisingSymbolTable implements SymbolTable {
     }
 
 
-    private readonly languageKey2version2entityKey2entityInfo: { [languageKey: string]: { [version: string]: { [entityKey: string]: (EntityInfo | undefined) } } } = {}
+    private readonly languageKey2version2entityKey2entityInfo: { [languageKey: LionWebKey]: { [version: string]: { [entityKey: LionWebKey]: (EntityInfo | undefined) } } } = {}
 
     private entityInfoMatching(entityMetaPointer: LionWebJsonMetaPointer): undefined | EntityInfo {
         return lazyMapGet(

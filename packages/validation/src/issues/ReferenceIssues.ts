@@ -1,4 +1,4 @@
-import { LionWebJsonMetaPointer, LionWebJsonNode } from "@lionweb/json"
+import { LionWebId, LionWebJsonMetaPointer, LionWebJsonNode } from "@lionweb/json"
 import { JsonContext } from "../json/JsonContext.js"
 import { ValidationIssue } from "./ValidationIssue.js"
 
@@ -7,7 +7,7 @@ export class Reference_DuplicateNodeId_Issue extends ValidationIssue {
 
     constructor(
         context: JsonContext,
-        public nodeId: string
+        public nodeId: LionWebId
     ) {
         super(context)
     }
@@ -75,9 +75,9 @@ export class Duplicates_Issue extends ValidationIssue {
 
     constructor(
         context: JsonContext,
-        public nodeid: string
+        public nodeId: LionWebId
     ) {
         super(context)
     }
-    msg = () => `Duplicate value "${this.nodeid}"`
+    msg = () => `Duplicate value "${this.nodeId}"`
 }

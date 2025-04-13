@@ -1,4 +1,4 @@
-import { LionWebJsonChunk, LionWebJsonContainment, LionWebJsonMetaPointer, LionWebJsonNode, LionWebJsonUsedLanguage } from "@lionweb/json"
+import { LionWebId, LionWebJsonChunk, LionWebJsonContainment, LionWebJsonMetaPointer, LionWebJsonNode, LionWebJsonUsedLanguage } from "@lionweb/json"
 import {
     Duplicates_Issue,
     Reference_ChildMissingInParent_Issue,
@@ -191,7 +191,7 @@ export class LionWebReferenceValidator {
 
     validateChildrenHaveCorrectParent(node: LionWebJsonNode, context: JsonContext) {
         node.containments.forEach((child: LionWebJsonContainment) => {
-            child.children.forEach((childId: string, index: number) => {
+            child.children.forEach((childId: LionWebId, index: number) => {
                 const childNode = this.nodesIdMap.get(childId)
                 if (childNode !== undefined) {
                     if (childNode.parent !== node.id) {
@@ -205,7 +205,7 @@ export class LionWebReferenceValidator {
                 }
             })
         })
-        node.annotations.forEach((annotationId: string, annotationIndex: number) => {
+        node.annotations.forEach((annotationId: LionWebId, annotationIndex: number) => {
             const childNode = this.nodesIdMap.get(annotationId)
             if (childNode !== undefined) {
                 if (childNode.parent === null || childNode.parent === undefined) {

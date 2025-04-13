@@ -1,11 +1,11 @@
-import { LionWebJsonMetaPointer, LionWebJsonNode } from "@lionweb/json"
+import { LionWebId, LionWebJsonMetaPointer, LionWebJsonNode } from "@lionweb/json"
 import { JsonContext } from "../../issues/index.js"
 import { Change, Missing } from "./Change.js"
 
 export abstract class PropertyChange extends Change {
     constructor(
         public context: JsonContext,
-        public nodeId: string,
+        public nodeId: LionWebId,
         public property: LionWebJsonMetaPointer,
         public oldValue: string | null,
         public newValue: string | null,

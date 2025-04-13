@@ -11,7 +11,7 @@ import {
     Property,
     Reference
 } from "@lionweb/core"
-import { LionWebJsonChunk } from "@lionweb/json"
+import { LionWebId, LionWebJsonChunk, LionWebKey } from "@lionweb/json"
 import { hasher } from "../hashing.js"
 
 const possibleKeySeparators = ["-", "_"]
@@ -24,7 +24,7 @@ const { stringDatatype, booleanDatatype, integerDatatype } = builtinPrimitives
 export const inferLanguagesFromSerializationChunk = (chunk: LionWebJsonChunk): Language[] => {
     const languages = new Map<string, Language>()
     const concepts = new Map<string, Concept>()
-    const links = new Array<{ link: Link; conceptId: string }>()
+    const links = new Array<{ link: Link; conceptId: LionWebId }>()
 
     for (const chunkLanguage of chunk.languages) {
         const languageName = chunkLanguage.key
@@ -134,7 +134,7 @@ const findLanguage = (languages: Map<string, Language>, languageName: string) =>
     return language
 }
 
-export const deriveLikelyPropertyName = (key: string) => {
+export const deriveLikelyPropertyName = (key: LionWebKey) => {
     for (const separator of possibleKeySeparators) {
         const name = key.split(separator)[2]
         if (name) {
