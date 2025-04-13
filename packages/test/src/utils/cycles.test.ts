@@ -18,7 +18,7 @@ describe("cycleWith", () => {
     const cycleWithObject = (obj: Obj) => cycleWith(obj, refsIn)
 
     it("should (only) detect attributes in cycles", () => {
-        ;[1, 2, 3].forEach(n => deepEqual(cycleWithObject(objects[n - 1]).length > 0, true, "in cycle"))
+        [1, 2, 3].forEach(n => deepEqual(cycleWithObject(objects[n - 1]).length > 0, true, "in cycle"))
         deepEqual(cycleWithObject(objects[4 - 1]).length, 0, "not in cycle")
     })
 
