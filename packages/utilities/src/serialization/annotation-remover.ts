@@ -1,4 +1,9 @@
-import { Annotation, byIdMap, Id } from "@lionweb/core"
+import {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+    Annotation,
+    byIdMap,
+    Id
+} from "@lionweb/core"
 import { LionWebJsonChunk, LionWebJsonNode } from "@lionweb/json"
 
 /**

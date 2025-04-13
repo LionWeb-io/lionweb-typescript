@@ -7,6 +7,7 @@ import {
     Concept,
     conceptsOf,
     Datatype,
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
     DynamicNode,
     Enumeration,
     Feature,
