@@ -1,11 +1,11 @@
-import { Id } from "../types.js"
+import { LionWebId } from "@lionweb/json"
 
 
 /**
  * Computes a map id -> thing with id.
  */
-export const byIdMap = <T extends { id: Id }>(ts: T[]): { [id: Id]: T } => {
-    const map: { [id: Id]: T } = {}
+export const byIdMap = <T extends { id: LionWebId }>(ts: T[]): { [id: LionWebId]: T } => {
+    const map: { [id: LionWebId]: T } = {}
     ts.forEach((t) => {
         map[t.id] = t
     })

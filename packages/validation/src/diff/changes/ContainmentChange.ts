@@ -1,5 +1,5 @@
-import { JsonContext } from "../../issues/index.js"
 import { LionWebJsonContainment, LionWebJsonMetaPointer, LionWebJsonNode } from "@lionweb/json"
+import { JsonContext } from "../../issues/index.js"
 import { Change, Missing } from "./Change.js"
 
 export abstract class ContainmentChange extends Change {
@@ -29,4 +29,3 @@ export class ChildOrderChanged extends ContainmentChange {
     readonly changeType = "ChildOrderChanged"
     protected msg = () => `Node "${this.parentNode.id}" changed order of children in containment "${this.containment.key}"`
 }
-

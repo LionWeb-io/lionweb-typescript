@@ -15,10 +15,10 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {Classifier, cycleWith, inheritsFrom, Language, nameOf, nameSorted} from "@lionweb/core"
-import {uniquesAmong} from "@lionweb/utilities/dist/utils/array.js"
-import {asString, when} from "littoral-templates"
-import {indent} from "../../utils/index.js"
+import { Classifier, cycleWith, inheritsFrom, Language, nameOf, nameSorted } from "@lionweb/core"
+import { uniquesAmong } from "@lionweb/utilities/dist/utils/array.js"
+import { asString, when } from "littoral-templates"
+import { indent } from "../../utils/index.js"
 
 
 /**

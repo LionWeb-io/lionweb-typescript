@@ -15,24 +15,20 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {equal} from "../assertions.js";
+import { IdMapping } from "@lionweb/class-core"
+import { equal } from "../assertions.js"
 
-import {IdMapping} from "@lionweb/class-core";
-
-import {DatatypeTestConcept, LinkTestConcept} from "../gen/TestLanguage.g.js";
-
+import { DatatypeTestConcept, LinkTestConcept } from "../gen/TestLanguage.g.js"
 
 describe("updating ID mapping", () => {
-
     it("registers children as well", () => {
-        const idMapping = new IdMapping({});
-        const dtc = DatatypeTestConcept.create("dtc");
-        const ltc = LinkTestConcept.create("ltc");
-        ltc.containment_1 = dtc;
-        idMapping.updateWith(ltc);
-        equal(idMapping.fromId("dtc"), dtc);
-        equal(idMapping.fromId("ltc"), ltc);
-    });
-
-});
+        const idMapping = new IdMapping({})
+        const dtc = DatatypeTestConcept.create("dtc")
+        const ltc = LinkTestConcept.create("ltc")
+        ltc.containment_1 = dtc
+        idMapping.updateWith(ltc)
+        equal(idMapping.fromId("dtc"), dtc)
+        equal(idMapping.fromId("ltc"), ltc)
+    })
+})
 

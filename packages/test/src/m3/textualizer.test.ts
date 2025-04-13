@@ -1,29 +1,21 @@
-import {serializeNodes} from "@lionweb/core"
-import {genericAsTreeText, languageAsText} from "@lionweb/utilities"
-import {readFileSync, writeFileSync} from "fs"
+import { serializeNodes } from "@lionweb/core"
+import { genericAsTreeText, languageAsText } from "@lionweb/utilities"
+import { readFileSync, writeFileSync } from "fs"
 
-import {libraryExtractionFacade, libraryModel} from "../instances/library.js"
-import {libraryLanguage} from "../languages/library.js"
-import {languageWithEnum} from "../languages/with-enum.js"
-import {equal} from "../utils/assertions.js"
-
+import { libraryExtractionFacade, libraryModel } from "../instances/library.js"
+import { libraryLanguage } from "../languages/library.js"
+import { languageWithEnum } from "../languages/with-enum.js"
+import { equal } from "../utils/assertions.js"
 
 describe("LionCore-specific textual syntax", () => {
-
     it("textualize language with an enum as text", () => {
         const actual = languageAsText(languageWithEnum)
         writeFileSync("src/m3/languageWithEnum.actual.txt", actual)
-        equal(
-            actual,
-            readFileSync("src/m3/languageWithEnum.expected.txt", { encoding: "utf8" })
-        )
+        equal(actual, readFileSync("src/m3/languageWithEnum.expected.txt", { encoding: "utf8" }))
     })
-
 })
 
-
 describe("generic textual syntax", () => {
-
     it("textualize library model without language def.", () => {
         equal(
             genericAsTreeText(serializeNodes(libraryModel, libraryExtractionFacade)),
@@ -65,6 +57,4 @@ GuideBookWriter (id: 7RxOqvS1ZIdpk-ao-6Tzy1QQRxl6fp_tGMH_BIK4LzQ) {
 `
         )
     })
-
 })
-

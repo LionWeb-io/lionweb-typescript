@@ -15,9 +15,9 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {Feature, featureMetaType, Link} from "@lionweb/core";
-import {INodeBase} from "../base-types.js";
-import {IDelta} from "../deltas/index.js";
+import { Feature, featureMetaType, Link } from "@lionweb/core"
+import { INodeBase } from "../base-types.js"
+import { IDelta } from "../deltas/index.js"
 
 
 /**

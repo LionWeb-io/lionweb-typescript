@@ -15,9 +15,9 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {assert} from "chai";
+import { assert } from "chai"
 
-export const {deepEqual, equal, fail, notEqual, throws} = assert;
+export const { deepEqual, equal, fail, notEqual, throws } = assert
 
 export const isTrue = (value: unknown, message?: string): void =>
     assert.isTrue(value, message);

@@ -1,8 +1,7 @@
-import {childrenExtractorUsing, dynamicExtractionFacade, DynamicNode, Node, nodesExtractorUsing} from "@lionweb/core"
+import { childrenExtractorUsing, dynamicExtractionFacade, DynamicNode, Node, nodesExtractorUsing } from "@lionweb/core"
 
-import {Annotated, Circle, Coord} from "./languages/shapes.js"
-import {deepEqual} from "./utils/assertions.js"
-
+import { Annotated, Circle, Coord } from "./languages/shapes.js"
+import { deepEqual } from "./utils/assertions.js"
 
 const center = {
     id: "center",
@@ -20,7 +19,7 @@ const center = {
             annotations: []
         }
     ]
-};
+}
 
 const circle: DynamicNode = {
     id: "circle",
@@ -30,30 +29,17 @@ const circle: DynamicNode = {
         radius: 5
     },
     annotations: []
-};
-
+}
 
 describe("annotations are extracted", () => {
-
     const idOf = ({ id }: Node) => id
 
     it("by childrenExtractorUsing", () => {
-        deepEqual(
-            childrenExtractorUsing(dynamicExtractionFacade)(circle).map(idOf),
-            ["center"]
-        );
-        deepEqual(
-            childrenExtractorUsing(dynamicExtractionFacade)(center).map(idOf),
-            ["annotated"]
-        );
-    });
+        deepEqual(childrenExtractorUsing(dynamicExtractionFacade)(circle).map(idOf), ["center"])
+        deepEqual(childrenExtractorUsing(dynamicExtractionFacade)(center).map(idOf), ["annotated"])
+    })
 
     it("by nodesExtractorUsing", () => {
-        deepEqual(
-            nodesExtractorUsing(dynamicExtractionFacade)(circle).map(idOf),
-            ["circle", "center", "annotated"]
-        );
-    });
-
-});
-
+        deepEqual(nodesExtractorUsing(dynamicExtractionFacade)(circle).map(idOf), ["circle", "center", "annotated"])
+    })
+})

@@ -1,11 +1,10 @@
-import {containmentChain, flatMap, Id, Language, M3Concept, Node} from "@lionweb/core"
+import { containmentChain, flatMap, Language, M3Concept, Node } from "@lionweb/core"
+import { LionWebId } from "@lionweb/json"
 
-import {deepEqual} from "./utils/assertions.js"
-
+import { deepEqual } from "./utils/assertions.js"
 
 describe("containmentChain function", () => {
-
-    const node = (id: Id, parent?: Node): Node => ({
+    const node = (id: LionWebId, parent?: Node): Node => ({
         id,
         annotations: [],
         parent
@@ -21,21 +20,18 @@ describe("containmentChain function", () => {
         deepEqual(containmentChain(node3), [node3, node1])
         deepEqual(containmentChain(node4), [node4, node2, node1])
     })
-
 })
 
-
 describe("flatMap function", () => {
-
     type Issue = {
-        location: Language | M3Concept,
+        location: Language | M3Concept
         message: string
     }
 
     const issuesWithFlatMap = (language: Language): Issue => {
         const issues: Issue = {
             location: language,
-            message: ''
+            message: ""
         }
         const visited = new Set<M3Concept>()
 
@@ -63,7 +59,12 @@ describe("flatMap function", () => {
     }
 
     const isEmptyLanguage = (language: Language): boolean =>
-        !language.id && !language.key && !language.name && !language.version && language.entities.length === 0 && language.dependsOn.length === 0
+        !language.id &&
+        !language.key &&
+        !language.name &&
+        !language.version &&
+        language.entities.length === 0 &&
+        language.dependsOn.length === 0
 
     const handleEdgeCases = (issues: Issue, visited: Set<M3Concept>): void => {
         if (!issues.message && visited.size === 0) {
@@ -81,5 +82,4 @@ describe("flatMap function", () => {
             message: "flatMap --> empty language object"
         })
     })
-
 })

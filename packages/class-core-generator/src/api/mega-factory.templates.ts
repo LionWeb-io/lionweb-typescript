@@ -15,46 +15,42 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {isConcrete, Language, LanguageEntity} from "@lionweb/core"
-import {asString, commaSeparated} from "littoral-templates"
+import { isConcrete, Language, LanguageEntity } from "@lionweb/core"
+import { asString, commaSeparated } from "littoral-templates"
 
-import {asJSIdentifier, indent} from "../utils/textgen.js"
-import {Deprecated, MpsAnnotation} from "./helpers/index.js";
-
+import { asJSIdentifier, indent } from "../utils/textgen.js"
+import { Deprecated, MpsAnnotation } from "./helpers/index.js"
 
 export const megaFactoryFor = (megaFactoryName: string, languages: Language[], mpsAnnotations: MpsAnnotation[] = [], header?: string) => {
-    const isNotDeprecated = (entity: LanguageEntity)=>
-        !mpsAnnotations.some(
-            (mpsAnnotation) => mpsAnnotation.annotatedNodeId === entity.id && mpsAnnotation instanceof Deprecated
-        )
+    const isNotDeprecated = (entity: LanguageEntity) =>
+        !mpsAnnotations.some(mpsAnnotation => mpsAnnotation.annotatedNodeId === entity.id && mpsAnnotation instanceof Deprecated)
 
-    const requiresFactoryMethod = (entity: LanguageEntity) =>
-        isConcrete(entity) && isNotDeprecated(entity)
+    const requiresFactoryMethod = (entity: LanguageEntity) => isConcrete(entity) && isNotDeprecated(entity)
 
     const factoryFor = (language: Language) => [
         `${asJSIdentifier(language.name)}Factory = {`,
-        indent(commaSeparated(
-            language.entities
-                .filter(requiresFactoryMethod)
-                .map((classifier) => `create${classifier.name}: () => ${asJSIdentifier(language.name)}.${classifier.name}.create(newId(), this.handleDelta)`)
-        )),
+        indent(
+            commaSeparated(
+                language.entities
+                    .filter(requiresFactoryMethod)
+                    .map(
+                        classifier =>
+                            `create${classifier.name}: () => ${asJSIdentifier(language.name)}.${classifier.name}.create(newId(), this.handleDelta)`
+                    )
+            )
+        ),
         `}`,
         ``
     ]
 
-    const languagesWithFactoryMethods = languages
-        .filter(
-            (language) => language.entities.some(requiresFactoryMethod)
-        )
+    const languagesWithFactoryMethods = languages.filter(language => language.entities.some(requiresFactoryMethod))
 
     return asString([
         header ?? [],
         `import {DeltaHandler} from "@lionweb/class-core";`,
         ``,
         `import {`,
-        indent(commaSeparated(
-            languagesWithFactoryMethods.map(({name}) => asJSIdentifier(name))
-        )),
+        indent(commaSeparated(languagesWithFactoryMethods.map(({ name }) => asJSIdentifier(name)))),
         `} from "./index.g.js";`,
         ``,
         `import {newId} from "../index.js";`,
@@ -64,9 +60,7 @@ export const megaFactoryFor = (megaFactoryName: string, languages: Language[], m
         indent([
             ``,
             `constructor(`,
-            indent([
-                `public readonly handleDelta?: DeltaHandler`
-            ]),
+            indent([`public readonly handleDelta?: DeltaHandler`]),
             `) {`,
             `}`,
             ``,

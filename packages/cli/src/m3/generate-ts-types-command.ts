@@ -1,9 +1,7 @@
-import {extname, join} from "path"
-import {existsSync, mkdirSync, statSync, writeFileSync} from "fs"
-
-import {AggregatingSimplisticHandler, deserializeLanguagesWithHandler} from "@lionweb/core"
-import {GenerationOptions, readSerializationChunk, tsTypesForLanguage} from "@lionweb/utilities"
-
+import { AggregatingSimplisticHandler, deserializeLanguagesWithHandler } from "@lionweb/core"
+import { GenerationOptions, readSerializationChunk, tsTypesForLanguage } from "@lionweb/utilities"
+import { existsSync, mkdirSync, statSync, writeFileSync } from "fs"
+import { extname, join } from "path"
 
 const generateTsTypesFromSerialization = async (path: string, generationOptions: GenerationOptions[]) => {
     try {
@@ -12,10 +10,9 @@ const generateTsTypesFromSerialization = async (path: string, generationOptions:
             mkdirSync(genPath)
         }
         const handler = new AggregatingSimplisticHandler()
-        deserializeLanguagesWithHandler(await readSerializationChunk(path), handler)
-            .forEach((language) => {
-                writeFileSync(join(genPath, `${language.name}.ts`), tsTypesForLanguage(language, ...generationOptions))
-            })
+        deserializeLanguagesWithHandler(await readSerializationChunk(path), handler).forEach(language => {
+            writeFileSync(join(genPath, `${language.name}.ts`), tsTypesForLanguage(language, ...generationOptions))
+        })
         handler.reportAllProblemsOnConsole()
         console.log(`generated TS types: "${path}" -> "${genPath}"`)
     } catch (e) {
@@ -24,17 +21,13 @@ const generateTsTypesFromSerialization = async (path: string, generationOptions:
     }
 }
 
-
 export const generateTsTypesWith = async (args: string[]) => {
     const generationOptions = args
-        .filter((arg) => arg.startsWith("--"))
-        .map((option) => option.substring(2).trim())
-        .filter((option) => option in GenerationOptions)
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .map((option) => (GenerationOptions as any)[option])    // e.g. "assumeSealed" -> GenerationOptions.assumeSealed
+        .filter(arg => arg.startsWith("--"))
+        .map(option => option.substring(2).trim())
+        .filter(option => option in GenerationOptions)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .map(option => (GenerationOptions as any)[option]) // e.g. "assumeSealed" -> GenerationOptions.assumeSealed
 
-    args
-        .filter((arg) => !arg.startsWith("--"))
-        .forEach((path) => generateTsTypesFromSerialization(path, generationOptions))
+    args.filter(arg => !arg.startsWith("--")).forEach(path => generateTsTypesFromSerialization(path, generationOptions))
 }
-

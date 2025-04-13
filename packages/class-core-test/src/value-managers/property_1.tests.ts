@@ -15,21 +15,20 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {AccumulatingSimplisticHandler, DefaultPrimitiveTypeDeserializer} from "@lionweb/core";
 import {
     collectingDeltaHandler,
     nodeBaseDeserializer,
     PropertyAddedDelta,
     PropertyChangedDelta,
     serializeNodeBases
-} from "@lionweb/class-core";
+} from "@lionweb/class-core"
+import { AccumulatingSimplisticHandler, DefaultPrimitiveTypeDeserializer } from "@lionweb/core"
 import { LionWebJsonMetaPointer } from "@lionweb/json"
 
-import {deepEqual, equal, isTrue, throws} from "../assertions.js";
-import {DatatypeTestConcept, TestLanguageBase} from "../gen/TestLanguage.g.js";
+import { deepEqual, equal, isTrue, throws } from "../assertions.js"
+import { DatatypeTestConcept, TestLanguageBase } from "../gen/TestLanguage.g.js"
 
-
-const testLanguageBase = TestLanguageBase.INSTANCE;
+const testLanguageBase = TestLanguageBase.INSTANCE
 
 
 describe("[1] string property", () => {

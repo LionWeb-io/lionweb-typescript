@@ -15,15 +15,9 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {Annotation, Concept, Interface, LanguageEntity, PrimitiveType} from "@lionweb/core"
+import { Annotation, Concept, Interface, LanguageEntity, PrimitiveType } from "@lionweb/core"
 
-
-type EntityMetaType =
-    | "Annotation"
-    | "Concept"
-    | "Enumeration"
-    | "Interface"
-    | "PrimitiveType"
+type EntityMetaType = "Annotation" | "Concept" | "Enumeration" | "Interface" | "PrimitiveType"
 
 export const entityMetaType = (entity: LanguageEntity): EntityMetaType => {
     if (entity instanceof Annotation) {

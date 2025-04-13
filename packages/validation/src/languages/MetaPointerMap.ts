@@ -7,7 +7,7 @@ export class MetaPointerMap {
      * Map from languageKey => languageVersion => key => LionWebJsonNode
      */
     map: Map<string, Map<string, Map<string, LionWebJsonNode>>> = new Map<string, Map<string, Map<string, LionWebJsonNode>>>()
-    
+
     add(languageKey: string, languageVersion: string, node: LionWebJsonNode): void {
         const keyProperty = NodeUtils.findProperty(node, MetaPointers.IKeyedKey)
         if (keyProperty === undefined) {
@@ -19,9 +19,9 @@ export class MetaPointerMap {
             console.log("MetaPointerMap.add: trying to add node without key property being empty or null.")
             return
         }
-        this.set({language: languageKey, version: languageVersion, key: key}, node)
+        this.set({ language: languageKey, version: languageVersion, key: key }, node)
     }
-    
+
     set(mp: LionWebJsonMetaPointer, node: LionWebJsonNode): void {
         let language = this.map.get(mp.language)
         if (language === undefined) {
@@ -35,7 +35,7 @@ export class MetaPointerMap {
         }
         version.set(mp.key, node)
     }
-    
+
     get(mp: LionWebJsonMetaPointer): LionWebJsonNode | undefined {
         return this.map.get(mp.language)?.get(mp.version)?.get(mp.key)
     }

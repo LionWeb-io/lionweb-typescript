@@ -1,16 +1,10 @@
-import {builtinPrimitives, chain, concatenator, LanguageFactory, lastOf} from "@lionweb/core"
-import {hasher} from "@lionweb/utilities"
+import { builtinPrimitives, chain, concatenator, LanguageFactory, lastOf } from "@lionweb/core"
+import { hasher } from "@lionweb/utilities"
 
-
-const factory = new LanguageFactory(
-    "libraryWithDates",
-    "1",
-    chain(concatenator("-"), hasher()),
-    lastOf
-)
+const factory = new LanguageFactory("libraryWithDates", "1", chain(concatenator("-"), hasher()), lastOf)
 export const libraryWithDatesLanguage = factory.language
 
-const {integerDatatype, stringDatatype} = builtinPrimitives
+const { integerDatatype, stringDatatype } = builtinPrimitives
 
 export const libraryWithDates = factory.concept("LibraryWithDates", false)
 const book = factory.concept("Book", false)
@@ -37,4 +31,3 @@ factory.property(writer, "name").ofType(stringDatatype).havingKey("library_Write
 factory.property(guideBookWriter, "countries").ofType(stringDatatype)
 
 factory.property(specialistBookWriter, "subject").ofType(stringDatatype)
-

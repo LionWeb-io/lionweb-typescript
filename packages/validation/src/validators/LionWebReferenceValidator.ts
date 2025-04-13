@@ -5,10 +5,10 @@ import {
     Reference_CirculairParent_Issue,
     Reference_DuplicateNodeId_Issue,
     Reference_LanguageUnknown_Issue,
-    Reference_ParentMissingInChild_Issue,
+    Reference_ParentMissingInChild_Issue
 } from "../issues/ReferenceIssues.js"
-import { JsonContext } from "../json/JsonContext.js"
 import { ChunkUtils } from "../json/ChunkUtils.js"
+import { JsonContext } from "../json/JsonContext.js"
 import { LionWebJsonChunkWrapper } from "../json/LionWebJsonChunkWrapper.js"
 import { ValidationResult } from "./generic/ValidationResult.js"
 

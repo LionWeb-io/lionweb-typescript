@@ -1,6 +1,6 @@
+import { LionWebJsonMetaPointer } from "@lionweb/json"
 import { allFeaturesOf } from "./m3/functions.js"
 import { Classifier, Feature, Language, LanguageEntity } from "./m3/types.js"
-import { LionWebJsonMetaPointer } from "@lionweb/json"
 
 
 /**

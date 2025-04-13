@@ -1,6 +1,3 @@
-import { currentSerializationFormatVersion, LionWebJsonChunk } from "@lionweb/json"
-import {expect} from "chai"
-
 import {
     Annotation,
     builtinClassifiers,
@@ -19,12 +16,12 @@ import {
     serializeLanguages,
     serializeNodes
 } from "@lionweb/core"
-import {dateDatatype, libraryWithDatesLanguage} from "./languages/libraryWithDates.js"
-import {TestNode, TestNodeReader} from "./instances/test-node.js"
-
+import { currentSerializationFormatVersion, LionWebJsonChunk } from "@lionweb/json"
+import { expect } from "chai"
+import { TestNode, TestNodeReader } from "./instances/test-node.js"
+import { dateDatatype, libraryWithDatesLanguage } from "./languages/libraryWithDates.js"
 
 describe("serialization", () => {
-
     it("serializes node with custom primitive type, without registering custom deserializer", () => {
         const myNode = new TestNode("1", "LibraryWithDates")
         myNode.properties["name"] = "myLibrary"
@@ -38,7 +35,9 @@ describe("serialization", () => {
         const primitiveTypeSerializer = new DefaultPrimitiveTypeSerializer()
         primitiveTypeSerializer.register(dateDatatype, (value: unknown) => {
             const d = value as Date
-            return `${Number(d.getFullYear()).toString().padStart(4, "0")}-${Number(d.getMonth() + 1).toString().padStart(2, "0")}-${Number(d.getDate()).toString().padStart(2, "0")}`
+            return `${Number(d.getFullYear()).toString().padStart(4, "0")}-${Number(d.getMonth() + 1)
+                .toString()
+                .padStart(2, "0")}-${Number(d.getDate()).toString().padStart(2, "0")}`
         })
 
         const myNode = new TestNode("1", "LibraryWithDates")
@@ -96,7 +95,9 @@ describe("serialization", () => {
                 }
             ]
         }
-        expect(serializeNodes([myNode], new TestNodeReader([libraryWithDatesLanguage]), primitiveTypeSerializer)).to.eql(expectedSerializationChunk)
+        expect(serializeNodes([myNode], new TestNodeReader([libraryWithDatesLanguage]), primitiveTypeSerializer)).to.eql(
+            expectedSerializationChunk
+        )
     })
 
     it("serializes annotations", () => {
@@ -145,9 +146,7 @@ describe("serialization", () => {
                     ],
                     containments: [],
                     references: [],
-                    annotations: [
-                        "0"
-                    ],
+                    annotations: ["0"],
                     parent: null
                 },
                 {
@@ -180,13 +179,13 @@ describe("serialization", () => {
     it(`doesn't fail on "unconnected" (i.e., unset or previously unresolved) null reference target values`, () => {
         const language = new Language("test language", "0", "test-language", "test-language")
         const annotation = new Annotation(language, "Annotation", "Annotation", "Annotation")
-            // don't set annotation.annotates!
+        // don't set annotation.annotates!
         language.havingEntities(annotation)
 
         const serializationChunk = serializeLanguages(language) // should not fail
-        const annotationSerNode = serializationChunk.nodes.find((node) => node.id === "Annotation")
+        const annotationSerNode = serializationChunk.nodes.find(node => node.id === "Annotation")
         expect(annotationSerNode).to.not.be.null
-        const referenceSer = annotationSerNode?.references.find((serRef) => serRef.reference.key === "Annotation-annotates")
+        const referenceSer = annotationSerNode?.references.find(serRef => serRef.reference.key === "Annotation-annotates")
         expect(referenceSer).to.not.be.undefined
         expect(referenceSer!.targets).to.eql([])
     })
@@ -194,13 +193,15 @@ describe("serialization", () => {
     it(`doesn't fail on unresolved, i.e. null-valued child values`, () => {
         const language = new Language("test language", "0", "test-language", "test-language")
         const enumeration = new Enumeration(language, "Enumeration", "Enumeration", "Enumeration")
-        enumeration.havingLiterals(null as unknown as EnumerationLiteral)   // some type-trickery
+        enumeration.havingLiterals(null as unknown as EnumerationLiteral) // some type-trickery
         language.havingEntities(enumeration)
 
         const serializationChunk = serializeLanguages(language) // should not fail
-        const enumerationSerNode = serializationChunk.nodes.find((node) => node.id === "Enumeration")
+        const enumerationSerNode = serializationChunk.nodes.find(node => node.id === "Enumeration")
         expect(enumerationSerNode).to.not.be.null
-        const containmentSer = enumerationSerNode?.containments.find((serContainment) => serContainment.containment.key === "Enumeration-literals")
+        const containmentSer = enumerationSerNode?.containments.find(
+            serContainment => serContainment.containment.key === "Enumeration-literals"
+        )
         expect(containmentSer).to.not.be.undefined
         expect(containmentSer!.children).to.eql([])
 
@@ -221,16 +222,13 @@ describe("serialization", () => {
 
         const serNode = serializationChunk.nodes[0]
         expect(serNode).to.not.be.undefined
-        const serSelfRef = serNode.references.find((serRef) => serRef.reference.key === "Concept-selfRef")
+        const serSelfRef = serNode.references.find(serRef => serRef.reference.key === "Concept-selfRef")
         expect(serSelfRef).to.not.be.undefined
         expect(serSelfRef!.targets).to.deep.eq([{ reference: "instance", resolveInfo: null }])
     })
-
 })
 
-
 describe("serialization of empty (unset) values", () => {
-
     const factory = new LanguageFactory("serialization-language", "0", concatenator("-"), lastOf)
     const enumeration = factory.enumeration("enumeration")
     const concept = factory.concept("concept", false)
@@ -342,7 +340,7 @@ describe("serialization of empty (unset) values", () => {
                 }
             ]
         }
-        const actualSerializationChunk = serializeNodes([node], dynamicExtractionFacade)    // (serializeEmptyFeatures has true as default)
+        const actualSerializationChunk = serializeNodes([node], dynamicExtractionFacade) // (serializeEmptyFeatures has true as default)
         expect(actualSerializationChunk).to.eql(expectedSerializationChunk)
         const usingExplicitOption = serializeNodes([node], dynamicExtractionFacade, { serializeEmptyFeatures: true })
         expect(usingExplicitOption).to.eql(expectedSerializationChunk)
@@ -376,6 +374,4 @@ describe("serialization of empty (unset) values", () => {
         const actualSerializationChunk = serializeNodes([node], dynamicExtractionFacade, { serializeEmptyFeatures: false })
         expect(actualSerializationChunk).to.eql(expectedSerializationChunk)
     })
-
 })
-

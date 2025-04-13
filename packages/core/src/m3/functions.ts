@@ -3,10 +3,11 @@
  */
 
 
+import { LionWebId } from "@lionweb/json"
 import { ClassifierDeducer } from "../facade.js"
 import { containmentChain } from "../functions.js"
 import { isRef, unresolved } from "../references.js"
-import { Id, Node } from "../types.js"
+import { Node } from "../types.js"
 import { cycleWith } from "../utils/cycles.js"
 import { flatMapNonCyclingFollowing } from "../utils/recursion.js"
 import { sortByStringKey } from "../utils/sorting.js"
@@ -259,7 +260,7 @@ const isEnumeration = (element: LanguageEntity): element is Enumeration =>
  * @return a function that looks up a classifier from the given {@link Language language} by its ID.
  */
 const idBasedClassifierDeducerFor = (language: Language) =>
-    (id: Id) =>
+    (id: LionWebId) =>
         language.entities.find((element) => element instanceof Classifier && element.id === id) as Classifier
 
 /**

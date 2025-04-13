@@ -1,9 +1,7 @@
-import {writeFileSync} from "fs"
-import {dirname} from "path"
-
-import {AggregatingSimplisticHandler, deserializeLanguagesWithHandler} from "@lionweb/core"
-import {generateMermaidForLanguage, generatePlantUmlForLanguage, readSerializationChunk} from "@lionweb/utilities"
-
+import { AggregatingSimplisticHandler, deserializeLanguagesWithHandler } from "@lionweb/core"
+import { generateMermaidForLanguage, generatePlantUmlForLanguage, readSerializationChunk } from "@lionweb/utilities"
+import { writeFileSync } from "fs"
+import { dirname } from "path"
 
 export const diagramFromSerializationChunkAt = async (path: string) => {
     try {
@@ -12,14 +10,12 @@ export const diagramFromSerializationChunkAt = async (path: string) => {
         const handler = new AggregatingSimplisticHandler()
         const languages = deserializeLanguagesWithHandler(json, handler)
         handler.reportAllProblemsOnConsole()
-        languages.forEach((language) => {
+        languages.forEach(language => {
             writeFileSync(`${dir}/${language.name}.puml`, generatePlantUmlForLanguage(language))
             writeFileSync(`${dir}/${language.name}.md`, generateMermaidForLanguage(language))
-
         })
         console.log(`generated diagrams: "${path}" -> "${dir}/"`)
     } catch (_) {
         console.error(`"${path}" does not point to a valid JSON serialization of a language`)
     }
 }
-

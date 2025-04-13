@@ -7,7 +7,7 @@ export class Reference_DuplicateNodeId_Issue extends ValidationIssue {
 
     constructor(
         context: JsonContext,
-        public nodeId: string,
+        public nodeId: string
     ) {
         super(context)
     }
@@ -21,7 +21,7 @@ export class Reference_ChildMissingInParent_Issue extends ValidationIssue {
     constructor(
         context: JsonContext,
         public child: LionWebJsonNode,
-        public parent: LionWebJsonNode,
+        public parent: LionWebJsonNode
     ) {
         super(context)
     }
@@ -35,7 +35,7 @@ export class Reference_ParentMissingInChild_Issue extends ValidationIssue {
     constructor(
         context: JsonContext,
         public parent: LionWebJsonNode,
-        public child: LionWebJsonNode,
+        public child: LionWebJsonNode
     ) {
         super(context)
     }
@@ -49,7 +49,7 @@ export class Reference_CirculairParent_Issue extends ValidationIssue {
     constructor(
         context: JsonContext,
         public node: LionWebJsonNode | undefined,
-        public parentPath: string[],
+        public parentPath: string[]
     ) {
         super(context)
     }
@@ -62,7 +62,7 @@ export class Reference_LanguageUnknown_Issue extends ValidationIssue {
 
     constructor(
         context: JsonContext,
-        public languageRef: LionWebJsonMetaPointer,
+        public languageRef: LionWebJsonMetaPointer
     ) {
         super(context)
     }
@@ -75,7 +75,7 @@ export class Duplicates_Issue extends ValidationIssue {
 
     constructor(
         context: JsonContext,
-        public nodeid: string,
+        public nodeid: string
     ) {
         super(context)
     }

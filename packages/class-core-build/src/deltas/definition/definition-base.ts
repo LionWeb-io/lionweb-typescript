@@ -30,7 +30,6 @@ import {
     Type
 } from "./Deltas.g.js"
 
-
 export const deltas = Deltas.create("Deltas")
 
 let id = 0

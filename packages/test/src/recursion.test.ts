@@ -1,10 +1,17 @@
-import {Concept, Enumeration, EnumerationLiteral, Language, Property, directlyContaineds, flatMapNonCyclingFollowing, trivialFlatMapper} from "@lionweb/core"
+import {
+    Concept,
+    directlyContaineds,
+    Enumeration,
+    EnumerationLiteral,
+    flatMapNonCyclingFollowing,
+    Language,
+    Property,
+    trivialFlatMapper
+} from "@lionweb/core"
 
-import {deepEqual} from "./utils/assertions.js"
-
+import { deepEqual } from "./utils/assertions.js"
 
 describe("flatMapNonCyclingFollowing", () => {
-
     it("should return the root", () => {
         const thing = "thing"
         const flatMap = flatMapNonCyclingFollowing(trivialFlatMapper, _ => [])
@@ -15,24 +22,21 @@ describe("flatMapNonCyclingFollowing", () => {
 
     it("should detect not cycle indefinitely", () => {
         // set up a simple graph:
-        const graph: {[node:number] : number[] }  = {
+        const graph: { [node: number]: number[] } = {
             1: [2, 3], // node 1 connects to 2 and 3
-            2: [4],    // node 2 connects to 4
-            3: [2],    // node 3 connects to 2 (creating a cycle with 1 -> 2 -> 3 -> 2)
-            4: []      // node 4 is a leaf
-        }   
+            2: [4], // node 2 connects to 4
+            3: [2], // node 3 connects to 2 (creating a cycle with 1 -> 2 -> 3 -> 2)
+            4: [] // node 4 is a leaf
+        }
 
         const flatMap = flatMapNonCyclingFollowing(trivialFlatMapper, (node: number) => graph[node])
         const result = flatMap(1)
 
         deepEqual(result, [1, 2, 4, 3])
     })
-
 })
 
-
 describe("directlyContaineds function", () => {
-
     it("should return entities for Language objects", () => {
         const language = new Language("ExampleLanguage", "1.0", "lang-001", "key-lang-001")
         const entity1 = new Concept(language, "Entity1", "key-entity-001", "id-entity-001", false)
@@ -41,7 +45,6 @@ describe("directlyContaineds function", () => {
 
         const result = directlyContaineds(language)
         deepEqual(result, [entity1, entity2])
-
     })
 
     it("should return features for Classifier objects", () => {
@@ -57,7 +60,7 @@ describe("directlyContaineds function", () => {
 
     it("should return literals for Enumeration objects", () => {
         const language = new Language("ExampleLanguage", "1.0", "lang-001", "key-lang-001")
-        const enumeration = new Enumeration( language,"ExampleEnumeration", "enum-001", "key-enum-001")
+        const enumeration = new Enumeration(language, "ExampleEnumeration", "enum-001", "key-enum-001")
         const literal1 = new EnumerationLiteral(enumeration, "Literal1", "key-lit1", "lit-001")
         const literal2 = new EnumerationLiteral(enumeration, "Literal2", "key-lit2", "lit-002")
         enumeration.havingLiterals(literal1, literal2)
@@ -74,5 +77,4 @@ describe("directlyContaineds function", () => {
         const result = directlyContaineds(nonMatchingConcept)
         deepEqual(result, [])
     })
-
 })

@@ -1,13 +1,11 @@
-import {concatenator, LanguageFactory, lastOf} from "@lionweb/core"
+import { concatenator, LanguageFactory, lastOf } from "@lionweb/core"
 
-import {equal} from "../utils/assertions.js"
-
+import { equal } from "../utils/assertions.js"
 
 describe("M3 types", () => {
-
     it("factory performs auto-containment, but also prevents duplication", () => {
         const factory = new LanguageFactory("TestLanguage", "0", concatenator("-"), lastOf)
-        const {language} = factory
+        const { language } = factory
 
         const concept = factory.concept("Concept", false)
         equal(language.entities.length, 1)
@@ -25,6 +23,4 @@ describe("M3 types", () => {
         enumeration.havingLiterals(literal)
         equal(enumeration.literals.length, 1)
     })
-
 })
-

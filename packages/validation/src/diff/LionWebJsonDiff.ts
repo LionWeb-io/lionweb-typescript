@@ -1,19 +1,20 @@
-import { JsonContext } from "../issues/index.js"
 import {
-    isEqualMetaPointer, isEqualReferenceTarget,
+    isEqualMetaPointer,
+    isEqualReferenceTarget,
     LionWebJsonChunk,
     LionWebJsonContainment,
     LionWebJsonNode,
     LionWebJsonProperty,
     LionWebJsonReference,
     LionWebJsonReferenceTarget,
-    LionWebJsonUsedLanguage,
+    LionWebJsonUsedLanguage
 } from "@lionweb/json"
+import { JsonContext } from "../issues/index.js"
 import { ChunkUtils } from "../json/ChunkUtils.js"
 import { NodeUtils } from "../json/NodeUtils.js"
 import { Change, GenericChange, Missing } from "./changes/Change.js"
 import { LanguageAdded, LanguageRemoved, NodeAdded, NodeRemoved, SerializationFormatChange } from "./changes/ChunkChange.js"
-import { ChildAdded, ChildRemoved, ChildOrderChanged } from "./changes/ContainmentChange.js"
+import { ChildAdded, ChildOrderChanged, ChildRemoved } from "./changes/ContainmentChange.js"
 import { AnnotationAdded, AnnotationOrderChanged, AnnotationRemoved, TargetAdded, TargetOrderChanged, TargetRemoved } from "./changes/index.js"
 import { NodeClassifierChanged, ParentChanged } from "./changes/NodeChange.js"
 import { PropertyValueChanged } from "./changes/PropertyChange.js"

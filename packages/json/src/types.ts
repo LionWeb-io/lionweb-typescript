@@ -4,8 +4,14 @@
  * We use types instead of classes, because the purpose is to define the Lionweb JSON to be sent over the line.
  */
 
+/**
+ * LionWebId of LionWeb node.
+ */
 export type LionWebId = string
-// key of concept, property, containment, referenve or property
+
+/**
+ * Key of concept, property, containment, or reference.
+ */
 export type LionWebKey = string
 
 export type LionWebJsonMetaPointer = {

@@ -1,4 +1,5 @@
-import { Id, Node } from "./types.js"
+import { LionWebId } from "@lionweb/json"
+import { Node } from "./types.js"
 import { flatMapNonCyclingFollowing, trivialFlatMapper } from "./utils/recursion.js"
 
 
@@ -15,7 +16,7 @@ export const containmentChain = (node: Node): Node[] => {
  * Maps an array of {@link Node AST nodes} or `null`s to their IDs.
  * These `null`s might be the result of unresolved children.
  */
-export const asIds = (nodeOrNulls: (Node | null)[]): (Id | null)[] =>
+export const asIds = (nodeOrNulls: (Node | null)[]): (LionWebId | null)[] =>
     nodeOrNulls.map((nodeOrNull) => nodeOrNull === null ? null : nodeOrNull.id)
 
 

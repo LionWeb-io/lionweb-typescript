@@ -36,90 +36,69 @@ import {
     Property,
     SingleRef
 } from "@lionweb/core"
-import {when, withNewlineAppended} from "littoral-templates"
+import { when, withNewlineAppended } from "littoral-templates"
 
-import {indent, switchOrIf} from "../utils/textgen.js"
-import {entityMetaType, extendsFrom, Imports, nameOfBaseClassForLanguage} from "./helpers/index.js"
-
+import { indent, switchOrIf } from "../utils/textgen.js"
+import { entityMetaType, extendsFrom, Imports, nameOfBaseClassForLanguage } from "./helpers/index.js"
 
 export const reflectiveClassFor = (imports: Imports) => {
-
     // classifier:
 
     const reflectiveMembersForFeature = (feature: Feature) => {
-        const {classifier, name, key, id, optional} = feature
+        const { classifier, name, key, id, optional } = feature
         const metaType = featureMetaType(feature)
         const qName = `${classifier.name}_${name}`
         return [
             `private readonly _${qName} = new ${imports.core(metaType)}(this._${classifier.name}, "${name}", "${key}", "${id}")${optional ? ".isOptional()" : ""}${isMultiple(feature) ? ".isMultiple()" : ""};`,
             //               | core (2nd x) |
             `get ${qName}(): ${metaType} {`,
-            indent([
-                `this.ensureWiredUp();`,
-                `return this._${qName};`
-            ]),
+            indent([`this.ensureWiredUp();`, `return this._${qName};`]),
             `}`
         ]
     }
 
     const reflectiveMembersForClassifier = (classifier: Classifier) => {
-        const {name, key, id, features} = classifier
+        const { name, key, id, features } = classifier
         const metaType = entityMetaType(classifier)
         return [
-            `public readonly _${name} = new ${imports.core(metaType)}(this._language, "${name}", "${key}", "${id}"${classifier instanceof Concept ? (", " + classifier.abstract) : ""});`,
+            `public readonly _${name} = new ${imports.core(metaType)}(this._language, "${name}", "${key}", "${id}"${classifier instanceof Concept ? ", " + classifier.abstract : ""});`,
             //              | core (2nd x) |
             `get ${name}(): ${metaType} {`,
-            indent([
-                `this.ensureWiredUp();`,
-                `return this._${name};`
-            ]),
+            indent([`this.ensureWiredUp();`, `return this._${name};`]),
             `}`,
             features.map(reflectiveMembersForFeature)
         ]
     }
 
+    // enumeration:
 
-// enumeration:
-
-    const reflectiveMemberForEnumerationLiteral = ({enumeration, name, key, id}: EnumerationLiteral) => {
+    const reflectiveMemberForEnumerationLiteral = ({ enumeration, name, key, id }: EnumerationLiteral) => {
         const qName = `${enumeration.name}_${name}`
         return [
             `private readonly _${qName} = new ${imports.core("EnumerationLiteral")}(this._${enumeration.name}, "${name}", "${key}", "${id}");`,
             //               |  core (2nd x)  |
             `get ${qName}(): EnumerationLiteral {`,
-            indent([
-                `this.ensureWiredUp();`,
-                `return this._${qName};`
-            ]),
+            indent([`this.ensureWiredUp();`, `return this._${qName};`]),
             `}`
         ]
     }
 
-    const reflectiveMembersForEnumeration = ({name, key, id, literals}: Enumeration) =>
-        [
-            `public readonly _${name} = new ${imports.core("Enumeration")}(this._language, "${name}", "${key}", "${id}");`,
-            //              | core (2nd x) |
-            `get ${name}(): Enumeration {`,
-            indent([
-                `this.ensureWiredUp();`,
-                `return this._${name};`
-            ]),
-            `}`,
-            literals.map(reflectiveMemberForEnumerationLiteral)
-        ]
+    const reflectiveMembersForEnumeration = ({ name, key, id, literals }: Enumeration) => [
+        `public readonly _${name} = new ${imports.core("Enumeration")}(this._language, "${name}", "${key}", "${id}");`,
+        //              | core (2nd x) |
+        `get ${name}(): Enumeration {`,
+        indent([`this.ensureWiredUp();`, `return this._${name};`]),
+        `}`,
+        literals.map(reflectiveMemberForEnumerationLiteral)
+    ]
 
-    const reflectiveMembersForPrimitiveType = ({name, key, id}: PrimitiveType) =>
-        [
-            `public readonly _${name} = new ${imports.core("PrimitiveType")}(this._language, "${name}", "${key}", "${id}");`,
-            //              | core (2nd x) |
-            `get ${name}(): PrimitiveType {`,
-            indent([
-                `this.ensureWiredUp();`,
-                `return this._${name};`
-            ]),
-            `}`
-        ]
-
+    const reflectiveMembersForPrimitiveType = ({ name, key, id }: PrimitiveType) => [
+        `public readonly _${name} = new ${imports.core("PrimitiveType")}(this._language, "${name}", "${key}", "${id}");`,
+        //              | core (2nd x) |
+        `get ${name}(): PrimitiveType {`,
+        indent([`this.ensureWiredUp();`, `return this._${name};`]),
+        `}`
+    ]
 
     const reflectiveMembersForEntity = (entity: LanguageEntity) => {
         if (entity instanceof Classifier) {
@@ -134,7 +113,6 @@ export const reflectiveClassFor = (imports: Imports) => {
         return `// unhandled language entity <${entityMetaType(entity)}>"${entity.name}"`
     }
 
-
     const refForType = (type: SingleRef<LanguageEntity>) => {
         if (type === null) {
             return `???`
@@ -146,12 +124,12 @@ export const reflectiveClassFor = (imports: Imports) => {
     }
 
     const wireUpStatementsForProperty = (property: Property) => {
-        const {classifier, name, type, optional} = property
+        const { classifier, name, type, optional } = property
         return `this._${classifier.name}_${name}.ofType(${refForType(type)})${optional ? ".isOptional()" : ""};`
     }
 
     const wireUpStatementsForLink = (link: Link) => {
-        const {classifier, name, type} = link
+        const { classifier, name, type } = link
         return `this._${classifier.name}_${name}.ofType(${refForType(type)});`
     }
 
@@ -165,23 +143,24 @@ export const reflectiveClassFor = (imports: Imports) => {
         return `// unhandled feature <${featureMetaType(feature)}>"${feature.name}"`
     }
 
-    const isConcreteClassifier = (classifier: Classifier): classifier is (Annotation | Concept) =>
+    const isConcreteClassifier = (classifier: Classifier): classifier is Annotation | Concept =>
         classifier instanceof Annotation || classifier instanceof Concept
 
     const wireUpStatementsForEntity = (entity: LanguageEntity) => {
-        const {name} = entity
+        const { name } = entity
         const thisLocalName = (localName: string) => `this._${name}_${localName}`
         if (entity instanceof Classifier) {
             const extends_ = extendsFrom(entity)
             return [
-                extends_ instanceof Classifier
-                    ? `this._${name}.extends = ${refForType(extends_)};`
-                    : [],
+                extends_ instanceof Classifier ? `this._${name}.extends = ${refForType(extends_)};` : [],
                 when(entity instanceof Interface && entity.extends.length > 0)(
-                    () => `this._${name}.extending(${(entity as Interface).extends.map((interface_) => refForType(interface_)).join(", ")});`
+                    () => `this._${name}.extending(${(entity as Interface).extends.map(interface_ => refForType(interface_)).join(", ")});`
                 ),
                 when(isConcreteClassifier(entity) && entity.implements.length > 0)(
-                    () => `this._${name}.implementing(${asArray((entity as (Annotation | Concept)).implements).map((interface_) => refForType(interface_)).join(", ")});`
+                    () =>
+                        `this._${name}.implementing(${asArray((entity as Annotation | Concept).implements)
+                            .map(interface_ => refForType(interface_))
+                            .join(", ")});`
                 ),
                 when(entity.features.length > 0)(
                     `this._${name}.havingFeatures(${entity.features.map(nameOf).map(thisLocalName).join(", ")});`
@@ -193,13 +172,13 @@ export const reflectiveClassFor = (imports: Imports) => {
             return `this._${name}.havingLiterals(${entity.literals.map(nameOf).map(thisLocalName).join(", ")});`
         }
         if (entity instanceof PrimitiveType) {
-            return []   // (nothing to do)
+            return [] // (nothing to do)
         }
         return `// unhandled language entity <${entityMetaType(entity)}>"${name}"`
     }
 
     return (language: Language) => {
-        const {version, id, key, entities} = language
+        const { version, id, key, entities } = language
         const enumerations = entities.filter(isEnumeration)
         const concreteClassifiers = entities.filter(isConcrete)
         const parameterPrefix = concreteClassifiers.length === 0 ? "_" : ""
@@ -212,10 +191,7 @@ export const reflectiveClassFor = (imports: Imports) => {
                 `private readonly _language: ${imports.core("Language")} = new Language("${imports.thisLanguageNameAsJsIdentifier}", "${version}", "${id}", "${key}");`,
                 //               | core | (3rd x)
                 `get language(): Language {`,
-                indent([
-                    `this.ensureWiredUp();`,
-                    `return this._language;`
-                ]),
+                indent([`this.ensureWiredUp();`, `return this._language;`]),
                 `}`,
                 ``,
                 entities.map(withNewlineAppended(reflectiveMembersForEntity)),
@@ -233,11 +209,13 @@ export const reflectiveClassFor = (imports: Imports) => {
                 ``,
                 `factory(${parameterPrefix}handleDelta?: ${imports.generic("DeltaHandler")}): ${imports.generic("NodeBaseFactory")} {`,
                 indent([
-                    `return (classifier: ${imports.core("Classifier")}, ${parameterPrefix}id: ${imports.core("Id")}) => {`,
+                    `return (classifier: ${imports.core("Classifier")}, ${parameterPrefix}id: ${imports.json("LionWebId")}) => {`,
                     indent(
                         switchOrIf(
                             "classifier.key",
-                            concreteClassifiers.map(nameOf).map((name) => [`this._${name}.key`, `${name}.create(id, ${parameterPrefix}handleDelta)`]),
+                            concreteClassifiers
+                                .map(nameOf)
+                                .map(name => [`this._${name}.key`, `${name}.create(id, ${parameterPrefix}handleDelta)`]),
                             [
                                 `const {language} = classifier;`,
                                 `throw new Error(\`can't instantiate \${classifier.name} (key=\${classifier.key}): classifier is not known in language \${language.name} (key=\${language.key}, version=\${language.version})\`);`
@@ -254,7 +232,7 @@ export const reflectiveClassFor = (imports: Imports) => {
                     `const {enumeration} = enumerationLiteral;`,
                     switchOrIf(
                         "enumeration.key",
-                        enumerations.map(nameOf).map((name) => [`this._${name}.key`, "enumerationLiteral.key as EnumType"]),
+                        enumerations.map(nameOf).map(name => [`this._${name}.key`, "enumerationLiteral.key as EnumType"]),
                         [
                             `const {language} = enumeration;`,
                             `throw new Error(\`enumeration with key \${enumeration.key} is not known in language \${language.name} (key=\${language.key}, version=\${language.version})\`);`
@@ -268,6 +246,5 @@ export const reflectiveClassFor = (imports: Imports) => {
             `}`
         ]
     }
-
 }
 

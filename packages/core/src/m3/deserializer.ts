@@ -1,7 +1,7 @@
+import { LionWebJsonChunk } from "@lionweb/json"
 import { deserializeSerializationChunk } from "../deserializer.js"
 import { nodesExtractorUsing } from "../facade.js"
 import { defaultSimplisticHandler, SimplisticHandler } from "../handler.js"
-import { LionWebJsonChunk } from "@lionweb/json"
 import { DefaultPrimitiveTypeDeserializer, lioncoreBuiltins } from "./builtins.js"
 import { lioncoreExtractionFacade, lioncoreInstantiationFacade } from "./facade.js"
 import { lioncore } from "./lioncore.js"

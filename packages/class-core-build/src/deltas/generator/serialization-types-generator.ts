@@ -15,8 +15,8 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {asString, when} from "littoral-templates"
-import {indent} from "@lionweb/class-core-generator"
+import { indent } from "@lionweb/class-core-generator"
+import { asString, when } from "littoral-templates"
 
 import {
     Delta,
@@ -29,17 +29,14 @@ import {
     SerializeSubTree,
     Type
 } from "../definition/Deltas.g.js"
-import {isSerializingAsChunk} from "./helpers.js"
-
+import { isSerializingAsChunk } from "./helpers.js"
 
 const tsTypeForTypeOfSerializationField = (type: Type) => {
     if (type instanceof FeatureType) {
         return "LionWebJsonMetaPointer"
     }
     if (type instanceof NodeType) {
-        return type.serialization instanceof RefOnly
-            ? "IdOrUnresolved"
-            : "Id"
+        return type.serialization instanceof RefOnly ? "IdOrUnresolved" : "LionWebId"
     }
     if (type instanceof IndexType) {
         return "number"
@@ -72,8 +69,8 @@ const typeForDelta = ({name, fields}: Delta) =>
 export const serializationTypesForDeltas = (deltas: Delta[], header?: string) =>
     asString([
         header ?? [],
-        `import {Id, IdOrUnresolved} from "@lionweb/core";`,
-        `import {LionWebJsonMetaPointer, LionWebJsonChunk} from "@lionweb/json";`,
+        `import {IdOrUnresolved} from "@lionweb/core";`,
+        `import {LionWebId, LionWebJsonMetaPointer, LionWebJsonChunk} from "@lionweb/json";`,
         ``,
         ``,
         `export type SerializedDelta =`,

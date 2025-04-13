@@ -15,15 +15,18 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {builtinPrimitives, PrimitiveType} from "@lionweb/core"
-
+import { builtinPrimitives, PrimitiveType } from "@lionweb/core"
 
 export const tsTypeForPrimitiveType = (primitiveType: PrimitiveType): string => {
     switch (primitiveType) {
-        case builtinPrimitives.booleanDatatype: return `boolean`
-        case builtinPrimitives.stringDatatype: return `string`
-        case builtinPrimitives.integerDatatype: return `number`
-        case builtinPrimitives.jsonDatatype: return `unknown`
+        case builtinPrimitives.booleanDatatype:
+            return `boolean`
+        case builtinPrimitives.stringDatatype:
+            return `string`
+        case builtinPrimitives.integerDatatype:
+            return `number`
+        case builtinPrimitives.jsonDatatype:
+            return `unknown`
         default:
             return `string`
     }

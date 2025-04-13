@@ -8,8 +8,8 @@ export class Language_PropertyValue_Issue extends ValidationIssue {
     constructor(
         context: JsonContext,
         public property: string,
-        public value: (string | null),
-        public expectedType: string,
+        public value: string | null,
+        public expectedType: string
     ) {
         super(context)
     }
@@ -24,7 +24,7 @@ export abstract class Language_IncorrectMetaPointerType_Issue extends Validation
     constructor(
         context: JsonContext,
         public metaPointer: LionWebJsonMetaPointer,
-        public incorrectType: string,
+        public incorrectType: string
     ) {
         super(context)
     }
@@ -43,7 +43,7 @@ export abstract class Language_FeatureMetaPointerNotInClassifier_Issue extends V
     constructor(
         context: JsonContext,
         public featureMetaPointer: LionWebJsonMetaPointer,
-        public classifierPointer: LionWebJsonNode,
+        public classifierPointer: LionWebJsonNode
     ) {
         super(context)
     }
@@ -82,7 +82,7 @@ export abstract class Language_UnknownMetaPointer_Issue extends ValidationIssue 
 
     constructor(
         context: JsonContext,
-        public metaPointer: LionWebJsonMetaPointer,
+        public metaPointer: LionWebJsonMetaPointer
     ) {
         super(context)
     }
@@ -112,7 +112,7 @@ export class NumberOfLanguagesUsed_Issue extends ValidationIssue {
     readonly issueType = "NumberOfLanguagesUsed"
     constructor(
         context: JsonContext,
-        public nrOfLanguages: number,
+        public nrOfLanguages: number
     ) {
         super(context)
     }
@@ -120,9 +120,7 @@ export class NumberOfLanguagesUsed_Issue extends ValidationIssue {
 }
 export class MissingM3Language_Issue extends ValidationIssue {
     readonly issueType = "MissingM3Language"
-    constructor(
-        context: JsonContext
-    ) {
+    constructor(context: JsonContext) {
         super(context)
     }
     msg = () => `Missing used language LionCore-M3`
@@ -131,7 +129,7 @@ export class NotLionCoreLanguageKey_Issue extends ValidationIssue {
     readonly issueType = "NotLionCoreLanguageKey"
     constructor(
         context: JsonContext,
-        public incorrectKey: string,
+        public incorrectKey: string
     ) {
         super(context)
     }
@@ -141,7 +139,7 @@ export class IncorrectLionCoreVersion_Issue extends ValidationIssue {
     readonly issueType = "IncorrectLionCoreVersion"
     constructor(
         context: JsonContext,
-        public incorrectVersion: string,
+        public incorrectVersion: string
     ) {
         super(context)
     }

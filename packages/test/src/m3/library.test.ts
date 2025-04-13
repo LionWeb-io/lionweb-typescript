@@ -1,11 +1,9 @@
-import {deserializeLanguages, lioncoreBuiltins, serializeLanguages} from "@lionweb/core"
+import { deserializeLanguages, lioncoreBuiltins, serializeLanguages } from "@lionweb/core"
 
-import {libraryLanguage} from "../languages/library.js"
-import {deepEqual} from "../utils/assertions.js"
-
+import { libraryLanguage } from "../languages/library.js"
+import { deepEqual } from "../utils/assertions.js"
 
 describe("Library test metamodel", () => {
-
     it("LionCore built-in primitive types are implicit", () => {
         libraryLanguage.dependingOn(lioncoreBuiltins)
         deepEqual(libraryLanguage.dependsOn, [])
@@ -17,6 +15,4 @@ describe("Library test metamodel", () => {
         deepEqual(deserialization.length, 1)
         deepEqual(deserialization[0], libraryLanguage)
     })
-
 })
-

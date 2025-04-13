@@ -1,4 +1,4 @@
-import { currentSerializationFormatVersion, LionWebJsonChunk, LionWebJsonNode } from "@lionweb/json"
+import { currentSerializationFormatVersion, LionWebId, LionWebJsonChunk, LionWebJsonNode } from "@lionweb/json"
 import { InstantiationFacade } from "./facade.js"
 import { defaultSimplisticHandler, SimplisticHandler } from "./handler.js"
 import { DefaultPrimitiveTypeDeserializer } from "./m3/builtins.js"
@@ -6,7 +6,7 @@ import { allFeaturesOf } from "./m3/functions.js"
 import { Classifier, Containment, Enumeration, Language, PrimitiveType, Property, Reference } from "./m3/types.js"
 import { unresolved } from "./references.js"
 import { MemoisingSymbolTable } from "./symbol-table.js"
-import { Id, Node } from "./types.js"
+import { Node } from "./types.js"
 import { byIdMap, groupBy } from "./utils/map-helpers.js"
 
 export interface PrimitiveTypeDeserializer {
@@ -45,7 +45,7 @@ export const deserializeSerializationChunk = <NT extends Node>(
 
     const serializedNodeById = byIdMap(serializedNodes)
 
-    const deserializedNodeById: { [id: Id]: NT } = {}
+    const deserializedNodeById: { [id: LionWebId]: NT } = {}
 
     /**
      * Instantiates a {@link Node} from the given {@link LionWebJsonNode},
@@ -63,13 +63,13 @@ export const deserializeSerializationChunk = <NT extends Node>(
         return node
     }
 
-    type ReferenceToInstall = [node: NT, feature: Reference, refId: Id]
+    type ReferenceToInstall = [node: NT, feature: Reference, refId: LionWebId]
     const referencesToInstall: ReferenceToInstall[] = []
 
     const tryInstantiate = (
         parent: NT | undefined,
         classifier: Classifier,
-        id: Id,
+        id: LionWebId,
         propertySettings: { [propertyKey: string]: unknown }
     ): NT | null => {
         try {
@@ -140,7 +140,7 @@ export const deserializeSerializationChunk = <NT extends Node>(
             if (feature instanceof Property && properties !== undefined && feature.key in serializedPropertiesPerKey) {
                 instantiationFacade.setFeatureValue(node, feature, propertySettings[feature.key])
             } else if (feature instanceof Containment && containments !== undefined && feature.key in serializedContainmentsPerKey) {
-                const childIds = serializedContainmentsPerKey[feature.key].flatMap(serChildren => serChildren.children) as Id[]
+                const childIds = serializedContainmentsPerKey[feature.key].flatMap(serChildren => serChildren.children) as LionWebId[]
                 if (feature.multiple) {
                     childIds.forEach(childId => {
                         if (childId in serializedNodeById) {
@@ -161,7 +161,7 @@ export const deserializeSerializationChunk = <NT extends Node>(
                     serReferences.targets.map(t => t.reference)
                 )
                 referencesToInstall.push(
-                    ...(serRefs.filter(serRef => typeof serRef === "string") as Id[]).map(
+                    ...(serRefs.filter(serRef => typeof serRef === "string") as LionWebId[]).map(
                         refId => [node, feature, refId] as ReferenceToInstall
                     )
                 )

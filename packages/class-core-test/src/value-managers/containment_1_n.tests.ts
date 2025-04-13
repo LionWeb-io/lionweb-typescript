@@ -15,19 +15,12 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {
-    ChildAddedDelta,
-    ChildDeletedDelta,
-    ChildMovedDelta,
-    ChildReplacedDelta,
-    collectingDeltaHandler
-} from "@lionweb/class-core";
+import { ChildAddedDelta, ChildDeletedDelta, ChildMovedDelta, ChildReplacedDelta, collectingDeltaHandler } from "@lionweb/class-core"
 
-import {deepEqual, equal, throws} from "../assertions.js";
-import {DatatypeTestConcept, LinkTestConcept, TestLanguageBase} from "../gen/TestLanguage.g.js";
+import { deepEqual, equal, throws } from "../assertions.js"
+import { DatatypeTestConcept, LinkTestConcept, TestLanguageBase } from "../gen/TestLanguage.g.js"
 
-
-const testLanguageBase = TestLanguageBase.INSTANCE;
+const testLanguageBase = TestLanguageBase.INSTANCE
 
 
 describe("[1..n] containment", () => {

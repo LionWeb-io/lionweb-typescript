@@ -1,5 +1,5 @@
-import { JsonContext } from "../../issues/index.js"
 import { LionWebJsonNode, LionWebJsonReference, LionWebJsonReferenceTarget } from "@lionweb/json"
+import { JsonContext } from "../../issues/index.js"
 import { Change, Missing } from "./Change.js"
 
 export abstract class ReferenceChange extends Change {
@@ -31,4 +31,3 @@ export class TargetOrderChanged extends ReferenceChange {
     readonly changeType = "TargetOrderChanged"
     protected msg = () => `Node "${this.node.id}" changed order of targets in reference "${this.afterReference?.reference?.key}"`
 }
-

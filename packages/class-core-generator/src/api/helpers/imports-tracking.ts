@@ -15,12 +15,10 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {Language, LanguageEntity, lioncoreBuiltins} from "@lionweb/core"
-import {asJSIdentifier} from "../../utils/textgen.js"
+import { Language, LanguageEntity, lioncoreBuiltins } from "@lionweb/core"
+import { asJSIdentifier } from "../../utils/textgen.js"
 
-
-export const importRenamingForLanguage = (language: Language) =>
-    asJSIdentifier(language.name)
+export const importRenamingForLanguage = (language: Language) => asJSIdentifier(language.name)
 
 export const nameOfBaseClassForLanguage = (language: Language) =>
     asJSIdentifier(language.name) + "Base"
@@ -40,6 +38,15 @@ export class Imports {
 
     get thisBaseClassName() {
         return this.thisLanguageNameAsJsIdentifier + "Base"
+    }
+
+    private readonly _jsonImports = new Set<string>()
+    get jsonImports() {
+        return [...this._jsonImports]
+    }
+    json(identifier: string) {
+        this._jsonImports.add(identifier)
+        return identifier
     }
 
     private readonly _coreImports = new Set<string>()

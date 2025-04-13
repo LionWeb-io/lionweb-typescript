@@ -1,19 +1,13 @@
-import {serializeLanguages, serializeNodes} from "@lionweb/core"
-import {
-    deriveLikelyPropertyName,
-    inferLanguagesFromSerializationChunk,
-    sortedSerializationChunk
-} from "@lionweb/utilities"
+import { serializeLanguages, serializeNodes } from "@lionweb/core"
+import { deriveLikelyPropertyName, inferLanguagesFromSerializationChunk, sortedSerializationChunk } from "@lionweb/utilities"
 
-import {libraryExtractionFacade, libraryModel} from "./instances/library.js"
-import {minimalLibraryLanguage} from "./languages/minimal-library.js"
-import {multiExtractionFacade, multiModel} from "./instances/multi.js"
-import {multiLanguage} from "./languages/multi.js"
-import {deepEqual, equal} from "./utils/assertions.js"
-
+import { libraryExtractionFacade, libraryModel } from "./instances/library.js"
+import { multiExtractionFacade, multiModel } from "./instances/multi.js"
+import { minimalLibraryLanguage } from "./languages/minimal-library.js"
+import { multiLanguage } from "./languages/multi.js"
+import { deepEqual, equal } from "./utils/assertions.js"
 
 describe("inferLanguagesFromChunk", () => {
-
     it("should correctly infer the minimal library language from the instance", () => {
         const serializationChunk = serializeNodes(libraryModel, libraryExtractionFacade)
 
@@ -21,7 +15,10 @@ describe("inferLanguagesFromChunk", () => {
         equal(languages.length, 1)
         const inferredLanguage = languages[0]
 
-        deepEqual(sortedSerializationChunk(serializeLanguages(inferredLanguage)), sortedSerializationChunk(serializeLanguages(minimalLibraryLanguage)))
+        deepEqual(
+            sortedSerializationChunk(serializeLanguages(inferredLanguage)),
+            sortedSerializationChunk(serializeLanguages(minimalLibraryLanguage))
+        )
     })
 
     it("should correctly infer the multi language from the instance", () => {
@@ -35,14 +32,18 @@ describe("inferLanguagesFromChunk", () => {
         // we can't infer the language dependency, so we (have to) do it manually:
         inferredMultiLanguage.dependingOn(inferredLibraryLanguage)
 
-        deepEqual(sortedSerializationChunk(serializeLanguages(inferredLibraryLanguage)), sortedSerializationChunk(serializeLanguages(minimalLibraryLanguage)))
-        deepEqual(sortedSerializationChunk(serializeLanguages(inferredMultiLanguage)), sortedSerializationChunk(serializeLanguages(multiLanguage)))
+        deepEqual(
+            sortedSerializationChunk(serializeLanguages(inferredLibraryLanguage)),
+            sortedSerializationChunk(serializeLanguages(minimalLibraryLanguage))
+        )
+        deepEqual(
+            sortedSerializationChunk(serializeLanguages(inferredMultiLanguage)),
+            sortedSerializationChunk(serializeLanguages(multiLanguage))
+        )
     })
-
 })
 
 describe("deriveLikelyPropertyName", () => {
-
     describe("for supported formats", () => {
         ["-", "_"].forEach(separator => {
             const propertyKey = ["languageKey", "classifierKey", "propertyKey"].join(separator)
@@ -58,6 +59,4 @@ describe("deriveLikelyPropertyName", () => {
             equal(deriveLikelyPropertyName(propertyKey), propertyKey)
         })
     })
-
 })
-

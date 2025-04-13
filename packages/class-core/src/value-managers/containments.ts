@@ -15,18 +15,12 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {Containment} from "@lionweb/core";
-import {action, observable} from "mobx";
+import { Containment } from "@lionweb/core"
+import { action, observable } from "mobx"
 
-import {INodeBase, removeFromParent} from "../base-types.js";
-import {checkIndex, FeatureValueManager} from "./base.js";
-import {
-    ChildAddedDelta,
-    ChildDeletedDelta,
-    ChildMovedDelta,
-    ChildMovedInSameContainmentDelta,
-    ChildReplacedDelta
-} from "../deltas/index.js";
+import { INodeBase, removeFromParent } from "../base-types.js"
+import { ChildAddedDelta, ChildDeletedDelta, ChildMovedDelta, ChildMovedInSameContainmentDelta, ChildReplacedDelta } from "../deltas/index.js"
+import { checkIndex, FeatureValueManager } from "./base.js"
 
 
 /**

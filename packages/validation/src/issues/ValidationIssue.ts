@@ -17,10 +17,13 @@ export abstract class ValidationIssue {
 
 export class GenericIssue extends ValidationIssue {
     readonly issueType = "GenericIssue"
-    
-    constructor(context: JsonContext, public text: string) {
+
+    constructor(
+        context: JsonContext,
+        public text: string
+    ) {
         super(context)
     }
-    
+
     protected msg = () => this.text
 }

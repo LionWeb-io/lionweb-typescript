@@ -15,17 +15,16 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {deserializeLanguages, Language, lioncore} from "@lionweb/core"
+import { deserializeLanguages, Language, lioncore } from "@lionweb/core"
 import { LionWebJsonChunk } from "@lionweb/json"
-import {readFileAsJson} from "@lionweb/utilities"
-import {writeFileSync} from "fs"
-import {join} from "path"
-import {cwd} from "process"
+import { readFileAsJson } from "@lionweb/utilities"
+import { writeFileSync } from "fs"
+import { join } from "path"
+import { cwd } from "process"
+import { MpsAnnotation } from "./helpers/index.js"
 
-import {indexTsFor} from "./index-ts.js"
-import {languageFileFor} from "./language-file.templates.js"
-import {MpsAnnotation} from "./helpers/index.js"
-
+import { indexTsFor } from "./index-ts.js"
+import { languageFileFor } from "./language-file.templates.js"
 
 const properGenericImportLocation = "@lionweb/class-core"
 

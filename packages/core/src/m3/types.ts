@@ -3,10 +3,10 @@
  * A LionWeb language (at the M2 meta level) can be represented as an instance of the {@link Language} type.
  */
 
+import { LionWebId, LionWebJsonMetaPointer } from "@lionweb/json"
 import { ResolveInfoDeducer } from "../facade.js"
 import { MultiRef, SingleRef, unresolved } from "../references.js"
-import { LionWebJsonMetaPointer } from "@lionweb/json"
-import { Id, Node } from "../types.js"
+import { Node } from "../types.js"
 
 
 /**
@@ -32,7 +32,7 @@ const simpleNameDeducer: ResolveInfoDeducer<Node> =
 
 
 interface IKeyed extends INamed {
-    key: Id
+    key: LionWebId
 }
 
 
@@ -59,16 +59,16 @@ abstract class M3Node implements IKeyed, IMetaTyped {
          * Because that's just an interface and is implemented by {@link M3Node},
          * we can type parent as M3Node?.
          */
-    readonly id: Id
+    readonly id: LionWebId
     name: string
-    key: Id
-    protected constructor(id: Id, name: string, key: Id, parent?: M3Node) {
+    key: LionWebId
+    protected constructor(id: LionWebId, name: string, key: LionWebId, parent?: M3Node) {
         this.id = id
         this.name = name
         this.key = key
         this.parent = parent
     }
-    havingKey(key: Id) {
+    havingKey(key: LionWebId) {
         this.key = key
         return this
     }
@@ -78,7 +78,7 @@ abstract class M3Node implements IKeyed, IMetaTyped {
 abstract class Feature extends M3Node {
     optional /*: boolean */ = false
     // TODO  look at order of constructors' arguments!
-    constructor(classifier: Classifier, name: string, key: string, id: Id) {
+    constructor(classifier: Classifier, name: string, key: string, id: LionWebId) {
         super(id, name, key, classifier)
     }
     isOptional() {
@@ -127,7 +127,7 @@ class Reference extends Link {
 }
 
 abstract class LanguageEntity extends M3Node {
-    constructor(language: Language, name: string, key: Id, id: Id) {
+    constructor(language: Language, name: string, key: LionWebId, id: LionWebId) {
         super(id, name, key, language)
     }
     get language(): Language {
@@ -159,7 +159,7 @@ class Concept extends Classifier {
     partition: boolean
     extends?: SingleRef<Concept>    // (reference)
     implements: MultiRef<Interface> = []  // (reference)
-    constructor(language: Language, name: string, key: string, id: Id, abstract: boolean, extends_?: SingleRef<Concept>) {
+    constructor(language: Language, name: string, key: string, id: LionWebId, abstract: boolean, extends_?: SingleRef<Concept>) {
         super(language, name, key, id)
         this.abstract = abstract
         this.extends = extends_
@@ -183,7 +183,7 @@ class Annotation extends Classifier {
     extends?: SingleRef<Annotation> // (reference)
     implements: MultiRef<Interface> = [] // (reference)
     annotates: SingleRef<Classifier> = unresolved   // (reference)
-    constructor(language: Language, name: string, key: string, id: Id, extends_?: SingleRef<Annotation>) {
+    constructor(language: Language, name: string, key: string, id: LionWebId, extends_?: SingleRef<Annotation>) {
         super(language, name, key, id)
         this.extends = extends_
     }
@@ -233,7 +233,7 @@ class EnumerationLiteral extends M3Node {
     metaType(): string {
         return "EnumerationLiteral"
     }
-    constructor(enumeration: Enumeration, name: string, key: string, id: Id) {
+    constructor(enumeration: Enumeration, name: string, key: string, id: LionWebId) {
         super(id, name, key, enumeration)
     }
     get enumeration(): Enumeration {
@@ -249,7 +249,7 @@ class Language extends M3Node {
     entities: LanguageEntity[] = []   // (containment)
     dependsOn: MultiRef<Language> = []  // special (!) reference
         // (!) special because deserializer needs to be aware of where to get the instance from
-    constructor(name: string, version: string, id: Id, key: Id) {
+    constructor(name: string, version: string, id: LionWebId, key: LionWebId) {
         super(id, name, key)
         this.version = version
     }

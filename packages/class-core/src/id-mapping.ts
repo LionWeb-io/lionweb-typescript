@@ -15,12 +15,12 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {Id, IdOrUnresolved, SingleRef, unresolved} from "@lionweb/core";
+import {  IdOrUnresolved, SingleRef, unresolved } from "@lionweb/core"
+import { LionWebId } from "@lionweb/json"
 
-import {INodeBase} from "./index.js";
+import { INodeBase } from "./index.js"
 
-
-type NodesById = { [id: Id]: INodeBase};
+type NodesById = { [id: LionWebId]: INodeBase }
 
 
 /**
@@ -35,7 +35,7 @@ export class IdMapping {
         this.nodesById = {...nodesById};
     }
 
-    fromId(id: Id): INodeBase {
+    fromId(id: LionWebId): INodeBase {
         if (!(id in this.nodesById)) {
             throw new Error(`node with id=${id} not in ID mapping`);
         }

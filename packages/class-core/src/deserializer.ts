@@ -22,7 +22,6 @@ import {
     DefaultPrimitiveTypeDeserializer,
     defaultSimplisticHandler,
     Enumeration,
-    Id,
     Language,
     MemoisingSymbolTable,
     PrimitiveType,
@@ -31,11 +30,11 @@ import {
     Reference,
     SimplisticHandler,
     unresolved
-} from "@lionweb/core";
-import { LionWebJsonChunk, LionWebJsonNode } from "@lionweb/json"
+} from "@lionweb/core"
+import { LionWebId, LionWebJsonChunk, LionWebJsonNode } from "@lionweb/json"
 
-import {DeltaHandler, IdMapping, ILanguageBase, INodeBase} from "./index.js";
-import {NodesToInstall} from "./linking.js";
+import { DeltaHandler, IdMapping, ILanguageBase, INodeBase } from "./index.js"
+import { NodesToInstall } from "./linking.js"
 
 
 /**
@@ -160,7 +159,7 @@ export const nodeBaseDeserializerWithIdMapping = (languageBases: ILanguageBase[]
 
         const dependentNodesById = byIdMap(dependentNodes)
 
-        const lookupNodeById = (id: Id) =>
+        const lookupNodeById = (id: LionWebId) =>
             nodesById[id] ?? dependentNodesById[id];
 
         nodesToInstall.forEach(([node, feature, ids]) => {

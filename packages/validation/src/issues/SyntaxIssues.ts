@@ -4,7 +4,7 @@ import { ValidationIssue } from "./ValidationIssue.js"
 export abstract class Syntax_PropertyIssue extends ValidationIssue {
     constructor(
         public context: JsonContext,
-        protected property: string,
+        protected property: string
     ) {
         super(context)
     }
@@ -32,7 +32,7 @@ export class Syntax_PropertyTypeIssue extends Syntax_PropertyIssue {
         context: JsonContext,
         property: string,
         protected expectedType: string,
-        protected actualType: string,
+        protected actualType: string
     ) {
         super(context, property)
     }
@@ -46,7 +46,7 @@ export class Syntax_ArrayContainsNull_Issue extends Syntax_PropertyIssue {
     constructor(
         context: JsonContext,
         property: string,
-        public index: number,
+        public index: number
     ) {
         super(context, property)
     }
@@ -57,7 +57,7 @@ export class Syntax_ArrayContainsNull_Issue extends Syntax_PropertyIssue {
 export abstract class Syntax_IncorrectFormat_Issue extends ValidationIssue {
     constructor(
         context: JsonContext,
-        public value: string,
+        public value: string
     ) {
         super(context)
     }

@@ -1,6 +1,6 @@
+import { LionWebJsonChunk } from "@lionweb/json"
 import fs from "fs"
 import { LionWebJsonDiff } from "../diff/index.js"
-import { LionWebJsonChunk } from "@lionweb/json"
 
 const file1 = process.argv[2]
 const file2 = process.argv[3]

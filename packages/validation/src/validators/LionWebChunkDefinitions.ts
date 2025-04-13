@@ -1,10 +1,5 @@
-import {
-    validateId,
-    validateKey,
-    validateSerializationFormatVersion,
-    validateVersion
-} from "./ValidationFunctions.js"
 import { MAY_BE_NULL, PropertyDef, PropertyDefinition } from "./generic/ValidationTypes.js"
+import { validateId, validateKey, validateSerializationFormatVersion, validateVersion } from "./ValidationFunctions.js"
 
 /**
  * The structure below defines the structure of a LionWeb Chunk by defining all the properties.

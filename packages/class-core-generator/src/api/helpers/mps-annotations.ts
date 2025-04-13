@@ -15,12 +15,10 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {LionWebId, LionWebJsonChunk} from "@lionweb/json"
-
+import { LionWebId, LionWebJsonChunk } from "@lionweb/json"
 
 export abstract class MpsAnnotation {
-    constructor(public readonly annotatedNodeId: LionWebId) {
-    }
+    constructor(public readonly annotatedNodeId: LionWebId) {}
 }
 
 export class ConceptDescription extends MpsAnnotation {

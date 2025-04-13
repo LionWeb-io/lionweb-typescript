@@ -15,15 +15,14 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {writeFileSync} from "fs"
-import {join} from "path"
+import { writeFileSync } from "fs"
+import { join } from "path"
 
-import {deltas} from "../definition/definition-base.js"
-import {typesForDeltas} from "./types-generator.js"
-import {deserializerForDeltas} from "./deserializer-generator.js";
-import {serializerForDeltas} from "./serializer-generator.js"
-import {serializationTypesForDeltas} from "./serialization-types-generator.js"
-
+import { deltas } from "../definition/definition-base.js"
+import { deserializerForDeltas } from "./deserializer-generator.js"
+import { serializationTypesForDeltas } from "./serialization-types-generator.js"
+import { serializerForDeltas } from "./serializer-generator.js"
+import { typesForDeltas } from "./types-generator.js"
 
 export const generateDeltaCode = (genPath: string, header?: string) => {
     writeFileSync(join(genPath, "types.g.ts"), typesForDeltas(deltas.deltas, header))

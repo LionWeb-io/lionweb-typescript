@@ -5,7 +5,7 @@ export type UnknownObjectType = { [key: string]: unknown }
 
 /**
  * Definition of a property, used by the SyntaxValidator to validate objects.
- * 
+ *
  * **Note** that some of the properties are defined as optional.
  * They should not be empty ever!! But being optional allows to leave them out in the `PropertyDef` function.
  * The `PropertyDef` function sets default values for all optional fields.
@@ -27,7 +27,7 @@ export type PropertyDefinition = {
     /**
      * IS this a list property?
      */
-    isList?: boolean,
+    isList?: boolean
     /**
      * Additional validation function
      */
@@ -44,7 +44,7 @@ export type ValidatorFunction = <T>(obj: T, result: ValidationResult, ctx: JsonC
  * @param pdef
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function emptyValidation<T>(object: T, result: ValidationResult, ctx: JsonContext,  pdef?: PropertyDefinition): void {}
+function emptyValidation<T>(object: T, result: ValidationResult, ctx: JsonContext, pdef?: PropertyDefinition): void {}
 
 // Make boolean argument more readable.
 export const MAY_BE_NULL = true
@@ -64,4 +64,3 @@ export function PropertyDef(propDef: PropertyDefinition): PropertyDefinition {
         validate: validate
     }
 }
-

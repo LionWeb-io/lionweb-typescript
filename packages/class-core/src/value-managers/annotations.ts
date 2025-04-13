@@ -15,17 +15,17 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {action, observable} from "mobx";
+import { action, observable } from "mobx"
 
-import {INodeBase, removeFromParent} from "../base-types.js";
-import {checkIndex, ValueManager} from "./base.js";
+import { INodeBase, removeFromParent } from "../base-types.js"
 import {
     AnnotationAddedDelta,
     AnnotationDeletedDelta,
     AnnotationMovedFromOtherParentDelta,
     AnnotationMovedInSameParentDelta,
     AnnotationReplacedDelta
-} from "../deltas/index.js";
+} from "../deltas/index.js"
+import { checkIndex, ValueManager } from "./base.js"
 
 
 /**

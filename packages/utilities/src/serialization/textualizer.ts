@@ -1,5 +1,6 @@
-import { byIdMap, Enumeration, Id, Language, MemoisingSymbolTable, Property } from "@lionweb/core"
+import { byIdMap, Enumeration, Language, MemoisingSymbolTable, Property } from "@lionweb/core"
 import {
+    LionWebId,
     LionWebJsonChunk,
     LionWebJsonContainment,
     LionWebJsonMetaPointer,
@@ -15,7 +16,7 @@ const indent = indentWith("    ")(1)
 const prependWith = (template: Template, prefix: string): Template => prefix + asString(template)
 
 export const genericAsTreeText = ({ nodes }: LionWebJsonChunk, languages: Language[] = []) => {
-    const nodesById: { [id: Id]: LionWebJsonNode } = byIdMap(nodes)
+    const nodesById: { [id: LionWebId]: LionWebJsonNode } = byIdMap(nodes)
     const symbolTable = new MemoisingSymbolTable(languages)
 
     const nameOrKey = (classifier: LionWebJsonMetaPointer, feature: LionWebJsonMetaPointer): string =>

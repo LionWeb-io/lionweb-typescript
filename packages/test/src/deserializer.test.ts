@@ -1,5 +1,3 @@
-import { currentSerializationFormatVersion, LionWebJsonChunk } from "@lionweb/json"
-import {expect} from "chai"
 import {
     AggregatingSimplisticHandler,
     Concept,
@@ -13,15 +11,16 @@ import {
     Reference,
     unresolved
 } from "@lionweb/core"
+import { currentSerializationFormatVersion, LionWebJsonChunk } from "@lionweb/json"
+import { expect } from "chai"
 
-import {BaseNode} from "./instances/base.js"
-import {libraryInstantiationFacade} from "./instances/library.js"
-import {libraryLanguage} from "./languages/library.js"
-import {dateDatatype, libraryWithDatesLanguage} from "./languages/libraryWithDates.js"
-import {deepEqual, equal} from "./utils/assertions.js"
+import { BaseNode } from "./instances/base.js"
+import { libraryInstantiationFacade } from "./instances/library.js"
+import { libraryLanguage } from "./languages/library.js"
+import { dateDatatype, libraryWithDatesLanguage } from "./languages/libraryWithDates.js"
+import { deepEqual, equal } from "./utils/assertions.js"
 
-
-type NodeWithProperties = BaseNode & {properties:Record<string, unknown>}
+type NodeWithProperties = BaseNode & { properties: Record<string, unknown> }
 
 export const libraryWithDatesInstantiationFacade: InstantiationFacade<BaseNode> = {
     nodeFor: (_parent, classifier, id, _propertySettings) => ({
@@ -38,16 +37,14 @@ export const libraryWithDatesInstantiationFacade: InstantiationFacade<BaseNode> 
     }
 }
 
-
 describe("deserialization", () => {
-
     it("deserializes all nodes, also when there are effectively no root nodes", () => {
         const serializationChunk: LionWebJsonChunk = {
             serializationFormatVersion: currentSerializationFormatVersion,
             languages: [
                 {
-                    "key": "library",
-                    "version": "1"
+                    key: "library",
+                    version: "1"
                 }
             ],
             nodes: [
@@ -66,18 +63,14 @@ describe("deserialization", () => {
                 }
             ]
         }
-        const deserialization = deserializeSerializationChunk(serializationChunk, libraryInstantiationFacade,
-            [libraryLanguage], [])
-        deepEqual(
-            deserialization,
-            [
-                {
-                    id: "1",
-                    classifier: "Library",
-                    annotations: []
-                }   // is instantiated despite its serialization specifying a non-null parent ID that's not resolvable within the serialization chunk
-            ]
-        )
+        const deserialization = deserializeSerializationChunk(serializationChunk, libraryInstantiationFacade, [libraryLanguage], [])
+        deepEqual(deserialization, [
+            {
+                id: "1",
+                classifier: "Library",
+                annotations: []
+            } // is instantiated despite its serialization specifying a non-null parent ID that's not resolvable within the serialization chunk
+        ])
     })
 
     it("deserializes node with custom primitive type, without registering custom deserializer, leading to empty model (and console messages)", () => {
@@ -85,8 +78,8 @@ describe("deserialization", () => {
             serializationFormatVersion: currentSerializationFormatVersion,
             languages: [
                 {
-                    "key": "library-with-dates",
-                    "version": "1"
+                    key: "library-with-dates",
+                    version: "1"
                 }
             ],
             nodes: [
@@ -116,7 +109,7 @@ describe("deserialization", () => {
         }
         deepEqual(
             deserializeSerializationChunk(serializationChunk, libraryWithDatesInstantiationFacade, [libraryWithDatesLanguage], []),
-            []  // because instantiation fails, but instantiation is effectively a flatmap
+            [] // because instantiation fails, but instantiation is effectively a flatmap
         )
     })
 
@@ -125,8 +118,8 @@ describe("deserialization", () => {
             serializationFormatVersion: currentSerializationFormatVersion,
             languages: [
                 {
-                    "key": "libraryWithDates",
-                    "version": "1"
+                    key: "libraryWithDates",
+                    version: "1"
                 }
             ],
             nodes: [
@@ -154,17 +147,21 @@ describe("deserialization", () => {
                 }
             ]
         }
-        const primitiveTypeDeserializer = new DefaultPrimitiveTypeDeserializer();
-        primitiveTypeDeserializer.register(dateDatatype, (value) => {
-            const parts = value.split("-");
+        const primitiveTypeDeserializer = new DefaultPrimitiveTypeDeserializer()
+        primitiveTypeDeserializer.register(dateDatatype, value => {
+            const parts = value.split("-")
             return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]))
         })
 
-        const deserialization = deserializeSerializationChunk(serializationChunk, libraryWithDatesInstantiationFacade,
-            [libraryWithDatesLanguage], [],
-            primitiveTypeDeserializer)
+        const deserialization = deserializeSerializationChunk(
+            serializationChunk,
+            libraryWithDatesInstantiationFacade,
+            [libraryWithDatesLanguage],
+            [],
+            primitiveTypeDeserializer
+        )
 
-        const node = deserialization[0] as NodeWithProperties;
+        const node = deserialization[0] as NodeWithProperties
         expect(node.properties["creationDate"]).to.eql(new Date(2024, 4, 28))
     })
 
@@ -195,7 +192,12 @@ describe("deserialization", () => {
         const someLanguage = new Language("someLanguage", "0", "someLanguage", "someLanguage")
         const someConcept = new Concept(someLanguage, "someConcept", "someConcept", "someConcept", false)
         someLanguage.havingEntities(someConcept)
-        const someConcept_aReference = new Reference(someConcept, "someConcept-aReference", "someConcept-aReference", "someConcept-aReference")
+        const someConcept_aReference = new Reference(
+            someConcept,
+            "someConcept-aReference",
+            "someConcept-aReference",
+            "someConcept-aReference"
+        )
         someConcept.havingFeatures(someConcept_aReference)
 
         const serializationChunk: LionWebJsonChunk = {
@@ -244,19 +246,24 @@ describe("deserialization", () => {
 
     it("aggregates problems", () => {
         const aggregator = new AggregatingSimplisticHandler()
-        deserializeChunk({
-            // misses "serializationFormatVersion"
-            languages: [],
-            nodes: []
-        } as unknown as LionWebJsonChunk, dynamicInstantiationFacade, [], [], undefined, aggregator)
-        aggregator.reportAllProblemsOnConsole(true)
-        deepEqual(
-            Object.entries(aggregator.allProblems()),
-            [
-                [`can't deserialize from serialization format other than version "${currentSerializationFormatVersion}" - assuming that version`, 1]
-            ]
+        deserializeChunk(
+            {
+                // misses "serializationFormatVersion"
+                languages: [],
+                nodes: []
+            } as unknown as LionWebJsonChunk,
+            dynamicInstantiationFacade,
+            [],
+            [],
+            undefined,
+            aggregator
         )
+        aggregator.reportAllProblemsOnConsole(true)
+        deepEqual(Object.entries(aggregator.allProblems()), [
+            [
+                `can't deserialize from serialization format other than version "${currentSerializationFormatVersion}" - assuming that version`,
+                1
+            ]
+        ])
     })
-
 })
-

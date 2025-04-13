@@ -65,7 +65,7 @@ export class GenericChange extends Change {
 
     constructor(
         context: JsonContext,
-        protected message: string,
+        protected message: string
     ) {
         super(context)
     }

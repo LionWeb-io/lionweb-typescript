@@ -1,16 +1,16 @@
-import fs from "fs"
 import {
-    ValidationResult,
     getAllDirectories,
     getFilesDirect,
     issuestoString,
+    LanguageRegistry,
     validateFileResult,
-    LanguageRegistry
+    ValidationResult
 } from "@lionweb/validation"
-import {LionWebLanguageWrapper} from "@lionweb/validation/dist/languages/LionWebLanguageWrapper.js"
+import { LionWebLanguageWrapper } from "@lionweb/validation/dist/languages/LionWebLanguageWrapper.js"
+import fs from "fs"
+import { isTrue } from "../utils/assertions.js"
 
-import {TestExpectation} from "./TestExpectation.js"
-import {isTrue} from "../utils/assertions.js"
+import { TestExpectation } from "./TestExpectation.js"
 
 // Directories containing test cases
 const validDir = "testset/valid"
@@ -82,7 +82,7 @@ function registerLanguage(registry: LanguageRegistry, filename: string) {
     registry.addLanguage(new LionWebLanguageWrapper(json))
 }
 
-tests.forEach(async (testDir) => {
+tests.forEach(async testDir => {
     console.log("testDir " + JSON.stringify(testDir))
     // await to ensure tests won't go in parallel because the KnownLanguages is static
     const registry = new LanguageRegistry()

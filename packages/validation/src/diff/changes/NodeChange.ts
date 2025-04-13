@@ -1,5 +1,5 @@
-import { JsonContext } from "../../issues/index.js"
 import { LionWebJsonMetaPointer, LionWebJsonNode } from "@lionweb/json"
+import { JsonContext } from "../../issues/index.js"
 import { Change, ChangeType } from "./Change.js"
 
 export class NodeClassifierChanged extends Change {
@@ -9,7 +9,7 @@ export class NodeClassifierChanged extends Change {
         public context: JsonContext,
         public node: LionWebJsonNode,
         public oldClassifier: LionWebJsonMetaPointer,
-        public newClassifier: LionWebJsonMetaPointer,
+        public newClassifier: LionWebJsonMetaPointer
     ) {
         super(context)
     }
@@ -24,7 +24,7 @@ export class ParentChanged extends Change {
         public context: JsonContext,
         public node: LionWebJsonNode,
         public beforeParentId: string | null,
-        public afterParentId: string | null,
+        public afterParentId: string | null
     ) {
         super(context)
     }
@@ -55,7 +55,6 @@ export class AnnotationAdded extends AnnotationChange {
 
     protected msg = () => `Node "${this.nodeAfter.id}" added annotation "${this.annotationId}"`
 }
-
 
 export class AnnotationOrderChanged extends AnnotationChange {
     readonly changeType = "AnnotationOrderChanged"

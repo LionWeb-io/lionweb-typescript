@@ -1,9 +1,5 @@
-import {
-    LionWebJsonChunkWrapper,
-    MetaPointers,
-    NodeUtils
-} from "../json/index.js"
 import { LionWebJsonChunk, LionWebJsonNode } from "@lionweb/json"
+import { LionWebJsonChunkWrapper, MetaPointers, NodeUtils } from "../json/index.js"
 import { visitAndMap } from "../util/graphs.js"
 import { isAnnotation, isConcept, isContainment, isInterface, isProperty, isReference } from "./LanguageUtils.js"
 
@@ -25,7 +21,7 @@ export class LionWebLanguageWrapper extends LionWebJsonChunkWrapper implements L
     name: string
     version: string
     key: string
-    
+
     constructor(chunk: LionWebJsonChunk) {
         super(chunk)
         const languageNode: LionWebJsonNode = this.findNodesOfClassifier(MetaPointers.Language)[0]

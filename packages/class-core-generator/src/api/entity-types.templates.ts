@@ -21,7 +21,6 @@ import {
     Enumeration,
     Feature,
     featureMetaType,
-    Id,
     Interface,
     isContainment,
     isProperty,
@@ -34,9 +33,10 @@ import {
     Reference,
     SingleRef
 } from "@lionweb/core"
-import {commaSeparated, when, withNewlineAppended} from "littoral-templates"
+import { LionWebId } from "@lionweb/json"
+import { commaSeparated, when, withNewlineAppended } from "littoral-templates"
 
-import {indent, switchOrIf, withFirstUpper, wrapInIf} from "../utils/textgen.js"
+import { indent, switchOrIf, withFirstUpper, wrapInIf } from "../utils/textgen.js"
 import {
     ConceptDescription,
     Deprecated,
@@ -55,7 +55,6 @@ import {
     tsTypeForValueManager
 } from "./helpers/index.js"
 
-
 const cardinalityPrefix = (feature: Feature) => {
     if (feature instanceof Property) {
         return feature.optional ? "Optional" : "Required"
@@ -68,7 +67,7 @@ const cardinalityPrefix = (feature: Feature) => {
 const valueManagerFor = (feature: Feature) =>
     `${cardinalityPrefix(feature)}${featureMetaType(feature)}ValueManager`
 
-export const typeForLanguageEntity = (imports: Imports, mpsAnnotationsPerId: Record<Id, MpsAnnotation[]>) => {
+export const typeForLanguageEntity = (imports: Imports, mpsAnnotationsPerId: Record<LionWebId, MpsAnnotation[]>) => {
 
     const sortedSuperTypesCond = <T extends Classifier>(ts: T[], prefix: string): string =>
         ts.length === 0 ? `` : `${prefix}${nameSorted(ts).map((t) => imports.entity(t)).join(", ")}`
@@ -163,7 +162,7 @@ export const typeForLanguageEntity = (imports: Imports, mpsAnnotationsPerId: Rec
                 when(!isAbstract(classifier))(
                     () =>
                         [
-                            `static create(id: Id, handleDelta?: ${imports.generic("DeltaHandler")}, parentInfo?: ${imports.generic("Parentage")}): ${classifier.name} {`,
+                            `static create(id: ${imports.json("LionWebId")}, handleDelta?: ${imports.generic("DeltaHandler")}, parentInfo?: ${imports.generic("Parentage")}): ${classifier.name} {`,
                             indent([
                                 `return new ${classifier.name}(${imports.language(classifier.language)}.INSTANCE.${classifier.name}, id, handleDelta, parentInfo);`
                             ]),
@@ -175,7 +174,7 @@ export const typeForLanguageEntity = (imports: Imports, mpsAnnotationsPerId: Rec
                         [
                             ``,
                             features.map(withNewlineAppended(classMembersForFeature)),
-                            `public constructor(classifier: ${imports.core("Classifier")}, id: ${imports.core("Id")}, handleDelta?: ${imports.generic("DeltaHandler")}, parentInfo?: ${imports.generic("Parentage")}) {`,
+                            `public constructor(classifier: ${imports.core("Classifier")}, id: ${imports.json("LionWebId")}, handleDelta?: ${imports.generic("DeltaHandler")}, parentInfo?: ${imports.generic("Parentage")}) {`,
                             indent([
                                 `super(classifier, id, handleDelta, parentInfo);`,
                                 features.map((feature) => `this._${feature.name} = new ${imports.generic(valueManagerFor(feature))}<${tsTypeForValueManager(feature, imports)}>(${imports.language(feature.classifier.language)}.INSTANCE.${feature.classifier.name}_${feature.name}, this);`)

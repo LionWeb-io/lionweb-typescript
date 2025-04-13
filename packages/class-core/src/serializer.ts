@@ -25,9 +25,9 @@ import {
     Property,
     Reference,
     serializeNodes
-} from "@lionweb/core";
+} from "@lionweb/core"
 
-import {INodeBase, LionCore_builtinsBase} from "./index.js";
+import { INodeBase, LionCore_builtinsBase } from "./index.js"
 
 
 /**

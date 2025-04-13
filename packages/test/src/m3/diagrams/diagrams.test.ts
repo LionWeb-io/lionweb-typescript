@@ -1,19 +1,10 @@
-import {readFileSync, writeFileSync} from "fs"
-import {
-    builtinClassifiers,
-    chain,
-    concatenator,
-    Language,
-    LanguageFactory,
-    lastOf
-} from "@lionweb/core"
-import {generateMermaidForLanguage, generatePlantUmlForLanguage, hasher} from "@lionweb/utilities"
+import { builtinClassifiers, chain, concatenator, Language, LanguageFactory, lastOf } from "@lionweb/core"
+import { generateMermaidForLanguage, generatePlantUmlForLanguage, hasher } from "@lionweb/utilities"
+import { readFileSync, writeFileSync } from "fs"
 
-import {equal} from "../../utils/assertions.js"
+import { equal } from "../../utils/assertions.js"
 
-
-const readTextFile = (fileName: string): string =>
-    readFileSync(`src/m3/diagrams/${fileName}`, { encoding: "utf8" })
+const readTextFile = (fileName: string): string => readFileSync(`src/m3/diagrams/${fileName}`, { encoding: "utf8" })
 
 const writeTextFile = (fileName: string, data: string) => {
     writeFileSync(`src/m3/diagrams/${fileName}`, data, { encoding: "utf8" })
@@ -27,7 +18,6 @@ const rendersEqualToFileOrOverwrite = (renderer: (language: Language) => string,
     }
     equal(actual, expected)
 }
-
 
 const testLanguage = (() => {
     const factory = new LanguageFactory("test", "0", chain(concatenator("-"), hasher()), lastOf)
@@ -46,20 +36,14 @@ const testLanguage = (() => {
     return factory.language
 })()
 
-
 describe("rendering languages as PlantUML diagrams", () => {
-
     it("is improved", () => {
         rendersEqualToFileOrOverwrite(generatePlantUmlForLanguage, "test-diagram-expected.puml")
     })
-
 })
 
 describe("rendering languages as Mermaid diagrams", () => {
-
     it("is improved", () => {
         rendersEqualToFileOrOverwrite(generateMermaidForLanguage, "test-diagram-expected.md")
     })
-
 })
-

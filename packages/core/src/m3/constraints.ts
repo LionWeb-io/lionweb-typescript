@@ -1,5 +1,4 @@
 import { idOf } from "../functions.js"
-import { isValidIdentifier } from "../types.js"
 import { duplicatesAmong } from "../utils/map-helpers.js"
 import { allContaineds, flatMap, inheritedCycleWith, keyOf, namedsOf, qualifiedNameOf } from "./functions.js"
 import { Classifier, isINamed, Language, M3Concept } from "./types.js"
@@ -15,6 +14,16 @@ export type Issue = {
     secondaries: M3Concept[]
 }
 // TODO  back this type with an M2
+
+
+const base64urlRegex = /^[A-Za-z0-9_-]+$/
+
+/**
+ * @return whether the given string is a valid identifier according to the LionWeb specification – see [here](https://github.com/LionWeb-io/specification/blob/main/2023.1/metametamodel/metametamodel.adoc#identifiers) for the relevant part.
+ * This is essentially whether the given string is a valid, non-empty [Base64url](https://en.wikipedia.org/wiki/Base64#Variants_summary_table) string.
+ */
+const isValidIdentifier = (str: string): boolean =>
+    base64urlRegex.test(str)
 
 
 /**

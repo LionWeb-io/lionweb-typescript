@@ -15,8 +15,9 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {Id, Link} from "@lionweb/core";
-import {INodeBase} from "./index.js";
+import { Link } from "@lionweb/core"
+import { LionWebId } from "@lionweb/json"
+import { INodeBase } from "./index.js"
 
 
 /**
@@ -35,5 +36,5 @@ import {INodeBase} from "./index.js";
  * Note: **DON'T** export this types from the package,
  * as these are only used to align the deserializer and deep-cloner.
  */
-export type NodesToInstall = [ container: INodeBase, feature: Link | null, nodesIds: Id[], originalReferenceTargets?: INodeBase[] ];
+export type NodesToInstall = [ container: INodeBase, feature: Link | null, nodesIds: LionWebId[], originalReferenceTargets?: INodeBase[] ];
 

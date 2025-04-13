@@ -15,8 +15,6 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {deepEqual, equal, isUndefined} from "../assertions.js";
-
 import {
     AnnotationAddedDelta,
     AnnotationDeletedDelta,
@@ -25,12 +23,12 @@ import {
     ChildDeletedDelta,
     ChildMovedDelta,
     ChildReplacedDelta
-} from "@lionweb/class-core";
+} from "@lionweb/class-core"
+import { deepEqual, equal, isUndefined } from "../assertions.js"
 
-import {DatatypeTestConcept, LinkTestConcept, TestAnnotation, TestLanguageBase} from "../gen/TestLanguage.g.js";
+import { DatatypeTestConcept, LinkTestConcept, TestAnnotation, TestLanguageBase } from "../gen/TestLanguage.g.js"
 
-
-const testLanguage = TestLanguageBase.INSTANCE;
+const testLanguage = TestLanguageBase.INSTANCE
 
 describe("delta application sets parentage correctly", () => {
 

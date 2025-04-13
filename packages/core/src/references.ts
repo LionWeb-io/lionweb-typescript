@@ -1,4 +1,4 @@
-import { Id } from "./types.js"
+import { LionWebId } from "@lionweb/json"
 
 
 /**
@@ -25,7 +25,7 @@ export type MultiRef<T> = T[]
 
 
 /**
- * A type that expresses a value is either an {@link Id} or a value to indicate that resolution to a node previously failed.
+ * A type that expresses a value is either an {@link LionWebId} or a value to indicate that resolution to a node previously failed.
  */
-export type IdOrUnresolved = Id | typeof unresolved;
+export type IdOrUnresolved = LionWebId | typeof unresolved;
 

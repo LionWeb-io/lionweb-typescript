@@ -1,5 +1,5 @@
-import {builtinPrimitives, chain, concatenator, LanguageFactory, lastOf} from "@lionweb/core"
-import {hasher} from "@lionweb/utilities"
+import { builtinPrimitives, chain, concatenator, LanguageFactory, lastOf } from "@lionweb/core"
+import { hasher } from "@lionweb/utilities"
 
 const factory = new LanguageFactory("library", "1", chain(concatenator("-"), hasher()), lastOf)
 export const minimalLibraryLanguage = factory.language

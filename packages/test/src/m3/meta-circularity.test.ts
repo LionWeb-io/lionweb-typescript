@@ -1,18 +1,10 @@
-import {
-    checkReferences,
-    deserializeLanguages,
-    issuesLanguage,
-    lioncore,
-    serializeLanguages
-} from "@lionweb/core"
-import {languageAsText} from "@lionweb/utilities"
+import { checkReferences, deserializeLanguages, issuesLanguage, lioncore, serializeLanguages } from "@lionweb/core"
+import { languageAsText } from "@lionweb/utilities"
 
-import {deepEqual} from "../utils/assertions.js"
-import {logIssues, logUnresolvedReferences} from "../utils/test-helpers.js"
-
+import { deepEqual } from "../utils/assertions.js"
+import { logIssues, logUnresolvedReferences } from "../utils/test-helpers.js"
 
 describe("meta-circularity (LionCore)", () => {
-
     it("check for unresolved references", () => {
         const unresolvedReferences = checkReferences(lioncore)
         logUnresolvedReferences(unresolvedReferences)
@@ -21,7 +13,7 @@ describe("meta-circularity (LionCore)", () => {
 
     it("check constraints", () => {
         const issues = issuesLanguage(lioncore)
-            // TODO  find out why computing issues is slow for a small language like LionCore
+        // TODO  find out why computing issues is slow for a small language like LionCore
         logIssues(issues)
         deepEqual(issues, [], "number of expected constraint violations -- see above for the issues")
     })
@@ -34,8 +26,6 @@ describe("meta-circularity (LionCore)", () => {
         deepEqual(languageAsText(language), languageAsText(lioncore))
         // deepEqual on object-level is not good enough (- maybe because of class JIT'ing?):
         // deepEqual(deserialization, lioncore)
-            // TODO  implement proper equality/comparison
+        // TODO  implement proper equality/comparison
     })
-
 })
-

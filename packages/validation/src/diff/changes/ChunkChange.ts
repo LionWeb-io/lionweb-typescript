@@ -1,5 +1,5 @@
-import { JsonContext } from "../../issues/index.js"
 import { LionWebJsonNode, LionWebJsonUsedLanguage } from "@lionweb/json"
+import { JsonContext } from "../../issues/index.js"
 import { Change } from "./Change.js"
 
 export abstract class ChunkChange extends Change {
@@ -14,7 +14,7 @@ export class SerializationFormatChange extends ChunkChange {
     constructor(
         public context: JsonContext,
         protected original: string,
-        protected newValue: string,
+        protected newValue: string
     ) {
         super(context)
     }
@@ -27,7 +27,7 @@ export class NodeRemoved extends ChunkChange {
 
     constructor(
         public context: JsonContext,
-        public node: LionWebJsonNode,
+        public node: LionWebJsonNode
     ) {
         super(context)
     }
@@ -40,7 +40,7 @@ export class NodeAdded extends ChunkChange {
 
     constructor(
         public context: JsonContext,
-        public node: LionWebJsonNode,
+        public node: LionWebJsonNode
     ) {
         super(context)
     }
@@ -51,7 +51,7 @@ export class NodeAdded extends ChunkChange {
 export abstract class LanguageChange extends ChunkChange {
     constructor(
         public context: JsonContext,
-        public language: LionWebJsonUsedLanguage,
+        public language: LionWebJsonUsedLanguage
     ) {
         super(context)
     }

@@ -15,7 +15,7 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {FeatureKinds, NodeType, SerializeSubTree, Type} from "../definition/Deltas.g.js"
+import { FeatureKinds, NodeType, SerializeSubTree, Type } from "../definition/Deltas.g.js"
 
 export const isSerializingAsChunk = (type: Type): type is NodeType =>
     type instanceof NodeType && type.serialization instanceof SerializeSubTree
