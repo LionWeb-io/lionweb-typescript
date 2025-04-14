@@ -18,7 +18,6 @@ import {
     unresolved
 } from "@lionweb/core"
 import { asString, indentWith, Template } from "littoral-templates"
-import { picker } from "../../utils/object.js"
 
 // define some layouting basics/building algebra:
 
@@ -47,7 +46,7 @@ export const generateMermaidForLanguage = ({ entities }: Language) =>
     ])
 
 const generateForEnumeration = ({ name, literals }: Enumeration) =>
-    withNewLine(block(`class ${name}`, [`<<enumeration>>`, literals.map(picker("name"))]))
+    withNewLine(block(`class ${name}`, [`<<enumeration>>`, literals.map(({name}) => name)]))
 
 const generateForAnnotation = ({ name, features, extends: extends_, implements: implements_, annotates }: Annotation) => [
     block(

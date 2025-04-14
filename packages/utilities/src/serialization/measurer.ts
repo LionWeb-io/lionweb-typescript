@@ -1,13 +1,21 @@
 import { Annotation, Concept, instantiableClassifiersOf, Interface, Language, LanguageEntity, MemoisingSymbolTable } from "@lionweb/core"
 import { LionWebJsonChunk, LionWebJsonMetaPointer, LionWebJsonNode, LionWebJsonUsedLanguage } from "@lionweb/json"
-import { sumNumbers } from "../utils/array.js"
-import { nested3Grouper, nested3Mapper, nestedFlatMap2, nestedFlatMap3 } from "../utils/nested-map.js"
+import { nested3Grouper, nested3Mapper, nestedFlatMap2, nestedFlatMap3 } from "@lionweb/ts-utils"
 import { ClassifierMetaTypes, Metrics } from "./metric-types.js"
+
 
 type Info = {
     classifier: LionWebJsonMetaPointer
     instantiations: number
 }
+
+
+/**
+ * Sum the given array of numbers.
+ */
+export const sumNumbers = (nums: number[]): number =>
+    nums.reduce((acc, cur) => acc + cur, 0)
+
 
 /**
  * Computes {@link Metrics metrics} on the given {@link LionWebJsonChunk serialization chunk}.

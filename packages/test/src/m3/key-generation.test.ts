@@ -1,4 +1,5 @@
-import { builtinPrimitives, chain, concatenator, LanguageFactory } from "@lionweb/core"
+import { builtinPrimitives, LanguageFactory } from "@lionweb/core"
+import { chain, concatenator } from "@lionweb/ts-utils"
 import { hasher } from "@lionweb/utilities"
 
 import { deepEqual } from "../utils/assertions.js"

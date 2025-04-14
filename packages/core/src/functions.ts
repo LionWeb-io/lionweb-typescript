@@ -1,6 +1,6 @@
 import { LionWebId } from "@lionweb/json"
+import { flatMapNonCyclingFollowing, trivialFlatMapper } from "@lionweb/ts-utils"
 import { Node } from "./types.js"
-import { flatMapNonCyclingFollowing, trivialFlatMapper } from "./utils/recursion.js"
 
 
 /**

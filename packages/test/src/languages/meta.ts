@@ -1,4 +1,5 @@
-import { builtinPrimitives, concatenator, LanguageFactory, lastOf } from "@lionweb/core"
+import { builtinPrimitives, LanguageFactory } from "@lionweb/core"
+import { concatenator, lastOf } from "@lionweb/ts-utils"
 
 const factory = new LanguageFactory("meta", "1", concatenator("-"), lastOf)
 

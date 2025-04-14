@@ -17,7 +17,6 @@
 
 import {
     Annotation,
-    asArray,
     Classifier,
     Concept,
     Enumeration,
@@ -36,6 +35,7 @@ import {
     Property,
     SingleRef
 } from "@lionweb/core"
+import { asArray } from "@lionweb/ts-utils"
 import { when, withNewlineAppended } from "littoral-templates"
 
 import { indent, switchOrIf } from "../utils/textgen.js"

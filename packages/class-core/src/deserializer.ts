@@ -16,7 +16,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import {
-    byIdMap,
     Classifier,
     Containment,
     DefaultPrimitiveTypeDeserializer,
@@ -32,6 +31,7 @@ import {
     unresolved
 } from "@lionweb/core"
 import { LionWebId, LionWebJsonChunk, LionWebJsonNode } from "@lionweb/json"
+import { byIdMap } from "@lionweb/ts-utils"
 
 import { DeltaHandler, IdMapping, ILanguageBase, INodeBase } from "./index.js"
 import { NodesToInstall } from "./linking.js"

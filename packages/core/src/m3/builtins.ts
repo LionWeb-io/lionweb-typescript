@@ -1,6 +1,6 @@
+import { StringsMapper } from "@lionweb/ts-utils"
 import { PrimitiveTypeDeserializer } from "../deserializer.js"
 import { PrimitiveTypeSerializer } from "../serializer.js"
-import { StringsMapper } from "../utils/string-mapping.js"
 import { currentReleaseVersion } from "../version.js"
 import { LanguageFactory } from "./factory.js"
 import { Classifier, Concept, Datatype, lioncoreBuiltinsKey, Property } from "./types.js"

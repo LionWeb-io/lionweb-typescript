@@ -21,3 +21,9 @@ export const asArray = <T>(thing: AnyNumberOf<T>): T[] => {
     return [thing]
 }
 
+/**
+ * @return a view of the given array of items with duplicates removed.
+ */
+export const uniquesAmong = <T>(ts: T[]): T[] =>
+    [...new Set(ts)]
+

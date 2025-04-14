@@ -1,4 +1,5 @@
-import { builtinClassifiers, chain, concatenator, Language, LanguageFactory, lastOf } from "@lionweb/core"
+import { builtinClassifiers, Language, LanguageFactory } from "@lionweb/core"
+import { chain, concatenator, lastOf } from "@lionweb/ts-utils"
 import { generateMermaidForLanguage, generatePlantUmlForLanguage, hasher } from "@lionweb/utilities"
 import { readFileSync, writeFileSync } from "fs"
 

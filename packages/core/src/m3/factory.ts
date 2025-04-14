@@ -1,5 +1,5 @@
+import { StringsMapper } from "@lionweb/ts-utils"
 import { SingleRef } from "../references.js"
-import { StringsMapper } from "../utils/string-mapping.js"
 import {
     Annotation,
     Classifier,

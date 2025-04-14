@@ -1,4 +1,5 @@
-import { concatenator, LanguageFactory, lastOf } from "@lionweb/core"
+import { LanguageFactory } from "@lionweb/core"
+import { concatenator, lastOf } from "@lionweb/ts-utils"
 
 import { equal } from "../utils/assertions.js"
 

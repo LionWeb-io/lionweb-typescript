@@ -1,4 +1,5 @@
-import { builtinPrimitives, chain, concatenator, LanguageFactory, lastOf } from "@lionweb/core"
+import { builtinPrimitives, LanguageFactory } from "@lionweb/core"
+import { chain, concatenator, lastOf } from "@lionweb/ts-utils"
 import { hasher } from "@lionweb/utilities"
 
 const factory = new LanguageFactory("libraryWithDates", "1", chain(concatenator("-"), hasher()), lastOf)

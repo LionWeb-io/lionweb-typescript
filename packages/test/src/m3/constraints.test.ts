@@ -1,4 +1,5 @@
-import { chain, concatenator, Concept, issuesLanguage, Language, LanguageFactory, lastOf } from "@lionweb/core"
+import { Concept, issuesLanguage, Language, LanguageFactory } from "@lionweb/core"
+import { chain, concatenator, lastOf } from "@lionweb/ts-utils"
 import { nanoIdGen } from "@lionweb/utilities"
 
 import { deepEqual, fail } from "../utils/assertions.js"

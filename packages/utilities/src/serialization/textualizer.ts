@@ -1,4 +1,4 @@
-import { byIdMap, Enumeration, Language, MemoisingSymbolTable, Property } from "@lionweb/core"
+import { Enumeration, Language, MemoisingSymbolTable, Property } from "@lionweb/core"
 import {
     LionWebId,
     LionWebJsonChunk,
@@ -9,6 +9,7 @@ import {
     LionWebJsonReference,
     LionWebJsonReferenceTarget
 } from "@lionweb/json"
+import { byIdMap } from "@lionweb/ts-utils"
 import { asString, indentWith, Template } from "littoral-templates"
 
 const indent = indentWith("    ")(1)

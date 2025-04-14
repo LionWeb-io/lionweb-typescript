@@ -11,7 +11,6 @@ import {
     DynamicNode,
     Enumeration,
     Feature,
-    groupBy,
     inheritsFrom,
     Interface,
     isConcrete,
@@ -19,7 +18,6 @@ import {
     LanguageEntity,
     Link,
     lioncoreBuiltins,
-    mapValues,
     nameOf,
     nameSorted,
     PrimitiveType,
@@ -27,9 +25,8 @@ import {
     SingleRef,
     unresolved
 } from "@lionweb/core"
+import { groupBy, mapValues, uniquesAmong } from "@lionweb/ts-utils"
 import { asString, Template, when } from "littoral-templates"
-import { uniquesAmong } from "../../utils/array.js"
-import { picker } from "../../utils/object.js"
 import { indent } from "./textgen.js"
 import { Field, tsFromTypeDef, TypeDefModifier } from "./type-def.js"
 
@@ -187,7 +184,7 @@ export const tsTypesForLanguage = (language: Language, ...generationOptions: Gen
         ...allFeaturesOf(classifier)
             .filter(feature => feature instanceof Link)
             .map(feature => feature as Link)
-            .flatMap(picker("type"))
+            .flatMap(({type}) => type)
             .filter(type => type instanceof Classifier)
             .map(classifier => classifier as Classifier)
     ]

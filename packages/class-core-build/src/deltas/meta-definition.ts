@@ -15,7 +15,8 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { builtinClassifiers, builtinPrimitives, concatenator, LanguageFactory } from "@lionweb/core"
+import { builtinClassifiers, builtinPrimitives, LanguageFactory } from "@lionweb/core"
+import { concatenator } from "@lionweb/ts-utils"
 
 const factory = new LanguageFactory("Deltas", "0", concatenator("-"), concatenator("-"))
 export const deltasLanguage = factory.language

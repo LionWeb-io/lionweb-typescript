@@ -1,4 +1,3 @@
-import { sumNumbers } from "@lionweb/utilities/dist/utils/array.js"
 import {
     flatMapValues,
     grouper,
@@ -9,8 +8,8 @@ import {
     nested3Mapper,
     nestedFlatMap2,
     nestedFlatMap3
-} from "@lionweb/utilities/dist/utils/nested-map.js"
-
+} from "@lionweb/ts-utils"
+import { sumNumbers } from "@lionweb/utilities/dist/serialization/measurer.js"
 import { deepEqual } from "../utils/assertions.js"
 
 describe("nested map utils work", () => {

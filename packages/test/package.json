@@ -34,6 +34,8 @@
   },
   "dependencies": {
     "@lionweb/core": "0.6.13-beta.4",
+    "@lionweb/json": "0.6.13-beta.4",
+    "@lionweb/ts-utils": "0.6.13-beta.4",
     "@lionweb/utilities": "0.6.13-beta.4",
     "@lionweb/validation": "0.6.13-beta.4"
   }

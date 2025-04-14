@@ -1,4 +1,5 @@
-import { chain, concatenator, LanguageFactory, lastOf } from "@lionweb/core"
+import { LanguageFactory } from "@lionweb/core"
+import { chain, concatenator, lastOf } from "@lionweb/ts-utils"
 import { hasher } from "@lionweb/utilities"
 import { library, libraryLanguage } from "./library.js"
 

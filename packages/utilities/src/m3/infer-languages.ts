@@ -1,17 +1,14 @@
 import {
-    asArray,
     builtinPrimitives,
-    chain,
-    concatenator,
     Concept,
     Containment,
     Language,
-    lastOf,
     Link,
     Property,
     Reference
 } from "@lionweb/core"
 import { LionWebId, LionWebJsonChunk, LionWebKey } from "@lionweb/json"
+import { asArray, chain, concatenator, lastOf } from "@lionweb/ts-utils"
 import { hasher } from "../hashing.js"
 
 const possibleKeySeparators = ["-", "_"]

@@ -1,9 +1,9 @@
 import {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    Annotation,
-    byIdMap
+    Annotation
 } from "@lionweb/core"
 import { LionWebId, LionWebJsonChunk, LionWebJsonNode } from "@lionweb/json"
+import { byIdMap } from "@lionweb/ts-utils"
 
 /**
  * Removes all annotations from the given {@link LionWebJsonChunk}, i.e.:

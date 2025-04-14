@@ -1,8 +1,8 @@
 import { LionWebId, LionWebKey } from "@lionweb/json"
+import { flatMapNonCyclingFollowing, trivialFlatMapper } from "@lionweb/ts-utils"
 import { allFeaturesOf, isContainment } from "./m3/functions.js"
 import { Classifier, Enumeration, EnumerationLiteral, Feature, Link } from "./m3/types.js"
 import { Node } from "./types.js"
-import { flatMapNonCyclingFollowing, trivialFlatMapper } from "./utils/recursion.js"
 
 
 /**

@@ -1,4 +1,5 @@
-import { groupBy } from "@lionweb/core"
+import { groupBy } from "./map-helpers.js"
+
 
 export type Nested1Map<T> = Record<string, T> // (for conceptual continuity)
 export type Nested2Map<T> = Record<string, Record<string, T>>
@@ -20,8 +21,8 @@ export const nested3Mapper = <T, R>(valueMapFunc: (t: T) => R) => mapValuesMappe
  */
 export const grouper =
     <T>(key1Func: (t: T) => string): ((ts: T[]) => Nested1Map<T[]>) =>
-    (ts: T[]) =>
-        groupBy(ts, key1Func)
+        (ts: T[]) =>
+            groupBy(ts, key1Func)
 
 /**
  * Return a function that groups an array of things using two group functions as a nested map
@@ -30,8 +31,8 @@ export const grouper =
  */
 export const nested2Grouper =
     <T>(key1Func: (t: T) => string, key2Func: (t: T) => string): ((ts: T[]) => Nested2Map<T[]>) =>
-    (ts: T[]) =>
-        mapValuesMapper(grouper(key2Func))(grouper(key1Func)(ts))
+        (ts: T[]) =>
+            mapValuesMapper(grouper(key2Func))(grouper(key1Func)(ts))
 // === mapValuesMapper((vs) => groupBy(vs, key2Func))(groupBy(ts, key1Func))
 
 /**
@@ -42,8 +43,8 @@ export const nested2Grouper =
  */
 export const nested3Grouper =
     <T>(key1Func: (t: T) => string, key2Func: (t: T) => string, key3Func: (t: T) => string): ((ts: T[]) => Nested3Map<T[]>) =>
-    (ts: T[]) =>
-        mapValuesMapper(nested2Grouper(key2Func, key3Func))(grouper(key1Func)(ts))
+        (ts: T[]) =>
+            mapValuesMapper(nested2Grouper(key2Func, key3Func))(grouper(key1Func)(ts))
 
 /**
  * Flat-maps over the values of a
@@ -51,7 +52,12 @@ export const nested3Grouper =
  * using the map function, which is also provided with the keys.
  */
 export const flatMapValues = <T, R>(map: Record<string, T>, mapFunc: (t: T, key1: string) => R): R[] =>
-    Object.entries(map).map(([key1, t]) => mapFunc(t, key1))
+    Object
+        .entries(map)
+        .map(
+            ([key1, t]) =>
+                mapFunc(t, key1)
+        )
 
 /**
  * Flat-maps over the values of a nested map
@@ -60,7 +66,14 @@ export const flatMapValues = <T, R>(map: Record<string, T>, mapFunc: (t: T, key1
  * using the map function, which is also provided with the keys.
  */
 export const nestedFlatMap2 = <T, R>(nested2Map: Nested2Map<T>, map2Func: (t: T, key1: string, key2: string) => R): R[] =>
-    Object.entries(nested2Map).flatMap(([key1, nestedMap1]) => flatMapValues(nestedMap1, (t, key2) => map2Func(t, key1, key2)))
+    Object
+        .entries(nested2Map)
+        .flatMap(
+            ([key1, nestedMap1]) =>
+                flatMapValues(nestedMap1, (t, key2) =>
+                    map2Func(t, key1, key2)
+                )
+        )
 
 /**
  * Flat-maps over the values of a nested map
@@ -70,4 +83,12 @@ export const nestedFlatMap2 = <T, R>(nested2Map: Nested2Map<T>, map2Func: (t: T,
  * using the map function, which is also provided with the keys.
  */
 export const nestedFlatMap3 = <T, R>(nested3Map: Nested3Map<T>, map3Func: (t: T, key1: string, key2: string, key3: string) => R): R[] =>
-    Object.entries(nested3Map).flatMap(([key1, nestedMap2]) => nestedFlatMap2(nestedMap2, (t, key2, key3) => map3Func(t, key1, key2, key3)))
+    Object
+        .entries(nested3Map)
+        .flatMap(
+            ([key1, nestedMap2]) =>
+                nestedFlatMap2(nestedMap2, (t, key2, key3) =>
+                    map3Func(t, key1, key2, key3)
+                )
+        )
+

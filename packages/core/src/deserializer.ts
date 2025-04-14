@@ -1,4 +1,5 @@
 import { currentSerializationFormatVersion, LionWebId, LionWebJsonChunk, LionWebJsonNode, LionWebKey } from "@lionweb/json"
+import { byIdMap, groupBy } from "@lionweb/ts-utils"
 import { InstantiationFacade } from "./facade.js"
 import { defaultSimplisticHandler, SimplisticHandler } from "./handler.js"
 import { DefaultPrimitiveTypeDeserializer } from "./m3/builtins.js"
@@ -7,7 +8,6 @@ import { Classifier, Containment, Enumeration, Language, PrimitiveType, Property
 import { unresolved } from "./references.js"
 import { MemoisingSymbolTable } from "./symbol-table.js"
 import { Node } from "./types.js"
-import { byIdMap, groupBy } from "./utils/map-helpers.js"
 
 export interface PrimitiveTypeDeserializer {
     deserializeValue(value: string | undefined, property: Property): unknown | undefined

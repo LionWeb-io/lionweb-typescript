@@ -1,11 +1,12 @@
 import { currentSerializationFormatVersion, LionWebId, LionWebJsonChunk, LionWebJsonMetaPointer, LionWebJsonNode } from "@lionweb/json"
+import { asArray } from "@lionweb/ts-utils"
 import { ExtractionFacade } from "./facade.js"
 import { asIds } from "./functions.js"
 import { DefaultPrimitiveTypeSerializer } from "./m3/builtins.js"
 import { allFeaturesOf } from "./m3/functions.js"
 import { Containment, Enumeration, Feature, Language, PrimitiveType, Property, Reference, simpleNameDeducer } from "./m3/types.js"
 import { Node } from "./types.js"
-import { asArray } from "./utils/array-helpers.js"
+
 
 export interface PrimitiveTypeSerializer {
     serializeValue(value: unknown, property: Property): string | undefined

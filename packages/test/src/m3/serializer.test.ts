@@ -1,4 +1,5 @@
-import { concatenator, LanguageFactory, lastOf, serializeLanguages } from "@lionweb/core"
+import { LanguageFactory, serializeLanguages } from "@lionweb/core"
+import { concatenator, lastOf } from "@lionweb/ts-utils"
 import { expect } from "chai"
 
 describe("serialization of a language", () => {

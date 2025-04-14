@@ -1,6 +1,5 @@
-import { sortByStringKey } from "@lionweb/core"
 import { LionWebJsonChunk } from "@lionweb/json"
-import { picker } from "../utils/object.js"
+import { sortByStringKey } from "@lionweb/ts-utils"
 import { orderedMetaPointer, orderedSerializedLanguageReference, orderedSerializedProperty, orderedSerializedReferenceTarget } from "./ordering.js"
 
 
@@ -11,8 +10,8 @@ import { orderedMetaPointer, orderedSerializedLanguageReference, orderedSerializ
 export const sortedSerializationChunk = ({serializationFormatVersion, languages, nodes}: LionWebJsonChunk): LionWebJsonChunk =>
     ({
         serializationFormatVersion,
-        languages: sortByStringKey(languages, picker("key")).map(orderedSerializedLanguageReference),
-        nodes: sortByStringKey(nodes, picker("id"))
+        languages: sortByStringKey(languages, ({key}) => key).map(orderedSerializedLanguageReference),
+        nodes: sortByStringKey(nodes, ({id}) => id)
             .map((node) => ({
                 id: node.id,
                 classifier: orderedMetaPointer(node.classifier),
@@ -25,7 +24,7 @@ export const sortedSerializationChunk = ({serializationFormatVersion, languages,
                 references: sortByStringKey(node.references, ({reference}) => reference.key)
                         .map(({reference, targets}) => ({
                             reference: orderedMetaPointer(reference),
-                            targets: sortByStringKey(targets, picker("reference")).map(orderedSerializedReferenceTarget)
+                            targets: sortByStringKey(targets, ({reference}) => reference).map(orderedSerializedReferenceTarget)
                         })),
                 annotations: node.annotations.sort(),
                 parent: node.parent

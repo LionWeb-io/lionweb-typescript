@@ -15,7 +15,8 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { Concept, groupBy, Language } from "@lionweb/core"
+import { Concept, Language } from "@lionweb/core"
+import { groupBy } from "@lionweb/ts-utils"
 import { asString, commaSeparated, when, withNewlineAppended } from "littoral-templates"
 import { sortedStringsByUppercase } from "../utils/string-sorting.js"
 import { indent } from "../utils/textgen.js"

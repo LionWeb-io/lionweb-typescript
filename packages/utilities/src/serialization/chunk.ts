@@ -1,7 +1,6 @@
 import { deserializeLanguages, Language, lioncoreKey } from "@lionweb/core"
 import { currentSerializationFormatVersion, LionWebJsonChunk, LionWebJsonUsedLanguage } from "@lionweb/json"
 import { readFileAsJson } from "../utils/json.js"
-import { picker } from "../utils/object.js"
 
 
 /**
@@ -75,8 +74,8 @@ const areEqual = (left: LionWebJsonUsedLanguage, right: LionWebJsonUsedLanguage)
 export const combinationOf = (serializationChunks: LionWebJsonChunk[]): LionWebJsonChunk =>
     ({
         serializationFormatVersion: currentSerializationFormatVersion,
-        languages: flatMapDistinct(serializationChunks.map(picker("languages")), areEqual),
-        nodes: serializationChunks.flatMap(picker("nodes"))
+        languages: flatMapDistinct(serializationChunks.map(({languages}) => languages), areEqual),
+        nodes: serializationChunks.flatMap(({nodes}) => nodes)
     })
 
 

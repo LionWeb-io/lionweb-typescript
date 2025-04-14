@@ -1,4 +1,5 @@
-import { cycleWith } from "@lionweb/core"
+
+import { cycleWith } from "@lionweb/ts-utils"
 
 import { deepEqual, isTrue } from "./assertions.js"
 

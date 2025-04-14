@@ -3,11 +3,10 @@ import {
     directlyContaineds,
     Enumeration,
     EnumerationLiteral,
-    flatMapNonCyclingFollowing,
     Language,
-    Property,
-    trivialFlatMapper
+    Property
 } from "@lionweb/core"
+import { flatMapNonCyclingFollowing, trivialFlatMapper } from "@lionweb/ts-utils"
 
 import { deepEqual } from "./utils/assertions.js"
 

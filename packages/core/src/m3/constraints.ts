@@ -1,5 +1,5 @@
+import { duplicatesAmong } from "@lionweb/ts-utils"
 import { idOf } from "../functions.js"
-import { duplicatesAmong } from "../utils/map-helpers.js"
 import { allContaineds, flatMap, inheritedCycleWith, keyOf, namedsOf, qualifiedNameOf } from "./functions.js"
 import { Classifier, isINamed, Language, M3Concept } from "./types.js"
 

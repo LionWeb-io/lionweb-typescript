@@ -16,7 +16,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { allFeaturesOf, allSuperTypesOf, Annotation, Classifier, Concept, Feature, Interface, MultiRef, SingleRef } from "@lionweb/core"
-import { uniquesAmong } from "@lionweb/utilities/dist/utils/array.js"
+import { uniquesAmong } from "@lionweb/ts-utils"
 
 export const isAbstract = (classifier: Classifier): boolean => classifier instanceof Concept && classifier.abstract
 /*

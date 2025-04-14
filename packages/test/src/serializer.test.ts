@@ -2,7 +2,6 @@ import {
     Annotation,
     builtinClassifiers,
     builtinPrimitives,
-    concatenator,
     Concept,
     DefaultPrimitiveTypeSerializer,
     dynamicExtractionFacade,
@@ -11,12 +10,12 @@ import {
     EnumerationLiteral,
     Language,
     LanguageFactory,
-    lastOf,
     Reference,
     serializeLanguages,
     serializeNodes
 } from "@lionweb/core"
 import { currentSerializationFormatVersion, LionWebJsonChunk } from "@lionweb/json"
+import { concatenator, lastOf } from "@lionweb/ts-utils"
 import { expect } from "chai"
 import { TestNode, TestNodeReader } from "./instances/test-node.js"
 import { dateDatatype, libraryWithDatesLanguage } from "./languages/libraryWithDates.js"
