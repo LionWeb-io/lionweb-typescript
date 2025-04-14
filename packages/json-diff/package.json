@@ -15,7 +15,7 @@
     "url": "https://github.com/LionWeb-io/lionweb-typescript/issues"
   },
   "scripts": {
-    "clean": "rm -rf dist/ lionweb-json-diff-*.tgz",
+    "clean": "rm -rf dist/ node_modules/ lionweb-json-diff-*.tgz",
     "build": "tsc",
     "lint": "eslint src",
     "pre-release-either": "npm run clean && npm install && npm run build",

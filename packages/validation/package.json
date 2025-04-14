@@ -14,7 +14,7 @@
     "testing"
   ],
   "scripts": {
-    "clean": "rm -rf dist/ lionweb-validation-*.tgz",
+    "clean": "rm -rf dist/ node_modules/ lionweb-validation-*.tgz",
     "build": "tsc && npm run copyM3 && npm run copyBuiltins",
     "copyM3": "node -e \"const fs = require('fs'); fs.copyFileSync('./src/languages/LionCore-M3.json', './dist/languages/LionCore-M3.json');\"",
     "copyBuiltins": "node -e \"const fs = require('fs'); fs.copyFileSync('./src/languages/LionCore-builtins.json', './dist/languages/LionCore-builtins.json');\"",

@@ -24,7 +24,7 @@
     "@lionweb/core": "0.6.13-beta.5",
     "@lionweb/json": "0.6.13-beta.5",
     "@lionweb/utilities": "0.6.13-beta.5",
-    "@lionweb/validation": "0.6.13-beta.5",
+    "@lionweb/validation": "0.6.13-beta.6",
     "chai": "5.2.0",
     "mocha": "11.1.0"
   },

@@ -19,10 +19,10 @@
     "@lionweb/core": "0.6.13-beta.5",
     "@lionweb/json-diff": "0.6.13-beta.5",
     "@lionweb/utilities": "0.6.13-beta.5",
-    "@lionweb/validation": "0.6.13-beta.5"
+    "@lionweb/validation": "0.6.13-beta.6"
   },
   "scripts": {
-    "clean": "rm -rf dist/ lionweb-cli-*.tgz",
+    "clean": "rm -rf dist/ node_modules/ lionweb-cli-*.tgz",
     "build": "tsc",
     "lint": "eslint src",
     "test": "node dist/lionweb-cli.js",
