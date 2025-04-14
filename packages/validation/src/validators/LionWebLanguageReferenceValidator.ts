@@ -1,5 +1,14 @@
 import { isEqualMetaPointer, LionWebJsonContainment, LionWebJsonNode, LionWebJsonProperty, LionWebJsonReference } from "@lionweb/json"
 import {
+    JsonContext,
+    LION_CORE_BUILTINS_INAMED_NAME,
+    LIONWEB_BOOLEAN_TYPE, LIONWEB_INTEGER_TYPE, LIONWEB_JSON_TYPE, LIONWEB_STRING_TYPE,
+    LionWebJsonChunkWrapper,
+    M3_Keys,
+    MetaPointers,
+    NodeUtils
+} from "@lionweb/json-utils"
+import {
     Language_ContainmentMetaPointerNotInClass_Issue,
     Language_IncorrectPropertyMetaPointer_Issue,
     Language_PropertyMetaPointerNotInClass_Issue,
@@ -14,21 +23,9 @@ import {
     Language_UnknownProperty_Issue,
     Language_UnknownReference_Issue
 } from "../issues/LanguageIssues.js"
-import { JsonContext } from "../json/JsonContext.js"
-import { LionWebJsonChunkWrapper } from "../json/LionWebJsonChunkWrapper.js"
 // import {
 //     KnownLanguages, LanguageRegistry
 // } from "../languages/LanguageRegistry.js"
-import {
-    LION_CORE_BUILTINS_INAMED_NAME,
-    LIONWEB_BOOLEAN_TYPE,
-    LIONWEB_INTEGER_TYPE,
-    LIONWEB_JSON_TYPE,
-    LIONWEB_STRING_TYPE,
-    M3_Keys,
-    MetaPointers
-} from "../json/M3definitions.js"
-import { NodeUtils } from "../json/NodeUtils.js"
 import { LanguageRegistry } from "../languages/index.js"
 import { ValidationResult } from "./generic/ValidationResult.js"
 import { validateBoolean, validateInteger, validateJSON } from "./ValidationFunctions.js"

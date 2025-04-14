@@ -9,7 +9,7 @@ type FlatMapper<T, R> = (t: T) => R[]
  */
 const flatMapNonCyclingFollowing = <T, R>(
     mapper: FlatMapper<T, R>,
-    edges: (t: T) => T[]
+    nextVertices: (t: T) => T[]
 ): FlatMapper<T, R> =>
     (startVertex: T): R[] => {
         const visited: T[] = []
@@ -20,7 +20,7 @@ const flatMapNonCyclingFollowing = <T, R>(
             }
             visited.push(t)
             rs.push(...mapper(t))
-            edges(t).forEach(recurse)
+            nextVertices(t).forEach(recurse)
         }
         recurse(startVertex)
         return rs

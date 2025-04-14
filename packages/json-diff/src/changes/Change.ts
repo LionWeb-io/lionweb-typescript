@@ -1,4 +1,4 @@
-import { JsonContext } from "../../issues/index.js"
+import { JsonContext } from "@lionweb/json-utils"
 
 export type ChangeType =
     | "GenericChange"

@@ -1,4 +1,4 @@
-import { JsonContext } from "../json/JsonContext.js"
+import { JsonContext } from "@lionweb/json-utils"
 import { ValidationIssue } from "./ValidationIssue.js"
 
 export abstract class Syntax_PropertyIssue extends ValidationIssue {

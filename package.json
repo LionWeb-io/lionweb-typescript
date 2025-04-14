@@ -30,7 +30,10 @@
     },
     "private"        : true,
     "workspaces"     : [
+        "./packages/ts-utils",
         "./packages/json",
+        "./packages/json-utils",
+        "./packages/json-diff",
         "./packages/core",
         "./packages/utilities",
         "./packages/validation",

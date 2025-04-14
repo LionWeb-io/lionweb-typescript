@@ -1,4 +1,4 @@
-import { JsonContext } from "../../json/index.js"
+import { JsonContext } from "@lionweb/json-utils"
 import { ValidationResult } from "./ValidationResult.js"
 
 export type UnknownObjectType = { [key: string]: unknown }

@@ -1,4 +1,5 @@
 import { LionWebId, LionWebJsonChunk, LionWebJsonContainment, LionWebJsonMetaPointer, LionWebJsonNode, LionWebJsonUsedLanguage } from "@lionweb/json"
+import { ChunkUtils, JsonContext, LionWebJsonChunkWrapper } from "@lionweb/json-utils"
 import {
     Duplicates_Issue,
     Reference_ChildMissingInParent_Issue,
@@ -7,9 +8,6 @@ import {
     Reference_LanguageUnknown_Issue,
     Reference_ParentMissingInChild_Issue
 } from "../issues/ReferenceIssues.js"
-import { ChunkUtils } from "../json/ChunkUtils.js"
-import { JsonContext } from "../json/JsonContext.js"
-import { LionWebJsonChunkWrapper } from "../json/LionWebJsonChunkWrapper.js"
 import { ValidationResult } from "./generic/ValidationResult.js"
 
 /**

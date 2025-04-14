@@ -1,5 +1,5 @@
 import { readSerializationChunk, writeJsonAsFile } from "@lionweb/utilities"
-import { LionWebJsonDiff } from "@lionweb/validation"
+import { LionWebJsonDiff } from "@lionweb/json-diff"
 
 export const diffSerializationChunks = async (leftPath: string, rightPath: string, diffPath: string) => {
     const differ = new LionWebJsonDiff()

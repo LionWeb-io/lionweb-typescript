@@ -1,5 +1,5 @@
 import { LionWebId, LionWebJsonMetaPointer, LionWebJsonNode } from "@lionweb/json"
-import { JsonContext } from "../../issues/index.js"
+import { JsonContext } from "@lionweb/json-utils"
 import { Change, ChangeType } from "./Change.js"
 
 export class NodeClassifierChanged extends Change {

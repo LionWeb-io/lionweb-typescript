@@ -31,6 +31,8 @@
     "republish-local": "yarn unpublish-local && yarn publish-local"
   },
     "dependencies": {
-        "@lionweb/json": "0.6.13-beta.4"
+        "@lionweb/json": "0.6.13-beta.4",
+        "@lionweb/ts-utils": "0.6.13-beta.4",
+        "@lionweb/json-utils": "0.6.13-beta.4"
     }
 }

@@ -1,5 +1,5 @@
 import { LionWebJsonNode, LionWebJsonUsedLanguage } from "@lionweb/json"
-import { JsonContext } from "../../issues/index.js"
+import { JsonContext } from "@lionweb/json-utils"
 import { Change } from "./Change.js"
 
 export abstract class ChunkChange extends Change {

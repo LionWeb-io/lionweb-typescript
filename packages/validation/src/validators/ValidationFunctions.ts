@@ -2,6 +2,7 @@
  * A list of functions that are used to validate primitive fields for LionWeb conformance.
  * Used in the LionWebSyntaxValidator.
  */
+import { JsonContext } from "@lionweb/json-utils"
 import { Language_PropertyValue_Issue } from "../issues/LanguageIssues.js"
 import {
     Syntax_IdFormat_Issue,
@@ -10,7 +11,6 @@ import {
     Syntax_SerializationFormatVersion_Issue,
     Syntax_VersionFormat_Issue
 } from "../issues/SyntaxIssues.js"
-import { JsonContext } from "../json/JsonContext.js"
 import { ValidationResult } from "./generic/ValidationResult.js"
 import { PropertyDefinition } from "./generic/ValidationTypes.js"
 

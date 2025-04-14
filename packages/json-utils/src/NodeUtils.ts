@@ -26,7 +26,7 @@ export class NodeUtils {
             prop => isEqualMetaPointer(prop.property, property)
         )
     }
-
+    
     /**
      * Find containment child with key equals `key` in `node`.
      * @param node

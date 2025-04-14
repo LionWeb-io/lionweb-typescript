@@ -1,4 +1,4 @@
-import { JsonContext } from "../json/JsonContext.js"
+import { JsonContext } from "@lionweb/json-utils"
 
 export abstract class ValidationIssue {
     abstract readonly issueType: string

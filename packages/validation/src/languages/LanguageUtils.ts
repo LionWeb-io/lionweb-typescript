@@ -1,7 +1,7 @@
 import { isEqualMetaPointer, LionWebJsonChunk, LionWebJsonNode } from "@lionweb/json"
+import { LION_CORE_M3_KEY, MetaPointers } from "@lionweb/json-utils"
 
 import { createRequire } from "module"
-import { LION_CORE_M3_KEY, MetaPointers } from "../json/M3definitions.js"
 
 const require = createRequire(import.meta.url)
 const LionCore_M3 = require("./LionCore-M3.json")

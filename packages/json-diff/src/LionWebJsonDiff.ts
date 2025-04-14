@@ -9,9 +9,7 @@ import {
     LionWebJsonReferenceTarget,
     LionWebJsonUsedLanguage
 } from "@lionweb/json"
-import { JsonContext } from "../issues/index.js"
-import { ChunkUtils } from "../json/ChunkUtils.js"
-import { NodeUtils } from "../json/NodeUtils.js"
+import { ChunkUtils, JsonContext, NodeUtils } from "@lionweb/json-utils"
 import { Change, GenericChange, Missing } from "./changes/Change.js"
 import { LanguageAdded, LanguageRemoved, NodeAdded, NodeRemoved, SerializationFormatChange } from "./changes/ChunkChange.js"
 import { ChildAdded, ChildOrderChanged, ChildRemoved } from "./changes/ContainmentChange.js"

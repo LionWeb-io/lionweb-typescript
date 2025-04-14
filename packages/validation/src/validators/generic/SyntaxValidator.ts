@@ -1,3 +1,4 @@
+import { JsonContext } from "@lionweb/json-utils"
 import {
     Syntax_ArrayContainsNull_Issue,
     Syntax_PropertyMissingIssue,
@@ -5,7 +6,6 @@ import {
     Syntax_PropertyTypeIssue,
     Syntax_PropertyUnknownIssue
 } from "../../issues/index.js"
-import { JsonContext } from "../../json/JsonContext.js"
 import { ValidationResult } from "./ValidationResult.js"
 import { PropertyDefinition, UnknownObjectType } from "./ValidationTypes.js"
 

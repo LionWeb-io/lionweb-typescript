@@ -1,0 +1,27 @@
+{
+    "name": "@lionweb/ts-utils",
+    "version": "0.6.13-beta.4",
+    "description": "Utilities for LionWeb JSON",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "typings": "dist/index.d.ts",
+    "type": "module",
+    "license": "Apache-2.0",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/LionWeb-io/lionweb-typescript.git"
+    },
+    "bugs": {
+        "url": "https://github.com/LionWeb-io/lionweb-typescript/issues"
+    },
+    "scripts": {
+        "clean": "rm -rf dist/ lionweb-ts-utils-*.tgz",
+        "build": "tsc",
+        "lint": "eslint src",
+        "pre-release-either": "npm run clean && npm install && npm run build",
+        "prerelease": "npm run pre-release-either",
+        "release": "npm publish",
+        "prerelease-beta": "npm run pre-release-either",
+        "release-beta": "npm publish --tag beta"
+    }
+}
