@@ -1,37 +1,37 @@
 {
-    "name"           : "@lionweb/class-core-test",
-    "version"        : "0.7.0-dev.0",
-    "description"    : "Tests for the LionWeb class-core package",
-    "private"        : true,
-    "type"           : "module",
-    "license"        : "Apache-2.0",
-    "repository"     : {
-        "type": "git",
-        "url" : "git+https://github.com/LionWeb-io/lionweb-typescript.git"
-    },
-    "bugs"           : {
-        "url": "https://github.com/LionWeb-io/lionweb-typescript/issues"
-    },
-    "scripts"        : {
-        "clean"  : "rm -rf dist/ node_modules/",
-        "build"  : "tsc",
-        "pretest": "npm run build",
-        "test"   : "mocha --recursive dist/",
-        "lint"   : "eslint src"
-    },
-    "dependencies"   : {
-        "@lionweb/class-core": "0.6.13-beta.4",
-        "@lionweb/core"      : "0.6.13-beta.4",
-        "@lionweb/json"      : "0.6.13-beta.4",
-        "@lionweb/utilities" : "0.6.13-beta.4",
-        "@lionweb/validation": "0.6.13-beta.4",
-        "chai"               : "5.2.0",
-        "mocha"              : "11.1.0"
-    },
-    "devDependencies": {
-        "@types/chai" : "5.2.1",
-        "@types/mocha": "10.0.10",
-        "mobx"        : "6.13.7",
-        "typescript"  : "5.3.3"
-    }
+  "name": "@lionweb/class-core-test",
+  "version": "0.7.0-dev.0",
+  "description": "Tests for the LionWeb class-core package",
+  "private": true,
+  "type": "module",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LionWeb-io/lionweb-typescript.git"
+  },
+  "bugs": {
+    "url": "https://github.com/LionWeb-io/lionweb-typescript/issues"
+  },
+  "scripts": {
+    "clean": "rm -rf dist/ node_modules/",
+    "build": "tsc",
+    "pretest": "npm run build",
+    "test": "mocha --recursive dist/",
+    "lint": "eslint src"
+  },
+  "dependencies": {
+    "@lionweb/class-core": "0.6.13-beta.5",
+    "@lionweb/core": "0.6.13-beta.5",
+    "@lionweb/json": "0.6.13-beta.5",
+    "@lionweb/utilities": "0.6.13-beta.5",
+    "@lionweb/validation": "0.6.13-beta.5",
+    "chai": "5.2.0",
+    "mocha": "11.1.0"
+  },
+  "devDependencies": {
+    "@types/chai": "5.2.1",
+    "@types/mocha": "10.0.10",
+    "mobx": "6.13.7",
+    "typescript": "5.3.3"
+  }
 }

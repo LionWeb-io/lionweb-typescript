@@ -1,6 +1,6 @@
 {
   "name": "@lionweb/validation",
-  "version": "0.6.13-beta.4",
+  "version": "0.6.13-beta.5",
   "license": "Apache 2.0",
   "description": "LionWeb Serialization validation",
   "author": "jos.warmer@openmodeling.nl",
@@ -30,9 +30,9 @@
     "unpublish-local": "npm unpublish --force --registry http://localhost:4873",
     "republish-local": "yarn unpublish-local && yarn publish-local"
   },
-    "dependencies": {
-        "@lionweb/json": "0.6.13-beta.4",
-        "@lionweb/ts-utils": "0.6.13-beta.4",
-        "@lionweb/json-utils": "0.6.13-beta.4"
-    }
+  "dependencies": {
+    "@lionweb/json": "0.6.13-beta.5",
+    "@lionweb/ts-utils": "0.6.13-beta.5",
+    "@lionweb/json-utils": "0.6.13-beta.5"
+  }
 }

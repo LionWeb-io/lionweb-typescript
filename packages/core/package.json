@@ -1,6 +1,6 @@
 {
   "name": "@lionweb/core",
-  "version": "0.6.13-beta.4",
+  "version": "0.6.13-beta.5",
   "description": "LionWeb core for {Java|Type}Script",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -24,8 +24,8 @@
     "prerelease-beta": "npm run pre-release-either",
     "release-beta": "npm publish --tag beta"
   },
-    "dependencies": {
-        "@lionweb/json": "0.6.13-beta.4",
-        "@lionweb/ts-utils": "0.6.13-beta.4"
-    }
+  "dependencies": {
+    "@lionweb/json": "0.6.13-beta.5",
+    "@lionweb/ts-utils": "0.6.13-beta.5"
+  }
 }
