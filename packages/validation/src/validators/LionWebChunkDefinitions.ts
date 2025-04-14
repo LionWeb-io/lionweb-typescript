@@ -1,4 +1,4 @@
-import { MAY_BE_NULL, PropertyDef, PropertyDefinition } from "./generic/ValidationTypes.js"
+import { MAY_BE_NULL, PrimitiveDef, PropertyDef, TypeDefinition } from "./generic/ValidationTypes.js"
 import { validateId, validateKey, validateSerializationFormatVersion, validateVersion } from "./ValidationFunctions.js"
 
 /**
