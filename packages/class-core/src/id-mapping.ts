@@ -42,11 +42,15 @@ export class IdMapping {
         return this.nodesById[id];
     }
 
-    fromRefId(idOrUnresolved: IdOrUnresolved): SingleRef<INodeBase> {
-        return idOrUnresolved === null
+    tryFromId = (id: Id): (INodeBase | undefined) =>
+        id in this.nodesById
+            ? this.nodesById[id]
+            : undefined;
+
+    fromRefId = (idOrUnresolved: IdOrUnresolved): SingleRef<INodeBase> =>
+        idOrUnresolved === null
             ? null
             : (this.nodesById[idOrUnresolved] ?? unresolved);
-    }
 
     updateWith(node: INodeBase) {
         this.nodesById[node.id] = node;
