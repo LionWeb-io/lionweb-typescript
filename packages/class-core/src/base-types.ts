@@ -29,6 +29,7 @@ import {
     Reference
 } from "@lionweb/core"
 import { LionWebId } from "@lionweb/json"
+import { uniquesAmong } from "@lionweb/ts-utils"
 import { makeObservable } from "mobx"
 
 import {
@@ -43,7 +44,6 @@ import {
     SingleContainmentValueManager,
     SingleReferenceValueManager
 } from "./index.js"
-import { uniquesAmong } from "./utils.js"
 
 
 /**

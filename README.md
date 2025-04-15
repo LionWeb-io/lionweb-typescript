@@ -6,6 +6,12 @@
 [![CI](https://github.com/LionWeb-io/lionweb-typescript/actions/workflows/test.yaml/badge.svg)
 ](https://github.com/LionWeb-io/lionweb-typescript/actions/workflows/test.yaml)
 
+[![npm](https://img.shields.io/npm/v/%40lionweb%2Fjson?label=%40lionweb%2Fjson)
+](https://www.npmjs.com/package/@lionweb/json)
+[![npm](https://img.shields.io/npm/v/%40lionweb%2Fjson-utils?label=%40lionweb%2Fjson-utils)
+](https://www.npmjs.com/package/@lionweb/json-utils)
+[![npm](https://img.shields.io/npm/v/%40lionweb%2Fjson-diff?label=%40lionweb%2Fjson-diff)
+](https://www.npmjs.com/package/@lionweb/json-diff)
 [![npm](https://img.shields.io/npm/v/%40lionweb%2Fcore?label=%40lionweb%2Fcore)
 ](https://www.npmjs.com/package/@lionweb/core)
 [![npm](https://img.shields.io/npm/v/%40lionweb%2Fcli?label=%40lionweb%2Fcli)
@@ -14,6 +20,8 @@
 ](https://www.npmjs.com/package/@lionweb/utilities)
 [![npm](https://img.shields.io/npm/v/%40lionweb%2Fvalidation?label=%40lionweb%2Fvalidation)
 ](https://www.npmjs.com/package/@lionweb/validation)
+[![npm](https://img.shields.io/npm/v/%40lionweb%2Fts-utils?label=%40lionweb%2Fts-utils)
+](https://www.npmjs.com/package/@lionweb/ts-utils)
 
 
 This repository contains a TypeScript implementation for (parts of) the [LionWeb specification](https://lionweb-io.github.io/specification/) – specifically: release version **2023.1** of the LionWeb specification.
@@ -29,7 +37,16 @@ The implementation of the JSON serialization format, serialization from in-memor
 
 ## Repo org
 
-The implementation is divided up in a number of NPM packages in the directory [`packages`](./packages) (in order of importance):
+The implementation is divided up in a number of NPM packages in the directory [`packages`](./packages) (in order of importance) — see their READMEs for more details:
+
+- `json`
+  Encapsulates the JSON serialization format.
+
+- `json-utils`
+  Utilities around the JSON serialization format, also i.c.w. LionCore M3.
+
+- `json-diff`
+  Computes differences between LionWeb serialization chunks.
 
 - `core`
   The "core stuff" such as: base types, the LionCore M3 (including the `builtins` language), and (de-)serialization.
@@ -40,20 +57,23 @@ The implementation is divided up in a number of NPM packages in the directory [`
 - `validation`
   Validators that validate a JSON serialization.
 
-- `test`
-  A package containing (unit) tests for the packages above.
+- `ts-utils`
+  General TypeScript utilities, e.g. for working with maps and such.
 
 - `cli`
   A package with an executable to trigger some of the functionality in `utilities` through a commandline interface (CLI), i.e. from the commandline.
-
-- `artifacts`
-  A package that generates artifacts (serialization chunks, diagrams, JSON Schemas) from some of the models constructed in the `core` and `test` packages.
 
 - `class-core`
   A package that contains a framework for the implementation of `INode` that's class-based, and can handle deltas.
 
 - `class-core-generator`
   A package that contains a code generator to generate classes based on the `class-core` package from an M2.
+
+- `test`
+  A package containing (unit) tests for the packages above.
+
+- `artifacts`
+  A package that generates artifacts (serialization chunks, diagrams, JSON Schemas) from some of the models constructed in the `core` and `test` packages.
 
 - `class-core-build`
   A package that builds part of the code in `class-core` — specifically the part related to the delta protocol.
@@ -63,7 +83,7 @@ The implementation is divided up in a number of NPM packages in the directory [`
   To ensure that a “clean clone” of this repository is not impacted, the `make-class-core.sh` script builds `class-core` first, before compiling and running `class-core-build`, and then builds `class-core` again.
 
 Each of these packages have their own `README.md`.
-The `core`, `utilities`, `cli`, and `validation`, `class-core`, and `class-core-generator` packages are published in the scope of [the `lionweb` organization](https://www.npmjs.com/org/lionweb), meaning that they're all prefixed with `@lionweb/`.
+The following packages are published in the scope of [the `lionweb` organization](https://www.npmjs.com/org/lionweb), meaning that they're all prefixed with `@lionweb/`: `json`, `json-utils`, `js-diff`, `core`, `ts-utils`, `utilities`, `cli`, and `validation`, `class-core`, `class-core-generator`
 The other packages are for internal use only.
 All these packages declare their own NPM semver identification, which isn't directly related to the release version of the LionWeb specification.
 
@@ -137,7 +157,9 @@ The output should look similar to this (but much longer):
 <img src="./documentation/images/test-output.png" alt="test" width="50%"/>
 
 
-### Updating version numbers
+### Version numbers
+
+**TODO**  explain how versions are aligned exactly
 
 To keep the version numbers of the various packages under `packages/` aligned throughout this repository, you can use the Node.js script [`update-package-versions.js`](./update-package-versions.js).
 You execute this script as follows from the repo's root:

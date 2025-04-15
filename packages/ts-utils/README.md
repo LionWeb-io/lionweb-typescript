@@ -12,9 +12,8 @@ An NPM package that can be added to a Node.js/NPM codebase as follows:
 ```shell
 $ npm add @lionweb/ts-utils
 ```
-It contains:
 
-* Utilities ...
+It contains general TypeScript utilities, e.g. for working with maps and such.
 
 
 ## Development

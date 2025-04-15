@@ -12,9 +12,7 @@ An NPM package that can be added to a Node.js/NPM codebase as follows:
 ```shell
 $ npm add @lionweb/json-diff
 ```
-It contains:
-
-* Utilities ...
+It computes differences between LionWeb serialization chunks.
 
 
 ## Development

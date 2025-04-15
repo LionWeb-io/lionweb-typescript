@@ -12,9 +12,7 @@ An NPM package that can be added to a Node.js/NPM codebase as follows:
 ```shell
 $ npm add @lionweb/json-utils
 ```
-It contains:
-
-* Utilities ...
+It contains utilities around the JSON serialization format, also i.c.w. LionCore M3.
 
 
 ## Development

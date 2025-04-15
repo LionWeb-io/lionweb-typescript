@@ -1,9 +1,10 @@
 # Changelog
 
-## 0.6.13
+## 0.7.0
 
 * Fix [bug #203](https://github.com/LionWeb-io/lionweb-typescript/issues/203).
 * (Fix that running setup on the test package for a second time fails.)
+* Extract utility functions to `@lionweb/ts-utils`, and `Id` (as `LionWebId`) to `@lionweb/json`.
 
 
 ## 0.6.12
