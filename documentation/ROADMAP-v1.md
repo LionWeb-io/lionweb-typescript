@@ -11,20 +11,12 @@
 
 ![The packages, including dependencies](./packages.svg)
 
-* `{base|ts}-utils`: LionWeb-agnostic utility/helper functionality, specifically for working with arrays and maps/objects.
+* `ts-utils`: LionWeb-agnostic utility/helper functionality, specifically for working with arrays and maps/objects.
     Don't depend on Node.js here — specifically: don't use `node:fs`!
-* `serialization`: all serialization types (prefixed with `LionWebJson`), and some utility functionality like comparing meta-pointers.
-
->  *Jos: I think we should call this `json` instead of 'serialization'?
-   These Json objects are still JavaScript.
-   The actual serialization functionality is in other packages.*
-
->  *Jos: And then the next package (serialization-utils) should be called `json-utils`.*
-
-
-* `serialization-utils`: utilities that deal exclusively with types from the `serialization` package.
-    Sub packages:
-    * diffing (moved from current `validation`)
+* `json`: all serialization types (prefixed with `LionWebJson`), and some utility functionality like comparing meta-pointers.
+* `json-diff`: diffing (moved from current `validation`) on top of types from the `json` package.
+* `json-utils`: utilities that deal exclusively with types from the `json` package.
+    Examples:
     * textualization — i.e., a textual syntax for serialization chunks.
         Allow optional _name provider_ to replace keys/ids with names coming from an M2.
 * `core`: the core types for models.
@@ -38,10 +30,7 @@
     * `M2`: textualization of an M2, infer language from a serialization chunk
 > *Jos: alternatively the `lionweb-json-utils` (now called `serialization-utils`) could also be moved here.
        and renamed to `lionweb-json`*
-* `issues`: types and utilities (e.g., `JsonPath` moved from the current `validation` package) for issues.
-
-> *Jos: Maybe call this `findings` to align with the unfinished language we were defining.*
-  
+* `findings`: types and utilities (e.g., `JsonPath` moved from the current `validation` package) for issues.
 * `correctness`: validation of serialization chunks, either M2-agnostic or M2-aware — aligned with the correctness document.
 > *Maybe posit that this package is developed, **and unit tested** concurrently with the `serialization` and `core` packages?*
 * `generation`: generation of TS code, diagrams, etc. based on language definitions
@@ -57,7 +46,7 @@
 * Rename `InstantiationFacade` &rarr; `Factory`
   * And `ExtractionFacade` &rarr; `Reflector`?
 > *Jos: And make sure there are cookbooks for both them, as I (JW) find them hard to understand and use.
-    preferrably simplify them (don't know how yet)*
+    Preferably simplify them (don't know how yet)*
 >> *Meinte: I was thinking that maybe we'd have `Factory` (for instantiating instances), `Writer` (for setting/writing values on instances), and `Reader` (for reading values on instances).*
 
 * Give deserialization a better API:
@@ -71,7 +60,7 @@
     * We can deal with broken models, so a “small” problem in the serialization should not prevent the deserialization as a whole.
       (The GPL types that the model is deserialized into might have a different opinion about it, but that's its problem.)
 
-> *Jos: But there must be a notification os some kind that the model was repaired.*
+> *Jos: But there must be a notification of some kind that the model was repaired.*
 
    * We should uncover _all_ problems during deserialization, not just the first one and then quit.
    * I (=MB) find it useful to do things in an FP-style, so effectively everything should be a `flatMap` of-sorts.
@@ -80,7 +69,7 @@
 > *Jos: I (JW) find that too much FP-style often makes things harder to read and understand.
 > I find readability more important than being concise, so I agree with the final criterion :-).
        We need to find the right balance here*
-      
+
   * Split readable and writable parts of `Node` interface — i.e., `Reader`, and `Writer`, in addition to `Factory` (see also above).
     * Provide factory getter and `setFeatureValue` that knows about moving children between parents in writable part.
 
