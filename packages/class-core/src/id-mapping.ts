@@ -34,6 +34,7 @@ export class IdMapping {
     constructor(nodesById: NodesById) {
         this.nodesById = {...nodesById};
     }
+    // TODO  consider using an instance of Map<Id, INodeBase> instead
 
     fromId(id: Id): INodeBase {
         if (!(id in this.nodesById)) {
@@ -43,9 +44,7 @@ export class IdMapping {
     }
 
     tryFromId = (id: Id): (INodeBase | undefined) =>
-        id in this.nodesById
-            ? this.nodesById[id]
-            : undefined;
+        this.nodesById[id];
 
     fromRefId = (idOrUnresolved: IdOrUnresolved): SingleRef<INodeBase> =>
         idOrUnresolved === null
