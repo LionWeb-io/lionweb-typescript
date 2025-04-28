@@ -29,6 +29,7 @@ This repository contains a TypeScript implementation for (parts of) the [LionWeb
 _Note_ that this repo doesn't implement the specification completely.
 In particular:
 
+* No support for release version 2024.1 (yet).
 * Not all constraints on the LionCore M3 have been implemented.
 * The functionality in the `utilities` and `validation` packages is provided “as-is”.
 
@@ -159,16 +160,15 @@ The output should look similar to this (but much longer):
 
 ### Version numbers
 
-**TODO**  explain how versions are aligned exactly
-
-To keep the version numbers of the various packages under `packages/` aligned throughout this repository, you can use the Node.js script [`update-package-versions.js`](./update-package-versions.js).
+To keep the version numbers of the various packages under `packages/` aligned throughout this repository, you use the Node.js script [`update-package-versions.js`](./update-package-versions.js).
 You execute this script as follows from the repo's root:
 
 ```shell
 node update-package-versions.js
 ```
 
-This reads the file [`packages/versions.json`](./packages/versions.json) and updates the `package.json` files of all packages under `packages/` according to it.
+This reads the file [`packages/versions.json`](./packages/versions.json) and updates the `package.json` files of all *workspace packages* (as listed in the root-level `package.json`) under `packages/` according to it.
+The format of that `versions.json` file is self-explanatory.
 This script runs `npm install` afterward to update the `package-lock.json`.
 Inspect the resulting diffs to ensure correctness, and don't forget to run `npm install` to update the `package-lock.json` in case you made corrections.
 

@@ -1,6 +1,6 @@
 {
   "name": "@lionweb/json-utils",
-  "version": "0.6.13-beta.5",
+  "version": "0.7.0-beta.0",
   "description": "Utilities for LionWeb JSON",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -25,6 +25,6 @@
     "release-beta": "npm publish --tag beta"
   },
   "dependencies": {
-    "@lionweb/json": "0.6.13-beta.5"
+    "@lionweb/json": "0.7.0-beta.0"
   }
 }

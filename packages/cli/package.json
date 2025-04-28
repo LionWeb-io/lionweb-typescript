@@ -1,6 +1,6 @@
 {
   "name": "@lionweb/cli",
-  "version": "0.6.14-beta.5",
+  "version": "0.7.0-beta.0",
   "description": "LionWeb CLI for {Java|Type}Script",
   "bin": {
     "lionweb-cli": "./dist/lionweb-cli.js"
@@ -16,10 +16,10 @@
     "url": "https://github.com/LionWeb-io/lionweb-typescript/issues"
   },
   "dependencies": {
-    "@lionweb/core": "0.6.13-beta.5",
-    "@lionweb/json-diff": "0.6.13-beta.5",
-    "@lionweb/utilities": "0.6.13-beta.5",
-    "@lionweb/validation": "0.6.13-beta.5"
+    "@lionweb/core": "0.7.0-beta.0",
+    "@lionweb/json-diff": "0.7.0-beta.0",
+    "@lionweb/utilities": "0.7.0-beta.0",
+    "@lionweb/validation": "0.7.0-beta.0"
   },
   "scripts": {
     "clean": "rm -rf dist/ lionweb-cli-*.tgz",
