@@ -27,7 +27,11 @@ export type PropertyDefinition = {
     /**
      * IS this a list property?
      */
-    isList?: boolean
+    isList?: boolean,
+    /**
+     * Is this property optional?
+     */
+    isOptional?: boolean,
     /**
      * Additional validation function
      */
@@ -55,12 +59,46 @@ export const MAY_BE_NULL = true
  * @constructor
  */
 export function PropertyDef(propDef: PropertyDefinition): PropertyDefinition {
-    const { property, expectedType, mayBeNull = false, isList = false, validate = emptyValidation } = propDef
+    const { property, expectedType, mayBeNull = false, isList = false, isOptional = false, validate = emptyValidation } = propDef
     return {
         property: property,
         expectedType: expectedType,
         isList: isList,
         mayBeNull: mayBeNull,
+        isOptional: isOptional,
         validate: validate
     }
+}
+
+export type PrimitiveDefinition = {
+    /**
+     * The expected type of the property value
+     */
+    primitiveType: string
+    /**
+     * Additional validation function
+     */
+    validate?: ValidatorFunction
+}
+/**
+ * Easy way to create a PropertyDefinition typed object with default values.
+ * @param propDef
+ * @constructor
+ */
+export function PrimitiveDef(propDef: PrimitiveDefinition): PrimitiveDefinition {
+    const { primitiveType, validate = emptyValidation } = propDef
+    return {
+        primitiveType: primitiveType,
+        validate: validate
+    }
+}
+export type ObjectDefinition = PropertyDefinition[]
+export type TypeDefinition = ObjectDefinition | PrimitiveDefinition
+
+export function isObjectDefinition(def: TypeDefinition): def is ObjectDefinition {
+    return Array.isArray(def)
+}
+
+export function isPrimitiveDefinition(def: TypeDefinition): def is PrimitiveDefinition {
+    return (def as PrimitiveDefinition)?.primitiveType !== undefined
 }

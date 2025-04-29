@@ -22,7 +22,7 @@
     "@lionweb/validation": "0.7.0-beta.0"
   },
   "scripts": {
-    "clean": "rm -rf dist/ lionweb-cli-*.tgz",
+    "clean": "rm -rf dist/ node_modules/ lionweb-cli-*.tgz",
     "build": "tsc",
     "lint": "eslint src",
     "test": "node dist/lionweb-cli.js",

@@ -18,7 +18,7 @@
     "@lionweb/utilities": "0.7.0-beta.0"
   },
   "scripts": {
-    "clean": "rm -rf dist/",
+    "clean": "rm -rf dist/ node_modules/",
     "lint": "eslint src",
     "build": "tsc && npm run generate",
     "generate": "node dist/generate-artifacts.js"
