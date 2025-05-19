@@ -15,7 +15,7 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {  IdOrUnresolved, SingleRef, unresolved } from "@lionweb/core"
+import { IdOrUnresolved, SingleRef, unresolved } from "@lionweb/core"
 import { LionWebId } from "@lionweb/json"
 
 import { INodeBase } from "./index.js"
@@ -34,6 +34,7 @@ export class IdMapping {
     constructor(nodesById: NodesById) {
         this.nodesById = {...nodesById};
     }
+    // TODO  consider using an instance of Map<Id, INodeBase> instead
 
     fromId(id: LionWebId): INodeBase {
         if (!(id in this.nodesById)) {
@@ -42,11 +43,13 @@ export class IdMapping {
         return this.nodesById[id];
     }
 
-    fromRefId(idOrUnresolved: IdOrUnresolved): SingleRef<INodeBase> {
-        return idOrUnresolved === null
+    tryFromId = (id: LionWebId): (INodeBase | undefined) =>
+        this.nodesById[id];
+
+    fromRefId = (idOrUnresolved: IdOrUnresolved): SingleRef<INodeBase> =>
+        idOrUnresolved === null
             ? null
             : (this.nodesById[idOrUnresolved] ?? unresolved);
-    }
 
     updateWith(node: INodeBase) {
         this.nodesById[node.id] = node;
