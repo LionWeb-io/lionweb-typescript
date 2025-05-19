@@ -191,13 +191,6 @@ const keyOf = <T extends IKeyed>({key}: T): LionWebKey =>
     key
 
 
-/**
- * Sorts the given {@link LanguageEntity language entities} by name.
- */
-const entitiesSortedByName = (entities: LanguageEntity[]) =>
-    sortByStringKey(entities, nameOf)
-
-
 type ConcreteClassifier = Concept | Annotation
 
 
@@ -315,7 +308,6 @@ export {
     conceptsOf,
     containmentChain,
     directlyContaineds,
-    entitiesSortedByName,
     featureMetaType,
     flatMap,
     idBasedClassifierDeducerFor,
