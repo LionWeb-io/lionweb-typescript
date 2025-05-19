@@ -5,13 +5,14 @@ import { readFileSync, writeFileSync } from "fs"
 import { libraryExtractionFacade, libraryModel } from "../instances/library.js"
 import { libraryLanguage } from "../languages/library.js"
 import { languageWithEnum } from "../languages/with-enum.js"
-import { equal } from "../utils/assertions.js"
+import { equal } from "../test-utils/assertions.js"
 
 describe("LionCore-specific textual syntax", () => {
     it("textualize language with an enum as text", () => {
         const actual = languageAsText(languageWithEnum)
-        writeFileSync("src/m3/languageWithEnum.actual.txt", actual)
-        equal(actual, readFileSync("src/m3/languageWithEnum.expected.txt", { encoding: "utf8" }))
+        const thisPath = "src/utilities"
+        writeFileSync(`${thisPath}/languageWithEnum.actual.txt`, actual)
+        equal(actual, readFileSync(`${thisPath}/languageWithEnum.expected.txt`, { encoding: "utf8" }))
     })
 })
 

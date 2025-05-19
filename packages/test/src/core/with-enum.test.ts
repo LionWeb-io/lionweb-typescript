@@ -1,7 +1,7 @@
 import { deserializeLanguages, Enumeration, serializeLanguages } from "@lionweb/core"
 
-import { languageWithEnum } from "./languages/with-enum.js"
-import { deepEqual } from "./utils/assertions.js"
+import { languageWithEnum } from "../languages/with-enum.js"
+import { deepEqual } from "../test-utils/assertions.js"
 
 describe("Language-with-enum test model", () => {
     it("roundtrip persistence of M2", () => {

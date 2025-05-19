@@ -8,7 +8,7 @@ import {
 } from "@lionweb/validation"
 import { LionWebLanguageWrapper } from "@lionweb/validation/dist/languages/LionWebLanguageWrapper.js"
 import fs from "fs"
-import { isTrue } from "../utils/assertions.js"
+import { isTrue } from "../test-utils/assertions.js"
 
 import { TestExpectation } from "./TestExpectation.js"
 

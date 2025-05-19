@@ -17,8 +17,8 @@ import {
 import { currentSerializationFormatVersion, LionWebJsonChunk } from "@lionweb/json"
 import { concatenator, lastOf } from "@lionweb/ts-utils"
 import { expect } from "chai"
-import { TestNode, TestNodeReader } from "./instances/test-node.js"
-import { dateDatatype, libraryWithDatesLanguage } from "./languages/libraryWithDates.js"
+import { TestNode, TestNodeReader } from "../instances/test-node.js"
+import { dateDatatype, libraryWithDatesLanguage } from "../languages/libraryWithDates.js"
 
 describe("serialization", () => {
     it("serializes node with custom primitive type, without registering custom deserializer", () => {
@@ -374,3 +374,17 @@ describe("serialization of empty (unset) values", () => {
         expect(actualSerializationChunk).to.eql(expectedSerializationChunk)
     })
 })
+
+describe("serialization of a language", () => {
+    it("doesn't fail when an annotation doesn't specify what it annotates", () => {
+        const factory = new LanguageFactory("annotation-language", "0", concatenator("-"), lastOf)
+        factory.annotation("annotation")
+        const serializationChunk = serializeLanguages(factory.language)
+        const annotationNode = serializationChunk.nodes.find(node => node.id === "annotation-language-annotation")
+        expect(annotationNode).to.not.be.undefined
+        const serializedReference = annotationNode!.references.find(serRef => serRef.reference.key === "Annotation-annotates")
+        expect(serializedReference).to.not.be.undefined
+        expect(serializedReference!.targets).to.eql([])
+    })
+})
+

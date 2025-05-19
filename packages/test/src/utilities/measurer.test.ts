@@ -2,11 +2,11 @@ import { serializeNodes } from "@lionweb/core"
 import { measure, readFileAsJson, writeJsonAsFile } from "@lionweb/utilities"
 import { join } from "path"
 
-import { libraryExtractionFacade, libraryModel } from "./instances/library.js"
-import { multiExtractionFacade, multiModel } from "./instances/multi.js"
-import { libraryLanguage } from "./languages/library.js"
-import { multiLanguage } from "./languages/multi.js"
-import { deepEqual } from "./utils/assertions.js"
+import { libraryExtractionFacade, libraryModel } from "../instances/library.js"
+import { multiExtractionFacade, multiModel } from "../instances/multi.js"
+import { libraryLanguage } from "../languages/library.js"
+import { multiLanguage } from "../languages/multi.js"
+import { deepEqual } from "../test-utils/assertions.js"
 
 describe("metrics computation", () => {
     const removeUndefineds = (json: unknown) => JSON.parse(JSON.stringify(json))

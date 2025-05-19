@@ -1,4 +1,4 @@
-import { deepEqual, throws } from "../utils/assertions.js"
+import { deepEqual, throws } from ".//assertions.js"
 
 describe("test helpers", () => {
     it("undefined values thwart deepEqual", () => {

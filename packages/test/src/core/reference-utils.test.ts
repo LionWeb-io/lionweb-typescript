@@ -12,7 +12,7 @@ import { LionWebId } from "@lionweb/json"
 
 import { AnotherConcept, SomeAnnotation, SomeAnnotation_ref, SomeConcept, SomeConcept_ref } from "../languages/generic.js"
 import { MyConcept, MyConcept_multivaluedRef, MyConcept_singularRef } from "../languages/tiny-ref.js"
-import { deepEqual } from "../utils/assertions.js"
+import { deepEqual } from "../test-utils/assertions.js"
 
 /*
  * These unit tests are pretty much a straight-up copy of the ones in the ReferenceUtilsTests class in the LionWeb C# implementation:

@@ -1,8 +1,8 @@
 import { checkReferences, deserializeLanguages, issuesLanguage, lioncore, serializeLanguages } from "@lionweb/core"
 import { languageAsText } from "@lionweb/utilities"
 
-import { deepEqual } from "../utils/assertions.js"
-import { logIssues, logUnresolvedReferences } from "../utils/test-helpers.js"
+import { deepEqual } from "../test-utils/assertions.js"
+import { logIssues, logUnresolvedReferences } from "../test-utils/test-helpers.js"
 
 describe("meta-circularity (LionCore)", () => {
     it("check for unresolved references", () => {
