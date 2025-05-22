@@ -2,7 +2,7 @@ import { Concept, issuesLanguage, Language, LanguageFactory } from "@lionweb/cor
 import { chain, concatenator, lastOf } from "@lionweb/ts-utils"
 import { nanoIdGen } from "@lionweb/utilities"
 
-import { deepEqual, fail } from "../utils/assertions.js"
+import { deepEqual, fail } from "../test-utils/assertions.js"
 
 describe("general LionCore constraints - name/version", () => {
     it("should (name) be non-empty", () => {

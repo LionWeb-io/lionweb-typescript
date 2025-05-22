@@ -2,13 +2,16 @@ import { builtinClassifiers, Language, LanguageFactory } from "@lionweb/core"
 import { chain, concatenator, lastOf } from "@lionweb/ts-utils"
 import { generateMermaidForLanguage, generatePlantUmlForLanguage, hasher } from "@lionweb/utilities"
 import { readFileSync, writeFileSync } from "fs"
+import { join } from "path"
 
-import { equal } from "../../utils/assertions.js"
+import { equal } from "../../test-utils/assertions.js"
 
-const readTextFile = (fileName: string): string => readFileSync(`src/m3/diagrams/${fileName}`, { encoding: "utf8" })
+const diagramsPath = "src/utilities/diagrams"
+
+const readTextFile = (fileName: string): string => readFileSync(join(diagramsPath, fileName), { encoding: "utf8" })
 
 const writeTextFile = (fileName: string, data: string) => {
-    writeFileSync(`src/m3/diagrams/${fileName}`, data, { encoding: "utf8" })
+    writeFileSync(join(diagramsPath, fileName), data, { encoding: "utf8" })
 }
 
 const rendersEqualToFileOrOverwrite = (renderer: (language: Language) => string, fileName: string) => {

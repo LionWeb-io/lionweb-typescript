@@ -1,7 +1,7 @@
 import { childrenExtractorUsing, dynamicExtractionFacade, DynamicNode, Node, nodesExtractorUsing } from "@lionweb/core"
 
-import { Annotated, Circle, Coord } from "./languages/shapes.js"
-import { deepEqual } from "./utils/assertions.js"
+import { Annotated, Circle, Coord } from "../languages/shapes.js"
+import { deepEqual } from "../test-utils/assertions.js"
 
 const center = {
     id: "center",

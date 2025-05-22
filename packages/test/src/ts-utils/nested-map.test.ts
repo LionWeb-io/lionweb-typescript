@@ -10,7 +10,7 @@ import {
     nestedFlatMap3
 } from "@lionweb/ts-utils"
 import { sumNumbers } from "@lionweb/utilities/dist/serialization/measurer.js"
-import { deepEqual } from "../utils/assertions.js"
+import { deepEqual } from "../test-utils/assertions.js"
 
 describe("nested map utils work", () => {
     it("mapValuesMapper", () => {

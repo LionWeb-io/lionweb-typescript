@@ -2,7 +2,6 @@ import {
     Annotation,
     Concept,
     Containment,
-    entitiesSortedByName,
     Enumeration,
     Feature,
     Interface,
@@ -11,6 +10,7 @@ import {
     Language,
     LanguageEntity,
     Link,
+    nameSorted,
     nonRelationalFeatures,
     PrimitiveType,
     relationsOf,
@@ -38,9 +38,9 @@ export const generateMermaidForLanguage = ({ entities }: Language) =>
         `classDiagram
 
 `,
-        indented(entitiesSortedByName(entities).map(generateForEntity)),
+        indented(nameSorted(entities).map(generateForEntity)),
         ``,
-        indented(entitiesSortedByName(entities).map(generateForRelationsOf)),
+        indented(nameSorted(entities).map(generateForRelationsOf)),
         ``,
         "```"
     ])

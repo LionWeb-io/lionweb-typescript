@@ -1,7 +1,7 @@
 import { LanguageFactory } from "@lionweb/core"
 import { concatenator, lastOf } from "@lionweb/ts-utils"
 
-import { equal } from "../utils/assertions.js"
+import { equal } from "../test-utils/assertions.js"
 
 describe("M3 types", () => {
     it("factory performs auto-containment, but also prevents duplication", () => {

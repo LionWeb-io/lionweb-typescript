@@ -2,7 +2,6 @@ import {
     Annotation,
     Concept,
     Containment,
-    entitiesSortedByName,
     Enumeration,
     Feature,
     Interface,
@@ -12,6 +11,7 @@ import {
     LanguageEntity,
     Link,
     nameOf,
+    nameSorted,
     nonRelationalFeatures,
     PrimitiveType,
     relationsOf,
@@ -35,13 +35,13 @@ hide empty members
 
 
 `,
-        entitiesSortedByName(entities).map(generateForEntity),
+        nameSorted(entities).map(generateForEntity),
         `
 
 ' relations:
 
 `,
-        entitiesSortedByName(entities).map(generateForRelationsOf),
+        nameSorted(entities).map(generateForRelationsOf),
         `
 @enduml
 `

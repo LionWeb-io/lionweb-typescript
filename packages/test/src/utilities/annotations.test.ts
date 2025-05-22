@@ -3,7 +3,7 @@ import { currentSerializationFormatVersion, LionWebJsonChunk } from "@lionweb/js
 import { genericAsTreeText, languageAsText, readFileAsJson, withoutAnnotations } from "@lionweb/utilities"
 import { readFileSync } from "fs"
 
-import { deepEqual, equal } from "./utils/assertions.js"
+import { deepEqual, equal } from "../test-utils/assertions.js"
 
 describe("annotation remover", () => {
     it("removes annotation instances and references to it", () => {

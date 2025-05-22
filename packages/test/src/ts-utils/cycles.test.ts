@@ -1,7 +1,6 @@
-
 import { cycleWith } from "@lionweb/ts-utils"
 
-import { deepEqual, isTrue } from "./assertions.js"
+import { deepEqual, isTrue } from "../test-utils/assertions.js"
 
 describe("cycleWith", () => {
     type Obj = {

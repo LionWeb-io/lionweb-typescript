@@ -14,11 +14,11 @@ import {
 import { currentSerializationFormatVersion, LionWebJsonChunk } from "@lionweb/json"
 import { expect } from "chai"
 
-import { BaseNode } from "./instances/base.js"
-import { libraryInstantiationFacade } from "./instances/library.js"
-import { libraryLanguage } from "./languages/library.js"
-import { dateDatatype, libraryWithDatesLanguage } from "./languages/libraryWithDates.js"
-import { deepEqual, equal } from "./utils/assertions.js"
+import { BaseNode } from "../instances/base.js"
+import { libraryInstantiationFacade } from "../instances/library.js"
+import { libraryLanguage } from "../languages/library.js"
+import { dateDatatype, libraryWithDatesLanguage } from "../languages/libraryWithDates.js"
+import { deepEqual, equal } from "../test-utils/assertions.js"
 
 type NodeWithProperties = BaseNode & { properties: Record<string, unknown> }
 

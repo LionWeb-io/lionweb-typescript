@@ -1,11 +1,11 @@
 import { serializeLanguages, serializeNodes } from "@lionweb/core"
 import { deriveLikelyPropertyName, inferLanguagesFromSerializationChunk, sortedSerializationChunk } from "@lionweb/utilities"
 
-import { libraryExtractionFacade, libraryModel } from "./instances/library.js"
-import { multiExtractionFacade, multiModel } from "./instances/multi.js"
-import { minimalLibraryLanguage } from "./languages/minimal-library.js"
-import { multiLanguage } from "./languages/multi.js"
-import { deepEqual, equal } from "./utils/assertions.js"
+import { libraryExtractionFacade, libraryModel } from "../instances/library.js"
+import { multiExtractionFacade, multiModel } from "../instances/multi.js"
+import { minimalLibraryLanguage } from "../languages/minimal-library.js"
+import { multiLanguage } from "../languages/multi.js"
+import { deepEqual, equal } from "../test-utils/assertions.js"
 
 describe("inferLanguagesFromChunk", () => {
     it("should correctly infer the minimal library language from the instance", () => {

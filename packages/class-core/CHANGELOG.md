@@ -3,6 +3,7 @@
 ## 0.7.0
 
 * Replace util functions with ones from `ts-utils`.
+* Add a method `tryFromId` to the `IdMapping` class that returns `undefined` on an unknown ID, rather than throwing an error.
 
 
 ## 0.6.13

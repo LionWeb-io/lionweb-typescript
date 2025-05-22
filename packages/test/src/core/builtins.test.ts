@@ -1,7 +1,7 @@
 import { checkReferences, issuesLanguage, lioncoreBuiltins } from "@lionweb/core"
 
-import { deepEqual } from "../utils/assertions.js"
-import { logIssues, logUnresolvedReferences } from "../utils/test-helpers.js"
+import { deepEqual } from "../test-utils/assertions.js"
+import { logIssues, logUnresolvedReferences } from "../test-utils/test-helpers.js"
 
 describe("primitive types built-in to LionCore", () => {
     it("check for unresolved references", () => {

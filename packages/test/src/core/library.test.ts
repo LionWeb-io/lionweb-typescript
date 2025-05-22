@@ -1,14 +1,15 @@
 import {
+    deserializeLanguages,
     deserializeSerializationChunk,
     dynamicInstantiationFacade,
-    DynamicNode,
-    nameBasedClassifierDeducerFor,
+    DynamicNode, lioncoreBuiltins,
+    nameBasedClassifierDeducerFor, serializeLanguages,
     serializeNodes
 } from "@lionweb/core"
 
-import { libraryExtractionFacade, libraryInstantiationFacade, libraryModel } from "./instances/library.js"
-import { libraryLanguage } from "./languages/library.js"
-import { deepEqual } from "./utils/assertions.js"
+import { libraryExtractionFacade, libraryInstantiationFacade, libraryModel } from "../instances/library.js"
+import { libraryLanguage } from "../languages/library.js"
+import { deepEqual } from "../test-utils/assertions.js"
 
 describe("Library test model", () => {
     it("[de-]serialize example library", () => {
@@ -33,3 +34,18 @@ describe("Library test model", () => {
         deepEqual(book.settings["author"], writer)
     })
 })
+
+describe("Library test metamodel", () => {
+    it("LionCore built-in primitive types are implicit", () => {
+        libraryLanguage.dependingOn(lioncoreBuiltins)
+        deepEqual(libraryLanguage.dependsOn, [])
+    })
+
+    it("serialize it", () => {
+        const serialization = serializeLanguages(libraryLanguage)
+        const deserialization = deserializeLanguages(serialization)
+        deepEqual(deserialization.length, 1)
+        deepEqual(deserialization[0], libraryLanguage)
+    })
+})
+
