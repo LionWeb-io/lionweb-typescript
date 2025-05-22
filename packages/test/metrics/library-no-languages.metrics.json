@@ -1,0 +1,37 @@
+{
+  "languagesWithInstantiations": [
+    {
+      "key": "library",
+      "version": "1",
+      "instantiations": 3
+    }
+  ],
+  "instantiatedClassifiers": [
+    {
+      "language": {
+        "key": "library",
+        "version": "1"
+      },
+      "key": "Library",
+      "instantiations": 1
+    },
+    {
+      "language": {
+        "key": "library",
+        "version": "1"
+      },
+      "key": "Book",
+      "instantiations": 1
+    },
+    {
+      "language": {
+        "key": "library",
+        "version": "1"
+      },
+      "key": "GuideBookWriter",
+      "instantiations": 1
+    }
+  ],
+  "languagesWithoutInstantiations": [],
+  "uninstantiatedInstantiableClassifiers": []
+}
