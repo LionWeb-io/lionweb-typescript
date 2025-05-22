@@ -15,30 +15,18 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {asString, commaSeparated, when} from "littoral-templates"
-import {indent} from "@lionweb/class-core-generator"
+import { indent } from "@lionweb/class-core-generator"
+import { asString, commaSeparated, when } from "littoral-templates"
 
-import {
-    Delta,
-    FeatureType,
-    Field,
-    IndexType,
-    NodeType,
-    PrimitiveValueType,
-    RefOnly,
-    Type
-} from "../definition/Deltas.g.js"
-import {tsTypeForFeatureKind} from "./helpers.js"
-
+import { Delta, FeatureType, Field, IndexType, NodeType, PrimitiveValueType, RefOnly, Type } from "../definition/Deltas.g.js"
+import { tsTypeForFeatureKind } from "./helpers.js"
 
 const tsTypeForClassField = (type: Type) => {
     if (type instanceof FeatureType) {
         return tsTypeForFeatureKind(type.kind)
     }
     if (type instanceof NodeType) {
-        return type.serialization instanceof RefOnly
-            ? "SingleRef<INodeBase>"
-            : "INodeBase"
+        return type.serialization instanceof RefOnly ? "SingleRef<INodeBase>" : "INodeBase"
     }
     if (type instanceof IndexType) {
         return "number"

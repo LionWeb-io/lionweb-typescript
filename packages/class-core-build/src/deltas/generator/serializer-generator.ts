@@ -15,8 +15,9 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {asString, commaSeparated} from "littoral-templates"
-import {indent, sortedStrings} from "@lionweb/class-core-generator"
+import { sortedStrings } from "@lionweb/ts-utils"
+import { indent } from "@lionweb/class-core-generator"
+import { asString, commaSeparated } from "littoral-templates"
 
 import {
     Delta,
@@ -29,17 +30,14 @@ import {
     SerializeSubTree,
     Type
 } from "../definition/Deltas.g.js"
-import {isSerializingAsChunk} from "./helpers.js"
-
+import { isSerializingAsChunk } from "./helpers.js"
 
 const serializationExpressionFor = (name: string, type: Type) => {
     if (type instanceof FeatureType) {
         return `metaPointerFor(delta.${name})`
     }
     if (type instanceof NodeType) {
-        return type.serialization instanceof RefOnly
-            ? `idFrom(delta.${name})`
-            : `delta.${name}.id`
+        return type.serialization instanceof RefOnly ? `idFrom(delta.${name})` : `delta.${name}.id`
     }
     if (type instanceof IndexType) {
         return `delta.${name}`

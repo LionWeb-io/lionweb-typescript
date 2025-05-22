@@ -15,12 +15,11 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {asString, indentWith, Template} from "littoral-templates"
-import {allFeaturesOf, Containment, Feature, Property, Reference, unresolved} from "@lionweb/core"
+import { allFeaturesOf, Containment, Feature, Property, Reference, unresolved } from "@lionweb/core"
+import { asString, indentWith, Template } from "littoral-templates"
 
-import {INodeBase} from "./base-types.js";
-import {LionCore_builtinsBase} from "./lionCore_builtins.g.js";
-
+import { INodeBase } from "./base-types.js"
+import { LionCore_builtinsBase } from "./lionCore_builtins.g.js"
 
 const indent = indentWith("    ")(1)
 

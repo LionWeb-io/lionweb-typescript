@@ -15,19 +15,16 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {equal} from "./assertions.js";
+import { equal } from "./assertions.js"
 
-import {TestEnumeration, TestLanguageBase} from "./gen/TestLanguage.g.js";
-
+import { TestEnumeration, TestLanguageBase } from "./gen/TestLanguage.g.js"
 
 describe("support for enumerations", () => {
-
-    const testLanguageBase = TestLanguageBase.INSTANCE;
+    const testLanguageBase = TestLanguageBase.INSTANCE
 
     it("runtime representation of enums", () => {
-        equal(TestEnumeration.literal1, testLanguageBase.TestEnumeration_literal1.key);
-        equal(testLanguageBase.enumLiteralFrom(testLanguageBase.TestEnumeration_literal2), TestEnumeration.literal2);
-    });
-
-});
+        equal(TestEnumeration.literal1, testLanguageBase.TestEnumeration_literal1.key)
+        equal(testLanguageBase.enumLiteralFrom(testLanguageBase.TestEnumeration_literal2), TestEnumeration.literal2)
+    })
+})
 

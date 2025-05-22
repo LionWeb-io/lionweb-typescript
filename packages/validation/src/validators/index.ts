@@ -1,5 +1,4 @@
 export * from "./generic/index.js"
-export * from "./generic/ValidationResult.js"
 export * from "./LionWebSyntaxValidator.js"
 export * from "./LionWebReferenceValidator.js"
 export * from "./LionWebLanguageValidator.js"

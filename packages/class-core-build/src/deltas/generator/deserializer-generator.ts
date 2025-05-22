@@ -15,21 +15,19 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {asString, commaSeparated} from "littoral-templates"
-import {indent, sortedStrings} from "@lionweb/class-core-generator"
+import { sortedStrings } from "@lionweb/ts-utils"
+import { indent } from "@lionweb/class-core-generator"
+import { asString, commaSeparated } from "littoral-templates"
 
-import {Delta, FeatureType, IndexType, NodeType, PrimitiveValueType, RefOnly, Type} from "../definition/Deltas.g.js"
-import {tsTypeForFeatureKind} from "./helpers.js"
-
+import { Delta, FeatureType, IndexType, NodeType, PrimitiveValueType, RefOnly, Type } from "../definition/Deltas.g.js"
+import { tsTypeForFeatureKind } from "./helpers.js"
 
 const deserializationExpressionForField = (name: string, type: Type) => {
     if (type instanceof FeatureType) {
         return `symbolTable.featureMatching(${type.container?.name ?? "<?container?>"}.classifier.metaPointer(), delta.${name}) as ${tsTypeForFeatureKind(type.kind)}`
     }
     if (type instanceof NodeType) {
-        return type.serialization instanceof RefOnly
-            ? `idMapping.fromRefId(delta.${name})`
-            : `idMapping.fromId(delta.${name})`
+        return type.serialization instanceof RefOnly ? `idMapping.fromRefId(delta.${name})` : `idMapping.fromId(delta.${name})`
     }
     if (type instanceof IndexType || type instanceof PrimitiveValueType) {
         return `delta.${name}`

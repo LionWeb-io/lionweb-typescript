@@ -1,4 +1,4 @@
-import { LionWebId, LionWebJsonMetaPointer, LionWebJsonNode } from "../json/LionWebJson.js"
+import { LionWebId, LionWebJsonMetaPointer, LionWebJsonNode } from "@lionweb/json"
 import { LionWebLanguageWrapper } from "./LionWebLanguageWrapper.js"
 import { MetaPointerMap } from "./MetaPointerMap.js"
 

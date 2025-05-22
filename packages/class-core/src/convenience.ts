@@ -15,14 +15,11 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {
-    Id,
-    incomingReferences as lwIncomingReferences,
-    ReferenceValue
-} from "@lionweb/core";
-import {deepDuplicateWith, DeltaHandler, IdMapping, ILanguageBase, INodeBase} from "./index.js";
-import {nodeBaseReader} from "./serializer.js";
-import {NodeDuplicator} from "./duplicator.js";
+import { incomingReferences as lwIncomingReferences, ReferenceValue } from "@lionweb/core"
+import { LionWebId } from "@lionweb/json"
+import { NodeDuplicator } from "./duplicator.js"
+import { deepDuplicateWith, DeltaHandler, IdMapping, ILanguageBase, INodeBase } from "./index.js"
+import { nodeBaseReader } from "./serializer.js"
 
 
 /**
@@ -69,7 +66,7 @@ export const deepClonerFor = (languageBases: ILanguageBase[], handleDelta?: Delt
 /**
  * Type definition for functions that compute a – not necessarily new – ID from a given original {@link INodeBase node}.
  */
-export type NewIdFunction = (originalNode: INodeBase) => Id;
+export type NewIdFunction = (originalNode: INodeBase) => LionWebId;
 
 
 /**

@@ -31,12 +31,15 @@ import {
     Classifier,
     Concept,
     EnumerationLiteral,
-    Id,
     Interface,
     Language,
     PrimitiveType,
     Property
 } from "@lionweb/core";
+
+import {
+    LionWebId
+} from "@lionweb/json";
 
 import {
     DeltaHandler,
@@ -108,7 +111,7 @@ export class LionCore_builtinsBase implements ILanguageBase {
     }
 
     factory(_handleDelta?: DeltaHandler): NodeBaseFactory {
-        return (classifier: Classifier, _id: Id) => {
+        return (classifier: Classifier, _id: LionWebId) => {
             const {language} = classifier;
             throw new Error(`can't instantiate ${classifier.name} (key=${classifier.key}): classifier is not known in language ${language.name} (key=${language.key}, version=${language.version})`);
         }

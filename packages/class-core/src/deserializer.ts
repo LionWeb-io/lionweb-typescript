@@ -16,34 +16,32 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import {
-    byIdMap,
     Classifier,
     Containment,
     DefaultPrimitiveTypeDeserializer,
     defaultSimplisticHandler,
     Enumeration,
-    Id,
     Language,
     MemoisingSymbolTable,
     PrimitiveType,
     PrimitiveTypeDeserializer,
     Property,
     Reference,
-    SerializationChunk,
-    SerializedNode,
     SimplisticHandler,
     unresolved
-} from "@lionweb/core";
+} from "@lionweb/core"
+import { LionWebId, LionWebJsonChunk, LionWebJsonNode } from "@lionweb/json"
+import { byIdMap } from "@lionweb/ts-utils"
 
-import {DeltaHandler, IdMapping, ILanguageBase, INodeBase} from "./index.js";
-import {NodesToInstall} from "./linking.js";
+import { DeltaHandler, IdMapping, ILanguageBase, INodeBase } from "./index.js"
+import { NodesToInstall } from "./linking.js"
 
 
 /**
  * A type for deserializer functions that are parametrized in their return type.
  */
 export type Deserializer<T> = (
-    serializationChunk: SerializationChunk,
+    serializationChunk: LionWebJsonChunk,
     dependentNodes?: INodeBase[],
     primitiveTypeDeserializer?: PrimitiveTypeDeserializer,
     problemHandler?: SimplisticHandler
@@ -74,7 +72,7 @@ export type RootsWithIdMapping = { roots: INodeBase[], idMapping: IdMapping };
 
 /**
  * @return a {@link Deserializer} function for the given languages (given as {@link ILanguageBase}s) that returns a {@link RootsWithIdMapping}.
- * @param languageBases the {@link ILanguageBase}s for (at least) all the languages used in the {@link SerializationChunk} to deserialize, minus LionCore M3 and built-ins.
+ * @param languageBases the {@link ILanguageBase}s for (at least) all the languages used in the {@link LionWebJsonChunk} to deserialize, minus LionCore M3 and built-ins.
  * @param handleDelta an optional {@link DeltaHandler} that will be injected in all {@link INodeBase nodes} created.
  */
 export const nodeBaseDeserializerWithIdMapping = (languageBases: ILanguageBase[], handleDelta?: DeltaHandler): Deserializer<RootsWithIdMapping> => {
@@ -84,7 +82,7 @@ export const nodeBaseDeserializerWithIdMapping = (languageBases: ILanguageBase[]
     const factoryFor = factoryLookupFor(languageBases, handleDelta);
 
     return (
-        serializationChunk: SerializationChunk,
+        serializationChunk: LionWebJsonChunk,
         dependentNodes: INodeBase[] = [],
         primitiveTypeDeserializer: PrimitiveTypeDeserializer = new DefaultPrimitiveTypeDeserializer(),
         problemsHandler: SimplisticHandler = defaultSimplisticHandler
@@ -92,7 +90,7 @@ export const nodeBaseDeserializerWithIdMapping = (languageBases: ILanguageBase[]
 
         const nodesToInstall: NodesToInstall[] = [];
 
-        const createNode = ({id, classifier: classifierMetaPointer, properties, containments, references, annotations}: SerializedNode) => {
+        const createNode = ({id, classifier: classifierMetaPointer, properties, containments, references, annotations}: LionWebJsonNode) => {
             const languageMessage = `language ${classifierMetaPointer.language} (${classifierMetaPointer.version})`;
             const classifier = symbolTable.entityMatching(classifierMetaPointer);
             if (classifier === undefined || !(classifier instanceof Classifier)) {
@@ -161,7 +159,7 @@ export const nodeBaseDeserializerWithIdMapping = (languageBases: ILanguageBase[]
 
         const dependentNodesById = byIdMap(dependentNodes)
 
-        const lookupNodeById = (id: Id) =>
+        const lookupNodeById = (id: LionWebId) =>
             nodesById[id] ?? dependentNodesById[id];
 
         nodesToInstall.forEach(([node, feature, ids]) => {
@@ -218,13 +216,13 @@ export const nodeBaseDeserializerWithIdMapping = (languageBases: ILanguageBase[]
 
 /**
  * @return a {@link Deserializer} function for the languages (given as {@link ILanguageBase}s) that returns the roots (of type {@link INodeBase}) of the deserialized model.
- * @param languageBases the {@link ILanguageBase}s for (at least) all the languages used in the {@link SerializationChunk} to deserialize, minus LionCore M3 and built-ins.
+ * @param languageBases the {@link ILanguageBase}s for (at least) all the languages used in the {@link LionWebJsonChunk} to deserialize, minus LionCore M3 and built-ins.
  * @param handleDelta an optional {@link DeltaHandler} that will be injected in all {@link INodeBase nodes} created.
  */
 export const nodeBaseDeserializer = (languageBases: ILanguageBase[], handleDelta?: DeltaHandler): Deserializer<INodeBase[]> => {
     const deserializerWithIdMapping = nodeBaseDeserializerWithIdMapping(languageBases, handleDelta);
     return (
-        serializationChunk: SerializationChunk,
+        serializationChunk: LionWebJsonChunk,
         dependentNodes: INodeBase[] = [],
         primitiveTypeDeserializer: PrimitiveTypeDeserializer = new DefaultPrimitiveTypeDeserializer(),
         problemsHandler: SimplisticHandler = defaultSimplisticHandler

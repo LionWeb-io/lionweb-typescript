@@ -1,47 +1,41 @@
-import {writeFileSync} from "fs"
-
-import {Language, lioncore, lioncoreBuiltins, serializeLanguages, serializeNodes} from "@lionweb/core"
+import { Language, lioncore, lioncoreBuiltins, serializeLanguages, serializeNodes } from "@lionweb/core"
+import { libraryExtractionFacade, libraryModel } from "@lionweb/test/dist/instances/library.js"
+import { multiExtractionFacade, multiModel } from "@lionweb/test/dist/instances/multi.js"
+import { libraryLanguage } from "@lionweb/test/dist/languages/library.js"
+import { multiLanguage } from "@lionweb/test/dist/languages/multi.js"
+import { shapesLanguage } from "@lionweb/test/dist/languages/shapes.js"
+import { languageWithEnum } from "@lionweb/test/dist/languages/with-enum.js"
 import {
-    languageAsText,
     generateMermaidForLanguage,
     generatePlantUmlForLanguage,
     GenerationOptions,
+    languageAsText,
     tsTypesForLanguage,
     writeJsonAsFile
 } from "@lionweb/utilities"
-import {libraryLanguage} from "@lionweb/test/dist/languages/library.js"
-import {multiLanguage} from "@lionweb/test/dist/languages/multi.js"
-import {languageWithEnum} from "@lionweb/test/dist/languages/with-enum.js"
-import {libraryExtractionFacade, libraryModel} from "@lionweb/test/dist/instances/library.js"
-import {multiExtractionFacade, multiModel} from "@lionweb/test/dist/instances/multi.js"
-import {shapesLanguage} from "@lionweb/test/dist/languages/shapes.js"
-import {diagramPath, instancePath, languagePath} from "./paths.js"
+import { writeFileSync } from "fs"
+import { diagramPath, instancePath, languagePath } from "./paths.js"
 
-
-writeFileSync(diagramPath( "metametamodel-gen.puml"), generatePlantUmlForLanguage(lioncore))
+writeFileSync(diagramPath("metametamodel-gen.puml"), generatePlantUmlForLanguage(lioncore))
 writeFileSync(diagramPath("metametamodel-gen.md"), generateMermaidForLanguage(lioncore))
 console.log(`generated diagrams for LionCore M3`)
 
-writeFileSync(diagramPath( "builtins.puml"), generatePlantUmlForLanguage(lioncoreBuiltins))
+writeFileSync(diagramPath("builtins.puml"), generatePlantUmlForLanguage(lioncoreBuiltins))
 writeFileSync(diagramPath("builtins.md"), generateMermaidForLanguage(lioncoreBuiltins))
 console.log(`generated diagrams for LionCore Built-ins`)
-
 
 const saveLanguageFiles = (language: Language, name: string, ...generationOptions: GenerationOptions[]) => {
     writeJsonAsFile(languagePath(`${name}.json`), serializeLanguages(language))
     writeFileSync(languagePath(`${name}.txt`), languageAsText(language))
     writeFileSync(languagePath(`${name}.ts.txt`), tsTypesForLanguage(language, ...generationOptions))
-        // (Generate with a '.txt' file extension to avoid it getting picked up by the compiler.)
+    // (Generate with a '.txt' file extension to avoid it getting picked up by the compiler.)
     console.log(`saved files for ${language.name} M2`)
 }
-
 
 saveLanguageFiles(lioncore, "lioncore")
 saveLanguageFiles(lioncoreBuiltins, "builtins")
 
-
 saveLanguageFiles(shapesLanguage, "shapes", GenerationOptions.assumeSealed)
-
 
 saveLanguageFiles(libraryLanguage, "library")
 
@@ -52,12 +46,9 @@ console.log(`generated diagrams for Library M2`)
 writeJsonAsFile(instancePath("library.json"), serializeNodes(libraryModel, libraryExtractionFacade))
 console.log(`serialized library M1`)
 
-
 saveLanguageFiles(languageWithEnum, "with-enum")
-
 
 saveLanguageFiles(multiLanguage, "multi")
 
 writeJsonAsFile(instancePath("multi.json"), serializeNodes(multiModel, multiExtractionFacade))
 console.log(`serialized multi-language M1`)
-

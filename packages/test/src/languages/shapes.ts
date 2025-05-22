@@ -1,13 +1,8 @@
-import {builtinClassifiers, builtinPrimitives, chain, concatenator, LanguageFactory, lastOf} from "@lionweb/core"
-import {hasher} from "@lionweb/utilities"
+import { builtinClassifiers, builtinPrimitives, LanguageFactory } from "@lionweb/core"
+import { chain, concatenator, lastOf } from "@lionweb/ts-utils"
+import { hasher } from "@lionweb/utilities"
 
-
-const factory = new LanguageFactory(
-    "Shapes",
-    "1",
-    chain(concatenator("-"), hasher({ encoding: "base64" })),
-    lastOf
-)
+const factory = new LanguageFactory("Shapes", "1", chain(concatenator("-"), hasher({ encoding: "base64" })), lastOf)
 export const shapesLanguage = factory.language
 
 export const Coord = factory.concept("Coord", false)
@@ -27,5 +22,3 @@ factory.property(Coord, "y").ofType(builtinPrimitives.integerDatatype)
 factory.property(Coord, "z").ofType(builtinPrimitives.integerDatatype)
 
 export const Annotated = factory.annotation("Annotated").annotating(Shape)
-
-

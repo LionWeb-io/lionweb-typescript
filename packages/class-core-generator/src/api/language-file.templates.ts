@@ -15,25 +15,19 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {Concept, groupBy, Language} from "@lionweb/core"
-import {asString, commaSeparated, when, withNewlineAppended} from "littoral-templates"
+import { sortedStringsByUppercase } from "@lionweb/ts-utils"
+import { Concept, Language } from "@lionweb/core"
+import { dependencyOrderOf, groupBy } from "@lionweb/ts-utils"
+import { asString, commaSeparated, when, withNewlineAppended } from "littoral-templates"
+import { indent } from "../utils/textgen.js"
 
-import {typeForLanguageEntity} from "./entity-types.templates.js"
-import {reflectiveClassFor} from "./reflective-layer.templates.js"
-import {indent} from "../utils/textgen.js"
-import {sortedStringsByUppercase} from "../utils/string-sorting.js"
-import {dependencyOrderOf} from "../utils/toposort.js"
-import {Imports} from "./helpers/index.js"
-import {GeneratorOptions} from "./generator.js"
-
+import { typeForLanguageEntity } from "./entity-types.templates.js"
+import { GeneratorOptions } from "./generator.js"
+import { Imports } from "./helpers/index.js"
+import { reflectiveClassFor } from "./reflective-layer.templates.js"
 
 const importStatement = (dep: string, items: string[]) =>
-    when(items.length > 0)([
-        `import {`,
-        indent(commaSeparated(sortedStringsByUppercase(items))),
-        `} from "${dep}";`,
-        ``
-    ])
+    when(items.length > 0)([`import {`, indent(commaSeparated(sortedStringsByUppercase(items))), `} from "${dep}";`, ``])
 
 
 export const languageFileFor = (language: Language, options: GeneratorOptions) => {
@@ -71,6 +65,7 @@ export const languageFileFor = (language: Language, options: GeneratorOptions) =
         ``,
         ``,
         importStatement(`@lionweb/core`, imports.coreImports),
+        importStatement(`@lionweb/json`, imports.jsonImports),
         importStatement(options.genericImportLocation, imports.genericImports),
         importStatement(`./index.g.js`, imports.languageImports),
         postImportsPart

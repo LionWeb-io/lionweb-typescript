@@ -1,5 +1,4 @@
-import {join} from "path"
-
+import { join } from "path"
 
 const diagramsPath = "diagrams"
 export const diagramPath = (fileName: string) => join(diagramsPath, fileName)
@@ -10,4 +9,3 @@ const languagesPath = join(chunksPath, "languages")
 
 export const instancePath = (fileName: string) => join(instancesPath, fileName)
 export const languagePath = (fileName: string) => join(languagesPath, fileName)
-

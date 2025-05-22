@@ -1,7 +1,5 @@
-import {extname} from "path"
-
-import {readSerializationChunk, sortedSerializationChunk, writeJsonAsFile} from "@lionweb/utilities"
-
+import { readSerializationChunk, sortedSerializationChunk, writeJsonAsFile } from "@lionweb/utilities"
+import { extname } from "path"
 
 export const sortSerializationChunkAt = async (path: string) => {
     const chunk = await readSerializationChunk(path)
@@ -10,4 +8,3 @@ export const sortSerializationChunkAt = async (path: string) => {
     writeJsonAsFile(extLessPath + ".sorted.json", sortedJson)
     console.log(`sorted: "${path}" -> ${extLessPath}`)
 }
-

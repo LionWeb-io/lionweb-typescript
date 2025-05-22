@@ -15,12 +15,12 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {Property} from "@lionweb/core";
-import {action, IObservableValue, observable} from "mobx";
+import { Property } from "@lionweb/core"
+import { action, IObservableValue, observable } from "mobx"
+import { INodeBase } from "../base-types.js"
+import { PropertyAddedDelta, PropertyChangedDelta, PropertyDeletedDelta } from "../deltas/index.js"
 
-import {FeatureValueManager} from "./base.js";
-import {INodeBase} from "../base-types.js";
-import {PropertyAddedDelta, PropertyChangedDelta, PropertyDeletedDelta} from "../deltas/index.js";
+import { FeatureValueManager } from "./base.js"
 
 
 /**

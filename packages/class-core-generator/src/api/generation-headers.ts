@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: LicenseRef-TRUMPF
 
-import {asString} from "littoral-templates"
+import { asString } from "littoral-templates"
 
 /**
  * @return the given string, reversed — "abc" -> "cba"

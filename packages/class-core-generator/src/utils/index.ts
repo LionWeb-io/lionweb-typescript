@@ -16,6 +16,5 @@
 // SPDX-License-Identifier: Apache-2.0
 
 export {asTypeScript} from "./json-as-ts.js"
-export {sortedStrings, sortedStringsByUppercase} from "./string-sorting.js"
 export {indent} from "./textgen.js"
 

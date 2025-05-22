@@ -28,7 +28,6 @@ import {
     Reference
 } from "@lionweb/core"
 
-
 export const TestLanguage = new Language("TestLanguage", "0", "TestLanguage", "TestLanguage")
 
 const TestEnumeration = new Enumeration(TestLanguage, "TestEnumeration", "TestEnumeration", "TestEnumeration")

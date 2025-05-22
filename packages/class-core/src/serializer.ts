@@ -25,9 +25,9 @@ import {
     Property,
     Reference,
     serializeNodes
-} from "@lionweb/core";
+} from "@lionweb/core"
 
-import {INodeBase, LionCore_builtinsBase} from "./index.js";
+import { INodeBase, LionCore_builtinsBase } from "./index.js"
 
 
 /**
@@ -79,7 +79,7 @@ export const nodeBaseReader: ExtractionFacade<INodeBase> = {
 };
 
 /**
- * @return a serialization of the given nodes (of type {@link INodeBase}) as a {@link SerializationChunk}.
+ * @return a serialization of the given nodes (of type {@link INodeBase}) as a {@link LionWebJsonChunk}.
  */
 export const serializeNodeBases = (nodes: INodeBase[]) =>
     serializeNodes(nodes, nodeBaseReader, { serializeEmptyFeatures: false });

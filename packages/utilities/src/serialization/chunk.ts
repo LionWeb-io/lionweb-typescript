@@ -1,23 +1,16 @@
-import {
-    currentSerializationFormatVersion,
-    deserializeLanguages,
-    Language,
-    lioncoreKey,
-    SerializationChunk,
-    SerializedLanguageReference
-} from "@lionweb/core"
-import {readFileAsJson} from "../utils/json.js"
-import {picker} from "../utils/object.js"
+import { deserializeLanguages, Language, lioncoreKey } from "@lionweb/core"
+import { currentSerializationFormatVersion, LionWebJsonChunk, LionWebJsonUsedLanguage } from "@lionweb/json"
+import { readFileAsJson } from "../utils/json.js"
 
 
 /**
- * Reads the file at the given path as a {@link SerializationChunk serialization chunk}.
+ * Reads the file at the given path as a {@link LionWebJsonChunk serialization chunk}.
  * **Note** that it's only checked that the file exists and can be parsed as JSON,
  * _not_ whether it satisfies the specified serialization chunk format!
  */
 export const readSerializationChunk = async (path: string) => {
     try {
-        return readFileAsJson(path) as SerializationChunk
+        return readFileAsJson(path) as LionWebJsonChunk
     } catch (e) {
         console.error(`${path} is not a valid JSON file`)
         throw e
@@ -71,18 +64,18 @@ const flatMapDistinct = <T>(tss: (T[])[], equalFunc: (l: T, r: T) => boolean) =>
         []
     )
 
-const areEqual = (left: SerializedLanguageReference, right: SerializedLanguageReference): boolean =>
+const areEqual = (left: LionWebJsonUsedLanguage, right: LionWebJsonUsedLanguage): boolean =>
     left.key === right.key && left.version === right.version
 
 
 /**
- * @return the combination of the given {@link SerializationChunk serialization chunks} into one.
+ * @return the combination of the given {@link LionWebJsonChunk serialization chunks} into one.
  */
-export const combinationOf = (serializationChunks: SerializationChunk[]): SerializationChunk =>
+export const combinationOf = (serializationChunks: LionWebJsonChunk[]): LionWebJsonChunk =>
     ({
         serializationFormatVersion: currentSerializationFormatVersion,
-        languages: flatMapDistinct(serializationChunks.map(picker("languages")), areEqual),
-        nodes: serializationChunks.flatMap(picker("nodes"))
+        languages: flatMapDistinct(serializationChunks.map(({languages}) => languages), areEqual),
+        nodes: serializationChunks.flatMap(({nodes}) => nodes)
     })
 
 

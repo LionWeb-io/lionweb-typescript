@@ -1,37 +1,35 @@
+import { isEqualMetaPointer, LionWebJsonContainment, LionWebJsonNode, LionWebJsonProperty, LionWebJsonReference } from "@lionweb/json"
+import {
+    JsonContext,
+    LION_CORE_BUILTINS_INAMED_NAME,
+    LIONWEB_BOOLEAN_TYPE, LIONWEB_INTEGER_TYPE, LIONWEB_JSON_TYPE, LIONWEB_STRING_TYPE,
+    LionWebJsonChunkWrapper,
+    M3_Keys,
+    MetaPointers,
+    NodeUtils
+} from "@lionweb/json-utils"
 import {
     Language_ContainmentMetaPointerNotInClass_Issue,
-    Language_IncorrectPropertyMetaPointer_Issue, Language_PropertyMetaPointerNotInClass_Issue,
-    Language_PropertyValue_Issue, Language_ReferenceMetaPointerNotInClass_Issue,
+    Language_IncorrectPropertyMetaPointer_Issue,
+    Language_PropertyMetaPointerNotInClass_Issue,
+    Language_PropertyValue_Issue,
+    Language_ReferenceMetaPointerNotInClass_Issue,
     Language_UnknownConcept_Issue
 } from "../issues/index.js"
 import {
     Language_IncorrectContainmentMetaPointer_Issue,
     Language_IncorrectReferenceMetaPointer_Issue,
-    Language_UnknownContainment_Issue, Language_UnknownProperty_Issue,
+    Language_UnknownContainment_Issue,
+    Language_UnknownProperty_Issue,
     Language_UnknownReference_Issue
 } from "../issues/LanguageIssues.js"
-import { isEqualMetaPointer, LionWebJsonNode, MetaPointers, NodeUtils } from "../json/index.js"
-import { JsonContext } from "../json/JsonContext.js"
-import {
-    LionWebJsonContainment,
-    LionWebJsonProperty,
-    LionWebJsonReference,
-} from "../json/LionWebJson.js"
-import { LionWebJsonChunkWrapper } from "../json/LionWebJsonChunkWrapper.js"
 // import {
 //     KnownLanguages, LanguageRegistry
 // } from "../languages/LanguageRegistry.js"
-import {
-    LION_CORE_BUILTINS_INAMED_NAME,
-    LIONWEB_BOOLEAN_TYPE,
-    LIONWEB_INTEGER_TYPE,
-    LIONWEB_JSON_TYPE,
-    LIONWEB_STRING_TYPE,
-    M3_Keys
-} from "../json/M3definitions.js"
 import { LanguageRegistry } from "../languages/index.js"
-import { validateBoolean, validateInteger, validateJSON } from "./ValidationFunctions.js"
 import { ValidationResult } from "./generic/ValidationResult.js"
+import { validateBoolean, validateInteger, validateJSON } from "./ValidationFunctions.js"
+
 
 /**
  * Check against the language definition

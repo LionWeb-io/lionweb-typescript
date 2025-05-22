@@ -30,8 +30,7 @@ import {
     Property,
     SingleRef
 } from "@lionweb/core"
-import {Imports, tsTypeForPrimitiveType} from "./index.js"
-
+import { Imports, tsTypeForPrimitiveType } from "./index.js"
 
 export const typeOf = (feature: Feature): SingleRef<LanguageEntity> => {
     if (feature instanceof Property) {

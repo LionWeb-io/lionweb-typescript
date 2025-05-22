@@ -33,13 +33,16 @@ import {
     Containment,
     Enumeration,
     EnumerationLiteral,
-    Id,
     Interface,
     Language,
     Property,
     Reference,
     SingleRef
 } from "@lionweb/core";
+
+import {
+    LionWebId
+} from "@lionweb/json";
 
 import {
     ContainmentValueManager,
@@ -230,7 +233,7 @@ export class DeltasBase implements ILanguageBase {
     }
 
     factory(handleDelta?: DeltaHandler): NodeBaseFactory {
-        return (classifier: Classifier, id: Id) => {
+        return (classifier: Classifier, id: LionWebId) => {
             switch (classifier.key) {
                 case this._Deltas.key: return Deltas.create(id, handleDelta);
                 case this._Field.key: return Field.create(id, handleDelta);
@@ -263,7 +266,7 @@ export class DeltasBase implements ILanguageBase {
 
 
 export class Deltas extends NodeBase {
-    static create(id: Id, handleDelta?: DeltaHandler, parentInfo?: Parentage): Deltas {
+    static create(id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage): Deltas {
         return new Deltas(DeltasBase.INSTANCE.Deltas, id, handleDelta, parentInfo);
     }
 
@@ -284,7 +287,7 @@ export class Deltas extends NodeBase {
         this._deltas.move(oldIndex, newIndex);
     }
 
-    public constructor(classifier: Classifier, id: Id, handleDelta?: DeltaHandler, parentInfo?: Parentage) {
+    public constructor(classifier: Classifier, id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage) {
         super(classifier, id, handleDelta, parentInfo);
         this._deltas = new OptionalMultiContainmentValueManager<Delta>(DeltasBase.INSTANCE.Deltas_deltas, this);
     }
@@ -301,7 +304,7 @@ export interface Type extends INodeBase {
 }
 
 export class Field extends NodeBase implements INamed {
-    static create(id: Id, handleDelta?: DeltaHandler, parentInfo?: Parentage): Field {
+    static create(id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage): Field {
         return new Field(DeltasBase.INSTANCE.Field, id, handleDelta, parentInfo);
     }
 
@@ -321,7 +324,7 @@ export class Field extends NodeBase implements INamed {
         this._name.set(newValue);
     }
 
-    public constructor(classifier: Classifier, id: Id, handleDelta?: DeltaHandler, parentInfo?: Parentage) {
+    public constructor(classifier: Classifier, id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage) {
         super(classifier, id, handleDelta, parentInfo);
         this._type = new RequiredSingleContainmentValueManager<Type>(DeltasBase.INSTANCE.Field_type, this);
         this._name = new RequiredPropertyValueManager<string>(LionCore_builtinsBase.INSTANCE.INamed_name, this);
@@ -349,7 +352,7 @@ export enum FeatureKinds {
 }
 
 export class FeatureType extends NodeBase implements Type {
-    static create(id: Id, handleDelta?: DeltaHandler, parentInfo?: Parentage): FeatureType {
+    static create(id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage): FeatureType {
         return new FeatureType(DeltasBase.INSTANCE.FeatureType, id, handleDelta, parentInfo);
     }
 
@@ -369,7 +372,7 @@ export class FeatureType extends NodeBase implements Type {
         this._container.set(newValue);
     }
 
-    public constructor(classifier: Classifier, id: Id, handleDelta?: DeltaHandler, parentInfo?: Parentage) {
+    public constructor(classifier: Classifier, id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage) {
         super(classifier, id, handleDelta, parentInfo);
         this._kind = new RequiredPropertyValueManager<FeatureKinds>(DeltasBase.INSTANCE.FeatureType_kind, this);
         this._container = new OptionalSingleReferenceValueManager<Field>(DeltasBase.INSTANCE.FeatureType_container, this);
@@ -394,7 +397,7 @@ export interface NodeSerialization extends INodeBase {
 }
 
 export class SerializeSubTree extends NodeBase implements NodeSerialization {
-    static create(id: Id, handleDelta?: DeltaHandler, parentInfo?: Parentage): SerializeSubTree {
+    static create(id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage): SerializeSubTree {
         return new SerializeSubTree(DeltasBase.INSTANCE.SerializeSubTree, id, handleDelta, parentInfo);
     }
 
@@ -406,7 +409,7 @@ export class SerializeSubTree extends NodeBase implements NodeSerialization {
         this._fieldName.set(newValue);
     }
 
-    public constructor(classifier: Classifier, id: Id, handleDelta?: DeltaHandler, parentInfo?: Parentage) {
+    public constructor(classifier: Classifier, id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage) {
         super(classifier, id, handleDelta, parentInfo);
         this._fieldName = new RequiredPropertyValueManager<string>(DeltasBase.INSTANCE.SerializeSubTree_fieldName, this);
     }
@@ -420,13 +423,13 @@ export class SerializeSubTree extends NodeBase implements NodeSerialization {
 }
 
 export class RefOnly extends NodeBase implements NodeSerialization {
-    static create(id: Id, handleDelta?: DeltaHandler, parentInfo?: Parentage): RefOnly {
+    static create(id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage): RefOnly {
         return new RefOnly(DeltasBase.INSTANCE.RefOnly, id, handleDelta, parentInfo);
     }
 }
 
 export class NodeType extends NodeBase implements Type {
-    static create(id: Id, handleDelta?: DeltaHandler, parentInfo?: Parentage): NodeType {
+    static create(id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage): NodeType {
         return new NodeType(DeltasBase.INSTANCE.NodeType, id, handleDelta, parentInfo);
     }
 
@@ -438,7 +441,7 @@ export class NodeType extends NodeBase implements Type {
         this._serialization.set(newValue);
     }
 
-    public constructor(classifier: Classifier, id: Id, handleDelta?: DeltaHandler, parentInfo?: Parentage) {
+    public constructor(classifier: Classifier, id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage) {
         super(classifier, id, handleDelta, parentInfo);
         this._serialization = new OptionalSingleContainmentValueManager<NodeSerialization>(DeltasBase.INSTANCE.NodeType_serialization, this);
     }
@@ -452,19 +455,19 @@ export class NodeType extends NodeBase implements Type {
 }
 
 export class IndexType extends NodeBase implements Type {
-    static create(id: Id, handleDelta?: DeltaHandler, parentInfo?: Parentage): IndexType {
+    static create(id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage): IndexType {
         return new IndexType(DeltasBase.INSTANCE.IndexType, id, handleDelta, parentInfo);
     }
 }
 
 export class PrimitiveValueType extends NodeBase implements Type {
-    static create(id: Id, handleDelta?: DeltaHandler, parentInfo?: Parentage): PrimitiveValueType {
+    static create(id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage): PrimitiveValueType {
         return new PrimitiveValueType(DeltasBase.INSTANCE.PrimitiveValueType, id, handleDelta, parentInfo);
     }
 }
 
 export class Delta extends NodeBase implements INamed {
-    static create(id: Id, handleDelta?: DeltaHandler, parentInfo?: Parentage): Delta {
+    static create(id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage): Delta {
         return new Delta(DeltasBase.INSTANCE.Delta, id, handleDelta, parentInfo);
     }
 
@@ -501,7 +504,7 @@ export class Delta extends NodeBase implements INamed {
         this._name.set(newValue);
     }
 
-    public constructor(classifier: Classifier, id: Id, handleDelta?: DeltaHandler, parentInfo?: Parentage) {
+    public constructor(classifier: Classifier, id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage) {
         super(classifier, id, handleDelta, parentInfo);
         this._documentation = new OptionalPropertyValueManager<string>(DeltasBase.INSTANCE.Delta_documentation, this);
         this._fields = new OptionalMultiContainmentValueManager<Field>(DeltasBase.INSTANCE.Delta_fields, this);

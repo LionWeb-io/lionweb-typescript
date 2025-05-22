@@ -15,30 +15,26 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {equal, isTrue, notEqual} from "./assertions.js";
+import { deepDuplicatorFor } from "@lionweb/class-core"
+import { equal, isTrue, notEqual } from "./assertions.js"
 
-import {deepDuplicatorFor} from "@lionweb/class-core";
-
-import {DatatypeTestConcept, LinkTestConcept, TestLanguageBase} from "./gen/TestLanguage.g.js";
-
+import { DatatypeTestConcept, LinkTestConcept, TestLanguageBase } from "./gen/TestLanguage.g.js"
 
 describe("deep-duplication", () => {
-
     it("works", () => {
-        const ltc = LinkTestConcept.create("ltc");
-        const dtc1 = DatatypeTestConcept.create("dtc1");
-        const dtc2 = DatatypeTestConcept.create("dtc2");
-        ltc.reference_0_1 = dtc1;
-        ltc.containment_0_1 = dtc2;
+        const ltc = LinkTestConcept.create("ltc")
+        const dtc1 = DatatypeTestConcept.create("dtc1")
+        const dtc2 = DatatypeTestConcept.create("dtc2")
+        ltc.reference_0_1 = dtc1
+        ltc.containment_0_1 = dtc2
 
-        const ltcDuplicate = deepDuplicatorFor([TestLanguageBase.INSTANCE], (originalNode) => originalNode.id + "-copied")(ltc)[0];
+        const ltcDuplicate = deepDuplicatorFor([TestLanguageBase.INSTANCE], originalNode => originalNode.id + "-copied")(ltc)[0]
 
-        equal(ltcDuplicate.id, "ltc-copied");
-        isTrue(ltcDuplicate instanceof LinkTestConcept);
-        equal((ltcDuplicate as LinkTestConcept).reference_0_1, dtc1);
-        notEqual((ltcDuplicate as LinkTestConcept).containment_0_1, dtc2);
-        equal((ltcDuplicate as LinkTestConcept).containment_0_1?.id, "dtc2-copied");
-    });
-
-});
+        equal(ltcDuplicate.id, "ltc-copied")
+        isTrue(ltcDuplicate instanceof LinkTestConcept)
+        equal((ltcDuplicate as LinkTestConcept).reference_0_1, dtc1)
+        notEqual((ltcDuplicate as LinkTestConcept).containment_0_1, dtc2)
+        equal((ltcDuplicate as LinkTestConcept).containment_0_1?.id, "dtc2-copied")
+    })
+})
 

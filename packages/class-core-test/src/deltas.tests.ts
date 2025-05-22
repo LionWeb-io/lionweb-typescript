@@ -15,35 +15,31 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {equal} from "./assertions.js";
-
-import {DeltaHandler, latching, NoOpDelta} from "@lionweb/class-core";
-
+import { DeltaHandler, latching, NoOpDelta } from "@lionweb/class-core"
+import { equal } from "./assertions.js"
 
 describe("deltas", () => {
-
     it("latching delta handler", () => {
-        let counter = 0;
-        const countingDeltaHandler: DeltaHandler = (_) => {
-            counter++;
-        };
-        const latchingDeltaHandler = latching(countingDeltaHandler);
-        const dummyDelta = new NoOpDelta();
-        latchingDeltaHandler(dummyDelta);
-        latchingDeltaHandler(dummyDelta);
-        equal(counter, 0);
-        latchingDeltaHandler.latch(true);
-        equal(counter, 0);
-        latchingDeltaHandler(dummyDelta);
-        equal(counter, 1);
-        latchingDeltaHandler(dummyDelta);
-        latchingDeltaHandler(dummyDelta);
-        latchingDeltaHandler(dummyDelta);
-        equal(counter, 4);
-        latchingDeltaHandler.latch(false);
-        latchingDeltaHandler(dummyDelta);
-        equal(counter, 4);
-    });
-
-});
+        let counter = 0
+        const countingDeltaHandler: DeltaHandler = _ => {
+            counter++
+        }
+        const latchingDeltaHandler = latching(countingDeltaHandler)
+        const dummyDelta = new NoOpDelta()
+        latchingDeltaHandler(dummyDelta)
+        latchingDeltaHandler(dummyDelta)
+        equal(counter, 0)
+        latchingDeltaHandler.latch(true)
+        equal(counter, 0)
+        latchingDeltaHandler(dummyDelta)
+        equal(counter, 1)
+        latchingDeltaHandler(dummyDelta)
+        latchingDeltaHandler(dummyDelta)
+        latchingDeltaHandler(dummyDelta)
+        equal(counter, 4)
+        latchingDeltaHandler.latch(false)
+        latchingDeltaHandler(dummyDelta)
+        equal(counter, 4)
+    })
+})
 

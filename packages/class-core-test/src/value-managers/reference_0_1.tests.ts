@@ -15,7 +15,6 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {AccumulatingSimplisticHandler, DefaultPrimitiveTypeDeserializer, MetaPointer} from "@lionweb/core";
 import {
     collectingDeltaHandler,
     nodeBaseDeserializer,
@@ -23,13 +22,14 @@ import {
     ReferenceDeletedDelta,
     ReferenceReplacedDelta,
     serializeNodeBases
-} from "@lionweb/class-core";
+} from "@lionweb/class-core"
+import { AccumulatingSimplisticHandler, DefaultPrimitiveTypeDeserializer } from "@lionweb/core"
+import { LionWebJsonMetaPointer } from "@lionweb/json"
 
-import {deepEqual, equal, isTrue, isUndefined} from "../assertions.js";
-import {DatatypeTestConcept, LinkTestConcept, TestLanguageBase} from "../gen/TestLanguage.g.js";
+import { deepEqual, equal, isTrue, isUndefined } from "../assertions.js"
+import { DatatypeTestConcept, LinkTestConcept, TestLanguageBase } from "../gen/TestLanguage.g.js"
 
-
-const testLanguageBase = TestLanguageBase.INSTANCE;
+const testLanguageBase = TestLanguageBase.INSTANCE
 
 
 describe("[0..1] reference", () => {
@@ -116,7 +116,7 @@ describe("[0..1] reference", () => {
 
 describe("serialization and deserialization w.r.t. a [0..1] reference", () => {
 
-    const metaPointer: MetaPointer = {
+    const metaPointer: LionWebJsonMetaPointer = {
         language: "TestLanguage",
         version: "0",
         key: "LinkTestConcept-reference_0_1"

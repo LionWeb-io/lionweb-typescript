@@ -15,12 +15,14 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {asArray, Containment, Feature, Id, idOf, Link, Property, Reference, SingleRef, unresolved} from "@lionweb/core";
+import {  Containment, Feature, idOf, Link, Property, Reference, SingleRef, unresolved } from "@lionweb/core"
+import { LionWebId } from "@lionweb/json"
+import { asArray } from "@lionweb/ts-utils"
 
-import {INodeBase} from "./base-types.js";
-import {NodesToInstall} from "./linking.js";
-import {getFeatureValue} from "./serializer.js";
-import {allNodesFrom} from "./convenience.js";
+import { INodeBase } from "./base-types.js"
+import { allNodesFrom } from "./convenience.js"
+import { NodesToInstall } from "./linking.js"
+import { getFeatureValue } from "./serializer.js"
 
 
 /**
@@ -45,7 +47,7 @@ export const deepDuplicateWith = (duplicateNode: NodeDuplicator): Duplicator =>
 
         const nodesToInstall: NodesToInstall[] = [];
 
-        const visit = (node: INodeBase): [id: Id, duplicatedNode: INodeBase] => {
+        const visit = (node: INodeBase): [id: LionWebId, duplicatedNode: INodeBase] => {
             const [duplicatedNode, featuresToDuplicate] = duplicateNode(node);
             const duplicateFeatureValue = (feature: Feature) => {
                 const value = getFeatureValue(node, feature);

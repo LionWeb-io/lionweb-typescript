@@ -1,4 +1,4 @@
-import { JsonContext } from "../json/JsonContext.js"
+import { JsonContext } from "@lionweb/json-utils"
 
 export abstract class ValidationIssue {
     abstract readonly issueType: string
@@ -17,10 +17,13 @@ export abstract class ValidationIssue {
 
 export class GenericIssue extends ValidationIssue {
     readonly issueType = "GenericIssue"
-    
-    constructor(context: JsonContext, public text: string) {
+
+    constructor(
+        context: JsonContext,
+        public text: string
+    ) {
         super(context)
     }
-    
+
     protected msg = () => this.text
 }

@@ -28,7 +28,7 @@ if (languageValidator.validationResult.hasErrors()) {
 for (const modelFile of getFilesRecursive(folder, [])) {
     const jsonString1 = fs.readFileSync(modelFile, "utf-8")
     const jsonModel = JSON.parse(jsonString1)
-    const modelValidator = new LionWebValidator(jsonModel, registry )
+    const modelValidator = new LionWebValidator(jsonModel, registry)
 
     modelValidator.validateAll()
     if (modelValidator.validationResult.hasErrors()) {

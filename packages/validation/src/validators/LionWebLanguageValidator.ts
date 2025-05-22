@@ -1,9 +1,7 @@
+import { isEqualMetaPointer, LionWebJsonChunk, LionWebJsonNode } from "@lionweb/json"
+import { isLionWebM3Language, JsonContext, LionWebJsonChunkWrapper, MetaPointers } from "@lionweb/json-utils"
 import { GenericIssue } from "../issues/index.js"
 import { MissingM3Language_Issue } from "../issues/LanguageIssues.js"
-import { isEqualMetaPointer, LionWebJsonNode, MetaPointers } from "../json/index.js"
-import { JsonContext } from "../json/JsonContext.js"
-import { isLionWebM3Language, LionWebJsonChunk } from "../json/LionWebJson.js"
-import { LionWebJsonChunkWrapper } from "../json/LionWebJsonChunkWrapper.js"
 import { isConcept, LanguageRegistry } from "../languages/index.js"
 import { ValidationResult } from "./generic/ValidationResult.js"
 

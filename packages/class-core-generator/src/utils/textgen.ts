@@ -21,7 +21,7 @@
  */
 
 
-import {asString, indentWith, Template} from "littoral-templates"
+import { asString, indentWith, Template } from "littoral-templates"
 
 
 /**

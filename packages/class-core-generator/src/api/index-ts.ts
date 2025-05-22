@@ -15,39 +15,49 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {Language} from "@lionweb/core"
-import {asString, commaSeparated} from "littoral-templates"
+import { dependencyOrderOf } from "@lionweb/ts-utils"
+import { Language } from "@lionweb/core"
+import { asString, commaSeparated } from "littoral-templates"
 
-import {indent} from "../utils/textgen.js"
-import {dependencyOrderOf} from "../utils/toposort.js"
-import {dependenciesThroughDirectInheritanceOf, importRenamingForLanguage, nameOfBaseClassForLanguage} from "./helpers/index.js"
-import {GeneratorOptions} from "./generator.js"
-
+import { indent } from "../utils/textgen.js"
+import { GeneratorOptions } from "./generator.js"
+import { dependenciesThroughDirectInheritanceOf, importRenamingForLanguage, nameOfBaseClassForLanguage } from "./helpers/index.js"
 
 export const indexTsFor = (languages: Language[], options: GeneratorOptions) => {
     const dependenciesInOrderOfDirectInheritance = dependencyOrderOf(languages, dependenciesThroughDirectInheritanceOf)
     if (dependenciesInOrderOfDirectInheritance === false) {
-        console.error(`⚠ CYCLE detected! Proceeding with order of languages as-is, instead of in type-wise (through direct inheritance) dependency order ⇒ generated code might not initialize!`)
+        console.error(
+            `⚠ CYCLE detected! Proceeding with order of languages as-is, instead of in type-wise (through direct inheritance) dependency order ⇒ generated code might not initialize!`
+        )
     }
-    const languagesForImports = dependenciesInOrderOfDirectInheritance === false
-        ? languages
-        : dependenciesInOrderOfDirectInheritance
-                .filter((language) => languages.indexOf(language) > -1)
+    const languagesForImports =
+        dependenciesInOrderOfDirectInheritance === false
+            ? languages
+            : dependenciesInOrderOfDirectInheritance.filter(language => languages.indexOf(language) > -1)
 
     return asString([
         options.header === undefined ? [] : [options.header, ``],
         `import {ILanguageBase, LionCore_builtinsBase} from "${options.genericImportLocation}";`,
         ``,
-        languagesForImports.map((language) => `import * as ${importRenamingForLanguage(language)} from "./${language.name}.g.js";`),
+        languagesForImports.map(language => `import * as ${importRenamingForLanguage(language)} from "./${language.name}.g.js";`),
         ``,
         `// ensure that all languages get wired up by triggering that through their first entity:`,
         `LionCore_builtinsBase.INSTANCE.String;`,
         languages
-            .filter(({entities}) => entities.length > 0)
-            .map((language) => `${importRenamingForLanguage(language)}.${nameOfBaseClassForLanguage(language)}.INSTANCE.${language.entities[0].name};`),
+            .filter(({ entities }) => entities.length > 0)
+            .map(
+                language =>
+                    `${importRenamingForLanguage(language)}.${nameOfBaseClassForLanguage(language)}.INSTANCE.${language.entities[0].name};`
+            ),
         ``,
         `export const allLanguageBases: ILanguageBase[] = [`,
-        indent(commaSeparated(languagesForImports.map((language) => `${importRenamingForLanguage(language)}.${nameOfBaseClassForLanguage(language)}.INSTANCE`))),
+        indent(
+            commaSeparated(
+                languagesForImports.map(
+                    language => `${importRenamingForLanguage(language)}.${nameOfBaseClassForLanguage(language)}.INSTANCE`
+                )
+            )
+        ),
         `];`,
         ``,
         `export {`,

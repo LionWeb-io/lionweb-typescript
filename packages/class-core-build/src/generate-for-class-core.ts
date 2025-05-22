@@ -15,22 +15,19 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {writeFileSync} from "fs"
-import {join} from "path"
-import {generatePlantUmlForLanguage, genericAsTreeText, languageAsText, writeJsonAsFile} from "@lionweb/utilities"
-import {lioncoreBuiltins, serializeLanguages} from "@lionweb/core"
-import {defaultTrumpfOriginatingApache2_0LicensedHeader, generateLanguage} from "@lionweb/class-core-generator"
-import {serializeNodeBases} from "@lionweb/class-core"  // Note: this is a circular dependency!
+import { serializeNodeBases } from "@lionweb/class-core" // Note: this is a circular dependency!
+import { defaultTrumpfOriginatingApache2_0LicensedHeader, generateLanguage } from "@lionweb/class-core-generator"
+import { lioncoreBuiltins, serializeLanguages } from "@lionweb/core"
+import { generatePlantUmlForLanguage, genericAsTreeText, languageAsText, writeJsonAsFile } from "@lionweb/utilities"
+import { writeFileSync } from "fs"
+import { join } from "path"
+import { deltas } from "./deltas/definition/definition-base.js"
+import { defineDeltas } from "./deltas/definition/definitions.js"
+import { generateDeltaCode } from "./deltas/generator/generator.js"
+import { deltasLanguage } from "./deltas/meta-definition.js"
+import { TestLanguage } from "./testLanguage.js"
 
-import {deltasLanguage} from "./deltas/meta-definition.js"
-import {deltas} from "./deltas/definition/definition-base.js"
-import {defineDeltas} from "./deltas/definition/definitions.js"
-import {TestLanguage} from "./testLanguage.js"
-import {generateDeltaCode} from "./deltas/generator/generator.js"
-
-
-const inArtifactsPath = (subPath: string) =>
-    join("artifacts", subPath)
+const inArtifactsPath = (subPath: string) => join("artifacts", subPath)
 
 // generate LionCore-builtins:
 generateLanguage(lioncoreBuiltins, "../class-core/src", { genericImportLocation: "./index.js", header: defaultTrumpfOriginatingApache2_0LicensedHeader })

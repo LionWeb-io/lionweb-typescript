@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.0
+
+From now on, the versions of all published packages will always be aligned, so also in terms of dependencies.
+
 ## 0.6.13
 
 Dependencies: `@lionweb/core` and `@lionweb/utilities` version 0.6.12

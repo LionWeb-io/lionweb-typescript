@@ -1,21 +1,13 @@
+import { LionWebId, LionWebJsonChunk, LionWebJsonContainment, LionWebJsonMetaPointer, LionWebJsonNode, LionWebJsonUsedLanguage } from "@lionweb/json"
+import { ChunkUtils, JsonContext, LionWebJsonChunkWrapper } from "@lionweb/json-utils"
 import {
     Duplicates_Issue,
     Reference_ChildMissingInParent_Issue,
     Reference_CirculairParent_Issue,
     Reference_DuplicateNodeId_Issue,
     Reference_LanguageUnknown_Issue,
-    Reference_ParentMissingInChild_Issue,
+    Reference_ParentMissingInChild_Issue
 } from "../issues/ReferenceIssues.js"
-import { JsonContext } from "../json/JsonContext.js"
-import { ChunkUtils } from "../json/ChunkUtils.js"
-import {
-    LionWebJsonContainment,
-    LionWebJsonChunk,
-    LionWebJsonMetaPointer,
-    LionWebJsonNode,
-    LwJsonUsedLanguage,
-} from "../json/LionWebJson.js"
-import { LionWebJsonChunkWrapper } from "../json/LionWebJsonChunkWrapper.js"
 import { ValidationResult } from "./generic/ValidationResult.js"
 
 /**
@@ -136,7 +128,7 @@ export class LionWebReferenceValidator {
      * @param usedLanguages
      * @param context
      */
-    checkDuplicateUsedLanguage(usedLanguages: LwJsonUsedLanguage[], context: JsonContext) {
+    checkDuplicateUsedLanguage(usedLanguages: LionWebJsonUsedLanguage[], context: JsonContext) {
         if (usedLanguages === null || usedLanguages === undefined) {
             return
         }
@@ -197,7 +189,7 @@ export class LionWebReferenceValidator {
 
     validateChildrenHaveCorrectParent(node: LionWebJsonNode, context: JsonContext) {
         node.containments.forEach((child: LionWebJsonContainment) => {
-            child.children.forEach((childId: string, index: number) => {
+            child.children.forEach((childId: LionWebId, index: number) => {
                 const childNode = this.nodesIdMap.get(childId)
                 if (childNode !== undefined) {
                     if (childNode.parent !== node.id) {
@@ -211,7 +203,7 @@ export class LionWebReferenceValidator {
                 }
             })
         })
-        node.annotations.forEach((annotationId: string, annotationIndex: number) => {
+        node.annotations.forEach((annotationId: LionWebId, annotationIndex: number) => {
             const childNode = this.nodesIdMap.get(annotationId)
             if (childNode !== undefined) {
                 if (childNode.parent === null || childNode.parent === undefined) {

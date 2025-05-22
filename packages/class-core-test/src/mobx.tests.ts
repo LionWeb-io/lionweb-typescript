@@ -15,39 +15,36 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {makeObservable, observable, observe} from "mobx";
+import { makeObservable, observable, observe } from "mobx"
 
-import {fail} from "./assertions.js";
-
+import { fail } from "./assertions.js"
 
 describe("MobX", () => {
-
     class SomeClass {
-        _value = observable.box<string | undefined>(undefined, { deep: false });
+        _value = observable.box<string | undefined>(undefined, { deep: false })
         get value() {
-            return this._value.get();
+            return this._value.get()
         }
         set value(newValue: string | undefined) {
-            this._value.set(newValue);
+            this._value.set(newValue)
         }
         constructor() {
-            makeObservable(this);   // Note: is required for the unit test below to succeed!
+            makeObservable(this) // Note: is required for the unit test below to succeed!
         }
     }
 
-    it("can't observe an instance as a whole", (done) => {
-        const instance = new SomeClass();
-        observe(instance, (change) => {
-            console.dir(change);
-            fail("saw object changing");
-        });
-        instance.value = "bar";
-        done();
-    });
+    it("can't observe an instance as a whole", done => {
+        const instance = new SomeClass()
+        observe(instance, change => {
+            console.dir(change)
+            fail("saw object changing")
+        })
+        instance.value = "bar"
+        done()
+    })
     /*
      * Note: this should not imply that observer(<stateless React component instance />) doesn't work!
      * SomeClass is of the right type — IObservableValue
      */
-
-});
+})
 

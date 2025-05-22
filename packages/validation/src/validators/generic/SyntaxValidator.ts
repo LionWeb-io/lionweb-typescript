@@ -1,3 +1,4 @@
+import { JsonContext } from "@lionweb/json-utils"
 import {
     Syntax_ArrayContainsNull_Issue,
     Syntax_PropertyMissingIssue,
@@ -5,21 +6,27 @@ import {
     Syntax_PropertyTypeIssue,
     Syntax_PropertyUnknownIssue
 } from "../../issues/index.js"
-import { JsonContext } from "../../json/JsonContext.js"
 import { ValidationResult } from "./ValidationResult.js"
-import { PropertyDefinition, UnknownObjectType } from "./ValidationTypes.js"
+import {
+    isObjectDefinition,
+    isPrimitiveDefinition,
+    ObjectDefinition,
+    PrimitiveDefinition,
+    TypeDefinition,
+    UnknownObjectType
+} from "./ValidationTypes.js"
 
 /**
  * Syntax Validator can check whether objects are structurally conforming to the
- * definitions given in `expectedTypes`.
+ * definitions given in `typeDefinitions`.
  */
 export class SyntaxValidator {
     validationResult: ValidationResult
-    expectedTypes: Map<string, PropertyDefinition[]>
+    typeDefinitions: Map<string, TypeDefinition>
 
-    constructor(validationResult: ValidationResult, expectedTypes: Map<string, PropertyDefinition[]>) {
+    constructor(validationResult: ValidationResult, expectedTypes: Map<string, TypeDefinition>) {
         this.validationResult = validationResult
-        this.expectedTypes = expectedTypes
+        this.typeDefinitions = expectedTypes
     }
 
     /**
@@ -29,115 +36,119 @@ export class SyntaxValidator {
      * @param expectedType  The expected type of the object.
      */
     validate(obj: unknown, expectedType: string) {
-        if (typeof obj !== "object") {
-            throw new Error(`SyntaxValidator.validate: 'obj' is not an object, expected a '${expectedType}'`)
-        }
         const object = obj as UnknownObjectType
-        const defs = this.expectedTypes.get(expectedType)
-        if (defs === undefined) {
+        const typeDef = this.typeDefinitions.get(expectedType)
+        if (typeDef === undefined) {
             throw new Error(`SyntaxValidator.validate: cannot find definition for ${expectedType}`)
-        } else {
-            this.validateObjectProperties(expectedType, defs, object, new JsonContext(null, ["$"]))
+        } else if (isObjectDefinition(typeDef)){
+            this.validateObjectProperties(expectedType, typeDef, object, new JsonContext(null, ["$"]))
+        } else if( isPrimitiveDefinition(typeDef)) {
+            this.validatePrimitiveValue("$", typeDef, object, new JsonContext(null, ["$"]))
         }
     }
 
     /**
      * Validate whether `object` is structured conform the properties in `propertyDef`
      * @param originalProperty  The property of which `object` it the value
-     * @param propertyDef       The property definitions that are being validated
+     * @param typeDef       The property definitions that are being validated
      * @param object            The object being validated
      * @param jsonContext       The location in the JSON
      * @private
      */
-    private validateObjectProperties(originalProperty: string, propertyDef: PropertyDefinition[], object: UnknownObjectType, jsonContext: JsonContext) {
-        if (propertyDef.length === 0) {
+    validateObjectProperties(originalProperty: string, typeDef: ObjectDefinition, object: UnknownObjectType, jsonContext: JsonContext) {
+        if (typeDef === null || typeDef === undefined) {
             return
         }
-        if ((typeof object) !== "object") {
-            this.validationResult.issue(new Syntax_PropertyTypeIssue(jsonContext, originalProperty, "object", typeof object))
-            return
-        }
-        for (const pdef of propertyDef) {
-            const expectedPropertyDefs = this.expectedTypes.get(pdef.expectedType)
-            const validator = pdef.validate!
-            const propertyValue = object[pdef.property]
-            if (propertyValue === undefined) {
-                this.validationResult.issue(new Syntax_PropertyMissingIssue(jsonContext, pdef.property + `{ ${typeof object}}{${originalProperty}}`))
-                continue
+            if ((typeof object) !== "object") {
+                this.validationResult.issue(new Syntax_PropertyTypeIssue(jsonContext, originalProperty, "object", typeof object))
+                return
             }
-            if (!pdef.mayBeNull && propertyValue === null) {
-                this.validationResult.issue(new Syntax_PropertyNullIssue(jsonContext, pdef.property))
-                continue
-            }
-            if (pdef.mayBeNull && propertyValue === null) {
-                // Ok, stop checking, continue with next property def
-                continue
-            }
-            if (pdef.isList) {
-                // Check whether value is an array
-                if (!Array.isArray(propertyValue)) {
-                    const newContext = jsonContext.concat(pdef.property)
-                    this.validationResult.issue(new Syntax_PropertyTypeIssue(newContext, pdef.property, "array", typeof propertyValue))
-                    return
+            for (const propertyDef of typeDef) {
+                const expectedTypeDef = this.typeDefinitions.get(propertyDef.expectedType)
+                const validator = propertyDef.validate!
+                const propertyValue = object[propertyDef.property]
+                if (propertyValue === undefined) {
+                    if (!propertyDef.isOptional) {
+                        this.validationResult.issue(new Syntax_PropertyMissingIssue(jsonContext, propertyDef.property))
+                    }
+                    continue
                 }
-                // If an array, validate every item in the array
-                (propertyValue as UnknownObjectType[]).forEach( (item, index) => {
-                    const newContext = jsonContext.concat(pdef.property, index)
-                    if (item === null) {
-                        this.validationResult.issue(new Syntax_ArrayContainsNull_Issue(newContext, pdef.property,index ))
-                    } else {
-                        if (expectedPropertyDefs !== undefined) {
-                            if (expectedPropertyDefs.length === 0) {
-                                // propertyValue should be a primitive as it has no property definitions
-                                if (this.validatePrimitiveValue(pdef, item, jsonContext)) {
-                                    validator.apply(null, [item, this.validationResult, newContext, pdef])
+                if (!propertyDef.mayBeNull && propertyValue === null) {
+                    this.validationResult.issue(new Syntax_PropertyNullIssue(jsonContext, propertyDef.property))
+                    continue
+                }
+                if (propertyDef.mayBeNull && propertyValue === null) {
+                    // Ok, stop checking, continue with next property def
+                    continue
+                }
+                if (propertyDef.isList) {
+                    // Check whether value is an array
+                    if (!Array.isArray(propertyValue)) {
+                        const newContext = jsonContext.concat(propertyDef.property)
+                        this.validationResult.issue(new Syntax_PropertyTypeIssue(newContext, propertyDef.property, "array", typeof propertyValue))
+                        return
+                    }
+                    // If an array, validate every item in the array
+                    (propertyValue as UnknownObjectType[]).forEach((item, index) => {
+                        const newContext = jsonContext.concat(propertyDef.property, index)
+                        if (item === null) {
+                            this.validationResult.issue(new Syntax_ArrayContainsNull_Issue(newContext, propertyDef.property, index))
+                        } else {
+                            if (expectedTypeDef !== undefined) {
+                                if (isPrimitiveDefinition(expectedTypeDef)) {
+                                    // propertyValue should be a primitive as it has no property definitions
+                                    if (this.validatePrimitiveValue(propertyDef.property, expectedTypeDef, item, jsonContext)) {
+                                        validator.apply(null, [item, this.validationResult, newContext, propertyDef])
+                                    }
+                                } else {
+                                    // propertyValue should be an object, validate its properties
+                                    this.validateObjectProperties(propertyDef.property, expectedTypeDef, item as UnknownObjectType, newContext)
+                                    validator.apply(null, [item, this.validationResult, newContext, propertyDef])
                                 }
                             } else {
-                                // propertyValue should be an object, validate its properties
-                                this.validateObjectProperties(pdef.property, expectedPropertyDefs, item as UnknownObjectType, newContext)
-                                validator.apply(null, [item, this.validationResult, newContext, pdef])
+                                throw new Error(`Expected type '${propertyDef.expectedType} has neither property defs, nor a validator.`)
                             }
-                        } else {
-                            throw new Error(`Expected type '${pdef.expectedType} has neither property defs, nor a validator.`)
                         }
+                    })
+                } else {
+                    const newContext = jsonContext.concat(propertyDef.property)
+                    if (Array.isArray(propertyValue)) {
+                        this.validationResult.issue(new Syntax_PropertyTypeIssue(newContext, propertyDef.property, propertyDef.expectedType, "array"))
+                        return
                     }
-                }) 
-            } else {
-                const newContext = jsonContext.concat(pdef.property)
-                if (Array.isArray(propertyValue)) {
-                    this.validationResult.issue(new Syntax_PropertyTypeIssue(newContext, pdef.property, pdef.expectedType, "array"))
-                    return
-                }
-                // Single valued property, validate it
-                if (expectedPropertyDefs !== undefined) {
-                    if (expectedPropertyDefs.length === 0) {
-                        // propertyValue should be a primitive as it has no property definitions
-                        if (this.validatePrimitiveValue(pdef, propertyValue, jsonContext)) {
-                            validator.apply(null, [propertyValue, this.validationResult, newContext, pdef])
+                    // Single valued property, validate it
+                    if (expectedTypeDef !== undefined) {
+                        if (isPrimitiveDefinition(expectedTypeDef)) {
+                            // propertyValue should be a primitive as it has no property definitions
+                            if (this.validatePrimitiveValue(propertyDef.property, expectedTypeDef, propertyValue, jsonContext)) {
+                                validator.apply(null, [propertyValue, this.validationResult, newContext, propertyDef])
+                            }
+                        } else if (isObjectDefinition(expectedTypeDef)) {
+                            // propertyValue should be an object, validate its properties
+                            this.validateObjectProperties(propertyDef.property, expectedTypeDef, propertyValue as UnknownObjectType, newContext)
+                            validator.apply(null, [propertyValue, this.validationResult, newContext, propertyDef])
+                        } else {
+                            throw new Error("EXPECTING ObjectDefinition or PrimitiveDefinition, but got something else")
                         }
                     } else {
-                        // propertyValue should be an object, validate its properties
-                        this.validateObjectProperties(pdef.property, expectedPropertyDefs, propertyValue as UnknownObjectType, newContext)
-                        validator.apply(null, [propertyValue, this.validationResult, newContext, pdef])
+                        throw new Error(`Expected single type '${propertyDef.expectedType}' for '${propertyDef.property}'  at ${newContext.toString()} has neither property defs, nor a validator.`)
                     }
-                } else {
-                    throw new Error(`Expected single type '${pdef.expectedType}' for '${pdef.property}'  at ${newContext.toString()} has neither property defs, nor a validator.`)
                 }
             }
-        }
-        this.checkStrayProperties(object, propertyDef.map(pdef => pdef.property ), jsonContext)
+            this.checkStrayProperties(object, typeDef, jsonContext)
     }
     
-    validatePrimitiveValue(propDef: PropertyDefinition, object: unknown, jsonContext: JsonContext): boolean {
-        if (!propDef.mayBeNull && (object === null || object === undefined)) {
-            this.validationResult.issue(new Syntax_PropertyNullIssue(jsonContext, propDef.property))
-            return false
-        }
+    validatePrimitiveValue(propertyName: string, propDef: PrimitiveDefinition, object: unknown, jsonContext: JsonContext): boolean {
+        // if (!propDef.mayBeNull && (object === null || object === undefined)) {
+        //     this.validationResult.issue(new Syntax_PropertyNullIssue(jsonContext, propDef.property))
+        //     return false
+        // }
 
-        if (typeof object !== propDef.expectedType) {
-            this.validationResult.issue(new Syntax_PropertyTypeIssue(jsonContext, propDef.property, propDef.expectedType,typeof object))
+        if (typeof object !== propDef.primitiveType) {
+            this.validationResult.issue(new Syntax_PropertyTypeIssue(jsonContext, propertyName, propDef.primitiveType,typeof object))
             return false
         }
+        propDef.validate!(object, this.validationResult, jsonContext)
         return true
     }
 
@@ -147,16 +158,12 @@ export class SyntaxValidator {
      * @param properties    The names of the expected properties
      * @param context       Location in JSON
      */
-    checkStrayProperties(obj: UnknownObjectType, properties: string[], context: JsonContext) {
+    checkStrayProperties(obj: UnknownObjectType, def: ObjectDefinition, context: JsonContext) {
         const own = Object.getOwnPropertyNames(obj)
+        const defined = def.map(pdef => pdef.property)
         own.forEach((ownProp) => {
-            if (!properties.includes(ownProp)) {
+            if (!defined.includes(ownProp)) {
                 this.validationResult.issue(new Syntax_PropertyUnknownIssue(context, ownProp))
-            }
-        })
-        properties.forEach((prop) => {
-            if (!own.includes(prop)) {
-                this.validationResult.issue(new Syntax_PropertyMissingIssue(context, prop))
             }
         })
     }

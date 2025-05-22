@@ -15,16 +15,16 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {deserializeLanguages, Language, lioncore, SerializationChunk} from "@lionweb/core"
-import {readFileAsJson} from "@lionweb/utilities"
-import {writeFileSync} from "fs"
-import {join} from "path"
-import {cwd} from "process"
+import { deserializeLanguages, Language, lioncore } from "@lionweb/core"
+import { LionWebJsonChunk } from "@lionweb/json"
+import { readFileAsJson } from "@lionweb/utilities"
+import { writeFileSync } from "fs"
+import { join } from "path"
+import { cwd } from "process"
+import { MpsAnnotation } from "./helpers/index.js"
 
-import {indexTsFor} from "./index-ts.js"
-import {languageFileFor} from "./language-file.templates.js"
-import {MpsAnnotation} from "./helpers/index.js"
-
+import { indexTsFor } from "./index-ts.js"
+import { languageFileFor } from "./language-file.templates.js"
 
 const properGenericImportLocation = "@lionweb/class-core"
 
@@ -56,7 +56,7 @@ export const generateApiFromLanguagesJson = (languagesJsonPath: string, generati
     console.log(`   Path to languages: ${languagesJsonPath}`)
     console.log(`   Generation path:   ${generationPath}`)
 
-    const languagesJson = readFileAsJson(languagesJsonPath) as SerializationChunk
+    const languagesJson = readFileAsJson(languagesJsonPath) as LionWebJsonChunk
     const languages = deserializeLanguages(languagesJson, lioncore)
     generateApiFromLanguages(languages, generationPath, options)
 }

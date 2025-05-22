@@ -15,11 +15,10 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {DefaultPrimitiveTypeSerializer, IdOrUnresolved, Property, SingleRef, unresolved} from "@lionweb/core";
-import {INodeBase} from "../../base-types.js";
+import { DefaultPrimitiveTypeSerializer, IdOrUnresolved, Property, SingleRef, unresolved } from "@lionweb/core"
+import { INodeBase } from "../../base-types.js"
 
-
-const defaultPrimitiveValueSerializer = new DefaultPrimitiveTypeSerializer();   // (suffices because serializeNodeBases also uses this class)
+const defaultPrimitiveValueSerializer = new DefaultPrimitiveTypeSerializer()   // (suffices because serializeNodeBases also uses this class)
 /**
  * A function that serializes the given value of the given {@link Property property},
  * using (an instance of) the same {@link DefaultPrimitiveTypeSerializer} class as the {@link serializeNodeBases} function.

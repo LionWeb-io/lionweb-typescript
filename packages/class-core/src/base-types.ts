@@ -23,13 +23,14 @@ import {
     Containment,
     EnumerationLiteral,
     Feature,
-    Id,
     Language,
     Node,
     Property,
     Reference
-} from "@lionweb/core";
-import {makeObservable} from "mobx";
+} from "@lionweb/core"
+import { LionWebId } from "@lionweb/json"
+import { uniquesAmong } from "@lionweb/ts-utils"
+import { makeObservable } from "mobx"
 
 import {
     AnnotationsValueManager,
@@ -43,7 +44,6 @@ import {
     SingleContainmentValueManager,
     SingleReferenceValueManager
 } from "./index.js"
-import {uniquesAmong} from "./utils.js"
 
 
 /**
@@ -226,7 +226,7 @@ export abstract class NodeBase implements INodeBase {
     }
 
 
-    protected constructor(readonly classifier: Classifier, readonly id: Id, readonly handleDelta?: DeltaHandler, parentage?: Parentage) {
+    protected constructor(readonly classifier: Classifier, readonly id: LionWebId, readonly handleDelta?: DeltaHandler, parentage?: Parentage) {
         this.classifier = classifier;
         this.id = id;
         if (parentage) {
@@ -338,7 +338,7 @@ export abstract class NodeBase implements INodeBase {
  * A type for functions that acts as factories, creating an instance of {@link INodeBase}
  * matching the given {@link Classifier classifier} and the given ID (of type {@link Id}).
  */
-export type NodeBaseFactory = (classifier: Classifier, id: Id) => INodeBase;
+export type NodeBaseFactory = (classifier: Classifier, id: LionWebId) => INodeBase;
 
 /**
  * A type that captures three base aspects of a language:
