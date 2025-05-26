@@ -46,7 +46,7 @@ export const genericAsTreeText = ({ nodes }: LionWebJsonChunk, languages: Langua
         `${referenceId}${resolveInfo === undefined ? `` : ` (${resolveInfo})`}`
 
     const referenceAsText = (classifier: LionWebJsonMetaPointer, { reference, targets }: LionWebJsonReference) =>
-        `${nameOrKey(classifier, reference)} -> ${targets.length === 0 ? `<none>` : targets.map(referenceTargetAsText).join(",")}`
+        `${nameOrKey(classifier, reference)} -> ${targets.length === 0 ? `<none>` : targets.map(referenceTargetAsText).join(", ")}`
 
     const containmentAsText = (classifier: LionWebJsonMetaPointer, { containment, children }: LionWebJsonContainment) => [
         `${nameOrKey(classifier, containment)}:${children.length === 0 ? ` <none>` : ``}`,
