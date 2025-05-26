@@ -5,6 +5,7 @@
 * Fix [bug #203](https://github.com/LionWeb-io/lionweb-typescript/issues/203).
 * (Fix that running setup on the test package for a second time fails.)
 * Extract utility functions to `@lionweb/ts-utils`, and `Id` (as `LionWebId`) to `@lionweb/json`.
+* Errors thrown by the built-in `DefaultPrimitiveTypeDeserializer` and `DefaultPrimitiveTypeSerializer` are improved to say what `Property` they pertain to.
 
 
 ## 0.6.12

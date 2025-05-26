@@ -1,6 +1,5 @@
 /dist
 /node_modules
-/utilities-*.tgz
 
 # retrieved from lionweb-integration-testing:
 /testset
