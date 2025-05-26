@@ -1,48 +1,48 @@
 {
-    "name"           : "lionweb-typescript",
-    "version"        : "0.7.0-dev",
-    "description"    : "LionWeb core for {Java|Type}Script",
-    "license"        : "Apache-2.0",
-    "repository"     : {
-        "type": "git",
-        "url" : "git+https://github.com/LionWeb-io/lionweb-typescript.git"
-    },
-    "bugs"           : {
-        "url": "https://github.com/LionWeb-io/lionweb-typescript/issues"
-    },
-    "devDependencies": {
-        "@types/node"                     : "20.17.30",
-        "@typescript-eslint/eslint-plugin": "6.21.0",
-        "@typescript-eslint/parser"       : "6.21.0",
-        "prettier"                        : "3.5.3",
-        "typescript"                      : "5.3.3"
-    },
-    "scripts"        : {
-        "initialize"  : "npm run clean && npm install && npm run setup && npm run build && source make-class-core.sh",
-        "clean"       : "rm -rf node_modules/ && npm run clean -w packages --if-present",
-        "build"       : "npm run build -w packages --if-present",
-        "lint"        : "npm run lint -w packages --if-present",
-        "setup"       : "npm run setup -w packages --if-present",
-        "test"        : "npm run test -w packages --if-present",
-        "prerelease"  : "npm run initialize",
-        "release"     : "npm run release -w packages --if-present",
-        "release-beta": "npm run release-beta -w packages --if-present"
-    },
-    "private"        : true,
-    "workspaces"     : [
-        "./packages/ts-utils",
-        "./packages/json",
-        "./packages/json-utils",
-        "./packages/json-diff",
-        "./packages/core",
-        "./packages/utilities",
-        "./packages/validation",
-        "./packages/cli",
-        "./packages/test",
-        "./packages/artifacts",
-        "./packages/class-core",
-        "./packages/class-core-generator",
-        "./packages/class-core-build",
-        "./packages/class-core-test"
-    ]
+  "name": "lionweb-typescript",
+  "version": "0.7.0-dev",
+  "description": "LionWeb core for {Java|Type}Script",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LionWeb-io/lionweb-typescript.git"
+  },
+  "bugs": {
+    "url": "https://github.com/LionWeb-io/lionweb-typescript/issues"
+  },
+  "devDependencies": {
+    "@types/node": "22.15.21",
+    "@typescript-eslint/eslint-plugin": "6.21.0",
+    "@typescript-eslint/parser": "6.21.0",
+    "prettier": "3.5.3",
+    "typescript": "5.3.3"
+  },
+  "scripts": {
+    "initialize": "npm run clean && npm install && npm run setup && npm run build && source make-class-core.sh",
+    "clean": "rm -rf node_modules/ && npm run clean -w packages --if-present",
+    "build": "npm run build -w packages --if-present",
+    "lint": "npm run lint -w packages --if-present",
+    "setup": "npm run setup -w packages --if-present",
+    "test": "npm run test -w packages --if-present",
+    "prerelease": "npm run initialize",
+    "release": "npm run release -w packages --if-present",
+    "release-beta": "npm run release-beta -w packages --if-present"
+  },
+  "private": true,
+  "workspaces": [
+    "./packages/ts-utils",
+    "./packages/json",
+    "./packages/json-utils",
+    "./packages/json-diff",
+    "./packages/core",
+    "./packages/utilities",
+    "./packages/validation",
+    "./packages/cli",
+    "./packages/test",
+    "./packages/artifacts",
+    "./packages/class-core",
+    "./packages/class-core-generator",
+    "./packages/class-core-build",
+    "./packages/class-core-test"
+  ]
 }
