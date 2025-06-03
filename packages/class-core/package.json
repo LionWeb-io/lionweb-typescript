@@ -1,0 +1,37 @@
+{
+  "name": "@lionweb/class-core",
+  "version": "0.7.0-beta.1",
+  "description": "Generic, language-aspecific base types for generated TypeScript APIs",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "typings": "dist/index.d.ts",
+  "type": "module",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LionWeb-io/lionweb-typescript.git"
+  },
+  "bugs": {
+    "url": "https://github.com/LionWeb-io/lionweb-typescript/issues"
+  },
+  "scripts": {
+    "clean": "rm -rf dist/ node_modules/ lionweb-class-core-*.tgz",
+    "build": "rm -rf dist && tsc",
+    "lint": "eslint src",
+    "pre-release-either": "npm run clean && npm install && npm run build",
+    "prerelease": "npm run pre-release-either",
+    "release": "npm publish",
+    "prerelease-beta": "npm run pre-release-either",
+    "release-beta": "npm publish --tag beta"
+  },
+  "dependencies": {
+    "@lionweb/core": "0.7.0-beta.1",
+    "@lionweb/json": "0.7.0-beta.1",
+    "@lionweb/ts-utils": "0.7.0-beta.1",
+    "littoral-templates": "0.3.0",
+    "mobx": "6.13.7"
+  },
+  "devDependencies": {
+    "typescript": "5.3.3"
+  }
+}

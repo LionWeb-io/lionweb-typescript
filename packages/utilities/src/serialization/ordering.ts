@@ -1,71 +1,68 @@
 import {
-    MetaPointer,
-    SerializationChunk,
-    SerializedContainment,
-    SerializedLanguageReference,
-    SerializedNode,
-    SerializedProperty,
-    SerializedReference,
-    SerializedReferenceTarget
-} from "@lionweb/core"
+    LionWebJsonChunk,
+    LionWebJsonContainment,
+    LionWebJsonMetaPointer,
+    LionWebJsonNode,
+    LionWebJsonProperty,
+    LionWebJsonReference,
+    LionWebJsonReferenceTarget,
+    LionWebJsonUsedLanguage
+} from "@lionweb/json"
 
+const orderedMetaPointer = ({ language, version, key }: LionWebJsonMetaPointer): LionWebJsonMetaPointer => ({
+    language,
+    version,
+    key
+})
 
-const orderedMetaPointer = ({language, version, key}: MetaPointer): MetaPointer =>
-    ({
-        language,
-        version,
-        key
-    })
+const orderedSerializedLanguageReference = ({ key, version }: LionWebJsonUsedLanguage): LionWebJsonUsedLanguage => ({
+    key,
+    version
+})
 
-const orderedSerializedLanguageReference = ({key, version}: SerializedLanguageReference): SerializedLanguageReference =>
-    ({
-        key,
-        version
-    })
+const orderedSerializedReferenceTarget = ({ reference, resolveInfo }: LionWebJsonReferenceTarget): LionWebJsonReferenceTarget => ({
+    resolveInfo,
+    reference
+})
 
-const orderedSerializedReferenceTarget = ({reference, resolveInfo}: SerializedReferenceTarget): SerializedReferenceTarget =>
-    ({
-        resolveInfo,
-        reference
-    })
+const orderedSerializedProperty = ({ property, value }: LionWebJsonProperty): LionWebJsonProperty => ({
+    property: orderedMetaPointer(property),
+    value
+})
 
-const orderedSerializedProperty = ({property, value}: SerializedProperty): SerializedProperty =>
-    ({
-        property: orderedMetaPointer(property),
-        value
-    })
+const orderedSerializedContainment = ({ containment, children }: LionWebJsonContainment): LionWebJsonContainment => ({
+    containment: orderedMetaPointer(containment),
+    children    // TODO  ensure [] if empty
+})
 
-const orderedSerializedContainment = ({containment, children}: SerializedContainment): SerializedContainment =>
-    ({
-        containment: orderedMetaPointer(containment),
-        children    // TODO  ensure [] if empty
-    })
+const orderedSerializedReference = ({ reference, targets }: LionWebJsonReference): LionWebJsonReference => ({
+    reference: orderedMetaPointer(reference),
+    targets: targets.map(orderedSerializedReferenceTarget)    // TODO  ensure [] if empty
+})
 
-const orderedSerializedReference = ({reference, targets}: SerializedReference): SerializedReference =>
-    ({
-        reference: orderedMetaPointer(reference),
-        targets: targets.map(orderedSerializedReferenceTarget)    // TODO  ensure [] if empty
-    })
+const orderedSerializedNode = ({
+    id,
+    classifier,
+    properties,
+    containments,
+    references,
+    annotations,
+    parent
+}: LionWebJsonNode): LionWebJsonNode => ({
+    id,
+    classifier: orderedMetaPointer(classifier),
+    properties: properties.map(orderedSerializedProperty),
+    containments: containments.map(orderedSerializedContainment),
+    references: references.map(orderedSerializedReference),
+    annotations,    // TODO  ensure [] if empty
+    parent
+})
 
-const orderedSerializedNode = ({id, classifier, properties, containments, references, annotations, parent}: SerializedNode): SerializedNode =>
-    ({
-        id,
-        classifier: orderedMetaPointer(classifier),
-        properties: properties.map(orderedSerializedProperty),
-        containments: containments.map(orderedSerializedContainment),
-        references: references.map(orderedSerializedReference),
-        annotations,    // TODO  ensure [] if empty
-        parent
-    })
-
-
-const orderedSerializationChunk = ({serializationFormatVersion, languages, nodes}: SerializationChunk): SerializationChunk =>
-    ({
-        serializationFormatVersion,
-        languages: languages.map(orderedSerializedLanguageReference),
-        nodes: nodes.map(orderedSerializedNode)
-    })
-
+const orderedSerializationChunk = ({ serializationFormatVersion, languages, nodes }: LionWebJsonChunk): LionWebJsonChunk => ({
+    serializationFormatVersion,
+    languages: languages.map(orderedSerializedLanguageReference),
+    nodes: nodes.map(orderedSerializedNode)
+})
 
 export {
     orderedMetaPointer,
@@ -74,4 +71,3 @@ export {
     orderedSerializedProperty,
     orderedSerializedReferenceTarget
 }
-

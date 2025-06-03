@@ -1,0 +1,47 @@
+language Deltas
+    version: 0
+    entities (↓name):
+
+        concept Delta implements INamed
+            features (↓name):
+                documentation: String?
+                fields: Field[0..*]
+
+        <<partition>> concept Deltas
+            features (↓name):
+                deltas: Delta[0..*]
+
+        enumeration FeatureKinds
+            literals:
+                property
+                containment
+                reference
+
+        concept FeatureType implements Type
+            features (↓name):
+                container -> Field?
+                kind: FeatureKinds
+
+        concept Field implements INamed
+            features (↓name):
+                type: Type
+
+        concept IndexType implements Type
+
+        interface NodeSerialization
+
+        concept NodeType implements Type
+            features (↓name):
+                serialization: NodeSerialization?
+
+        concept PrimitiveValueType implements Type
+
+        concept RefOnly implements NodeSerialization
+
+        concept SerializeSubTree implements NodeSerialization
+            features (↓name):
+                fieldName: String
+
+        interface Type
+
+

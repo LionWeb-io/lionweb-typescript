@@ -1,24 +1,42 @@
 const { exec } = require("child_process")
-const { writeFileSync, readFileSync } = require("fs")
+const { writeFileSync, readdirSync, readFileSync } = require("fs")
 const { join } = require("path")
 const { EOL } = require("os")
 
 
-const package2version = require("./packages/versions.json")
+const versions = require("./packages/versions.json")
 
+const {
+    "publish-version": publishVersion,
+    "internal-version": internalVersion,
+    "internal-packages": internalPackages,
+} = versions.lionweb
+const {"external-deps": externalDeps} = versions
+
+const ownPackageVersion = (dep) => internalPackages.indexOf(dep) === -1 ? publishVersion : internalVersion
 
 const fqPrefix = "@lionweb/"
 
-const replaceVersionsIn = (deps) => {
+const replaceVersionsIn = (deps, doNotWarnOnUnlisted) => {
     Object.entries(deps)
         .forEach(([dep, currentVersion]) => {
             if (dep.startsWith(fqPrefix)) {
                 const uqDep = dep.substring(fqPrefix.length)
-                if (uqDep in package2version) {
-                    const desiredVersion = package2version[uqDep]
+                const desiredVersion = ownPackageVersion(uqDep)
+                if (desiredVersion !== currentVersion) {
+                    console.log(`   replacing dep for ${uqDep}: ${currentVersion} -> ${desiredVersion}`)
+                    deps[dep] = desiredVersion
+                }
+            } else {
+                if (dep in externalDeps) {
+                    const desiredVersion = externalDeps[dep]
                     if (desiredVersion !== currentVersion) {
-                        console.log(`   replacing dep for ${uqDep}: ${currentVersion} -> ${desiredVersion}`)
+                        console.log(`   replacing dep for ${dep}: ${currentVersion} -> ${desiredVersion}`)
                         deps[dep] = desiredVersion
+                    }
+                } else {
+                    if (!doNotWarnOnUnlisted) {
+                        console.log(`   encountered unlisted external dep: ${dep} @ ${currentVersion}`)
                     }
                 }
             }
@@ -33,14 +51,14 @@ const writeJsonAsFile = (path, json) => {
     writeFileSync(path, JSON.stringify(json, null, 2) + EOL)
 }
 
-
-Object
-    .keys(package2version)
+readFileAsJson("package.json")
+    .workspaces
+    .map((path) => path.substring("./packages/".length))
     .forEach((pkg) => {
         console.log(`updating versions in package.json of package "${pkg}"...`)
         const packageJsonPath = join("packages", pkg, "package.json")
         const packageJson = readFileAsJson(packageJsonPath)
-        packageJson.version = package2version[pkg]
+        packageJson.version = ownPackageVersion(pkg)
         if ("dependencies" in packageJson) {
             replaceVersionsIn(packageJson.dependencies)
         }
@@ -51,6 +69,10 @@ Object
         console.log(`(done)`)
         console.log()
     })
+
+const mainPackageJson = readFileAsJson("package.json")
+replaceVersionsIn(mainPackageJson.devDependencies, true)
+writeJsonAsFile("package.json", mainPackageJson)
 
 console.log(`updating package-lock.json...`)
 exec("npm install")

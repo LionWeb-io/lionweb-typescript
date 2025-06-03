@@ -1,14 +1,14 @@
-import { LionWebJsonChunk, LionWebJsonDiff } from "@lionweb/validation"
-import { assert } from "chai"
-import fs from "fs"
+import { LionWebJsonChunk } from "@lionweb/json"
+import { LionWebJsonDiff } from "@lionweb/json-diff"
+import { existsSync, readFileSync, statSync } from "fs"
 
-const { deepEqual } = assert
+import { deepEqual } from "../test-utils/assertions.js"
 
 function readModel(filename: string): LionWebJsonChunk | null {
-    if (fs.existsSync(filename)) {
-        const stats = fs.statSync(filename)
+    if (existsSync(filename)) {
+        const stats = statSync(filename)
         if (stats.isFile()) {
-            const chunk: LionWebJsonChunk = JSON.parse(fs.readFileSync(filename).toString())
+            const chunk: LionWebJsonChunk = JSON.parse(readFileSync(filename).toString())
             return chunk
         }
     }

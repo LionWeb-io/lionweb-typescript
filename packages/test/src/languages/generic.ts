@@ -1,13 +1,8 @@
-import {chain, concatenator, LanguageFactory, lastOf} from "@lionweb/core"
-import {hasher} from "@lionweb/utilities"
+import { LanguageFactory } from "@lionweb/core"
+import { chain, concatenator, lastOf } from "@lionweb/ts-utils"
+import { hasher } from "@lionweb/utilities"
 
-
-const factory = new LanguageFactory(
-    "Generic",
-    "0",
-    chain(concatenator("-"), hasher({ encoding: "base64" })),
-    lastOf
-)
+const factory = new LanguageFactory("Generic", "0", chain(concatenator("-"), hasher({ encoding: "base64" })), lastOf)
 export const genericLanguage = factory.language
 
 export const SomeConcept = factory.concept("SomeConcept", false)
@@ -19,4 +14,3 @@ export const SomeConcept_refs = factory.reference(SomeConcept, "refs").ofType(An
 export const SomeAnnotation = factory.annotation("SomeAnnotation")
 SomeAnnotation.annotates = AnotherConcept
 export const SomeAnnotation_ref = factory.reference(SomeAnnotation, "ref").ofType(SomeConcept)
-

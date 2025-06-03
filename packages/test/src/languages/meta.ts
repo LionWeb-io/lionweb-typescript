@@ -1,11 +1,7 @@
-import {builtinPrimitives, concatenator, LanguageFactory, lastOf} from "@lionweb/core"
+import { builtinPrimitives, LanguageFactory } from "@lionweb/core"
+import { concatenator, lastOf } from "@lionweb/ts-utils"
 
-const factory = new LanguageFactory(
-    "meta",
-    "1",
-    concatenator("-"),
-    lastOf
-)
+const factory = new LanguageFactory("meta", "1", concatenator("-"), lastOf)
 
 /**
  * A "meta" language in which every instance of a meta concept has name "{A|a}[n]<name of meta concept>".
@@ -24,4 +20,3 @@ const anEnumeration = factory.enumeration("AnEnumeration")
 factory.enumerationLiteral(anEnumeration, "anEnumerationLiteral")
 
 factory.interface("AnInterface")
-

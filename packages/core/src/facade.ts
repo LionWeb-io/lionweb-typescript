@@ -1,7 +1,8 @@
-import {Node} from "./types.js"
-import {Classifier, Enumeration, EnumerationLiteral, Feature, Link} from "./m3/types.js"
-import {flatMapNonCyclingFollowing, trivialFlatMapper} from "./utils/recursion.js"
-import {allFeaturesOf, isContainment} from "./m3/functions.js"
+import { LionWebId, LionWebKey } from "@lionweb/json"
+import { flatMapNonCyclingFollowing, trivialFlatMapper } from "@lionweb/ts-utils"
+import { allFeaturesOf, isContainment } from "./m3/functions.js"
+import { Classifier, Enumeration, EnumerationLiteral, Feature, Link } from "./m3/types.js"
+import { Node } from "./types.js"
 
 
 /**
@@ -11,7 +12,7 @@ type ClassifierDeducer<NT extends Node> = (node: NT) => Classifier
 
 /**
  * Type def. for functions that deduce the string value of the `resolveInfo` field of a
- * {@link SerializedReferenceTarget serialized reference target}, or  {@code undefined}
+ * {@link LionWebJsonReferenceTarget serialized reference target}, or  {@code undefined}
  * to indicate that no `resolveInfo` could be derived.
  */
 type ResolveInfoDeducer<NT extends Node> = (node: NT) => string | undefined
@@ -46,7 +47,7 @@ interface ExtractionFacade<NT extends Node> {
     enumerationLiteralFrom: (encoding: unknown, enumeration: Enumeration) => EnumerationLiteral | null
 
     /**
-     * @return The string value of the `resolveInfo` field of a {@link SerializedReferenceTarget serialized reference target},
+     * @return The string value of the `resolveInfo` field of a {@link LionWebJsonReferenceTarget serialized reference target},
      * or {@code undefined} to indicate that no `resolveInfo` could be derived.
      */
     resolveInfoFor?: ResolveInfoDeducer<NT>
@@ -60,8 +61,8 @@ interface InstantiationFacade<NT extends Node> {
      * its ID and the values of the node's properties ("settings").
      * (The latter may be required as arguments for the constructor of a class, whose instances represent nodes.)
      */
-    nodeFor: (parent: NT | undefined, classifier: Classifier, id: string, propertySettings: { [propertyKey: string]: unknown }) => NT
-// TODO  this prohibits multiple properties with the same key but different language => use a variant of SerializedProperty[] with the value already deserialized
+    nodeFor: (parent: NT | undefined, classifier: Classifier, id: LionWebId, propertySettings: { [propertyKey: LionWebKey]: unknown }) => NT
+// TODO  this prohibits multiple properties with the same key but different language => use a variant of LionWebJsonProperty[] with the value already deserialized
 
     /**
      * Sets the *single* given value of the indicated {@link Feature} on the given node.
@@ -89,7 +90,7 @@ const childrenExtractorUsing = <NT extends Node>(extractionFacade: ExtractionFac
     (node: NT): NT[] => [
         ...(allFeaturesOf(extractionFacade.classifierOf(node))
             .filter(isContainment)
-            .flatMap((containment) => extractionFacade.getFeatureValue(node, containment))),
+            .flatMap((containment) => extractionFacade.getFeatureValue(node, containment) ?? [])),
 // FIXME  there's NO guarantee about the result of extractionFacade.getFeatureValue(node, containment) !!!
         ...node.annotations
     ] as NT[]
@@ -104,7 +105,7 @@ const nodesExtractorUsing = <NT extends Node>(extractionFacade: ExtractionFacade
 
 type SettingsUpdater = (settings: Record<string, unknown>, feature: Feature, value: unknown) => void
 
-const settingsUpdater = (metaKey: string): SettingsUpdater =>
+const settingsUpdater = (metaKey: keyof Feature): SettingsUpdater =>
     (settings: Record<string, unknown>, feature: Feature, value: unknown): void => {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const key = (feature as any)[metaKey] as string

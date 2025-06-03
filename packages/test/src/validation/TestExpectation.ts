@@ -8,4 +8,3 @@ export type TestExpectation = {
 
 export type ExpectationList = TestExpectation[]; 
 
-

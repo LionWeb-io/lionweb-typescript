@@ -6,6 +6,12 @@
 [![CI](https://github.com/LionWeb-io/lionweb-typescript/actions/workflows/test.yaml/badge.svg)
 ](https://github.com/LionWeb-io/lionweb-typescript/actions/workflows/test.yaml)
 
+[![npm](https://img.shields.io/npm/v/%40lionweb%2Fjson?label=%40lionweb%2Fjson)
+](https://www.npmjs.com/package/@lionweb/json)
+[![npm](https://img.shields.io/npm/v/%40lionweb%2Fjson-utils?label=%40lionweb%2Fjson-utils)
+](https://www.npmjs.com/package/@lionweb/json-utils)
+[![npm](https://img.shields.io/npm/v/%40lionweb%2Fjson-diff?label=%40lionweb%2Fjson-diff)
+](https://www.npmjs.com/package/@lionweb/json-diff)
 [![npm](https://img.shields.io/npm/v/%40lionweb%2Fcore?label=%40lionweb%2Fcore)
 ](https://www.npmjs.com/package/@lionweb/core)
 [![npm](https://img.shields.io/npm/v/%40lionweb%2Fcli?label=%40lionweb%2Fcli)
@@ -14,6 +20,8 @@
 ](https://www.npmjs.com/package/@lionweb/utilities)
 [![npm](https://img.shields.io/npm/v/%40lionweb%2Fvalidation?label=%40lionweb%2Fvalidation)
 ](https://www.npmjs.com/package/@lionweb/validation)
+[![npm](https://img.shields.io/npm/v/%40lionweb%2Fts-utils?label=%40lionweb%2Fts-utils)
+](https://www.npmjs.com/package/@lionweb/ts-utils)
 
 
 This repository contains a TypeScript implementation for (parts of) the [LionWeb specification](https://lionweb-io.github.io/specification/) – specifically: release version **2023.1** of the LionWeb specification.
@@ -21,6 +29,7 @@ This repository contains a TypeScript implementation for (parts of) the [LionWeb
 _Note_ that this repo doesn't implement the specification completely.
 In particular:
 
+* No support for release version 2024.1 (yet).
 * Not all constraints on the LionCore M3 have been implemented.
 * The functionality in the `utilities` and `validation` packages is provided “as-is”.
 
@@ -29,23 +38,53 @@ The implementation of the JSON serialization format, serialization from in-memor
 
 ## Repo org
 
-The implementation is divided up in a number of NPM packages in the directory [`packages`](./packages) (in order of importance):
+The implementation is divided up in a number of NPM packages in the directory [`packages`](./packages) (in order of importance) — see their READMEs for more details:
+
+- `json`
+  Encapsulates the JSON serialization format.
+
+- `json-utils`
+  Utilities around the JSON serialization format, also i.c.w. LionCore M3.
+
+- `json-diff`
+  Computes differences between LionWeb serialization chunks.
 
 - `core`
   The "core stuff" such as: base types, the LionCore M3 (including the `builtins` language), and (de-)serialization.
+
 - `utilities`
   Utilities on top of the `core` packages that might be broadly useful, but should not go into the `core` package.
+
 - `validation`
   Validators that validate a JSON serialization.
-- `test`
-  A package containing (unit) tests for the packages above.
+
+- `ts-utils`
+  General TypeScript utilities, e.g. for working with maps and such.
+
 - `cli`
   A package with an executable to trigger some of the functionality in `utilities` through a commandline interface (CLI), i.e. from the commandline.
+
+- `class-core`
+  A package that contains a framework for the implementation of `INode` that's class-based, and can handle deltas.
+
+- `class-core-generator`
+  A package that contains a code generator to generate classes based on the `class-core` package from an M2.
+
+- `test`
+  A package containing (unit) tests for the packages above.
+
 - `artifacts`
   A package that generates artifacts (serialization chunks, diagrams, JSON Schemas) from some of the models constructed in the `core` and `test` packages.
 
+- `class-core-build`
+  A package that builds part of the code in `class-core` — specifically the part related to the delta protocol.
+
+  _Note_ that this package – and specifically the `generate-for-class-core.ts` file – depends on `class-core` itself.
+  This constitutes a *circular* dependency, but that only exists at compile+build time, so should not be problematic.
+  To ensure that a “clean clone” of this repository is not impacted, the `make-class-core.sh` script builds `class-core` first, before compiling and running `class-core-build`, and then builds `class-core` again.
+
 Each of these packages have their own `README.md`.
-The `core`, `utilities`, `cli`, and `validation` packages are published in the scope of [the `lionweb` organization](https://www.npmjs.com/org/lionweb), meaning that they're all prefixed with `@lionweb/`.
+The following packages are published in the scope of [the `lionweb` organization](https://www.npmjs.com/org/lionweb), meaning that they're all prefixed with `@lionweb/`: `json`, `json-utils`, `js-diff`, `core`, `ts-utils`, `utilities`, `cli`, and `validation`, `class-core`, `class-core-generator`
 The other packages are for internal use only.
 All these packages declare their own NPM semver identification, which isn't directly related to the release version of the LionWeb specification.
 
@@ -73,19 +112,32 @@ npm run clean
 npm install
 npm run setup
 ```
+
 Run the following command to **build** each of the packages:
 
 ```shell
-# Build the project
 npm run build
 ```
 
 This includes cleaning up and installing any NPM (dev) dependencies.
 
-The preceding commands can also be run as follows:
+Run the following command to **re-build** the `class-core`-related packages specifically:
+
+```shell
+source make-class-core.sh
+```
+
+The chain of preceding commands can also be run as follows:
 
 ```shell
 npm run initialize
+```
+
+Run the following command to run the tests:
+
+```shell
+# Run the tests
+npm run test
 ```
 
 The following command statically _style_-checks the source code in all the packages:
@@ -98,13 +150,6 @@ npm run lint
 *Note* that this does not catch TypeScript compilation errors!
 (That's because linting only does parsing, not full compilation.)
 
-Run the following command to run the tests:
-
-```shell
-# Run the tests
-npm run test
-```
-
 <br />
 
 The output should look similar to this (but much longer):
@@ -113,25 +158,26 @@ The output should look similar to this (but much longer):
 <img src="./documentation/images/test-output.png" alt="test" width="50%"/>
 
 
-### Updating version numbers
+### Version numbers
 
-To keep the version numbers of the various packages under `packages/` aligned throughout this repository, you can use the Node.js script [`update-package-versions.js`](./update-package-versions.js).
+To keep the version numbers of the various packages under `packages/` aligned throughout this repository, you use the Node.js script [`update-package-versions.js`](./update-package-versions.js).
 You execute this script as follows from the repo's root:
 
 ```shell
 node update-package-versions.js
 ```
 
-This reads the file [`packages/versions.json`](./packages/versions.json) and updates the `package.json` files of all packages under `packages/` according to it.
+This reads the file [`packages/versions.json`](./packages/versions.json) and updates the `package.json` files of all *workspace packages* (as listed in the root-level `package.json`) under `packages/` according to it, as well as the main(/root-level) `package.json`.
+The format of that `versions.json` file is self-explanatory.
 This script runs `npm install` afterward to update the `package-lock.json`.
-Inspect the resulting diffs to ensure correctness, and don't forget to run `npm install` to update the `package-lock.json` in case you made corrections.
+Inspect the resulting diffs to ensure correctness, and don't forget to run `npm install` to update the `package-lock.json` in case you made corrections outside of/after running this script.
 
 
 ### Releasing/publishing packages
 
 Packages are released to the [npm registry (website)](https://www.npmjs.com/): see the badges at the top of this document.
 We'll use the terms “release/releasing” from now on, instead of “publication/publishing” as npm itself does.
-We only release the following packages: `core`, `validation`, `utilities`, `cli`.
+We only release the following packages: `core`, `validation`, `utilities`, `cli`, `class-core`, `class-core-generator`.
 
 Releasing a package involves the following steps:
 

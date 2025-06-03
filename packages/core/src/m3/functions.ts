@@ -3,6 +3,12 @@
  */
 
 
+import { LionWebId, LionWebKey } from "@lionweb/json"
+import { cycleWith, flatMapNonCyclingFollowing, sortByStringKey } from "@lionweb/ts-utils"
+import { ClassifierDeducer } from "../facade.js"
+import { containmentChain } from "../functions.js"
+import { isRef, unresolved } from "../references.js"
+import { Node } from "../types.js"
 import {
     Annotation,
     Classifier,
@@ -23,13 +29,6 @@ import {
     Property,
     Reference
 } from "./types.js"
-import {isRef, unresolved} from "../references.js"
-import {sortByStringKey} from "../utils/sorting.js"
-import {cycleWith} from "../utils/cycles.js"
-import {flatMapNonCyclingFollowing} from "../utils/recursion.js"
-import {Id, Node} from "../types.js"
-import {ClassifierDeducer} from "../facade.js"
-import {containmentChain} from "../functions.js"
 
 
 /**
@@ -188,15 +187,8 @@ const namedsOf = (language: Language): M3Concept[] =>
 /**
  * @return the key of the given {@link INamed named thing}.
  */
-const keyOf = <T extends IKeyed>({key}: T): string =>
+const keyOf = <T extends IKeyed>({key}: T): LionWebKey =>
     key
-
-
-/**
- * Sorts the given {@link LanguageEntity language entities} by name.
- */
-const entitiesSortedByName = (entities: LanguageEntity[]) =>
-    sortByStringKey(entities, nameOf)
 
 
 type ConcreteClassifier = Concept | Annotation
@@ -259,7 +251,7 @@ const isEnumeration = (element: LanguageEntity): element is Enumeration =>
  * @return a function that looks up a classifier from the given {@link Language language} by its ID.
  */
 const idBasedClassifierDeducerFor = (language: Language) =>
-    (id: Id) =>
+    (id: LionWebId) =>
         language.entities.find((element) => element instanceof Classifier && element.id === id) as Classifier
 
 /**
@@ -316,7 +308,6 @@ export {
     conceptsOf,
     containmentChain,
     directlyContaineds,
-    entitiesSortedByName,
     featureMetaType,
     flatMap,
     idBasedClassifierDeducerFor,

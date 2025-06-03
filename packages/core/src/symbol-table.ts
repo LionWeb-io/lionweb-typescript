@@ -1,10 +1,10 @@
-import {MetaPointer} from "./serialization.js"
-import {Classifier, Feature, Language, LanguageEntity} from "./m3/types.js"
-import {allFeaturesOf} from "./m3/functions.js"
+import { LionWebJsonMetaPointer, LionWebKey } from "@lionweb/json"
+import { allFeaturesOf } from "./m3/functions.js"
+import { Classifier, Feature, Language, LanguageEntity } from "./m3/types.js"
 
 
 /**
- * Interface for objects that can look up within languages, based on given {@link MetaPointer meta pointers}.
+ * Interface for objects that can look up within languages, based on given {@link LionWebJsonMetaPointer meta pointers}.
  * This is meant to be able to properly encapsulate performance optimizations, also outside of the context
  * of deserialization.
  */
@@ -13,22 +13,22 @@ interface SymbolTable {
     /**
      * Looks up the {@link Language}, as pointed to by the given language key and version.
      */
-    languageMatching(key: string, version: string): Language | undefined
+    languageMatching(key: LionWebKey, version: string): Language | undefined
 
     /**
-     * Looks up the {@link LanguageEntity}, as pointed to by the given {@link MetaPointer},
+     * Looks up the {@link LanguageEntity}, as pointed to by the given {@link LionWebJsonMetaPointer},
      * or {@code undefined} if it couldn't be found.
      */
-    entityMatching(entityMetaPointer: MetaPointer): LanguageEntity | undefined
+    entityMatching(entityMetaPointer: LionWebJsonMetaPointer): LanguageEntity | undefined
 
     /**
-     * Looks up the {@link Feature}, as pointed to by the {@link MetaPointer} given second,
-     * as a feature of the {@link Classifier}, as pointed to by the {@link MetaPointer} given first,
+     * Looks up the {@link Feature}, as pointed to by the {@link LionWebJsonMetaPointer} given second,
+     * as a feature of the {@link Classifier}, as pointed to by the {@link LionWebJsonMetaPointer} given first,
      * or {@code undefined} it it couldn't be found.
-     * <em>Note</em> that the {@code language} and {@code version} values of both {@link MetaPointer}-typed arguments should coincide,
+     * <em>Note</em> that the {@code language} and {@code version} values of both {@link LionWebJsonMetaPointer}-typed arguments should coincide,
      * although this is typically not checked!
      */
-    featureMatching(entityMetaPointer: MetaPointer, featureMetaPointer: MetaPointer): Feature | undefined
+    featureMatching(entityMetaPointer: LionWebJsonMetaPointer, featureMetaPointer: LionWebJsonMetaPointer): Feature | undefined
 
 }
 
@@ -44,20 +44,20 @@ class NaiveSymbolTable implements SymbolTable {
         this.languages = languages
     }
 
-    languageMatching(key: string, version: string): Language | undefined {
+    languageMatching(key: LionWebKey, version: string): Language | undefined {
         return this.languages.find((language) =>
                language.key === key
             && language.version === version
         )
     }
 
-    entityMatching(entityMetaPointer: MetaPointer): LanguageEntity | undefined {
+    entityMatching(entityMetaPointer: LionWebJsonMetaPointer): LanguageEntity | undefined {
         return this.languageMatching(entityMetaPointer.language, entityMetaPointer.version)
             ?.entities
             .find((entity) => entity.key === entityMetaPointer.key)
     }
 
-    featureMatching(classifierMetaPointer: MetaPointer, featureMetaPointer: MetaPointer): Feature | undefined {
+    featureMatching(classifierMetaPointer: LionWebJsonMetaPointer, featureMetaPointer: LionWebJsonMetaPointer): Feature | undefined {
         const classifier = this.entityMatching(classifierMetaPointer)
         if (classifier === undefined || !(classifier instanceof Classifier)) {
             return undefined
@@ -81,8 +81,8 @@ const lazyMapGet = <T>(map: { [key: string]: T }, key: string, createThunk: () =
 
 type EntityInfo = {
     entity: LanguageEntity
-    allFeatures: Feature[]                                  // === [] if entity is not a Classifier
-    featureKey2feature: { [featureKey: string]: Feature }   // populated through memoisation
+    allFeatures: Feature[]                                      // === [] if entity is not a Classifier
+    featureKey2feature: { [featureKey: LionWebKey]: Feature }   // populated through memoisation
 }
 
 class MemoisingSymbolTable implements SymbolTable {
@@ -93,9 +93,9 @@ class MemoisingSymbolTable implements SymbolTable {
         this.languages = languages
     }
 
-    private readonly languageKey2version2language: { [languageKey: string]: { [version: string]: Language } } = {}
+    private readonly languageKey2version2language: { [languageKey: LionWebKey]: { [version: string]: Language } } = {}
 
-    languageMatching(languageKey: string, version: string): Language | undefined {
+    languageMatching(languageKey: LionWebKey, version: string): Language | undefined {
         return lazyMapGet(
             lazyMapGet(this.languageKey2version2language, languageKey, () => ({})),
             version,
@@ -107,9 +107,9 @@ class MemoisingSymbolTable implements SymbolTable {
     }
 
 
-    private readonly languageKey2version2entityKey2entityInfo: { [languageKey: string]: { [version: string]: { [entityKey: string]: (EntityInfo | undefined) } } } = {}
+    private readonly languageKey2version2entityKey2entityInfo: { [languageKey: LionWebKey]: { [version: string]: { [entityKey: LionWebKey]: (EntityInfo | undefined) } } } = {}
 
-    private entityInfoMatching(entityMetaPointer: MetaPointer): undefined | EntityInfo {
+    private entityInfoMatching(entityMetaPointer: LionWebJsonMetaPointer): undefined | EntityInfo {
         return lazyMapGet(
             lazyMapGet(
                 lazyMapGet(this.languageKey2version2entityKey2entityInfo, entityMetaPointer.language, () => ({})),
@@ -126,11 +126,11 @@ class MemoisingSymbolTable implements SymbolTable {
         )
     }
 
-    entityMatching(entityMetaPointer: MetaPointer): LanguageEntity | undefined {
+    entityMatching(entityMetaPointer: LionWebJsonMetaPointer): LanguageEntity | undefined {
         return this.entityInfoMatching(entityMetaPointer)?.entity
     }
 
-    featureMatching(classifierMetaPointer: MetaPointer, featureMetaPointer: MetaPointer): Feature | undefined {
+    featureMatching(classifierMetaPointer: LionWebJsonMetaPointer, featureMetaPointer: LionWebJsonMetaPointer): Feature | undefined {
         const entityInfo = this.entityInfoMatching(classifierMetaPointer)
         if (entityInfo === undefined || !(entityInfo.entity instanceof Classifier)) {
             return undefined

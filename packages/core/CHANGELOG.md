@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.7.0
+
+* Fix [bug #203](https://github.com/LionWeb-io/lionweb-typescript/issues/203).
+* (Fix that running setup on the test package for a second time fails.)
+* Extract utility functions to `@lionweb/ts-utils`, and `Id` (as `LionWebId`) to `@lionweb/json`.
+
+
 ## 0.6.12
 
 * `LanguageFactory` instances take care of containment: e.g., creating an entity automatically adds that to the language, and likewise for features (to classifiers) and literals (to enumerations). 
@@ -25,9 +32,9 @@
 
 * Add `featureMetaType` function and `FeatureMetaType` type.
 
-* Expose `metaPointerFor` function that computes the `MetaPointer` for a `Feature`.
+* Expose `metaPointerFor` function that computes the `LionWebJsonMetaPointer` for a `Feature`.
 
-* Expose `IdOrUnresolved` type that expresses a value is either an `Id` or a value to indicate that resolution to a node previously failed.
+* Expose `IdOrUnresolved` type that expresses a value is either an `LionWebId` or a value to indicate that resolution to a node previously failed.
 
 * Expose `isMultiple` function that determines whether a `Feature` is multi-valued.
 
@@ -69,7 +76,7 @@
     * Fix a bug w.r.t. enumeration literals — deserializing changed the keys of enumeration literals in the language's definition.
     * Deserialization doesn't throw on unresolvable references, but warns on the console and returns `null` (which means “unresolved”).
 * Export `byIdMap` function, which computes a map id &rarr; thing from an array of things with an `id`, from the package.
-* Make `SerializedProperty.value` `null`-able, to align with the specification.
+* Make `LionWebJsonProperty.value` `null`-able, to align with the specification.
 
 
 ## 0.6.7

@@ -1,8 +1,7 @@
-import {Id} from "@lionweb/core"
+import { LionWebId } from "@lionweb/json"
 
 export type BaseNode = {
-    id: Id
+    id: LionWebId
     classifier: string
     annotations: BaseNode[]
 }
-

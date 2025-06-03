@@ -1,14 +1,15 @@
 import {
-    ValidationResult,
     getAllDirectories,
     getFilesDirect,
     issuestoString,
+    LanguageRegistry,
     validateFileResult,
-    LanguageRegistry
+    ValidationResult
 } from "@lionweb/validation"
 import { LionWebLanguageWrapper } from "@lionweb/validation/dist/languages/LionWebLanguageWrapper.js"
-import { assert } from "chai"
 import fs from "fs"
+import { isTrue } from "../test-utils/assertions.js"
+
 import { TestExpectation } from "./TestExpectation.js"
 
 // Directories containing test cases
@@ -60,7 +61,7 @@ function validationTest(testDir: TestDir, validateAgainstLanguage: boolean, regi
                         console.log("SUCCESS: " + issuestoString(result, file))
                     }
                 }
-                assert.isTrue(success, issuestoString(result, file))
+                isTrue(success, issuestoString(result, file))
             })
         }
     }
@@ -74,14 +75,14 @@ const tests: TestDir[] = [
     { dir: m3languageDir, lang: [m3languageFile, builtinsLanguageFile] }
 ]
 
-function registerLanguage(registry: LanguageRegistry, filename: string) {
-    // console.log(`ADD LANGUAGE ${filename}`)
-    const languageAsString = fs.readFileSync(filename, "utf-8")
+function registerLanguage(registry: LanguageRegistry, fileName: string) {
+    // console.log(`ADD LANGUAGE ${fileName}`)
+    const languageAsString = fs.readFileSync(fileName, "utf-8")
     const json = JSON.parse(languageAsString)
     registry.addLanguage(new LionWebLanguageWrapper(json))
 }
 
-tests.forEach(async (testDir) => {
+tests.forEach(async testDir => {
     console.log("testDir " + JSON.stringify(testDir))
     // await to ensure tests won't go in parallel because the KnownLanguages is static
     const registry = new LanguageRegistry()

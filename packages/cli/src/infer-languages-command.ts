@@ -1,10 +1,9 @@
-import {writeFileSync} from "fs"
+import { serializeLanguages } from "@lionweb/core"
+import { inferLanguagesFromSerializationChunk, readSerializationChunk } from "@lionweb/utilities"
+import { writeFileSync } from "fs"
 import path from "path"
-import {serializeLanguages} from "@lionweb/core"
-import {inferLanguagesFromSerializationChunk, readSerializationChunk} from "@lionweb/utilities"
 
-
-export const inferLanguages = async (filePath: string)=> {
+export const inferLanguages = async (filePath: string) => {
     const dirName = path.dirname(filePath)
     const chunk = await readSerializationChunk(filePath)
 
@@ -15,4 +14,3 @@ export const inferLanguages = async (filePath: string)=> {
         console.log(`Language ${language.name} has been generated: "${languageFile}"`)
     }
 }
-

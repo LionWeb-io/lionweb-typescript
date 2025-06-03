@@ -1,6 +1,6 @@
-import {allFeaturesOf, Reference} from "../m3/index.js"
-import {ExtractionFacade} from "../facade.js"
-import {Node} from "../types.js"
+import { ExtractionFacade } from "../facade.js"
+import { allFeaturesOf, Reference } from "../m3/index.js"
+import { Node } from "../types.js"
 
 
 /**
@@ -35,7 +35,7 @@ export const referenceValues = <NT extends Node>(
 ): ReferenceValue<NT>[] => {
     const visit = (sourceNode: NT, reference: Reference): ReferenceValue<NT>[] => {
         if (reference.multiple) {
-            const targetNodes = extractionFacade.getFeatureValue(sourceNode, reference) as NT[] ?? []
+            const targetNodes = (extractionFacade.getFeatureValue(sourceNode, reference) ?? []) as NT[]
             return targetNodes
                 .map((targetNode, index) =>
                     new ReferenceValue<NT>(sourceNode, targetNode, reference, index)

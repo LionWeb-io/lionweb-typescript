@@ -1,8 +1,26 @@
 {
-    "core"      : "0.6.13-beta.0",
-    "utilities" : "0.6.13-beta.0",
-    "cli"       : "0.6.14-beta.0",
-    "validation": "0.6.3",
-    "test"      : "0.7.0-dev.0",
-    "artifacts" : "0.7.0-dev.0"
+    "lionweb": {
+        "publish-version" : "0.7.0-beta.1",
+        "internal-version": "0.7.0-dev.0",
+        "internal-packages": [
+            "artifacts",
+            "class-core-build",
+            "class-core-test",
+            "test"
+        ]
+    },
+    "external-deps": {
+        "@types/chai": "5.2.1",
+        "@types/mocha": "10.0.10",
+        "@types/node": "22.15.21",
+        "@types/xml2js": "0.4.14",
+        "chai": "5.2.0",
+        "degit": "2.8.4",
+        "littoral-templates": "0.3.0",
+        "mobx": "6.13.7",
+        "mocha": "11.1.0",
+        "nanoid": "5.0.9",
+        "typescript": "5.3.3",
+        "xml2js": "0.6.2"
+    }
 }
