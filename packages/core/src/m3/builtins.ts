@@ -3,7 +3,7 @@ import { PrimitiveTypeDeserializer } from "../deserializer.js"
 import { PrimitiveTypeSerializer } from "../serializer.js"
 import { currentReleaseVersion } from "../version.js"
 import { LanguageFactory } from "./factory.js"
-import { Classifier, Concept, Datatype, lioncoreBuiltinsKey, Property } from "./types.js"
+import { Classifier, Concept, DataType, lioncoreBuiltinsKey, Property } from "./types.js"
 
 const lioncoreBuiltinsIdAndKeyGenerator: StringsMapper = (...names) => [lioncoreBuiltinsKey, ...names.slice(1)].join("-")
 
@@ -62,22 +62,21 @@ const builtinFeatures = {
 }
 
 /**
- * Determines whether two datatypes should be structurally equal based on equality of: meta type, key, and language's key.
+ * Determines whether two data types should be structurally equal based on equality of: meta type, key, and language's key.
  */
-const shouldBeIdentical = (left: Datatype, right: Datatype): boolean =>
+const shouldBeIdentical = (left: DataType, right: DataType): boolean =>
     left.key === right.key && left.language.key === right.language.key && left.metaType() === right.metaType()
 
-abstract class DatatypeRegister<T> {
-    private map = new Map<Datatype, T>()
+abstract class DataTypeRegister<T> {
+    private map = new Map<DataType, T>()
 
-    public register(datatype: Datatype, t: T) {
-        this.map.set(datatype, t)
+    public register(dataType: DataType, t: T) {
+        this.map.set(dataType, t)
     }
 
-    protected byType(targetDatatype: Datatype): T | undefined {
-        for (const entry of this.map.entries()) {
-            const [datatype, t] = entry
-            if (shouldBeIdentical(targetDatatype, datatype)) {
+    protected byType(targetDataType: DataType): T | undefined {
+        for (const [dataType, t] of this.map.entries()) {
+            if (shouldBeIdentical(targetDataType, dataType)) {
                 return t
             }
         }
@@ -86,7 +85,7 @@ abstract class DatatypeRegister<T> {
 }
 
 export class DefaultPrimitiveTypeDeserializer
-    extends DatatypeRegister<SpecificPrimitiveTypeDeserializer>
+    extends DataTypeRegister<SpecificPrimitiveTypeDeserializer>
     implements PrimitiveTypeDeserializer
 {
     constructor() {
@@ -117,7 +116,7 @@ export class DefaultPrimitiveTypeDeserializer
     }
 }
 
-export class DefaultPrimitiveTypeSerializer extends DatatypeRegister<SpecificPrimitiveTypeSerializer> implements PrimitiveTypeSerializer {
+export class DefaultPrimitiveTypeSerializer extends DataTypeRegister<SpecificPrimitiveTypeSerializer> implements PrimitiveTypeSerializer {
     constructor() {
         super()
         this.register(stringDatatype, value => value as string)

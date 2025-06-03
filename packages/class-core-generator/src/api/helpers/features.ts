@@ -18,7 +18,7 @@
 import {
     builtinClassifiers,
     Classifier,
-    Datatype,
+    DataType,
     Enumeration,
     Feature,
     isContainment,
@@ -43,17 +43,17 @@ export const typeOf = (feature: Feature): SingleRef<LanguageEntity> => {
 }
 
 
-export const tsTypeForDatatype = (datatype: SingleRef<Datatype>, imports: Imports) => {
-    if (datatype === null) {
-        return `unknown /* [ERROR] can't compute a TS type for a null datatype */`
+export const tsTypeForDataType = (dataType: SingleRef<DataType>, imports: Imports) => {
+    if (dataType === null) {
+        return `unknown /* [ERROR] can't compute a TS type for a null data type */`
     }
-    if (datatype instanceof PrimitiveType) {
-        return tsTypeForPrimitiveType(datatype)
+    if (dataType instanceof PrimitiveType) {
+        return tsTypeForPrimitiveType(dataType)
     }
-    if (datatype instanceof Enumeration) {
-        return imports.entity(datatype)
+    if (dataType instanceof Enumeration) {
+        return imports.entity(dataType)
     }
-    return `unknown /* [ERROR] can't compute a TS type for datatype ${datatype.name} that has an unhandled/-known meta-type ${datatype.constructor.name} */`
+    return `unknown /* [ERROR] can't compute a TS type for data type ${dataType.name} that has an unhandled/-known meta-type ${dataType.constructor.name} */`
 }
 
 

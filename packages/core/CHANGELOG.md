@@ -7,6 +7,8 @@
 * Extract utility functions to `@lionweb/ts-utils`, and `Id` (as `LionWebId`) to `@lionweb/json`.
 * Errors thrown by the built-in `DefaultPrimitiveTypeDeserializer` and `DefaultPrimitiveTypeSerializer` are improved to say what `Property` they pertain to.
 * Fix that `PrimitiveTypeSerializer.serializeValue` returns `undefined` instead of `null` – which is according to spec – for an empty property value.
+* Fix misspellings of “data type” including camel-cased versions: particularly, classes `Datatype[Register]` &rarr; `DataType[Register]`, which are part of the LionCore built-ins or the infrastructure around that.
+    The original class `Datatype` is kept in a backward compatible way (by extending from the renamed class), and is to be deprecated at some point.
 
 
 ## 0.6.12
@@ -52,8 +54,8 @@
 
 ## 0.6.10
 
-* Make `DefaultPrimitiveTypeDeserializer` and `DefaultPrimitiveTypeSerializer` be able to deal with duplicate definitions of datatypes.
-    * Expose a function `shouldBeIdentical` that determines whether two datatypes should be structurally equal based on equality of: meta type, key, and language's key.
+* Make `DefaultPrimitiveTypeDeserializer` and `DefaultPrimitiveTypeSerializer` be able to deal with duplicate definitions of data types.
+    * Expose a function `shouldBeIdentical` that determines whether two data types should be structurally equal based on equality of: meta type, key, and language's key.
 * Make serializer more resilient against unresolved (i.e., `null`-valued) children.
 * Fix that `resolveInfo` of a serialized reference must be `null`, not `undefined`.
 

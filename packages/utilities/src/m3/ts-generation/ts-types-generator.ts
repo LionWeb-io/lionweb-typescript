@@ -6,7 +6,7 @@ import {
     Classifier,
     Concept,
     conceptsOf,
-    Datatype,
+    DataType,
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
     DynamicNode,
     Enumeration,
@@ -50,9 +50,9 @@ const fieldForLink = ({ name, type, optional, multiple }: Link): Field => ({
     type: `${type === unresolved ? `unknown` : type.name}${multiple ? `[]` : ``}`
 })
 
-const tsTypeFor = (datatype: SingleRef<Datatype>): string => {
-    if (datatype instanceof PrimitiveType) {
-        switch (datatype) {
+const tsTypeFor = (dataType: SingleRef<DataType>): string => {
+    if (dataType instanceof PrimitiveType) {
+        switch (dataType) {
             case builtinPrimitives.booleanDatatype:
                 return `boolean`
             case builtinPrimitives.stringDatatype:
@@ -65,10 +65,10 @@ const tsTypeFor = (datatype: SingleRef<Datatype>): string => {
                 return `string`
         }
     }
-    if (datatype instanceof Enumeration) {
-        return datatype.name
+    if (dataType instanceof Enumeration) {
+        return dataType.name
     }
-    return `unknown /* [ERROR] can't compute a TS type for this datatype: ${datatype} */`
+    return `unknown /* [ERROR] can't compute a TS type for this data type: ${dataType} */`
 }
 
 const fieldForProperty = ({ name, type, optional }: Property): Field => ({
@@ -99,7 +99,7 @@ const typeForEnumeration = (enumeration: Enumeration): Template => [
     ``
 ]
 
-const typeForPrimitiveType = (datatype: PrimitiveType): Template => [`export type ${datatype.name} = ${tsTypeFor(datatype)};`, ``]
+const typeForPrimitiveType = (primitiveType: PrimitiveType): Template => [`export type ${primitiveType.name} = ${tsTypeFor(primitiveType)};`, ``]
 
 export enum GenerationOptions {
     assumeSealed
