@@ -16,16 +16,16 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import {
+    BuiltinPropertyValueDeserializer,
     Classifier,
     Containment,
-    DefaultPrimitiveTypeDeserializer,
     defaultSimplisticHandler,
     Enumeration,
     Language,
     MemoisingSymbolTable,
     PrimitiveType,
-    PrimitiveTypeDeserializer,
     Property,
+    PropertyValueDeserializer,
     Reference,
     SimplisticHandler,
     unresolved
@@ -43,7 +43,7 @@ import { NodesToInstall } from "./linking.js"
 export type Deserializer<T> = (
     serializationChunk: LionWebJsonChunk,
     dependentNodes?: INodeBase[],
-    primitiveTypeDeserializer?: PrimitiveTypeDeserializer,
+    propertyValueDeserializer?: PropertyValueDeserializer,
     problemHandler?: SimplisticHandler
 ) => T;
 
@@ -84,7 +84,7 @@ export const nodeBaseDeserializerWithIdMapping = (languageBases: ILanguageBase[]
     return (
         serializationChunk: LionWebJsonChunk,
         dependentNodes: INodeBase[] = [],
-        primitiveTypeDeserializer: PrimitiveTypeDeserializer = new DefaultPrimitiveTypeDeserializer(),
+        propertyValueDeserializer: PropertyValueDeserializer = new BuiltinPropertyValueDeserializer(),
         problemsHandler: SimplisticHandler = defaultSimplisticHandler
     ): RootsWithIdMapping => {
 
@@ -106,7 +106,7 @@ export const nodeBaseDeserializerWithIdMapping = (languageBases: ILanguageBase[]
                     problemsHandler.reportProblem(`can't deserialize value for feature with key ${propertyMetaPointer.key} in ${languageMessage}: feature not found on classifier ${classifierMetaPointer.key} in language (${classifierMetaPointer.language}, ${classifierMetaPointer.version}) - skipping`);
                 } else if (feature instanceof Property) {
                     if (feature.type instanceof PrimitiveType) {
-                        node.getPropertyValueManager(feature).setDirectly(value === null ? undefined : primitiveTypeDeserializer.deserializeValue(value, feature));
+                        node.getPropertyValueManager(feature).setDirectly(value === null ? undefined : propertyValueDeserializer.deserializeValue(value, feature));
                     } else if (feature.type instanceof Enumeration) {
                         if (value !== undefined) {
                             const literal = feature.type.literals.find((literal) => literal.key === value);
@@ -224,9 +224,9 @@ export const nodeBaseDeserializer = (languageBases: ILanguageBase[], handleDelta
     return (
         serializationChunk: LionWebJsonChunk,
         dependentNodes: INodeBase[] = [],
-        primitiveTypeDeserializer: PrimitiveTypeDeserializer = new DefaultPrimitiveTypeDeserializer(),
+        propertyValueDeserializer: PropertyValueDeserializer = new BuiltinPropertyValueDeserializer(),
         problemsHandler: SimplisticHandler = defaultSimplisticHandler
     ): INodeBase[] =>
-        deserializerWithIdMapping(serializationChunk, dependentNodes, primitiveTypeDeserializer, problemsHandler).roots
+        deserializerWithIdMapping(serializationChunk, dependentNodes, propertyValueDeserializer, problemsHandler).roots
 }
 

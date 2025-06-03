@@ -14,6 +14,8 @@
     This includes:
     * Introduce class `BuiltinsPropertyValueSerializer` as a future replacement for `DefaultPrimitiveTypeSerializer`.
     * Introduce field `SerializationOptions.propertyValueSerializer` as a future replacement for `SerializationOptions.primitiveTypeSerializer`.
+* Introduce interface `PropertyValueDeserializer` that will replace `PrimitiveTypeDeserializer` – which is kept for backward compatibility, for now – in the next major release.
+  This includes introducing class `BuiltinsPropertyValueDeserializer` as a future replacement for `DefaultPrimitiveTypeDeserializer`.
 
 
 ## 0.6.12

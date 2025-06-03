@@ -1,17 +1,31 @@
-import { currentSerializationFormatVersion, LionWebId, LionWebJsonChunk, LionWebJsonNode, LionWebKey } from "@lionweb/json"
+import {
+    currentSerializationFormatVersion,
+    LionWebId,
+    LionWebJsonChunk,
+    LionWebJsonNode,
+    LionWebKey
+} from "@lionweb/json"
 import { byIdMap, groupBy } from "@lionweb/ts-utils"
 import { InstantiationFacade } from "./facade.js"
 import { defaultSimplisticHandler, SimplisticHandler } from "./handler.js"
-import { DefaultPrimitiveTypeDeserializer } from "./m3/builtins.js"
+import { BuiltinPropertyValueDeserializer } from "./m3/builtins.js"
 import { allFeaturesOf } from "./m3/functions.js"
 import { Classifier, Containment, Enumeration, Language, PrimitiveType, Property, Reference } from "./m3/types.js"
 import { unresolved } from "./references.js"
 import { MemoisingSymbolTable } from "./symbol-table.js"
 import { Node } from "./types.js"
 
-export interface PrimitiveTypeDeserializer {
+/**
+ * Interface for objects that expose a method to deserialize a property's value.
+ */
+export interface PropertyValueDeserializer {
     deserializeValue(value: string | undefined, property: Property): unknown | undefined
 }
+
+/**
+ * Misspelled alias of {@link PropertyValueDeserializer}, kept for backward compatibility, and to be deprecated and removed later.
+ */
+export interface PrimitiveTypeDeserializer extends PropertyValueDeserializer {}
 
 /**
  * @return a deserialization of a {@link LionWebJsonChunk}
@@ -20,7 +34,7 @@ export interface PrimitiveTypeDeserializer {
  * @param instantiationFacade - a {@link InstantiationFacade} that is used to instantiate nodes and set values on them
  * @param languages - a {@link Language language} that the serialized model is expected to conform to
  * @param dependentNodes - a collection of nodes from dependent models against which all references in the serialized model are supposed to resolve against
- * @param primitiveTypeDeserializer - a deserializer for values of primitive types (by default a {@link DefaultPrimitiveTypeDeserializer})
+ * @param propertyValueDeserializer - a deserializer for values of properties (by default a {@link BuiltinPropertyValueDeserializer})
  * @param problemHandler - a handler for reporting problems (by default a {@link defaultSimplisticHandler})
  */
 export const deserializeSerializationChunk = <NT extends Node>(
@@ -30,7 +44,7 @@ export const deserializeSerializationChunk = <NT extends Node>(
     // TODO  facades <--> languages, so it's weird that it looks split up like this
     dependentNodes: Node[],
     // TODO (#13)  see if you can turn this into [nodes: Node[], instantiationFacade: InstantiationFacade<Node>][] after all
-    primitiveTypeDeserializer: PrimitiveTypeDeserializer = new DefaultPrimitiveTypeDeserializer(),
+    propertyValueDeserializer: BuiltinPropertyValueDeserializer = new BuiltinPropertyValueDeserializer(),
     problemHandler: SimplisticHandler = defaultSimplisticHandler
 ): NT[] => {
     if (serializationChunk.serializationFormatVersion !== currentSerializationFormatVersion) {
@@ -113,7 +127,7 @@ export const deserializeSerializationChunk = <NT extends Node>(
                         const value = serializedPropertiesPerKey[property.key][0].value
                         if (property.type instanceof PrimitiveType) {
                             propertySettings[property.key] =
-                                value === null ? undefined : primitiveTypeDeserializer.deserializeValue(value, property as Property)
+                                value === null ? undefined : propertyValueDeserializer.deserializeValue(value, property as Property)
                             return
                         }
                         if (property.type instanceof Enumeration) {

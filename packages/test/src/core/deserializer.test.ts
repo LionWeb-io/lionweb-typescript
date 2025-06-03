@@ -1,7 +1,7 @@
 import {
     AggregatingSimplisticHandler,
+    BuiltinPropertyValueDeserializer,
     Concept,
-    DefaultPrimitiveTypeDeserializer,
     deserializeChunk,
     deserializeSerializationChunk,
     dynamicInstantiationFacade,
@@ -147,8 +147,8 @@ describe("deserialization", () => {
                 }
             ]
         }
-        const primitiveTypeDeserializer = new DefaultPrimitiveTypeDeserializer()
-        primitiveTypeDeserializer.register(dateDatatype, value => {
+        const propertyValueDeserializer = new BuiltinPropertyValueDeserializer()
+        propertyValueDeserializer.register(dateDatatype, value => {
             const parts = value.split("-")
             return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]))
         })
@@ -158,7 +158,7 @@ describe("deserialization", () => {
             libraryWithDatesInstantiationFacade,
             [libraryWithDatesLanguage],
             [],
-            primitiveTypeDeserializer
+            propertyValueDeserializer
         )
 
         const node = deserialization[0] as NodeWithProperties

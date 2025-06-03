@@ -1,5 +1,5 @@
 import { StringsMapper } from "@lionweb/ts-utils"
-import { PrimitiveTypeDeserializer } from "../deserializer.js"
+import { PropertyValueDeserializer } from "../deserializer.js"
 import { PropertyValueSerializer } from "../serializer.js"
 import { currentReleaseVersion } from "../version.js"
 import { LanguageFactory } from "./factory.js"
@@ -79,9 +79,9 @@ abstract class DataTypeRegister<T> {
     }
 }
 
-export class DefaultPrimitiveTypeDeserializer
+export class BuiltinPropertyValueDeserializer
     extends DataTypeRegister<(value: string) => unknown>
-    implements PrimitiveTypeDeserializer
+    implements PropertyValueDeserializer
 {
     constructor() {
         super()
@@ -110,6 +110,12 @@ export class DefaultPrimitiveTypeDeserializer
         }
     }
 }
+
+/**
+ * Misspelled alias of {@link BuiltinPropertyValueDeserializer}, kept for backward compatibility, and to be deprecated and removed later.
+ */
+export class DefaultPrimitiveTypeDeserializer extends BuiltinPropertyValueDeserializer {}
+
 
 export class BuiltinPropertyValueSerializer extends DataTypeRegister<(value: unknown) => string> implements PropertyValueSerializer {
     constructor() {
