@@ -126,10 +126,10 @@ export class DefaultPrimitiveTypeSerializer extends DatatypeRegister<SpecificPri
         this.register(jsonDatatype, value => JSON.stringify(value, null))
     }
 
-    serializeValue(value: unknown | undefined, property: Property): string | undefined {
+    serializeValue(value: unknown | undefined, property: Property): string | null {
         if (value === undefined) {
             if (property.optional) {
-                return undefined
+                return null
             }
             throw new Error(`can't serialize undefined as the value of required property "${property.name}" (on classifier "${property.classifier.name}" in language "${property.classifier.language.name}")`)
         }

@@ -9,7 +9,7 @@ import { Node } from "./types.js"
 
 
 export interface PrimitiveTypeSerializer {
-    serializeValue(value: unknown, property: Property): string | undefined
+    serializeValue(value: unknown, property: Property): string | null
 }
 
 const isPrimitiveTypeSerializer = (value: unknown): value is PrimitiveTypeSerializer =>
