@@ -1,6 +1,6 @@
 import { StringsMapper } from "@lionweb/ts-utils"
 import { PrimitiveTypeDeserializer } from "../deserializer.js"
-import { PrimitiveTypeSerializer } from "../serializer.js"
+import { PropertyValueSerializer } from "../serializer.js"
 import { currentReleaseVersion } from "../version.js"
 import { LanguageFactory } from "./factory.js"
 import { Classifier, Concept, DataType, lioncoreBuiltinsKey, Property } from "./types.js"
@@ -111,7 +111,7 @@ export class DefaultPrimitiveTypeDeserializer
     }
 }
 
-export class BuiltinPropertyValueSerializer extends DataTypeRegister<(value: unknown) => string> implements PrimitiveTypeSerializer {
+export class BuiltinPropertyValueSerializer extends DataTypeRegister<(value: unknown) => string> implements PropertyValueSerializer {
     constructor() {
         super()
         this.register(stringDatatype, value => value as string)
@@ -139,5 +139,10 @@ export class BuiltinPropertyValueSerializer extends DataTypeRegister<(value: unk
         }
     }
 }
+
+/**
+ * Misspelled alias of {@link BuiltinPropertyValueSerializer}, kept for backward compatibility, and to be deprecated and removed later.
+ */
+export class DefaultPrimitiveTypeSerializer extends BuiltinPropertyValueSerializer {}
 
 export { builtinPrimitives, builtinClassifiers, builtinFeatures, isBuiltinNodeConcept, lioncoreBuiltins, shouldBeIdentical }

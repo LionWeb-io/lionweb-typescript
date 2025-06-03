@@ -10,6 +10,10 @@
 * Fix misspellings of “data type” including camel-cased versions: particularly, classes `Datatype[Register]` &rarr; `DataType[Register]`, which are part of the LionCore built-ins or the infrastructure around that.
     The original class `Datatype` is kept in a backward compatible way (by extending from the renamed class), and is to be deprecated at some point.
 * Remove type `BuiltinPrimitive` that couldn't really be used sensibly anywhere.
+* Introduce interface `PropertyValueSerializer` that will replace `PrimitiveTypeSerializer` – which is kept for backward compatibility, for now – in the next major release.
+    This includes:
+    * Introduce class `BuiltinsPropertyValueSerializer` as a future replacement for `DefaultPrimitiveTypeSerializer`.
+    * Introduce field `SerializationOptions.propertyValueSerializer` as a future replacement for `SerializationOptions.primitiveTypeSerializer`.
 
 
 ## 0.6.12

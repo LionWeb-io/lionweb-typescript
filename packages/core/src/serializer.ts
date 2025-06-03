@@ -2,18 +2,29 @@ import { currentSerializationFormatVersion, LionWebId, LionWebJsonChunk, LionWeb
 import { asArray } from "@lionweb/ts-utils"
 import { ExtractionFacade } from "./facade.js"
 import { asIds } from "./functions.js"
-import { DefaultPrimitiveTypeSerializer } from "./m3/builtins.js"
+import { BuiltinPropertyValueSerializer } from "./m3/builtins.js"
 import { allFeaturesOf } from "./m3/functions.js"
 import { Containment, Enumeration, Feature, Language, PrimitiveType, Property, Reference, simpleNameDeducer } from "./m3/types.js"
 import { Node } from "./types.js"
 
 
-export interface PrimitiveTypeSerializer {
+/**
+ * Interface for objects that expose a method to serialize a property's value.
+ */
+export interface PropertyValueSerializer {
     serializeValue(value: unknown, property: Property): string | null
 }
 
-const isPrimitiveTypeSerializer = (value: unknown): value is PrimitiveTypeSerializer =>
+/**
+ * Misspelled alias of {@link PropertyValueSerializer}, kept for backward compatibility, and to be deprecated and removed later.
+ */
+export interface PrimitiveTypeSerializer extends PropertyValueSerializer {}
+
+
+const isPropertyValueSerializer = (value: unknown): value is PropertyValueSerializer =>
     typeof value === "object" && value !== null && "serializeValue" in value && typeof value.serializeValue === "function"
+        // (we can't check the rest of the signature – i.e. arguments and their types – at runtime, because that's JavaScript)
+
 
 /**
  * Type to provide options to the serializer.
@@ -26,7 +37,16 @@ export type SerializationOptions = Partial<{
      */
     serializeEmptyFeatures: boolean
 
-    primitiveTypeSerializer: PrimitiveTypeSerializer
+    /**
+     * A {@link PropertyValueSerializer} implementation.
+     * Default = DefaultPropertyValueSerializer.
+     */
+    propertyValueSerializer: PropertyValueSerializer
+
+    /**
+     * Misspelled alias of {@link #propertyValueSerializer}, kept for backward compatibility, and to be deprecated and removed later.
+     */
+    primitiveTypeSerializer: PropertyValueSerializer
 }>
 
 /**
@@ -47,15 +67,17 @@ export const metaPointerFor = (feature: Feature): LionWebJsonMetaPointer => {
 export const serializeNodes = <NT extends Node>(
     nodes: NT[],
     extractionFacade: ExtractionFacade<NT>,
-    primitiveTypeSerializerOrOptions?: PrimitiveTypeSerializer | SerializationOptions
+    propertyValueSerializerOrOptions?: PropertyValueSerializer | SerializationOptions
 ): LionWebJsonChunk /* <=> JSON */ => {
-    const primitiveTypeSerializer =
-        (isPrimitiveTypeSerializer(primitiveTypeSerializerOrOptions)
-            ? primitiveTypeSerializerOrOptions
-            : primitiveTypeSerializerOrOptions?.primitiveTypeSerializer) ?? new DefaultPrimitiveTypeSerializer()
-    const serializeEmptyFeatures = isPrimitiveTypeSerializer(primitiveTypeSerializerOrOptions)
-        ? true
-        : (primitiveTypeSerializerOrOptions?.serializeEmptyFeatures ?? true)
+    const options: SerializationOptions =
+        isPropertyValueSerializer(propertyValueSerializerOrOptions)
+            ? {
+                propertyValueSerializer: propertyValueSerializerOrOptions
+            }
+            : (propertyValueSerializerOrOptions ?? {})
+    const propertyValueSerializer =
+        options.propertyValueSerializer ?? options.primitiveTypeSerializer ?? new BuiltinPropertyValueSerializer()
+    const serializeEmptyFeatures = options.serializeEmptyFeatures ?? true
 
     const serializedNodes: LionWebJsonNode[] = [] // keep nodes as much as possible "in order"
     const ids: { [id: LionWebId]: boolean } = {} // maintain a map to keep track of IDs of nodes that have been serialized
@@ -98,7 +120,7 @@ export const serializeNodes = <NT extends Node>(
                 const encodedValue = (() => {
                     // (could also just inspect type of value:)
                     if (feature.type instanceof PrimitiveType) {
-                        return primitiveTypeSerializer.serializeValue(value, feature)
+                        return propertyValueSerializer.serializeValue(value, feature)
                     }
                     if (feature.type instanceof Enumeration) {
                         return extractionFacade.enumerationLiteralFrom(value, feature.type)?.key

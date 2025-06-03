@@ -2,8 +2,8 @@ import {
     Annotation,
     builtinClassifiers,
     builtinPrimitives,
+    BuiltinPropertyValueSerializer,
     Concept,
-    DefaultPrimitiveTypeSerializer,
     dynamicExtractionFacade,
     DynamicNode,
     Enumeration,
@@ -31,8 +31,8 @@ describe("serialization", () => {
     })
 
     it("serializes node with custom primitive type, works when registering custom deserializer", () => {
-        const primitiveTypeSerializer = new DefaultPrimitiveTypeSerializer()
-        primitiveTypeSerializer.register(dateDatatype, (value: unknown) => {
+        const builtinsPropertyValueSerializer = new BuiltinPropertyValueSerializer()
+        builtinsPropertyValueSerializer.register(dateDatatype, (value: unknown) => {
             const d = value as Date
             return `${Number(d.getFullYear()).toString().padStart(4, "0")}-${Number(d.getMonth() + 1)
                 .toString()
@@ -94,7 +94,7 @@ describe("serialization", () => {
                 }
             ]
         }
-        expect(serializeNodes([myNode], new TestNodeReader([libraryWithDatesLanguage]), primitiveTypeSerializer)).to.eql(
+        expect(serializeNodes([myNode], new TestNodeReader([libraryWithDatesLanguage]), builtinsPropertyValueSerializer)).to.eql(
             expectedSerializationChunk
         )
     })
