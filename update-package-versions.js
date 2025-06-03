@@ -17,7 +17,7 @@ const ownPackageVersion = (dep) => internalPackages.indexOf(dep) === -1 ? publis
 
 const fqPrefix = "@lionweb/"
 
-const replaceVersionsIn = (deps) => {
+const replaceVersionsIn = (deps, doNotWarnOnUnlisted) => {
     Object.entries(deps)
         .forEach(([dep, currentVersion]) => {
             if (dep.startsWith(fqPrefix)) {
@@ -35,7 +35,9 @@ const replaceVersionsIn = (deps) => {
                         deps[dep] = desiredVersion
                     }
                 } else {
-                    console.log(`   encountered unlisted external dep: ${dep} @ ${currentVersion}`)
+                    if (!doNotWarnOnUnlisted) {
+                        console.log(`   encountered unlisted external dep: ${dep} @ ${currentVersion}`)
+                    }
                 }
             }
         })
@@ -67,6 +69,10 @@ readFileAsJson("package.json")
         console.log(`(done)`)
         console.log()
     })
+
+const mainPackageJson = readFileAsJson("package.json")
+replaceVersionsIn(mainPackageJson.devDependencies, true)
+writeJsonAsFile("package.json", mainPackageJson)
 
 console.log(`updating package-lock.json...`)
 exec("npm install")
