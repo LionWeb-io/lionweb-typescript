@@ -32,12 +32,12 @@ const orderedSerializedProperty = ({ property, value }: LionWebJsonProperty): Li
 
 const orderedSerializedContainment = ({ containment, children }: LionWebJsonContainment): LionWebJsonContainment => ({
     containment: orderedMetaPointer(containment),
-    children
+    children    // TODO  ensure [] if empty
 })
 
 const orderedSerializedReference = ({ reference, targets }: LionWebJsonReference): LionWebJsonReference => ({
     reference: orderedMetaPointer(reference),
-    targets: targets.map(orderedSerializedReferenceTarget)
+    targets: targets.map(orderedSerializedReferenceTarget)    // TODO  ensure [] if empty
 })
 
 const orderedSerializedNode = ({
@@ -54,7 +54,7 @@ const orderedSerializedNode = ({
     properties: properties.map(orderedSerializedProperty),
     containments: containments.map(orderedSerializedContainment),
     references: references.map(orderedSerializedReference),
-    annotations,
+    annotations,    // TODO  ensure [] if empty
     parent
 })
 

@@ -7,6 +7,7 @@ export const byIdMap = <T extends { id: string }>(ts: T[]): { [id: string]: T } 
         map[t.id] = t
     })
     return map
+    // TODO  -> Object.fromEntries(...) but what happens then with duplicate IDs?
 }
 
 
