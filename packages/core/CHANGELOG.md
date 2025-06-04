@@ -9,6 +9,7 @@
 * Fix that `PrimitiveTypeSerializer.serializeValue` returns `undefined` instead of `null` – which is according to spec – for an empty property value.
 * Fix misspellings of “data type” including camel-cased versions: particularly, classes `Datatype[Register]` &rarr; `DataType[Register]`, which are part of the LionCore built-ins or the infrastructure around that.
     The original class `Datatype` is kept in a backward compatible way (by extending from the renamed class), and is to be deprecated at some point.
+* Remove type `BuiltinPrimitive` that couldn't really be used sensibly anywhere.
 
 
 ## 0.6.12

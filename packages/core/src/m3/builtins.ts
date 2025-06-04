@@ -40,11 +40,6 @@ const inamed = factory.interface("INamed")
 
 const inamed_name = factory.property(inamed, "name").ofType(stringDatatype)
 
-type BuiltinPrimitive = string | boolean | number | Record<string, unknown> | Array<unknown>
-type PrimitiveTypeValue = BuiltinPrimitive | unknown
-type SpecificPrimitiveTypeDeserializer = (value: string) => PrimitiveTypeValue
-type SpecificPrimitiveTypeSerializer = (value: unknown) => string
-
 const builtinPrimitives = {
     stringDatatype,
     booleanDatatype,
@@ -85,7 +80,7 @@ abstract class DataTypeRegister<T> {
 }
 
 export class DefaultPrimitiveTypeDeserializer
-    extends DataTypeRegister<SpecificPrimitiveTypeDeserializer>
+    extends DataTypeRegister<(value: string) => unknown>
     implements PrimitiveTypeDeserializer
 {
     constructor() {
@@ -96,7 +91,7 @@ export class DefaultPrimitiveTypeDeserializer
         this.register(jsonDatatype, value => JSON.parse(value as string))
     }
 
-    deserializeValue(value: string | undefined, property: Property): PrimitiveTypeValue | undefined {
+    deserializeValue(value: string | undefined, property: Property): unknown | undefined {
         if (value === undefined) {
             if (property.optional) {
                 return undefined
@@ -116,7 +111,7 @@ export class DefaultPrimitiveTypeDeserializer
     }
 }
 
-export class DefaultPrimitiveTypeSerializer extends DataTypeRegister<SpecificPrimitiveTypeSerializer> implements PrimitiveTypeSerializer {
+export class BuiltinPropertyValueSerializer extends DataTypeRegister<(value: unknown) => string> implements PrimitiveTypeSerializer {
     constructor() {
         super()
         this.register(stringDatatype, value => value as string)
@@ -144,7 +139,5 @@ export class DefaultPrimitiveTypeSerializer extends DataTypeRegister<SpecificPri
         }
     }
 }
-
-export type { BuiltinPrimitive }
 
 export { builtinPrimitives, builtinClassifiers, builtinFeatures, isBuiltinNodeConcept, lioncoreBuiltins, shouldBeIdentical }
