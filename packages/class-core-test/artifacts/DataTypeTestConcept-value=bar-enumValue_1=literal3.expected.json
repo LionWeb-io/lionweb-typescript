@@ -12,14 +12,14 @@
       "classifier": {
         "language": "TestLanguage",
         "version": "0",
-        "key": "DatatypeTestConcept"
+        "key": "DataTypeTestConcept"
       },
       "properties": [
         {
           "property": {
             "language": "TestLanguage",
             "version": "0",
-            "key": "DatatypeTestConcept-stringValue_1"
+            "key": "DataTypeTestConcept-stringValue_1"
           },
           "value": "bar"
         },
@@ -27,7 +27,7 @@
           "property": {
             "language": "TestLanguage",
             "version": "0",
-            "key": "DatatypeTestConcept-enumValue_1"
+            "key": "DataTypeTestConcept-enumValue_1"
           },
           "value": "TestEnumeration-literal3"
         }

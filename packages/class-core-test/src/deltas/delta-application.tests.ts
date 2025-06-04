@@ -26,7 +26,7 @@ import {
 } from "@lionweb/class-core"
 import { deepEqual, equal, isUndefined } from "../assertions.js"
 
-import { DatatypeTestConcept, LinkTestConcept, TestAnnotation, TestLanguageBase } from "../gen/TestLanguage.g.js"
+import { DataTypeTestConcept, LinkTestConcept, TestAnnotation, TestLanguageBase } from "../gen/TestLanguage.g.js"
 
 const testLanguage = TestLanguageBase.INSTANCE
 
@@ -40,7 +40,7 @@ describe("delta application sets parentage correctly", () => {
             testLanguage.LinkTestConcept_containment_1_n
         ].forEach((containment) => {
             const ltc = LinkTestConcept.create("ltc");
-            const dtc = DatatypeTestConcept.create("dtc");
+            const dtc = DataTypeTestConcept.create("dtc");
             const delta = new ChildAddedDelta(ltc, containment, 0, dtc);
 
             applyDelta(delta);
@@ -51,7 +51,7 @@ describe("delta application sets parentage correctly", () => {
 
     it("child moved", () => {
         const srcLtc = LinkTestConcept.create("srcLtc");
-        const dtc = DatatypeTestConcept.create("dtc");
+        const dtc = DataTypeTestConcept.create("dtc");
         srcLtc.containment_0_1 = dtc;
         const dstLtc = LinkTestConcept.create("dstLtc");
         const delta = new ChildMovedDelta(srcLtc, testLanguage.LinkTestConcept_containment_0_1, 0, dstLtc, testLanguage.LinkTestConcept_containment_0_1, 0, dtc);
@@ -64,10 +64,10 @@ describe("delta application sets parentage correctly", () => {
 
     it("child replaced", () => {
         const srcLtc = LinkTestConcept.create("srcLtc");
-        const dtc1 = DatatypeTestConcept.create("dtc1");
+        const dtc1 = DataTypeTestConcept.create("dtc1");
         srcLtc.containment_0_1 = dtc1;
         const dstLtc = LinkTestConcept.create("dstLtc");
-        const dtc2 = DatatypeTestConcept.create("dtc2");
+        const dtc2 = DataTypeTestConcept.create("dtc2");
         dstLtc.containment_0_1 = dtc2;
         const delta = new ChildReplacedDelta(dstLtc, testLanguage.LinkTestConcept_containment_0_1, 0, dtc2, dtc1);
 
@@ -79,7 +79,7 @@ describe("delta application sets parentage correctly", () => {
 
     it("child deleted", () => {
         const ltc = LinkTestConcept.create("ltc");
-        const dtc = DatatypeTestConcept.create("dtc");
+        const dtc = DataTypeTestConcept.create("dtc");
         ltc.containment_0_1 = dtc;
         const delta = new ChildDeletedDelta(ltc, testLanguage.LinkTestConcept_containment_0_1, 0, dtc);
 

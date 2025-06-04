@@ -21,15 +21,15 @@ const factory = new LanguageFactory(
 export const lioncore = factory.language.havingKey("LionCore-M3")
 
 const { inamed } = builtinClassifiers
-const { booleanDatatype, stringDatatype } = builtinPrimitives
+const { booleanDataType, stringDataType } = builtinPrimitives
 
 const ikeyed = factory.interface("IKeyed").extending(inamed)
 
-const ikeyed_key = factory.property(ikeyed, "key").ofType(stringDatatype)
+const ikeyed_key = factory.property(ikeyed, "key").ofType(stringDataType)
 
 const feature = factory.concept("Feature", true).implementing(ikeyed)
 
-const feature_optional = factory.property(feature, "optional").ofType(booleanDatatype)
+const feature_optional = factory.property(feature, "optional").ofType(booleanDataType)
 
 const property = factory.concept("Property", false, feature)
 
@@ -37,7 +37,7 @@ const property_type = factory.reference(property, "type")
 
 const link = factory.concept("Link", true, feature)
 
-const link_multiple = factory.property(link, "multiple").ofType(booleanDatatype)
+const link_multiple = factory.property(link, "multiple").ofType(booleanDataType)
 
 const link_type = factory.reference(link, "type")
 
@@ -63,9 +63,9 @@ const annotation_implements = factory.reference(annotation, "implements").isMult
 
 const concept = factory.concept("Concept", false, classifier)
 
-const concept_abstract = factory.property(concept, "abstract").ofType(booleanDatatype)
+const concept_abstract = factory.property(concept, "abstract").ofType(booleanDataType)
 
-const concept_partition = factory.property(concept, "partition").ofType(booleanDatatype)
+const concept_partition = factory.property(concept, "partition").ofType(booleanDataType)
 
 const concept_extends = factory.reference(concept, "extends").isOptional().ofType(concept)
 
@@ -94,7 +94,7 @@ enumeration_literals.ofType(enumerationLiteral)
 
 const language = factory.concept("Language", false).implementing(ikeyed).isPartition()
 
-const language_version = factory.property(language, "version").ofType(stringDatatype)
+const language_version = factory.property(language, "version").ofType(stringDataType)
 
 const language_entities = factory.containment(language, "entities").isOptional().isMultiple().ofType(languageEntity)
 

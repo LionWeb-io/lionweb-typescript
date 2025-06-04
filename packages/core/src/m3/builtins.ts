@@ -22,10 +22,10 @@ const factory = new LanguageFactory(
  */
 const lioncoreBuiltins = factory.language
 
-const stringDatatype = factory.primitiveType("String")
-const booleanDatatype = factory.primitiveType("Boolean")
-const integerDatatype = factory.primitiveType("Integer")
-const jsonDatatype = factory.primitiveType("JSON")
+const stringDataType = factory.primitiveType("String")
+const booleanDataType = factory.primitiveType("Boolean")
+const integerDataType = factory.primitiveType("Integer")
+const jsonDataType = factory.primitiveType("JSON")
 
 const node = factory.concept("Node", true)
 
@@ -38,13 +38,29 @@ const isBuiltinNodeConcept = (classifier: Classifier) =>
 
 const inamed = factory.interface("INamed")
 
-const inamed_name = factory.property(inamed, "name").ofType(stringDatatype)
+const inamed_name = factory.property(inamed, "name").ofType(stringDataType)
 
 const builtinPrimitives = {
-    stringDatatype,
-    booleanDatatype,
-    integerDatatype,
-    jsonDatatype
+    stringDataType,
+    booleanDataType,
+    integerDataType,
+    jsonDataType,
+    /**
+     * Misspelled alias of {@link stringDataType}, kept for backward compatibility, and to be deprecated and removed later.
+     */
+    stringDatatype: stringDataType,
+    /**
+     * Misspelled alias of {@link booleanDataType}, kept for backward compatibility, and to be deprecated and removed later.
+     */
+    booleanDatatype: booleanDataType,
+    /**
+     * Misspelled alias of {@link integerDataType}, kept for backward compatibility, and to be deprecated and removed later.
+     */
+    integerDatatype: integerDataType,
+    /**
+     * Misspelled alias of {@link jsonDataType}, kept for backward compatibility, and to be deprecated and removed later.
+     */
+    jsonDatatype: jsonDataType
 }
 
 const builtinClassifiers = {
@@ -85,10 +101,10 @@ export class BuiltinPropertyValueDeserializer
 {
     constructor() {
         super()
-        this.register(stringDatatype, value => value)
-        this.register(booleanDatatype, value => JSON.parse(value))
-        this.register(integerDatatype, value => Number(value))
-        this.register(jsonDatatype, value => JSON.parse(value as string))
+        this.register(stringDataType, value => value)
+        this.register(booleanDataType, value => JSON.parse(value))
+        this.register(integerDataType, value => Number(value))
+        this.register(jsonDataType, value => JSON.parse(value as string))
     }
 
     deserializeValue(value: string | undefined, property: Property): unknown | undefined {
@@ -120,10 +136,10 @@ export class DefaultPrimitiveTypeDeserializer extends BuiltinPropertyValueDeseri
 export class BuiltinPropertyValueSerializer extends DataTypeRegister<(value: unknown) => string> implements PropertyValueSerializer {
     constructor() {
         super()
-        this.register(stringDatatype, value => value as string)
-        this.register(booleanDatatype, value => `${value as boolean}`)
-        this.register(integerDatatype, value => `${value as number}`)
-        this.register(jsonDatatype, value => JSON.stringify(value, null))
+        this.register(stringDataType, value => value as string)
+        this.register(booleanDataType, value => `${value as boolean}`)
+        this.register(integerDataType, value => `${value as number}`)
+        this.register(jsonDataType, value => JSON.stringify(value, null))
     }
 
     serializeValue(value: unknown | undefined, property: Property): string | null {

@@ -19,13 +19,13 @@ import { builtinPrimitives, PrimitiveType } from "@lionweb/core"
 
 export const tsTypeForPrimitiveType = (primitiveType: PrimitiveType): string => {
     switch (primitiveType) {
-        case builtinPrimitives.booleanDatatype:
+        case builtinPrimitives.booleanDataType:
             return `boolean`
-        case builtinPrimitives.stringDatatype:
+        case builtinPrimitives.stringDataType:
             return `string`
-        case builtinPrimitives.integerDatatype:
+        case builtinPrimitives.integerDataType:
             return `number`
-        case builtinPrimitives.jsonDatatype:
+        case builtinPrimitives.jsonDataType:
             return `unknown`
         default:
             return `string`

@@ -11,7 +11,7 @@ describe("key generation", () => {
 
         equal(form.key, "FormLanguage-Form")
 
-        const size = factory.property(form, "size").ofType(builtinPrimitives.integerDatatype)
+        const size = factory.property(form, "size").ofType(builtinPrimitives.integerDataType)
 
         equal(size.key, "FormLanguage-Form-size")
     })

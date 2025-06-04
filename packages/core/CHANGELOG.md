@@ -7,8 +7,10 @@
 * Extract utility functions to `@lionweb/ts-utils`, and `Id` (as `LionWebId`) to `@lionweb/json`.
 * Errors thrown by the built-in `DefaultPrimitiveTypeDeserializer` and `DefaultPrimitiveTypeSerializer` are improved to say what `Property` they pertain to.
 * Fix that `PrimitiveTypeSerializer.serializeValue` returns `undefined` instead of `null` – which is according to spec – for an empty property value.
-* Fix misspellings of “data type” including camel-cased versions: particularly, classes `Datatype[Register]` &rarr; `DataType[Register]`, which are part of the LionCore built-ins or the infrastructure around that.
-    The original class `Datatype` is kept in a backward compatible way (by extending from the renamed class), and is to be deprecated at some point.
+* Fix misspellings of “data type” including camel-cased versions, particularly:
+    * Classes `Datatype[Register]` &rarr; `DataType[Register]`, which are part of the LionCore built-ins or the infrastructure around that.
+        The original class `Datatype` is kept in a backward compatible way (by extending from the renamed class), and is to be deprecated and removed at some point.
+    * Members `{string|boolean|integer|json}Datatype` of `builtinPrimitives` &rarr; `<*>DataType` with the former kept as aliases – to be deprecated and removed at some point.
 * Remove type `BuiltinPrimitive` that couldn't really be used sensibly anywhere.
 * Introduce interface `PropertyValueSerializer` that will replace `PrimitiveTypeSerializer` – which is kept for backward compatibility, for now – in the next major release.
     This includes:

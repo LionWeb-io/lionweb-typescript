@@ -53,13 +53,13 @@ const fieldForLink = ({ name, type, optional, multiple }: Link): Field => ({
 const tsTypeFor = (dataType: SingleRef<DataType>): string => {
     if (dataType instanceof PrimitiveType) {
         switch (dataType) {
-            case builtinPrimitives.booleanDatatype:
+            case builtinPrimitives.booleanDataType:
                 return `boolean`
-            case builtinPrimitives.stringDatatype:
+            case builtinPrimitives.stringDataType:
                 return `string`
-            case builtinPrimitives.integerDatatype:
+            case builtinPrimitives.integerDataType:
                 return `number`
-            case builtinPrimitives.jsonDatatype:
+            case builtinPrimitives.jsonDataType:
                 return `unknown`
             default:
                 return `string`

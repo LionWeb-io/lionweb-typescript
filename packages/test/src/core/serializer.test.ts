@@ -18,7 +18,7 @@ import { currentSerializationFormatVersion, LionWebJsonChunk } from "@lionweb/js
 import { concatenator, lastOf } from "@lionweb/ts-utils"
 import { expect } from "chai"
 import { TestNode, TestNodeReader } from "../instances/test-node.js"
-import { dateDatatype, libraryWithDatesLanguage } from "../languages/libraryWithDates.js"
+import { dateDataType, libraryWithDatesLanguage } from "../languages/libraryWithDates.js"
 
 describe("serialization", () => {
     it("serializes node with custom primitive type, without registering custom deserializer", () => {
@@ -32,7 +32,7 @@ describe("serialization", () => {
 
     it("serializes node with custom primitive type, works when registering custom deserializer", () => {
         const builtinsPropertyValueSerializer = new BuiltinPropertyValueSerializer()
-        builtinsPropertyValueSerializer.register(dateDatatype, (value: unknown) => {
+        builtinsPropertyValueSerializer.register(dateDataType, (value: unknown) => {
             const d = value as Date
             return `${Number(d.getFullYear()).toString().padStart(4, "0")}-${Number(d.getMonth() + 1)
                 .toString()
@@ -231,9 +231,9 @@ describe("serialization of empty (unset) values", () => {
     const factory = new LanguageFactory("serialization-language", "0", concatenator("-"), lastOf)
     const enumeration = factory.enumeration("enumeration")
     const concept = factory.concept("concept", false)
-    factory.property(concept, "stringProperty").ofType(builtinPrimitives.stringDatatype).isOptional()
-    factory.property(concept, "integerProperty").ofType(builtinPrimitives.integerDatatype).isOptional()
-    factory.property(concept, "booleanProperty").ofType(builtinPrimitives.booleanDatatype).isOptional()
+    factory.property(concept, "stringProperty").ofType(builtinPrimitives.stringDataType).isOptional()
+    factory.property(concept, "integerProperty").ofType(builtinPrimitives.integerDataType).isOptional()
+    factory.property(concept, "booleanProperty").ofType(builtinPrimitives.booleanDataType).isOptional()
     factory.property(concept, "enumProperty").ofType(enumeration).isOptional()
     factory.containment(concept, "containment").ofType(concept).isOptional()
     factory.containment(concept, "containments").ofType(concept).isOptional().isMultiple()

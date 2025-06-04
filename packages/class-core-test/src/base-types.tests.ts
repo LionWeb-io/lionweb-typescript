@@ -17,15 +17,15 @@
 
 import { isSameSet } from "./assertions.js"
 
-import { DatatypeTestConcept, LinkTestConcept } from "./gen/TestLanguage.g.js"
+import { DataTypeTestConcept, LinkTestConcept } from "./gen/TestLanguage.g.js"
 
 describe("internals of base types", () => {
     it("children", () => {
         const ltc = LinkTestConcept.create("ltc")
-        const dtc1 = DatatypeTestConcept.create("dtc1")
-        const dtc2 = DatatypeTestConcept.create("dtc2")
-        const dtc3 = DatatypeTestConcept.create("dtc3")
-        const dtc4 = DatatypeTestConcept.create("dtc4")
+        const dtc1 = DataTypeTestConcept.create("dtc1")
+        const dtc2 = DataTypeTestConcept.create("dtc2")
+        const dtc3 = DataTypeTestConcept.create("dtc3")
+        const dtc4 = DataTypeTestConcept.create("dtc4")
         ltc.containment_0_1 = dtc1
         ltc.containment_1 = dtc2
         ltc.addContainment_0_n(dtc3)
@@ -39,10 +39,10 @@ describe("internals of base types", () => {
 
     it("referenceTargets", () => {
         const ltc = LinkTestConcept.create("ltc")
-        const dtc1 = DatatypeTestConcept.create("dtc1")
-        const dtc2 = DatatypeTestConcept.create("dtc2")
-        const dtc3 = DatatypeTestConcept.create("dtc3")
-        const dtc4 = DatatypeTestConcept.create("dtc4")
+        const dtc1 = DataTypeTestConcept.create("dtc1")
+        const dtc2 = DataTypeTestConcept.create("dtc2")
+        const dtc3 = DataTypeTestConcept.create("dtc3")
+        const dtc4 = DataTypeTestConcept.create("dtc4")
         ltc.reference_0_1 = dtc1
         ltc.reference_1 = dtc2
         ltc.addReference_0_n(dtc3)

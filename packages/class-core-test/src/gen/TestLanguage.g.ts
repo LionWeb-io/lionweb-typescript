@@ -118,50 +118,50 @@ export class TestLanguageBase implements ILanguageBase {
         return this._SecondTestEnumeration_literal3;
     }
 
-    public readonly _DatatypeTestConcept = new Concept(this._language, "DatatypeTestConcept", "DatatypeTestConcept", "DatatypeTestConcept", false);
-    get DatatypeTestConcept(): Concept {
+    public readonly _DataTypeTestConcept = new Concept(this._language, "DataTypeTestConcept", "DataTypeTestConcept", "DataTypeTestConcept", false);
+    get DataTypeTestConcept(): Concept {
         this.ensureWiredUp();
-        return this._DatatypeTestConcept;
+        return this._DataTypeTestConcept;
     }
-    private readonly _DatatypeTestConcept_booleanValue_1 = new Property(this._DatatypeTestConcept, "booleanValue_1", "DatatypeTestConcept-booleanValue_1", "DatatypeTestConcept-booleanValue_1");
-    get DatatypeTestConcept_booleanValue_1(): Property {
+    private readonly _DataTypeTestConcept_booleanValue_1 = new Property(this._DataTypeTestConcept, "booleanValue_1", "DataTypeTestConcept-booleanValue_1", "DataTypeTestConcept-booleanValue_1");
+    get DataTypeTestConcept_booleanValue_1(): Property {
         this.ensureWiredUp();
-        return this._DatatypeTestConcept_booleanValue_1;
+        return this._DataTypeTestConcept_booleanValue_1;
     }
-    private readonly _DatatypeTestConcept_integerValue_1 = new Property(this._DatatypeTestConcept, "integerValue_1", "DatatypeTestConcept-integerValue_1", "DatatypeTestConcept-integerValue_1");
-    get DatatypeTestConcept_integerValue_1(): Property {
+    private readonly _DataTypeTestConcept_integerValue_1 = new Property(this._DataTypeTestConcept, "integerValue_1", "DataTypeTestConcept-integerValue_1", "DataTypeTestConcept-integerValue_1");
+    get DataTypeTestConcept_integerValue_1(): Property {
         this.ensureWiredUp();
-        return this._DatatypeTestConcept_integerValue_1;
+        return this._DataTypeTestConcept_integerValue_1;
     }
-    private readonly _DatatypeTestConcept_stringValue_1 = new Property(this._DatatypeTestConcept, "stringValue_1", "DatatypeTestConcept-stringValue_1", "DatatypeTestConcept-stringValue_1");
-    get DatatypeTestConcept_stringValue_1(): Property {
+    private readonly _DataTypeTestConcept_stringValue_1 = new Property(this._DataTypeTestConcept, "stringValue_1", "DataTypeTestConcept-stringValue_1", "DataTypeTestConcept-stringValue_1");
+    get DataTypeTestConcept_stringValue_1(): Property {
         this.ensureWiredUp();
-        return this._DatatypeTestConcept_stringValue_1;
+        return this._DataTypeTestConcept_stringValue_1;
     }
-    private readonly _DatatypeTestConcept_enumValue_1 = new Property(this._DatatypeTestConcept, "enumValue_1", "DatatypeTestConcept-enumValue_1", "DatatypeTestConcept-enumValue_1");
-    get DatatypeTestConcept_enumValue_1(): Property {
+    private readonly _DataTypeTestConcept_enumValue_1 = new Property(this._DataTypeTestConcept, "enumValue_1", "DataTypeTestConcept-enumValue_1", "DataTypeTestConcept-enumValue_1");
+    get DataTypeTestConcept_enumValue_1(): Property {
         this.ensureWiredUp();
-        return this._DatatypeTestConcept_enumValue_1;
+        return this._DataTypeTestConcept_enumValue_1;
     }
-    private readonly _DatatypeTestConcept_booleanValue_0_1 = new Property(this._DatatypeTestConcept, "booleanValue_0_1", "DatatypeTestConcept-booleanValue_0_1", "DatatypeTestConcept-booleanValue_0_1").isOptional();
-    get DatatypeTestConcept_booleanValue_0_1(): Property {
+    private readonly _DataTypeTestConcept_booleanValue_0_1 = new Property(this._DataTypeTestConcept, "booleanValue_0_1", "DataTypeTestConcept-booleanValue_0_1", "DataTypeTestConcept-booleanValue_0_1").isOptional();
+    get DataTypeTestConcept_booleanValue_0_1(): Property {
         this.ensureWiredUp();
-        return this._DatatypeTestConcept_booleanValue_0_1;
+        return this._DataTypeTestConcept_booleanValue_0_1;
     }
-    private readonly _DatatypeTestConcept_integerValue_0_1 = new Property(this._DatatypeTestConcept, "integerValue_0_1", "DatatypeTestConcept-integerValue_0_1", "DatatypeTestConcept-integerValue_0_1").isOptional();
-    get DatatypeTestConcept_integerValue_0_1(): Property {
+    private readonly _DataTypeTestConcept_integerValue_0_1 = new Property(this._DataTypeTestConcept, "integerValue_0_1", "DataTypeTestConcept-integerValue_0_1", "DataTypeTestConcept-integerValue_0_1").isOptional();
+    get DataTypeTestConcept_integerValue_0_1(): Property {
         this.ensureWiredUp();
-        return this._DatatypeTestConcept_integerValue_0_1;
+        return this._DataTypeTestConcept_integerValue_0_1;
     }
-    private readonly _DatatypeTestConcept_stringValue_0_1 = new Property(this._DatatypeTestConcept, "stringValue_0_1", "DatatypeTestConcept-stringValue_0_1", "DatatypeTestConcept-stringValue_0_1").isOptional();
-    get DatatypeTestConcept_stringValue_0_1(): Property {
+    private readonly _DataTypeTestConcept_stringValue_0_1 = new Property(this._DataTypeTestConcept, "stringValue_0_1", "DataTypeTestConcept-stringValue_0_1", "DataTypeTestConcept-stringValue_0_1").isOptional();
+    get DataTypeTestConcept_stringValue_0_1(): Property {
         this.ensureWiredUp();
-        return this._DatatypeTestConcept_stringValue_0_1;
+        return this._DataTypeTestConcept_stringValue_0_1;
     }
-    private readonly _DatatypeTestConcept_enumValue_0_1 = new Property(this._DatatypeTestConcept, "enumValue_0_1", "DatatypeTestConcept-enumValue_0_1", "DatatypeTestConcept-enumValue_0_1").isOptional();
-    get DatatypeTestConcept_enumValue_0_1(): Property {
+    private readonly _DataTypeTestConcept_enumValue_0_1 = new Property(this._DataTypeTestConcept, "enumValue_0_1", "DataTypeTestConcept-enumValue_0_1", "DataTypeTestConcept-enumValue_0_1").isOptional();
+    get DataTypeTestConcept_enumValue_0_1(): Property {
         this.ensureWiredUp();
-        return this._DatatypeTestConcept_enumValue_0_1;
+        return this._DataTypeTestConcept_enumValue_0_1;
     }
 
     public readonly _LinkTestConcept = new Concept(this._language, "LinkTestConcept", "LinkTestConcept", "LinkTestConcept", false);
@@ -221,34 +221,34 @@ export class TestLanguageBase implements ILanguageBase {
         if (this._wiredUp) {
             return;
         }
-        this._language.havingEntities(this._TestEnumeration, this._SecondTestEnumeration, this._DatatypeTestConcept, this._LinkTestConcept, this._TestAnnotation);
+        this._language.havingEntities(this._TestEnumeration, this._SecondTestEnumeration, this._DataTypeTestConcept, this._LinkTestConcept, this._TestAnnotation);
         this._TestEnumeration.havingLiterals(this._TestEnumeration_literal1, this._TestEnumeration_literal2, this._TestEnumeration_literal3);
         this._SecondTestEnumeration.havingLiterals(this._SecondTestEnumeration_literal1, this._SecondTestEnumeration_literal2, this._SecondTestEnumeration_literal3);
-        this._DatatypeTestConcept.havingFeatures(this._DatatypeTestConcept_booleanValue_1, this._DatatypeTestConcept_integerValue_1, this._DatatypeTestConcept_stringValue_1, this._DatatypeTestConcept_enumValue_1, this._DatatypeTestConcept_booleanValue_0_1, this._DatatypeTestConcept_integerValue_0_1, this._DatatypeTestConcept_stringValue_0_1, this._DatatypeTestConcept_enumValue_0_1);
-        this._DatatypeTestConcept_booleanValue_1.ofType(LionCore_builtinsBase.INSTANCE._Boolean);
-        this._DatatypeTestConcept_integerValue_1.ofType(LionCore_builtinsBase.INSTANCE._Integer);
-        this._DatatypeTestConcept_stringValue_1.ofType(LionCore_builtinsBase.INSTANCE._String);
-        this._DatatypeTestConcept_enumValue_1.ofType(this._TestEnumeration);
-        this._DatatypeTestConcept_booleanValue_0_1.ofType(LionCore_builtinsBase.INSTANCE._Boolean).isOptional();
-        this._DatatypeTestConcept_integerValue_0_1.ofType(LionCore_builtinsBase.INSTANCE._Integer).isOptional();
-        this._DatatypeTestConcept_stringValue_0_1.ofType(LionCore_builtinsBase.INSTANCE._String).isOptional();
-        this._DatatypeTestConcept_enumValue_0_1.ofType(this._TestEnumeration).isOptional();
+        this._DataTypeTestConcept.havingFeatures(this._DataTypeTestConcept_booleanValue_1, this._DataTypeTestConcept_integerValue_1, this._DataTypeTestConcept_stringValue_1, this._DataTypeTestConcept_enumValue_1, this._DataTypeTestConcept_booleanValue_0_1, this._DataTypeTestConcept_integerValue_0_1, this._DataTypeTestConcept_stringValue_0_1, this._DataTypeTestConcept_enumValue_0_1);
+        this._DataTypeTestConcept_booleanValue_1.ofType(LionCore_builtinsBase.INSTANCE._Boolean);
+        this._DataTypeTestConcept_integerValue_1.ofType(LionCore_builtinsBase.INSTANCE._Integer);
+        this._DataTypeTestConcept_stringValue_1.ofType(LionCore_builtinsBase.INSTANCE._String);
+        this._DataTypeTestConcept_enumValue_1.ofType(this._TestEnumeration);
+        this._DataTypeTestConcept_booleanValue_0_1.ofType(LionCore_builtinsBase.INSTANCE._Boolean).isOptional();
+        this._DataTypeTestConcept_integerValue_0_1.ofType(LionCore_builtinsBase.INSTANCE._Integer).isOptional();
+        this._DataTypeTestConcept_stringValue_0_1.ofType(LionCore_builtinsBase.INSTANCE._String).isOptional();
+        this._DataTypeTestConcept_enumValue_0_1.ofType(this._TestEnumeration).isOptional();
         this._LinkTestConcept.havingFeatures(this._LinkTestConcept_containment_0_1, this._LinkTestConcept_containment_1, this._LinkTestConcept_containment_0_n, this._LinkTestConcept_containment_1_n, this._LinkTestConcept_reference_0_1, this._LinkTestConcept_reference_1, this._LinkTestConcept_reference_0_n, this._LinkTestConcept_reference_1_n);
-        this._LinkTestConcept_containment_0_1.ofType(this._DatatypeTestConcept);
-        this._LinkTestConcept_containment_1.ofType(this._DatatypeTestConcept);
-        this._LinkTestConcept_containment_0_n.ofType(this._DatatypeTestConcept);
-        this._LinkTestConcept_containment_1_n.ofType(this._DatatypeTestConcept);
-        this._LinkTestConcept_reference_0_1.ofType(this._DatatypeTestConcept);
-        this._LinkTestConcept_reference_1.ofType(this._DatatypeTestConcept);
-        this._LinkTestConcept_reference_0_n.ofType(this._DatatypeTestConcept);
-        this._LinkTestConcept_reference_1_n.ofType(this._DatatypeTestConcept);
+        this._LinkTestConcept_containment_0_1.ofType(this._DataTypeTestConcept);
+        this._LinkTestConcept_containment_1.ofType(this._DataTypeTestConcept);
+        this._LinkTestConcept_containment_0_n.ofType(this._DataTypeTestConcept);
+        this._LinkTestConcept_containment_1_n.ofType(this._DataTypeTestConcept);
+        this._LinkTestConcept_reference_0_1.ofType(this._DataTypeTestConcept);
+        this._LinkTestConcept_reference_1.ofType(this._DataTypeTestConcept);
+        this._LinkTestConcept_reference_0_n.ofType(this._DataTypeTestConcept);
+        this._LinkTestConcept_reference_1_n.ofType(this._DataTypeTestConcept);
         this._wiredUp = true;
     }
 
     factory(handleDelta?: DeltaHandler): NodeBaseFactory {
         return (classifier: Classifier, id: LionWebId) => {
             switch (classifier.key) {
-                case this._DatatypeTestConcept.key: return DatatypeTestConcept.create(id, handleDelta);
+                case this._DataTypeTestConcept.key: return DataTypeTestConcept.create(id, handleDelta);
                 case this._LinkTestConcept.key: return LinkTestConcept.create(id, handleDelta);
                 case this._TestAnnotation.key: return TestAnnotation.create(id, handleDelta);
                 default: {
@@ -287,9 +287,9 @@ export enum SecondTestEnumeration {
     literal3 = "SecondTestEnumeration-literal3"
 }
 
-export class DatatypeTestConcept extends NodeBase {
-    static create(id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage): DatatypeTestConcept {
-        return new DatatypeTestConcept(TestLanguageBase.INSTANCE.DatatypeTestConcept, id, handleDelta, parentInfo);
+export class DataTypeTestConcept extends NodeBase {
+    static create(id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage): DataTypeTestConcept {
+        return new DataTypeTestConcept(TestLanguageBase.INSTANCE.DataTypeTestConcept, id, handleDelta, parentInfo);
     }
 
     private readonly _booleanValue_1: RequiredPropertyValueManager<boolean>;
@@ -358,26 +358,26 @@ export class DatatypeTestConcept extends NodeBase {
 
     public constructor(classifier: Classifier, id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage) {
         super(classifier, id, handleDelta, parentInfo);
-        this._booleanValue_1 = new RequiredPropertyValueManager<boolean>(TestLanguageBase.INSTANCE.DatatypeTestConcept_booleanValue_1, this);
-        this._integerValue_1 = new RequiredPropertyValueManager<number>(TestLanguageBase.INSTANCE.DatatypeTestConcept_integerValue_1, this);
-        this._stringValue_1 = new RequiredPropertyValueManager<string>(TestLanguageBase.INSTANCE.DatatypeTestConcept_stringValue_1, this);
-        this._enumValue_1 = new RequiredPropertyValueManager<TestEnumeration>(TestLanguageBase.INSTANCE.DatatypeTestConcept_enumValue_1, this);
-        this._booleanValue_0_1 = new OptionalPropertyValueManager<boolean>(TestLanguageBase.INSTANCE.DatatypeTestConcept_booleanValue_0_1, this);
-        this._integerValue_0_1 = new OptionalPropertyValueManager<number>(TestLanguageBase.INSTANCE.DatatypeTestConcept_integerValue_0_1, this);
-        this._stringValue_0_1 = new OptionalPropertyValueManager<string>(TestLanguageBase.INSTANCE.DatatypeTestConcept_stringValue_0_1, this);
-        this._enumValue_0_1 = new OptionalPropertyValueManager<TestEnumeration>(TestLanguageBase.INSTANCE.DatatypeTestConcept_enumValue_0_1, this);
+        this._booleanValue_1 = new RequiredPropertyValueManager<boolean>(TestLanguageBase.INSTANCE.DataTypeTestConcept_booleanValue_1, this);
+        this._integerValue_1 = new RequiredPropertyValueManager<number>(TestLanguageBase.INSTANCE.DataTypeTestConcept_integerValue_1, this);
+        this._stringValue_1 = new RequiredPropertyValueManager<string>(TestLanguageBase.INSTANCE.DataTypeTestConcept_stringValue_1, this);
+        this._enumValue_1 = new RequiredPropertyValueManager<TestEnumeration>(TestLanguageBase.INSTANCE.DataTypeTestConcept_enumValue_1, this);
+        this._booleanValue_0_1 = new OptionalPropertyValueManager<boolean>(TestLanguageBase.INSTANCE.DataTypeTestConcept_booleanValue_0_1, this);
+        this._integerValue_0_1 = new OptionalPropertyValueManager<number>(TestLanguageBase.INSTANCE.DataTypeTestConcept_integerValue_0_1, this);
+        this._stringValue_0_1 = new OptionalPropertyValueManager<string>(TestLanguageBase.INSTANCE.DataTypeTestConcept_stringValue_0_1, this);
+        this._enumValue_0_1 = new OptionalPropertyValueManager<TestEnumeration>(TestLanguageBase.INSTANCE.DataTypeTestConcept_enumValue_0_1, this);
     }
 
     getPropertyValueManager(property: Property): PropertyValueManager<unknown> {
         switch (property.key) {
-            case TestLanguageBase.INSTANCE.DatatypeTestConcept_booleanValue_1.key: return this._booleanValue_1;
-            case TestLanguageBase.INSTANCE.DatatypeTestConcept_integerValue_1.key: return this._integerValue_1;
-            case TestLanguageBase.INSTANCE.DatatypeTestConcept_stringValue_1.key: return this._stringValue_1;
-            case TestLanguageBase.INSTANCE.DatatypeTestConcept_enumValue_1.key: return this._enumValue_1;
-            case TestLanguageBase.INSTANCE.DatatypeTestConcept_booleanValue_0_1.key: return this._booleanValue_0_1;
-            case TestLanguageBase.INSTANCE.DatatypeTestConcept_integerValue_0_1.key: return this._integerValue_0_1;
-            case TestLanguageBase.INSTANCE.DatatypeTestConcept_stringValue_0_1.key: return this._stringValue_0_1;
-            case TestLanguageBase.INSTANCE.DatatypeTestConcept_enumValue_0_1.key: return this._enumValue_0_1;
+            case TestLanguageBase.INSTANCE.DataTypeTestConcept_booleanValue_1.key: return this._booleanValue_1;
+            case TestLanguageBase.INSTANCE.DataTypeTestConcept_integerValue_1.key: return this._integerValue_1;
+            case TestLanguageBase.INSTANCE.DataTypeTestConcept_stringValue_1.key: return this._stringValue_1;
+            case TestLanguageBase.INSTANCE.DataTypeTestConcept_enumValue_1.key: return this._enumValue_1;
+            case TestLanguageBase.INSTANCE.DataTypeTestConcept_booleanValue_0_1.key: return this._booleanValue_0_1;
+            case TestLanguageBase.INSTANCE.DataTypeTestConcept_integerValue_0_1.key: return this._integerValue_0_1;
+            case TestLanguageBase.INSTANCE.DataTypeTestConcept_stringValue_0_1.key: return this._stringValue_0_1;
+            case TestLanguageBase.INSTANCE.DataTypeTestConcept_enumValue_0_1.key: return this._enumValue_0_1;
             default: return super.getPropertyValueManager(property);
         }
     }
@@ -388,100 +388,100 @@ export class LinkTestConcept extends NodeBase {
         return new LinkTestConcept(TestLanguageBase.INSTANCE.LinkTestConcept, id, handleDelta, parentInfo);
     }
 
-    private readonly _containment_0_1: OptionalSingleContainmentValueManager<DatatypeTestConcept>;
-    get containment_0_1(): DatatypeTestConcept | undefined {
+    private readonly _containment_0_1: OptionalSingleContainmentValueManager<DataTypeTestConcept>;
+    get containment_0_1(): DataTypeTestConcept | undefined {
         return this._containment_0_1.get();
     }
-    set containment_0_1(newValue: DatatypeTestConcept | undefined) {
+    set containment_0_1(newValue: DataTypeTestConcept | undefined) {
         this._containment_0_1.set(newValue);
     }
 
-    private readonly _containment_1: RequiredSingleContainmentValueManager<DatatypeTestConcept>;
-    get containment_1(): DatatypeTestConcept {
+    private readonly _containment_1: RequiredSingleContainmentValueManager<DataTypeTestConcept>;
+    get containment_1(): DataTypeTestConcept {
         return this._containment_1.get();
     }
-    set containment_1(newValue: DatatypeTestConcept) {
+    set containment_1(newValue: DataTypeTestConcept) {
         this._containment_1.set(newValue);
     }
 
-    private readonly _containment_0_n: OptionalMultiContainmentValueManager<DatatypeTestConcept>;
-    get containment_0_n(): DatatypeTestConcept[] {
+    private readonly _containment_0_n: OptionalMultiContainmentValueManager<DataTypeTestConcept>;
+    get containment_0_n(): DataTypeTestConcept[] {
         return this._containment_0_n.get();
     }
-    addContainment_0_n(newValue: DatatypeTestConcept) {
+    addContainment_0_n(newValue: DataTypeTestConcept) {
         this._containment_0_n.add(newValue);
     }
-    removeContainment_0_n(valueToRemove: DatatypeTestConcept) {
+    removeContainment_0_n(valueToRemove: DataTypeTestConcept) {
         this._containment_0_n.remove(valueToRemove);
     }
-    addContainment_0_nAtIndex(newValue: DatatypeTestConcept, index: number) {
+    addContainment_0_nAtIndex(newValue: DataTypeTestConcept, index: number) {
         this._containment_0_n.insertAtIndex(newValue, index);
     }
     moveContainment_0_n(oldIndex: number, newIndex: number) {
         this._containment_0_n.move(oldIndex, newIndex);
     }
 
-    private readonly _containment_1_n: RequiredMultiContainmentValueManager<DatatypeTestConcept>;
-    get containment_1_n(): DatatypeTestConcept[] {
+    private readonly _containment_1_n: RequiredMultiContainmentValueManager<DataTypeTestConcept>;
+    get containment_1_n(): DataTypeTestConcept[] {
         return this._containment_1_n.get();
     }
-    addContainment_1_n(newValue: DatatypeTestConcept) {
+    addContainment_1_n(newValue: DataTypeTestConcept) {
         this._containment_1_n.add(newValue);
     }
-    removeContainment_1_n(valueToRemove: DatatypeTestConcept) {
+    removeContainment_1_n(valueToRemove: DataTypeTestConcept) {
         this._containment_1_n.remove(valueToRemove);
     }
-    addContainment_1_nAtIndex(newValue: DatatypeTestConcept, index: number) {
+    addContainment_1_nAtIndex(newValue: DataTypeTestConcept, index: number) {
         this._containment_1_n.insertAtIndex(newValue, index);
     }
     moveContainment_1_n(oldIndex: number, newIndex: number) {
         this._containment_1_n.move(oldIndex, newIndex);
     }
 
-    private readonly _reference_0_1: OptionalSingleReferenceValueManager<DatatypeTestConcept>;
-    get reference_0_1(): SingleRef<DatatypeTestConcept> | undefined {
+    private readonly _reference_0_1: OptionalSingleReferenceValueManager<DataTypeTestConcept>;
+    get reference_0_1(): SingleRef<DataTypeTestConcept> | undefined {
         return this._reference_0_1.get();
     }
-    set reference_0_1(newValue: SingleRef<DatatypeTestConcept> | undefined) {
+    set reference_0_1(newValue: SingleRef<DataTypeTestConcept> | undefined) {
         this._reference_0_1.set(newValue);
     }
 
-    private readonly _reference_1: RequiredSingleReferenceValueManager<DatatypeTestConcept>;
-    get reference_1(): SingleRef<DatatypeTestConcept> {
+    private readonly _reference_1: RequiredSingleReferenceValueManager<DataTypeTestConcept>;
+    get reference_1(): SingleRef<DataTypeTestConcept> {
         return this._reference_1.get();
     }
-    set reference_1(newValue: SingleRef<DatatypeTestConcept>) {
+    set reference_1(newValue: SingleRef<DataTypeTestConcept>) {
         this._reference_1.set(newValue);
     }
 
-    private readonly _reference_0_n: OptionalMultiReferenceValueManager<DatatypeTestConcept>;
-    get reference_0_n(): SingleRef<DatatypeTestConcept>[] {
+    private readonly _reference_0_n: OptionalMultiReferenceValueManager<DataTypeTestConcept>;
+    get reference_0_n(): SingleRef<DataTypeTestConcept>[] {
         return this._reference_0_n.get();
     }
-    addReference_0_n(newValue: DatatypeTestConcept) {
+    addReference_0_n(newValue: DataTypeTestConcept) {
         this._reference_0_n.add(newValue);
     }
-    removeReference_0_n(valueToRemove: DatatypeTestConcept) {
+    removeReference_0_n(valueToRemove: DataTypeTestConcept) {
         this._reference_0_n.remove(valueToRemove);
     }
-    addReference_0_nAtIndex(newValue: DatatypeTestConcept, index: number) {
+    addReference_0_nAtIndex(newValue: DataTypeTestConcept, index: number) {
         this._reference_0_n.insertAtIndex(newValue, index);
     }
     moveReference_0_n(oldIndex: number, newIndex: number) {
         this._reference_0_n.move(oldIndex, newIndex);
     }
 
-    private readonly _reference_1_n: RequiredMultiReferenceValueManager<DatatypeTestConcept>;
-    get reference_1_n(): SingleRef<DatatypeTestConcept>[] {
+    private readonly _reference_1_n: RequiredMultiReferenceValueManager<DataTypeTestConcept>;
+    get reference_1_n(): SingleRef<DataTypeTestConcept>[] {
         return this._reference_1_n.get();
     }
-    addReference_1_n(newValue: DatatypeTestConcept) {
+    addReference_1_n(newValue: DataTypeTestConcept) {
         this._reference_1_n.add(newValue);
     }
-    removeReference_1_n(valueToRemove: DatatypeTestConcept) {
+    removeReference_1_n(valueToRemove: DataTypeTestConcept) {
         this._reference_1_n.remove(valueToRemove);
     }
-    addReference_1_nAtIndex(newValue: DatatypeTestConcept, index: number) {
+    addReference_1_nAtIndex(newValue: DataTypeTestConcept, index: number) {
         this._reference_1_n.insertAtIndex(newValue, index);
     }
     moveReference_1_n(oldIndex: number, newIndex: number) {
@@ -490,14 +490,14 @@ export class LinkTestConcept extends NodeBase {
 
     public constructor(classifier: Classifier, id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage) {
         super(classifier, id, handleDelta, parentInfo);
-        this._containment_0_1 = new OptionalSingleContainmentValueManager<DatatypeTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_containment_0_1, this);
-        this._containment_1 = new RequiredSingleContainmentValueManager<DatatypeTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_containment_1, this);
-        this._containment_0_n = new OptionalMultiContainmentValueManager<DatatypeTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_containment_0_n, this);
-        this._containment_1_n = new RequiredMultiContainmentValueManager<DatatypeTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_containment_1_n, this);
-        this._reference_0_1 = new OptionalSingleReferenceValueManager<DatatypeTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_reference_0_1, this);
-        this._reference_1 = new RequiredSingleReferenceValueManager<DatatypeTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_reference_1, this);
-        this._reference_0_n = new OptionalMultiReferenceValueManager<DatatypeTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_reference_0_n, this);
-        this._reference_1_n = new RequiredMultiReferenceValueManager<DatatypeTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_reference_1_n, this);
+        this._containment_0_1 = new OptionalSingleContainmentValueManager<DataTypeTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_containment_0_1, this);
+        this._containment_1 = new RequiredSingleContainmentValueManager<DataTypeTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_containment_1, this);
+        this._containment_0_n = new OptionalMultiContainmentValueManager<DataTypeTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_containment_0_n, this);
+        this._containment_1_n = new RequiredMultiContainmentValueManager<DataTypeTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_containment_1_n, this);
+        this._reference_0_1 = new OptionalSingleReferenceValueManager<DataTypeTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_reference_0_1, this);
+        this._reference_1 = new RequiredSingleReferenceValueManager<DataTypeTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_reference_1, this);
+        this._reference_0_n = new OptionalMultiReferenceValueManager<DataTypeTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_reference_0_n, this);
+        this._reference_1_n = new RequiredMultiReferenceValueManager<DataTypeTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_reference_1_n, this);
     }
 
     getContainmentValueManager(containment: Containment): ContainmentValueManager<INodeBase> {
