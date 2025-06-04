@@ -102,17 +102,17 @@ export class DefaultPrimitiveTypeDeserializer
             if (property.optional) {
                 return undefined
             }
-            throw new Error(`can't deserialize undefined as the value of a required property`)
+            throw new Error(`can't deserialize undefined as the value of required property "${property.name}" (on classifier "${property.classifier.name}" in language "${property.classifier.language.name}")`)
         }
         const { type } = property
         if (type == null) {
-            throw new Error(`cant't deserialize a property with unspecified type`)
+            throw new Error(`can't deserialize property "${property.name}" (on classifier "${property.classifier.name}" in language "${property.classifier.language.name}") with unspecified type`)
         }
         const specificDeserializer = this.byType(type)
         if (specificDeserializer != undefined) {
             return specificDeserializer(value)
         } else {
-            throw new Error(`can't deserialize value of type "${type!.name}": ${value}`)
+            throw new Error(`can't deserialize value of property "${property.name}" (on classifier "${property.classifier.name}" in language "${property.classifier.language.name}") of type "${type!.name}": ${value}`)
         }
     }
 }
@@ -131,17 +131,17 @@ export class DefaultPrimitiveTypeSerializer extends DatatypeRegister<SpecificPri
             if (property.optional) {
                 return undefined
             }
-            throw new Error(`can't serialize undefined as the value of a required property`)
+            throw new Error(`can't serialize undefined as the value of required property "${property.name}" (on classifier "${property.classifier.name}" in language "${property.classifier.language.name}")`)
         }
         const { type } = property
         if (type == null) {
-            throw new Error(`cant't serialize a property with unspecified type`)
+            throw new Error(`can't serialize property "${property.name}" (on classifier "${property.classifier.name}" in language "${property.classifier.language.name}") with unspecified type`)
         }
         const specificSerializer = this.byType(type)
         if (specificSerializer != undefined) {
             return specificSerializer(value)
         } else {
-            throw new Error(`can't serialize value of type "${type!.name}": ${value}`)
+            throw new Error(`can't serialize value of property "${property.name}" (on classifier "${property.classifier.name}" in language "${property.classifier.language.name}") of type "${type!.name}": ${value}`)
         }
     }
 }
