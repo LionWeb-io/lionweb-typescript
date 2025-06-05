@@ -5,7 +5,7 @@ import {
     LionWebJsonNode,
     LionWebKey
 } from "@lionweb/json"
-import { byIdMap, groupBy } from "@lionweb/ts-utils"
+import { byIdMap, groupBy, keepDefineds } from "@lionweb/ts-utils"
 import { Writer } from "./writing.js"
 import { defaultSimplisticHandler, SimplisticHandler } from "./handler.js"
 import { BuiltinPropertyValueDeserializer } from "./m3/builtins.js"
@@ -182,19 +182,21 @@ export const deserializeSerializationChunk = <NT extends Node>(
             }
         })
 
-        node.annotations = annotations
-            .filter(annotationId => annotationId in serializedNodeById)
-            .map(annotationId => instantiateMemoised(serializedNodeById[annotationId]))
-            .filter(annotationOrNull => annotationOrNull !== null)
+        node.annotations = keepDefineds(
+            annotations
+                .filter(annotationId => annotationId in serializedNodeById)
+                .map(annotationId => instantiateMemoised(serializedNodeById[annotationId]))
+        )
             .map(annotation => annotation!)
 
         return node
     }
 
-    const rootLikeNodes = serializedNodes
-        .filter(({ parent }) => parent === null || !(parent in serializedNodeById))
-        .map(serializedNode => instantiateMemoised(serializedNode))
-        .filter(nodeOrNull => nodeOrNull !== null)
+    const rootLikeNodes = keepDefineds(
+        serializedNodes
+            .filter(({ parent }) => parent === null || !(parent in serializedNodeById))
+            .map(serializedNode => instantiateMemoised(serializedNode))
+    )
         .map(node => node!)
 
     const dependentNodesById = byIdMap(dependentNodes)

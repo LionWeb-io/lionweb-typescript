@@ -27,3 +27,11 @@ export const asArray = <T>(thing: AnyNumberOf<T>): T[] => {
 export const uniquesAmong = <T>(ts: T[]): T[] =>
     [...new Set(ts)]
 
+
+/**
+ * @return the defined values of given type (parameter) `T` from the given array,
+ * leaving out the `null` or `undefined` values.
+ */
+export const keepDefineds = <T>(ts: (T | null | undefined)[]): T[] =>
+    ts.filter((t) => t !== undefined && t !== null) as T[]
+
