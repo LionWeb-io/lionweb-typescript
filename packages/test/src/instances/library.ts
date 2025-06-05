@@ -1,4 +1,4 @@
-import { InstantiationFacade, nameBasedClassifierDeducerFor, Reader, updateSettingsNameBased } from "@lionweb/core"
+import { Writer as CoreWriter, nameBasedClassifierDeducerFor, Reader, updateSettingsNameBased } from "@lionweb/core"
 import { hasher } from "@lionweb/utilities"
 import { libraryLanguage } from "../languages/library.js"
 import { BaseNode } from "./base.js"
@@ -58,7 +58,7 @@ export const libraryReader: Reader<BaseNode> = {
     }
 }
 
-export const libraryInstantiationFacade: InstantiationFacade<BaseNode> = {
+export const libraryWriter: CoreWriter<BaseNode> = {
     nodeFor: (_parent, classifier, id, _propertySettings) => ({
         id,
         classifier: classifier.key,

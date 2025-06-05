@@ -6,7 +6,7 @@ import {
     LionWebKey
 } from "@lionweb/json"
 import { byIdMap, groupBy } from "@lionweb/ts-utils"
-import { InstantiationFacade } from "./writing.js"
+import { Writer } from "./writing.js"
 import { defaultSimplisticHandler, SimplisticHandler } from "./handler.js"
 import { BuiltinPropertyValueDeserializer } from "./m3/builtins.js"
 import { allFeaturesOf } from "./m3/functions.js"
@@ -31,7 +31,7 @@ export interface PrimitiveTypeDeserializer extends PropertyValueDeserializer {}
  * @return a deserialization of a {@link LionWebJsonChunk}
  *
  * @param serializationChunk - a {@link SerializedModel model} from its LionWeb serialization JSON format
- * @param instantiationFacade - a {@link InstantiationFacade} that is used to instantiate nodes and set values on them
+ * @param writer - a {@link Writer} that is used to instantiate nodes and set values on them
  * @param languages - a {@link Language language} that the serialized model is expected to conform to
  * @param dependentNodes - a collection of nodes from dependent models against which all references in the serialized model are supposed to resolve against
  * @param propertyValueDeserializer - a deserializer for values of properties (by default a {@link BuiltinPropertyValueDeserializer})
@@ -39,11 +39,11 @@ export interface PrimitiveTypeDeserializer extends PropertyValueDeserializer {}
  */
 export const deserializeSerializationChunk = <NT extends Node>(
     serializationChunk: LionWebJsonChunk,
-    instantiationFacade: InstantiationFacade<NT>,
+    writer: Writer<NT>,
     languages: Language[],
     // TODO  facades <--> languages, so it's weird that it looks split up like this
     dependentNodes: Node[],
-    // TODO (#13)  see if you can turn this into [nodes: Node[], instantiationFacade: InstantiationFacade<Node>][] after all
+    // TODO (#13)  see if you can turn this into [nodes: Node[], writer: Writer<Node>][] after all
     propertyValueDeserializer: BuiltinPropertyValueDeserializer = new BuiltinPropertyValueDeserializer(),
     problemHandler: SimplisticHandler = defaultSimplisticHandler
 ): NT[] => {
@@ -87,7 +87,7 @@ export const deserializeSerializationChunk = <NT extends Node>(
         propertySettings: { [propertyKey: LionWebKey]: unknown }
     ): NT | null => {
         try {
-            return instantiationFacade.nodeFor(parent, classifier, id, propertySettings)
+            return writer.nodeFor(parent, classifier, id, propertySettings)
         } catch (e: unknown) {
             problemHandler.reportProblem(
                 `error occurred during instantiation of a node for classifier ${classifier.name} with meta-pointer (${classifier.language.key}, ${classifier.language.version}, ${classifier.key}); reason:`
@@ -133,7 +133,7 @@ export const deserializeSerializationChunk = <NT extends Node>(
                         if (property.type instanceof Enumeration) {
                             const literal = property.type.literals.find(literal => literal.key === value)
                             if (literal !== undefined) {
-                                propertySettings[property.key] = instantiationFacade.encodingOf(literal)
+                                propertySettings[property.key] = writer.encodingOf(literal)
                             }
                             return
                         }
@@ -152,13 +152,13 @@ export const deserializeSerializationChunk = <NT extends Node>(
 
         allFeatures.forEach(feature => {
             if (feature instanceof Property && properties !== undefined && feature.key in serializedPropertiesPerKey) {
-                instantiationFacade.setFeatureValue(node, feature, propertySettings[feature.key])
+                writer.setFeatureValue(node, feature, propertySettings[feature.key])
             } else if (feature instanceof Containment && containments !== undefined && feature.key in serializedContainmentsPerKey) {
                 const childIds = serializedContainmentsPerKey[feature.key].flatMap(serChildren => serChildren.children) as LionWebId[]
                 if (feature.multiple) {
                     childIds.forEach(childId => {
                         if (childId in serializedNodeById) {
-                            instantiationFacade.setFeatureValue(node, feature, instantiateMemoised(serializedNodeById[childId], node))
+                            writer.setFeatureValue(node, feature, instantiateMemoised(serializedNodeById[childId], node))
                         }
                     })
                 } else {
@@ -166,7 +166,7 @@ export const deserializeSerializationChunk = <NT extends Node>(
                         // just set the 1st one:
                         const firstChildId = childIds[0]
                         if (firstChildId in serializedNodeById) {
-                            instantiationFacade.setFeatureValue(node, feature, instantiateMemoised(serializedNodeById[firstChildId], node))
+                            writer.setFeatureValue(node, feature, instantiateMemoised(serializedNodeById[firstChildId], node))
                         }
                     }
                 }
@@ -211,7 +211,7 @@ export const deserializeSerializationChunk = <NT extends Node>(
             }
             return target
         })()
-        instantiationFacade.setFeatureValue(node, reference, value)
+        writer.setFeatureValue(node, reference, value)
     })
 
     return rootLikeNodes

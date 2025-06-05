@@ -21,6 +21,7 @@
 * Introduce a function `nodeSerializer` that takes configuration consisting of an `ExtractionFacade` instance and an optional configuration object, and returns a function that takes (an array of) nodes and returns a serialization chunk.
     **Note** that this function is essentially experimental, and that its signature might change in the near future!
 * Rename `ExtractionFacade` (and its instances) to `Reader`, keeping aliases for backward compatibility, to be deprecated and removed later.
+* Rename `InstantiationFacade` (and its instances) to `Writer`, keeping aliases for backward compatibility, to be deprecated and removed later.
 
 
 ## 0.6.12

@@ -3,7 +3,7 @@ import { builtinFeatures } from "./m3/builtins.js"
 import { Classifier } from "./m3/types.js"
 import { Reader, ResolveInfoDeducer } from "./reading.js"
 import { Node } from "./types.js"
-import { InstantiationFacade, updateSettingsKeyBased } from "./writing.js"
+import { updateSettingsKeyBased, Writer } from "./writing.js"
 
 
 /**
@@ -42,10 +42,9 @@ export const dynamicReader: Reader<DynamicNode> = ({
 export const dynamicExtractionFacade = dynamicReader
 
 /**
- * An implementation of {@link InstantiationFacade} for {@link DynamicNode dynamic nodes}.
+ * An implementation of {@link Writer} for {@link DynamicNode dynamic nodes}.
  */
-
-export const dynamicInstantiationFacade: InstantiationFacade<DynamicNode> = ({
+export const dynamicWriter: Writer<DynamicNode> = ({
     nodeFor: (_parent, classifier, id, _propertySettings) => ({
         id,
         classifier,
@@ -56,4 +55,9 @@ export const dynamicInstantiationFacade: InstantiationFacade<DynamicNode> = ({
     },
     encodingOf: ({key}) => key
 })
+
+/**
+ * Alias for {@link Reader}, kept for backward compatibility, and to be deprecated and removed later.
+ */
+export const dynamicInstantiationFacade = dynamicReader
 

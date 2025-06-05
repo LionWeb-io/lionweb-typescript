@@ -11,7 +11,7 @@ import { Node } from "./types.js"
  *  - specific to LionCore (so to match m3/types.ts)
  * - generic to deserialize into {@link DynamicNode dynamic nodes}
  */
-export interface InstantiationFacade<NT extends Node> {
+export interface Writer<NT extends Node> {
 
     /**
      * @return An instance of the given concept, also given its parent (or {@link undefined} for root nodes),
@@ -35,9 +35,22 @@ export interface InstantiationFacade<NT extends Node> {
 
 }
 
+/**
+ * Alias for {@link Writer}, kept for backward compatibility, and to be deprecated and removed later.
+ */
+export interface InstantiationFacade<NT extends Node> extends Writer<NT> {}
 
-type SettingsUpdater = (settings: Record<string, unknown>, feature: Feature, value: unknown) => void
 
+/**
+ * Type def. for functions that update features’ values on a settings object.
+ */
+export type SettingsUpdater = (settings: Record<string, unknown>, feature: Feature, value: unknown) => void
+
+/**
+ * @return a {@link SettingsUpdater} that uses the given “meta key” – which is a property/key on the {@link Feature} type –
+ *  to look up what key to look a feature’s value up on a settings object.
+ *  <em>Note:</em> for internal use only — use with some care!
+ */
 const settingsUpdater = (metaKey: keyof Feature): SettingsUpdater =>
     (settings: Record<string, unknown>, feature: Feature, value: unknown): void => {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -51,7 +64,6 @@ const settingsUpdater = (metaKey: keyof Feature): SettingsUpdater =>
             settings[key] = value
         }
     }
-
 
 /**
  * Updates the value of the given {@link Feature feature} on the given "settings" object

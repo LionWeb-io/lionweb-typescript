@@ -1,8 +1,8 @@
 import {
     Classifier,
-    dynamicInstantiationFacade,
     DynamicNode,
     dynamicReader,
+    dynamicWriter,
     incomingReferences,
     referencesToOutOfScopeNodes,
     ReferenceValue,
@@ -32,7 +32,7 @@ describe("reference utils", () => {
         settings: {},
         annotations: []
     })
-    const setValue = dynamicInstantiationFacade.setFeatureValue
+    const setValue = dynamicWriter.setFeatureValue
 
     it("find a reference from a feature of a concept", () => {
         const targetNode = createNode("target", AnotherConcept)

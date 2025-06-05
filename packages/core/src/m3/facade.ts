@@ -16,7 +16,7 @@ import {
     Property,
     Reference
 } from "./types.js"
-import { InstantiationFacade, updateSettingsNameBased } from "../writing.js"
+import { updateSettingsNameBased, Writer } from "../writing.js"
 
 const { inamed_name } = builtinFeatures
 const { ikeyed_key } = metaFeatures
@@ -35,9 +35,9 @@ export const lioncoreReader: Reader<M3Concept> = {
 export const lioncoreExtractionFacade = lioncoreReader
 
 /**
- * @return An implementation of {@link InstantiationFacade} for instances of the LionCore M3 (so M2s).
+ * @return An implementation of {@link Writer} for instances of the LionCore M3 (so M2s).
  */
-export const lioncoreInstantiationFacade: InstantiationFacade<M3Concept> = {
+export const lioncoreWriter: Writer<M3Concept> = {
     nodeFor: (parent, classifier, id, propertySettings) => {
         switch (classifier.key) {
             case metaConcepts.annotation.key:
@@ -122,3 +122,9 @@ export const lioncoreInstantiationFacade: InstantiationFacade<M3Concept> = {
     },
     encodingOf: literal => literal
 }
+
+/**
+ * Alias for {@link lioncoreWriter}, kept for backward compatibility, and to be deprecated and removed later.
+ */
+export const lioncoreInstantationFacade = lioncoreWriter
+

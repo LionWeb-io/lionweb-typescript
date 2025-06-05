@@ -1,5 +1,5 @@
 import { deserializeSerializationChunk, nodeSerializer } from "@lionweb/core"
-import { libraryInstantiationFacade } from "../instances/library.js"
+import { libraryWriter } from "../instances/library.js"
 import { multiModel, multiReader } from "../instances/multi.js"
 
 import { libraryLanguage } from "../languages/library.js"
@@ -11,7 +11,7 @@ describe("multi-language test model", () => {
         const serializationChunk = nodeSerializer(multiReader)(multiModel)
         const deserialization = deserializeSerializationChunk(
             serializationChunk,
-            libraryInstantiationFacade,
+            libraryWriter,
             [libraryLanguage, multiLanguage],
             []
         )

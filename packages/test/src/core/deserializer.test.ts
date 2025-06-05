@@ -4,25 +4,25 @@ import {
     Concept,
     deserializeChunk,
     deserializeSerializationChunk,
-    dynamicInstantiationFacade,
+    dynamicWriter,
     Feature,
-    InstantiationFacade,
     Language,
     Reference,
-    unresolved
+    unresolved,
+    Writer
 } from "@lionweb/core"
 import { currentSerializationFormatVersion, LionWebJsonChunk } from "@lionweb/json"
 import { expect } from "chai"
 
 import { BaseNode } from "../instances/base.js"
-import { libraryInstantiationFacade } from "../instances/library.js"
+import { libraryWriter } from "../instances/library.js"
 import { libraryLanguage } from "../languages/library.js"
 import { dateDataType, libraryWithDatesLanguage } from "../languages/libraryWithDates.js"
 import { deepEqual, equal } from "../test-utils/assertions.js"
 
 type NodeWithProperties = BaseNode & { properties: Record<string, unknown> }
 
-export const libraryWithDatesInstantiationFacade: InstantiationFacade<BaseNode> = {
+export const libraryWithDatesWriter: Writer<BaseNode> = {
     nodeFor: (_parent, classifier, id, _propertySettings) => ({
         id,
         classifier: classifier.key,
@@ -63,7 +63,7 @@ describe("deserialization", () => {
                 }
             ]
         }
-        const deserialization = deserializeSerializationChunk(serializationChunk, libraryInstantiationFacade, [libraryLanguage], [])
+        const deserialization = deserializeSerializationChunk(serializationChunk, libraryWriter, [libraryLanguage], [])
         deepEqual(deserialization, [
             {
                 id: "1",
@@ -108,7 +108,7 @@ describe("deserialization", () => {
             ]
         }
         deepEqual(
-            deserializeSerializationChunk(serializationChunk, libraryWithDatesInstantiationFacade, [libraryWithDatesLanguage], []),
+            deserializeSerializationChunk(serializationChunk, libraryWithDatesWriter, [libraryWithDatesLanguage], []),
             [] // because instantiation fails, but instantiation is effectively a flatmap
         )
     })
@@ -155,7 +155,7 @@ describe("deserialization", () => {
 
         const deserialization = deserializeSerializationChunk(
             serializationChunk,
-            libraryWithDatesInstantiationFacade,
+            libraryWithDatesWriter,
             [libraryWithDatesLanguage],
             [],
             propertyValueDeserializer
@@ -185,7 +185,7 @@ describe("deserialization", () => {
                 }
             ]
         }
-        deepEqual(deserializeSerializationChunk(serializationChunk, dynamicInstantiationFacade, [], []), [])
+        deepEqual(deserializeSerializationChunk(serializationChunk, dynamicWriter, [], []), [])
     })
 
     it("doesn't throw for unresolvable references", () => {
@@ -239,7 +239,7 @@ describe("deserialization", () => {
             ]
         }
 
-        const model = deserializeSerializationChunk(serializationChunk, dynamicInstantiationFacade, [someLanguage], [])
+        const model = deserializeSerializationChunk(serializationChunk, dynamicWriter, [someLanguage], [])
         equal(model.length, 1)
         deepEqual(model[0].settings, { [someConcept_aReference.key]: unresolved })
     })
@@ -252,7 +252,7 @@ describe("deserialization", () => {
                 languages: [],
                 nodes: []
             } as unknown as LionWebJsonChunk,
-            dynamicInstantiationFacade,
+            dynamicWriter,
             [],
             [],
             undefined,
