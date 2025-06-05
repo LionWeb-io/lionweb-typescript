@@ -1,4 +1,4 @@
-import { groupBy } from "./map-helpers.js"
+import { groupBy } from "./maps.js"
 
 
 export type Nested1Map<T> = Record<string, T> // (for conceptual continuity)
