@@ -1,4 +1,4 @@
-import { serializeNodes } from "@lionweb/core"
+import { nodeSerializer } from "@lionweb/core"
 import { genericAsTreeText, languageAsText } from "@lionweb/utilities"
 import { readFileSync, writeFileSync } from "fs"
 
@@ -19,7 +19,7 @@ describe("LionCore-specific textual syntax", () => {
 describe("generic textual syntax", () => {
     it("textualize library model without language def.", () => {
         equal(
-            genericAsTreeText(serializeNodes(libraryModel, libraryExtractionFacade)),
+            genericAsTreeText(nodeSerializer(libraryExtractionFacade)(libraryModel)),
             `[Library] (id: jkxERSov0TuSh7MMz2D5ciLrZDrU4o_VMOpmBqh_j7E) {
     [library_Library_name] = Bob's Library
     [books]:
@@ -40,7 +40,7 @@ describe("generic textual syntax", () => {
 
     it("textualize library model with language def.", () => {
         equal(
-            genericAsTreeText(serializeNodes(libraryModel, libraryExtractionFacade), [libraryLanguage]),
+            genericAsTreeText(nodeSerializer(libraryExtractionFacade)(libraryModel), [libraryLanguage]),
             `Library (id: jkxERSov0TuSh7MMz2D5ciLrZDrU4o_VMOpmBqh_j7E) {
     name = 'Bob's Library'
     books:

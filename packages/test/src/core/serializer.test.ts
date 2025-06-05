@@ -10,9 +10,9 @@ import {
     EnumerationLiteral,
     Language,
     LanguageFactory,
+    nodeSerializer,
     Reference,
-    serializeLanguages,
-    serializeNodes
+    serializeLanguages
 } from "@lionweb/core"
 import { currentSerializationFormatVersion, LionWebJsonChunk } from "@lionweb/json"
 import { concatenator, lastOf } from "@lionweb/ts-utils"
@@ -27,7 +27,7 @@ describe("serialization", () => {
         myNode.properties["creationDate"] = new Date(30, 4, 2024)
         myNode.containments["books"] = []
 
-        expect(() => serializeNodes([myNode], new TestNodeReader([libraryWithDatesLanguage]))).to.throw()
+        expect(() => nodeSerializer(new TestNodeReader([libraryWithDatesLanguage]))([myNode])).to.throw()
     })
 
     it("serializes node with custom primitive type, works when registering custom deserializer", () => {
@@ -94,9 +94,10 @@ describe("serialization", () => {
                 }
             ]
         }
-        expect(serializeNodes([myNode], new TestNodeReader([libraryWithDatesLanguage]), builtinsPropertyValueSerializer)).to.eql(
-            expectedSerializationChunk
+        expect(
+            nodeSerializer(new TestNodeReader([libraryWithDatesLanguage]), { propertyValueSerializer: builtinsPropertyValueSerializer })([myNode])
         )
+            .to.eql(expectedSerializationChunk)
     })
 
     it("serializes annotations", () => {
@@ -172,7 +173,7 @@ describe("serialization", () => {
                 }
             ]
         }
-        expect(serializeNodes([annotatedNode], new TestNodeReader([language]))).to.eql(expectedSerializationChunk)
+        expect(nodeSerializer(new TestNodeReader([language]))([annotatedNode], )).to.eql(expectedSerializationChunk)
     })
 
     it(`doesn't fail on "unconnected" (i.e., unset or previously unresolved) null reference target values`, () => {
@@ -217,7 +218,7 @@ describe("serialization", () => {
         const instance = new TestNode("instance", "Concept")
         instance.references["selfRef"] = [instance]
         const reader = new TestNodeReader([language])
-        const serializationChunk = serializeNodes([instance], reader)
+        const serializationChunk = nodeSerializer(reader)([instance])
 
         const serNode = serializationChunk.nodes[0]
         expect(serNode).to.not.be.undefined
@@ -339,9 +340,9 @@ describe("serialization of empty (unset) values", () => {
                 }
             ]
         }
-        const actualSerializationChunk = serializeNodes([node], dynamicExtractionFacade) // (serializeEmptyFeatures has true as default)
+        const actualSerializationChunk = nodeSerializer(dynamicExtractionFacade)([node]) // (serializeEmptyFeatures has true as default)
         expect(actualSerializationChunk).to.eql(expectedSerializationChunk)
-        const usingExplicitOption = serializeNodes([node], dynamicExtractionFacade, { serializeEmptyFeatures: true })
+        const usingExplicitOption = nodeSerializer(dynamicExtractionFacade, { serializeEmptyFeatures: true })([node])
         expect(usingExplicitOption).to.eql(expectedSerializationChunk)
     })
 
@@ -370,7 +371,7 @@ describe("serialization of empty (unset) values", () => {
                 }
             ]
         }
-        const actualSerializationChunk = serializeNodes([node], dynamicExtractionFacade, { serializeEmptyFeatures: false })
+        const actualSerializationChunk = nodeSerializer(dynamicExtractionFacade, { serializeEmptyFeatures: false })([node])
         expect(actualSerializationChunk).to.eql(expectedSerializationChunk)
     })
 })

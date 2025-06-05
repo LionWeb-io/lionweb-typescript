@@ -1,4 +1,4 @@
-import { deserializeSerializationChunk, serializeNodes } from "@lionweb/core"
+import { deserializeSerializationChunk, nodeSerializer } from "@lionweb/core"
 import { libraryInstantiationFacade } from "../instances/library.js"
 import { multiExtractionFacade, multiModel } from "../instances/multi.js"
 
@@ -8,7 +8,7 @@ import { deepEqual } from "../test-utils/assertions.js"
 
 describe("multi-language test model", () => {
     it("[de-]serialize multi-language model", () => {
-        const serializationChunk = serializeNodes(multiModel, multiExtractionFacade)
+        const serializationChunk = nodeSerializer(multiExtractionFacade)(multiModel)
         const deserialization = deserializeSerializationChunk(
             serializationChunk,
             libraryInstantiationFacade,

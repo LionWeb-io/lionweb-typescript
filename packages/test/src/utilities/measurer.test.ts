@@ -1,4 +1,4 @@
-import { serializeNodes } from "@lionweb/core"
+import { nodeSerializer } from "@lionweb/core"
 import { measure, readFileAsJson, writeJsonAsFile } from "@lionweb/utilities"
 import { join } from "path"
 
@@ -22,13 +22,13 @@ describe("metrics computation", () => {
     }
 
     it("works on library", () => {
-        const serializationChunk = serializeNodes(libraryModel, libraryExtractionFacade)
+        const serializationChunk = nodeSerializer(libraryExtractionFacade)(libraryModel)
         compareWithFile(measure(serializationChunk, []), "library-no-languages.metrics.json")
         compareWithFile(measure(serializationChunk, [libraryLanguage]), "library-with-languages.metrics.json")
     })
 
     it("works on multi-language model", () => {
-        const serializationChunk = serializeNodes(multiModel, multiExtractionFacade)
+        const serializationChunk = nodeSerializer(multiExtractionFacade)(multiModel)
         compareWithFile(measure(serializationChunk, []), "multi-no-languages.metrics.json")
         compareWithFile(measure(serializationChunk, [multiLanguage]), "multi-with-languages.metrics.json")
     })

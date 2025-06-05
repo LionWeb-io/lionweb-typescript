@@ -18,6 +18,8 @@
     * Introduce field `SerializationOptions.propertyValueSerializer` as a future replacement for `SerializationOptions.primitiveTypeSerializer`.
 * Introduce interface `PropertyValueDeserializer` that will replace `PrimitiveTypeDeserializer` – which is kept for backward compatibility, for now – in the next major release.
   This includes introducing class `BuiltinsPropertyValueDeserializer` as a future replacement for `DefaultPrimitiveTypeDeserializer`.
+* Introduce a function `nodeSerializer` that takes configuration consisting of an `ExtractionFacade` instance and an optional configuration object, and returns a function that takes (an array of) nodes and returns a serialization chunk.
+    **Note** that this function is essentially experimental, and that its signature might change in the near future!
 
 
 ## 0.6.12
