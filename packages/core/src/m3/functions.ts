@@ -5,8 +5,8 @@
 
 import { LionWebId, LionWebKey } from "@lionweb/json"
 import { cycleWith, flatMapNonCyclingFollowing, sortByStringKey } from "@lionweb/ts-utils"
-import { ClassifierDeducer } from "../facade.js"
 import { containmentChain } from "../functions.js"
+import { ClassifierDeducer } from "../reading.js"
 import { isRef, unresolved } from "../references.js"
 import { Node } from "../types.js"
 import {

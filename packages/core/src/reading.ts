@@ -1,0 +1,55 @@
+import { Classifier, Enumeration, EnumerationLiteral, Feature } from "./m3/index.js"
+import { Node } from "./types.js"
+
+
+/**
+ * Type def. for functions that deduce the {@link Classifier classifier} of a given {@link Node node}.
+ */
+export type ClassifierDeducer<NT extends Node> = (node: NT) => Classifier
+
+/**
+ * Type def. for functions that deduce the string value of the `resolveInfo` field of a
+ * {@link LionWebJsonReferenceTarget serialized reference target}, or  {@code undefined}
+ * to indicate that no `resolveInfo` could be derived.
+ */
+export type ResolveInfoDeducer<NT extends Node> = (node: NT) => string | undefined
+
+/**
+ * An interface that's used to parametrize generic serialization of
+ * (in-memory) nodes of the given type (parameter).
+ * Implementations of these interfaces {w|c}ould be:
+ *  - specific to LionCore (so to match m3/types.ts)
+ *  - generic to serialize {@link DynamicNode dynamic nodes}
+ */
+export interface Reader<NT extends Node> {
+
+    /**
+     * @return The {@link Concept concept} of the given node
+     */
+    classifierOf: ClassifierDeducer<NT>
+
+    /**
+     * @return The value of the given {@link Feature feature} on the given node.
+     */
+    getFeatureValue: (node: NT, feature: Feature) => unknown
+// TODO  split to getPropertyValue, &c.?
+
+    /**
+     * @return The {@link EnumerationLiteral} corresponding to
+     * the given {@link Enumeration} and the runtime encoding of a literal of it,
+     */
+    enumerationLiteralFrom: (encoding: unknown, enumeration: Enumeration) => EnumerationLiteral | null
+
+    /**
+     * @return The string value of the `resolveInfo` field of a {@link LionWebJsonReferenceTarget serialized reference target},
+     * or {@code undefined} to indicate that no `resolveInfo` could be derived.
+     */
+    resolveInfoFor?: ResolveInfoDeducer<NT>
+
+}
+
+/**
+ * Alias for {@link Reader}, kept for backward compatibility, and to be deprecated and removed later.
+ */
+export interface ExtractionFacade<NT extends Node> extends Reader<NT> {}
+

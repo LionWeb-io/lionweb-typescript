@@ -4,8 +4,8 @@ import {
     builtinPrimitives,
     BuiltinPropertyValueSerializer,
     Concept,
-    dynamicExtractionFacade,
     DynamicNode,
+    dynamicReader,
     Enumeration,
     EnumerationLiteral,
     Language,
@@ -340,9 +340,9 @@ describe("serialization of empty (unset) values", () => {
                 }
             ]
         }
-        const actualSerializationChunk = nodeSerializer(dynamicExtractionFacade)([node]) // (serializeEmptyFeatures has true as default)
+        const actualSerializationChunk = nodeSerializer(dynamicReader)([node]) // (serializeEmptyFeatures has true as default)
         expect(actualSerializationChunk).to.eql(expectedSerializationChunk)
-        const usingExplicitOption = nodeSerializer(dynamicExtractionFacade, { serializeEmptyFeatures: true })([node])
+        const usingExplicitOption = nodeSerializer(dynamicReader, { serializeEmptyFeatures: true })([node])
         expect(usingExplicitOption).to.eql(expectedSerializationChunk)
     })
 
@@ -371,7 +371,7 @@ describe("serialization of empty (unset) values", () => {
                 }
             ]
         }
-        const actualSerializationChunk = nodeSerializer(dynamicExtractionFacade, { serializeEmptyFeatures: false })([node])
+        const actualSerializationChunk = nodeSerializer(dynamicReader, { serializeEmptyFeatures: false })([node])
         expect(actualSerializationChunk).to.eql(expectedSerializationChunk)
     })
 })

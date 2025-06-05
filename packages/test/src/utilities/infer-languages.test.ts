@@ -5,15 +5,15 @@ import {
     sortedSerializationChunk
 } from "@lionweb/utilities"
 
-import { libraryExtractionFacade, libraryModel } from "../instances/library.js"
-import { multiExtractionFacade, multiModel } from "../instances/multi.js"
+import { libraryModel, libraryReader } from "../instances/library.js"
+import { multiModel, multiReader } from "../instances/multi.js"
 import { minimalLibraryLanguage } from "../languages/minimal-library.js"
 import { multiLanguage } from "../languages/multi.js"
 import { deepEqual, equal } from "../test-utils/assertions.js"
 
 describe("inferLanguagesFromChunk", () => {
     it("should correctly infer the minimal library language from the instance", () => {
-        const serializationChunk = nodeSerializer(libraryExtractionFacade)(libraryModel)
+        const serializationChunk = nodeSerializer(libraryReader)(libraryModel)
 
         const languages = inferLanguagesFromSerializationChunk(serializationChunk)
         equal(languages.length, 1)
@@ -26,7 +26,7 @@ describe("inferLanguagesFromChunk", () => {
     })
 
     it("should correctly infer the multi language from the instance", () => {
-        const serializationChunk = nodeSerializer(multiExtractionFacade)(multiModel)
+        const serializationChunk = nodeSerializer(multiReader)(multiModel)
 
         const languages = inferLanguagesFromSerializationChunk(serializationChunk)
         equal(languages.length, 2)

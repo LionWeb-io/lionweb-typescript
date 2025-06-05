@@ -1,4 +1,4 @@
-import { childrenExtractorUsing, dynamicExtractionFacade, DynamicNode, Node, nodesExtractorUsing } from "@lionweb/core"
+import { childrenExtractorUsing, DynamicNode, dynamicReader, Node, nodesExtractorUsing } from "@lionweb/core"
 
 import { Annotated, Circle, Coord } from "../languages/shapes.js"
 import { deepEqual } from "../test-utils/assertions.js"
@@ -35,11 +35,11 @@ describe("annotations are extracted", () => {
     const idOf = ({ id }: Node) => id
 
     it("by childrenExtractorUsing", () => {
-        deepEqual(childrenExtractorUsing(dynamicExtractionFacade)(circle).map(idOf), ["center"])
-        deepEqual(childrenExtractorUsing(dynamicExtractionFacade)(center).map(idOf), ["annotated"])
+        deepEqual(childrenExtractorUsing(dynamicReader)(circle).map(idOf), ["center"])
+        deepEqual(childrenExtractorUsing(dynamicReader)(center).map(idOf), ["annotated"])
     })
 
     it("by nodesExtractorUsing", () => {
-        deepEqual(nodesExtractorUsing(dynamicExtractionFacade)(circle).map(idOf), ["circle", "center", "annotated"])
+        deepEqual(nodesExtractorUsing(dynamicReader)(circle).map(idOf), ["circle", "center", "annotated"])
     })
 })

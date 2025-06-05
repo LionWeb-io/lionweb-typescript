@@ -20,10 +20,10 @@ import {
     builtinClassifiers,
     builtinFeatures,
     Containment,
-    ExtractionFacade,
     Feature,
     nodeSerializer,
     Property,
+    Reader,
     Reference
 } from "@lionweb/core"
 
@@ -48,10 +48,10 @@ export const getFeatureValue = (node: INodeBase, feature: Feature) => {
 };
 
 /**
- * An {@link ExtractionFacade} that works on/for {@link INodeBase}s specifically.
+ * A {@link Reader} that works on/for {@link INodeBase}s specifically.
  * **Note** that this function is for internal use only!
  */
-export const nodeBaseReader: ExtractionFacade<INodeBase> = {
+export const nodeBaseReader: Reader<INodeBase> = {
     classifierOf: (node) => node.classifier,
     getFeatureValue,
     enumerationLiteralFrom: (encoding, enumeration) => {

@@ -3,11 +3,11 @@ import {
     Containment,
     Enumeration,
     EnumerationLiteral,
-    ExtractionFacade,
     Feature,
     Language,
     Link,
     Property,
+    Reader,
     Reference,
     unresolved
 } from "@lionweb/core"
@@ -29,7 +29,7 @@ export class TestNode implements BaseNode {
 }
 
 
-export class TestNodeReader implements ExtractionFacade<TestNode> {
+export class TestNodeReader implements Reader<TestNode> {
 
     constructor(public readonly knownLanguages: Language[] = []) {
     }

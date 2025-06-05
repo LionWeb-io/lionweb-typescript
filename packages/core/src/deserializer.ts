@@ -6,7 +6,7 @@ import {
     LionWebKey
 } from "@lionweb/json"
 import { byIdMap, groupBy } from "@lionweb/ts-utils"
-import { InstantiationFacade } from "./facade.js"
+import { InstantiationFacade } from "./writing.js"
 import { defaultSimplisticHandler, SimplisticHandler } from "./handler.js"
 import { BuiltinPropertyValueDeserializer } from "./m3/builtins.js"
 import { allFeaturesOf } from "./m3/functions.js"

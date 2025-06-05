@@ -1,8 +1,8 @@
 import {
     Classifier,
-    dynamicExtractionFacade,
     dynamicInstantiationFacade,
     DynamicNode,
+    dynamicReader,
     incomingReferences,
     referencesToOutOfScopeNodes,
     ReferenceValue,
@@ -10,7 +10,13 @@ import {
 } from "@lionweb/core"
 import { LionWebId } from "@lionweb/json"
 
-import { AnotherConcept, SomeAnnotation, SomeAnnotation_ref, SomeConcept, SomeConcept_ref } from "../languages/generic.js"
+import {
+    AnotherConcept,
+    SomeAnnotation,
+    SomeAnnotation_ref,
+    SomeConcept,
+    SomeConcept_ref
+} from "../languages/generic.js"
 import { MyConcept, MyConcept_multivaluedRef, MyConcept_singularRef } from "../languages/tiny-ref.js"
 import { deepEqual } from "../test-utils/assertions.js"
 
@@ -35,8 +41,8 @@ describe("reference utils", () => {
         const scope = [sourceNode, targetNode]
 
         const expectedRefs = [new ReferenceValue(sourceNode, targetNode, SomeConcept_ref, null)]
-        deepEqual(referenceValues(scope, dynamicExtractionFacade), expectedRefs)
-        deepEqual(incomingReferences(targetNode, scope, dynamicExtractionFacade), expectedRefs)
+        deepEqual(referenceValues(scope, dynamicReader), expectedRefs)
+        deepEqual(incomingReferences(targetNode, scope, dynamicReader), expectedRefs)
     })
 
     it("find a reference from an annotation", () => {
@@ -53,7 +59,7 @@ describe("reference utils", () => {
          * and because the annotation is explicitly declared as part of the scope.
          * It's more interesting to verify that a scope computed from root nodes would contain the annotation!
          */
-        deepEqual(incomingReferences(targetNode, scope, dynamicExtractionFacade), [
+        deepEqual(incomingReferences(targetNode, scope, dynamicReader), [
             new ReferenceValue(sourceNode, targetNode, SomeAnnotation_ref, null)
         ])
     })
@@ -62,7 +68,7 @@ describe("reference utils", () => {
         const node = createNode("node", MyConcept)
         setValue(node, MyConcept_singularRef, node)
 
-        deepEqual(incomingReferences(node, [node], dynamicExtractionFacade), [new ReferenceValue(node, node, MyConcept_singularRef, null)])
+        deepEqual(incomingReferences(node, [node], dynamicReader), [new ReferenceValue(node, node, MyConcept_singularRef, null)])
     })
 
     it("find references in different features of the source", () => {
@@ -72,7 +78,7 @@ describe("reference utils", () => {
         setValue(sourceNode, MyConcept_multivaluedRef, targetNode)
         deepEqual(sourceNode.settings["multivaluedRef"], [targetNode]) // assert that setValue(<node>, <multivalued feature>, <value>) _added_ the value
 
-        deepEqual(incomingReferences(targetNode, [sourceNode], dynamicExtractionFacade), [
+        deepEqual(incomingReferences(targetNode, [sourceNode], dynamicReader), [
             new ReferenceValue(sourceNode, targetNode, MyConcept_singularRef, null),
             new ReferenceValue(sourceNode, targetNode, MyConcept_multivaluedRef, 0)
         ])
@@ -85,7 +91,7 @@ describe("reference utils", () => {
         setValue(sourceNode, MyConcept_multivaluedRef, targetNode)
         deepEqual(sourceNode.settings["multivaluedRef"], [targetNode, targetNode]) // assert that setValue(<node>, <multivalued feature>, <value>) _added_ the values
 
-        deepEqual(incomingReferences(targetNode, [sourceNode], dynamicExtractionFacade), [
+        deepEqual(incomingReferences(targetNode, [sourceNode], dynamicReader), [
             new ReferenceValue(sourceNode, targetNode, MyConcept_multivaluedRef, 0),
             new ReferenceValue(sourceNode, targetNode, MyConcept_multivaluedRef, 1)
         ])
@@ -99,7 +105,7 @@ describe("reference utils", () => {
         setValue(sourceNode1, MyConcept_singularRef, targetNode1)
         setValue(sourceNode2, MyConcept_singularRef, targetNode2)
 
-        deepEqual(incomingReferences([targetNode1, targetNode2], [sourceNode1, sourceNode2], dynamicExtractionFacade), [
+        deepEqual(incomingReferences([targetNode1, targetNode2], [sourceNode1, sourceNode2], dynamicReader), [
             new ReferenceValue(sourceNode1, targetNode1, MyConcept_singularRef, null),
             new ReferenceValue(sourceNode2, targetNode2, MyConcept_singularRef, null)
         ])
@@ -113,8 +119,8 @@ describe("reference utils", () => {
 
         const expectedRefs = [new ReferenceValue(sourceNode, targetNode, SomeConcept_ref, null)]
         const duplicateTargetNodes = [targetNode, targetNode]
-        deepEqual(incomingReferences(duplicateTargetNodes, scope, dynamicExtractionFacade), expectedRefs)
-        deepEqual(referenceValues(scope, dynamicExtractionFacade), expectedRefs)
+        deepEqual(incomingReferences(duplicateTargetNodes, scope, dynamicReader), expectedRefs)
+        deepEqual(referenceValues(scope, dynamicReader), expectedRefs)
     })
 
     it("have defined behavior when duplicate nodes in scope", () => {
@@ -125,8 +131,8 @@ describe("reference utils", () => {
 
         const expectedRefs = [new ReferenceValue(sourceNode, targetNode, SomeConcept_ref, null)]
         const duplicateScope = [...scope, ...scope]
-        deepEqual(incomingReferences(targetNode, duplicateScope, dynamicExtractionFacade), expectedRefs)
-        deepEqual(referenceValues(duplicateScope, dynamicExtractionFacade), expectedRefs)
+        deepEqual(incomingReferences(targetNode, duplicateScope, dynamicReader), expectedRefs)
+        deepEqual(referenceValues(duplicateScope, dynamicReader), expectedRefs)
     })
 
     it("find unreachable nodes", () => {
@@ -135,7 +141,7 @@ describe("reference utils", () => {
         setValue(sourceNode, SomeConcept_ref, targetNode)
 
         deepEqual(
-            referencesToOutOfScopeNodes([sourceNode, sourceNode], dynamicExtractionFacade), // Note: scope is duplicate
+            referencesToOutOfScopeNodes([sourceNode, sourceNode], dynamicReader), // Note: scope is duplicate
             [new ReferenceValue(sourceNode, targetNode, SomeConcept_ref, null)]
         )
     })

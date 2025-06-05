@@ -4,7 +4,7 @@
  */
 
 import { LionWebId, LionWebJsonMetaPointer, LionWebKey } from "@lionweb/json"
-import { ResolveInfoDeducer } from "../facade.js"
+import { ResolveInfoDeducer } from "../reading.js"
 import { MultiRef, SingleRef, unresolved } from "../references.js"
 import { Node } from "../types.js"
 

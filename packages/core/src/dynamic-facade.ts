@@ -1,8 +1,9 @@
 import { LionWebKey } from "@lionweb/json"
-import { ExtractionFacade, InstantiationFacade, ResolveInfoDeducer, updateSettingsKeyBased } from "./facade.js"
 import { builtinFeatures } from "./m3/builtins.js"
 import { Classifier } from "./m3/types.js"
+import { Reader, ResolveInfoDeducer } from "./reading.js"
 import { Node } from "./types.js"
+import { InstantiationFacade, updateSettingsKeyBased } from "./writing.js"
 
 
 /**
@@ -22,9 +23,9 @@ const propertyGetterFor = (key: LionWebKey): ResolveInfoDeducer<DynamicNode> =>
             : undefined
 
 /**
- * An implementation of {@link ExtractionFacade} for {@link DynamicNode dynamic nodes}.
+ * An implementation of {@link Reader} for {@link DynamicNode dynamic nodes}.
  */
-export const dynamicExtractionFacade: ExtractionFacade<DynamicNode> = ({
+export const dynamicReader: Reader<DynamicNode> = ({
     classifierOf: (node) => node.classifier,
     getFeatureValue: (node, feature) =>
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -35,6 +36,10 @@ export const dynamicExtractionFacade: ExtractionFacade<DynamicNode> = ({
     resolveInfoFor: propertyGetterFor(builtinFeatures.inamed_name.key)
 })
 
+/**
+ * Alias for {@link Reader}, kept for backward compatibility, and to be deprecated and removed later.
+ */
+export const dynamicExtractionFacade = dynamicReader
 
 /**
  * An implementation of {@link InstantiationFacade} for {@link DynamicNode dynamic nodes}.

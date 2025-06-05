@@ -1,7 +1,7 @@
-import { ExtractionFacade, InstantiationFacade, updateSettingsNameBased } from "../facade.js"
 import { builtinFeatures } from "./builtins.js"
 import { metaTypedBasedClassifierDeducerFor, qualifiedNameOf } from "./functions.js"
 import { lioncore, metaConcepts, metaFeatures } from "./lioncore.js"
+import { Reader } from "../reading.js"
 import {
     Annotation,
     Classifier,
@@ -16,17 +16,23 @@ import {
     Property,
     Reference
 } from "./types.js"
+import { InstantiationFacade, updateSettingsNameBased } from "../writing.js"
 
 const { inamed_name } = builtinFeatures
 const { ikeyed_key } = metaFeatures
 
-export const lioncoreExtractionFacade: ExtractionFacade<M3Concept> = {
+export const lioncoreReader: Reader<M3Concept> = {
     classifierOf: metaTypedBasedClassifierDeducerFor(lioncore),
     getFeatureValue: (node, feature) =>
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (node as any)[feature.name], // (mirrors name-based update of settings)
     enumerationLiteralFrom: (value, _) => value as EnumerationLiteral | null
 }
+
+/**
+ * Alias for {@link lioncoreReader}, kept for backward compatibility, and to be deprecated and removed later.
+ */
+export const lioncoreExtractionFacade = lioncoreReader
 
 /**
  * @return An implementation of {@link InstantiationFacade} for instances of the LionCore M3 (so M2s).

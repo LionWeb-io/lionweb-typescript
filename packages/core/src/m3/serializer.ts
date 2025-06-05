@@ -1,6 +1,6 @@
 import { LionWebJsonChunk } from "@lionweb/json"
 import { nodeSerializer } from "../serializer.js"
-import { lioncoreExtractionFacade } from "./facade.js"
+import { lioncoreReader } from "./facade.js"
 import { Language } from "./types.js"
 
 
@@ -9,5 +9,5 @@ import { Language } from "./types.js"
  * into the LionWeb serialization JSON format.
  */
 export const serializeLanguages = (...languages: Language[]): LionWebJsonChunk =>
-    nodeSerializer(lioncoreExtractionFacade)(languages)
+    nodeSerializer(lioncoreReader)(languages)
 

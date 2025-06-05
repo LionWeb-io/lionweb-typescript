@@ -2,7 +2,7 @@ import { nodeSerializer } from "@lionweb/core"
 import { genericAsTreeText, languageAsText } from "@lionweb/utilities"
 import { readFileSync, writeFileSync } from "fs"
 
-import { libraryExtractionFacade, libraryModel } from "../instances/library.js"
+import { libraryModel, libraryReader } from "../instances/library.js"
 import { libraryLanguage } from "../languages/library.js"
 import { languageWithEnum } from "../languages/with-enum.js"
 import { equal } from "../test-utils/assertions.js"
@@ -19,7 +19,7 @@ describe("LionCore-specific textual syntax", () => {
 describe("generic textual syntax", () => {
     it("textualize library model without language def.", () => {
         equal(
-            genericAsTreeText(nodeSerializer(libraryExtractionFacade)(libraryModel)),
+            genericAsTreeText(nodeSerializer(libraryReader)(libraryModel)),
             `[Library] (id: jkxERSov0TuSh7MMz2D5ciLrZDrU4o_VMOpmBqh_j7E) {
     [library_Library_name] = Bob's Library
     [books]:
@@ -40,7 +40,7 @@ describe("generic textual syntax", () => {
 
     it("textualize library model with language def.", () => {
         equal(
-            genericAsTreeText(nodeSerializer(libraryExtractionFacade)(libraryModel), [libraryLanguage]),
+            genericAsTreeText(nodeSerializer(libraryReader)(libraryModel), [libraryLanguage]),
             `Library (id: jkxERSov0TuSh7MMz2D5ciLrZDrU4o_VMOpmBqh_j7E) {
     name = 'Bob's Library'
     books:

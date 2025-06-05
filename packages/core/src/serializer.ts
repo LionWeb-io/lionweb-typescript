@@ -1,11 +1,26 @@
-import { currentSerializationFormatVersion, LionWebId, LionWebJsonChunk, LionWebJsonMetaPointer, LionWebJsonNode } from "@lionweb/json"
+import {
+    currentSerializationFormatVersion,
+    LionWebId,
+    LionWebJsonChunk,
+    LionWebJsonMetaPointer,
+    LionWebJsonNode
+} from "@lionweb/json"
 import { asArray } from "@lionweb/ts-utils"
-import { ExtractionFacade } from "./facade.js"
 import { asIds } from "./functions.js"
+import { Reader } from "./reading.js"
+import { Node } from "./types.js"
 import { BuiltinPropertyValueSerializer } from "./m3/builtins.js"
 import { allFeaturesOf } from "./m3/functions.js"
-import { Containment, Enumeration, Feature, Language, PrimitiveType, Property, Reference, simpleNameDeducer } from "./m3/types.js"
-import { Node } from "./types.js"
+import {
+    Containment,
+    Enumeration,
+    Feature,
+    Language,
+    PrimitiveType,
+    Property,
+    Reference,
+    simpleNameDeducer
+} from "./m3/types.js"
 
 
 /**
@@ -65,7 +80,7 @@ export const metaPointerFor = (feature: Feature): LionWebJsonMetaPointer => {
 /**
  * @return a function that serializes the {@link Node nodes} passed to it.
  */
-export const nodeSerializer = <NT extends Node>(extractionFacade: ExtractionFacade<NT>, serializationOptions?: SerializationOptions) => {
+export const nodeSerializer = <NT extends Node>(reader: Reader<NT>, serializationOptions?: SerializationOptions) => {
     const propertyValueSerializer =
         serializationOptions?.propertyValueSerializer ?? serializationOptions?.primitiveTypeSerializer ?? new BuiltinPropertyValueSerializer()
     const serializeEmptyFeatures = serializationOptions?.serializeEmptyFeatures ?? true
@@ -86,7 +101,7 @@ export const nodeSerializer = <NT extends Node>(extractionFacade: ExtractionFaca
                 return
             }
 
-            const classifier = extractionFacade.classifierOf(node)
+            const classifier = reader.classifierOf(node)
             const language = classifier.language
             registerLanguageUsed(language)
             const serializedNode: LionWebJsonNode = {
@@ -101,7 +116,7 @@ export const nodeSerializer = <NT extends Node>(extractionFacade: ExtractionFaca
             serializedNodes.push(serializedNode)
             ids[node.id] = true
             allFeaturesOf(classifier).forEach(feature => {  // TODO  can be made more efficient by caching allFeaturesOf(classifier)
-                const value = extractionFacade.getFeatureValue(node, feature)
+                const value = reader.getFeatureValue(node, feature)
                 const featureLanguage = feature.classifier.language
                 registerLanguageUsed(featureLanguage)
                 const featureMetaPointer = metaPointerFor(feature)
@@ -116,7 +131,7 @@ export const nodeSerializer = <NT extends Node>(extractionFacade: ExtractionFaca
                             return propertyValueSerializer.serializeValue(value, feature)
                         }
                         if (feature.type instanceof Enumeration) {
-                            return extractionFacade.enumerationLiteralFrom(value, feature.type)?.key
+                            return reader.enumerationLiteralFrom(value, feature.type)?.key
                         }
                         return undefined
                     })()
@@ -157,7 +172,7 @@ export const nodeSerializer = <NT extends Node>(extractionFacade: ExtractionFaca
                             .map(t => t as NT)
                             .map(t => ({
                                 resolveInfo:
-                                    (extractionFacade.resolveInfoFor ? extractionFacade.resolveInfoFor(t) : simpleNameDeducer(t)) ?? null,
+                                    (reader.resolveInfoFor ? reader.resolveInfoFor(t) : simpleNameDeducer(t)) ?? null,
                                 reference: t.id
                             }))
                     })
@@ -188,11 +203,11 @@ export const nodeSerializer = <NT extends Node>(extractionFacade: ExtractionFaca
  */
 export const serializeNodes = <NT extends Node>(
     nodes: NT[],
-    extractionFacade: ExtractionFacade<NT>,
+    reader: Reader<NT>,
     propertyValueSerializerOrOptions?: PropertyValueSerializer | SerializationOptions
 ): LionWebJsonChunk =>
     nodeSerializer<NT>(
-        extractionFacade,
+        reader,
         isPropertyValueSerializer(propertyValueSerializerOrOptions)
             ? {
                 propertyValueSerializer: propertyValueSerializerOrOptions
