@@ -44,6 +44,7 @@
     "./packages/class-core",
     "./packages/class-core-generator",
     "./packages/build",
-    "./packages/class-core-test"
+    "./packages/class-core-test",
+    "./packages/io-lionweb-mps-specific"
   ]
 }

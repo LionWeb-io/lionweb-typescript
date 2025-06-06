@@ -38,6 +38,10 @@ cd cli
 npm run build
 cd ..
 
+cd io-lionweb-mps-specific
+npm run build
+cd ..
+
 cd test
 npm test
 cd ..
