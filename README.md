@@ -76,12 +76,12 @@ The implementation is divided up in a number of NPM packages in the directory [`
 - `artifacts`
   A package that generates artifacts (serialization chunks, diagrams, JSON Schemas) from some of the models constructed in the `core` and `test` packages.
 
-- `class-core-build`
+- `build`
   A package that builds part of the code in `class-core` — specifically the part related to the delta protocol.
 
   _Note_ that this package – and specifically the `generate-for-class-core.ts` file – depends on `class-core` itself.
   This constitutes a *circular* dependency, but that only exists at compile+build time, so should not be problematic.
-  To ensure that a “clean clone” of this repository is not impacted, the `make-class-core.sh` script builds `class-core` first, before compiling and running `class-core-build`, and then builds `class-core` again.
+  To ensure that a “clean clone” of this repository is not impacted, the `make-class-core.sh` script builds `class-core` first, before compiling and running `build`, and then builds `class-core` again.
 
 Each of these packages have their own `README.md`.
 The following packages are published in the scope of [the `lionweb` organization](https://www.npmjs.com/org/lionweb), meaning that they're all prefixed with `@lionweb/`: `json`, `json-utils`, `js-diff`, `core`, `ts-utils`, `utilities`, `cli`, and `validation`, `class-core`, `class-core-generator`
@@ -128,7 +128,7 @@ source make-class-core.sh
 ```
 
 This script exits as soon as the first failure it detected.
-It also triggers the `generate` scriptlet of the `class-core-build` package.
+It also triggers the `generate` scriptlet of the `build` package.
 
 The chain of preceding commands can also be run as follows:
 

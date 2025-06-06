@@ -43,7 +43,7 @@
     "./packages/artifacts",
     "./packages/class-core",
     "./packages/class-core-generator",
-    "./packages/class-core-build",
+    "./packages/build",
     "./packages/class-core-test"
   ]
 }

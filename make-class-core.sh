@@ -8,12 +8,12 @@ cd class-core-generator
 npm run build
 cd ..
 
-# Build class-core first, because class-core-build depends *circularly* on it.
+# Build class-core first, because build depends *circularly* on it.
 cd class-core
 npm run build
 cd ..
 
-cd class-core-build
+cd build
 ClassCoreTestGenPath="../class-core-test/src/gen"   # relative!
 rm -rf $ClassCoreTestGenPath
 mkdir -p $ClassCoreTestGenPath

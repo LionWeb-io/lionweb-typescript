@@ -1,5 +1,5 @@
 {
-  "name": "@lionweb/class-core-build",
+  "name": "@lionweb/build",
   "version": "0.7.0-dev.0",
   "description": "Build the deltas language, and the delta types in -class-core from their specification",
   "private": true,

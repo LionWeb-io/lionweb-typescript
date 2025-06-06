@@ -4,7 +4,7 @@
         "internal-version": "0.7.0-dev.0",
         "internal-packages": [
             "artifacts",
-            "class-core-build",
+            "build",
             "class-core-test",
             "test"
         ]
