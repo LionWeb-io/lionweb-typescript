@@ -48,7 +48,7 @@ export function printIssues(result: ValidationResult, file?: string): void {
 }
 
 export function issuestoString(vresult: ValidationResult, file?: string): string {
-    let result = ""
-    vresult.issues.forEach(issue => (result += (file == undefined ? "" : `File ${file}: `) + issue.errorMsg() + "\n"))
+    let result = "ISSUES: "
+    vresult.issues.forEach(issue => (result += (file === undefined ? "NOFILE" : `File ${file}: `) + issue.errorMsg() + "\n"))
     return result
 }
