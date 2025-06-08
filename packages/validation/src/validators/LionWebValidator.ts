@@ -34,7 +34,7 @@ export class LionWebValidator {
     }
 
     validateSyntax() {
-        this.syntaxValidator.validate(this.object, "LionWebChunk")
+        this.syntaxValidator.validate(this.object, "LionWebJsonChunk")
         this.syntaxCorrect = !this.validationResult.hasErrors()
         if (this.syntaxCorrect) {
             this.chunk = new LionWebJsonChunkWrapper(this.object as LionWebJsonChunk)
