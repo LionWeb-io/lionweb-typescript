@@ -28,7 +28,8 @@ import {
     Link,
     PrimitiveType,
     Property,
-    SingleRef
+    SingleRef,
+    unresolved
 } from "@lionweb/core"
 import { Imports, tsTypeForPrimitiveType } from "./index.js"
 
@@ -58,8 +59,8 @@ export const tsTypeForDataType = (dataType: SingleRef<DataType>, imports: Import
 
 
 export const tsTypeForClassifier = (classifier: SingleRef<Classifier>, imports: Imports) => {
-    if (classifier === null) {
-        return `unknown /* [ERROR] can't compute a TS type for a null classifier */`
+    if (classifier === unresolved) {
+        return `unknown /* [ERROR] can't compute a TS type for an unresolved classifier */`
     }
     return classifier === builtinClassifiers.node ? imports.generic("INodeBase") : imports.entity(classifier)
 }

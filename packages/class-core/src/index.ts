@@ -19,11 +19,11 @@ export * from "./base-types.js";
 export * from "./convenience.js";
 export * from "./deltas/index.js";
 export * from "./deserializer.js";
-export {deepDuplicateWith} from "./duplicator.js";
+export { deepDuplicateWith } from "./duplicator.js";
 export * from "./id-mapping.js";
 // skip linking.js: see comment there
 export * from "./lionCore_builtins.g.js";
 export {serializeNodeBases} from "./serializer.js";
+export { asTreeTextWith } from "./textualizer.js";
 export * from "./value-managers/index.js";
-export {asTreeTextWith} from "./textualizer.js";
 
