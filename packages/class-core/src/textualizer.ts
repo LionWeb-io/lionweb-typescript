@@ -19,7 +19,7 @@ import { allFeaturesOf, Containment, Feature, Property, Reference, unresolved } 
 import { asString, indentWith, Template } from "littoral-templates"
 
 import { INodeBase } from "./base-types.js"
-import { LionCore_builtinsBase } from "./lionCore_builtins.g.js"
+import { LionCore_builtinsBase } from "./LionCore_builtins.g.js"
 
 const indent = indentWith("    ")(1)
 

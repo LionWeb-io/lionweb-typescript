@@ -22,7 +22,7 @@ export * from "./deserializer.js";
 export { deepDuplicateWith } from "./duplicator.js";
 export * from "./id-mapping.js";
 // skip linking.js: see comment there
-export * from "./lionCore_builtins.g.js";
+export * from "./LionCore_builtins.g.js";
 export {serializeNodeBases} from "./serializer.js";
 export { asTreeTextWith } from "./textualizer.js";
 export * from "./value-managers/index.js";
