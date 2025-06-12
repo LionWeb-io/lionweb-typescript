@@ -217,6 +217,9 @@ Note that beta releases are different in a couple of ways:
 Releasing all (releasable) packages at the same time can be done through the top-level `release` script.
 If you do that, you can perform the manual steps above all at the same time, which might save time and commits.
 
+You can also perform an alpha release in exactly the same way as a beta release, but with all occurrences of "`beta`" replaced with "`alpha`".
+Alpha releases should be limited to experimental features.
+
 
 #### Future work
 
