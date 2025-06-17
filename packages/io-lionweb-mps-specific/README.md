@@ -8,8 +8,8 @@
 ](https://www.npmjs.com/package/@lionweb/io-lionweb-mps-specific)
 
 This NPM package contains an implementation of the `io.lionweb.mps.specific` language.
-The MPS implementation of that language is part of the `lionweb-mps` plug-in.
-It's used to export MPS-specific language (structure) metadata as part of LionWeb language exports from MPS (in the LionCore M3 format).
+The MPS implementation of that language is part of [the `lionweb-mps` plug-in](https://github.com/LionWeb-io/lionweb-mps/tree/mps2021.3).
+The annotations in this language are used to export MPS-specific language (structure) metadata as part of LionWeb language exports from MPS (in the LionCore M3 format).
 More specifically, this pertains to metadata like the *alias*, *short description*, *documentation*, etc., of a language concept.
 
 It can be added to a TypeScript codebase as follows:
@@ -17,4 +17,15 @@ It can be added to a TypeScript codebase as follows:
 ```shell
 $ npm add @lionweb/io-lionweb-mps-specific
 ```
+
+## API
+
+The API consists of the following things exported from this package:
+
+* The _implementation_ of the language consists of the following classes: `ConceptDescription`, `Deprecated`, `KeyedDescription`, `ShortDescription`, `VirtualPackage`.
+    Also see [this PlantUml diagram](meta/io.lionweb.mps.specific.puml) for some more information.
+* The language is _defined_ through the constant `ioLionWebMpsSpecificLanguage` (of type `Language`).
+    Its classifiers are exported separately through the `ioLionWebMpsSpecificClassifiers` dictionary.
+* The `deserializeLanguagesWithIoLionWebMpsSpecific` function deserializes a LionWeb serialization chunk as an array of `Language`s, potentially being annotated with instances of annotations from the `io.lionweb.mps.specific` language.
+* The `ioLionWebMpsSpecificAnnotationsFrom` function returns the (instances of the) `io.lionweb.mps.specific` language's annotations that annotate the given language element (of type `M3Concept`).
 
