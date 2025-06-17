@@ -1,5 +1,10 @@
 # Changelog
 
+0.7.0
+
+* Move `dependenciesThroughDirectInheritanceOf` and `verboseDependencies` functions from `class-core-generator` to `utilities` package, and expose it.
+
+
 ## 0.6.12
 
 Dependencies: `@lionweb/core` version 0.6.12

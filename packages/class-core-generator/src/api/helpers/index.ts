@@ -16,7 +16,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 export * from "./classifiers.js"
-export * from "./dependencies.js"
 export * from "./entities.js"
 export * from "./features.js"
 export * from "./imports-tracking.js"

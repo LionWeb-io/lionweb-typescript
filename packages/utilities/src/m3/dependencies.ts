@@ -18,7 +18,7 @@
 import { Classifier, inheritsFrom, Language, nameOf, nameSorted } from "@lionweb/core"
 import { cycleWith, uniquesAmong } from "@lionweb/ts-utils"
 import { asString, when } from "littoral-templates"
-import { indent } from "../../utils/index.js"
+import { indent } from "./ts-generation/textgen.js"
 
 
 /**
