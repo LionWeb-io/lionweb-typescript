@@ -19,11 +19,11 @@ import { isConcrete, Language, LanguageEntity } from "@lionweb/core"
 import { asString, commaSeparated } from "littoral-templates"
 
 import { asJSIdentifier, indent } from "../utils/textgen.js"
-import { Deprecated, MpsAnnotation } from "./helpers/index.js"
+import { Deprecated, ioLionWebMpsSpecificAnnotationsFrom } from "@lionweb/io-lionweb-mps-specific"
 
-export const megaFactoryFor = (megaFactoryName: string, languages: Language[], mpsAnnotations: MpsAnnotation[] = [], header?: string) => {
+export const megaFactoryFor = (megaFactoryName: string, languages: Language[], header?: string) => {
     const isNotDeprecated = (entity: LanguageEntity) =>
-        !mpsAnnotations.some(mpsAnnotation => mpsAnnotation.annotatedNodeId === entity.id && mpsAnnotation instanceof Deprecated)
+        !ioLionWebMpsSpecificAnnotationsFrom(entity).some((annotation) => annotation instanceof Deprecated)
 
     const requiresFactoryMethod = (entity: LanguageEntity) => isConcrete(entity) && isNotDeprecated(entity)
 

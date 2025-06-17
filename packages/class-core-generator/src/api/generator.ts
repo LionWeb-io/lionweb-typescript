@@ -21,7 +21,6 @@ import { readFileAsJson } from "@lionweb/utilities"
 import { writeFileSync } from "fs"
 import { join } from "path"
 import { cwd } from "process"
-import { MpsAnnotation } from "./helpers/index.js"
 
 import { indexTsFor } from "./index-ts.js"
 import { languageFileFor } from "./language-file.templates.js"
@@ -30,14 +29,12 @@ const properGenericImportLocation = "@lionweb/class-core"
 
 
 export type GeneratorOptions = {
-    mpsAnnotations: MpsAnnotation[]
     genericImportLocation: string
     header?: string
 }
 
 
 const withDefaults = (options?: Partial<GeneratorOptions>): GeneratorOptions => ({
-    mpsAnnotations: options?.mpsAnnotations ?? [],
     genericImportLocation: options?.genericImportLocation ?? properGenericImportLocation,
     header: options?.header
 })

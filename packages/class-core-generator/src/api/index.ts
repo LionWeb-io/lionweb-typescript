@@ -15,7 +15,6 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-export {generateLanguage, generateApiFromLanguages, generateApiFromLanguagesJson} from "./generator.js"
+export { generateLanguage, generateApiFromLanguages, generateApiFromLanguagesJson } from "./generator.js"
 export * from "./generation-headers.js"
-export * from "./helpers/mps-annotations.js"
 export * from "./mega-factory.templates.js"

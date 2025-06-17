@@ -27,26 +27,32 @@ import {
     isReference,
     LanguageEntity,
     Link,
+    M3Concept,
     nameSorted,
+    Node,
     PrimitiveType,
     Property,
     Reference,
     SingleRef
 } from "@lionweb/core"
-import { LionWebId } from "@lionweb/json"
+import {
+    ConceptDescription,
+    Deprecated,
+    ioLionWebMpsSpecificAnnotationsFrom,
+    KeyedDescription,
+    ShortDescription,
+    VirtualPackage
+} from "@lionweb/io-lionweb-mps-specific"
 import { commaSeparated, when, withNewlineAppended } from "littoral-templates"
 
 import { indent, switchOrIf, withFirstUpper, wrapInIf } from "../utils/textgen.js"
 import {
-    ConceptDescription,
-    Deprecated,
     entityMetaType,
     extendsFrom,
     featuresToConcretelyImplementOf,
     implementsFrom,
     Imports,
     isAbstract,
-    MpsAnnotation,
     optionalityPostfix,
     tsFieldTypeForFeature,
     tsTypeForClassifier,
@@ -67,7 +73,7 @@ const cardinalityPrefix = (feature: Feature) => {
 const valueManagerFor = (feature: Feature) =>
     `${cardinalityPrefix(feature)}${featureMetaType(feature)}ValueManager`
 
-export const typeForLanguageEntity = (imports: Imports, mpsAnnotationsPerId: Record<LionWebId, MpsAnnotation[]>) => {
+export const typeForLanguageEntity = (imports: Imports) => {
 
     const sortedSuperTypesCond = <T extends Classifier>(ts: T[], prefix: string): string =>
         ts.length === 0 ? `` : `${prefix}${nameSorted(ts).map((t) => imports.entity(t)).join(", ")}`
@@ -79,6 +85,7 @@ export const typeForLanguageEntity = (imports: Imports, mpsAnnotationsPerId: Rec
         const {name, type} = property
         return [
             `private readonly _${name}: ${imports.generic(valueManagerFor(property))}<${tsTypeForDataType(type, imports)}>;`,
+            jsDocFor(property),
             `get ${name}(): ${tsTypeForDataType(type, imports)}${optionalityPostfix(property)} {`,
             indent(`return this._${name}.get();`),
             `}`,
@@ -96,6 +103,7 @@ export const typeForLanguageEntity = (imports: Imports, mpsAnnotationsPerId: Rec
         const {name, type, multiple} = link
         return [
             `private readonly _${name}: ${imports.generic(valueManagerFor(link))}<${tsTypeForClassifier(type, imports)}>;`,
+            jsDocFor(link),
             `get ${name}(): ${tsTypeForLink(link)} {`,
             indent(`return this._${name}.get();`),
             `}`,
@@ -215,18 +223,46 @@ export const typeForLanguageEntity = (imports: Imports, mpsAnnotationsPerId: Rec
     const typeForPrimitiveType = (primitiveType: PrimitiveType) =>
         `export type ${primitiveType.name} = ${tsTypeForPrimitiveType(primitiveType)};`
 
-    const jsDocFor = (entity: LanguageEntity) => {
-        const mpsAnnotationsForEntity = mpsAnnotationsPerId[entity.id] ?? []
-        const conceptDescription = mpsAnnotationsForEntity.find((mpsAnnotation) => mpsAnnotation instanceof ConceptDescription) as ConceptDescription
-        const hasShortConceptDescription = !!(conceptDescription?.shortDescription)
-        const deprecated = mpsAnnotationsForEntity.find((mpsAnnotation) => mpsAnnotation instanceof Deprecated) as Deprecated
-        return when(hasShortConceptDescription || deprecated !== undefined)([
+    const jsDocFor = (entity: M3Concept) => {
+        const annotations = ioLionWebMpsSpecificAnnotationsFrom(entity)
+        const conceptDescription = annotations.find((annotation) => annotation instanceof ConceptDescription) as ConceptDescription
+        const deprecated = annotations.find((annotation) => annotation instanceof Deprecated) as Deprecated
+        const keyedDescription = annotations.find((annotation) => annotation instanceof KeyedDescription) as KeyedDescription
+        const shortDescription = annotations.find((annotation) => annotation instanceof ShortDescription) as ShortDescription
+        const virtualPackage = annotations.find((annotation) => annotation instanceof VirtualPackage) as VirtualPackage
+        const requiresJsDoc =
+               !!(conceptDescription?.conceptShortDescription)
+            || !!(conceptDescription?.helpUrl)
+            || !!(shortDescription?.description)
+            || keyedDescription !== undefined
+            || deprecated !== undefined
+            || !!(virtualPackage?.name)
+        const linkName = (node: Node) =>
+            node instanceof LanguageEntity
+                ? node.name
+                : "??? (not a language's entity)"
+        return when(requiresJsDoc)([
             `/**`,
-            when(hasShortConceptDescription)(
-                () => ` * ${conceptDescription.shortDescription}`
+            when(!!(conceptDescription?.conceptShortDescription))(
+                () => ` * ${conceptDescription.conceptShortDescription}`
+            ),
+            when(!!(conceptDescription?.helpUrl))(
+                () => ` * {@see} ${conceptDescription.helpUrl}`
+            ),
+            when(!!(shortDescription?.description))(
+                () => ` * ${shortDescription.description}`
+            ),
+            when(keyedDescription !== undefined)(
+                () => [
+                    when(keyedDescription.documentation !== undefined)(` * ${keyedDescription.documentation}`),
+                    keyedDescription.seeAlso.map((seeAlso) => ` * {@see} {@link ${linkName(seeAlso)}}`)
+                ]
             ),
             when(deprecated !== undefined)(
-                () => ` * @deprecated ${deprecated.comment ?? ""}${deprecated.build === null ? "" : ` (build: ${deprecated.build})`}`
+                () => ` * @deprecated ${deprecated.comment ?? ""}${deprecated.build === undefined ? "" : ` (build: ${deprecated.build})`}`
+            ),
+            when(!!(virtualPackage?.name))(
+                () => `(virtual package: ${virtualPackage.name})`
             ),
             ` */`
         ])

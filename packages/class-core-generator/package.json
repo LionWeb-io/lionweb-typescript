@@ -28,6 +28,7 @@
   },
   "devDependencies": {
     "@lionweb/core": "0.7.0-beta.1",
+    "@lionweb/io-lionweb-mps-specific": "0.7.0-beta.1",
     "@lionweb/json": "0.7.0-beta.1",
     "@lionweb/ts-utils": "0.7.0-beta.1",
     "@lionweb/utilities": "0.7.0-beta.1",

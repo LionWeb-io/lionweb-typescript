@@ -17,7 +17,7 @@
 
 import { sortedStringsByUppercase } from "@lionweb/ts-utils"
 import { Concept, Language } from "@lionweb/core"
-import { dependencyOrderOf, groupBy } from "@lionweb/ts-utils"
+import { dependencyOrderOf } from "@lionweb/ts-utils"
 import { asString, commaSeparated, when, withNewlineAppended } from "littoral-templates"
 import { indent } from "../utils/textgen.js"
 
@@ -41,8 +41,6 @@ export const languageFileFor = (language: Language, options: GeneratorOptions) =
         throw new Error(`language ${name} has a cycle among the graph of entities with edges formed by the inheritance dependency`)
     }
 
-    const mpsAnnotationsPerId = groupBy(options.mpsAnnotations, ({annotatedNodeId}) => annotatedNodeId)
-
     const postImportsPart = [
         ``,
         reflectiveClassFor(imports)(language),
@@ -50,7 +48,7 @@ export const languageFileFor = (language: Language, options: GeneratorOptions) =
         ``,
         orderedEntities
             .filter((entity) => entity.language === language)
-            .map(withNewlineAppended(typeForLanguageEntity(imports, mpsAnnotationsPerId)))
+            .map(withNewlineAppended(typeForLanguageEntity(imports)))
     ]
 
     return asString([
