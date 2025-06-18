@@ -108,7 +108,7 @@ This repo relies on the following tools being installed:
 
 ## Development
 
-### Commands
+### Making everything
 
 Run the following command to setup the project:
 
@@ -118,27 +118,27 @@ npm install
 npm run setup
 ```
 
-Run the following command to **build** each of the packages:
+Run the following command to **build** (“make”) each of the packages, in dependency order:
 
 ```shell
-npm run build
-```
-
-This includes cleaning up and installing any NPM (dev) dependencies.
-
-Run the following command to **re-build** the `class-core`-related packages specifically:
-
-```shell
-source make-class-core.sh
+source make.sh
 ```
 
 This script exits as soon as the first failure it detected.
-It also triggers the `generate` scriptlet of the `build` package.
+It also triggers the `generate` scriptlet of the `build` package, which generates a couple of source files in other packages.
 
 The chain of preceding commands can also be run as follows:
 
 ```shell
 npm run initialize
+```
+
+### Building, testing, linting
+
+Run the following command to build all test packages::
+
+```shell
+npm run build
 ```
 
 Run the following command to run all the tests:
@@ -147,6 +147,11 @@ Run the following command to run all the tests:
 # Run the tests
 npm run test
 ```
+
+The output should look similar to this (but much longer):
+<br />
+<br />
+<img src="./documentation/images/test-output.png" alt="test" width="50%"/>
 
 The following command statically _style_-checks the source code in all the packages:
 
@@ -157,22 +162,6 @@ npm run lint
 
 *Note* that this does not catch TypeScript compilation errors!
 (That's because linting only does parsing, not full compilation.)
-
-<br />
-
-The output should look similar to this (but much longer):
-<br />
-<br />
-<img src="./documentation/images/test-output.png" alt="test" width="50%"/>
-
-The `make-dev-all.sh` script does the same as above but then in dependency order.
-You run it as follows:
-
-```shell
-source make-dev-all.sh
-```
-
-This script exits as soon as the first failure it detected.
 
 
 ### Version numbers
