@@ -19,4 +19,5 @@ export * from "./annotations.js"
 export * from "./definition.js"
 export * from "./deserializer.js"
 export * from "./implementation.js"
+export * from "./textualizer.js"
 
