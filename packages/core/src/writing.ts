@@ -11,14 +11,14 @@ import { Node } from "./types.js"
  *  - specific to LionCore (so to match m3/types.ts)
  * - generic to deserialize into {@link DynamicNode dynamic nodes}
  */
-export interface Writer<NT extends Node> {
+export interface Writer<NT extends Node, PNT extends Node = NT> {
 
     /**
      * @return An instance of the given concept, also given its parent (or {@link undefined} for root nodes),
      * its ID and the values of the node's properties ("settings").
      * (The latter may be required as arguments for the constructor of a class, whose instances represent nodes.)
      */
-    nodeFor: (parent: NT | undefined, classifier: Classifier, id: LionWebId, propertySettings: { [propertyKey: LionWebKey]: unknown }) => NT
+    nodeFor: (parent: PNT | undefined, classifier: Classifier, id: LionWebId, propertySettings: { [propertyKey: LionWebKey]: unknown }) => NT
 // TODO  this prohibits multiple properties with the same key but different language => use a variant of LionWebJsonProperty[] with the value already deserialized
 
     /**
@@ -38,7 +38,7 @@ export interface Writer<NT extends Node> {
 /**
  * Alias for {@link Writer}, kept for backward compatibility, and to be deprecated and removed later.
  */
-export interface InstantiationFacade<NT extends Node> extends Writer<NT> {}
+export interface InstantiationFacade<NT extends Node, PNT extends Node = NT> extends Writer<NT, PNT> {}
 
 
 /**

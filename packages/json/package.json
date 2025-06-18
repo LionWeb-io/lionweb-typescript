@@ -18,10 +18,12 @@
     "clean": "rm -rf dist/ node_modules/ lionweb-json-*.tgz",
     "build": "tsc",
     "lint": "eslint src",
-    "pre-release-either": "npm run clean && npm install && npm run build",
-    "prerelease": "npm run pre-release-either",
-    "release": "npm publish",
-    "prerelease-beta": "npm run pre-release-either",
-    "release-beta": "npm publish --tag beta"
+    "prep:pre-release": "npm run clean && npm install && npm run build",
+    "prerelease-alpha": "npm run prep:pre-release",
+    "release-alpha": "npm publish --tag alpha",
+    "prerelease-beta": "npm run prep:pre-release",
+    "release-beta": "npm publish --tag beta",
+    "prerelease": "npm run prep:pre-release",
+    "release": "npm publish"
   }
 }

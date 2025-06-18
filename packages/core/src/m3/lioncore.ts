@@ -102,11 +102,13 @@ const language_dependsOn = factory.reference(language, "dependsOn").isOptional()
 
 export const metaConcepts = {
     annotation,
+    classifier,
     concept,
     interface: interface_,
     containment,
     enumeration,
     enumerationLiteral,
+    ikeyed,
     language,
     primitiveType,
     property,

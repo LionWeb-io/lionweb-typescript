@@ -22,6 +22,8 @@
 ](https://www.npmjs.com/package/@lionweb/validation)
 [![npm](https://img.shields.io/npm/v/%40lionweb%2Fts-utils?label=%40lionweb%2Fts-utils)
 ](https://www.npmjs.com/package/@lionweb/ts-utils)
+[![npm](https://img.shields.io/npm/v/%40lionweb%2Ftextgen-utils?label=%40lionweb%2Ftextgen-utils)
+](https://www.npmjs.com/package/@lionweb/textgen-utils)
 
 
 This repository contains a TypeScript implementation for (parts of) the [LionWeb specification](https://lionweb-io.github.io/specification/) – specifically: release version **2023.1** of the LionWeb specification.
@@ -61,6 +63,9 @@ The implementation is divided up in a number of NPM packages in the directory [`
 - `ts-utils`
   General TypeScript utilities, e.g. for working with maps and such.
 
+- `textgen-utils`
+  General utilities for doing text – i.e.: code – generation, typically based on the `littoral-templates` package.
+
 - `cli`
   A package with an executable to trigger some of the functionality in `utilities` through a commandline interface (CLI), i.e. from the commandline.
 
@@ -76,12 +81,12 @@ The implementation is divided up in a number of NPM packages in the directory [`
 - `artifacts`
   A package that generates artifacts (serialization chunks, diagrams, JSON Schemas) from some of the models constructed in the `core` and `test` packages.
 
-- `class-core-build`
+- `build`
   A package that builds part of the code in `class-core` — specifically the part related to the delta protocol.
 
   _Note_ that this package – and specifically the `generate-for-class-core.ts` file – depends on `class-core` itself.
   This constitutes a *circular* dependency, but that only exists at compile+build time, so should not be problematic.
-  To ensure that a “clean clone” of this repository is not impacted, the `make-class-core.sh` script builds `class-core` first, before compiling and running `class-core-build`, and then builds `class-core` again.
+  To ensure that a “clean clone” of this repository is not impacted, the `make-class-core.sh` script builds `class-core` first, before compiling and running `build`, and then builds `class-core` again.
 
 Each of these packages have their own `README.md`.
 The following packages are published in the scope of [the `lionweb` organization](https://www.npmjs.com/org/lionweb), meaning that they're all prefixed with `@lionweb/`: `json`, `json-utils`, `js-diff`, `core`, `ts-utils`, `utilities`, `cli`, and `validation`, `class-core`, `class-core-generator`
@@ -103,7 +108,7 @@ This repo relies on the following tools being installed:
 
 ## Development
 
-### Commands
+### Making everything
 
 Run the following command to setup the project:
 
@@ -113,27 +118,27 @@ npm install
 npm run setup
 ```
 
-Run the following command to **build** each of the packages:
+Run the following command to **build** (“make”) each of the packages, in dependency order:
 
 ```shell
-npm run build
-```
-
-This includes cleaning up and installing any NPM (dev) dependencies.
-
-Run the following command to **re-build** the `class-core`-related packages specifically:
-
-```shell
-source make-class-core.sh
+source make.sh
 ```
 
 This script exits as soon as the first failure it detected.
-It also triggers the `generate` scriptlet of the `class-core-build` package.
+It also triggers the `generate` scriptlet of the `build` package, which generates a couple of source files in other packages.
 
 The chain of preceding commands can also be run as follows:
 
 ```shell
 npm run initialize
+```
+
+### Building, testing, linting
+
+Run the following command to build all test packages::
+
+```shell
+npm run build
 ```
 
 Run the following command to run all the tests:
@@ -142,6 +147,11 @@ Run the following command to run all the tests:
 # Run the tests
 npm run test
 ```
+
+The output should look similar to this (but much longer):
+<br />
+<br />
+<img src="./documentation/images/test-output.png" alt="test" width="50%"/>
 
 The following command statically _style_-checks the source code in all the packages:
 
@@ -152,22 +162,6 @@ npm run lint
 
 *Note* that this does not catch TypeScript compilation errors!
 (That's because linting only does parsing, not full compilation.)
-
-<br />
-
-The output should look similar to this (but much longer):
-<br />
-<br />
-<img src="./documentation/images/test-output.png" alt="test" width="50%"/>
-
-The `make-dev-all.sh` script does the same as above but then in dependency order.
-You run it as follows:
-
-```shell
-source make-dev-all.sh
-```
-
-This script exits as soon as the first failure it detected.
 
 
 ### Version numbers
@@ -189,7 +183,7 @@ Inspect the resulting diffs to ensure correctness, and don't forget to run `npm 
 
 Packages are released to the [npm registry (website)](https://www.npmjs.com/): see the badges at the top of this document.
 We'll use the terms “release/releasing” from now on, instead of “publication/publishing” as npm itself does.
-We only release the following packages: `core`, `validation`, `utilities`, `cli`, `class-core`, `class-core-generator`.
+We (only) release the following packages: `core`, `validation`, `utilities`, `cli`, `class-core`, `class-core-generator`, `ts-utils`, `textgen-utils`, `io-lionweb-mps-specific`.
 
 Releasing a package involves the following steps:
 
@@ -216,6 +210,9 @@ Note that beta releases are different in a couple of ways:
 
 Releasing all (releasable) packages at the same time can be done through the top-level `release` script.
 If you do that, you can perform the manual steps above all at the same time, which might save time and commits.
+
+You can also perform an alpha release in exactly the same way as a beta release, but with all occurrences of "`beta`" replaced with "`alpha`".
+Alpha releases should be limited to experimental features.
 
 
 #### Future work

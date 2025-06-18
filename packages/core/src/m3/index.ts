@@ -1,6 +1,7 @@
 export * from "./builtins.js"
 export * from "./constraints.js"
 export * from "./deserializer.js"
+export * from "./facade.js"
 export * from "./factory.js"
 export * from "./functions.js"
 export * from "./lioncore.js"

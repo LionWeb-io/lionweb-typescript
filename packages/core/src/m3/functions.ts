@@ -299,10 +299,29 @@ const instantiableClassifiersOf = (language: Language): Classifier[] =>
     language.entities.filter(isInstantiableClassifier) as Classifier[]
 
 
+/**
+ * @return whether the two given {@link Classifiers classifiers} are the same (/identical by meta-pointer).
+ */
+const areSameClassifiers = (left: Classifier, right: Classifier) =>
+    (left === right) || (
+        areSameLanguages(left.language, right.language) && left.key === right.key
+    )
+
+/**
+ * @return whether the two given {@link Language languages} are the same (/identical by meta-pointer).
+ */
+const areSameLanguages = (left: Language, right: Language) =>
+    (left === right) || (
+        left.key === right.key && left.version === right.version
+    )
+
+
 export {
     allContaineds,
     allFeaturesOf,
     allSuperTypesOf,
+    areSameClassifiers,
+    areSameLanguages,
     classBasedClassifierDeducerFor,
     concatenateNamesOf,
     conceptsOf,

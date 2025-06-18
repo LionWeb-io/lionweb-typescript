@@ -1,5 +1,5 @@
 import { Template, when } from "littoral-templates"
-import { indent } from "./textgen.js"
+import { indent } from "@lionweb/textgen-utils"
 
 export enum TypeDefModifier {
     none,

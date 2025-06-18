@@ -7,11 +7,12 @@
 [![npm](https://img.shields.io/npm/v/%40lionweb%2Futilities?label=%40lionweb%2Futilities)
 ](https://www.npmjs.com/package/@lionweb/utilities)
 
-An NPM package that can be added to a Node.js/NPM codebase as follows:
+This NPM package can be added to a TypeScript codebase as follows:
 
 ```shell
 $ npm add @lionweb/utilities
 ```
+
 It contains utilities on top of the `core` package, such as:
 
 * Diagram generation (PlantUML and Mermaid) from an M2.

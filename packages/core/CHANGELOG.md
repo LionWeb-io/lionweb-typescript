@@ -22,6 +22,9 @@
     **Note** that this function is essentially experimental, and that its signature might change in the near future!
 * Rename `ExtractionFacade` (and its instances) to `Reader`, keeping aliases for backward compatibility, to be deprecated and removed later.
 * Rename `InstantiationFacade` (and its instances) to `Writer`, keeping aliases for backward compatibility, to be deprecated and removed later.
+* Expose `classifier` and `ikeyed` through `metaConcepts`, and expose `lioncoreReader` and `lioncoreWriter` as well.
+* Added a type parameter `PNT` to the `Writer` interface, which is the type for the parent node passed to the `.nodeFor(...)` method (as its first argument), and which equals the `NT` type parameter by default.
+* Expose functions `areSameClassifiers` and `areSameLanguages` that compare two given classifiers, resp., languages by their meta-pointers.
 
 
 ## 0.6.12
