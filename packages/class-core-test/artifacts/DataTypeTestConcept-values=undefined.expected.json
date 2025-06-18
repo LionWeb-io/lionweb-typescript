@@ -12,7 +12,7 @@
       "classifier": {
         "language": "TestLanguage",
         "version": "0",
-        "key": "DatatypeTestConcept"
+        "key": "DataTypeTestConcept"
       },
       "properties": [],
       "containments": [],

@@ -12,7 +12,7 @@ export const metaLanguage = factory.language
 factory.annotation("AnAnnotation")
 
 const aConcept = factory.concept("AConcept", false)
-factory.property(aConcept, "aProperty").ofType(builtinPrimitives.jsonDatatype)
+factory.property(aConcept, "aProperty").ofType(builtinPrimitives.jsonDataType)
 factory.containment(aConcept, "aContainment").ofType(aConcept)
 factory.reference(aConcept, "aReference").ofType(aConcept)
 

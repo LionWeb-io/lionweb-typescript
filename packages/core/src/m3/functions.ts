@@ -5,8 +5,8 @@
 
 import { LionWebId, LionWebKey } from "@lionweb/json"
 import { cycleWith, flatMapNonCyclingFollowing, sortByStringKey } from "@lionweb/ts-utils"
-import { ClassifierDeducer } from "../facade.js"
 import { containmentChain } from "../functions.js"
+import { ClassifierDeducer } from "../reading.js"
 import { isRef, unresolved } from "../references.js"
 import { Node } from "../types.js"
 import {
@@ -14,7 +14,7 @@ import {
     Classifier,
     Concept,
     Containment,
-    Datatype,
+    DataType,
     Enumeration,
     Feature,
     IKeyed,
@@ -34,7 +34,7 @@ import {
 /**
  * @return The type of the given {@link Feature}
  */
-const type = (feature: Feature): Classifier | Datatype | typeof unresolved =>
+const type = (feature: Feature): Classifier | DataType | typeof unresolved =>
     (feature as (Link | Property)).type
 
 

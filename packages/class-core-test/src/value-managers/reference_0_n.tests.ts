@@ -18,7 +18,7 @@
 import { collectingDeltaHandler, ReferenceAddedDelta, ReferenceDeletedDelta } from "@lionweb/class-core"
 
 import { deepEqual, equal } from "../assertions.js"
-import { DatatypeTestConcept, LinkTestConcept, TestLanguageBase } from "../gen/TestLanguage.g.js"
+import { DataTypeTestConcept, LinkTestConcept, TestLanguageBase } from "../gen/TestLanguage.g.js"
 
 const testLanguageBase = TestLanguageBase.INSTANCE
 
@@ -38,7 +38,7 @@ describe("[0..n] reference", () => {
 
     it("adding to a [0..n] reference", () => {
         const [handleDeltas, deltas] = collectingDeltaHandler();
-        const dtc1 = DatatypeTestConcept.create("dtc1", handleDeltas);
+        const dtc1 = DataTypeTestConcept.create("dtc1", handleDeltas);
         const ltc = LinkTestConcept.create("ltc", handleDeltas);
 
         // pre-check:
@@ -55,7 +55,7 @@ describe("[0..n] reference", () => {
         );
 
         // action+check:
-        const dtc2 = DatatypeTestConcept.create("dtc2", handleDeltas);
+        const dtc2 = DataTypeTestConcept.create("dtc2", handleDeltas);
         ltc.addReference_0_n(dtc2);
         deepEqual(ltc.reference_0_n, [dtc1, dtc2]);
         equal(dtc2.parent, undefined);
@@ -68,7 +68,7 @@ describe("[0..n] reference", () => {
 
     it("unsetting a [0..n] reference", () => {
         const [handleDeltas, deltas] = collectingDeltaHandler();
-        const dtc = DatatypeTestConcept.create("dtc", handleDeltas);
+        const dtc = DataTypeTestConcept.create("dtc", handleDeltas);
         const ltc = LinkTestConcept.create("ltc", handleDeltas);
 
         // pre-check:
@@ -87,9 +87,9 @@ describe("[0..n] reference", () => {
 
     it("remove a target", () => {
         const [handleDeltas, deltas] = collectingDeltaHandler();
-        const dtc1 = DatatypeTestConcept.create("dtc1", handleDeltas);
-        const dtc2 = DatatypeTestConcept.create("dtc2", handleDeltas);
-        const dtc3 = DatatypeTestConcept.create("dtc3", handleDeltas);
+        const dtc1 = DataTypeTestConcept.create("dtc1", handleDeltas);
+        const dtc2 = DataTypeTestConcept.create("dtc2", handleDeltas);
+        const dtc3 = DataTypeTestConcept.create("dtc3", handleDeltas);
         const ltc = LinkTestConcept.create("ltc", handleDeltas);
 
         // pre-check:
@@ -114,7 +114,7 @@ describe("[0..n] reference", () => {
 
     it("trying to remove a target that wasn't in there", () => {
         const [handleDeltas, deltas] = collectingDeltaHandler();
-        const dtc1 = DatatypeTestConcept.create("dtc1", handleDeltas);
+        const dtc1 = DataTypeTestConcept.create("dtc1", handleDeltas);
         const ltc = LinkTestConcept.create("ltc", handleDeltas);
 
         // pre-check:
@@ -122,7 +122,7 @@ describe("[0..n] reference", () => {
         equal(dtc1.parent, undefined);
         equal(deltas.length, 1);
 
-        const dtc2 = DatatypeTestConcept.create("dtc2", handleDeltas);
+        const dtc2 = DataTypeTestConcept.create("dtc2", handleDeltas);
 
         // action+check:
         ltc.removeReference_0_n(dtc2);

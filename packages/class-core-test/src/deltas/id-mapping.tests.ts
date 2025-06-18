@@ -18,13 +18,13 @@
 import { IdMapping } from "@lionweb/class-core"
 import { equal, throws } from "../assertions.js"
 
-import { DatatypeTestConcept, LinkTestConcept } from "../gen/TestLanguage.g.js"
+import { DataTypeTestConcept, LinkTestConcept } from "../gen/TestLanguage.g.js"
 import { unresolved } from "@lionweb/core"
 
 describe("updating ID mapping", () => {
     it("registers children as well", () => {
         const idMapping = new IdMapping({})
-        const dtc = DatatypeTestConcept.create("dtc")
+        const dtc = DataTypeTestConcept.create("dtc")
         const ltc = LinkTestConcept.create("ltc")
         ltc.containment_1 = dtc
         idMapping.updateWith(ltc)
@@ -70,7 +70,7 @@ describe("ID mapping", () => {
 
     it("updating ID mapping registers children as well", () => {
         const idMapping = new IdMapping({})
-        const dtc = DatatypeTestConcept.create("dtc")
+        const dtc = DataTypeTestConcept.create("dtc")
         const ltc = LinkTestConcept.create("ltc")
         ltc.containment_1 = dtc
         idMapping.updateWith(ltc)

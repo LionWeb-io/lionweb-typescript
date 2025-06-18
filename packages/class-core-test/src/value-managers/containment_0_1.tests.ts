@@ -24,11 +24,11 @@ import {
     nodeBaseDeserializer,
     serializeNodeBases
 } from "@lionweb/class-core"
-import { AccumulatingSimplisticHandler, DefaultPrimitiveTypeDeserializer } from "@lionweb/core"
+import { AccumulatingSimplisticHandler, BuiltinPropertyValueDeserializer } from "@lionweb/core"
 import { LionWebJsonMetaPointer } from "@lionweb/json"
 
 import { deepEqual, equal, isTrue, isUndefined } from "../assertions.js"
-import { DatatypeTestConcept, LinkTestConcept, TestLanguageBase } from "../gen/TestLanguage.g.js"
+import { DataTypeTestConcept, LinkTestConcept, TestLanguageBase } from "../gen/TestLanguage.g.js"
 
 const testLanguageBase = TestLanguageBase.INSTANCE
 
@@ -37,7 +37,7 @@ describe("read+write access to a [0..1] containment", () => {
 
     it("setting of a [0..1] containment", () => {
         const [handleDelta, deltas] = collectingDeltaHandler();
-        const child = DatatypeTestConcept.create("child", handleDelta);
+        const child = DataTypeTestConcept.create("child", handleDelta);
         const parent = LinkTestConcept.create("parent", handleDelta);
 
         // pre-check:
@@ -53,7 +53,7 @@ describe("read+write access to a [0..1] containment", () => {
 
     it("moving a child (through a [0..1] containment) from parent to parent", () => {
         const [handleDelta, deltas] = collectingDeltaHandler();
-        const child = DatatypeTestConcept.create("child", handleDelta);
+        const child = DataTypeTestConcept.create("child", handleDelta);
         const srcParent = LinkTestConcept.create("srcParent", handleDelta);
         const dstParent = LinkTestConcept.create("dstParent", handleDelta);
 
@@ -88,7 +88,7 @@ describe("read+write access to a [0..1] containment", () => {
 
     it("moving a child (through a [0..1] containment) directly between parents", () => {
         const [handleDelta, deltas] = collectingDeltaHandler();
-        const child = DatatypeTestConcept.create("child", handleDelta);
+        const child = DataTypeTestConcept.create("child", handleDelta);
         const srcParent = LinkTestConcept.create("srcParent", handleDelta);
         const dstParent = LinkTestConcept.create("dstParent", handleDelta);
 
@@ -116,11 +116,11 @@ describe("read+write access to a [0..1] containment", () => {
 
     it("moving a child (through a [0..1] containment) directly between parents, replacing an already-present child", () => {
         const [handleDelta, deltas] = collectingDeltaHandler();
-        const childAlreadyAssigned = DatatypeTestConcept.create("childAlreadyAssigned", handleDelta);
+        const childAlreadyAssigned = DataTypeTestConcept.create("childAlreadyAssigned", handleDelta);
         const dstParent = LinkTestConcept.create("dstParent", handleDelta);
         dstParent.containment_0_1 = childAlreadyAssigned;
         const srcParent = LinkTestConcept.create("srcParent", handleDelta);
-        const childToMove = DatatypeTestConcept.create("childToMove", handleDelta);
+        const childToMove = DataTypeTestConcept.create("childToMove", handleDelta);
         srcParent.containment_0_1 = childToMove;
 
         // pre-check:
@@ -159,7 +159,7 @@ describe("serialization and deserialization w.r.t. a [0..1] containment", () => 
 
         const deserialize = nodeBaseDeserializer([testLanguageBase]);
         const problemHandler = new AccumulatingSimplisticHandler();
-        const deserializedNodes = deserialize(serializationChunk, [], new DefaultPrimitiveTypeDeserializer(), problemHandler);
+        const deserializedNodes = deserialize(serializationChunk, [], new BuiltinPropertyValueDeserializer(), problemHandler);
         equal(problemHandler.allProblems.length, 0);
         equal(deserializedNodes.length, 1);
         const root = deserializedNodes[0];
@@ -172,7 +172,7 @@ describe("serialization and deserialization w.r.t. a [0..1] containment", () => 
     });
 
     it("serializes a set containment correctly", () => {
-        const dtc = DatatypeTestConcept.create("dtc");
+        const dtc = DataTypeTestConcept.create("dtc");
         const ltc = LinkTestConcept.create("ltc");
         ltc.containment_0_1 = dtc;
         const serializationChunk = serializeNodeBases([ltc]);
@@ -186,7 +186,7 @@ describe("serialization and deserialization w.r.t. a [0..1] containment", () => 
 
         const deserialize = nodeBaseDeserializer([testLanguageBase]);
         const problemHandler = new AccumulatingSimplisticHandler();
-        const deserializedNodes = deserialize(serializationChunk, [], new DefaultPrimitiveTypeDeserializer(), problemHandler);
+        const deserializedNodes = deserialize(serializationChunk, [], new BuiltinPropertyValueDeserializer(), problemHandler);
         equal(problemHandler.allProblems.length, 0);
         equal(deserializedNodes.length, 1); // (because there's only one “root”)
         const root = deserializedNodes[0];
@@ -195,10 +195,10 @@ describe("serialization and deserialization w.r.t. a [0..1] containment", () => 
         equal(deserializedLtc.id, "ltc");
         equal(deserializedLtc.classifier, testLanguageBase.LinkTestConcept);
         equal(deserializedLtc.parent, undefined);
-        isTrue(deserializedLtc.containment_0_1 instanceof DatatypeTestConcept);
-        const deserializedDtc = deserializedLtc.containment_0_1 as DatatypeTestConcept;
+        isTrue(deserializedLtc.containment_0_1 instanceof DataTypeTestConcept);
+        const deserializedDtc = deserializedLtc.containment_0_1 as DataTypeTestConcept;
         equal(deserializedDtc.id, "dtc");
-        equal(deserializedDtc.classifier, testLanguageBase.DatatypeTestConcept);
+        equal(deserializedDtc.classifier, testLanguageBase.DataTypeTestConcept);
         equal(deserializedDtc.parent, deserializedLtc);
     });
 

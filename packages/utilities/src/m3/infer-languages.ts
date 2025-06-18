@@ -16,7 +16,7 @@ const possibleKeySeparators = ["-", "_"]
 const id = chain(concatenator("-"), hasher())
 const key = lastOf
 
-const { stringDatatype, booleanDatatype, integerDatatype } = builtinPrimitives
+const { stringDataType, booleanDataType, integerDataType } = builtinPrimitives
 
 export const inferLanguagesFromSerializationChunk = (chunk: LionWebJsonChunk): Language[] => {
     const languages = new Map<string, Language>()
@@ -59,11 +59,11 @@ export const inferLanguagesFromSerializationChunk = (chunk: LionWebJsonChunk): L
                 feature.isOptional()
             } else {
                 if (isBoolean(property.value)) {
-                    feature.ofType(booleanDatatype)
+                    feature.ofType(booleanDataType)
                 } else if (isNumeric(property.value)) {
-                    feature.ofType(integerDatatype)
+                    feature.ofType(integerDataType)
                 } else {
-                    feature.ofType(stringDatatype)
+                    feature.ofType(stringDataType)
                 }
             }
 

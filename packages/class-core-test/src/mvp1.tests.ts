@@ -30,32 +30,32 @@ import { join } from "path"
 
 import { deepEqual, equal, fail, isTrue, throws } from "./assertions.js"
 
-import { DatatypeTestConcept, TestEnumeration, TestLanguageBase } from "./gen/TestLanguage.g.js"
+import { DataTypeTestConcept, TestEnumeration, TestLanguageBase } from "./gen/TestLanguage.g.js"
 
 describe("TestConcept", () => {
     const testLanguageBase = TestLanguageBase.INSTANCE
 
     it("direct instantiation", () => {
-        const instance = DatatypeTestConcept.create("foo")
+        const instance = DataTypeTestConcept.create("foo")
         equal(instance.id, "foo")
-        equal(instance.classifier, testLanguageBase.DatatypeTestConcept)
+        equal(instance.classifier, testLanguageBase.DataTypeTestConcept)
         equal(instance.parent, undefined)
         equal(instance.containment, undefined)
     })
 
     it("instantiation via factory", () => {
-        const instance = testLanguageBase.factory()(testLanguageBase.DatatypeTestConcept, "foo")
+        const instance = testLanguageBase.factory()(testLanguageBase.DataTypeTestConcept, "foo")
         equal(instance.id, "foo")
-        equal(instance.classifier, testLanguageBase.DatatypeTestConcept)
+        equal(instance.classifier, testLanguageBase.DataTypeTestConcept)
         equal(instance.parent, undefined)
         equal(instance.containment, undefined)
     })
 
     it("getting and setting .stringValue_1", () => {
-        const instance = DatatypeTestConcept.create("foo")
+        const instance = DataTypeTestConcept.create("foo")
         throws(
             () => instance.stringValue_1,
-            `can't read required property "stringValue_1" that's unset on instance of TestLanguage.DatatypeTestConcept with id=foo`
+            `can't read required property "stringValue_1" that's unset on instance of TestLanguage.DataTypeTestConcept with id=foo`
         )
         instance.stringValue_1 = "bar"
         equal(instance.stringValue_1, "bar")
@@ -64,17 +64,17 @@ describe("TestConcept", () => {
     })
 
     it("getting and setting .stringValue_1 via a value manager", () => {
-        const instance = DatatypeTestConcept.create("foo")
-        equal(instance.getPropertyValueManager(testLanguageBase.DatatypeTestConcept_stringValue_1).getDirectly(), undefined)
+        const instance = DataTypeTestConcept.create("foo")
+        equal(instance.getPropertyValueManager(testLanguageBase.DataTypeTestConcept_stringValue_1).getDirectly(), undefined)
         instance.stringValue_1 = "bar"
-        equal(instance.getPropertyValueManager(testLanguageBase.DatatypeTestConcept_stringValue_1).getDirectly(), "bar")
+        equal(instance.getPropertyValueManager(testLanguageBase.DataTypeTestConcept_stringValue_1).getDirectly(), "bar")
     })
 
     it("getting and setting .enumValue_1", () => {
-        const instance = DatatypeTestConcept.create("foo")
+        const instance = DataTypeTestConcept.create("foo")
         throws(
             () => instance.enumValue_1,
-            `can't read required property "enumValue_1" that's unset on instance of TestLanguage.DatatypeTestConcept with id=foo`
+            `can't read required property "enumValue_1" that's unset on instance of TestLanguage.DataTypeTestConcept with id=foo`
         )
         instance.enumValue_1 = TestEnumeration.literal1
         equal(instance.enumValue_1, TestEnumeration.literal1)
@@ -83,15 +83,15 @@ describe("TestConcept", () => {
     })
 
     it("getting and setting .newValue via a value manager", () => {
-        const instance = DatatypeTestConcept.create("foo")
-        equal(instance.getPropertyValueManager(testLanguageBase.DatatypeTestConcept_enumValue_1).getDirectly(), undefined)
+        const instance = DataTypeTestConcept.create("foo")
+        equal(instance.getPropertyValueManager(testLanguageBase.DataTypeTestConcept_enumValue_1).getDirectly(), undefined)
         instance.enumValue_1 = TestEnumeration.literal3
-        equal(instance.getPropertyValueManager(testLanguageBase.DatatypeTestConcept_enumValue_1).getDirectly(), TestEnumeration.literal3)
+        equal(instance.getPropertyValueManager(testLanguageBase.DataTypeTestConcept_enumValue_1).getDirectly(), TestEnumeration.literal3)
     })
 
     it("receiving ∂s when changing .stringValue_1", done => {
         const [deltaHandler, deltas] = collectingDeltaHandler()
-        const instance = DatatypeTestConcept.create("foo", deltaHandler)
+        const instance = DataTypeTestConcept.create("foo", deltaHandler)
 
         // pre-check:
         equal(deltas.length, 0)
@@ -103,12 +103,12 @@ describe("TestConcept", () => {
         isTrue(delta1 instanceof PropertyAddedDelta)
         const pcd1 = delta1 as PropertyAddedDelta<string>
         equal(pcd1.container, instance)
-        equal(pcd1.property, testLanguageBase.DatatypeTestConcept_stringValue_1)
+        equal(pcd1.property, testLanguageBase.DataTypeTestConcept_stringValue_1)
         equal(pcd1.value, "bar")
 
         instance.stringValue_1 = "fiddlesticks"
         equal(deltas.length, 2)
-        deepEqual(deltas[1], new PropertyChangedDelta(instance, testLanguageBase.DatatypeTestConcept_stringValue_1, "bar", "fiddlesticks"))
+        deepEqual(deltas[1], new PropertyChangedDelta(instance, testLanguageBase.DataTypeTestConcept_stringValue_1, "bar", "fiddlesticks"))
 
         instance.stringValue_1 = "fiddlesticks" // change to the same value
         equal(deltas.length, 2)
@@ -116,8 +116,8 @@ describe("TestConcept", () => {
         done()
     })
 
-    it("MobX doesn't see a DatatypeTestConcept instance changing as a whole", done => {
-        const instance = DatatypeTestConcept.create("foo")
+    it("MobX doesn't see a DataTypeTestConcept instance changing as a whole", done => {
+        const instance = DataTypeTestConcept.create("foo")
         observe(instance, change => {
             console.dir(change)
             fail("saw a change while observing the instance")
@@ -139,16 +139,16 @@ describe("TestConcept", () => {
     }
 
     it("can be serialized", () => {
-        const instance = DatatypeTestConcept.create("foo")
-        persistSerialization([instance], "DatatypeTestConcept-values=undefined")
+        const instance = DataTypeTestConcept.create("foo")
+        persistSerialization([instance], "DataTypeTestConcept-values=undefined")
         instance.stringValue_1 = "bar"
         instance.enumValue_1 = TestEnumeration.literal3
-        persistSerialization([instance], "DatatypeTestConcept-value=bar-enumValue_1=literal3")
+        persistSerialization([instance], "DataTypeTestConcept-value=bar-enumValue_1=literal3")
     })
 
     it("can be deserialized without sending deltas, but then changes do send deltas", done => {
         const serializationChunk = readFileAsJson(
-            join(artifactsPath, "DatatypeTestConcept-value=bar-enumValue_1=literal3.expected.json")
+            join(artifactsPath, "DataTypeTestConcept-value=bar-enumValue_1=literal3.expected.json")
         ) as LionWebJsonChunk
         const [deltaHandler, deltas] = collectingDeltaHandler()
         const deserialize = nodeBaseDeserializer([testLanguageBase], deltaHandler)
@@ -157,11 +157,11 @@ describe("TestConcept", () => {
         equal(nodes.length, 1)
         const node1 = nodes[0]
         equal(node1.id, "foo")
-        equal(node1.classifier, testLanguageBase.DatatypeTestConcept)
+        equal(node1.classifier, testLanguageBase.DataTypeTestConcept)
         equal(node1.parent, undefined)
         equal(node1.containment, undefined)
-        isTrue(node1 instanceof DatatypeTestConcept)
-        const instance = node1 as DatatypeTestConcept
+        isTrue(node1 instanceof DataTypeTestConcept)
+        const instance = node1 as DataTypeTestConcept
         equal(instance.stringValue_1, "bar")
         equal(instance.enumValue_1, TestEnumeration.literal3)
         equal(deltas.length, 0)
@@ -171,7 +171,7 @@ describe("TestConcept", () => {
         isTrue(delta1 instanceof PropertyChangedDelta)
         const pcd1 = delta1 as PropertyChangedDelta<string>
         equal(pcd1.container, instance)
-        equal(pcd1.property, testLanguageBase.DatatypeTestConcept_stringValue_1)
+        equal(pcd1.property, testLanguageBase.DataTypeTestConcept_stringValue_1)
         equal(pcd1.oldValue, "bar")
         equal(pcd1.newValue, "fiddlesticks")
         instance.enumValue_1 = TestEnumeration.literal2
@@ -180,7 +180,7 @@ describe("TestConcept", () => {
         isTrue(delta2 instanceof PropertyChangedDelta)
         const pcd2 = delta2 as PropertyChangedDelta<TestEnumeration>
         equal(pcd2.container, instance)
-        equal(pcd2.property, testLanguageBase.DatatypeTestConcept_enumValue_1)
+        equal(pcd2.property, testLanguageBase.DataTypeTestConcept_enumValue_1)
         equal(pcd2.oldValue, TestEnumeration.literal3)
         equal(pcd2.newValue, TestEnumeration.literal2)
         done()

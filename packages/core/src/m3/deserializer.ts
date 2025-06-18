@@ -1,9 +1,9 @@
 import { LionWebJsonChunk } from "@lionweb/json"
 import { deserializeSerializationChunk } from "../deserializer.js"
-import { nodesExtractorUsing } from "../facade.js"
+import { nodesExtractorUsing } from "../extraction.js"
 import { defaultSimplisticHandler, SimplisticHandler } from "../handler.js"
-import { DefaultPrimitiveTypeDeserializer, lioncoreBuiltins } from "./builtins.js"
-import { lioncoreExtractionFacade, lioncoreInstantiationFacade } from "./facade.js"
+import { BuiltinPropertyValueDeserializer, lioncoreBuiltins } from "./builtins.js"
+import { lioncoreReader, lioncoreWriter } from "./facade.js"
 import { lioncore } from "./lioncore.js"
 import { Language } from "./types.js"
 
@@ -27,10 +27,10 @@ export const deserializeLanguagesWithHandler = (
 ): Language[] =>
     deserializeSerializationChunk(
         serializationChunk,
-        lioncoreInstantiationFacade,
+        lioncoreWriter,
         [lioncore, ...dependentLanguages],
-        [lioncoreBuiltins, ...dependentLanguages].flatMap(nodesExtractorUsing(lioncoreExtractionFacade)),
-        new DefaultPrimitiveTypeDeserializer(),
+        [lioncoreBuiltins, ...dependentLanguages].flatMap(nodesExtractorUsing(lioncoreReader)),
+        new BuiltinPropertyValueDeserializer(),
         handler
     )
         .filter((rootNode) => rootNode instanceof Language)

@@ -1,6 +1,12 @@
-import { Language, lioncore, lioncoreBuiltins, serializeLanguages, serializeNodes } from "@lionweb/core"
-import { libraryExtractionFacade, libraryModel } from "@lionweb/test/dist/instances/library.js"
-import { multiExtractionFacade, multiModel } from "@lionweb/test/dist/instances/multi.js"
+import {
+    Language,
+    lioncore,
+    lioncoreBuiltins,
+    nodeSerializer,
+    serializeLanguages
+} from "@lionweb/core"
+import { libraryModel, libraryReader } from "@lionweb/test/dist/instances/library.js"
+import { multiModel, multiReader } from "@lionweb/test/dist/instances/multi.js"
 import { libraryLanguage } from "@lionweb/test/dist/languages/library.js"
 import { multiLanguage } from "@lionweb/test/dist/languages/multi.js"
 import { shapesLanguage } from "@lionweb/test/dist/languages/shapes.js"
@@ -43,12 +49,12 @@ writeFileSync(diagramPath("library-gen.puml"), generatePlantUmlForLanguage(libra
 writeFileSync(diagramPath("library-gen.md"), generateMermaidForLanguage(libraryLanguage))
 console.log(`generated diagrams for Library M2`)
 
-writeJsonAsFile(instancePath("library.json"), serializeNodes(libraryModel, libraryExtractionFacade))
+writeJsonAsFile(instancePath("library.json"), nodeSerializer(libraryReader)(libraryModel))
 console.log(`serialized library M1`)
 
 saveLanguageFiles(languageWithEnum, "with-enum")
 
 saveLanguageFiles(multiLanguage, "multi")
 
-writeJsonAsFile(instancePath("multi.json"), serializeNodes(multiModel, multiExtractionFacade))
+writeJsonAsFile(instancePath("multi.json"), nodeSerializer(multiReader)(multiModel))
 console.log(`serialized multi-language M1`)

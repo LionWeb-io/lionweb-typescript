@@ -54,7 +54,7 @@
           "children": [
             "TestEnumeration",
             "SecondTestEnumeration",
-            "DatatypeTestConcept",
+            "DataTypeTestConcept",
             "LinkTestConcept",
             "TestAnnotation"
           ]
@@ -340,7 +340,7 @@
       "parent": "SecondTestEnumeration"
     },
     {
-      "id": "DatatypeTestConcept",
+      "id": "DataTypeTestConcept",
       "classifier": {
         "language": "LionCore-M3",
         "version": "2023.1",
@@ -369,7 +369,7 @@
             "version": "2023.1",
             "key": "IKeyed-key"
           },
-          "value": "DatatypeTestConcept"
+          "value": "DataTypeTestConcept"
         },
         {
           "property": {
@@ -377,7 +377,7 @@
             "version": "2023.1",
             "key": "LionCore-builtins-INamed-name"
           },
-          "value": "DatatypeTestConcept"
+          "value": "DataTypeTestConcept"
         }
       ],
       "containments": [
@@ -388,14 +388,14 @@
             "key": "Classifier-features"
           },
           "children": [
-            "DatatypeTestConcept-booleanValue_1",
-            "DatatypeTestConcept-integerValue_1",
-            "DatatypeTestConcept-stringValue_1",
-            "DatatypeTestConcept-enumValue_1",
-            "DatatypeTestConcept-booleanValue_0_1",
-            "DatatypeTestConcept-integerValue_0_1",
-            "DatatypeTestConcept-stringValue_0_1",
-            "DatatypeTestConcept-enumValue_0_1"
+            "DataTypeTestConcept-booleanValue_1",
+            "DataTypeTestConcept-integerValue_1",
+            "DataTypeTestConcept-stringValue_1",
+            "DataTypeTestConcept-enumValue_1",
+            "DataTypeTestConcept-booleanValue_0_1",
+            "DataTypeTestConcept-integerValue_0_1",
+            "DataTypeTestConcept-stringValue_0_1",
+            "DataTypeTestConcept-enumValue_0_1"
           ]
         }
       ],
@@ -421,7 +421,7 @@
       "parent": "TestLanguage"
     },
     {
-      "id": "DatatypeTestConcept-booleanValue_1",
+      "id": "DataTypeTestConcept-booleanValue_1",
       "classifier": {
         "language": "LionCore-M3",
         "version": "2023.1",
@@ -442,7 +442,7 @@
             "version": "2023.1",
             "key": "IKeyed-key"
           },
-          "value": "DatatypeTestConcept-booleanValue_1"
+          "value": "DataTypeTestConcept-booleanValue_1"
         },
         {
           "property": {
@@ -470,10 +470,10 @@
         }
       ],
       "annotations": [],
-      "parent": "DatatypeTestConcept"
+      "parent": "DataTypeTestConcept"
     },
     {
-      "id": "DatatypeTestConcept-integerValue_1",
+      "id": "DataTypeTestConcept-integerValue_1",
       "classifier": {
         "language": "LionCore-M3",
         "version": "2023.1",
@@ -494,7 +494,7 @@
             "version": "2023.1",
             "key": "IKeyed-key"
           },
-          "value": "DatatypeTestConcept-integerValue_1"
+          "value": "DataTypeTestConcept-integerValue_1"
         },
         {
           "property": {
@@ -522,10 +522,10 @@
         }
       ],
       "annotations": [],
-      "parent": "DatatypeTestConcept"
+      "parent": "DataTypeTestConcept"
     },
     {
-      "id": "DatatypeTestConcept-stringValue_1",
+      "id": "DataTypeTestConcept-stringValue_1",
       "classifier": {
         "language": "LionCore-M3",
         "version": "2023.1",
@@ -546,7 +546,7 @@
             "version": "2023.1",
             "key": "IKeyed-key"
           },
-          "value": "DatatypeTestConcept-stringValue_1"
+          "value": "DataTypeTestConcept-stringValue_1"
         },
         {
           "property": {
@@ -574,10 +574,10 @@
         }
       ],
       "annotations": [],
-      "parent": "DatatypeTestConcept"
+      "parent": "DataTypeTestConcept"
     },
     {
-      "id": "DatatypeTestConcept-enumValue_1",
+      "id": "DataTypeTestConcept-enumValue_1",
       "classifier": {
         "language": "LionCore-M3",
         "version": "2023.1",
@@ -598,7 +598,7 @@
             "version": "2023.1",
             "key": "IKeyed-key"
           },
-          "value": "DatatypeTestConcept-enumValue_1"
+          "value": "DataTypeTestConcept-enumValue_1"
         },
         {
           "property": {
@@ -626,10 +626,10 @@
         }
       ],
       "annotations": [],
-      "parent": "DatatypeTestConcept"
+      "parent": "DataTypeTestConcept"
     },
     {
-      "id": "DatatypeTestConcept-booleanValue_0_1",
+      "id": "DataTypeTestConcept-booleanValue_0_1",
       "classifier": {
         "language": "LionCore-M3",
         "version": "2023.1",
@@ -650,7 +650,7 @@
             "version": "2023.1",
             "key": "IKeyed-key"
           },
-          "value": "DatatypeTestConcept-booleanValue_0_1"
+          "value": "DataTypeTestConcept-booleanValue_0_1"
         },
         {
           "property": {
@@ -678,10 +678,10 @@
         }
       ],
       "annotations": [],
-      "parent": "DatatypeTestConcept"
+      "parent": "DataTypeTestConcept"
     },
     {
-      "id": "DatatypeTestConcept-integerValue_0_1",
+      "id": "DataTypeTestConcept-integerValue_0_1",
       "classifier": {
         "language": "LionCore-M3",
         "version": "2023.1",
@@ -702,7 +702,7 @@
             "version": "2023.1",
             "key": "IKeyed-key"
           },
-          "value": "DatatypeTestConcept-integerValue_0_1"
+          "value": "DataTypeTestConcept-integerValue_0_1"
         },
         {
           "property": {
@@ -730,10 +730,10 @@
         }
       ],
       "annotations": [],
-      "parent": "DatatypeTestConcept"
+      "parent": "DataTypeTestConcept"
     },
     {
-      "id": "DatatypeTestConcept-stringValue_0_1",
+      "id": "DataTypeTestConcept-stringValue_0_1",
       "classifier": {
         "language": "LionCore-M3",
         "version": "2023.1",
@@ -754,7 +754,7 @@
             "version": "2023.1",
             "key": "IKeyed-key"
           },
-          "value": "DatatypeTestConcept-stringValue_0_1"
+          "value": "DataTypeTestConcept-stringValue_0_1"
         },
         {
           "property": {
@@ -782,10 +782,10 @@
         }
       ],
       "annotations": [],
-      "parent": "DatatypeTestConcept"
+      "parent": "DataTypeTestConcept"
     },
     {
-      "id": "DatatypeTestConcept-enumValue_0_1",
+      "id": "DataTypeTestConcept-enumValue_0_1",
       "classifier": {
         "language": "LionCore-M3",
         "version": "2023.1",
@@ -806,7 +806,7 @@
             "version": "2023.1",
             "key": "IKeyed-key"
           },
-          "value": "DatatypeTestConcept-enumValue_0_1"
+          "value": "DataTypeTestConcept-enumValue_0_1"
         },
         {
           "property": {
@@ -834,7 +834,7 @@
         }
       ],
       "annotations": [],
-      "parent": "DatatypeTestConcept"
+      "parent": "DataTypeTestConcept"
     },
     {
       "id": "LinkTestConcept",
@@ -968,8 +968,8 @@
           },
           "targets": [
             {
-              "resolveInfo": "DatatypeTestConcept",
-              "reference": "DatatypeTestConcept"
+              "resolveInfo": "DataTypeTestConcept",
+              "reference": "DataTypeTestConcept"
             }
           ]
         }
@@ -1028,8 +1028,8 @@
           },
           "targets": [
             {
-              "resolveInfo": "DatatypeTestConcept",
-              "reference": "DatatypeTestConcept"
+              "resolveInfo": "DataTypeTestConcept",
+              "reference": "DataTypeTestConcept"
             }
           ]
         }
@@ -1088,8 +1088,8 @@
           },
           "targets": [
             {
-              "resolveInfo": "DatatypeTestConcept",
-              "reference": "DatatypeTestConcept"
+              "resolveInfo": "DataTypeTestConcept",
+              "reference": "DataTypeTestConcept"
             }
           ]
         }
@@ -1148,8 +1148,8 @@
           },
           "targets": [
             {
-              "resolveInfo": "DatatypeTestConcept",
-              "reference": "DatatypeTestConcept"
+              "resolveInfo": "DataTypeTestConcept",
+              "reference": "DataTypeTestConcept"
             }
           ]
         }
@@ -1208,8 +1208,8 @@
           },
           "targets": [
             {
-              "resolveInfo": "DatatypeTestConcept",
-              "reference": "DatatypeTestConcept"
+              "resolveInfo": "DataTypeTestConcept",
+              "reference": "DataTypeTestConcept"
             }
           ]
         }
@@ -1268,8 +1268,8 @@
           },
           "targets": [
             {
-              "resolveInfo": "DatatypeTestConcept",
-              "reference": "DatatypeTestConcept"
+              "resolveInfo": "DataTypeTestConcept",
+              "reference": "DataTypeTestConcept"
             }
           ]
         }
@@ -1328,8 +1328,8 @@
           },
           "targets": [
             {
-              "resolveInfo": "DatatypeTestConcept",
-              "reference": "DatatypeTestConcept"
+              "resolveInfo": "DataTypeTestConcept",
+              "reference": "DataTypeTestConcept"
             }
           ]
         }
@@ -1388,8 +1388,8 @@
           },
           "targets": [
             {
-              "resolveInfo": "DatatypeTestConcept",
-              "reference": "DatatypeTestConcept"
+              "resolveInfo": "DataTypeTestConcept",
+              "reference": "DataTypeTestConcept"
             }
           ]
         }

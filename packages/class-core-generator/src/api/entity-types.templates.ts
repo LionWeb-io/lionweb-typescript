@@ -50,7 +50,7 @@ import {
     optionalityPostfix,
     tsFieldTypeForFeature,
     tsTypeForClassifier,
-    tsTypeForDatatype,
+    tsTypeForDataType,
     tsTypeForPrimitiveType,
     tsTypeForValueManager
 } from "./helpers/index.js"
@@ -78,11 +78,11 @@ export const typeForLanguageEntity = (imports: Imports, mpsAnnotationsPerId: Rec
     const classMembersForProperty = (property: Property) => {
         const {name, type} = property
         return [
-            `private readonly _${name}: ${imports.generic(valueManagerFor(property))}<${tsTypeForDatatype(type, imports)}>;`,
-            `get ${name}(): ${tsTypeForDatatype(type, imports)}${optionalityPostfix(property)} {`,
+            `private readonly _${name}: ${imports.generic(valueManagerFor(property))}<${tsTypeForDataType(type, imports)}>;`,
+            `get ${name}(): ${tsTypeForDataType(type, imports)}${optionalityPostfix(property)} {`,
             indent(`return this._${name}.get();`),
             `}`,
-            `set ${name}(newValue: ${tsTypeForDatatype(type, imports)}${optionalityPostfix(property)}) {`,
+            `set ${name}(newValue: ${tsTypeForDataType(type, imports)}${optionalityPostfix(property)}) {`,
             indent(`this._${name}.set(newValue);`),
             `}`
         ]

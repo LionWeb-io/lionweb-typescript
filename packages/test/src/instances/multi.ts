@@ -1,17 +1,17 @@
-import { ExtractionFacade, nameBasedClassifierDeducerFor } from "@lionweb/core"
+import { nameBasedClassifierDeducerFor, Reader } from "@lionweb/core"
 import { hasher } from "@lionweb/utilities"
 import { libraryLanguage } from "../languages/library.js"
 import { multiLanguage } from "../languages/multi.js"
 import { BaseNode } from "./base.js"
-import { bobLibrary, jackLondon, Library, libraryExtractionFacade } from "./library.js"
+import { bobLibrary, jackLondon, Library, libraryReader } from "./library.js"
 
 export type Container = BaseNode & {
     classifier: "Container"
     libraries: Library[]
 }
 
-export const multiExtractionFacade: ExtractionFacade<BaseNode> = {
-    ...libraryExtractionFacade,
+export const multiReader: Reader<BaseNode> = {
+    ...libraryReader,
     /* override */ classifierOf: node =>
         nameBasedClassifierDeducerFor(libraryLanguage)(node.classifier) ?? nameBasedClassifierDeducerFor(multiLanguage)(node.classifier)
 }

@@ -1,4 +1,4 @@
-import { ExtractionFacade, InstantiationFacade, nameBasedClassifierDeducerFor, updateSettingsNameBased } from "@lionweb/core"
+import { Writer as CoreWriter, nameBasedClassifierDeducerFor, Reader, updateSettingsNameBased } from "@lionweb/core"
 import { hasher } from "@lionweb/utilities"
 import { libraryLanguage } from "../languages/library.js"
 import { BaseNode } from "./base.js"
@@ -45,7 +45,7 @@ export type SpecialistBookWriter = Writer &
         subject: string
     }
 
-export const libraryExtractionFacade: ExtractionFacade<BaseNode> = {
+export const libraryReader: Reader<BaseNode> = {
     classifierOf: node => nameBasedClassifierDeducerFor(libraryLanguage)(node.classifier),
     getFeatureValue: (node, feature) =>
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -58,7 +58,7 @@ export const libraryExtractionFacade: ExtractionFacade<BaseNode> = {
     }
 }
 
-export const libraryInstantiationFacade: InstantiationFacade<BaseNode> = {
+export const libraryWriter: CoreWriter<BaseNode> = {
     nodeFor: (_parent, classifier, id, _propertySettings) => ({
         id,
         classifier: classifier.key,

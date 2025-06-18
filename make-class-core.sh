@@ -1,3 +1,7 @@
+# Have script exit after first failure is detected:
+set -e
+
+
 cd packages
 
 cd class-core-generator
@@ -10,15 +14,14 @@ npm run build
 cd ..
 
 cd class-core-build
-npm run build
-RelClassCoreTestGenPath="../class-core-test/src/gen"
-rm -rf $RelClassCoreTestGenPath
-mkdir -p $RelClassCoreTestGenPath
-node dist/generate-for-class-core.js
+ClassCoreTestGenPath="../class-core-test/src/gen"   # relative!
+rm -rf $ClassCoreTestGenPath
+mkdir -p $ClassCoreTestGenPath
+npm run generate
 cd ..
 
 # Build class-core *again*, because part of its sources might have been changed by the previous step.
-# (The source code of the class-core package is small, so the impact of building twice is negligible.)
+# (The source code of the class-core package is small, so the performance impact of building twice is negligible.)
 cd class-core
 npm run build
 cd ..

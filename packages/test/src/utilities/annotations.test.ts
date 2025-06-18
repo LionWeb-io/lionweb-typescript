@@ -150,7 +150,7 @@ describe("deserializing a meta-circular language", () => {
             "error occurred during instantiation of a node for classifier ConceptDescription with meta-pointer (io-lionweb-mps-specific, 0, ConceptDescription); reason:",
             "Error: don't know a node of concept io.lionweb.mps.specific.ConceptDescription with key ConceptDescription that's not in LionCore M3"
             // The deserializer is now aware of the existence of annotations (and knows its language), but can't instantiate instances of those,
-            // because the lioncoreInstantiationFacade doesn't provide a runtime representation.
+            // because the lioncoreWriter doesn't provide a runtime representation.
         ])
     })
 })

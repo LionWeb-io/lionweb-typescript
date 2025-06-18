@@ -40,32 +40,32 @@ SecondTestEnumeration.havingLiterals(
     ...([1, 2, 3].map((i) => new EnumerationLiteral(SecondTestEnumeration, `literal${i}`, `SecondTestEnumeration-literal${i}`, `SecondTestEnumeration-literal${i}`)))
 )
 
-const DatatypeTestConcept = new Concept(TestLanguage, "DatatypeTestConcept", "DatatypeTestConcept", "DatatypeTestConcept", false)
-DatatypeTestConcept.havingFeatures(
-    new Property(DatatypeTestConcept, "booleanValue_1", "DatatypeTestConcept-booleanValue_1", "DatatypeTestConcept-booleanValue_1").ofType(builtinPrimitives.booleanDatatype),
-    new Property(DatatypeTestConcept, "integerValue_1", "DatatypeTestConcept-integerValue_1", "DatatypeTestConcept-integerValue_1").ofType(builtinPrimitives.integerDatatype),
-    new Property(DatatypeTestConcept, "stringValue_1", "DatatypeTestConcept-stringValue_1", "DatatypeTestConcept-stringValue_1").ofType(builtinPrimitives.stringDatatype),
-    new Property(DatatypeTestConcept, "enumValue_1", "DatatypeTestConcept-enumValue_1", "DatatypeTestConcept-enumValue_1").ofType(TestEnumeration),
-    new Property(DatatypeTestConcept, "booleanValue_0_1", "DatatypeTestConcept-booleanValue_0_1", "DatatypeTestConcept-booleanValue_0_1").ofType(builtinPrimitives.booleanDatatype).isOptional(),
-    new Property(DatatypeTestConcept, "integerValue_0_1", "DatatypeTestConcept-integerValue_0_1", "DatatypeTestConcept-integerValue_0_1").ofType(builtinPrimitives.integerDatatype).isOptional(),
-    new Property(DatatypeTestConcept, "stringValue_0_1", "DatatypeTestConcept-stringValue_0_1", "DatatypeTestConcept-stringValue_0_1").ofType(builtinPrimitives.stringDatatype).isOptional(),
-    new Property(DatatypeTestConcept, "enumValue_0_1", "DatatypeTestConcept-enumValue_0_1", "DatatypeTestConcept-enumValue_0_1").ofType(TestEnumeration).isOptional()
+const DataTypeTestConcept = new Concept(TestLanguage, "DataTypeTestConcept", "DataTypeTestConcept", "DataTypeTestConcept", false)
+DataTypeTestConcept.havingFeatures(
+    new Property(DataTypeTestConcept, "booleanValue_1", "DataTypeTestConcept-booleanValue_1", "DataTypeTestConcept-booleanValue_1").ofType(builtinPrimitives.booleanDataType),
+    new Property(DataTypeTestConcept, "integerValue_1", "DataTypeTestConcept-integerValue_1", "DataTypeTestConcept-integerValue_1").ofType(builtinPrimitives.integerDataType),
+    new Property(DataTypeTestConcept, "stringValue_1", "DataTypeTestConcept-stringValue_1", "DataTypeTestConcept-stringValue_1").ofType(builtinPrimitives.stringDataType),
+    new Property(DataTypeTestConcept, "enumValue_1", "DataTypeTestConcept-enumValue_1", "DataTypeTestConcept-enumValue_1").ofType(TestEnumeration),
+    new Property(DataTypeTestConcept, "booleanValue_0_1", "DataTypeTestConcept-booleanValue_0_1", "DataTypeTestConcept-booleanValue_0_1").ofType(builtinPrimitives.booleanDataType).isOptional(),
+    new Property(DataTypeTestConcept, "integerValue_0_1", "DataTypeTestConcept-integerValue_0_1", "DataTypeTestConcept-integerValue_0_1").ofType(builtinPrimitives.integerDataType).isOptional(),
+    new Property(DataTypeTestConcept, "stringValue_0_1", "DataTypeTestConcept-stringValue_0_1", "DataTypeTestConcept-stringValue_0_1").ofType(builtinPrimitives.stringDataType).isOptional(),
+    new Property(DataTypeTestConcept, "enumValue_0_1", "DataTypeTestConcept-enumValue_0_1", "DataTypeTestConcept-enumValue_0_1").ofType(TestEnumeration).isOptional()
 )
 
 const LinkTestConcept = new Concept(TestLanguage, "LinkTestConcept", "LinkTestConcept", "LinkTestConcept", false)
 LinkTestConcept.havingFeatures(
-    new Containment(LinkTestConcept, "containment_0_1", "LinkTestConcept-containment_0_1", "LinkTestConcept-containment_0_1").ofType(DatatypeTestConcept).isOptional(),
-    new Containment(LinkTestConcept, "containment_1", "LinkTestConcept-containment_1", "LinkTestConcept-containment_1").ofType(DatatypeTestConcept),
-    new Containment(LinkTestConcept, "containment_0_n", "LinkTestConcept-containment_0_n", "LinkTestConcept-containment_0_n").ofType(DatatypeTestConcept).isOptional().isMultiple(),
-    new Containment(LinkTestConcept, "containment_1_n", "LinkTestConcept-containment_1_n", "LinkTestConcept-containment_1_n").ofType(DatatypeTestConcept).isMultiple(),
-    new Reference(LinkTestConcept, "reference_0_1", "LinkTestConcept-reference_0_1", "LinkTestConcept-reference_0_1").ofType(DatatypeTestConcept).isOptional(),
-    new Reference(LinkTestConcept, "reference_1", "LinkTestConcept-reference_1", "LinkTestConcept-reference_1").ofType(DatatypeTestConcept),
-    new Reference(LinkTestConcept, "reference_0_n", "LinkTestConcept-reference_0_n", "LinkTestConcept-reference_0_n").ofType(DatatypeTestConcept).isOptional().isMultiple(),
-    new Reference(LinkTestConcept, "reference_1_n", "LinkTestConcept-reference_1_n", "LinkTestConcept-reference_1_n").ofType(DatatypeTestConcept).isMultiple()
+    new Containment(LinkTestConcept, "containment_0_1", "LinkTestConcept-containment_0_1", "LinkTestConcept-containment_0_1").ofType(DataTypeTestConcept).isOptional(),
+    new Containment(LinkTestConcept, "containment_1", "LinkTestConcept-containment_1", "LinkTestConcept-containment_1").ofType(DataTypeTestConcept),
+    new Containment(LinkTestConcept, "containment_0_n", "LinkTestConcept-containment_0_n", "LinkTestConcept-containment_0_n").ofType(DataTypeTestConcept).isOptional().isMultiple(),
+    new Containment(LinkTestConcept, "containment_1_n", "LinkTestConcept-containment_1_n", "LinkTestConcept-containment_1_n").ofType(DataTypeTestConcept).isMultiple(),
+    new Reference(LinkTestConcept, "reference_0_1", "LinkTestConcept-reference_0_1", "LinkTestConcept-reference_0_1").ofType(DataTypeTestConcept).isOptional(),
+    new Reference(LinkTestConcept, "reference_1", "LinkTestConcept-reference_1", "LinkTestConcept-reference_1").ofType(DataTypeTestConcept),
+    new Reference(LinkTestConcept, "reference_0_n", "LinkTestConcept-reference_0_n", "LinkTestConcept-reference_0_n").ofType(DataTypeTestConcept).isOptional().isMultiple(),
+    new Reference(LinkTestConcept, "reference_1_n", "LinkTestConcept-reference_1_n", "LinkTestConcept-reference_1_n").ofType(DataTypeTestConcept).isMultiple()
 )
 
 const TestAnnotation = new Annotation(TestLanguage, "TestAnnotation", "TestAnnotation", "TestAnnotation")
 TestAnnotation.annotates = builtinClassifiers.node
 
-TestLanguage.havingEntities(TestEnumeration, SecondTestEnumeration, DatatypeTestConcept, LinkTestConcept, TestAnnotation)
+TestLanguage.havingEntities(TestEnumeration, SecondTestEnumeration, DataTypeTestConcept, LinkTestConcept, TestAnnotation)
 

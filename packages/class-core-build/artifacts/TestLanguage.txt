@@ -2,7 +2,7 @@ language TestLanguage
     version: 0
     entities (↓name):
 
-        concept DatatypeTestConcept
+        concept DataTypeTestConcept
             features (↓name):
                 booleanValue_0_1: Boolean?
                 booleanValue_1: Boolean
@@ -15,14 +15,14 @@ language TestLanguage
 
         concept LinkTestConcept
             features (↓name):
-                containment_0_1: DatatypeTestConcept?
-                containment_0_n: DatatypeTestConcept[0..*]
-                containment_1: DatatypeTestConcept
-                containment_1_n: DatatypeTestConcept[1..*]
-                reference_0_1 -> DatatypeTestConcept?
-                reference_0_n -> DatatypeTestConcept[0..*]
-                reference_1 -> DatatypeTestConcept
-                reference_1_n -> DatatypeTestConcept[1..*]
+                containment_0_1: DataTypeTestConcept?
+                containment_0_n: DataTypeTestConcept[0..*]
+                containment_1: DataTypeTestConcept
+                containment_1_n: DataTypeTestConcept[1..*]
+                reference_0_1 -> DataTypeTestConcept?
+                reference_0_n -> DataTypeTestConcept[0..*]
+                reference_1 -> DataTypeTestConcept
+                reference_1_n -> DataTypeTestConcept[1..*]
 
         enumeration SecondTestEnumeration
             literals:

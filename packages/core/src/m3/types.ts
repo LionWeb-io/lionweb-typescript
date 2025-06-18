@@ -4,7 +4,7 @@
  */
 
 import { LionWebId, LionWebJsonMetaPointer, LionWebKey } from "@lionweb/json"
-import { ResolveInfoDeducer } from "../facade.js"
+import { ResolveInfoDeducer } from "../reading.js"
 import { MultiRef, SingleRef, unresolved } from "../references.js"
 import { Node } from "../types.js"
 
@@ -94,8 +94,8 @@ class Property extends Feature {
     metaType(): string {
         return "Property"
     }
-    type: SingleRef<Datatype> = unresolved   // (reference)
-    ofType(type: Datatype): Property {
+    type: SingleRef<DataType> = unresolved   // (reference)
+    ofType(type: DataType): Property {
         this.type = type
         return this
     }
@@ -210,15 +210,20 @@ class Interface extends Classifier {
     }
 }
 
-abstract class Datatype extends LanguageEntity {}
+abstract class DataType extends LanguageEntity {}
 
-class PrimitiveType extends Datatype {
+/**
+ * Misspelled alias of {@link DataType}, kept for backward compatibility, and to be deprecated and removed later.
+ */
+abstract class Datatype extends DataType {}
+
+class PrimitiveType extends DataType {
     metaType(): string {
         return "PrimitiveType"
     }
 }
 
-class Enumeration extends Datatype {
+class Enumeration extends DataType {
     metaType(): string {
         return "Enumeration"
     }
@@ -293,6 +298,7 @@ export {
     Classifier,
     Concept,
     Containment,
+    DataType,
     Datatype,
     Enumeration,
     EnumerationLiteral,

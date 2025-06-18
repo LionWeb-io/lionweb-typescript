@@ -8,7 +8,8 @@ export const LION_CORE_M3_KEY = "LionCore-M3"
 export const LION_CORE_M3_NAME = "LionCore_M3"
 
 export const LION_CORE_M3_VERSION = "2023.1"
-// Builtin datatypes
+
+// built-in data types:
 export const LIONWEB_BOOLEAN_TYPE = "LionCore-builtins-Boolean"
 export const LIONWEB_JSON_TYPE = "LionCore-builtins-JSON"
 export const LIONWEB_INTEGER_TYPE = "LionCore-builtins-Integer"

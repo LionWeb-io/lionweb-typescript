@@ -127,13 +127,16 @@ Run the following command to **re-build** the `class-core`-related packages spec
 source make-class-core.sh
 ```
 
+This script exits as soon as the first failure it detected.
+It also triggers the `generate` scriptlet of the `class-core-build` package.
+
 The chain of preceding commands can also be run as follows:
 
 ```shell
 npm run initialize
 ```
 
-Run the following command to run the tests:
+Run the following command to run all the tests:
 
 ```shell
 # Run the tests
@@ -156,6 +159,15 @@ The output should look similar to this (but much longer):
 <br />
 <br />
 <img src="./documentation/images/test-output.png" alt="test" width="50%"/>
+
+The `make-dev-all.sh` script does the same as above but then in dependency order.
+You run it as follows:
+
+```shell
+source make-dev-all.sh
+```
+
+This script exits as soon as the first failure it detected.
 
 
 ### Version numbers

@@ -1,9 +1,9 @@
 import { StringsMapper } from "@lionweb/ts-utils"
-import { PrimitiveTypeDeserializer } from "../deserializer.js"
-import { PrimitiveTypeSerializer } from "../serializer.js"
+import { PropertyValueDeserializer } from "../deserializer.js"
+import { PropertyValueSerializer } from "../serializer.js"
 import { currentReleaseVersion } from "../version.js"
 import { LanguageFactory } from "./factory.js"
-import { Classifier, Concept, Datatype, lioncoreBuiltinsKey, Property } from "./types.js"
+import { Classifier, Concept, DataType, lioncoreBuiltinsKey, Property } from "./types.js"
 
 const lioncoreBuiltinsIdAndKeyGenerator: StringsMapper = (...names) => [lioncoreBuiltinsKey, ...names.slice(1)].join("-")
 
@@ -22,10 +22,10 @@ const factory = new LanguageFactory(
  */
 const lioncoreBuiltins = factory.language
 
-const stringDatatype = factory.primitiveType("String")
-const booleanDatatype = factory.primitiveType("Boolean")
-const integerDatatype = factory.primitiveType("Integer")
-const jsonDatatype = factory.primitiveType("JSON")
+const stringDataType = factory.primitiveType("String")
+const booleanDataType = factory.primitiveType("Boolean")
+const integerDataType = factory.primitiveType("Integer")
+const jsonDataType = factory.primitiveType("JSON")
 
 const node = factory.concept("Node", true)
 
@@ -38,18 +38,29 @@ const isBuiltinNodeConcept = (classifier: Classifier) =>
 
 const inamed = factory.interface("INamed")
 
-const inamed_name = factory.property(inamed, "name").ofType(stringDatatype)
-
-type BuiltinPrimitive = string | boolean | number | Record<string, unknown> | Array<unknown>
-type PrimitiveTypeValue = BuiltinPrimitive | unknown
-type SpecificPrimitiveTypeDeserializer = (value: string) => PrimitiveTypeValue
-type SpecificPrimitiveTypeSerializer = (value: unknown) => string
+const inamed_name = factory.property(inamed, "name").ofType(stringDataType)
 
 const builtinPrimitives = {
-    stringDatatype,
-    booleanDatatype,
-    integerDatatype,
-    jsonDatatype
+    stringDataType,
+    booleanDataType,
+    integerDataType,
+    jsonDataType,
+    /**
+     * Misspelled alias of {@link stringDataType}, kept for backward compatibility, and to be deprecated and removed later.
+     */
+    stringDatatype: stringDataType,
+    /**
+     * Misspelled alias of {@link booleanDataType}, kept for backward compatibility, and to be deprecated and removed later.
+     */
+    booleanDatatype: booleanDataType,
+    /**
+     * Misspelled alias of {@link integerDataType}, kept for backward compatibility, and to be deprecated and removed later.
+     */
+    integerDatatype: integerDataType,
+    /**
+     * Misspelled alias of {@link jsonDataType}, kept for backward compatibility, and to be deprecated and removed later.
+     */
+    jsonDatatype: jsonDataType
 }
 
 const builtinClassifiers = {
@@ -62,22 +73,21 @@ const builtinFeatures = {
 }
 
 /**
- * Determines whether two datatypes should be structurally equal based on equality of: meta type, key, and language's key.
+ * Determines whether two data types should be structurally equal based on equality of: meta type, key, and language's key.
  */
-const shouldBeIdentical = (left: Datatype, right: Datatype): boolean =>
+const shouldBeIdentical = (left: DataType, right: DataType): boolean =>
     left.key === right.key && left.language.key === right.language.key && left.metaType() === right.metaType()
 
-abstract class DatatypeRegister<T> {
-    private map = new Map<Datatype, T>()
+abstract class DataTypeRegister<T> {
+    private map = new Map<DataType, T>()
 
-    public register(datatype: Datatype, t: T) {
-        this.map.set(datatype, t)
+    public register(dataType: DataType, t: T) {
+        this.map.set(dataType, t)
     }
 
-    protected byType(targetDatatype: Datatype): T | undefined {
-        for (const entry of this.map.entries()) {
-            const [datatype, t] = entry
-            if (shouldBeIdentical(targetDatatype, datatype)) {
+    protected byType(targetDataType: DataType): T | undefined {
+        for (const [dataType, t] of this.map.entries()) {
+            if (shouldBeIdentical(targetDataType, dataType)) {
                 return t
             }
         }
@@ -85,19 +95,19 @@ abstract class DatatypeRegister<T> {
     }
 }
 
-export class DefaultPrimitiveTypeDeserializer
-    extends DatatypeRegister<SpecificPrimitiveTypeDeserializer>
-    implements PrimitiveTypeDeserializer
+export class BuiltinPropertyValueDeserializer
+    extends DataTypeRegister<(value: string) => unknown>
+    implements PropertyValueDeserializer
 {
     constructor() {
         super()
-        this.register(stringDatatype, value => value)
-        this.register(booleanDatatype, value => JSON.parse(value))
-        this.register(integerDatatype, value => Number(value))
-        this.register(jsonDatatype, value => JSON.parse(value as string))
+        this.register(stringDataType, value => value)
+        this.register(booleanDataType, value => JSON.parse(value))
+        this.register(integerDataType, value => Number(value))
+        this.register(jsonDataType, value => JSON.parse(value as string))
     }
 
-    deserializeValue(value: string | undefined, property: Property): PrimitiveTypeValue | undefined {
+    deserializeValue(value: string | undefined, property: Property): unknown | undefined {
         if (value === undefined) {
             if (property.optional) {
                 return undefined
@@ -117,19 +127,25 @@ export class DefaultPrimitiveTypeDeserializer
     }
 }
 
-export class DefaultPrimitiveTypeSerializer extends DatatypeRegister<SpecificPrimitiveTypeSerializer> implements PrimitiveTypeSerializer {
+/**
+ * Misspelled alias of {@link BuiltinPropertyValueDeserializer}, kept for backward compatibility, and to be deprecated and removed later.
+ */
+export class DefaultPrimitiveTypeDeserializer extends BuiltinPropertyValueDeserializer {}
+
+
+export class BuiltinPropertyValueSerializer extends DataTypeRegister<(value: unknown) => string> implements PropertyValueSerializer {
     constructor() {
         super()
-        this.register(stringDatatype, value => value as string)
-        this.register(booleanDatatype, value => `${value as boolean}`)
-        this.register(integerDatatype, value => `${value as number}`)
-        this.register(jsonDatatype, value => JSON.stringify(value, null))
+        this.register(stringDataType, value => value as string)
+        this.register(booleanDataType, value => `${value as boolean}`)
+        this.register(integerDataType, value => `${value as number}`)
+        this.register(jsonDataType, value => JSON.stringify(value, null))
     }
 
-    serializeValue(value: unknown | undefined, property: Property): string | undefined {
+    serializeValue(value: unknown | undefined, property: Property): string | null {
         if (value === undefined) {
             if (property.optional) {
-                return undefined
+                return null
             }
             throw new Error(`can't serialize undefined as the value of required property "${property.name}" (on classifier "${property.classifier.name}" in language "${property.classifier.language.name}")`)
         }
@@ -146,6 +162,9 @@ export class DefaultPrimitiveTypeSerializer extends DatatypeRegister<SpecificPri
     }
 }
 
-export type { BuiltinPrimitive }
+/**
+ * Misspelled alias of {@link BuiltinPropertyValueSerializer}, kept for backward compatibility, and to be deprecated and removed later.
+ */
+export class DefaultPrimitiveTypeSerializer extends BuiltinPropertyValueSerializer {}
 
 export { builtinPrimitives, builtinClassifiers, builtinFeatures, isBuiltinNodeConcept, lioncoreBuiltins, shouldBeIdentical }

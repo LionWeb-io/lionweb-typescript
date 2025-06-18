@@ -6,6 +6,22 @@
 * (Fix that running setup on the test package for a second time fails.)
 * Extract utility functions to `@lionweb/ts-utils`, and `Id` (as `LionWebId`) to `@lionweb/json`.
 * Errors thrown by the built-in `DefaultPrimitiveTypeDeserializer` and `DefaultPrimitiveTypeSerializer` are improved to say what `Property` they pertain to.
+* Fix that `PrimitiveTypeSerializer.serializeValue` returns `undefined` instead of `null` – which is according to spec – for an empty property value.
+* Fix misspellings of “data type” including camel-cased versions, particularly:
+    * Classes `Datatype[Register]` &rarr; `DataType[Register]`, which are part of the LionCore built-ins or the infrastructure around that.
+        The original class `Datatype` is kept in a backward compatible way (by extending from the renamed class), and is to be deprecated and removed at some point.
+    * Members `{string|boolean|integer|json}Datatype` of `builtinPrimitives` &rarr; `<*>DataType` with the former kept as aliases – to be deprecated and removed at some point.
+* Remove type `BuiltinPrimitive` that couldn't really be used sensibly anywhere.
+* Introduce interface `PropertyValueSerializer` that will replace `PrimitiveTypeSerializer` – which is kept for backward compatibility, for now – in the next major release.
+    This includes:
+    * Introduce class `BuiltinsPropertyValueSerializer` as a future replacement for `DefaultPrimitiveTypeSerializer`.
+    * Introduce field `SerializationOptions.propertyValueSerializer` as a future replacement for `SerializationOptions.primitiveTypeSerializer`.
+* Introduce interface `PropertyValueDeserializer` that will replace `PrimitiveTypeDeserializer` – which is kept for backward compatibility, for now – in the next major release.
+  This includes introducing class `BuiltinsPropertyValueDeserializer` as a future replacement for `DefaultPrimitiveTypeDeserializer`.
+* Introduce a function `nodeSerializer` that takes configuration consisting of an `ExtractionFacade` instance and an optional configuration object, and returns a function that takes (an array of) nodes and returns a serialization chunk.
+    **Note** that this function is essentially experimental, and that its signature might change in the near future!
+* Rename `ExtractionFacade` (and its instances) to `Reader`, keeping aliases for backward compatibility, to be deprecated and removed later.
+* Rename `InstantiationFacade` (and its instances) to `Writer`, keeping aliases for backward compatibility, to be deprecated and removed later.
 
 
 ## 0.6.12
@@ -51,8 +67,8 @@
 
 ## 0.6.10
 
-* Make `DefaultPrimitiveTypeDeserializer` and `DefaultPrimitiveTypeSerializer` be able to deal with duplicate definitions of datatypes.
-    * Expose a function `shouldBeIdentical` that determines whether two datatypes should be structurally equal based on equality of: meta type, key, and language's key.
+* Make `DefaultPrimitiveTypeDeserializer` and `DefaultPrimitiveTypeSerializer` be able to deal with duplicate definitions of data types.
+    * Expose a function `shouldBeIdentical` that determines whether two data types should be structurally equal based on equality of: meta type, key, and language's key.
 * Make serializer more resilient against unresolved (i.e., `null`-valued) children.
 * Fix that `resolveInfo` of a serialized reference must be `null`, not `undefined`.
 

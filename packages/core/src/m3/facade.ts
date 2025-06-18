@@ -1,7 +1,7 @@
-import { ExtractionFacade, InstantiationFacade, updateSettingsNameBased } from "../facade.js"
 import { builtinFeatures } from "./builtins.js"
 import { metaTypedBasedClassifierDeducerFor, qualifiedNameOf } from "./functions.js"
 import { lioncore, metaConcepts, metaFeatures } from "./lioncore.js"
+import { Reader } from "../reading.js"
 import {
     Annotation,
     Classifier,
@@ -16,11 +16,12 @@ import {
     Property,
     Reference
 } from "./types.js"
+import { updateSettingsNameBased, Writer } from "../writing.js"
 
 const { inamed_name } = builtinFeatures
 const { ikeyed_key } = metaFeatures
 
-export const lioncoreExtractionFacade: ExtractionFacade<M3Concept> = {
+export const lioncoreReader: Reader<M3Concept> = {
     classifierOf: metaTypedBasedClassifierDeducerFor(lioncore),
     getFeatureValue: (node, feature) =>
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -29,9 +30,14 @@ export const lioncoreExtractionFacade: ExtractionFacade<M3Concept> = {
 }
 
 /**
- * @return An implementation of {@link InstantiationFacade} for instances of the LionCore M3 (so M2s).
+ * Alias for {@link lioncoreReader}, kept for backward compatibility, and to be deprecated and removed later.
  */
-export const lioncoreInstantiationFacade: InstantiationFacade<M3Concept> = {
+export const lioncoreExtractionFacade = lioncoreReader
+
+/**
+ * @return An implementation of {@link Writer} for instances of the LionCore M3 (so M2s).
+ */
+export const lioncoreWriter: Writer<M3Concept> = {
     nodeFor: (parent, classifier, id, propertySettings) => {
         switch (classifier.key) {
             case metaConcepts.annotation.key:
@@ -116,3 +122,9 @@ export const lioncoreInstantiationFacade: InstantiationFacade<M3Concept> = {
     },
     encodingOf: literal => literal
 }
+
+/**
+ * Alias for {@link lioncoreWriter}, kept for backward compatibility, and to be deprecated and removed later.
+ */
+export const lioncoreInstantationFacade = lioncoreWriter
+

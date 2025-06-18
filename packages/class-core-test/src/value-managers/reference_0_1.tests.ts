@@ -23,11 +23,11 @@ import {
     ReferenceReplacedDelta,
     serializeNodeBases
 } from "@lionweb/class-core"
-import { AccumulatingSimplisticHandler, DefaultPrimitiveTypeDeserializer } from "@lionweb/core"
+import { AccumulatingSimplisticHandler, BuiltinPropertyValueDeserializer } from "@lionweb/core"
 import { LionWebJsonMetaPointer } from "@lionweb/json"
 
 import { deepEqual, equal, isTrue, isUndefined } from "../assertions.js"
-import { DatatypeTestConcept, LinkTestConcept, TestLanguageBase } from "../gen/TestLanguage.g.js"
+import { DataTypeTestConcept, LinkTestConcept, TestLanguageBase } from "../gen/TestLanguage.g.js"
 
 const testLanguageBase = TestLanguageBase.INSTANCE
 
@@ -47,7 +47,7 @@ describe("[0..1] reference", () => {
 
     it("setting a [0..1] reference", () => {
         const [handleDeltas, deltas] = collectingDeltaHandler();
-        const dtc = DatatypeTestConcept.create("dtc", handleDeltas);
+        const dtc = DataTypeTestConcept.create("dtc", handleDeltas);
         const ltc = LinkTestConcept.create("ltc", handleDeltas);
 
         // pre-check:
@@ -72,7 +72,7 @@ describe("[0..1] reference", () => {
 
     it("unsetting a [0..1] reference", () => {
         const [handleDeltas, deltas] = collectingDeltaHandler();
-        const dtc = DatatypeTestConcept.create("dtc", handleDeltas);
+        const dtc = DataTypeTestConcept.create("dtc", handleDeltas);
         const ltc = LinkTestConcept.create("ltc", handleDeltas);
 
         // pre-check:
@@ -91,8 +91,8 @@ describe("[0..1] reference", () => {
 
     it("setting a [0..1] reference, replacing an already set target", () => {
         const [handleDeltas, deltas] = collectingDeltaHandler();
-        const dtc1 = DatatypeTestConcept.create("dtc1", handleDeltas);
-        const dtc2 = DatatypeTestConcept.create("dtc2", handleDeltas);
+        const dtc1 = DataTypeTestConcept.create("dtc1", handleDeltas);
+        const dtc2 = DataTypeTestConcept.create("dtc2", handleDeltas);
         const ltc = LinkTestConcept.create("ltc", handleDeltas);
 
         // pre-check:
@@ -132,7 +132,7 @@ describe("serialization and deserialization w.r.t. a [0..1] reference", () => {
 
         const deserialize = nodeBaseDeserializer([testLanguageBase]);
         const problemHandler = new AccumulatingSimplisticHandler();
-        const deserializedNodes = deserialize(serializationChunk, [], new DefaultPrimitiveTypeDeserializer(), problemHandler);
+        const deserializedNodes = deserialize(serializationChunk, [], new BuiltinPropertyValueDeserializer(), problemHandler);
         equal(problemHandler.allProblems.length, 0);
         equal(deserializedNodes.length, 1);
         const root = deserializedNodes[0];
@@ -145,7 +145,7 @@ describe("serialization and deserialization w.r.t. a [0..1] reference", () => {
     });
 
     it("serializes a set reference correctly", () => {
-        const dtc = DatatypeTestConcept.create("dtc");
+        const dtc = DataTypeTestConcept.create("dtc");
         const ltc = LinkTestConcept.create("ltc");
         ltc.reference_0_1 = dtc;
         const serializationChunk = serializeNodeBases([ltc, dtc]);
@@ -162,7 +162,7 @@ describe("serialization and deserialization w.r.t. a [0..1] reference", () => {
 
         const deserialize = nodeBaseDeserializer([testLanguageBase]);
         const problemHandler = new AccumulatingSimplisticHandler();
-        const deserializedNodes = deserialize(serializationChunk, [], new DefaultPrimitiveTypeDeserializer(), problemHandler);
+        const deserializedNodes = deserialize(serializationChunk, [], new BuiltinPropertyValueDeserializer(), problemHandler);
         equal(problemHandler.allProblems.length, 0);
         equal(deserializedNodes.length, 2);
         const node1 = deserializedNodes[0];
@@ -171,10 +171,10 @@ describe("serialization and deserialization w.r.t. a [0..1] reference", () => {
         equal(deserializedLtc.id, "ltc");
         equal(deserializedLtc.classifier, testLanguageBase.LinkTestConcept);
         equal(deserializedLtc.parent, undefined);
-        isTrue(deserializedLtc.reference_0_1 instanceof DatatypeTestConcept);
-        const deserializedTC = deserializedLtc.reference_0_1 as DatatypeTestConcept;
+        isTrue(deserializedLtc.reference_0_1 instanceof DataTypeTestConcept);
+        const deserializedTC = deserializedLtc.reference_0_1 as DataTypeTestConcept;
         equal(deserializedTC.id, "dtc");
-        equal(deserializedTC.classifier, testLanguageBase.DatatypeTestConcept);
+        equal(deserializedTC.classifier, testLanguageBase.DataTypeTestConcept);
         equal(deserializedTC.parent, undefined);
     });
 

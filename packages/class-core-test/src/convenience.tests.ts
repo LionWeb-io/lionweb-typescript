@@ -18,13 +18,13 @@
 import { deepDuplicatorFor } from "@lionweb/class-core"
 import { equal, isTrue, notEqual } from "./assertions.js"
 
-import { DatatypeTestConcept, LinkTestConcept, TestLanguageBase } from "./gen/TestLanguage.g.js"
+import { DataTypeTestConcept, LinkTestConcept, TestLanguageBase } from "./gen/TestLanguage.g.js"
 
 describe("deep-duplication", () => {
     it("works", () => {
         const ltc = LinkTestConcept.create("ltc")
-        const dtc1 = DatatypeTestConcept.create("dtc1")
-        const dtc2 = DatatypeTestConcept.create("dtc2")
+        const dtc1 = DataTypeTestConcept.create("dtc1")
+        const dtc2 = DataTypeTestConcept.create("dtc2")
         ltc.reference_0_1 = dtc1
         ltc.containment_0_1 = dtc2
 

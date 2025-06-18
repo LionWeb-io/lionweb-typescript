@@ -1,4 +1,4 @@
-import { ExtractionFacade } from "../facade.js"
+import { Reader } from "../reading.js"
 import { allFeaturesOf, Reference } from "../m3/index.js"
 import { Node } from "../types.js"
 
@@ -26,23 +26,23 @@ export class ReferenceValue<NT extends Node> {
  * even if the scope passed contains duplicate nodes.
  *
  * @param scope - the {@link Node nodes} that are searched for references
- * @param extractionFacade - an {@link ExtractionFacade} to reflect on nodes.
+ * @param reader - a {@link Reader} to reflect on nodes.
  * _Note_ that it's assumed that its {@link getFeatureValue} function doesn't throw.
  */
 export const referenceValues = <NT extends Node>(
     scope: NT[],
-    extractionFacade: ExtractionFacade<NT>
+    reader: Reader<NT>
 ): ReferenceValue<NT>[] => {
     const visit = (sourceNode: NT, reference: Reference): ReferenceValue<NT>[] => {
         if (reference.multiple) {
-            const targetNodes = (extractionFacade.getFeatureValue(sourceNode, reference) ?? []) as NT[]
+            const targetNodes = (reader.getFeatureValue(sourceNode, reference) ?? []) as NT[]
             return targetNodes
                 .map((targetNode, index) =>
                     new ReferenceValue<NT>(sourceNode, targetNode, reference, index)
                 )
         }
 
-        const targetNode = extractionFacade.getFeatureValue(sourceNode, reference) as (NT | undefined)
+        const targetNode = reader.getFeatureValue(sourceNode, reference) as (NT | undefined)
         if (targetNode !== undefined) {
             return [new ReferenceValue<NT>(sourceNode, targetNode, reference, null)]
         }
@@ -52,7 +52,7 @@ export const referenceValues = <NT extends Node>(
 
     return [...new Set(scope)]  // ~ .distinct()
         .flatMap((sourceNode) =>
-            allFeaturesOf(extractionFacade.classifierOf(sourceNode))
+            allFeaturesOf(reader.classifierOf(sourceNode))
                 .filter((feature) => feature instanceof Reference)
                 .map((feature) => feature as Reference)
                 .flatMap((reference) => visit(sourceNode, reference))
@@ -71,16 +71,16 @@ export const referenceValues = <NT extends Node>(
  *
  * @param targetNodeOrNodes - one or more target {@link Node nodes} for which the incoming references are searched
  * @param scope - the {@link Node nodes} that are searched for references
- * @param extractionFacade - an {@link ExtractionFacade} to reflect on nodes.
+ * @param reader - a {@link Reader} to reflect on nodes.
  * _Note_ that it's assumed that its {@link getFeatureValue} function doesn't throw.
  */
 export const incomingReferences = <NT extends Node>(
     targetNodeOrNodes: NT[] | NT,
     scope: NT[],
-    extractionFacade: ExtractionFacade<NT>
+    reader: Reader<NT>
 ): ReferenceValue<NT>[] => {
     const targetNodes = Array.isArray(targetNodeOrNodes) ? targetNodeOrNodes : [targetNodeOrNodes]
-    return referenceValues(scope, extractionFacade)
+    return referenceValues(scope, reader)
         .filter((referenceValue) => targetNodes.indexOf(referenceValue.targetNode) > -1)
 }
 
@@ -94,13 +94,13 @@ export const incomingReferences = <NT extends Node>(
  * even if the given scope contains duplicate nodes.
  *
  * @param scope - the {@link Node nodes} that form the scope of “reachable” nodes
- * @param extractionFacade - an {@link ExtractionFacade} to reflect on nodes.
+ * @param reader - a {@link Reader} to reflect on nodes.
  * _Note_ that it's assumed that its {@link getFeatureValue} function doesn't throw.
  */
 export const referencesToOutOfScopeNodes = <NT extends Node>(
     scope: NT[],
-    extractionFacade: ExtractionFacade<NT>
+    reader: Reader<NT>
 ): ReferenceValue<NT>[] =>
-    referenceValues(scope, extractionFacade)
+    referenceValues(scope, reader)
         .filter((referenceValue) => scope.indexOf(referenceValue.targetNode) === -1)
 
