@@ -35,10 +35,10 @@ import {
     Property,
     SingleRef
 } from "@lionweb/core"
+import { indent, switchOrIf } from "@lionweb/textgen-utils"
 import { asArray } from "@lionweb/ts-utils"
 import { when, withNewlineAppended } from "littoral-templates"
 
-import { indent, switchOrIf } from "../utils/textgen.js"
 import { entityMetaType, extendsFrom, Imports, nameOfBaseClassForLanguage } from "./helpers/index.js"
 
 export const reflectiveClassFor = (imports: Imports) => {

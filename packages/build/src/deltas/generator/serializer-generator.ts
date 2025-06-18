@@ -16,7 +16,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { sortedStrings } from "@lionweb/ts-utils"
-import { indent } from "@lionweb/class-core-generator"
+import { indent } from "@lionweb/textgen-utils"
 import { asString, commaSeparated } from "littoral-templates"
 
 import {

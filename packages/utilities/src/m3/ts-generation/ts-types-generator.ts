@@ -25,9 +25,9 @@ import {
     SingleRef,
     unresolved
 } from "@lionweb/core"
+import { indent } from "@lionweb/textgen-utils"
 import { groupBy, mapValues, uniquesAmong } from "@lionweb/ts-utils"
 import { asString, Template, when } from "littoral-templates"
-import { indent } from "./textgen.js"
 import { Field, tsFromTypeDef, TypeDefModifier } from "./type-def.js"
 
 const fieldForFeature = (feature: Feature) => {

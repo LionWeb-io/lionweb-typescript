@@ -43,9 +43,9 @@ import {
     ShortDescription,
     VirtualPackage
 } from "@lionweb/io-lionweb-mps-specific"
+import { indent, switchOrIf, withFirstUpper, wrapInIf } from "@lionweb/textgen-utils"
 import { commaSeparated, when, withNewlineAppended } from "littoral-templates"
 
-import { indent, switchOrIf, withFirstUpper, wrapInIf } from "../utils/textgen.js"
 import {
     entityMetaType,
     extendsFrom,

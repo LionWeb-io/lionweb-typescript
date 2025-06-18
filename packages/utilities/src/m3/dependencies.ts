@@ -16,9 +16,9 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { Classifier, inheritsFrom, Language, nameOf, nameSorted } from "@lionweb/core"
+import { indent } from "@lionweb/textgen-utils"
 import { cycleWith, uniquesAmong } from "@lionweb/ts-utils"
 import { asString, when } from "littoral-templates"
-import { indent } from "./ts-generation/textgen.js"
 
 
 /**

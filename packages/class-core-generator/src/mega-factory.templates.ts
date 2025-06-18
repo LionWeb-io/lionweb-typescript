@@ -16,10 +16,9 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { isConcrete, Language, LanguageEntity } from "@lionweb/core"
-import { asString, commaSeparated } from "littoral-templates"
-
-import { asJSIdentifier, indent } from "../utils/textgen.js"
 import { Deprecated, ioLionWebMpsSpecificAnnotationsFrom } from "@lionweb/io-lionweb-mps-specific"
+import { asJSIdentifier, indent } from "@lionweb/textgen-utils"
+import { asString, commaSeparated } from "littoral-templates"
 
 export const megaFactoryFor = (megaFactoryName: string, languages: Language[], header?: string) => {
     const isNotDeprecated = (entity: LanguageEntity) =>

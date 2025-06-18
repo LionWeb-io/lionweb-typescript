@@ -16,11 +16,11 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { Language } from "@lionweb/core"
+import { indent } from "@lionweb/textgen-utils"
 import { dependencyOrderOf } from "@lionweb/ts-utils"
 import { dependenciesThroughDirectInheritanceOf } from "@lionweb/utilities"
 import { asString, commaSeparated } from "littoral-templates"
 
-import { indent } from "../utils/textgen.js"
 import { GeneratorOptions } from "./generator.js"
 import { importRenamingForLanguage, nameOfBaseClassForLanguage } from "./helpers/index.js"
 

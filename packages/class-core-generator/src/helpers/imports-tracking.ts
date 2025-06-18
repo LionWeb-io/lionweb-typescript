@@ -16,7 +16,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { Language, LanguageEntity, lioncoreBuiltins } from "@lionweb/core"
-import { asJSIdentifier } from "../../utils/textgen.js"
+import { asJSIdentifier } from "@lionweb/textgen-utils"
 
 export const importRenamingForLanguage = (language: Language) => asJSIdentifier(language.name)
 

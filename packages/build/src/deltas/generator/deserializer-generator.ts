@@ -15,8 +15,8 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import { indent } from "@lionweb/textgen-utils"
 import { sortedStrings } from "@lionweb/ts-utils"
-import { indent } from "@lionweb/class-core-generator"
 import { asString, commaSeparated } from "littoral-templates"
 
 import { Delta, FeatureType, IndexType, NodeType, PrimitiveValueType, RefOnly, Type } from "../definition/Deltas.g.js"

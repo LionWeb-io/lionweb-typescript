@@ -15,11 +15,10 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { sortedStringsByUppercase } from "@lionweb/ts-utils"
 import { Concept, Language } from "@lionweb/core"
-import { dependencyOrderOf } from "@lionweb/ts-utils"
+import { indent } from "@lionweb/textgen-utils"
+import { dependencyOrderOf, sortedStringsByUppercase } from "@lionweb/ts-utils"
 import { asString, commaSeparated, when, withNewlineAppended } from "littoral-templates"
-import { indent } from "../utils/textgen.js"
 
 import { typeForLanguageEntity } from "./entity-types.templates.js"
 import { GeneratorOptions } from "./generator.js"
