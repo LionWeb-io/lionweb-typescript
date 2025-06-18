@@ -36,16 +36,16 @@
     "./packages/json-utils",
     "./packages/json-diff",
     "./packages/core",
+    "./packages/textgen-utils",
     "./packages/utilities",
     "./packages/validation",
     "./packages/cli",
     "./packages/test",
+    "./packages/io-lionweb-mps-specific",
     "./packages/artifacts",
     "./packages/class-core",
-    "./packages/textgen-utils",
     "./packages/class-core-generator",
     "./packages/build",
-    "./packages/class-core-test",
-    "./packages/io-lionweb-mps-specific"
+    "./packages/class-core-test"
   ]
 }
