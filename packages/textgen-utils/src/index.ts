@@ -15,6 +15,6 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-export {asTypeScript} from "./json-as-ts.js"
-export {indent} from "./textgen.js"
+export * from "./javascript.js"
+export * from "./general.js"
 

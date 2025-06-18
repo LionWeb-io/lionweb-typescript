@@ -42,6 +42,7 @@
     "./packages/test",
     "./packages/artifacts",
     "./packages/class-core",
+    "./packages/textgen-utils",
     "./packages/class-core-generator",
     "./packages/build",
     "./packages/class-core-test",

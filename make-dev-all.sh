@@ -10,6 +10,10 @@ cd ts-utils
 npm run build
 cd ..
 
+cd textgen-utils
+npm run build
+cd ..
+
 cd json
 npm run build
 cd ..

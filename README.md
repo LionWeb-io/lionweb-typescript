@@ -22,6 +22,8 @@
 ](https://www.npmjs.com/package/@lionweb/validation)
 [![npm](https://img.shields.io/npm/v/%40lionweb%2Fts-utils?label=%40lionweb%2Fts-utils)
 ](https://www.npmjs.com/package/@lionweb/ts-utils)
+[![npm](https://img.shields.io/npm/v/%40lionweb%2Ftextgen-utils?label=%40lionweb%2Ftextgen-utils)
+](https://www.npmjs.com/package/@lionweb/textgen-utils)
 
 
 This repository contains a TypeScript implementation for (parts of) the [LionWeb specification](https://lionweb-io.github.io/specification/) – specifically: release version **2023.1** of the LionWeb specification.
@@ -60,6 +62,9 @@ The implementation is divided up in a number of NPM packages in the directory [`
 
 - `ts-utils`
   General TypeScript utilities, e.g. for working with maps and such.
+
+- `textgen-utils`
+  General utilities for doing text – i.e.: code – generation, typically based on the `littoral-templates` package.
 
 - `cli`
   A package with an executable to trigger some of the functionality in `utilities` through a commandline interface (CLI), i.e. from the commandline.
@@ -189,7 +194,7 @@ Inspect the resulting diffs to ensure correctness, and don't forget to run `npm 
 
 Packages are released to the [npm registry (website)](https://www.npmjs.com/): see the badges at the top of this document.
 We'll use the terms “release/releasing” from now on, instead of “publication/publishing” as npm itself does.
-We only release the following packages: `core`, `validation`, `utilities`, `cli`, `class-core`, `class-core-generator`.
+We (only) release the following packages: `core`, `validation`, `utilities`, `cli`, `class-core`, `class-core-generator`, `ts-utils`, `textgen-utils`, `io-lionweb-mps-specific`.
 
 Releasing a package involves the following steps:
 

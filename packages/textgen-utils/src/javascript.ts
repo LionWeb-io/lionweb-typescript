@@ -15,40 +15,8 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-/*
- * NOTE: this code is copied verbatim from the @lionweb/utilities package, and subsequently modified/added to.
- * This code should “flow back” to the @lionweb packages.
- */
-
-
-import { asString, indentWith, Template } from "littoral-templates"
-
-
-/**
- * @return an indenter function that indents by 4 spaces.
- */
-export const indent = indentWith("    ")(1)
-
-
-const withFirstCased = (charFunc: (ch: string) => string) =>
-    (str: string) => {
-        if (str.length === 0) {
-            return str
-        }
-        return charFunc(str.charAt(0))
-            + (str.length > 1 ? str.substring(1) : "")
-    }
-
-/**
- * @return the given string but with its first character lower-cased (when possible).
- */
-export const withFirstLower = withFirstCased((ch) => ch.toLowerCase())
-
-/**
- * @return the given string but with its first character upper-cased (when possible).
- */
-export const withFirstUpper = withFirstCased((ch) => ch.toUpperCase())
-
+import { asString, Template } from "littoral-templates"
+import { indent } from "./general.js"
 
 /**
  * @return a sanitized version of the given string that should be suitable as a valid JavaScript identifier.
@@ -59,15 +27,17 @@ export const asJSIdentifier = (str: string): string =>
         .replaceAll("-", "_")
 
 
-export const wrapInIf = (condition: boolean, left: () => string, right: string) =>
-    (text: string) =>
-        condition
-            ? `${left()}${text}${right}`
-            : text
-
-
+/**
+ * A type def. that captures one `case` of a TypeScript `switch` statement.
+ */
 export type MatchCase = [caseExpression: string, returnValue: string]
 
+/**
+ * @return a JavaScript `switch` statement (as a {@link Template template}).
+ * @param expression string with a valid JS expression
+ * @param cases `cases` of the `switch` statement, encoded using {@link MatchCase}
+ * @param defaultBlock template with a valid `default` block
+ */
 export const switchOrIf = (expression: string, cases: MatchCase[], defaultBlock: Template) =>
     cases.length > 1
         ? [
@@ -86,4 +56,11 @@ export const switchOrIf = (expression: string, cases: MatchCase[], defaultBlock:
             ]),
             defaultBlock
         ]
+
+
+/**
+ * @return the given JSON as valid TypeScript source, meaning: without quotation marks around object keys.
+ */
+export const asTypeScript = (json: unknown) =>
+    JSON.stringify(json, null, 4).replaceAll(/"(.+?)": /g, `$1: `)
 
