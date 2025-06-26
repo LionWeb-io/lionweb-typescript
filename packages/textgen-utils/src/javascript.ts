@@ -15,7 +15,7 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { asString, Template } from "littoral-templates"
+import { Template } from "littoral-templates"
 import { indent } from "./general.js"
 
 /**
@@ -36,7 +36,7 @@ export type MatchCase = [caseExpression: string, returnValue: string]
  * @return a JavaScript `switch` statement (as a {@link Template template}).
  * @param expression string with a valid JS expression
  * @param cases `cases` of the `switch` statement, encoded using {@link MatchCase}
- * @param defaultBlock template with a valid `default` block
+ * @param defaultBlock template with a valid `default` block – assumed to be a single-line string if it's a string
  */
 export const switchOrIf = (expression: string, cases: MatchCase[], defaultBlock: Template) =>
     cases.length > 1
@@ -44,7 +44,13 @@ export const switchOrIf = (expression: string, cases: MatchCase[], defaultBlock:
             `switch (${expression}) {`,
             indent([
                 cases.map(([caseExpression, returnValue]) => `case ${caseExpression}: return ${returnValue};`),
-                `default: ${typeof defaultBlock === "string" ? defaultBlock : asString(["{", indent(defaultBlock), "}"])}`
+                typeof defaultBlock === "string"
+                    ? `default: ${defaultBlock}`
+                    : [
+                        `default: {`,
+                        indent(defaultBlock),
+                        `}`
+                    ]
             ]),
             `}`
         ]

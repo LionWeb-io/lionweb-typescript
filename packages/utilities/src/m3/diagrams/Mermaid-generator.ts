@@ -36,7 +36,6 @@ export const generateMermaidForLanguage = ({ entities }: Language) =>
     asString([
         "```mermaid",
         `classDiagram
-
 `,
         indented(nameSorted(entities).map(generateForEntity)),
         ``,
@@ -89,7 +88,6 @@ const generateForNonRelationalFeature = (feature: Feature) => {
 const generateForPrimitiveType = ({ name }: PrimitiveType) =>
     `class ${name}
 <<PrimitiveType>> ${name}
-
 `
 
 const generateForEntity = (entity: LanguageEntity) => {

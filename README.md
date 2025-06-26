@@ -173,7 +173,7 @@ You execute this script as follows from the repo's root:
 node update-package-versions.js
 ```
 
-This reads the file [`packages/versions.json`](./packages/versions.json) and updates the `package.json` files of all *workspace packages* (as listed in the root-level `package.json`) under `packages/` according to it, as well as the main(/root-level) `package.json`.
+This reads the file [`packages/versions.json`](versions.json) and updates the `package.json` files of all *workspace packages* (as listed in the root-level `package.json`) under `packages/` according to it, as well as the main(/root-level) `package.json`.
 The format of that `versions.json` file is self-explanatory.
 This script runs `npm install` afterward to update the `package-lock.json`.
 Inspect the resulting diffs to ensure correctness, and don't forget to run `npm install` to update the `package-lock.json` in case you made corrections outside of/after running this script.

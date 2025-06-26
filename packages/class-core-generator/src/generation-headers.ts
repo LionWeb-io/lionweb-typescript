@@ -29,19 +29,17 @@ const trumpfOriginatingApache2_0LicenseHeaderComments = `// Copyright 2025 TRUMP
 // limitations under the License.
 //
 // ${reverseString("txeTthgirypoCeliF-XDPS")}: 2025 TRUMPF Laser SE and other contributors
-// ${reverseString("reifitnedI-esneciL-XDPS")}: Apache-2.0
-`
+// ${reverseString("reifitnedI-esneciL-XDPS")}: Apache-2.0`
 
 /**
  * Generic (//-styled) comments warning about code being generated.
  */
 export const generatedCodeWarningComments = `// Warning: this file is generated!
-// Modifying it by hand is useless at best, and sabotage at worst.
-`
+// Modifying it by hand is useless at best, and sabotage at worst.`
 
 /**
  * The empty line-separation concatenation of the Trumpf-flavored Apache-2.0 license header and the generation warning.
  */
 export const defaultTrumpfOriginatingApache2_0LicensedHeader =
-    asString([trumpfOriginatingApache2_0LicenseHeaderComments, ``, generatedCodeWarningComments, ``])
+    asString([trumpfOriginatingApache2_0LicenseHeaderComments, ``, generatedCodeWarningComments])
 
