@@ -4,7 +4,7 @@ const { join } = require("path")
 const { EOL } = require("os")
 
 
-const versions = require("./packages/versions.json")
+const versions = require("./versions.json")
 
 const {
     "publish-version": publishVersion,

@@ -33,25 +33,21 @@ hide empty members
 
 ' qualified name: "${name}"
 
-
 `,
         nameSorted(entities).map(generateForEntity),
         `
 
 ' relations:
-
 `,
         nameSorted(entities).map(generateForRelationsOf),
         `
-@enduml
-`
+@enduml`
     ])
 
 const generateForEnumeration = ({ name, literals }: Enumeration) => [
     `enum ${name} {`,
     indented(literals.map(({name}) => name)),
     `}
-
 `
 ]
 
