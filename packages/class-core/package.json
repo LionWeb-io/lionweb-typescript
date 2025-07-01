@@ -1,6 +1,6 @@
 {
   "name": "@lionweb/class-core",
-  "version": "0.7.0-beta.4",
+  "version": "0.7.0-beta.5",
   "description": "Generic, language-aspecific base types for generated TypeScript APIs",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -27,10 +27,10 @@
     "release": "npm publish"
   },
   "dependencies": {
-    "@lionweb/core": "0.7.0-beta.4",
-    "@lionweb/json": "0.7.0-beta.4",
-    "@lionweb/ts-utils": "0.7.0-beta.4",
-    "littoral-templates": "0.4.0",
+    "@lionweb/core": "0.7.0-beta.5",
+    "@lionweb/json": "0.7.0-beta.5",
+    "@lionweb/ts-utils": "0.7.0-beta.5",
+    "littoral-templates": "0.4.1",
     "mobx": "6.13.7"
   },
   "devDependencies": {
