@@ -1,37 +1,37 @@
 {
-  "name": "@lionweb/cli",
-  "version": "0.7.0-beta.4",
-  "description": "LionWeb CLI for {Java|Type}Script",
-  "bin": {
-    "lionweb-cli": "./dist/lionweb-cli.js"
-  },
-  "main": "dist/lionweb-cli.js",
-  "type": "module",
-  "license": "Apache-2.0",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/LionWeb-io/lionweb-typescript.git"
-  },
-  "bugs": {
-    "url": "https://github.com/LionWeb-io/lionweb-typescript/issues"
-  },
-  "scripts": {
-    "clean": "rm -rf dist/ node_modules/ lionweb-cli-*.tgz",
-    "build": "tsc",
-    "lint": "eslint src",
-    "test": "node dist/lionweb-cli.js",
-    "prep:pre-release": "npm run clean && npm install && npm run build",
-    "prerelease-alpha": "npm run prep:pre-release",
-    "release-alpha": "npm publish --tag alpha",
-    "prerelease-beta": "npm run prep:pre-release",
-    "release-beta": "npm publish --tag beta",
-    "prerelease": "npm run prep:pre-release",
-    "release": "npm publish"
-  },
-  "dependencies": {
-    "@lionweb/core": "0.7.0-beta.4",
-    "@lionweb/json-diff": "0.7.0-beta.4",
-    "@lionweb/utilities": "0.7.0-beta.4",
-    "@lionweb/validation": "0.7.0-beta.4"
-  }
+    "name": "@lionweb/cli",
+    "version": "0.7.0-beta.4",
+    "description": "LionWeb CLI for {Java|Type}Script",
+    "bin": {
+        "lionweb-cli": "./dist/lionweb-cli.js"
+    },
+    "main": "dist/lionweb-cli.js",
+    "type": "module",
+    "license": "Apache-2.0",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/LionWeb-io/lionweb-typescript.git"
+    },
+    "bugs": {
+        "url": "https://github.com/LionWeb-io/lionweb-typescript/issues"
+    },
+    "scripts": {
+        "clean": "npx rimraf dist node_modules -g lionweb-cli-*.tgz",
+        "build": "tsc",
+        "lint": "eslint src",
+        "test": "node dist/lionweb-cli.js",
+        "prep:pre-release": "npm run clean && npm install && npm run build",
+        "prerelease-alpha": "npm run prep:pre-release",
+        "release-alpha": "npm publish --tag alpha",
+        "prerelease-beta": "npm run prep:pre-release",
+        "release-beta": "npm publish --tag beta",
+        "prerelease": "npm run prep:pre-release",
+        "release": "npm publish"
+    },
+    "dependencies": {
+        "@lionweb/core": "0.7.0-beta.4",
+        "@lionweb/json-diff": "0.7.0-beta.4",
+        "@lionweb/utilities": "0.7.0-beta.4",
+        "@lionweb/validation": "0.7.0-beta.4"
+    }
 }

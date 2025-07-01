@@ -1,42 +1,42 @@
 {
-  "name": "@lionweb/test",
-  "version": "0.7.0-dev.0",
-  "description": "LionWeb test for {Java|Type}Script",
-  "private": true,
-  "main": "dist/lioncore-cli.js",
-  "type": "module",
-  "license": "Apache-2.0",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/LionWeb-io/lionweb-typescript.git"
-  },
-  "bugs": {
-    "url": "https://github.com/LionWeb-io/lionweb-typescript/issues"
-  },
-  "scripts": {
-    "clean": "rm -rf dist/ node_modules/ testset/ testchanges/ metrics/",
-    "build": "tsc",
-    "lint": "eslint src",
-    "pretest": "npm run build",
-    "setup": "npm run checkout-testset && npm run checkout-testchanges && npx mkdirp metrics",
-    "checkout-testset": "npx degit --force https://github.com/LionWeb-io/lionweb-integration-testing/testset/ testset",
-    "checkout-testchanges": "npx degit --force https://github.com/LionWeb-io/lionweb-integration-testing/testchanges/ testchanges",
-    "test": "mocha --recursive dist/"
-  },
-  "devDependencies": {
-    "@types/chai": "5.2.1",
-    "@types/mocha": "10.0.10",
-    "@types/xml2js": "0.4.14",
-    "chai": "5.2.0",
-    "degit": "2.8.4",
-    "mocha": "11.1.0",
-    "xml2js": "0.6.2"
-  },
-  "dependencies": {
-    "@lionweb/core": "0.7.0-beta.4",
-    "@lionweb/json": "0.7.0-beta.4",
-    "@lionweb/ts-utils": "0.7.0-beta.4",
-    "@lionweb/utilities": "0.7.0-beta.4",
-    "@lionweb/validation": "0.7.0-beta.4"
-  }
+    "name": "@lionweb/test",
+    "version": "0.7.0-dev.0",
+    "description": "LionWeb test for {Java|Type}Script",
+    "private": true,
+    "main": "dist/lioncore-cli.js",
+    "type": "module",
+    "license": "Apache-2.0",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/LionWeb-io/lionweb-typescript.git"
+    },
+    "bugs": {
+        "url": "https://github.com/LionWeb-io/lionweb-typescript/issues"
+    },
+    "scripts": {
+        "clean": "npx rimraf dist node_modules testset testchanges metrics",
+        "build": "tsc",
+        "lint": "eslint src",
+        "pretest": "npm run build",
+        "setup": "npm run checkout-testset && npm run checkout-testchanges && npx mkdirp metrics",
+        "checkout-testset": "npx degit --force https://github.com/LionWeb-io/lionweb-integration-testing/testset/ testset",
+        "checkout-testchanges": "npx degit --force https://github.com/LionWeb-io/lionweb-integration-testing/testchanges/ testchanges",
+        "test": "mocha --recursive dist/"
+    },
+    "devDependencies": {
+        "@types/chai": "5.2.1",
+        "@types/mocha": "10.0.10",
+        "@types/xml2js": "0.4.14",
+        "chai": "5.2.0",
+        "degit": "2.8.4",
+        "mocha": "11.1.0",
+        "xml2js": "0.6.2"
+    },
+    "dependencies": {
+        "@lionweb/core": "0.7.0-beta.4",
+        "@lionweb/json": "0.7.0-beta.4",
+        "@lionweb/ts-utils": "0.7.0-beta.4",
+        "@lionweb/utilities": "0.7.0-beta.4",
+        "@lionweb/validation": "0.7.0-beta.4"
+    }
 }

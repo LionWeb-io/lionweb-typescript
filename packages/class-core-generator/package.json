@@ -1,40 +1,40 @@
 {
-  "name": "@lionweb/class-core-generator",
-  "version": "0.7.0-beta.4",
-  "description": "Generator for implementations of languages based on the class-core package",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "typings": "dist/index.d.ts",
-  "type": "module",
-  "license": "Apache-2.0",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/LionWeb-io/lionweb-typescript.git"
-  },
-  "bugs": {
-    "url": "https://github.com/LionWeb-io/lionweb-typescript/issues"
-  },
-  "scripts": {
-    "clean": "rm -rf dist/ node_modules/ lionweb-class-core-generator-*.tgz",
-    "build": "tsc",
-    "lint": "eslint src",
-    "prep:pre-release": "npm run clean && npm install && npm run build",
-    "prerelease-alpha": "npm run prep:pre-release",
-    "release-alpha": "npm publish --tag alpha",
-    "prerelease-beta": "npm run prep:pre-release",
-    "release-beta": "npm publish --tag beta",
-    "prerelease": "npm run prep:pre-release",
-    "release": "npm publish"
-  },
-  "devDependencies": {
-    "@lionweb/core": "0.7.0-beta.4",
-    "@lionweb/io-lionweb-mps-specific": "0.7.0-beta.4",
-    "@lionweb/json": "0.7.0-beta.4",
-    "@lionweb/textgen-utils": "0.7.0-beta.4",
-    "@lionweb/ts-utils": "0.7.0-beta.4",
-    "@lionweb/utilities": "0.7.0-beta.4",
-    "@types/node": "22.15.21",
-    "littoral-templates": "0.4.0",
-    "typescript": "5.3.3"
-  }
+    "name": "@lionweb/class-core-generator",
+    "version": "0.7.0-beta.4",
+    "description": "Generator for implementations of languages based on the class-core package",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "typings": "dist/index.d.ts",
+    "type": "module",
+    "license": "Apache-2.0",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/LionWeb-io/lionweb-typescript.git"
+    },
+    "bugs": {
+        "url": "https://github.com/LionWeb-io/lionweb-typescript/issues"
+    },
+    "scripts": {
+        "clean": "npx rimraf dist node_modules -g lionweb-class-core-generator-*.tgz",
+        "build": "tsc",
+        "lint": "eslint src",
+        "prep:pre-release": "npm run clean && npm install && npm run build",
+        "prerelease-alpha": "npm run prep:pre-release",
+        "release-alpha": "npm publish --tag alpha",
+        "prerelease-beta": "npm run prep:pre-release",
+        "release-beta": "npm publish --tag beta",
+        "prerelease": "npm run prep:pre-release",
+        "release": "npm publish"
+    },
+    "devDependencies": {
+        "@lionweb/core": "0.7.0-beta.4",
+        "@lionweb/io-lionweb-mps-specific": "0.7.0-beta.4",
+        "@lionweb/json": "0.7.0-beta.4",
+        "@lionweb/textgen-utils": "0.7.0-beta.4",
+        "@lionweb/ts-utils": "0.7.0-beta.4",
+        "@lionweb/utilities": "0.7.0-beta.4",
+        "@types/node": "22.15.21",
+        "littoral-templates": "0.4.0",
+        "typescript": "5.3.3"
+    }
 }
