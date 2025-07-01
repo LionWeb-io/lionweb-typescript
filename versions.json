@@ -1,6 +1,6 @@
 {
     "lionweb": {
-        "publish-version" : "0.7.0-beta.4",
+        "publish-version" : "0.7.0-beta.5",
         "internal-version": "0.7.0-dev.0",
         "internal-packages": [
             "artifacts",
@@ -16,7 +16,7 @@
         "@types/xml2js": "0.4.14",
         "chai": "5.2.0",
         "degit": "2.8.4",
-        "littoral-templates": "0.4.0",
+        "littoral-templates": "0.4.1",
         "mobx": "6.13.7",
         "mocha": "11.1.0",
         "nanoid": "5.0.9",
