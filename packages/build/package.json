@@ -14,7 +14,7 @@
     "url": "https://github.com/LionWeb-io/lionweb-typescript/issues"
   },
   "scripts": {
-    "clean": "rm -rf dist/ node_modules/",
+    "clean": "npx rimraf dist node_modules",
     "build": "tsc",
     "pregenerate": "npm run build",
     "generate": "node dist/generate-for-class-core.js && node dist/generate-for-io.lionweb.mps.specific.js",

@@ -3,5 +3,4 @@
 /lionweb-typescript.iml
 
 # NPM:
-/node_modules
-
+node_modules/

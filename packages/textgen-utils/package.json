@@ -15,7 +15,7 @@
     "url": "https://github.com/LionWeb-io/lionweb-typescript/issues"
   },
   "scripts": {
-    "clean": "rm -rf dist/ node_modules/ lionweb-textgen-utils-*.tgz",
+    "clean": "npx rimraf dist node_modules -g lionweb-textgen-utils-*.tgz",
     "build": "tsc",
     "lint": "eslint src",
     "prep:pre-release": "npm run clean && npm install && npm run build",

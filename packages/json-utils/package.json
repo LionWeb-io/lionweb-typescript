@@ -15,7 +15,7 @@
     "url": "https://github.com/LionWeb-io/lionweb-typescript/issues"
   },
   "scripts": {
-    "clean": "rm -rf dist/ node_modules/ lionweb-json-utils-*.tgz",
+    "clean": "npx rimraf dist node_modules -g lionweb-json-utils-*.tgz",
     "build": "tsc",
     "lint": "eslint src",
     "prep:pre-release": "npm run clean && npm install && npm run build",
@@ -28,5 +28,8 @@
   },
   "dependencies": {
     "@lionweb/json": "0.7.0-beta.4"
+  },
+  "devDependencies": {
+    "rimraf": "^6.0.1"
   }
 }

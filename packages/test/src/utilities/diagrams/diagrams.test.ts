@@ -15,7 +15,7 @@ const writeTextFile = (fileName: string, data: string) => {
 }
 
 const rendersEqualToFileOrOverwrite = (renderer: (language: Language) => string, fileName: string) => {
-    const actual = renderer(testLanguage)
+    const actual = renderer(testLanguage).replaceAll("\r\n", "\n") // normalize Windows EOLs
     const expected = readTextFile(fileName)
     if (actual !== expected) {
         writeTextFile(fileName, actual)

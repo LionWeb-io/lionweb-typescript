@@ -121,7 +121,7 @@ npm run setup
 Run the following command to **build** (“make”) each of the packages, in dependency order:
 
 ```shell
-source make.sh
+npm run build
 ```
 
 This script exits as soon as the first failure it detected.
@@ -149,9 +149,12 @@ npm run test
 ```
 
 The output should look similar to this (but much longer):
+
+```html
 <br />
 <br />
 <img src="./documentation/images/test-output.png" alt="test" width="50%"/>
+```
 
 The following command statically _style_-checks the source code in all the packages:
 

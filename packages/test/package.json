@@ -14,11 +14,11 @@
     "url": "https://github.com/LionWeb-io/lionweb-typescript/issues"
   },
   "scripts": {
-    "clean": "rm -rf dist/ node_modules/ testset/ testchanges/ metrics/",
+    "clean": "npx rimraf dist node_modules testset testchanges metrics",
     "build": "tsc",
     "lint": "eslint src",
     "pretest": "npm run build",
-    "setup": "npm run checkout-testset && npm run checkout-testchanges && mkdir -p metrics",
+    "setup": "npm run checkout-testset && npm run checkout-testchanges && npx mkdirp metrics",
     "checkout-testset": "npx degit --force https://github.com/LionWeb-io/lionweb-integration-testing/testset/ testset",
     "checkout-testchanges": "npx degit --force https://github.com/LionWeb-io/lionweb-integration-testing/testchanges/ testchanges",
     "test": "mocha --recursive dist/"

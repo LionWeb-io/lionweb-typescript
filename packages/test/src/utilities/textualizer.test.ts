@@ -9,10 +9,10 @@ import { equal } from "../test-utils/assertions.js"
 
 describe("LionCore-specific textual syntax", () => {
     it("textualize language with an enum as text", () => {
-        const actual = languageAsText(languageWithEnum)
+        const actual = languageAsText(languageWithEnum).replaceAll("\r\n", "\n") // normalize Windows EOLs
         const thisPath = "src/utilities"
         writeFileSync(`${thisPath}/languageWithEnum.actual.txt`, actual)
-        equal(actual, readFileSync(`${thisPath}/languageWithEnum.expected.txt`, { encoding: "utf8" }))
+        equal(actual, readFileSync(`${thisPath}/languageWithEnum.expected.txt`, { encoding: "utf8" }).replaceAll("\r\n", "\n"))
     })
 })
 

@@ -13,7 +13,7 @@
     "url": "https://github.com/LionWeb-io/lionweb-typescript/issues"
   },
   "scripts": {
-    "clean": "rm -rf dist/ node_modules/",
+    "clean": "npx rimraf dist node_modules",
     "build": "tsc",
     "pretest": "npm run build",
     "test": "mocha --recursive dist/",

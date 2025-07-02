@@ -23,7 +23,7 @@
     "nanoid": "5.0.9"
   },
   "scripts": {
-    "clean": "rm -rf dist/ node_modules/ lionweb-io-lionweb-mps-specific-*.tgz",
+    "clean": "npx rimraf dist node_modules -g lionweb-io-lionweb-mps-specific-*.tgz",
     "build": "tsc",
     "lint": "eslint src",
     "prep:pre-release": "npm run clean && npm install && npm run build",
