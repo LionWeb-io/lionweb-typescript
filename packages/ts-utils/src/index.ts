@@ -1,6 +1,7 @@
 export * from "./array-helpers.js"
 export * from "./cycles.js"
 export * from "./graphs.js"
+export * from "./json.js"
 export * from "./map-helpers.js"
 export * from "./nested-map.js"
 export * from "./recursion.js"
