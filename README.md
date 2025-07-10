@@ -86,7 +86,7 @@ The implementation is divided up in a number of NPM packages in the directory [`
 
   _Note_ that this package – and specifically the `generate-for-class-core.ts` file – depends on `class-core` itself.
   This constitutes a *circular* dependency, but that only exists at compile+build time, so should not be problematic.
-  To ensure that a “clean clone” of this repository is not impacted, the `make-class-core.sh` script builds `class-core` first, before compiling and running `build`, and then builds `class-core` again.
+  To ensure that a “clean clone” of this repository is not impacted, the `make.sh` script builds `class-core` first, before compiling and running `build`, and then builds `class-core` again.
 
 Each of these packages have their own `README.md`.
 The following packages are published in the scope of [the `lionweb` organization](https://www.npmjs.com/org/lionweb), meaning that they're all prefixed with `@lionweb/`: `json`, `json-utils`, `js-diff`, `core`, `ts-utils`, `utilities`, `cli`, and `validation`, `class-core`, `class-core-generator`
@@ -110,22 +110,14 @@ This repo relies on the following tools being installed:
 
 ### Making everything
 
-Run the following command to setup the project:
+Run the following command to set up the project:
 
 ```shell
 npm run clean
 npm install
 npm run setup
+./make.sh
 ```
-
-Run the following command to **build** (“make”) each of the packages, in dependency order:
-
-```shell
-npm run build
-```
-
-This script exits as soon as the first failure it detected.
-It also triggers the `generate` scriptlet of the `build` package, which generates a couple of source files in other packages.
 
 The chain of preceding commands can also be run as follows:
 
@@ -135,7 +127,16 @@ npm run initialize
 
 ### Building, testing, linting
 
-Run the following command to build all test packages::
+Run the following command to **build** (“make”) each of the packages, in dependency order:
+
+```shell
+./make.sh
+```
+
+This script exits – or at least: should – as soon as the first failure it detected.
+It also triggers the `generate` scriptlet of the `build` package, which generates a couple of source files in other packages.
+
+Run the following command to just com-/transpile the TypeScript source code in all packages:
 
 ```shell
 npm run build
@@ -144,8 +145,7 @@ npm run build
 Run the following command to run all the tests:
 
 ```shell
-# Run the tests
-npm run test
+npm test
 ```
 
 The output should look similar to this (but much longer):

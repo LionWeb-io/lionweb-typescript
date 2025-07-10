@@ -19,11 +19,11 @@ cd json
 npm run build
 cd ..
 
-cd json-diff
+cd json-utils
 npm run build
 cd ..
 
-cd json-utils
+cd json-diff
 npm run build
 cd ..
 
