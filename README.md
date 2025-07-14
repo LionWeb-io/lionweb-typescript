@@ -100,6 +100,8 @@ This repo relies on the following tools being installed:
 
 - [Node.js](https://nodejs.org/): JavaScript runtime
   - NPM (bundled with Node.js)
+- A shell (compatible with the Bourne shell), to run [`make.sh`](./make.sh) and other `.sh` scripts.
+  (This might take a little more effort on Windows machines than on Linux or even macOS.)
 - (optional) [PlantUML](https://plantuml.com/).
   An IDE plugin such as the one [for IntelliJ IDEA](https://plugins.jetbrains.com/plugin/7017-plantuml-integration) also does the trick.
 
