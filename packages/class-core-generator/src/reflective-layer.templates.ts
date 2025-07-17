@@ -27,6 +27,7 @@ import {
     isConcrete,
     isEnumeration,
     isMultiple,
+    isPartition,
     Language,
     LanguageEntity,
     Link,
@@ -61,7 +62,7 @@ export const reflectiveClassFor = (imports: Imports) => {
         const { name, key, id, features } = classifier
         const metaType = entityMetaType(classifier)
         return [
-            `public readonly _${name} = new ${imports.core(metaType)}(this._language, "${name}", "${key}", "${id}"${classifier instanceof Concept ? ", " + classifier.abstract : ""});`,
+            `public readonly _${name} = new ${imports.core(metaType)}(this._language, "${name}", "${key}", "${id}"${classifier instanceof Concept ? ", " + classifier.abstract : ""})${isPartition(classifier) ? ".isPartition()" : ""};`,
             //              | core (2nd x) |
             `get ${name}(): ${metaType} {`,
             indent([`this.ensureWiredUp();`, `return this._${name};`]),
@@ -214,8 +215,12 @@ export const reflectiveClassFor = (imports: Imports) => {
                         switchOrIf(
                             "classifier.key",
                             concreteClassifiers
-                                .map(nameOf)
-                                .map(name => [`this._${name}.key`, `${name}.create(id, ${parameterPrefix}handleDelta)`]),
+                                .map((classifier) => [
+                                    // case's key:
+                                    `this._${classifier.name}.key`,
+                                    // return value:
+                                    `${classifier.name}.create(id, ${parameterPrefix}handleDelta)`
+                                ]),
                             [
                                 `const {language} = classifier;`,
                                 `throw new Error(\`can't instantiate \${classifier.name} (key=\${classifier.key}): classifier is not known in language \${language.name} (key=\${language.key}, version=\${language.version})\`);`

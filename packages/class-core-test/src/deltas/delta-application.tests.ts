@@ -26,7 +26,7 @@ import {
 } from "@lionweb/class-core"
 import { deepEqual, equal, isUndefined } from "../assertions.js"
 
-import { DataTypeTestConcept, LinkTestConcept, TestAnnotation, TestLanguageBase } from "../gen/TestLanguage.g.js"
+import { LinkTestConcept, TestAnnotation, TestLanguageBase } from "../gen/TestLanguage.g.js"
 
 const testLanguage = TestLanguageBase.INSTANCE
 
@@ -39,77 +39,77 @@ describe("delta application sets parentage correctly", () => {
             testLanguage.LinkTestConcept_containment_0_n,
             testLanguage.LinkTestConcept_containment_1_n
         ].forEach((containment) => {
-            const ltc = LinkTestConcept.create("ltc");
-            const dtc = DataTypeTestConcept.create("dtc");
-            const delta = new ChildAddedDelta(ltc, containment, 0, dtc);
+            const parent = LinkTestConcept.create("parent");
+            const child = LinkTestConcept.create("child");
+            const delta = new ChildAddedDelta(parent, containment, 0, child);
 
             applyDelta(delta);
 
-            equal(dtc.parent, ltc);
+            equal(child.parent, parent);
         });
     });
 
     it("child moved", () => {
-        const srcLtc = LinkTestConcept.create("srcLtc");
-        const dtc = DataTypeTestConcept.create("dtc");
-        srcLtc.containment_0_1 = dtc;
+        const parent = LinkTestConcept.create("parent");
+        const child = LinkTestConcept.create("child");
+        parent.containment_0_1 = child;
         const dstLtc = LinkTestConcept.create("dstLtc");
-        const delta = new ChildMovedDelta(srcLtc, testLanguage.LinkTestConcept_containment_0_1, 0, dstLtc, testLanguage.LinkTestConcept_containment_0_1, 0, dtc);
+        const delta = new ChildMovedDelta(parent, testLanguage.LinkTestConcept_containment_0_1, 0, dstLtc, testLanguage.LinkTestConcept_containment_0_1, 0, child);
 
         applyDelta(delta);
 
-        equal(dtc.parent, dstLtc);
-        isUndefined(srcLtc.containment_0_1);
+        equal(child.parent, dstLtc);
+        isUndefined(parent.containment_0_1);
     });
 
     it("child replaced", () => {
-        const srcLtc = LinkTestConcept.create("srcLtc");
-        const dtc1 = DataTypeTestConcept.create("dtc1");
-        srcLtc.containment_0_1 = dtc1;
-        const dstLtc = LinkTestConcept.create("dstLtc");
-        const dtc2 = DataTypeTestConcept.create("dtc2");
-        dstLtc.containment_0_1 = dtc2;
-        const delta = new ChildReplacedDelta(dstLtc, testLanguage.LinkTestConcept_containment_0_1, 0, dtc2, dtc1);
+        const srcParent = LinkTestConcept.create("srcParent");
+        const child1 = LinkTestConcept.create("child1");
+        srcParent.containment_0_1 = child1;
+        const dstParent = LinkTestConcept.create("dstParent");
+        const child2 = LinkTestConcept.create("child2");
+        dstParent.containment_0_1 = child2;
+        const delta = new ChildReplacedDelta(dstParent, testLanguage.LinkTestConcept_containment_0_1, 0, child2, child1);
 
         applyDelta(delta);
 
-        equal(dtc1.parent, dstLtc);
-        isUndefined(dtc2.parent);
+        equal(child1.parent, dstParent);
+        isUndefined(child2.parent);
     });
 
     it("child deleted", () => {
-        const ltc = LinkTestConcept.create("ltc");
-        const dtc = DataTypeTestConcept.create("dtc");
-        ltc.containment_0_1 = dtc;
-        const delta = new ChildDeletedDelta(ltc, testLanguage.LinkTestConcept_containment_0_1, 0, dtc);
+        const parent = LinkTestConcept.create("parent");
+        const child = LinkTestConcept.create("child");
+        parent.containment_0_1 = child;
+        const delta = new ChildDeletedDelta(parent, testLanguage.LinkTestConcept_containment_0_1, 0, child);
 
         applyDelta(delta);
 
-        isUndefined(dtc.parent);
-        isUndefined(ltc.containment_0_1);
+        isUndefined(child.parent);
+        isUndefined(parent.containment_0_1);
     });
 
     it("annotation added", () => {
-        const ltc = LinkTestConcept.create("ltc");
+        const node = LinkTestConcept.create("node");
         const annotation = TestAnnotation.create("anno");
-        const delta = new AnnotationAddedDelta(ltc, 0, annotation);
+        const delta = new AnnotationAddedDelta(node, 0, annotation);
 
         applyDelta(delta);
 
-        equal(annotation.parent, ltc);
-        deepEqual(ltc.annotations, [annotation]);
+        equal(annotation.parent, node);
+        deepEqual(node.annotations, [annotation]);
     });
 
     it("annotation deleted", () => {
-        const ltc = LinkTestConcept.create("ltc");
+        const node = LinkTestConcept.create("node");
         const annotation = TestAnnotation.create("anno");
-        ltc.addAnnotation(annotation);
-        const delta = new AnnotationDeletedDelta(ltc, 0, annotation);
+        node.addAnnotation(annotation);
+        const delta = new AnnotationDeletedDelta(node, 0, annotation);
 
         applyDelta(delta);
 
         isUndefined(annotation.parent);
-        deepEqual(ltc.annotations, []);
+        deepEqual(node.annotations, []);
     });
 
 });

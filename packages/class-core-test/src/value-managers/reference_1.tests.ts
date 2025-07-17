@@ -26,7 +26,7 @@ import { AccumulatingSimplisticHandler, BuiltinPropertyValueDeserializer } from 
 import { LionWebJsonMetaPointer } from "@lionweb/json"
 
 import { deepEqual, equal, isTrue, isUndefined, throws } from "../assertions.js"
-import { DataTypeTestConcept, LinkTestConcept, TestLanguageBase } from "../gen/TestLanguage.g.js"
+import { LinkTestConcept, TestLanguageBase } from "../gen/TestLanguage.g.js"
 
 const testLanguageBase = TestLanguageBase.INSTANCE
 
@@ -35,7 +35,7 @@ describe("[1] reference", () => {
 
     it("getting an unset [1] reference", () => {
         const [handleDeltas, deltas] = collectingDeltaHandler();
-        const ltc = LinkTestConcept.create("ltc", handleDeltas);
+        const node = LinkTestConcept.create("node", handleDeltas);
 
         // pre-check:
         equal(deltas.length, 0);
@@ -43,77 +43,77 @@ describe("[1] reference", () => {
         // action+check:
         throws(
             () => {
-                equal(ltc.reference_1, undefined);
+                equal(node.reference_1, undefined);
             },
-            `can't read required reference "reference_1" that's unset on instance of TestLanguage.LinkTestConcept with id=ltc`
+            `can't read required reference "reference_1" that's unset on instance of TestLanguage.LinkTestConcept with id=node`
         );
     });
 
     it("setting a [1] reference", () => {
         const [handleDeltas, deltas] = collectingDeltaHandler();
-        const dtc = DataTypeTestConcept.create("dtc", handleDeltas);
-        const ltc = LinkTestConcept.create("ltc", handleDeltas);
+        const dst = LinkTestConcept.create("dst", handleDeltas);
+        const src = LinkTestConcept.create("src", handleDeltas);
 
         // pre-check:
         equal(deltas.length, 0);
 
         // action+check:
-        ltc.reference_1 = dtc;
-        equal(ltc.reference_1, dtc);
-        equal(dtc.parent, undefined);
+        src.reference_1 = dst;
+        equal(src.reference_1, dst);
+        equal(dst.parent, undefined);
         equal(deltas.length, 1);
         deepEqual(
             deltas[0],
-            new ReferenceAddedDelta(ltc, testLanguageBase.LinkTestConcept_reference_1, 0, dtc)
+            new ReferenceAddedDelta(src, testLanguageBase.LinkTestConcept_reference_1, 0, dst)
         );
 
         // action+check:
-        ltc.reference_1 = dtc;
-        equal(ltc.reference_1, dtc);
-        equal(dtc.parent, undefined);
+        src.reference_1 = dst;
+        equal(src.reference_1, dst);
+        equal(dst.parent, undefined);
         equal(deltas.length, 1);    // (no new delta)
     });
 
     it("unsetting a [1] reference", () => {
         const [handleDeltas, deltas] = collectingDeltaHandler();
-        const dtc = DataTypeTestConcept.create("dtc", handleDeltas);
-        const ltc = LinkTestConcept.create("ltc", handleDeltas);
+        const dst = LinkTestConcept.create("dst", handleDeltas);
+        const src = LinkTestConcept.create("src", handleDeltas);
 
         // pre-check:
-        ltc.reference_1 = dtc;
-        equal(dtc.parent, undefined);
+        src.reference_1 = dst;
+        equal(dst.parent, undefined);
         equal(deltas.length, 1);
 
         // action+check:
         throws(
             () => {
                 // @ts-expect-error Doesn't compile, but we want to test the behavior anyway.
-                ltc.reference_1 = undefined;
+                src.reference_1 = undefined;
             },
-            `can't unset required reference "reference_1" on instance of TestLanguage.LinkTestConcept with id=ltc`
+            `can't unset required reference "reference_1" on instance of TestLanguage.LinkTestConcept with id=src`
         );
         equal(deltas.length, 1);
     });
 
     it("setting a [1] reference, replacing an already set target", () => {
         const [handleDeltas, deltas] = collectingDeltaHandler();
-        const dtc1 = DataTypeTestConcept.create("dtc1", handleDeltas);
-        const dtc2 = DataTypeTestConcept.create("dtc2", handleDeltas);
-        const ltc = LinkTestConcept.create("ltc", handleDeltas);
+        const dst1 = LinkTestConcept.create("dst1", handleDeltas);
+        const dst2 = LinkTestConcept.create("dst2", handleDeltas);
+        const src = LinkTestConcept.create("src", handleDeltas);
 
         // pre-check:
-        ltc.reference_1 = dtc1;
-        equal(dtc1.parent, undefined);
+        src.reference_1 = dst1;
+        equal(dst1.parent, undefined);
         equal(deltas.length, 1);
 
         // action+check:
-        ltc.reference_1 = dtc2;
-        equal(ltc.reference_1, dtc2);
-        equal(dtc2.parent, undefined);
+        src.reference_1 = dst2;
+        equal(src.reference_1, dst2);
+        equal(dst2.parent, undefined);
         equal(deltas.length, 2);
         deepEqual(
             deltas[1],
-            new ReferenceReplacedDelta(ltc, testLanguageBase.LinkTestConcept_reference_1, 0, dtc1, dtc2)
+            new ReferenceReplacedDelta(src, testLanguageBase.LinkTestConcept_reference_1, 0, dst1, dst2)
         );
     });
 
@@ -129,8 +129,8 @@ describe("serialization and deserialization w.r.t. a [1] reference", () => {
     };
 
     it("serializes and deserializes an unset reference correctly", () => {
-        const ltc = LinkTestConcept.create("ltc");    // leave .reference_1 unset
-        const serializationChunk = serializeNodeBases([ltc]);
+        const node = LinkTestConcept.create("node");    // leave .reference_1 unset
+        const serializationChunk = serializeNodeBases([node]);
         const {nodes} = serializationChunk;
         equal(nodes.length, 1);
         const serReference = nodes[0].references.find(({reference}) => reference.key === metaPointer.key);
@@ -143,30 +143,30 @@ describe("serialization and deserialization w.r.t. a [1] reference", () => {
         equal(deserializedNodes.length, 1);
         const root = deserializedNodes[0];
         isTrue(root instanceof LinkTestConcept);
-        const deserializedLtc = root as LinkTestConcept;
-        equal(deserializedLtc.id, "ltc");
-        equal(deserializedLtc.classifier, testLanguageBase.LinkTestConcept);
-        equal(deserializedLtc.parent, undefined);
+        const deserializedNode = root as LinkTestConcept;
+        equal(deserializedNode.id, "node");
+        equal(deserializedNode.classifier, testLanguageBase.LinkTestConcept);
+        equal(deserializedNode.parent, undefined);
         throws(
             () => {
-                equal(deserializedLtc.reference_1, undefined);
+                equal(deserializedNode.reference_1, undefined);
             },
-            `can't read required reference "reference_1" that's unset on instance of TestLanguage.LinkTestConcept with id=ltc`
+            `can't read required reference "reference_1" that's unset on instance of TestLanguage.LinkTestConcept with id=node`
         )
     });
 
     it("serializes a set [1] reference correctly", () => {
-        const dtc = DataTypeTestConcept.create("dtc");
-        const ltc = LinkTestConcept.create("ltc");
-        ltc.reference_1 = dtc;
-        const serializationChunk = serializeNodeBases([ltc, dtc]);
+        const dst = LinkTestConcept.create("dst");
+        const src = LinkTestConcept.create("src");
+        src.reference_1 = dst;
+        const serializationChunk = serializeNodeBases([src, dst]);
         const {nodes} = serializationChunk;
         equal(nodes.length, 2);
         const serReference = nodes[0].references.find(({reference}) => reference.key === metaPointer.key);
         deepEqual(serReference, {
             reference: metaPointer,
             targets: [{
-                reference: "dtc",
+                reference: "dst",
                 resolveInfo: null
             }]
         });
@@ -178,15 +178,15 @@ describe("serialization and deserialization w.r.t. a [1] reference", () => {
         equal(deserializedNodes.length, 2);
         const node1 = deserializedNodes[0];
         isTrue(node1 instanceof LinkTestConcept);
-        const deserializedLtc = node1 as LinkTestConcept;
-        equal(deserializedLtc.id, "ltc");
-        equal(deserializedLtc.classifier, testLanguageBase.LinkTestConcept);
-        equal(deserializedLtc.parent, undefined);
-        isTrue(deserializedLtc.reference_1 instanceof DataTypeTestConcept);
-        const deserializedTC = deserializedLtc.reference_1 as DataTypeTestConcept;
-        equal(deserializedTC.id, "dtc");
-        equal(deserializedTC.classifier, testLanguageBase.DataTypeTestConcept);
-        equal(deserializedTC.parent, undefined);
+        const deserializedSrc = node1 as LinkTestConcept;
+        equal(deserializedSrc.id, "src");
+        equal(deserializedSrc.classifier, testLanguageBase.LinkTestConcept);
+        equal(deserializedSrc.parent, undefined);
+        isTrue(deserializedSrc.reference_1 instanceof LinkTestConcept);
+        const deserializedDst = deserializedSrc.reference_1 as LinkTestConcept;
+        equal(deserializedDst.id, "dst");
+        equal(deserializedDst.classifier, testLanguageBase.LinkTestConcept);
+        equal(deserializedDst.parent, undefined);
     });
 
 });

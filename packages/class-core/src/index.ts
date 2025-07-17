@@ -21,6 +21,7 @@ export * from "./deltas/index.js";
 export * from "./deserializer.js";
 export { deepDuplicateWith } from "./duplicator.js";
 export * from "./id-mapping.js";
+export { combinedFactoryFor } from "./factory.js";
 // skip linking.js: see comment there
 export * from "./LionCore_builtins.g.js";
 export {serializeNodeBases} from "./serializer.js";

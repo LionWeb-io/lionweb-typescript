@@ -77,6 +77,10 @@ cd test
 npm test
 cd ..
 
+cd artifacts
+npm run generate
+cd ..
+
 cd .. # (/<root>)
 
 # (doesn't bother with dependency order:)

@@ -18,8 +18,8 @@
 // Warning: this file is generated!
 // Modifying it by hand is useless at best, and sabotage at worst.
 
-import {IdOrUnresolved} from "@lionweb/core";
-import {LionWebId, LionWebJsonMetaPointer, LionWebJsonChunk} from "@lionweb/json";
+import { IdOrUnresolved } from "@lionweb/core";
+import { LionWebId, LionWebJsonMetaPointer, LionWebJsonChunk } from "@lionweb/json";
 
 
 export type SerializedDelta =

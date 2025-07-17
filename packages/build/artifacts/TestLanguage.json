@@ -361,7 +361,7 @@
             "version": "2023.1",
             "key": "Concept-partition"
           },
-          "value": "false"
+          "value": "true"
         },
         {
           "property": {
@@ -858,7 +858,7 @@
             "version": "2023.1",
             "key": "Concept-partition"
           },
-          "value": "false"
+          "value": "true"
         },
         {
           "property": {
@@ -911,7 +911,12 @@
             "version": "2023.1",
             "key": "Concept-implements"
           },
-          "targets": []
+          "targets": [
+            {
+              "resolveInfo": "INamed",
+              "reference": "LionCore-builtins-INamed"
+            }
+          ]
         }
       ],
       "annotations": [],
@@ -968,8 +973,8 @@
           },
           "targets": [
             {
-              "resolveInfo": "DataTypeTestConcept",
-              "reference": "DataTypeTestConcept"
+              "resolveInfo": "LinkTestConcept",
+              "reference": "LinkTestConcept"
             }
           ]
         }
@@ -1028,8 +1033,8 @@
           },
           "targets": [
             {
-              "resolveInfo": "DataTypeTestConcept",
-              "reference": "DataTypeTestConcept"
+              "resolveInfo": "LinkTestConcept",
+              "reference": "LinkTestConcept"
             }
           ]
         }
@@ -1088,8 +1093,8 @@
           },
           "targets": [
             {
-              "resolveInfo": "DataTypeTestConcept",
-              "reference": "DataTypeTestConcept"
+              "resolveInfo": "LinkTestConcept",
+              "reference": "LinkTestConcept"
             }
           ]
         }
@@ -1148,8 +1153,8 @@
           },
           "targets": [
             {
-              "resolveInfo": "DataTypeTestConcept",
-              "reference": "DataTypeTestConcept"
+              "resolveInfo": "LinkTestConcept",
+              "reference": "LinkTestConcept"
             }
           ]
         }
@@ -1208,8 +1213,8 @@
           },
           "targets": [
             {
-              "resolveInfo": "DataTypeTestConcept",
-              "reference": "DataTypeTestConcept"
+              "resolveInfo": "LinkTestConcept",
+              "reference": "LinkTestConcept"
             }
           ]
         }
@@ -1268,8 +1273,8 @@
           },
           "targets": [
             {
-              "resolveInfo": "DataTypeTestConcept",
-              "reference": "DataTypeTestConcept"
+              "resolveInfo": "LinkTestConcept",
+              "reference": "LinkTestConcept"
             }
           ]
         }
@@ -1328,8 +1333,8 @@
           },
           "targets": [
             {
-              "resolveInfo": "DataTypeTestConcept",
-              "reference": "DataTypeTestConcept"
+              "resolveInfo": "LinkTestConcept",
+              "reference": "LinkTestConcept"
             }
           ]
         }
@@ -1388,8 +1393,8 @@
           },
           "targets": [
             {
-              "resolveInfo": "DataTypeTestConcept",
-              "reference": "DataTypeTestConcept"
+              "resolveInfo": "LinkTestConcept",
+              "reference": "LinkTestConcept"
             }
           ]
         }

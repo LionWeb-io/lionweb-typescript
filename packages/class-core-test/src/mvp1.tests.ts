@@ -33,6 +33,7 @@ import { deepEqual, equal, fail, isTrue, throws } from "./assertions.js"
 import { DataTypeTestConcept, TestEnumeration, TestLanguageBase } from "./gen/TestLanguage.g.js"
 
 describe("TestConcept", () => {
+
     const testLanguageBase = TestLanguageBase.INSTANCE
 
     it("direct instantiation", () => {
@@ -151,8 +152,8 @@ describe("TestConcept", () => {
             join(artifactsPath, "DataTypeTestConcept-value=bar-enumValue_1=literal3.expected.json")
         ) as LionWebJsonChunk
         const [deltaHandler, deltas] = collectingDeltaHandler()
-        const deserialize = nodeBaseDeserializer([testLanguageBase], deltaHandler)
-        const nodes = deserialize(serializationChunk, [])
+        const deserialized = nodeBaseDeserializer([testLanguageBase], deltaHandler)
+        const nodes = deserialized(serializationChunk, [])
         equal(deltas.length, 0)
         equal(nodes.length, 1)
         const node1 = nodes[0]
@@ -175,7 +176,7 @@ describe("TestConcept", () => {
         equal(pcd1.oldValue, "bar")
         equal(pcd1.newValue, "fiddlesticks")
         instance.enumValue_1 = TestEnumeration.literal2
-        equal(deltas.length, 2) // <-- failing
+        equal(deltas.length, 2)
         const delta2 = deltas[1]
         isTrue(delta2 instanceof PropertyChangedDelta)
         const pcd2 = delta2 as PropertyChangedDelta<TestEnumeration>
@@ -185,5 +186,6 @@ describe("TestConcept", () => {
         equal(pcd2.newValue, TestEnumeration.literal2)
         done()
     })
+
 })
 

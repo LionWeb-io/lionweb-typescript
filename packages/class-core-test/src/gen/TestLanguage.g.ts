@@ -48,6 +48,7 @@ import {
     ContainmentValueManager,
     DeltaHandler,
     ILanguageBase,
+    INamed,
     INodeBase,
     LionCore_builtinsBase,
     NodeBase,
@@ -118,7 +119,7 @@ export class TestLanguageBase implements ILanguageBase {
         return this._SecondTestEnumeration_literal3;
     }
 
-    public readonly _DataTypeTestConcept = new Concept(this._language, "DataTypeTestConcept", "DataTypeTestConcept", "DataTypeTestConcept", false);
+    public readonly _DataTypeTestConcept = new Concept(this._language, "DataTypeTestConcept", "DataTypeTestConcept", "DataTypeTestConcept", false).isPartition();
     get DataTypeTestConcept(): Concept {
         this.ensureWiredUp();
         return this._DataTypeTestConcept;
@@ -164,7 +165,7 @@ export class TestLanguageBase implements ILanguageBase {
         return this._DataTypeTestConcept_enumValue_0_1;
     }
 
-    public readonly _LinkTestConcept = new Concept(this._language, "LinkTestConcept", "LinkTestConcept", "LinkTestConcept", false);
+    public readonly _LinkTestConcept = new Concept(this._language, "LinkTestConcept", "LinkTestConcept", "LinkTestConcept", false).isPartition();
     get LinkTestConcept(): Concept {
         this.ensureWiredUp();
         return this._LinkTestConcept;
@@ -233,15 +234,16 @@ export class TestLanguageBase implements ILanguageBase {
         this._DataTypeTestConcept_integerValue_0_1.ofType(LionCore_builtinsBase.INSTANCE._Integer).isOptional();
         this._DataTypeTestConcept_stringValue_0_1.ofType(LionCore_builtinsBase.INSTANCE._String).isOptional();
         this._DataTypeTestConcept_enumValue_0_1.ofType(this._TestEnumeration).isOptional();
+        this._LinkTestConcept.implementing(LionCore_builtinsBase.INSTANCE._INamed);
         this._LinkTestConcept.havingFeatures(this._LinkTestConcept_containment_0_1, this._LinkTestConcept_containment_1, this._LinkTestConcept_containment_0_n, this._LinkTestConcept_containment_1_n, this._LinkTestConcept_reference_0_1, this._LinkTestConcept_reference_1, this._LinkTestConcept_reference_0_n, this._LinkTestConcept_reference_1_n);
-        this._LinkTestConcept_containment_0_1.ofType(this._DataTypeTestConcept);
-        this._LinkTestConcept_containment_1.ofType(this._DataTypeTestConcept);
-        this._LinkTestConcept_containment_0_n.ofType(this._DataTypeTestConcept);
-        this._LinkTestConcept_containment_1_n.ofType(this._DataTypeTestConcept);
-        this._LinkTestConcept_reference_0_1.ofType(this._DataTypeTestConcept);
-        this._LinkTestConcept_reference_1.ofType(this._DataTypeTestConcept);
-        this._LinkTestConcept_reference_0_n.ofType(this._DataTypeTestConcept);
-        this._LinkTestConcept_reference_1_n.ofType(this._DataTypeTestConcept);
+        this._LinkTestConcept_containment_0_1.ofType(this._LinkTestConcept);
+        this._LinkTestConcept_containment_1.ofType(this._LinkTestConcept);
+        this._LinkTestConcept_containment_0_n.ofType(this._LinkTestConcept);
+        this._LinkTestConcept_containment_1_n.ofType(this._LinkTestConcept);
+        this._LinkTestConcept_reference_0_1.ofType(this._LinkTestConcept);
+        this._LinkTestConcept_reference_1.ofType(this._LinkTestConcept);
+        this._LinkTestConcept_reference_0_n.ofType(this._LinkTestConcept);
+        this._LinkTestConcept_reference_1_n.ofType(this._LinkTestConcept);
         this._wiredUp = true;
     }
 
@@ -383,121 +385,137 @@ export class DataTypeTestConcept extends NodeBase {
     }
 }
 
-export class LinkTestConcept extends NodeBase {
+export class LinkTestConcept extends NodeBase implements INamed {
     static create(id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage): LinkTestConcept {
         return new LinkTestConcept(TestLanguageBase.INSTANCE.LinkTestConcept, id, handleDelta, parentInfo);
     }
 
-    private readonly _containment_0_1: OptionalSingleContainmentValueManager<DataTypeTestConcept>;
-    get containment_0_1(): DataTypeTestConcept | undefined {
+    private readonly _containment_0_1: OptionalSingleContainmentValueManager<LinkTestConcept>;
+    get containment_0_1(): LinkTestConcept | undefined {
         return this._containment_0_1.get();
     }
-    set containment_0_1(newValue: DataTypeTestConcept | undefined) {
+    set containment_0_1(newValue: LinkTestConcept | undefined) {
         this._containment_0_1.set(newValue);
     }
 
-    private readonly _containment_1: RequiredSingleContainmentValueManager<DataTypeTestConcept>;
-    get containment_1(): DataTypeTestConcept {
+    private readonly _containment_1: RequiredSingleContainmentValueManager<LinkTestConcept>;
+    get containment_1(): LinkTestConcept {
         return this._containment_1.get();
     }
-    set containment_1(newValue: DataTypeTestConcept) {
+    set containment_1(newValue: LinkTestConcept) {
         this._containment_1.set(newValue);
     }
 
-    private readonly _containment_0_n: OptionalMultiContainmentValueManager<DataTypeTestConcept>;
-    get containment_0_n(): DataTypeTestConcept[] {
+    private readonly _containment_0_n: OptionalMultiContainmentValueManager<LinkTestConcept>;
+    get containment_0_n(): LinkTestConcept[] {
         return this._containment_0_n.get();
     }
-    addContainment_0_n(newValue: DataTypeTestConcept) {
+    addContainment_0_n(newValue: LinkTestConcept) {
         this._containment_0_n.add(newValue);
     }
-    removeContainment_0_n(valueToRemove: DataTypeTestConcept) {
+    removeContainment_0_n(valueToRemove: LinkTestConcept) {
         this._containment_0_n.remove(valueToRemove);
     }
-    addContainment_0_nAtIndex(newValue: DataTypeTestConcept, index: number) {
+    addContainment_0_nAtIndex(newValue: LinkTestConcept, index: number) {
         this._containment_0_n.insertAtIndex(newValue, index);
     }
     moveContainment_0_n(oldIndex: number, newIndex: number) {
         this._containment_0_n.move(oldIndex, newIndex);
     }
 
-    private readonly _containment_1_n: RequiredMultiContainmentValueManager<DataTypeTestConcept>;
-    get containment_1_n(): DataTypeTestConcept[] {
+    private readonly _containment_1_n: RequiredMultiContainmentValueManager<LinkTestConcept>;
+    get containment_1_n(): LinkTestConcept[] {
         return this._containment_1_n.get();
     }
-    addContainment_1_n(newValue: DataTypeTestConcept) {
+    addContainment_1_n(newValue: LinkTestConcept) {
         this._containment_1_n.add(newValue);
     }
-    removeContainment_1_n(valueToRemove: DataTypeTestConcept) {
+    removeContainment_1_n(valueToRemove: LinkTestConcept) {
         this._containment_1_n.remove(valueToRemove);
     }
-    addContainment_1_nAtIndex(newValue: DataTypeTestConcept, index: number) {
+    addContainment_1_nAtIndex(newValue: LinkTestConcept, index: number) {
         this._containment_1_n.insertAtIndex(newValue, index);
     }
     moveContainment_1_n(oldIndex: number, newIndex: number) {
         this._containment_1_n.move(oldIndex, newIndex);
     }
 
-    private readonly _reference_0_1: OptionalSingleReferenceValueManager<DataTypeTestConcept>;
-    get reference_0_1(): SingleRef<DataTypeTestConcept> | undefined {
+    private readonly _reference_0_1: OptionalSingleReferenceValueManager<LinkTestConcept>;
+    get reference_0_1(): SingleRef<LinkTestConcept> | undefined {
         return this._reference_0_1.get();
     }
-    set reference_0_1(newValue: SingleRef<DataTypeTestConcept> | undefined) {
+    set reference_0_1(newValue: SingleRef<LinkTestConcept> | undefined) {
         this._reference_0_1.set(newValue);
     }
 
-    private readonly _reference_1: RequiredSingleReferenceValueManager<DataTypeTestConcept>;
-    get reference_1(): SingleRef<DataTypeTestConcept> {
+    private readonly _reference_1: RequiredSingleReferenceValueManager<LinkTestConcept>;
+    get reference_1(): SingleRef<LinkTestConcept> {
         return this._reference_1.get();
     }
-    set reference_1(newValue: SingleRef<DataTypeTestConcept>) {
+    set reference_1(newValue: SingleRef<LinkTestConcept>) {
         this._reference_1.set(newValue);
     }
 
-    private readonly _reference_0_n: OptionalMultiReferenceValueManager<DataTypeTestConcept>;
-    get reference_0_n(): SingleRef<DataTypeTestConcept>[] {
+    private readonly _reference_0_n: OptionalMultiReferenceValueManager<LinkTestConcept>;
+    get reference_0_n(): SingleRef<LinkTestConcept>[] {
         return this._reference_0_n.get();
     }
-    addReference_0_n(newValue: DataTypeTestConcept) {
+    addReference_0_n(newValue: LinkTestConcept) {
         this._reference_0_n.add(newValue);
     }
-    removeReference_0_n(valueToRemove: DataTypeTestConcept) {
+    removeReference_0_n(valueToRemove: LinkTestConcept) {
         this._reference_0_n.remove(valueToRemove);
     }
-    addReference_0_nAtIndex(newValue: DataTypeTestConcept, index: number) {
+    addReference_0_nAtIndex(newValue: LinkTestConcept, index: number) {
         this._reference_0_n.insertAtIndex(newValue, index);
     }
     moveReference_0_n(oldIndex: number, newIndex: number) {
         this._reference_0_n.move(oldIndex, newIndex);
     }
 
-    private readonly _reference_1_n: RequiredMultiReferenceValueManager<DataTypeTestConcept>;
-    get reference_1_n(): SingleRef<DataTypeTestConcept>[] {
+    private readonly _reference_1_n: RequiredMultiReferenceValueManager<LinkTestConcept>;
+    get reference_1_n(): SingleRef<LinkTestConcept>[] {
         return this._reference_1_n.get();
     }
-    addReference_1_n(newValue: DataTypeTestConcept) {
+    addReference_1_n(newValue: LinkTestConcept) {
         this._reference_1_n.add(newValue);
     }
-    removeReference_1_n(valueToRemove: DataTypeTestConcept) {
+    removeReference_1_n(valueToRemove: LinkTestConcept) {
         this._reference_1_n.remove(valueToRemove);
     }
-    addReference_1_nAtIndex(newValue: DataTypeTestConcept, index: number) {
+    addReference_1_nAtIndex(newValue: LinkTestConcept, index: number) {
         this._reference_1_n.insertAtIndex(newValue, index);
     }
     moveReference_1_n(oldIndex: number, newIndex: number) {
         this._reference_1_n.move(oldIndex, newIndex);
     }
 
+    private readonly _name: RequiredPropertyValueManager<string>;
+    get name(): string {
+        return this._name.get();
+    }
+    set name(newValue: string) {
+        this._name.set(newValue);
+    }
+
     public constructor(classifier: Classifier, id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage) {
         super(classifier, id, handleDelta, parentInfo);
-        this._containment_0_1 = new OptionalSingleContainmentValueManager<DataTypeTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_containment_0_1, this);
-        this._containment_1 = new RequiredSingleContainmentValueManager<DataTypeTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_containment_1, this);
-        this._containment_0_n = new OptionalMultiContainmentValueManager<DataTypeTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_containment_0_n, this);
-        this._containment_1_n = new RequiredMultiContainmentValueManager<DataTypeTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_containment_1_n, this);
-        this._reference_0_1 = new OptionalSingleReferenceValueManager<DataTypeTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_reference_0_1, this);
-        this._reference_1 = new RequiredSingleReferenceValueManager<DataTypeTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_reference_1, this);
-        this._reference_0_n = new OptionalMultiReferenceValueManager<DataTypeTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_reference_0_n, this);
-        this._reference_1_n = new RequiredMultiReferenceValueManager<DataTypeTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_reference_1_n, this);
+        this._containment_0_1 = new OptionalSingleContainmentValueManager<LinkTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_containment_0_1, this);
+        this._containment_1 = new RequiredSingleContainmentValueManager<LinkTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_containment_1, this);
+        this._containment_0_n = new OptionalMultiContainmentValueManager<LinkTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_containment_0_n, this);
+        this._containment_1_n = new RequiredMultiContainmentValueManager<LinkTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_containment_1_n, this);
+        this._reference_0_1 = new OptionalSingleReferenceValueManager<LinkTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_reference_0_1, this);
+        this._reference_1 = new RequiredSingleReferenceValueManager<LinkTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_reference_1, this);
+        this._reference_0_n = new OptionalMultiReferenceValueManager<LinkTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_reference_0_n, this);
+        this._reference_1_n = new RequiredMultiReferenceValueManager<LinkTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_reference_1_n, this);
+        this._name = new RequiredPropertyValueManager<string>(LionCore_builtinsBase.INSTANCE.INamed_name, this);
+    }
+
+    getPropertyValueManager(property: Property): PropertyValueManager<unknown> {
+        if (property.key === LionCore_builtinsBase.INSTANCE.INamed_name.key) {
+            return this._name;
+        }
+        return super.getPropertyValueManager(property);
     }
 
     getContainmentValueManager(containment: Containment): ContainmentValueManager<INodeBase> {

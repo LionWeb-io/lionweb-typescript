@@ -36,13 +36,13 @@ describe("[0..1] string property", () => {
 
     it("getting an unset [0..1] string property", () => {
         const [handleDelta, deltas] = collectingDeltaHandler();
-        const dtc = DataTypeTestConcept.create("dtc", handleDelta);
+        const node = DataTypeTestConcept.create("node", handleDelta);
 
         // pre-check:
         equal(deltas.length, 0);
 
         // action+check:
-        equal(dtc.stringValue_0_1, undefined);
+        equal(node.stringValue_0_1, undefined);
         equal(deltas.length, 0);
     });
 
@@ -53,8 +53,8 @@ describe("[0..1] string property", () => {
     };
 
     it("serializing and deserializing an unset [0..1] string property", () => {
-        const dtc = DataTypeTestConcept.create("dtc");
-        const serializationChunk = serializeNodeBases([dtc]);
+        const node = DataTypeTestConcept.create("node");
+        const serializationChunk = serializeNodeBases([node]);
         const {nodes} = serializationChunk;
         equal(nodes.length, 1);
         equal(nodes[0].properties.length, 0);
@@ -67,35 +67,35 @@ describe("[0..1] string property", () => {
         equal(deserializedNodes.length, 1);
         const root = deserializedNodes[0];
         isTrue(root instanceof DataTypeTestConcept);
-        const deserializedLtc = root as DataTypeTestConcept;
-        equal(deserializedLtc.id, "dtc");
-        equal(deserializedLtc.classifier, testLanguageBase.DataTypeTestConcept);
-        equal(deserializedLtc.parent, undefined);
-        equal(deserializedLtc.stringValue_0_1, undefined);
+        const deserializedNode = root as DataTypeTestConcept;
+        equal(deserializedNode.id, "node");
+        equal(deserializedNode.classifier, testLanguageBase.DataTypeTestConcept);
+        equal(deserializedNode.parent, undefined);
+        equal(deserializedNode.stringValue_0_1, undefined);
         equal(deltas.length, 0);
     });
 
     it("setting a [0..1] string property", () => {
         const [handleDelta, deltas] = collectingDeltaHandler();
-        const dtc = DataTypeTestConcept.create("dtc", handleDelta);
+        const node = DataTypeTestConcept.create("node", handleDelta);
 
         // pre-check:
         equal(deltas.length, 0);
 
         // action+check:
-        dtc.stringValue_0_1 = "foo";
-        equal(dtc.stringValue_0_1, "foo");
+        node.stringValue_0_1 = "foo";
+        equal(node.stringValue_0_1, "foo");
         equal(deltas.length, 1);
         deepEqual(
             deltas[0],
-            new PropertyAddedDelta(dtc, testLanguageBase.DataTypeTestConcept_stringValue_0_1, "foo")
+            new PropertyAddedDelta(node, testLanguageBase.DataTypeTestConcept_stringValue_0_1, "foo")
         );
     });
 
     it("serializing and deserializing a set [0..1] string property", () => {
-        const dtc = DataTypeTestConcept.create("dtc");
-        dtc.stringValue_0_1 = "foo";
-        const serializationChunk = serializeNodeBases([dtc]);
+        const node = DataTypeTestConcept.create("node");
+        node.stringValue_0_1 = "foo";
+        const serializationChunk = serializeNodeBases([node]);
         const {nodes} = serializationChunk;
         equal(nodes.length, 1);
         equal(nodes[0].properties.length, 1);
@@ -115,47 +115,47 @@ describe("[0..1] string property", () => {
         equal(deserializedNodes.length, 1);
         const root = deserializedNodes[0];
         isTrue(root instanceof DataTypeTestConcept);
-        const deserializedLtc = root as DataTypeTestConcept;
-        equal(deserializedLtc.id, "dtc");
-        equal(deserializedLtc.classifier, testLanguageBase.DataTypeTestConcept);
-        equal(deserializedLtc.parent, undefined);
-        equal(deserializedLtc.stringValue_0_1, "foo");
+        const deserializedNode = root as DataTypeTestConcept;
+        equal(deserializedNode.id, "node");
+        equal(deserializedNode.classifier, testLanguageBase.DataTypeTestConcept);
+        equal(deserializedNode.parent, undefined);
+        equal(deserializedNode.stringValue_0_1, "foo");
         equal(deltas.length, 0);
     });
 
     it("unsetting a [0..1] string property", () => {
         const [handleDelta, deltas] = collectingDeltaHandler();
-        const dtc = DataTypeTestConcept.create("dtc", handleDelta);
+        const node = DataTypeTestConcept.create("node", handleDelta);
 
         // pre-check:
-        dtc.stringValue_0_1 = "foo";
+        node.stringValue_0_1 = "foo";
         equal(deltas.length, 1);
 
         // action+check:
-        dtc.stringValue_0_1 = undefined;
-        equal(dtc.stringValue_0_1, undefined);
+        node.stringValue_0_1 = undefined;
+        equal(node.stringValue_0_1, undefined);
         equal(deltas.length, 2);
         deepEqual(
             deltas[1],
-            new PropertyDeletedDelta(dtc, testLanguageBase.DataTypeTestConcept_stringValue_0_1, "foo")
+            new PropertyDeletedDelta(node, testLanguageBase.DataTypeTestConcept_stringValue_0_1, "foo")
         );
     });
 
     it("changing a [0..1] string property", () => {
         const [handleDelta, deltas] = collectingDeltaHandler();
-        const dtc = DataTypeTestConcept.create("dtc", handleDelta);
+        const node = DataTypeTestConcept.create("node", handleDelta);
 
         // pre-check:
-        dtc.stringValue_0_1 = "foo";
+        node.stringValue_0_1 = "foo";
         equal(deltas.length, 1);
 
         // action+check:
-        dtc.stringValue_0_1 = "bar";
-        equal(dtc.stringValue_0_1, "bar");
+        node.stringValue_0_1 = "bar";
+        equal(node.stringValue_0_1, "bar");
         equal(deltas.length, 2);
         deepEqual(
             deltas[1],
-            new PropertyChangedDelta(dtc, testLanguageBase.DataTypeTestConcept_stringValue_0_1, "foo", "bar")
+            new PropertyChangedDelta(node, testLanguageBase.DataTypeTestConcept_stringValue_0_1, "foo", "bar")
         );
     });
 

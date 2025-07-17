@@ -17,15 +17,21 @@
 
 import { serializeNodeBases } from "@lionweb/class-core" // Note: this is a circular dependency!
 import { defaultTrumpfOriginatingApache2_0LicensedHeader, generateLanguage } from "@lionweb/class-core-generator"
-import { lioncoreBuiltins, serializeLanguages } from "@lionweb/core"
-import { generatePlantUmlForLanguage, genericAsTreeText, languageAsText, writeJsonAsFile } from "@lionweb/utilities"
+import { deserializeLanguages, lioncoreBuiltins, serializeLanguages } from "@lionweb/core"
+import { LionWebJsonChunk } from "@lionweb/json"
+import {
+    generatePlantUmlForLanguage,
+    genericAsTreeText,
+    languageAsText,
+    readFileAsJson,
+    writeJsonAsFile
+} from "@lionweb/utilities"
 import { writeFileSync } from "fs"
 import { join } from "path"
 import { deltas } from "./deltas/definition/definition-base.js"
 import { defineDeltas } from "./deltas/definition/definitions.js"
 import { generateDeltaCode } from "./deltas/generator/generator.js"
 import { deltasLanguage } from "./deltas/meta-definition.js"
-import { TestLanguage } from "./testLanguage.js"
 
 const inArtifactsPath = (subPath: string) => join("artifacts", subPath)
 
@@ -44,7 +50,7 @@ writeFileSync(inArtifactsPath("deltas.txt"), genericAsTreeText(serializeNodeBase
 generateDeltaCode("../class-core/src/deltas", defaultTrumpfOriginatingApache2_0LicensedHeader)
 
 // TestLanguage language:
-writeJsonAsFile(inArtifactsPath("TestLanguage.json"), serializeLanguages(TestLanguage))
+const TestLanguage = deserializeLanguages(readFileAsJson(inArtifactsPath("TestLanguage.json")) as LionWebJsonChunk)[0]
 writeFileSync(inArtifactsPath("TestLanguage.txt"), languageAsText(TestLanguage))
 generateLanguage(TestLanguage, "../class-core-test/src/gen", { header: defaultTrumpfOriginatingApache2_0LicensedHeader })
 

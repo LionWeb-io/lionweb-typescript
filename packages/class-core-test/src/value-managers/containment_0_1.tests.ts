@@ -28,7 +28,7 @@ import { AccumulatingSimplisticHandler, BuiltinPropertyValueDeserializer } from 
 import { LionWebJsonMetaPointer } from "@lionweb/json"
 
 import { deepEqual, equal, isTrue, isUndefined } from "../assertions.js"
-import { DataTypeTestConcept, LinkTestConcept, TestLanguageBase } from "../gen/TestLanguage.g.js"
+import { LinkTestConcept, TestLanguageBase } from "../gen/TestLanguage.g.js"
 
 const testLanguageBase = TestLanguageBase.INSTANCE
 
@@ -37,7 +37,7 @@ describe("read+write access to a [0..1] containment", () => {
 
     it("setting of a [0..1] containment", () => {
         const [handleDelta, deltas] = collectingDeltaHandler();
-        const child = DataTypeTestConcept.create("child", handleDelta);
+        const child = LinkTestConcept.create("child", handleDelta);
         const parent = LinkTestConcept.create("parent", handleDelta);
 
         // pre-check:
@@ -53,7 +53,7 @@ describe("read+write access to a [0..1] containment", () => {
 
     it("moving a child (through a [0..1] containment) from parent to parent", () => {
         const [handleDelta, deltas] = collectingDeltaHandler();
-        const child = DataTypeTestConcept.create("child", handleDelta);
+        const child = LinkTestConcept.create("child", handleDelta);
         const srcParent = LinkTestConcept.create("srcParent", handleDelta);
         const dstParent = LinkTestConcept.create("dstParent", handleDelta);
 
@@ -88,7 +88,7 @@ describe("read+write access to a [0..1] containment", () => {
 
     it("moving a child (through a [0..1] containment) directly between parents", () => {
         const [handleDelta, deltas] = collectingDeltaHandler();
-        const child = DataTypeTestConcept.create("child", handleDelta);
+        const child = LinkTestConcept.create("child", handleDelta);
         const srcParent = LinkTestConcept.create("srcParent", handleDelta);
         const dstParent = LinkTestConcept.create("dstParent", handleDelta);
 
@@ -116,11 +116,11 @@ describe("read+write access to a [0..1] containment", () => {
 
     it("moving a child (through a [0..1] containment) directly between parents, replacing an already-present child", () => {
         const [handleDelta, deltas] = collectingDeltaHandler();
-        const childAlreadyAssigned = DataTypeTestConcept.create("childAlreadyAssigned", handleDelta);
+        const childAlreadyAssigned = LinkTestConcept.create("childAlreadyAssigned", handleDelta);
         const dstParent = LinkTestConcept.create("dstParent", handleDelta);
         dstParent.containment_0_1 = childAlreadyAssigned;
         const srcParent = LinkTestConcept.create("srcParent", handleDelta);
-        const childToMove = DataTypeTestConcept.create("childToMove", handleDelta);
+        const childToMove = LinkTestConcept.create("childToMove", handleDelta);
         srcParent.containment_0_1 = childToMove;
 
         // pre-check:
@@ -172,16 +172,16 @@ describe("serialization and deserialization w.r.t. a [0..1] containment", () => 
     });
 
     it("serializes a set containment correctly", () => {
-        const dtc = DataTypeTestConcept.create("dtc");
-        const ltc = LinkTestConcept.create("ltc");
-        ltc.containment_0_1 = dtc;
-        const serializationChunk = serializeNodeBases([ltc]);
+        const child = LinkTestConcept.create("child");
+        const parent = LinkTestConcept.create("parent");
+        parent.containment_0_1 = child;
+        const serializationChunk = serializeNodeBases([parent]);
         const {nodes} = serializationChunk;
         equal(nodes.length, 2);
         const serContainment = nodes[0].containments.find(({containment}) => containment.key === metaPointer.key);
         deepEqual(serContainment, {
             containment: metaPointer,
-            children: ["dtc"]
+            children: ["child"]
         });
 
         const deserialize = nodeBaseDeserializer([testLanguageBase]);
@@ -191,15 +191,15 @@ describe("serialization and deserialization w.r.t. a [0..1] containment", () => 
         equal(deserializedNodes.length, 1); // (because there's only one “root”)
         const root = deserializedNodes[0];
         isTrue(root instanceof LinkTestConcept);
-        const deserializedLtc = root as LinkTestConcept;
-        equal(deserializedLtc.id, "ltc");
-        equal(deserializedLtc.classifier, testLanguageBase.LinkTestConcept);
-        equal(deserializedLtc.parent, undefined);
-        isTrue(deserializedLtc.containment_0_1 instanceof DataTypeTestConcept);
-        const deserializedDtc = deserializedLtc.containment_0_1 as DataTypeTestConcept;
-        equal(deserializedDtc.id, "dtc");
-        equal(deserializedDtc.classifier, testLanguageBase.DataTypeTestConcept);
-        equal(deserializedDtc.parent, deserializedLtc);
+        const deserializedParent = root as LinkTestConcept;
+        equal(deserializedParent.id, "parent");
+        equal(deserializedParent.classifier, testLanguageBase.LinkTestConcept);
+        equal(deserializedParent.parent, undefined);
+        isTrue(deserializedParent.containment_0_1 instanceof LinkTestConcept);
+        const deserializedChild = deserializedParent.containment_0_1 as LinkTestConcept;
+        equal(deserializedChild.id, "child");
+        equal(deserializedChild.classifier, testLanguageBase.LinkTestConcept);
+        equal(deserializedChild.parent, deserializedParent);
     });
 
 });

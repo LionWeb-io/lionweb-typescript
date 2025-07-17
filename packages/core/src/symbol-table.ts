@@ -1,4 +1,5 @@
 import { LionWebJsonMetaPointer, LionWebKey } from "@lionweb/json"
+import { lazyMapGet } from "@lionweb/ts-utils"
 import { allFeaturesOf } from "./m3/functions.js"
 import { Classifier, Feature, Language, LanguageEntity } from "./m3/types.js"
 
@@ -66,16 +67,6 @@ class NaiveSymbolTable implements SymbolTable {
         return allFeatures.find((feature) => feature.key === featureMetaPointer.key)
     }
 
-}
-
-
-const lazyMapGet = <T>(map: { [key: string]: T }, key: string, createThunk: () => T): T => {
-    if (key in map) {
-        return map[key]
-    }
-    const value = createThunk()
-    map[key] = value
-    return value
 }
 
 
