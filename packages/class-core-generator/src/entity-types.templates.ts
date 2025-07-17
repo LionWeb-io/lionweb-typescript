@@ -182,7 +182,7 @@ export const typeForLanguageEntity = (imports: Imports) => {
                         [
                             ``,
                             features.map(withNewlineAppended(classMembersForFeature)),
-                            `public constructor(classifier: ${imports.core("Classifier")}, id: ${imports.json("LionWebId")}, handleDelta?: ${imports.generic("DeltaHandler")}, parentInfo?: ${imports.generic("Parentage")}) {`,
+                            `${isAbstract(classifier) ? "protected" : "public"} constructor(classifier: ${imports.core("Classifier")}, id: ${imports.json("LionWebId")}, handleDelta?: ${imports.generic("DeltaHandler")}, parentInfo?: ${imports.generic("Parentage")}) {`,
                             indent([
                                 `super(classifier, id, handleDelta, parentInfo);`,
                                 features.map((feature) => `this._${feature.name} = new ${imports.generic(valueManagerFor(feature))}<${tsTypeForValueManager(feature, imports)}>(${imports.language(feature.classifier.language)}.INSTANCE.${feature.classifier.name}_${feature.name}, this);`)

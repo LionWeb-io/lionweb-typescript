@@ -73,7 +73,7 @@ export class DeltasBase implements ILanguageBase {
         return this._language;
     }
 
-    public readonly _Deltas = new Concept(this._language, "Deltas", "Deltas-Deltas", "Deltas-Deltas", false);
+    public readonly _Deltas = new Concept(this._language, "Deltas", "Deltas-Deltas", "Deltas-Deltas", false).isPartition();
     get Deltas(): Concept {
         this.ensureWiredUp();
         return this._Deltas;
