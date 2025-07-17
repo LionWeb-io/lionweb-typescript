@@ -48,6 +48,7 @@
     "./packages/class-core-generator",
     "./packages/artifacts",
     "./packages/build",
-    "./packages/class-core-test"
+    "./packages/class-core-test",
+    "./packages/deltas-websocket"
   ]
 }

@@ -81,6 +81,10 @@ cd artifacts
 npm run generate
 cd ..
 
+cd deltas-websocket
+npm test
+cd ..
+
 cd .. # (/<root>)
 
 # (doesn't bother with dependency order:)

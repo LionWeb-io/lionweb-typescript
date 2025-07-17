@@ -1,0 +1,57 @@
+{
+  "serializationFormatVersion": "2023.1",
+  "languages": [
+    {
+      "key": "key-Shapes",
+      "version": "1"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "a",
+      "classifier": {
+        "language": "key-Shapes",
+        "version": "1",
+        "key": "key-Geometry"
+      },
+      "properties": [],
+      "containments": [
+        {
+          "containment": {
+            "language": "key-Shapes",
+            "version": "1",
+            "key": "key-documentation"
+          },
+          "children": [
+            "documentation"
+          ]
+        }
+      ],
+      "references": [],
+      "annotations": [],
+      "parent": null
+    },
+    {
+      "id": "documentation",
+      "classifier": {
+        "language": "key-Shapes",
+        "version": "1",
+        "key": "key-Documentation"
+      },
+      "properties": [
+        {
+          "property": {
+            "language": "key-Shapes",
+            "version": "1",
+            "key": "key-text"
+          },
+          "value": "hello there"
+        }
+      ],
+      "containments": [],
+      "references": [],
+      "annotations": [],
+      "parent": "a"
+    }
+  ]
+}

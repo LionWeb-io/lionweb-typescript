@@ -1,0 +1,42 @@
+{
+  "name": "@lionweb/deltas-websocket",
+  "version": "0.0.1-alpha.0",
+  "description": "Implementation of WebSocket components for delta protocol",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "typings": "dist/index.d.ts",
+  "type": "module",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LionWeb-io/lionweb-typescript.git"
+  },
+  "bugs": {
+    "url": "https://github.com/LionWeb-io/lionweb-typescript/issues"
+  },
+  "bin": {
+    "client-cli": "./dist/cli/client.js",
+    "server-cli": "./dist/cli/server.js"
+  },
+  "scripts": {
+    "clean": "npx rimraf dist/ node_modules/ lionweb-json-*.tgz",
+    "build": "tsc",
+    "lint": "eslint src",
+    "pretest": "npm run build && node dist/models/build-test-models.js",
+    "test": "mocha --recursive dist/tests/",
+    "client": "npm run build && node --trace-uncaught dist/cli/client.js 40000 client-A Bogus,SignOn,AddDocs,SetDocs,SignOff,Wait",
+    "server": "npm run build && node --trace-uncaught dist/cli/server.js 40000"
+  },
+  "dependencies": {
+    "@lionweb/class-core-test": "0.7.0-dev.0",
+    "ws": "8.18.2"
+  },
+  "devDependencies": {
+    "@types/chai": "5.2.1",
+    "@types/mocha": "10.0.10",
+    "@types/ws": "8.18.1",
+    "ansi-colors": "4.1.3",
+    "chai": "5.2.0",
+    "mocha": "11.1.0"
+  }
+}

@@ -1,0 +1,6 @@
+/dist
+/deltas-websocket-*.tgz
+
+# shouldn't be necessary!:
+/node_modules
+

@@ -58,7 +58,9 @@ readFileAsJson("package.json")
         console.log(`updating versions in package.json of package "${pkg}"...`)
         const packageJsonPath = join("packages", pkg, "package.json")
         const packageJson = readFileAsJson(packageJsonPath)
-        packageJson.version = ownPackageVersion(pkg)
+        if (pkg !== "deltas-websocket") {
+            packageJson.version = ownPackageVersion(pkg)
+        }
         if ("dependencies" in packageJson) {
             replaceVersionsIn(packageJson.dependencies)
         }
