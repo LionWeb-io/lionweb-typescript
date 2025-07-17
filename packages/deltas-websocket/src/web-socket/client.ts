@@ -17,8 +17,9 @@
 
 import { WebSocket } from "ws"
 
-import { delayed, wrappedAsPromise } from "../utils/async.js"
+import { wrappedAsPromise } from "../utils/async.js"
 import { tryParseJson } from "../utils/json.js"
+import { Procedure } from "../utils/procedure.js"
 import { TextualLogger, textualLoggerFunctionFrom } from "../utils/textual-logging.js"
 
 
@@ -30,9 +31,12 @@ export type LowLevelClient<TMessageToServer> = {
     disconnect: () => Promise<void>
 }
 
+type ClientState = "connecting" | "connected" | "disconnected"
+
 /**
- * @return a WebSocket-driven implementation of a {@link LowLevelClient low-level client}.
- * @param url The URL of the server to connect to.
+ * @return a WebSocket-driven implementation of a {@link LowLevelClient low-level client},
+ *  as a {@link Promise} that resolves as soon the client was able to connect to the WebSocket server.
+ * @param url The URL of the WebSocket server to connect to.
  * @param clientId An ID for the created client.
  * @param receiveMessage A function that's called with a received message.
  * @param optionalTextualLogger An optional {@link TextualLogger textual logger}.
@@ -40,39 +44,68 @@ export type LowLevelClient<TMessageToServer> = {
 export const createWebSocketClient = async <TMessageForClient, TMessageToServer>(
     url: string,
     clientId: string,
-    receiveMessage: (message: TMessageForClient) => void,
+    receiveMessage: Procedure<TMessageForClient>,
     optionalTextualLogger?: TextualLogger
 ): Promise<LowLevelClient<TMessageToServer>> => {
     const webSocket = new WebSocket(url)
     const log = textualLoggerFunctionFrom(optionalTextualLogger)
     log(`client ${clientId} started`)
-    webSocket
-        .on("open", () => {
-            log(`connected to server`)
-        })
-        .on("message", (messageText: string) => {
-            log(`received message from server: ${messageText}`)
-            receiveMessage(tryParseJson(messageText, log) as TMessageForClient)
-        })
-        .on("error", (error) => {
-            log(`error occurred: ${error}`, true)
-        })
-        .on("close", () => {
-            log(`disconnected from server`)
-        })
-    return delayed(10, {
-        sendMessage: (message) => {
-            const messageText = JSON.stringify(message)
-            log(`sending message to server: ${messageText}`)
-            return wrappedAsPromise((callback) => {
-                webSocket.send(messageText, callback)
+    let state: ClientState = "connecting"
+    return new Promise((resolveClientStart, rejectClientStart) => {
+        const lowLevelWebSocketClient: LowLevelClient<TMessageToServer> = {
+            sendMessage: (message) => {
+                if (state === "connected") {
+                    const messageText = JSON.stringify(message)
+                    log(`sending message to server: ${messageText}`)
+                    return wrappedAsPromise((callback) => {
+                        webSocket.send(messageText, callback)
+                    })
+                } else {
+                    log(`state=${state}`)
+                    return Promise.reject(new Error(`can't send message to server when client's state=${state}`))
+                }
+            },
+            disconnect: () => new Promise((resolveDisconnect, rejectDisconnect) => {
+                if (state === "connected") {
+                    webSocket.close()
+                    state = "disconnected"
+                    resolveDisconnect()
+                }
+                rejectDisconnect(new Error(state))
             })
-        },
-        disconnect: () =>
-            new Promise<void>((resolve) => {
-                webSocket.close()
-                resolve()
+        }
+        webSocket
+            .on("open", () => {
+                state = "connected"
+                log(`connected to server`)
+                resolveClientStart(lowLevelWebSocketClient)
+            })
+            .on("message", (messageText: string) => {
+                log(`received message from server: ${messageText}`)
+                receiveMessage(tryParseJson(messageText, log) as TMessageForClient)
+            })
+            .on("error", (error) => {
+                log(`error occurred: ${error}`, true)
+                if (isConnectionRefusedError(firstRealError(error))) {
+                    if (state === "connecting") {
+                        rejectClientStart(new Error(`could not connect to WebSocket server at ${url}`))
+                    } else {
+                        // ignore
+                        // TODO  is that OK?
+                    }
+                }
+            })
+            .on("close", () => {
+                state = "disconnected"
+                log(`disconnected from server`)
             })
     })
 }
+
+const firstRealError = (error: Error): Error =>
+    error instanceof AggregateError ? firstRealError(error.errors[0]) : error
+
+const isConnectionRefusedError = (error: Error) =>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (error as any).code === "ECONNREFUSED"
 

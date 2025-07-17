@@ -17,7 +17,7 @@
 
 import { expect } from "chai"
 
-import { delayed } from "../utils/async.js"
+import { delayed } from "../utils/async-tests.js"
 
 
 describe("testing asynchronous stuff with Mocha(+Chai)", function() {
@@ -27,7 +27,7 @@ describe("testing asynchronous stuff with Mocha(+Chai)", function() {
      *
      * (This is really a meta test that documents how we can and should use Mocha(+Chai) for asynchronous stuff.)
      */
-    it("then-chain", async function() {
+    it("awaiting (=effectively a then-chain) waits before running assertions", async function() {
         let flag = false
         flag = await delayed(10, true)
         expect(flag).to.equal(true)

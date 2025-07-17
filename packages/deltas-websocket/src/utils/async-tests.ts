@@ -15,29 +15,13 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-
 /**
- * (self-explanatory)
+ * @return a {@link Promise} that resolves to the given `value` after `ms` milliseconds have elapsed.
+ * *Note*: this function should only be used in test code, not in production code.
  */
-export type Procedure<T> = (t: T) => void
-
-/**
- * @return a {@link Procedure procedure} that executes the procedures in the given order.
- * Any procedure that's {@code undefined} will be skipped.
- */
-export const combine = <T>(...procedures: (Procedure<T> | undefined)[]): Procedure<T> =>
-    (t) => {
-        procedures.forEach((procedure) => {
-            if (procedure !== undefined) {
-                procedure(t)
-            }
-        })
-    }
-
-
-/**
- * Implementation of {@link Procedure} that does nothing.
- */
-export const noOpProcedure: Procedure<void> = (_) =>
-    undefined  // ~void
+export const delayed = <T>(ms: number, value: T): Promise<T> =>
+    new Promise((resolve) => setTimeout(() => {
+            resolve(value)
+        }, ms)
+    )
 

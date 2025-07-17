@@ -32,7 +32,7 @@ import {
     ServerReceivedMessage
 } from "../semantic-logging.js"
 import { withStylesApplied } from "../utils/ansi.js"
-import { delayed } from "../utils/async.js"
+import { delayed } from "../utils/async-tests.js"
 import { nextPort } from "./port.js"
 
 describe(`scenarios (${withStylesApplied("yellow")("yellow=client")}, ${withStylesApplied("blue")("blue=server")})`, async function() {

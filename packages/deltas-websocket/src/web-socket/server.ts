@@ -20,6 +20,7 @@ import { WebSocketServer } from "ws"
 
 import { wrappedAsPromise } from "../utils/async.js"
 import { tryParseJson } from "../utils/json.js"
+import { setMap } from "../utils/set.js"
 import { TextualLogger, textualLoggerFunctionFrom } from "../utils/textual-logging.js"
 
 
@@ -38,16 +39,16 @@ export type LowLevelServer<TBroadcastMessage> = {
  * @param receiveMessage A function that's called with the client's metadata and a received message.
  * @param optionalTextualLogger An optional {@link TextualLogger textual logger}.
  */
-export const createWebSocketServer = async <TClientMetadata, TMessageForServer, TResponse, TBroadcastMessage>(
+export const createWebSocketServer = <TClientMetadata, TMessageForServer, TResponse, TBroadcastMessage>(
     port: number,
     clientMetadataFrom: (request: IncomingMessage) => TClientMetadata,
     receiveMessage: (clientMetadata: TClientMetadata, message: TMessageForServer) => TResponse,
     optionalTextualLogger?: TextualLogger
-): Promise<LowLevelServer<TBroadcastMessage>> => {
-    const server = new WebSocketServer({ port })
+): LowLevelServer<TBroadcastMessage> => {
+    const webSocketServer = new WebSocketServer({ port })
     const log = textualLoggerFunctionFrom(optionalTextualLogger)
-    log("server started")
-    server.on("connection", (webSocket, request) => {
+    log("WebSocketServer started")
+    webSocketServer.on("connection", (webSocket, request) => {
         log(`a client connected`)
         const clientMetadata = clientMetadataFrom(request)
         webSocket.on("message", (messageText: string) => {
@@ -56,7 +57,7 @@ export const createWebSocketServer = async <TClientMetadata, TMessageForServer, 
             if (response !== undefined) {
                 const responseText = JSON.stringify(response)
                 // send back to this client (only):
-                webSocket.send(responseText)    // TODO  handle error?
+                webSocket.send(responseText)    // TODO  handle error
             }
         })
     })
@@ -65,18 +66,16 @@ export const createWebSocketServer = async <TClientMetadata, TMessageForServer, 
         broadcastMessage: async (message: TBroadcastMessage) => {
             const messageText = JSON.stringify(message)
             log(`broadcasting message to all clients: ${messageText}`)
-            const promises: Promise<void>[] = []
-            server.clients.forEach((client) => {
-                promises.push(wrappedAsPromise((callback) => {
+            await Promise.all(setMap(webSocketServer.clients, (client) =>
+                wrappedAsPromise((callback) => {
                     client.send(messageText, callback)
-                }))
-            })
-            await Promise.all(promises)     // (to return void instead of void[])
+                })
+            ))
         },
         shutdown: () => {
             log(`shutting down server`)
             return wrappedAsPromise((callback) => {
-                server.clients.forEach((webSocket) => {
+                webSocketServer.clients.forEach((webSocket) => {
                     webSocket.close()
                     process.nextTick(() => {
                         const state = webSocket.readyState
@@ -85,11 +84,15 @@ export const createWebSocketServer = async <TClientMetadata, TMessageForServer, 
                         }
                     })
                 })
-                server.close(callback)
+                webSocketServer.close(callback)
             })
         }
     }
 }
 
+
+/**
+ * @return the URL for a WebSocket server hosted on `localhost` on the given `port`.
+ */
 export const wsLocalhostUrl = (port: number) => `ws://localhost:${port}`
 

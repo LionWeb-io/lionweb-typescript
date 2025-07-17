@@ -15,29 +15,14 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-
 /**
- * (self-explanatory)
+ * @return an array of the mapped values of the given set.
  */
-export type Procedure<T> = (t: T) => void
-
-/**
- * @return a {@link Procedure procedure} that executes the procedures in the given order.
- * Any procedure that's {@code undefined} will be skipped.
- */
-export const combine = <T>(...procedures: (Procedure<T> | undefined)[]): Procedure<T> =>
-    (t) => {
-        procedures.forEach((procedure) => {
-            if (procedure !== undefined) {
-                procedure(t)
-            }
-        })
-    }
-
-
-/**
- * Implementation of {@link Procedure} that does nothing.
- */
-export const noOpProcedure: Procedure<void> = (_) =>
-    undefined  // ~void
+export const setMap = <T, R>(set: Set<T>, mapFunc: (t: T) => R): R[] => {
+    const rs: R[] = []
+    set.forEach((t) => {
+        rs.push(mapFunc(t))
+    })
+    return rs
+}
 

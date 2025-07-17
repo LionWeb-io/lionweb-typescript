@@ -15,18 +15,28 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-
 import { clearInterval, setInterval } from "timers"
+
 
 /**
  * A type for callback functions of the shape present in the WebSocket API.
  */
-export type ErrorCallback = (err?: Error) => void
+export type Callback = (error?: Error) => void
 
 /**
- * @return the given procedure with (error) callback, but wrapped properly as a {@link Promise}.
+ * A generic implementation of {@link Callback} that just throws a received {@link Error error}.
  */
-export const wrappedAsPromise = (procedure: (callback: ErrorCallback) => void): Promise<void> =>
+export const throwingCallback: Callback = (error) => {
+    if (error !== undefined) {
+        throw error
+    }
+}
+
+
+/**
+ * @return the given procedure with callback, but wrapped properly as a {@link Promise}.
+ */
+export const wrappedAsPromise = (procedure: (callback: Callback) => void): Promise<void> =>
     new Promise<void>((resolve, reject) => {
         procedure(
             (optionalError) => {
@@ -38,16 +48,6 @@ export const wrappedAsPromise = (procedure: (callback: ErrorCallback) => void): 
             }
         )
     })
-
-
-/**
- * @return a {@link Promise} that resolves to the given `value` after `ms` milliseconds have elapsed.
- */
-export const delayed = <T>(ms: number, value: T): Promise<T> =>
-    new Promise((resolve) => setTimeout(() => {
-            resolve(value)
-        }, ms)
-    )
 
 
 /**
