@@ -20,7 +20,8 @@
   "scripts": {
     "clean": "npx rimraf dist node_modules",
     "lint": "eslint src",
-    "build": "tsc && npm run generate",
+    "build": "tsc",
+    "pregenerate": "npm run build",
     "generate": "node dist/generate-artifacts.js"
   }
 }
