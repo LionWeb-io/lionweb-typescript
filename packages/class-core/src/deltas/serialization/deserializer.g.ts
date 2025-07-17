@@ -27,6 +27,8 @@ import { DeltaDeserializer } from "./base.js";
 import {
     AnnotationAddedDelta,
     AnnotationDeletedDelta,
+    AnnotationMovedAndReplacedFromOtherParentDelta,
+    AnnotationMovedAndReplacedInSameParentDelta,
     AnnotationMovedFromOtherParentDelta,
     AnnotationMovedInSameParentDelta,
     AnnotationReplacedDelta,
@@ -35,7 +37,10 @@ import {
     ChildMovedDelta,
     ChildMovedInSameContainmentDelta,
     ChildReplacedDelta,
+    ClassifierChangedDelta,
     NoOpDelta,
+    PartitionAddedDelta,
+    PartitionDeletedDelta,
     PropertyAddedDelta,
     PropertyChangedDelta,
     PropertyDeletedDelta,
@@ -53,6 +58,18 @@ export const deltaDeserializer = (languageBases: ILanguageBase[], idMapping: IdM
         switch (delta.kind) {
             case "NoOp": {
                 return new NoOpDelta();
+            }
+            case "PartitionAdded": {
+                const newPartition = idMapping.fromId(delta.newPartition);
+                return new PartitionAddedDelta(newPartition);
+            }
+            case "PartitionDeleted": {
+                const deletedPartition = idMapping.fromId(delta.deletedPartition);
+                return new PartitionDeletedDelta(deletedPartition);
+            }
+            case "ClassifierChanged": {
+                const node = idMapping.fromId(delta.node);
+                return new ClassifierChangedDelta(node);
             }
             case "PropertyAdded": {
                 const container = idMapping.fromId(delta.container);
@@ -186,6 +203,23 @@ export const deltaDeserializer = (languageBases: ILanguageBase[], idMapping: IdM
                 const newIndex = delta.newIndex;
                 const movedAnnotation = idMapping.fromId(delta.movedAnnotation);
                 return new AnnotationMovedInSameParentDelta(parent, oldIndex, newIndex, movedAnnotation);
+            }
+            case "AnnotationMovedAndReplacedFromOtherParent": {
+                const oldParent = idMapping.fromId(delta.oldParent);
+                const oldIndex = delta.oldIndex;
+                const replacedAnnotation = idMapping.fromId(delta.replacedAnnotation);
+                const newParent = idMapping.fromId(delta.newParent);
+                const newIndex = delta.newIndex;
+                const movedAnnotation = idMapping.fromId(delta.movedAnnotation);
+                return new AnnotationMovedAndReplacedFromOtherParentDelta(oldParent, oldIndex, replacedAnnotation, newParent, newIndex, movedAnnotation);
+            }
+            case "AnnotationMovedAndReplacedInSameParent": {
+                const parent = idMapping.fromId(delta.parent);
+                const oldIndex = delta.oldIndex;
+                const newIndex = delta.newIndex;
+                const replacedAnnotation = idMapping.fromId(delta.replacedAnnotation);
+                const movedAnnotation = idMapping.fromId(delta.movedAnnotation);
+                return new AnnotationMovedAndReplacedInSameParentDelta(parent, oldIndex, newIndex, replacedAnnotation, movedAnnotation);
             }
         }
     }

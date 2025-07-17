@@ -36,6 +36,27 @@ import { IDelta } from "./base.js";
 export class NoOpDelta implements IDelta {
 }
 
+export class PartitionAddedDelta implements IDelta {
+    constructor(
+        public readonly newPartition: INodeBase
+    ) {
+    }
+}
+
+export class PartitionDeletedDelta implements IDelta {
+    constructor(
+        public readonly deletedPartition: INodeBase
+    ) {
+    }
+}
+
+export class ClassifierChangedDelta implements IDelta {
+    constructor(
+        public readonly node: INodeBase
+    ) {
+    }
+}
+
 export class PropertyAddedDelta<T> implements IDelta {
     constructor(
         public readonly container: INodeBase,
@@ -224,6 +245,29 @@ export class AnnotationMovedInSameParentDelta implements IDelta {
         public readonly parent: INodeBase,
         public readonly oldIndex: number,
         public readonly newIndex: number,
+        public readonly movedAnnotation: INodeBase
+    ) {
+    }
+}
+
+export class AnnotationMovedAndReplacedFromOtherParentDelta implements IDelta {
+    constructor(
+        public readonly oldParent: INodeBase,
+        public readonly oldIndex: number,
+        public readonly replacedAnnotation: INodeBase,
+        public readonly newParent: INodeBase,
+        public readonly newIndex: number,
+        public readonly movedAnnotation: INodeBase
+    ) {
+    }
+}
+
+export class AnnotationMovedAndReplacedInSameParentDelta implements IDelta {
+    constructor(
+        public readonly parent: INodeBase,
+        public readonly oldIndex: number,
+        public readonly newIndex: number,
+        public readonly replacedAnnotation: INodeBase,
         public readonly movedAnnotation: INodeBase
     ) {
     }

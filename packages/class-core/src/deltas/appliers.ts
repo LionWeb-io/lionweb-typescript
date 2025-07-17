@@ -18,6 +18,8 @@
 import {
     AnnotationAddedDelta,
     AnnotationDeletedDelta,
+    AnnotationMovedAndReplacedFromOtherParentDelta,
+    AnnotationMovedAndReplacedInSameParentDelta,
     AnnotationMovedFromOtherParentDelta,
     AnnotationMovedInSameParentDelta,
     AnnotationReplacedDelta,
@@ -243,6 +245,15 @@ const deltaApplier = (idMapping?: IdMapping) =>
         if (delta instanceof AnnotationMovedInSameParentDelta) {
             const valueManager = lookupNodeFrom(delta.parent).annotationsValueManager;
             valueManager.moveDirectly(delta.oldIndex, delta.newIndex);
+            return;
+        }
+        if (delta instanceof AnnotationMovedAndReplacedFromOtherParentDelta) {
+            // TODO
+            return;
+        }
+        if (delta instanceof AnnotationMovedAndReplacedInSameParentDelta) {
+            const valueManager = lookupNodeFrom(delta.parent).annotationsValueManager;
+            valueManager.moveAndReplaceAtIndexDirectly(delta.oldIndex, delta.newIndex);
             return;
         }
 

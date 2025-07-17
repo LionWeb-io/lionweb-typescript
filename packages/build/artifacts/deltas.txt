@@ -5,120 +5,120 @@ Deltas (id: Deltas) {
             Warning: should only be used for development purposes!'
             name = 'NoOp'
         }
-        Delta (id: 8) {
-            name = 'PropertyAdded'
+        Delta (id: 5) {
+            name = 'PartitionAdded'
             fields:
-                Field (id: 3) {
-                    name = 'container'
+                Field (id: 4) {
+                    name = 'newPartition'
                     type:
-                        NodeType (id: 2) {
-                        }
-                }
-                Field (id: 5) {
-                    name = 'property'
-                    type:
-                        FeatureType (id: 4) {
-                            kind = property
-                            container -> 3 (container)
-                        }
-                }
-                Field (id: 7) {
-                    name = 'value'
-                    type:
-                        PrimitiveValueType (id: 6) {
-                        }
-                }
-        }
-        Delta (id: 15) {
-            name = 'PropertyDeleted'
-            fields:
-                Field (id: 10) {
-                    name = 'container'
-                    type:
-                        NodeType (id: 9) {
-                        }
-                }
-                Field (id: 12) {
-                    name = 'property'
-                    type:
-                        FeatureType (id: 11) {
-                            kind = property
-                            container -> 10 (container)
-                        }
-                }
-                Field (id: 14) {
-                    name = 'oldValue'
-                    type:
-                        PrimitiveValueType (id: 13) {
-                        }
-                }
-        }
-        Delta (id: 24) {
-            name = 'PropertyChanged'
-            fields:
-                Field (id: 17) {
-                    name = 'container'
-                    type:
-                        NodeType (id: 16) {
-                        }
-                }
-                Field (id: 19) {
-                    name = 'property'
-                    type:
-                        FeatureType (id: 18) {
-                            kind = property
-                            container -> 17 (container)
-                        }
-                }
-                Field (id: 21) {
-                    name = 'oldValue'
-                    type:
-                        PrimitiveValueType (id: 20) {
-                        }
-                }
-                Field (id: 23) {
-                    name = 'newValue'
-                    type:
-                        PrimitiveValueType (id: 22) {
-                        }
-                }
-        }
-        Delta (id: 34) {
-            name = 'ChildAdded'
-            fields:
-                Field (id: 26) {
-                    name = 'parent'
-                    type:
-                        NodeType (id: 25) {
-                        }
-                }
-                Field (id: 28) {
-                    name = 'containment'
-                    type:
-                        FeatureType (id: 27) {
-                            kind = containment
-                            container -> 26 (parent)
-                        }
-                }
-                Field (id: 30) {
-                    name = 'index'
-                    type:
-                        IndexType (id: 29) {
-                        }
-                }
-                Field (id: 33) {
-                    name = 'newChild'
-                    type:
-                        NodeType (id: 32) {
+                        NodeType (id: 3) {
                             serialization:
-                                SerializeSubTree (id: 31) {
+                                SerializeSubTree (id: 2) {
                                     fieldName = 'newNodes'
                                 }
                         }
                 }
         }
+        Delta (id: 8) {
+            name = 'PartitionDeleted'
+            fields:
+                Field (id: 7) {
+                    name = 'deletedPartition'
+                    type:
+                        NodeType (id: 6) {
+                        }
+                }
+        }
+        Delta (id: 11) {
+            name = 'ClassifierChanged'
+            fields:
+                Field (id: 10) {
+                    name = 'node'
+                    type:
+                        NodeType (id: 9) {
+                        }
+                }
+        }
+        Delta (id: 18) {
+            name = 'PropertyAdded'
+            fields:
+                Field (id: 13) {
+                    name = 'container'
+                    type:
+                        NodeType (id: 12) {
+                        }
+                }
+                Field (id: 15) {
+                    name = 'property'
+                    type:
+                        FeatureType (id: 14) {
+                            kind = property
+                            container -> 13 (container)
+                        }
+                }
+                Field (id: 17) {
+                    name = 'value'
+                    type:
+                        PrimitiveValueType (id: 16) {
+                        }
+                }
+        }
+        Delta (id: 25) {
+            name = 'PropertyDeleted'
+            fields:
+                Field (id: 20) {
+                    name = 'container'
+                    type:
+                        NodeType (id: 19) {
+                        }
+                }
+                Field (id: 22) {
+                    name = 'property'
+                    type:
+                        FeatureType (id: 21) {
+                            kind = property
+                            container -> 20 (container)
+                        }
+                }
+                Field (id: 24) {
+                    name = 'oldValue'
+                    type:
+                        PrimitiveValueType (id: 23) {
+                        }
+                }
+        }
+        Delta (id: 34) {
+            name = 'PropertyChanged'
+            fields:
+                Field (id: 27) {
+                    name = 'container'
+                    type:
+                        NodeType (id: 26) {
+                        }
+                }
+                Field (id: 29) {
+                    name = 'property'
+                    type:
+                        FeatureType (id: 28) {
+                            kind = property
+                            container -> 27 (container)
+                        }
+                }
+                Field (id: 31) {
+                    name = 'oldValue'
+                    type:
+                        PrimitiveValueType (id: 30) {
+                        }
+                }
+                Field (id: 33) {
+                    name = 'newValue'
+                    type:
+                        PrimitiveValueType (id: 32) {
+                        }
+                }
+        }
         Delta (id: 44) {
-            name = 'ChildDeleted'
+            name = 'ChildAdded'
             fields:
                 Field (id: 36) {
                     name = 'parent'
@@ -141,18 +141,18 @@ Deltas (id: Deltas) {
                         }
                 }
                 Field (id: 43) {
-                    name = 'deletedChild'
+                    name = 'newChild'
                     type:
                         NodeType (id: 42) {
                             serialization:
                                 SerializeSubTree (id: 41) {
-                                    fieldName = 'deletedNodes'
+                                    fieldName = 'newNodes'
                                 }
                         }
                 }
         }
-        Delta (id: 57) {
-            name = 'ChildReplaced'
+        Delta (id: 54) {
+            name = 'ChildDeleted'
             fields:
                 Field (id: 46) {
                     name = 'parent'
@@ -175,147 +175,148 @@ Deltas (id: Deltas) {
                         }
                 }
                 Field (id: 53) {
-                    name = 'replacedChild'
+                    name = 'deletedChild'
                     type:
                         NodeType (id: 52) {
                             serialization:
                                 SerializeSubTree (id: 51) {
+                                    fieldName = 'deletedNodes'
+                                }
+                        }
+                }
+        }
+        Delta (id: 67) {
+            name = 'ChildReplaced'
+            fields:
+                Field (id: 56) {
+                    name = 'parent'
+                    type:
+                        NodeType (id: 55) {
+                        }
+                }
+                Field (id: 58) {
+                    name = 'containment'
+                    type:
+                        FeatureType (id: 57) {
+                            kind = containment
+                            container -> 56 (parent)
+                        }
+                }
+                Field (id: 60) {
+                    name = 'index'
+                    type:
+                        IndexType (id: 59) {
+                        }
+                }
+                Field (id: 63) {
+                    name = 'replacedChild'
+                    type:
+                        NodeType (id: 62) {
+                            serialization:
+                                SerializeSubTree (id: 61) {
                                     fieldName = 'replacedNodes'
                                 }
                         }
                 }
-                Field (id: 56) {
+                Field (id: 66) {
                     name = 'newChild'
                     type:
-                        NodeType (id: 55) {
+                        NodeType (id: 65) {
                             serialization:
-                                SerializeSubTree (id: 54) {
+                                SerializeSubTree (id: 64) {
                                     fieldName = 'newNodes'
                                 }
                         }
                 }
         }
-        Delta (id: 72) {
+        Delta (id: 82) {
             name = 'ChildMoved'
             fields:
-                Field (id: 59) {
+                Field (id: 69) {
                     name = 'oldParent'
                     type:
-                        NodeType (id: 58) {
-                        }
-                }
-                Field (id: 61) {
-                    name = 'oldContainment'
-                    type:
-                        FeatureType (id: 60) {
-                            kind = containment
-                            container -> 59 (oldParent)
-                        }
-                }
-                Field (id: 63) {
-                    name = 'oldIndex'
-                    type:
-                        IndexType (id: 62) {
-                        }
-                }
-                Field (id: 65) {
-                    name = 'newParent'
-                    type:
-                        NodeType (id: 64) {
-                        }
-                }
-                Field (id: 67) {
-                    name = 'newContainment'
-                    type:
-                        FeatureType (id: 66) {
-                            kind = containment
-                            container -> 65 (newParent)
-                        }
-                }
-                Field (id: 69) {
-                    name = 'newIndex'
-                    type:
-                        IndexType (id: 68) {
+                        NodeType (id: 68) {
                         }
                 }
                 Field (id: 71) {
-                    name = 'child'
+                    name = 'oldContainment'
                     type:
-                        NodeType (id: 70) {
-                        }
-                }
-        }
-        Delta (id: 83) {
-            name = 'ChildMovedInSameContainment'
-            fields:
-                Field (id: 74) {
-                    name = 'parent'
-                    type:
-                        NodeType (id: 73) {
-                        }
-                }
-                Field (id: 76) {
-                    name = 'containment'
-                    type:
-                        FeatureType (id: 75) {
+                        FeatureType (id: 70) {
                             kind = containment
-                            container -> 74 (parent)
+                            container -> 69 (oldParent)
                         }
                 }
-                Field (id: 78) {
+                Field (id: 73) {
                     name = 'oldIndex'
                     type:
-                        IndexType (id: 77) {
+                        IndexType (id: 72) {
                         }
                 }
-                Field (id: 80) {
+                Field (id: 75) {
+                    name = 'newParent'
+                    type:
+                        NodeType (id: 74) {
+                        }
+                }
+                Field (id: 77) {
+                    name = 'newContainment'
+                    type:
+                        FeatureType (id: 76) {
+                            kind = containment
+                            container -> 75 (newParent)
+                        }
+                }
+                Field (id: 79) {
                     name = 'newIndex'
                     type:
-                        IndexType (id: 79) {
+                        IndexType (id: 78) {
                         }
                 }
-                Field (id: 82) {
+                Field (id: 81) {
                     name = 'child'
                     type:
-                        NodeType (id: 81) {
+                        NodeType (id: 80) {
                         }
                 }
         }
         Delta (id: 93) {
-            name = 'ReferenceAdded'
+            name = 'ChildMovedInSameContainment'
             fields:
-                Field (id: 85) {
-                    name = 'container'
+                Field (id: 84) {
+                    name = 'parent'
                     type:
-                        NodeType (id: 84) {
+                        NodeType (id: 83) {
                         }
                 }
-                Field (id: 87) {
-                    name = 'reference'
+                Field (id: 86) {
+                    name = 'containment'
                     type:
-                        FeatureType (id: 86) {
-                            kind = reference
-                            container -> 85 (container)
+                        FeatureType (id: 85) {
+                            kind = containment
+                            container -> 84 (parent)
                         }
                 }
-                Field (id: 89) {
-                    name = 'index'
+                Field (id: 88) {
+                    name = 'oldIndex'
                     type:
-                        IndexType (id: 88) {
+                        IndexType (id: 87) {
+                        }
+                }
+                Field (id: 90) {
+                    name = 'newIndex'
+                    type:
+                        IndexType (id: 89) {
                         }
                 }
                 Field (id: 92) {
-                    name = 'newTarget'
+                    name = 'child'
                     type:
                         NodeType (id: 91) {
-                            serialization:
-                                RefOnly (id: 90) {
-                                }
                         }
                 }
         }
         Delta (id: 103) {
-            name = 'ReferenceDeleted'
+            name = 'ReferenceAdded'
             fields:
                 Field (id: 95) {
                     name = 'container'
@@ -338,7 +339,7 @@ Deltas (id: Deltas) {
                         }
                 }
                 Field (id: 102) {
-                    name = 'deletedTarget'
+                    name = 'newTarget'
                     type:
                         NodeType (id: 101) {
                             serialization:
@@ -347,9 +348,8 @@ Deltas (id: Deltas) {
                         }
                 }
         }
-        Delta (id: 116) {
-            documentation = 'Note: corresponds to "reference changed" in delta proposal!'
-            name = 'ReferenceReplaced'
+        Delta (id: 113) {
+            name = 'ReferenceDeleted'
             fields:
                 Field (id: 105) {
                     name = 'container'
@@ -372,7 +372,7 @@ Deltas (id: Deltas) {
                         }
                 }
                 Field (id: 112) {
-                    name = 'replacedTarget'
+                    name = 'deletedTarget'
                     type:
                         NodeType (id: 111) {
                             serialization:
@@ -380,256 +380,372 @@ Deltas (id: Deltas) {
                                 }
                         }
                 }
+        }
+        Delta (id: 126) {
+            documentation = 'Note: corresponds to "reference changed" in delta proposal!'
+            name = 'ReferenceReplaced'
+            fields:
                 Field (id: 115) {
-                    name = 'newTarget'
+                    name = 'container'
                     type:
                         NodeType (id: 114) {
-                            serialization:
-                                RefOnly (id: 113) {
-                                }
                         }
                 }
-        }
-        Delta (id: 132) {
-            documentation = 'Note: corresponds to "entry moved from other reference" in delta proposal!'
-            name = 'ReferenceMoved'
-            fields:
-                Field (id: 118) {
-                    name = 'oldContainer'
+                Field (id: 117) {
+                    name = 'reference'
                     type:
-                        NodeType (id: 117) {
-                        }
-                }
-                Field (id: 120) {
-                    name = 'oldReference'
-                    type:
-                        FeatureType (id: 119) {
+                        FeatureType (id: 116) {
                             kind = reference
-                            container -> 118 (oldContainer)
+                            container -> 115 (container)
+                        }
+                }
+                Field (id: 119) {
+                    name = 'index'
+                    type:
+                        IndexType (id: 118) {
                         }
                 }
                 Field (id: 122) {
-                    name = 'oldIndex'
+                    name = 'replacedTarget'
                     type:
-                        IndexType (id: 121) {
-                        }
-                }
-                Field (id: 124) {
-                    name = 'newContainer'
-                    type:
-                        NodeType (id: 123) {
-                        }
-                }
-                Field (id: 126) {
-                    name = 'newReference'
-                    type:
-                        FeatureType (id: 125) {
-                            kind = reference
-                            container -> 124 (newContainer)
-                        }
-                }
-                Field (id: 128) {
-                    name = 'newIndex'
-                    type:
-                        IndexType (id: 127) {
-                        }
-                }
-                Field (id: 131) {
-                    name = 'target'
-                    type:
-                        NodeType (id: 130) {
+                        NodeType (id: 121) {
                             serialization:
-                                RefOnly (id: 129) {
+                                RefOnly (id: 120) {
+                                }
+                        }
+                }
+                Field (id: 125) {
+                    name = 'newTarget'
+                    type:
+                        NodeType (id: 124) {
+                            serialization:
+                                RefOnly (id: 123) {
                                 }
                         }
                 }
         }
-        Delta (id: 144) {
-            name = 'ReferenceMovedInSameReference'
+        Delta (id: 142) {
+            documentation = 'Note: corresponds to "entry moved from other reference" in delta proposal!'
+            name = 'ReferenceMoved'
             fields:
+                Field (id: 128) {
+                    name = 'oldContainer'
+                    type:
+                        NodeType (id: 127) {
+                        }
+                }
+                Field (id: 130) {
+                    name = 'oldReference'
+                    type:
+                        FeatureType (id: 129) {
+                            kind = reference
+                            container -> 128 (oldContainer)
+                        }
+                }
+                Field (id: 132) {
+                    name = 'oldIndex'
+                    type:
+                        IndexType (id: 131) {
+                        }
+                }
                 Field (id: 134) {
-                    name = 'container'
+                    name = 'newContainer'
                     type:
                         NodeType (id: 133) {
                         }
                 }
                 Field (id: 136) {
-                    name = 'reference'
+                    name = 'newReference'
                     type:
                         FeatureType (id: 135) {
                             kind = reference
-                            container -> 134 (container)
+                            container -> 134 (newContainer)
                         }
                 }
                 Field (id: 138) {
-                    name = 'oldIndex'
+                    name = 'newIndex'
                     type:
                         IndexType (id: 137) {
                         }
                 }
-                Field (id: 140) {
-                    name = 'newIndex'
-                    type:
-                        IndexType (id: 139) {
-                        }
-                }
-                Field (id: 143) {
+                Field (id: 141) {
                     name = 'target'
                     type:
-                        NodeType (id: 142) {
+                        NodeType (id: 140) {
                             serialization:
-                                RefOnly (id: 141) {
+                                RefOnly (id: 139) {
                                 }
                         }
                 }
         }
-        Delta (id: 152) {
-            name = 'AnnotationAdded'
+        Delta (id: 154) {
+            name = 'ReferenceMovedInSameReference'
             fields:
-                Field (id: 146) {
-                    name = 'parent'
+                Field (id: 144) {
+                    name = 'container'
                     type:
-                        NodeType (id: 145) {
+                        NodeType (id: 143) {
+                        }
+                }
+                Field (id: 146) {
+                    name = 'reference'
+                    type:
+                        FeatureType (id: 145) {
+                            kind = reference
+                            container -> 144 (container)
                         }
                 }
                 Field (id: 148) {
-                    name = 'index'
+                    name = 'oldIndex'
                     type:
                         IndexType (id: 147) {
                         }
                 }
-                Field (id: 151) {
+                Field (id: 150) {
+                    name = 'newIndex'
+                    type:
+                        IndexType (id: 149) {
+                        }
+                }
+                Field (id: 153) {
+                    name = 'target'
+                    type:
+                        NodeType (id: 152) {
+                            serialization:
+                                RefOnly (id: 151) {
+                                }
+                        }
+                }
+        }
+        Delta (id: 162) {
+            name = 'AnnotationAdded'
+            fields:
+                Field (id: 156) {
+                    name = 'parent'
+                    type:
+                        NodeType (id: 155) {
+                        }
+                }
+                Field (id: 158) {
+                    name = 'index'
+                    type:
+                        IndexType (id: 157) {
+                        }
+                }
+                Field (id: 161) {
                     name = 'newAnnotation'
                     type:
-                        NodeType (id: 150) {
+                        NodeType (id: 160) {
                             serialization:
-                                SerializeSubTree (id: 149) {
+                                SerializeSubTree (id: 159) {
                                     fieldName = 'newAnnotationNodes'
                                 }
                         }
                 }
         }
-        Delta (id: 160) {
+        Delta (id: 170) {
             name = 'AnnotationDeleted'
             fields:
-                Field (id: 154) {
+                Field (id: 164) {
                     name = 'parent'
                     type:
-                        NodeType (id: 153) {
+                        NodeType (id: 163) {
                         }
                 }
-                Field (id: 156) {
+                Field (id: 166) {
                     name = 'index'
                     type:
-                        IndexType (id: 155) {
+                        IndexType (id: 165) {
                         }
                 }
-                Field (id: 159) {
+                Field (id: 169) {
                     name = 'deletedAnnotation'
                     type:
-                        NodeType (id: 158) {
+                        NodeType (id: 168) {
                             serialization:
-                                SerializeSubTree (id: 157) {
+                                SerializeSubTree (id: 167) {
                                     fieldName = 'deletedAnnotationNodes'
                                 }
                         }
                 }
         }
-        Delta (id: 171) {
+        Delta (id: 181) {
             name = 'AnnotationReplaced'
             fields:
-                Field (id: 162) {
+                Field (id: 172) {
                     name = 'parent'
                     type:
-                        NodeType (id: 161) {
+                        NodeType (id: 171) {
                         }
                 }
-                Field (id: 164) {
+                Field (id: 174) {
                     name = 'index'
                     type:
-                        IndexType (id: 163) {
+                        IndexType (id: 173) {
                         }
                 }
-                Field (id: 167) {
+                Field (id: 177) {
                     name = 'replacedAnnotation'
                     type:
-                        NodeType (id: 166) {
+                        NodeType (id: 176) {
                             serialization:
-                                SerializeSubTree (id: 165) {
+                                SerializeSubTree (id: 175) {
                                     fieldName = 'replacedAnnotationNodes'
                                 }
                         }
                 }
-                Field (id: 170) {
+                Field (id: 180) {
                     name = 'newAnnotation'
                     type:
-                        NodeType (id: 169) {
+                        NodeType (id: 179) {
                             serialization:
-                                SerializeSubTree (id: 168) {
+                                SerializeSubTree (id: 178) {
                                     fieldName = 'newAnnotationNodes'
                                 }
                         }
                 }
         }
-        Delta (id: 182) {
+        Delta (id: 192) {
             name = 'AnnotationMovedFromOtherParent'
             fields:
-                Field (id: 173) {
+                Field (id: 183) {
                     name = 'oldParent'
                     type:
-                        NodeType (id: 172) {
+                        NodeType (id: 182) {
                         }
                 }
-                Field (id: 175) {
+                Field (id: 185) {
                     name = 'oldIndex'
                     type:
-                        IndexType (id: 174) {
+                        IndexType (id: 184) {
                         }
                 }
-                Field (id: 177) {
+                Field (id: 187) {
                     name = 'newParent'
                     type:
-                        NodeType (id: 176) {
+                        NodeType (id: 186) {
                         }
                 }
-                Field (id: 179) {
+                Field (id: 189) {
                     name = 'newIndex'
                     type:
-                        IndexType (id: 178) {
+                        IndexType (id: 188) {
                         }
                 }
-                Field (id: 181) {
+                Field (id: 191) {
                     name = 'movedAnnotation'
                     type:
-                        NodeType (id: 180) {
+                        NodeType (id: 190) {
                         }
                 }
         }
-        Delta (id: 191) {
+        Delta (id: 201) {
             name = 'AnnotationMovedInSameParent'
             fields:
-                Field (id: 184) {
+                Field (id: 194) {
                     name = 'parent'
                     type:
-                        NodeType (id: 183) {
+                        NodeType (id: 193) {
                         }
                 }
-                Field (id: 186) {
+                Field (id: 196) {
                     name = 'oldIndex'
                     type:
-                        IndexType (id: 185) {
+                        IndexType (id: 195) {
                         }
                 }
-                Field (id: 188) {
+                Field (id: 198) {
                     name = 'newIndex'
                     type:
-                        IndexType (id: 187) {
+                        IndexType (id: 197) {
                         }
                 }
-                Field (id: 190) {
+                Field (id: 200) {
                     name = 'movedAnnotation'
                     type:
-                        NodeType (id: 189) {
+                        NodeType (id: 199) {
+                        }
+                }
+        }
+        Delta (id: 215) {
+            name = 'AnnotationMovedAndReplacedFromOtherParent'
+            fields:
+                Field (id: 203) {
+                    name = 'oldParent'
+                    type:
+                        NodeType (id: 202) {
+                        }
+                }
+                Field (id: 205) {
+                    name = 'oldIndex'
+                    type:
+                        IndexType (id: 204) {
+                        }
+                }
+                Field (id: 208) {
+                    name = 'replacedAnnotation'
+                    type:
+                        NodeType (id: 207) {
+                            serialization:
+                                SerializeSubTree (id: 206) {
+                                    fieldName = 'replacedAnnotationNodes'
+                                }
+                        }
+                }
+                Field (id: 210) {
+                    name = 'newParent'
+                    type:
+                        NodeType (id: 209) {
+                        }
+                }
+                Field (id: 212) {
+                    name = 'newIndex'
+                    type:
+                        IndexType (id: 211) {
+                        }
+                }
+                Field (id: 214) {
+                    name = 'movedAnnotation'
+                    type:
+                        NodeType (id: 213) {
+                        }
+                }
+        }
+        Delta (id: 227) {
+            name = 'AnnotationMovedAndReplacedInSameParent'
+            fields:
+                Field (id: 217) {
+                    name = 'parent'
+                    type:
+                        NodeType (id: 216) {
+                        }
+                }
+                Field (id: 219) {
+                    name = 'oldIndex'
+                    type:
+                        IndexType (id: 218) {
+                        }
+                }
+                Field (id: 221) {
+                    name = 'newIndex'
+                    type:
+                        IndexType (id: 220) {
+                        }
+                }
+                Field (id: 224) {
+                    name = 'replacedAnnotation'
+                    type:
+                        NodeType (id: 223) {
+                            serialization:
+                                SerializeSubTree (id: 222) {
+                                    fieldName = 'replacedAnnotationNodes'
+                                }
+                        }
+                }
+                Field (id: 226) {
+                    name = 'movedAnnotation'
+                    type:
+                        NodeType (id: 225) {
                         }
                 }
         }

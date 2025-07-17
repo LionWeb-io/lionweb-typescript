@@ -23,6 +23,8 @@ import { IDelta } from "../base.js";
 import {
     AnnotationAddedDelta,
     AnnotationDeletedDelta,
+    AnnotationMovedAndReplacedFromOtherParentDelta,
+    AnnotationMovedAndReplacedInSameParentDelta,
     AnnotationMovedFromOtherParentDelta,
     AnnotationMovedInSameParentDelta,
     AnnotationReplacedDelta,
@@ -31,7 +33,10 @@ import {
     ChildMovedDelta,
     ChildMovedInSameContainmentDelta,
     ChildReplacedDelta,
+    ClassifierChangedDelta,
     NoOpDelta,
+    PartitionAddedDelta,
+    PartitionDeletedDelta,
     PropertyAddedDelta,
     PropertyChangedDelta,
     PropertyDeletedDelta,
@@ -44,6 +49,8 @@ import {
 import {
     AnnotationAddedSerializedDelta,
     AnnotationDeletedSerializedDelta,
+    AnnotationMovedAndReplacedFromOtherParentSerializedDelta,
+    AnnotationMovedAndReplacedInSameParentSerializedDelta,
     AnnotationMovedFromOtherParentSerializedDelta,
     AnnotationMovedInSameParentSerializedDelta,
     AnnotationReplacedSerializedDelta,
@@ -52,7 +59,10 @@ import {
     ChildMovedInSameContainmentSerializedDelta,
     ChildMovedSerializedDelta,
     ChildReplacedSerializedDelta,
+    ClassifierChangedSerializedDelta,
     NoOpSerializedDelta,
+    PartitionAddedSerializedDelta,
+    PartitionDeletedSerializedDelta,
     PropertyAddedSerializedDelta,
     PropertyChangedSerializedDelta,
     PropertyDeletedSerializedDelta,
@@ -71,6 +81,28 @@ export const serializeDelta = (delta: IDelta) => {
         return {
             kind: "NoOp"
         } as NoOpSerializedDelta;
+    }
+
+    if (delta instanceof PartitionAddedDelta) {
+        return {
+            kind: "PartitionAdded",
+            newPartition: delta.newPartition.id,
+            newNodes: serializeNodeBases([delta.newPartition])
+        } as PartitionAddedSerializedDelta;
+    }
+
+    if (delta instanceof PartitionDeletedDelta) {
+        return {
+            kind: "PartitionDeleted",
+            deletedPartition: delta.deletedPartition.id
+        } as PartitionDeletedSerializedDelta;
+    }
+
+    if (delta instanceof ClassifierChangedDelta) {
+        return {
+            kind: "ClassifierChanged",
+            node: delta.node.id
+        } as ClassifierChangedSerializedDelta;
     }
 
     if (delta instanceof PropertyAddedDelta) {
@@ -266,6 +298,31 @@ export const serializeDelta = (delta: IDelta) => {
             newIndex: delta.newIndex,
             movedAnnotation: delta.movedAnnotation.id
         } as AnnotationMovedInSameParentSerializedDelta;
+    }
+
+    if (delta instanceof AnnotationMovedAndReplacedFromOtherParentDelta) {
+        return {
+            kind: "AnnotationMovedAndReplacedFromOtherParent",
+            oldParent: delta.oldParent.id,
+            oldIndex: delta.oldIndex,
+            replacedAnnotation: delta.replacedAnnotation.id,
+            replacedAnnotationNodes: serializeNodeBases([delta.replacedAnnotation]),
+            newParent: delta.newParent.id,
+            newIndex: delta.newIndex,
+            movedAnnotation: delta.movedAnnotation.id
+        } as AnnotationMovedAndReplacedFromOtherParentSerializedDelta;
+    }
+
+    if (delta instanceof AnnotationMovedAndReplacedInSameParentDelta) {
+        return {
+            kind: "AnnotationMovedAndReplacedInSameParent",
+            parent: delta.parent.id,
+            oldIndex: delta.oldIndex,
+            newIndex: delta.newIndex,
+            replacedAnnotation: delta.replacedAnnotation.id,
+            replacedAnnotationNodes: serializeNodeBases([delta.replacedAnnotation]),
+            movedAnnotation: delta.movedAnnotation.id
+        } as AnnotationMovedAndReplacedInSameParentSerializedDelta;
     }
 
     throw new Error(`serialization of delta of class ${delta.constructor.name} not implemented`);

@@ -18,6 +18,8 @@
 import {
     AnnotationAddedDelta,
     AnnotationDeletedDelta,
+    AnnotationMovedAndReplacedFromOtherParentDelta,
+    AnnotationMovedAndReplacedInSameParentDelta,
     AnnotationMovedFromOtherParentDelta,
     AnnotationMovedInSameParentDelta,
     AnnotationReplacedDelta,
@@ -104,6 +106,12 @@ export const invertDelta = (delta: IDelta): IDelta => {
     }
     if (delta instanceof AnnotationMovedInSameParentDelta) {
         return new AnnotationMovedInSameParentDelta(delta.parent, delta.newIndex, delta.oldIndex, delta.movedAnnotation);
+    }
+    if (delta instanceof AnnotationMovedAndReplacedFromOtherParentDelta) {
+        // TODO
+    }
+    if (delta instanceof AnnotationMovedAndReplacedInSameParentDelta) {
+        // TODO
     }
 
     throw new Error(`inversion of delta of class ${delta.constructor.name} not implemented`);

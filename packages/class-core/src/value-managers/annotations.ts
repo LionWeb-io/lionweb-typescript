@@ -22,6 +22,7 @@ import { checkIndex, ValueManager } from "./base.js"
 import {
     AnnotationAddedDelta,
     AnnotationDeletedDelta,
+    AnnotationMovedAndReplacedInSameParentDelta,
     AnnotationMovedFromOtherParentDelta,
     AnnotationMovedInSameParentDelta,
     AnnotationReplacedDelta
@@ -117,6 +118,31 @@ export class AnnotationsValueManager extends ValueManager {
     @action replaceAtIndex(newAnnotation: INodeBase, index: number) {
         const replacedAnnotation = this.replaceAtIndexDirectly(newAnnotation, index);
         this.emitDelta(() => new AnnotationReplacedDelta(this.container, index, replacedAnnotation, newAnnotation));
+    }
+
+    /**
+     * @return the moved and replaced annotations, as an array tuple.
+     */
+    @action moveAndReplaceAtIndexDirectly(oldIndex: number, newIndex: number): [INodeBase, INodeBase] | undefined {
+        checkIndex(oldIndex, this.annotations.length, false);
+        checkIndex(newIndex, this.annotations.length, false);
+        if (oldIndex !== newIndex) {
+            const movedAnnotation = this.annotations[oldIndex];
+            const replacedAnnotation = this.annotations[newIndex];
+            this.annotations[newIndex] = movedAnnotation;
+            this.annotations.splice(oldIndex, 1);
+            replacedAnnotation.detach();
+            return [movedAnnotation, replacedAnnotation];
+        }
+        return undefined;
+    }
+
+    @action moveAndReplaceAtIndex(oldIndex: number, newIndex: number) {
+        const participants = this.moveAndReplaceAtIndexDirectly(oldIndex, newIndex);
+        if (participants !== undefined) {
+            const [movedAnnotation, replacedAnnotation] = participants;
+            this.emitDelta(() => new AnnotationMovedAndReplacedInSameParentDelta(this.container, oldIndex, newIndex, replacedAnnotation, movedAnnotation));
+        }
     }
 
     @action removeDirectly(annotationToRemove: INodeBase): number {

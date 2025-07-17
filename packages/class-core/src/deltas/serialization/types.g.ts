@@ -24,6 +24,9 @@ import { LionWebId, LionWebJsonMetaPointer, LionWebJsonChunk } from "@lionweb/js
 
 export type SerializedDelta =
     | NoOpSerializedDelta
+    | PartitionAddedSerializedDelta
+    | PartitionDeletedSerializedDelta
+    | ClassifierChangedSerializedDelta
     | PropertyAddedSerializedDelta
     | PropertyDeletedSerializedDelta
     | PropertyChangedSerializedDelta
@@ -42,11 +45,29 @@ export type SerializedDelta =
     | AnnotationReplacedSerializedDelta
     | AnnotationMovedFromOtherParentSerializedDelta
     | AnnotationMovedInSameParentSerializedDelta
+    | AnnotationMovedAndReplacedFromOtherParentSerializedDelta
+    | AnnotationMovedAndReplacedInSameParentSerializedDelta
     ;
 
 
 export type NoOpSerializedDelta = {
     kind: "NoOp"
+}
+
+export type PartitionAddedSerializedDelta = {
+    kind: "PartitionAdded"
+    newPartition: LionWebId
+    newNodes: LionWebJsonChunk
+}
+
+export type PartitionDeletedSerializedDelta = {
+    kind: "PartitionDeleted"
+    deletedPartition: LionWebId
+}
+
+export type ClassifierChangedSerializedDelta = {
+    kind: "ClassifierChanged"
+    node: LionWebId
 }
 
 export type PropertyAddedSerializedDelta = {
@@ -205,6 +226,27 @@ export type AnnotationMovedInSameParentSerializedDelta = {
     parent: LionWebId
     oldIndex: number
     newIndex: number
+    movedAnnotation: LionWebId
+}
+
+export type AnnotationMovedAndReplacedFromOtherParentSerializedDelta = {
+    kind: "AnnotationMovedAndReplacedFromOtherParent"
+    oldParent: LionWebId
+    oldIndex: number
+    replacedAnnotation: LionWebId
+    replacedAnnotationNodes: LionWebJsonChunk
+    newParent: LionWebId
+    newIndex: number
+    movedAnnotation: LionWebId
+}
+
+export type AnnotationMovedAndReplacedInSameParentSerializedDelta = {
+    kind: "AnnotationMovedAndReplacedInSameParent"
+    parent: LionWebId
+    oldIndex: number
+    newIndex: number
+    replacedAnnotation: LionWebId
+    replacedAnnotationNodes: LionWebJsonChunk
     movedAnnotation: LionWebId
 }
 
