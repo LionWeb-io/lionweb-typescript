@@ -18,23 +18,23 @@
 import { deepDuplicatorFor } from "@lionweb/class-core"
 import { equal, isTrue, notEqual } from "./assertions.js"
 
-import { DataTypeTestConcept, LinkTestConcept, TestLanguageBase } from "./gen/TestLanguage.g.js"
+import { LinkTestConcept, TestLanguageBase } from "./gen/TestLanguage.g.js"
 
 describe("deep-duplication", () => {
     it("works", () => {
-        const ltc = LinkTestConcept.create("ltc")
-        const dtc1 = DataTypeTestConcept.create("dtc1")
-        const dtc2 = DataTypeTestConcept.create("dtc2")
-        ltc.reference_0_1 = dtc1
-        ltc.containment_0_1 = dtc2
+        const parent = LinkTestConcept.create("parent")
+        const child1 = LinkTestConcept.create("child1")
+        const child2 = LinkTestConcept.create("child2")
+        parent.reference_0_1 = child1
+        parent.containment_0_1 = child2
 
-        const ltcDuplicate = deepDuplicatorFor([TestLanguageBase.INSTANCE], originalNode => originalNode.id + "-copied")(ltc)[0]
+        const parentDuplicate = deepDuplicatorFor([TestLanguageBase.INSTANCE], originalNode => originalNode.id + "-copied")(parent)[0]
 
-        equal(ltcDuplicate.id, "ltc-copied")
-        isTrue(ltcDuplicate instanceof LinkTestConcept)
-        equal((ltcDuplicate as LinkTestConcept).reference_0_1, dtc1)
-        notEqual((ltcDuplicate as LinkTestConcept).containment_0_1, dtc2)
-        equal((ltcDuplicate as LinkTestConcept).containment_0_1?.id, "dtc2-copied")
+        equal(parentDuplicate.id, "parent-copied")
+        isTrue(parentDuplicate instanceof LinkTestConcept)
+        equal((parentDuplicate as LinkTestConcept).reference_0_1, child1)
+        notEqual((parentDuplicate as LinkTestConcept).containment_0_1, child2)
+        equal((parentDuplicate as LinkTestConcept).containment_0_1?.id, "child2-copied")
     })
 })
 

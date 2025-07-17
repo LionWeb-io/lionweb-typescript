@@ -15,10 +15,16 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { ChildAddedDelta, ChildDeletedDelta, ChildMovedDelta, ChildReplacedDelta, collectingDeltaHandler } from "@lionweb/class-core"
+import {
+    ChildAddedDelta,
+    ChildDeletedDelta,
+    ChildMovedDelta,
+    ChildReplacedDelta,
+    collectingDeltaHandler
+} from "@lionweb/class-core"
 
 import { deepEqual, equal, throws } from "../assertions.js"
-import { DataTypeTestConcept, LinkTestConcept, TestLanguageBase } from "../gen/TestLanguage.g.js"
+import { LinkTestConcept, TestLanguageBase } from "../gen/TestLanguage.g.js"
 
 const testLanguageBase = TestLanguageBase.INSTANCE
 
@@ -38,119 +44,119 @@ describe("[0..n] containment", () => {
 
     it("adding to a [0..n] containment", () => {
         const [handleDeltas, deltas] = collectingDeltaHandler();
-        const dtc1 = DataTypeTestConcept.create("dtc1", handleDeltas);
-        const ltc = LinkTestConcept.create("ltc", handleDeltas);
+        const child1 = LinkTestConcept.create("child1", handleDeltas);
+        const parent = LinkTestConcept.create("parent", handleDeltas);
 
         // pre-check:
         equal(deltas.length, 0);
 
         // action+check:
-        ltc.addContainment_0_n(dtc1);
-        deepEqual(ltc.containment_0_n, [dtc1]);
-        equal(dtc1.parent, ltc);
-        equal(dtc1.containment, testLanguageBase.LinkTestConcept_containment_0_n);
+        parent.addContainment_0_n(child1);
+        deepEqual(parent.containment_0_n, [child1]);
+        equal(child1.parent, parent);
+        equal(child1.containment, testLanguageBase.LinkTestConcept_containment_0_n);
         equal(deltas.length, 1);
         deepEqual(
             deltas[0],
-            new ChildAddedDelta(ltc, testLanguageBase.LinkTestConcept_containment_0_n, 0, dtc1)
+            new ChildAddedDelta(parent, testLanguageBase.LinkTestConcept_containment_0_n, 0, child1)
         );
 
         // action+check:
-        const dtc2 = DataTypeTestConcept.create("dtc2", handleDeltas);
-        ltc.addContainment_0_n(dtc2);
-        deepEqual(ltc.containment_0_n, [dtc1, dtc2]);
-        equal(dtc2.parent, ltc);
-        equal(dtc2.containment, testLanguageBase.LinkTestConcept_containment_0_n);
+        const child2 = LinkTestConcept.create("child2", handleDeltas);
+        parent.addContainment_0_n(child2);
+        deepEqual(parent.containment_0_n, [child1, child2]);
+        equal(child2.parent, parent);
+        equal(child2.containment, testLanguageBase.LinkTestConcept_containment_0_n);
         equal(deltas.length, 2);
         deepEqual(
             deltas[1],
-            new ChildAddedDelta(ltc, testLanguageBase.LinkTestConcept_containment_0_n, 1, dtc2)
+            new ChildAddedDelta(parent, testLanguageBase.LinkTestConcept_containment_0_n, 1, child2)
         );
     });
 
     it("unsetting a [0..n] containment", () => {
         const [handleDeltas, deltas] = collectingDeltaHandler();
-        const dtc = DataTypeTestConcept.create("dtc", handleDeltas);
-        const ltc = LinkTestConcept.create("ltc", handleDeltas);
+        const child = LinkTestConcept.create("child", handleDeltas);
+        const parent = LinkTestConcept.create("parent", handleDeltas);
 
         // pre-check:
-        ltc.addContainment_0_n(dtc);
-        equal(dtc.parent, ltc);
-        equal(dtc.containment, testLanguageBase.LinkTestConcept_containment_0_n);
+        parent.addContainment_0_n(child);
+        equal(child.parent, parent);
+        equal(child.containment, testLanguageBase.LinkTestConcept_containment_0_n);
         equal(deltas.length, 1);
 
         // action+check:
-        ltc.removeContainment_0_n(dtc);
-        equal(dtc.parent, undefined);
+        parent.removeContainment_0_n(child);
+        equal(child.parent, undefined);
         equal(deltas.length, 2);
         deepEqual(
             deltas[1],
-            new ChildDeletedDelta(ltc, testLanguageBase.LinkTestConcept_containment_0_n, 0, dtc)
+            new ChildDeletedDelta(parent, testLanguageBase.LinkTestConcept_containment_0_n, 0, child)
         );
     });
 
     it("remove a target", () => {
         const [handleDeltas, deltas] = collectingDeltaHandler();
-        const dtc1 = DataTypeTestConcept.create("dtc1", handleDeltas);
-        const dtc2 = DataTypeTestConcept.create("dtc2", handleDeltas);
-        const dtc3 = DataTypeTestConcept.create("dtc3", handleDeltas);
-        const ltc = LinkTestConcept.create("ltc", handleDeltas);
+        const child1 = LinkTestConcept.create("child1", handleDeltas);
+        const child2 = LinkTestConcept.create("child2", handleDeltas);
+        const child3 = LinkTestConcept.create("child3", handleDeltas);
+        const parent = LinkTestConcept.create("parent", handleDeltas);
 
         // pre-check:
-        ltc.addContainment_0_n(dtc1);
-        equal(dtc1.parent, ltc);
-        equal(dtc1.containment, testLanguageBase.LinkTestConcept_containment_0_n);
-        ltc.addContainment_0_n(dtc2);
-        equal(dtc2.parent, ltc);
-        equal(dtc2.containment, testLanguageBase.LinkTestConcept_containment_0_n);
-        ltc.addContainment_0_n(dtc3);
-        equal(dtc3.parent, ltc);
-        equal(dtc3.containment, testLanguageBase.LinkTestConcept_containment_0_n);
+        parent.addContainment_0_n(child1);
+        equal(child1.parent, parent);
+        equal(child1.containment, testLanguageBase.LinkTestConcept_containment_0_n);
+        parent.addContainment_0_n(child2);
+        equal(child2.parent, parent);
+        equal(child2.containment, testLanguageBase.LinkTestConcept_containment_0_n);
+        parent.addContainment_0_n(child3);
+        equal(child3.parent, parent);
+        equal(child3.containment, testLanguageBase.LinkTestConcept_containment_0_n);
         equal(deltas.length, 3);
         deepEqual(
             deltas,
             [
-                new ChildAddedDelta(ltc, testLanguageBase.LinkTestConcept_containment_0_n, 0, dtc1),
-                new ChildAddedDelta(ltc, testLanguageBase.LinkTestConcept_containment_0_n, 1, dtc2),
-                new ChildAddedDelta(ltc, testLanguageBase.LinkTestConcept_containment_0_n, 2, dtc3)
+                new ChildAddedDelta(parent, testLanguageBase.LinkTestConcept_containment_0_n, 0, child1),
+                new ChildAddedDelta(parent, testLanguageBase.LinkTestConcept_containment_0_n, 1, child2),
+                new ChildAddedDelta(parent, testLanguageBase.LinkTestConcept_containment_0_n, 2, child3)
             ]
         );
 
         // action+check:
-        ltc.removeContainment_0_n(dtc2);
-        equal(dtc2.parent, undefined);
-        deepEqual(ltc.containment_0_n, [dtc1, dtc3]);
+        parent.removeContainment_0_n(child2);
+        equal(child2.parent, undefined);
+        deepEqual(parent.containment_0_n, [child1, child3]);
         equal(deltas.length, 4);
         deepEqual(
             deltas[3],
-            new ChildDeletedDelta(ltc, testLanguageBase.LinkTestConcept_containment_0_n, 1, dtc2)
+            new ChildDeletedDelta(parent, testLanguageBase.LinkTestConcept_containment_0_n, 1, child2)
         );
     });
 
 
     it("trying to remove a target that wasn't in there", () => {
         const [handleDeltas, deltas] = collectingDeltaHandler();
-        const dtc1 = DataTypeTestConcept.create("dtc1", handleDeltas);
-        const ltc = LinkTestConcept.create("ltc", handleDeltas);
+        const child1 = LinkTestConcept.create("child1", handleDeltas);
+        const parent = LinkTestConcept.create("parent", handleDeltas);
 
         // pre-check:
-        ltc.addContainment_0_n(dtc1);
-        equal(dtc1.parent, ltc);
-        equal(dtc1.containment, testLanguageBase.LinkTestConcept_containment_0_n);
+        parent.addContainment_0_n(child1);
+        equal(child1.parent, parent);
+        equal(child1.containment, testLanguageBase.LinkTestConcept_containment_0_n);
         equal(deltas.length, 1);
 
-        const dtc2 = DataTypeTestConcept.create("dtc2", handleDeltas);
+        const child2 = LinkTestConcept.create("child2", handleDeltas);
 
         // action+check:
-        ltc.removeContainment_0_n(dtc2);
-        equal(dtc2.parent, undefined);
+        parent.removeContainment_0_n(child2);
+        equal(child2.parent, undefined);
         equal(deltas.length, 1);
-        deepEqual(ltc.containment_0_n, [dtc1]);
+        deepEqual(parent.containment_0_n, [child1]);
     });
 
     it("moving a child between parents ([0..1] -> [0..n])", () => {
         const [handleDelta, deltas] = collectingDeltaHandler();
-        const child = DataTypeTestConcept.create("child", handleDelta);
+        const child = LinkTestConcept.create("child", handleDelta);
         const srcParent = LinkTestConcept.create("srcParent", handleDelta);
         const dstParent = LinkTestConcept.create("dstParent", handleDelta);
 
@@ -175,7 +181,7 @@ describe("[0..n] containment", () => {
 
     it("moving a child between parents ([0..n] -> [0..n])", () => {
         const [handleDelta, deltas] = collectingDeltaHandler();
-        const child = DataTypeTestConcept.create("child", handleDelta);
+        const child = LinkTestConcept.create("child", handleDelta);
         const srcParent = LinkTestConcept.create("srcParent", handleDelta);
         const dstParent = LinkTestConcept.create("dstParent", handleDelta);
 
@@ -200,11 +206,11 @@ describe("[0..n] containment", () => {
 
     it("moving a child between parents, replacing an already-present child", () => {
         const [handleDelta, deltas] = collectingDeltaHandler();
-        const childAlreadyAssigned = DataTypeTestConcept.create("childAlreadyAssigned", handleDelta);
+        const childAlreadyAssigned = LinkTestConcept.create("childAlreadyAssigned", handleDelta);
         const dstParent = LinkTestConcept.create("dstParent", handleDelta);
         dstParent.containment_0_1 = childAlreadyAssigned;
         const srcParent = LinkTestConcept.create("srcParent", handleDelta);
-        const childToMove = DataTypeTestConcept.create("childToMove", handleDelta);
+        const childToMove = LinkTestConcept.create("childToMove", handleDelta);
         srcParent.containment_0_1 = childToMove;
 
         // pre-check:
@@ -224,62 +230,62 @@ describe("[0..n] containment", () => {
 
     it("addAtIndex", () => {
         const [handleDelta, deltas] = collectingDeltaHandler();
-        const ltc1 = LinkTestConcept.create("ltc1", handleDelta);
-        const ltc2 = LinkTestConcept.create("ltc2", handleDelta);
-        const dtc1 = DataTypeTestConcept.create("dtc1", handleDelta);
-        const dtc2 = DataTypeTestConcept.create("dtc2", handleDelta);
+        const parent1 = LinkTestConcept.create("parent1", handleDelta);
+        const parent2 = LinkTestConcept.create("parent2", handleDelta);
+        const child1 = LinkTestConcept.create("child1", handleDelta);
+        const child2 = LinkTestConcept.create("child2", handleDelta);
 
         // pre-check:
         equal(deltas.length, 0);
-        equal(dtc1.parent, undefined);
-        equal(dtc2.parent, undefined);
+        equal(child1.parent, undefined);
+        equal(child2.parent, undefined);
 
         throws(
             () => {
-                ltc1.addContainment_0_nAtIndex(dtc1, Math.PI);
+                parent1.addContainment_0_nAtIndex(child1, Math.PI);
             },
             `an array index must be an integer, but got: 3.141592653589793`
         );
         throws(
             () => {
-                ltc1.addContainment_0_nAtIndex(dtc1, -1);
+                parent1.addContainment_0_nAtIndex(child1, -1);
             },
             `an array index must be a non-negative integer, but got: -1`
         );
         throws(
             () => {
-                ltc1.addContainment_0_nAtIndex(dtc1, 1);
+                parent1.addContainment_0_nAtIndex(child1, 1);
             },
             `the largest valid insert index for an array with 0 elements is 0, but got: 1`
         );
 
         // action+check:
-        ltc1.addContainment_0_n(dtc1);
-        equal(dtc1.parent, ltc1);
+        parent1.addContainment_0_n(child1);
+        equal(child1.parent, parent1);
         equal(deltas.length, 1);
-        deepEqual(deltas[0], new ChildAddedDelta(ltc1, testLanguageBase.LinkTestConcept_containment_0_n, 0, dtc1));
+        deepEqual(deltas[0], new ChildAddedDelta(parent1, testLanguageBase.LinkTestConcept_containment_0_n, 0, child1));
         throws(
             () => {
-                ltc1.addContainment_0_nAtIndex(dtc1, 2);
+                parent1.addContainment_0_nAtIndex(child1, 2);
             },
             `the largest valid insert index for an array with 1 element is 1, but got: 2`
         );
 
         // action+check:
-        ltc1.addContainment_0_nAtIndex(dtc2, 0);
-        deepEqual(ltc1.containment_0_n, [dtc2, dtc1]);
-        equal(dtc2.parent, ltc1);
+        parent1.addContainment_0_nAtIndex(child2, 0);
+        deepEqual(parent1.containment_0_n, [child2, child1]);
+        equal(child2.parent, parent1);
         equal(deltas.length, 2);
-        deepEqual(deltas[1], new ChildAddedDelta(ltc1, testLanguageBase.LinkTestConcept_containment_0_n, 0, dtc2));
+        deepEqual(deltas[1], new ChildAddedDelta(parent1, testLanguageBase.LinkTestConcept_containment_0_n, 0, child2));
 
         // action+check:
-        ltc2.addContainment_1_nAtIndex(dtc1, 0);
-        deepEqual(ltc1.containment_0_n, [dtc2]);
-        deepEqual(ltc2.containment_1_n, [dtc1]);
-        equal(dtc1.parent, ltc2);
-        equal(dtc1.containment, testLanguageBase.LinkTestConcept_containment_1_n);
+        parent2.addContainment_1_nAtIndex(child1, 0);
+        deepEqual(parent1.containment_0_n, [child2]);
+        deepEqual(parent2.containment_1_n, [child1]);
+        equal(child1.parent, parent2);
+        equal(child1.containment, testLanguageBase.LinkTestConcept_containment_1_n);
         equal(deltas.length, 3);
-        deepEqual(deltas[2], new ChildMovedDelta(ltc1, testLanguageBase.LinkTestConcept_containment_0_n, 1, ltc2, testLanguageBase.LinkTestConcept_containment_1_n, 0, dtc1));
+        deepEqual(deltas[2], new ChildMovedDelta(parent1, testLanguageBase.LinkTestConcept_containment_0_n, 1, parent2, testLanguageBase.LinkTestConcept_containment_1_n, 0, child1));
     });
 
 });

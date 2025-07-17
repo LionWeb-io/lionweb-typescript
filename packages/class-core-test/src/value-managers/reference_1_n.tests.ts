@@ -18,7 +18,7 @@
 import { collectingDeltaHandler, ReferenceAddedDelta, ReferenceDeletedDelta } from "@lionweb/class-core"
 
 import { deepEqual, equal, throws } from "../assertions.js"
-import { DataTypeTestConcept, LinkTestConcept, TestLanguageBase } from "../gen/TestLanguage.g.js"
+import { LinkTestConcept, TestLanguageBase } from "../gen/TestLanguage.g.js"
 
 const testLanguageBase = TestLanguageBase.INSTANCE
 
@@ -27,7 +27,7 @@ describe("[1..n] reference", () => {
 
     it("getting an unset [1..n] reference", () => {
         const [handleDeltas, deltas] = collectingDeltaHandler();
-        const ltc = LinkTestConcept.create("ltc", handleDeltas);
+        const node = LinkTestConcept.create("node", handleDeltas);
 
         // pre-check:
         equal(deltas.length, 0);
@@ -35,105 +35,105 @@ describe("[1..n] reference", () => {
         // action+check:
         throws(
             () => {
-                deepEqual(ltc.reference_1_n, []);
+                deepEqual(node.reference_1_n, []);
             },
-            `can't read required reference "reference_1_n" that's unset on instance of TestLanguage.LinkTestConcept with id=ltc`
+            `can't read required reference "reference_1_n" that's unset on instance of TestLanguage.LinkTestConcept with id=node`
         );
         equal(deltas.length, 0);
     });
 
     it("adding to a [1..n] reference", () => {
         const [handleDeltas, deltas] = collectingDeltaHandler();
-        const dtc1 = DataTypeTestConcept.create("dtc1", handleDeltas);
-        const ltc = LinkTestConcept.create("ltc", handleDeltas);
+        const dst1 = LinkTestConcept.create("dst1", handleDeltas);
+        const src = LinkTestConcept.create("src", handleDeltas);
 
         // pre-check:
         equal(deltas.length, 0);
 
         // action+check:
-        ltc.addReference_1_n(dtc1);
-        deepEqual(ltc.reference_1_n, [dtc1]);
-        equal(dtc1.parent, undefined);
+        src.addReference_1_n(dst1);
+        deepEqual(src.reference_1_n, [dst1]);
+        equal(dst1.parent, undefined);
         equal(deltas.length, 1);
         deepEqual(
             deltas[0],
-            new ReferenceAddedDelta(ltc, testLanguageBase.LinkTestConcept_reference_1_n, 0, dtc1)
+            new ReferenceAddedDelta(src, testLanguageBase.LinkTestConcept_reference_1_n, 0, dst1)
         );
 
         // action+check:
-        const dtc2 = DataTypeTestConcept.create("dtc2", handleDeltas);
-        ltc.addReference_1_n(dtc2);
-        deepEqual(ltc.reference_1_n, [dtc1, dtc2]);
-        equal(dtc2.parent, undefined);
+        const dst2 = LinkTestConcept.create("dst2", handleDeltas);
+        src.addReference_1_n(dst2);
+        deepEqual(src.reference_1_n, [dst1, dst2]);
+        equal(dst2.parent, undefined);
         equal(deltas.length, 2);
         deepEqual(
             deltas[1],
-            new ReferenceAddedDelta(ltc, testLanguageBase.LinkTestConcept_reference_1_n, 1, dtc2)
+            new ReferenceAddedDelta(src, testLanguageBase.LinkTestConcept_reference_1_n, 1, dst2)
         );
     });
 
     it("unsetting a [1..n] reference", () => {
         const [handleDeltas, deltas] = collectingDeltaHandler();
-        const dtc = DataTypeTestConcept.create("dtc", handleDeltas);
-        const ltc = LinkTestConcept.create("ltc", handleDeltas);
+        const dst = LinkTestConcept.create("dst", handleDeltas);
+        const src = LinkTestConcept.create("src", handleDeltas);
 
         // pre-check:
-        ltc.addReference_1_n(dtc);
-        equal(dtc.parent, undefined);
+        src.addReference_1_n(dst);
+        equal(dst.parent, undefined);
         equal(deltas.length, 1);
 
         // action+check:
         throws(
             () => {
-                ltc.removeReference_1_n(dtc);
+                src.removeReference_1_n(dst);
             },
-            `can't unset required reference "reference_1_n" on instance of TestLanguage.LinkTestConcept with id=ltc`
+            `can't unset required reference "reference_1_n" on instance of TestLanguage.LinkTestConcept with id=src`
         )
         equal(deltas.length, 1);
     });
 
     it("remove a target", () => {
         const [handleDeltas, deltas] = collectingDeltaHandler();
-        const dtc1 = DataTypeTestConcept.create("dtc1", handleDeltas);
-        const dtc2 = DataTypeTestConcept.create("dtc2", handleDeltas);
-        const dtc3 = DataTypeTestConcept.create("dtc3", handleDeltas);
-        const ltc = LinkTestConcept.create("ltc", handleDeltas);
+        const dst1 = LinkTestConcept.create("dst1", handleDeltas);
+        const dst2 = LinkTestConcept.create("dst2", handleDeltas);
+        const dst3 = LinkTestConcept.create("dst3", handleDeltas);
+        const src = LinkTestConcept.create("src", handleDeltas);
 
         // pre-check:
-        ltc.addReference_1_n(dtc1);
-        equal(dtc1.parent, undefined);
-        ltc.addReference_1_n(dtc2);
-        equal(dtc2.parent, undefined);
-        ltc.addReference_1_n(dtc3);
-        equal(dtc3.parent, undefined);
+        src.addReference_1_n(dst1);
+        equal(dst1.parent, undefined);
+        src.addReference_1_n(dst2);
+        equal(dst2.parent, undefined);
+        src.addReference_1_n(dst3);
+        equal(dst3.parent, undefined);
         equal(deltas.length, 3);
 
         // action+check:
-        ltc.removeReference_1_n(dtc2);
-        deepEqual(ltc.reference_1_n, [dtc1, dtc3]);
+        src.removeReference_1_n(dst2);
+        deepEqual(src.reference_1_n, [dst1, dst3]);
         equal(deltas.length, 4);
         deepEqual(
             deltas[3],
-            new ReferenceDeletedDelta(ltc, testLanguageBase.LinkTestConcept_reference_1_n, 1, dtc2)
+            new ReferenceDeletedDelta(src, testLanguageBase.LinkTestConcept_reference_1_n, 1, dst2)
         );
     });
 
     it("trying to remove a target that wasn't in there", () => {
         const [handleDeltas, deltas] = collectingDeltaHandler();
-        const dtc1 = DataTypeTestConcept.create("dtc1", handleDeltas);
-        const ltc = LinkTestConcept.create("ltc", handleDeltas);
+        const dst1 = LinkTestConcept.create("dst1", handleDeltas);
+        const src = LinkTestConcept.create("src", handleDeltas);
 
         // pre-check:
-        ltc.addReference_1_n(dtc1);
-        equal(dtc1.parent, undefined);
+        src.addReference_1_n(dst1);
+        equal(dst1.parent, undefined);
         equal(deltas.length, 1);
 
-        const dtc2 = DataTypeTestConcept.create("dtc2", handleDeltas);
+        const dst2 = LinkTestConcept.create("dst2", handleDeltas);
 
         // action+check:
-        ltc.removeReference_1_n(dtc2);
+        src.removeReference_1_n(dst2);
         equal(deltas.length, 1);
-        deepEqual(ltc.reference_1_n, [dtc1]);
+        deepEqual(src.reference_1_n, [dst1]);
     });
 
 });
