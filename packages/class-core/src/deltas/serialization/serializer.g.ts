@@ -18,8 +18,8 @@
 // Warning: this file is generated!
 // Modifying it by hand is useless at best, and sabotage at worst.
 
-import {metaPointerFor} from "@lionweb/core";
-import {IDelta} from "../base.js";
+import { metaPointerFor } from "@lionweb/core";
+import { IDelta } from "../base.js";
 import {
     AnnotationAddedDelta,
     AnnotationDeletedDelta,
@@ -62,8 +62,8 @@ import {
     ReferenceMovedSerializedDelta,
     ReferenceReplacedSerializedDelta
 } from "./types.g.js";
-import {idFrom, serializePropertyValue} from "./serializer-helpers.js";
-import {serializeNodeBases} from "../../serializer.js";
+import { idFrom, serializePropertyValue } from "./serializer-helpers.js";
+import { serializeNodeBases } from "../../serializer.js";
 
 
 export const serializeDelta = (delta: IDelta) => {

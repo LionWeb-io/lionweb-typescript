@@ -18,12 +18,12 @@
 // Warning: this file is generated!
 // Modifying it by hand is useless at best, and sabotage at worst.
 
-import {Containment, MemoisingSymbolTable, Property, Reference} from "@lionweb/core";
+import { Containment, MemoisingSymbolTable, Property, Reference } from "@lionweb/core";
 
-import {ILanguageBase} from "../../base-types.js";
-import {IdMapping} from "../../id-mapping.js";
-import {SerializedDelta} from "./types.g.js";
-import {DeltaDeserializer} from "./base.js";
+import { ILanguageBase } from "../../base-types.js";
+import { IdMapping } from "../../id-mapping.js";
+import { SerializedDelta } from "./types.g.js";
+import { DeltaDeserializer } from "./base.js";
 import {
     AnnotationAddedDelta,
     AnnotationDeletedDelta,

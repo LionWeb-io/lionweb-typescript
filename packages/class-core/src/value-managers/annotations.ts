@@ -18,6 +18,7 @@
 import { action, observable } from "mobx"
 
 import { INodeBase, removeFromParent } from "../base-types.js"
+import { checkIndex, ValueManager } from "./base.js"
 import {
     AnnotationAddedDelta,
     AnnotationDeletedDelta,
@@ -25,7 +26,6 @@ import {
     AnnotationMovedInSameParentDelta,
     AnnotationReplacedDelta
 } from "../deltas/index.js"
-import { checkIndex, ValueManager } from "./base.js"
 
 
 /**

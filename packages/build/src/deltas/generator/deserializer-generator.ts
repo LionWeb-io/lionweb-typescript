@@ -45,12 +45,12 @@ const deserializationBlockForDelta = ({name, fields}: Delta) =>
 export const deserializerForDeltas = (deltas: Delta[], header?: string) =>
     asString([
         header ?? [],
-        `import {Containment, MemoisingSymbolTable, Property, Reference} from "@lionweb/core";`,
+        `import { Containment, MemoisingSymbolTable, Property, Reference } from "@lionweb/core";`,
         ``,
-        `import {ILanguageBase} from "../../base-types.js";`,
-        `import {IdMapping} from "../../id-mapping.js";`,
-        `import {SerializedDelta} from "./types.g.js";`,
-        `import {DeltaDeserializer} from "./base.js";`,
+        `import { ILanguageBase } from "../../base-types.js";`,
+        `import { IdMapping } from "../../id-mapping.js";`,
+        `import { SerializedDelta } from "./types.g.js";`,
+        `import { DeltaDeserializer } from "./base.js";`,
         `import {`,
         indent(commaSeparated(sortedStrings(deltas.map(({name}) => `${name}Delta`)))),
         `} from "../types.g.js";`,

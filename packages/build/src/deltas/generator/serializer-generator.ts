@@ -77,8 +77,8 @@ const serializationOf = ({name, fields}: Delta) =>
 export const serializerForDeltas = (deltas: Delta[], header?: string) =>
     asString([
         header ?? [],
-        `import {metaPointerFor} from "@lionweb/core";`,
-        `import {IDelta} from "../base.js";`,
+        `import { metaPointerFor } from "@lionweb/core";`,
+        `import { IDelta } from "../base.js";`,
         `import {`,
         indent(
             commaSeparated(sortedStrings(deltas.map(({name}) => `${name}Delta`)))
@@ -89,8 +89,8 @@ export const serializerForDeltas = (deltas: Delta[], header?: string) =>
             commaSeparated(sortedStrings(deltas.map(({name}) => `${name}SerializedDelta`)))
         ),
         `} from "./types.g.js";`,
-        `import {idFrom, serializePropertyValue} from "./serializer-helpers.js";`,
-        `import {serializeNodeBases} from "../../serializer.js";`,
+        `import { idFrom, serializePropertyValue } from "./serializer-helpers.js";`,
+        `import { serializeNodeBases } from "../../serializer.js";`,
         ``,
         ``,
         `export const serializeDelta = (delta: IDelta) => {`,
