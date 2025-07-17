@@ -15,7 +15,7 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { Classifier, inheritsFrom, Language, nameOf, nameSorted } from "@lionweb/core"
+import { Classifier, inheritsDirectlyFrom, Language, nameOf, nameSorted } from "@lionweb/core"
 import { indent } from "@lionweb/textgen-utils"
 import { cycleWith, uniquesAmong } from "@lionweb/ts-utils"
 import { asString, when } from "littoral-templates"
@@ -28,7 +28,7 @@ export const dependenciesThroughDirectInheritanceOf = (language: Language) =>
     uniquesAmong(
         language.entities
             .filter((entity) => entity instanceof Classifier)
-            .flatMap((entity) => inheritsFrom(entity as Classifier))
+            .flatMap((entity) => inheritsDirectlyFrom(entity as Classifier))
             .map((classifier) => classifier.language)
             .filter((depLanguage) => depLanguage !== language)
     )

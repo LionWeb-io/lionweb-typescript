@@ -201,7 +201,17 @@ type ConcreteClassifier = Concept | Annotation
 const isConcrete = (thing: LanguageEntity): thing is ConcreteClassifier =>
     (thing instanceof Concept && !thing.abstract) || (thing instanceof Annotation)
 
-const inheritsFrom = (classifier: Classifier): Classifier[] => {
+/**
+ * Determines whether the given {@link LanguageEntity metamodel element} is a {@link Concept concept}
+ * which is a partition.
+ */
+const isPartition = (thing: LanguageEntity): thing is Concept =>
+    thing instanceof Concept && thing.partition
+
+/**
+ * @return an array of {@link Classifier classifiers} that it **directly** inherits from.
+ */
+const inheritsDirectlyFrom = (classifier: Classifier): Classifier[] => {
     if (classifier instanceof Concept || classifier instanceof Annotation) {
         return [
             ...(
@@ -219,17 +229,26 @@ const inheritsFrom = (classifier: Classifier): Classifier[] => {
 }
 
 /**
+ * Alias for {@link inheritsDirectlyFrom}, kept for backward compatibility, and to be deprecated and removed later.
+ */
+const inheritsFrom = inheritsDirectlyFrom;
+
+/**
  * @return an array that's either an inheritance cycle, or empty (meaning: no inheritance cycle).
  */
-const inheritedCycleWith = (classifier: Classifier) =>
-    cycleWith(classifier, inheritsFrom)
+const inheritanceCycleWith = (classifier: Classifier) =>
+    cycleWith(classifier, inheritsDirectlyFrom)
 
+/**
+ * Alias for {@link inheritanceCycleWith}, kept for backward compatibility, and to be deprecated and removed later.
+ */
+const inheritedCycleWith = inheritanceCycleWith;
 
 /**
  * @return *all* super types (through `extends` or `implements`) of the given {@link Classifier classifier}.
  */
 const allSuperTypesOf = (classifier: Classifier): Classifier[] =>
-    flatMapNonCyclingFollowing(inheritsFrom, inheritsFrom)(classifier)
+    flatMapNonCyclingFollowing(inheritsDirectlyFrom, inheritsDirectlyFrom)(classifier)
 
 
 /**
@@ -237,7 +256,7 @@ const allSuperTypesOf = (classifier: Classifier): Classifier[] =>
  * including the inherited ones.
  */
 const allFeaturesOf = (classifier: Classifier): Feature[] =>
-    flatMapNonCyclingFollowing((ci) => ci.features, inheritsFrom)(classifier)
+    flatMapNonCyclingFollowing((ci) => ci.features, inheritsDirectlyFrom)(classifier)
 
 
 /**
@@ -330,13 +349,16 @@ export {
     featureMetaType,
     flatMap,
     idBasedClassifierDeducerFor,
+    inheritanceCycleWith,
     inheritedCycleWith,
     inheritsFrom,
+    inheritsDirectlyFrom,
     instantiableClassifiersOf,
     isConcrete,
     isContainment,
     isEnumeration,
     isMultiple,
+    isPartition,
     isProperty,
     isReference,
     keyOf,

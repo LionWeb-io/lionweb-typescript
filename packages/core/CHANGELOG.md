@@ -25,7 +25,8 @@
 * Expose `classifier` and `ikeyed` through `metaConcepts`, and expose `lioncoreReader` and `lioncoreWriter` as well.
 * Added a type parameter `PNT` to the `Writer` interface, which is the type for the parent node passed to the `.nodeFor(...)` method (as its first argument), and which equals the `NT` type parameter by default.
 * Expose functions `areSameClassifiers` and `areSameLanguages` that compare two given classifiers, resp., languages by their meta-pointers.
-
+* Rename `inheritsFrom` &rarr; `inheritsDirectlyFrom`, and `inheritedCycleWith` &rarr; `inheritanceCycleWith` for more naming clarity, keeping aliases for backward compatibility, to be deprecated and removed later.
+* Add function `isPartition`.
 
 ## 0.6.12
 

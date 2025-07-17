@@ -55,3 +55,19 @@ export const mapValues = <V, W>(map: Record<string, V>, valFunc: (v: V) => W): R
             .map(([key, value]) => [key, valFunc(value)])
     )
 
+
+/**
+ * Gets the value under the given key from the given map,
+ * creating that value when that key wasn't present yet.
+ * This allows for convenient “chaining” of map-lookups,
+ * e.g. to build up nested maps.
+ */
+export const lazyMapGet = <T>(map: { [key: string]: T }, key: string, createThunk: () => T): T => {
+    if (key in map) {
+        return map[key]
+    }
+    const value = createThunk()
+    map[key] = value
+    return value
+}
+

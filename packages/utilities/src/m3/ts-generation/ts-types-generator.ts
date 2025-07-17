@@ -11,7 +11,7 @@ import {
     DynamicNode,
     Enumeration,
     Feature,
-    inheritsFrom,
+    inheritsDirectlyFrom,
     Interface,
     isConcrete,
     Language,
@@ -125,7 +125,7 @@ export const tsTypesForLanguage = (language: Language, ...generationOptions: Gen
     }
 
     const typeForAnnotation = (annotation: Annotation) => {
-        const superTypes = inheritsFrom(annotation)
+        const superTypes = inheritsDirectlyFrom(annotation)
 
         return tsFromTypeDef({
             modifier: TypeDefModifier.none,
@@ -136,7 +136,7 @@ export const tsTypesForLanguage = (language: Language, ...generationOptions: Gen
     }
 
     const typeForConcept = (concept: Concept) => {
-        const superTypes = inheritsFrom(concept)
+        const superTypes = inheritsDirectlyFrom(concept)
         const subClassifiers = concept.abstract
             ? generationOptions.indexOf(GenerationOptions.assumeSealed) > -1
                 ? conceptsOf(language).filter(entity => entity.extends === concept)
@@ -180,7 +180,7 @@ export const tsTypesForLanguage = (language: Language, ...generationOptions: Gen
     }
 
     const dependenciesOfClassifier = (classifier: Classifier): Classifier[] => [
-        ...inheritsFrom(classifier),
+        ...inheritsDirectlyFrom(classifier),
         ...allFeaturesOf(classifier)
             .filter(feature => feature instanceof Link)
             .map(feature => feature as Link)

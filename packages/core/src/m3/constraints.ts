@@ -1,6 +1,6 @@
 import { duplicatesAmong } from "@lionweb/ts-utils"
 import { idOf } from "../functions.js"
-import { allContaineds, flatMap, inheritedCycleWith, keyOf, namedsOf, qualifiedNameOf } from "./functions.js"
+import { allContaineds, flatMap, inheritanceCycleWith, keyOf, namedsOf, qualifiedNameOf } from "./functions.js"
 import { Classifier, isINamed, Language, M3Concept } from "./types.js"
 
 
@@ -74,7 +74,7 @@ export const issuesLanguage = (language: Language): Issue[] =>
 
                 // The classifier should not inherit from itself (directly or indirectly)
                 if (t instanceof Classifier) {
-                    const cycle = inheritedCycleWith(t);
+                    const cycle = inheritanceCycleWith(t);
                     (cycle.length > 0) && issue(`A ${t.constructor.name} can't inherit (directly or indirectly) from itself, but ${qualifiedNameOf(t)} does so through the following cycle: ${cycle.map((t) => qualifiedNameOf(t)).join(" -> ")}`)
                             // TODO  check whether it needs to be "a" or "an", or just say "An instance of ..."
                 }
