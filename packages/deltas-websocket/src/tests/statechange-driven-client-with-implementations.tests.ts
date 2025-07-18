@@ -18,8 +18,8 @@
 import { expect } from "chai"
 
 import { LionWebId } from "@lionweb/json"
-import { LionWebClient } from "../client/implementation.js"
-import { LionWebServer } from "../server/implementation.js"
+import { LionWebClient } from "../client/client-impl.js"
+import { LionWebServer } from "../server/server-impl.js"
 import { wsLocalhostUrl } from "../web-socket/server.js"
 import { delayed } from "../utils/async-tests.js"
 import { Geometry, ShapesBase } from "../gen/Shapes.g.js"
