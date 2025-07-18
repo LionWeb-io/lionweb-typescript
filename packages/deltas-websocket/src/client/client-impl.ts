@@ -54,6 +54,7 @@ import {
     SemanticLogger,
     semanticLoggerFunctionFrom
 } from "../semantic-logging.js"
+import { priorityQueueAcceptor } from "../utils/priority-queue.js"
 
 
 export type LionWebClientParameters = {
@@ -137,6 +138,8 @@ export class LionWebClient {
             }
         }
 
+        const acceptEvent = priorityQueueAcceptor<Event>(({sequenceNumber}) => sequenceNumber, 0, processEvent)
+
         const receiveMessageOnClient = (message: Event | QueryResponse) => {
             log(new ClientReceivedMessage(clientId, message))
             if (isQueryResponse(message)) {
@@ -148,7 +151,7 @@ export class LionWebClient {
                 }
             }
             if (isEvent(message)) {
-                return processEvent(message)   // ~void
+                acceptEvent(message)
             }
         }
 

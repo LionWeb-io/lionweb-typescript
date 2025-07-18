@@ -15,10 +15,19 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-let nextPortNumber = 40000
-
 /**
- * @return a unique port number.
+ * Prints the key-value pairs in the given record to the console in a readable way.
+ * You can use it as follows to conveniently print debug info:
+ *
+ * `println({ localVar1, localVar2, ... })`
+ *
+ * (This is meant for debugging convenience only!)
  */
-export const nextPort = () => ++nextPortNumber
+export const println = (values: { [key: string]: unknown }) => {
+    console.log(
+        Object.entries(values)
+            .map(([key, value]) => `${key}=${value}`)
+            .join("  ")
+    )
+}
 
