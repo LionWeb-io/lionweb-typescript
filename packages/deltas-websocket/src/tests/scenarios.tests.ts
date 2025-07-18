@@ -17,8 +17,8 @@
 
 import { expect } from "chai"
 
-import { LionWebClient } from "../client/implementation.js"
-import { LionWebServer } from "../server/implementation.js"
+import { LionWebClient } from "../client/client-impl.js"
+import { LionWebServer } from "../server/server-impl.js"
 import { wsLocalhostUrl } from "../web-socket/server.js"
 import { SignOnQueryRequest, SignOnQueryResponse } from "../payload/query-types.js"
 import { TestLanguageBase } from "@lionweb/class-core-test/dist/gen/TestLanguage.g.js"

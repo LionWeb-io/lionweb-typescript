@@ -17,7 +17,7 @@
 
 import { argv, exit } from "process"
 import { runAsApp, semanticConsoleLogger, tryParseInteger } from "./common.js"
-import { LionWebServer } from "../server/implementation.js"
+import { LionWebServer } from "../server/server-impl.js"
 
 if (argv.length < 3) {  // $ node dist/cli/server.js <port>
     console.log(
