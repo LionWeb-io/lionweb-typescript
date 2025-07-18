@@ -16,7 +16,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { LionWebId } from "@lionweb/json"
-import { DeltaProtocolMessage } from "./common.js"
+import { mapFrom } from "@lionweb/ts-utils"
+import { DeltaProtocolMessage, Message } from "./common.js"
 
 export interface QueryRequest extends DeltaProtocolMessage {
     queryId: LionWebId
@@ -44,4 +45,17 @@ export interface SignOffQueryRequest extends QueryRequest {
 export interface SignOffQueryResponse extends QueryRequest {
     messageKind: "SignOffResponse"
 }
+
+
+const queryResponseMessageKinds = mapFrom(
+    [
+        "SignOn",
+        "SignOff"
+    ],
+    (str) => `${str}Response`,
+    (_) => true
+)
+
+export const isQueryResponse = (message: Message): message is QueryResponse =>
+    message.messageKind in queryResponseMessageKinds
 

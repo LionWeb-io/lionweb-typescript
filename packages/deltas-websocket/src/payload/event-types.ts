@@ -16,7 +16,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { LionWebId, LionWebJsonChunk, LionWebJsonMetaPointer } from "@lionweb/json"
-import { DeltaProtocolMessage } from "./common.js"
+import { mapFrom } from "@lionweb/ts-utils"
+import { DeltaProtocolMessage, Message } from "./common.js"
 
 export type CommandOrigin = {
     participationId: LionWebId
@@ -58,4 +59,18 @@ export interface ChildAddedEvent extends Event {
     containment: LionWebJsonMetaPointer
     index: number
 }
+
+const eventMessageKinds = mapFrom(
+    [
+        "PartitionAdded",
+        "PropertyAdded",
+        "PropertyChanged",
+        "ChildAdded"
+    ],
+    (_) => _,
+    (_) => true
+)
+
+export const isEvent = (message: Message): message is Event =>
+    message.messageKind in eventMessageKinds
 

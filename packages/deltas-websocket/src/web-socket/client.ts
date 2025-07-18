@@ -16,6 +16,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { WebSocket } from "ws"
+import { LionWebId } from "@lionweb/json"
 
 import { wrappedAsPromise } from "../utils/async.js"
 import { tryParseJson } from "../utils/json.js"
@@ -30,6 +31,12 @@ export type LowLevelClient<TMessageToServer> = {
     sendMessage: (message: TMessageToServer) => Promise<void>
     disconnect: () => Promise<void>
 }
+
+export type LowLevelClientInstantiator<TMessageForClient, TMessageToServer> = (
+    url: string,
+    clientId: LionWebId,
+    receiveMessageOnClient: (message: TMessageForClient) => void
+) => Promise<LowLevelClient<TMessageToServer>>
 
 type ClientState = "connecting" | "connected" | "disconnected"
 
