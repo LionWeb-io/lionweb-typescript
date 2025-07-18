@@ -78,16 +78,12 @@ describe(`scenarios (${withStylesApplied("yellow")("yellow=client")}, ${withStyl
         const queryId = "query-1"
         await lionWebClient.signOn(queryId)
 
-        const waitTime = 20 // (ms)
-        await delayed(waitTime, null)
-            .then(() => {
-                expect(lionWebClient.participationId!).to.equal("participation-a")
-            })
+        expect(lionWebClient.participationId!).to.equal("participation-a")
 
         const newPartition = lionWebClient.factory(testLanguageBase.LinkTestConcept, "partition-A")
         lionWebClient.addPartition(newPartition)
 
-        await delayed(waitTime, null)
+        await delayed(20, null)
         await lionWebClient.disconnect()
         await lionWebServer.shutdown()
 

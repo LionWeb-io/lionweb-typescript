@@ -56,7 +56,7 @@ export class LionWebServer {
                 if (clientMetadata.participationId === undefined) {
                     throw new Error(`can't process an event if no participation has started`)   // TODO  instead: log an item, and fall through
                 }
-                // (now .clientId must be !== undefined as well:)
+                // (now .clientId must be !== undefined too:)
                 return clientMetadata as ClientMetadata
             }
             switch (message.messageKind) {
