@@ -66,6 +66,12 @@ export type LionWebClientParameters = {
 }
 
 
+type QueryData = {
+    resolveResponse: (value: QueryResponse) => void
+    rejectResponse: (reason?: Error) => void
+}
+
+
 export class LionWebClient {
 
     participationId?: LionWebId
@@ -78,6 +84,8 @@ export class LionWebClient {
         private readonly commandSender: DeltaHandler,
         private readonly lowLevelClient: LowLevelClient<Command | QueryRequest>
     ) {}
+
+    private readonly queryPromiseById: { [queryId: string]: QueryData } = {}
 
     static async setUp({clientId, url, languageBases, serializationChunk, semanticLogger, lowLevelClientInstantiator}: LionWebClientParameters): Promise<LionWebClient> {
         const log = semanticLoggerFunctionFrom(semanticLogger)
@@ -113,18 +121,18 @@ export class LionWebClient {
             }
         }
 
-        const processQueryResponse = (queryResponse: QueryResponse) => {
+        const processQueryResponse = (queryResponse: QueryResponse, {resolveResponse, rejectResponse}: QueryData) => {
             switch (queryResponse.messageKind) {
                 case "SignOnResponse": {
                     lionWebClient.participationId = (queryResponse as SignOnQueryResponse).participationId
-                    return  // ~void
+                    return resolveResponse(queryResponse) // ~void
                 }
                 case "SignOffResponse": {
                     lionWebClient.participationId = undefined
-                    return  // ~void
+                    return resolveResponse(queryResponse)
                 }
                 default: {
-                    throw new Error(`client can't handle a query response of kind "${queryResponse.messageKind}"`)   // TODO  instead: log an item, and fall through
+                    rejectResponse(new Error(`client can't handle a query response of kind "${queryResponse.messageKind}"`))
                 }
             }
         }
@@ -132,10 +140,15 @@ export class LionWebClient {
         const receiveMessageOnClient = (message: Event | QueryResponse) => {
             log(new ClientReceivedMessage(clientId, message))
             if (isQueryResponse(message)) {
-                return processQueryResponse(message as QueryResponse)   // ~void
+                const {queryId} = message
+                if (queryId in lionWebClient.queryPromiseById) {
+                    processQueryResponse(message, lionWebClient.queryPromiseById[queryId])
+                    delete lionWebClient.queryPromiseById[queryId]
+                    return  // ~void
+                }
             }
             if (isEvent(message)) {
-                return processEvent(message as Event)   // ~void
+                return processEvent(message)   // ~void
             }
         }
 
@@ -156,8 +169,14 @@ export class LionWebClient {
         return lionWebClient
     }
 
-    signOn = (queryId: LionWebId) =>
-        this.lowLevelClient.sendMessage({
+    private enqueueQuery = async (queryRequest: QueryRequest): Promise<QueryResponse> =>
+        new Promise((resolveResponse, rejectResponse) => {
+            this.queryPromiseById[queryRequest.queryId] = { resolveResponse, rejectResponse }
+            return this.lowLevelClient.sendMessage(queryRequest)
+        })
+
+    signOn = async (queryId: LionWebId) =>
+        await this.enqueueQuery({
             messageKind: "SignOnRequest",
             queryId,
             deltaProtocolVersion: "2025.1",
@@ -165,15 +184,17 @@ export class LionWebClient {
             protocolMessages: []
         } as SignOnQueryRequest)
 
-    signOff = (queryId: LionWebId) =>
-        this.lowLevelClient.sendMessage({
+    signOff = async (queryId: LionWebId) =>
+        await this.enqueueQuery({
             messageKind: "SignOffRequest",
             queryId,
             protocolMessages: []
         } as SignOffQueryRequest)
 
-    disconnect = () =>
-        this.lowLevelClient.disconnect()
+    async disconnect() {
+        // TODO  abort responses to all queries that the server hasn't responded to?
+        await this.lowLevelClient.disconnect()
+    }
 
     private static checkWhetherPartition(node: INodeBase): void {
         const {classifier} = node
