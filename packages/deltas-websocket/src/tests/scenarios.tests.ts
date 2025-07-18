@@ -140,7 +140,7 @@ describe(`scenarios (${withStylesApplied("yellow")("yellow=client")}, ${withStyl
                     messageKind: "PartitionAdded",
                     newPartition: serializationOfNewPartition,
                     originCommands: [{ participationId: "participation-a", commandId: "cmd-1" }],
-                    sequenceNumber: 1,
+                    sequenceNumber: 0,
                     protocolMessages: []
                 }
             ),
