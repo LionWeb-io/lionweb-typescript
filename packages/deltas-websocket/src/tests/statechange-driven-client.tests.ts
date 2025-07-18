@@ -32,7 +32,7 @@ import { byIdMap } from "@lionweb/ts-utils"
 import { createWebSocketClient, LowLevelClient } from "../web-socket/client.js"
 import { createWebSocketServer, wsLocalhostUrl } from "../web-socket/server.js"
 
-import { delayed } from "../utils/async-tests.js"
+import { delayed } from "./async.js"
 import { combine } from "../utils/procedure.js"
 import { prefixedWith, timedConsoleLogger } from "../utils/textual-logging.js"
 import { Payload } from "./payload.js"

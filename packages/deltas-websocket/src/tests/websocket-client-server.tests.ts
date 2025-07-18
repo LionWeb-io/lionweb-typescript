@@ -20,7 +20,7 @@ import { expect } from "chai"
 
 import { createWebSocketClient } from "../web-socket/client.js"
 import { createWebSocketServer, wsLocalhostUrl } from "../web-socket/server.js"
-import { delayed } from "../utils/async-tests.js"
+import { delayed } from "./async.js"
 import { noOpProcedure } from "../utils/procedure.js"
 import { prefixedWith, timedConsoleLogger } from "../utils/textual-logging.js"
 import { nextPort } from "./port.js"
