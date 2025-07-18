@@ -17,7 +17,7 @@
 
 import { expect } from "chai"
 
-import { delayed } from "../utils/async-tests.js"
+import { delayed } from "./async.js"
 
 
 describe("testing asynchronous stuff with Mocha(+Chai)", function() {
