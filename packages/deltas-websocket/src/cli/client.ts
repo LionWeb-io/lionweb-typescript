@@ -72,7 +72,7 @@ await runAsApp(async () => {
             })
     }
 
-    const lionWebClient = await LionWebClient.setUp({
+    const lionWebClient = await LionWebClient.create({
         clientId,
         url,
         languageBases,

@@ -38,7 +38,7 @@ describe("WebSocket-driven implementations of client and server", async function
         const testModelChunk = testModel
 
         const createClient = (clientId: LionWebId) =>
-            LionWebClient.setUp({ clientId, url: wsLocalhostUrl(port), languageBases, serializationChunk: testModelChunk })
+            LionWebClient.create({ clientId, url: wsLocalhostUrl(port), languageBases, serializationChunk: testModelChunk })
         const clientA = await createClient("A")
         const clientB = await createClient("B")
         // end Arrange

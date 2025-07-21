@@ -19,14 +19,7 @@ import { LionWebId } from "@lionweb/json"
 
 import { Command } from "../payload/command-types.js"
 import { Event } from "../payload/event-types.js"
-import {
-    QueryRequest,
-    QueryResponse,
-    SignOffQueryRequest,
-    SignOffQueryResponse,
-    SignOnQueryRequest,
-    SignOnQueryResponse
-} from "../payload/query-types.js"
+import { QueryMessage, SignOffRequest, SignOffResponse, SignOnRequest, SignOnResponse } from "../payload/query-types.js"
 import { SemanticLogger, semanticLoggerFunctionFrom, ServerReceivedMessage } from "../semantic-logging.js"
 import { commandAsEvent } from "./command-processor.js"
 import { createWebSocketServer, LowLevelServer } from "../web-socket/server.js"
@@ -50,7 +43,7 @@ export class LionWebServer {
         const log = semanticLoggerFunctionFrom(semanticLogger)
 
         let nextParticipationIdSequenceNumber = 0
-        const receiveMessageOnServer = (clientMetadata: Partial<ClientMetadata>, message: Command | QueryRequest) => {
+        const receiveMessageOnServer = (clientMetadata: Partial<ClientMetadata>, message: Command | QueryMessage) => {
             log(new ServerReceivedMessage({ ...clientMetadata}, message))
             const checkedClientMetadata = (): ClientMetadata => {
                 if (clientMetadata.participationId === undefined) {
@@ -61,7 +54,7 @@ export class LionWebServer {
             }
             switch (message.messageKind) {
                 case "SignOnRequest": {
-                    const { clientId, queryId } = message as SignOnQueryRequest
+                    const { clientId, queryId } = message as SignOnRequest
                     clientMetadata.participationId = `participation-${String.fromCharCode(97 + (nextParticipationIdSequenceNumber++))}`
                     clientMetadata.clientId = clientId
                     return {
@@ -69,16 +62,16 @@ export class LionWebServer {
                         queryId,
                         participationId: clientMetadata.participationId,
                         protocolMessages: []
-                    } as SignOnQueryResponse
+                    } as SignOnResponse
                 }
                 case "SignOffRequest": {
-                    const { queryId } = message as SignOffQueryRequest
+                    const { queryId } = message as SignOffRequest
                     clientMetadata.participationId = undefined
                     return {
                         messageKind: "SignOffResponse",
                         queryId,
                         protocolMessages: []
-                    } as SignOffQueryResponse
+                    } as SignOffResponse
                 }
                 // all commands, in order of the specification:
                 case "AddPartition":
@@ -93,7 +86,7 @@ export class LionWebServer {
                     throw new Error(`can't handle message of kind "${message.messageKind}"`)   // TODO  instead: log an item, and fall through
             }
         }
-        const lowLevelServer = await createWebSocketServer<Partial<ClientMetadata>, (Command | QueryRequest), (void | QueryResponse), Event>(
+        const lowLevelServer = await createWebSocketServer<Partial<ClientMetadata>, (Command | QueryMessage), (void | QueryMessage), Event>(
             port,
             (_) => ({}), // (leave values undefined – they're set later)
             receiveMessageOnServer

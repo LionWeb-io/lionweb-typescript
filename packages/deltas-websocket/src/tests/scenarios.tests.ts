@@ -20,12 +20,12 @@ import { expect } from "chai"
 import { LionWebClient } from "../client/client-impl.js"
 import { LionWebServer } from "../server/server-impl.js"
 import { wsLocalhostUrl } from "../web-socket/server.js"
-import { SignOnQueryRequest, SignOnQueryResponse } from "../payload/query-types.js"
+import { SignOnRequest, SignOnResponse } from "../payload/query-types.js"
 import { TestLanguageBase } from "@lionweb/class-core-test/dist/gen/TestLanguage.g.js"
 import {
+    ClientDidNotApplyEventFromOwnCommand,
     ClientReceivedMessage,
     ClientSentMessage,
-    ClientDidNotApplyEventFromOwnCommand,
     DeltaOccurredOnClient,
     ISemanticLogItem,
     semanticLogItemsToConsole,
@@ -67,7 +67,7 @@ describe(`scenarios (${withStylesApplied("yellow")("yellow=client")}, ${withStyl
 
         // create client:
         const clientId = "myClient" // but participation ID is handed out by the server!
-        const lionWebClient = await LionWebClient.setUp({
+        const lionWebClient = await LionWebClient.create({
             clientId,
             url: wsLocalhostUrl(port),
             languageBases: [testLanguageBase],
@@ -106,8 +106,8 @@ describe(`scenarios (${withStylesApplied("yellow")("yellow=client")}, ${withStyl
             }]
         }
         const expectedLogItems = [
-            new ServerReceivedMessage({}, { messageKind: "SignOnRequest", queryId, deltaProtocolVersion: "2025.1", clientId, protocolMessages: [] } as SignOnQueryRequest),
-            new ClientReceivedMessage(clientId, { messageKind: "SignOnResponse", queryId, participationId: "participation-a", protocolMessages: [] } as SignOnQueryResponse),
+            new ServerReceivedMessage({}, { messageKind: "SignOnRequest", queryId, deltaProtocolVersion: "2025.1", clientId, protocolMessages: [] } as SignOnRequest),
+            new ClientReceivedMessage(clientId, { messageKind: "SignOnResponse", queryId, participationId: "participation-a", protocolMessages: [] } as SignOnResponse),
             new DeltaOccurredOnClient(
                 clientId,
                 {

@@ -39,11 +39,17 @@ import { Command } from "../payload/command-types.js"
 import { Event, isEvent } from "../payload/event-types.js"
 import {
     isQueryResponse,
-    QueryRequest,
-    QueryResponse,
-    SignOffQueryRequest,
-    SignOnQueryRequest,
-    SignOnQueryResponse
+    QueryMessage,
+    ReconnectRequest,
+    ReconnectResponse,
+    SignOffRequest,
+    SignOnRequest,
+    SignOnResponse,
+    SubscribeToChangingPartitionsRequest,
+    SubscribeToPartitionChangesParameters,
+    SubscribeToPartitionContentsRequest,
+    SubscribeToPartitionContentsResponse,
+    UnsubscribeFromPartitionContentsRequest
 } from "../payload/query-types.js"
 import {
     ClientAppliedEvent,
@@ -57,25 +63,32 @@ import {
 import { priorityQueueAcceptor } from "../utils/priority-queue.js"
 
 
+/**
+ * Parameters – required and optional – for instantiating a {@link LionWebClient LionWeb delta protocol client}.
+ */
 export type LionWebClientParameters = {
     clientId: LionWebId
     url: string
     languageBases: ILanguageBase[]
     serializationChunk?: LionWebJsonChunk
     semanticLogger?: SemanticLogger
-    lowLevelClientInstantiator?: LowLevelClientInstantiator<Event | QueryResponse, Command | QueryRequest>
+    lowLevelClientInstantiator?: LowLevelClientInstantiator<Event | QueryMessage, Command | QueryMessage>
 }
 
 
-type QueryData = {
-    resolveResponse: (value: QueryResponse) => void
-    rejectResponse: (reason?: Error) => void
-}
-
-
+/**
+ * Implementation of a LionWeb delta protocol client.
+ */
 export class LionWebClient {
 
-    participationId?: LionWebId
+    private _participationId?: LionWebId // !== undefined => signed on
+
+    get participationId() {
+        return this._participationId
+    }
+
+    private signedOff = false
+    private lastReceivedSequenceNumber = -1
 
     constructor(
         public readonly clientId: LionWebId,
@@ -83,12 +96,12 @@ export class LionWebClient {
         private readonly idMapping: IdMapping,
         public readonly factory: NodeBaseFactory,
         private readonly commandSender: DeltaHandler,
-        private readonly lowLevelClient: LowLevelClient<Command | QueryRequest>
+        private readonly lowLevelClient: LowLevelClient<Command | QueryMessage>
     ) {}
 
-    private readonly queryPromiseById: { [queryId: string]: QueryData } = {}
+    private readonly queryResolveById: { [queryId: string]: (value: QueryMessage) => void } = {}
 
-    static async setUp({clientId, url, languageBases, serializationChunk, semanticLogger, lowLevelClientInstantiator}: LionWebClientParameters): Promise<LionWebClient> {
+    static async create({clientId, url, languageBases, serializationChunk, semanticLogger, lowLevelClientInstantiator}: LionWebClientParameters): Promise<LionWebClient> {
         const log = semanticLoggerFunctionFrom(semanticLogger)
 
         let loading = true
@@ -112,6 +125,7 @@ export class LionWebClient {
         loading = false
 
         const processEvent = (event: Event) => {
+            lionWebClient.lastReceivedSequenceNumber = event.sequenceNumber
             const originatingCommand = event.originCommands.find(({ commandId }) => commandIds.indexOf(commandId) > -1)
             if (originatingCommand === undefined) {
                 const delta = eventAsDelta(event)
@@ -122,31 +136,16 @@ export class LionWebClient {
             }
         }
 
-        const processQueryResponse = (queryResponse: QueryResponse, {resolveResponse, rejectResponse}: QueryData) => {
-            switch (queryResponse.messageKind) {
-                case "SignOnResponse": {
-                    lionWebClient.participationId = (queryResponse as SignOnQueryResponse).participationId
-                    return resolveResponse(queryResponse) // ~void
-                }
-                case "SignOffResponse": {
-                    lionWebClient.participationId = undefined
-                    return resolveResponse(queryResponse)
-                }
-                default: {
-                    rejectResponse(new Error(`client can't handle a query response of kind "${queryResponse.messageKind}"`))
-                }
-            }
-        }
-
         const acceptEvent = priorityQueueAcceptor<Event>(({sequenceNumber}) => sequenceNumber, 0, processEvent)
 
-        const receiveMessageOnClient = (message: Event | QueryResponse) => {
+        const receiveMessageOnClient = (message: Event | QueryMessage) => {
             log(new ClientReceivedMessage(clientId, message))
             if (isQueryResponse(message)) {
                 const {queryId} = message
-                if (queryId in lionWebClient.queryPromiseById) {
-                    processQueryResponse(message, lionWebClient.queryPromiseById[queryId])
-                    delete lionWebClient.queryPromiseById[queryId]
+                if (queryId in lionWebClient.queryResolveById) {
+                    const resolveResponse = lionWebClient.queryResolveById[queryId]
+                    resolveResponse(message)
+                    delete lionWebClient.queryResolveById[queryId]
                     return  // ~void
                 }
             }
@@ -156,10 +155,8 @@ export class LionWebClient {
         }
 
         const lowLevelClient = await
-            (lowLevelClientInstantiator === undefined
-                ? createWebSocketClient<(Event | QueryResponse), (Command | QueryRequest)>
-                : lowLevelClientInstantiator
-            ).apply(this, [url, clientId, receiveMessageOnClient])
+            (lowLevelClientInstantiator ?? (createWebSocketClient<(Event | QueryMessage), (Command | QueryMessage)>))
+                .apply(this, [url, clientId, receiveMessageOnClient])
 
         const lionWebClient = new LionWebClient(
             clientId,
@@ -172,29 +169,77 @@ export class LionWebClient {
         return lionWebClient
     }
 
-    private enqueueQuery = async (queryRequest: QueryRequest): Promise<QueryResponse> =>
-        new Promise((resolveResponse, rejectResponse) => {
-            this.queryPromiseById[queryRequest.queryId] = { resolveResponse, rejectResponse }
+    private readonly enqueueQuery = async (queryRequest: QueryMessage): Promise<QueryMessage> =>
+        new Promise((resolveResponse) => {
+            this.queryResolveById[queryRequest.queryId] = resolveResponse
             return this.lowLevelClient.sendMessage(queryRequest)
         })
 
-    signOn = async (queryId: LionWebId) =>
+    async subscribeToChangingPartitions(queryId: LionWebId, parameters: SubscribeToPartitionChangesParameters): Promise<void> {
         await this.enqueueQuery({
+            messageKind: "SubscribeToChangingPartitionsRequest",
+            queryId,
+            ...parameters,
+            protocolMessages: []
+        } as SubscribeToChangingPartitionsRequest)
+    }
+
+    async subscribeToPartitionContents(queryId: LionWebId, partition: LionWebId): Promise<LionWebJsonChunk> {   // TODO  already deserialize, because we've got everything we need
+        const response = await this.enqueueQuery({
+            messageKind: "SubscribeToPartitionContentsRequest",
+            queryId,
+            partition,
+            protocolMessages: []
+        } as SubscribeToPartitionContentsRequest) as SubscribeToPartitionContentsResponse
+        return response.contents
+    }
+
+    async unsubscribeFromPartitionContents(queryId: LionWebId, partition: LionWebId): Promise<void> {
+        await this.enqueueQuery({
+            messageKind: "UnsubscribeFromPartitionContentsRequest",
+            queryId,
+            partition,
+            protocolMessages: []
+        } as UnsubscribeFromPartitionContentsRequest)
+    }
+
+    async signOn(queryId: LionWebId): Promise<void> {
+        if (this.signedOff) {
+            throw new Error(`can't sign on after having signed off`)
+        }
+        const response = await this.enqueueQuery({
             messageKind: "SignOnRequest",
             queryId,
             deltaProtocolVersion: "2025.1",
             clientId: this.clientId,
             protocolMessages: []
-        } as SignOnQueryRequest)
+        } as SignOnRequest) as SignOnResponse
+        this._participationId = response.participationId
+    }
 
-    signOff = async (queryId: LionWebId) =>
+    async signOff(queryId: LionWebId): Promise<void> {
         await this.enqueueQuery({
             messageKind: "SignOffRequest",
             queryId,
             protocolMessages: []
-        } as SignOffQueryRequest)
+        } as SignOffRequest)
+        this.signedOff = true
+        this._participationId = undefined
+    }
 
-    async disconnect() {
+    async reconnect(queryId: LionWebId, participationId: LionWebId, lastReceivedSequenceNumber: number): Promise<void> {
+        const response = await this.enqueueQuery({
+            messageKind: "ReconnectRequest",
+            queryId,
+            participationId,
+            lastReceivedSequenceNumber,
+            protocolMessages: []
+        } as ReconnectRequest) as ReconnectResponse
+        this._participationId = participationId
+        this.lastReceivedSequenceNumber = response.lastReceivedSequenceNumber
+    }
+
+    async disconnect(): Promise<void> {
         // TODO  abort responses to all queries that the server hasn't responded to?
         await this.lowLevelClient.disconnect()
     }
@@ -209,7 +254,7 @@ export class LionWebClient {
         }
     }
 
-    addPartition(partition: INodeBase) {
+    addPartition(partition: INodeBase): void {
         LionWebClient.checkWhetherPartition(partition)
         if (this.model.indexOf(partition) === -1) {
             this.model.push(partition)

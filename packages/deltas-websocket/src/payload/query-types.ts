@@ -15,47 +15,119 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { LionWebId } from "@lionweb/json"
+import { LionWebId, LionWebJsonChunk } from "@lionweb/json"
 import { mapFrom } from "@lionweb/ts-utils"
 import { DeltaProtocolMessage, Message } from "./common.js"
 
-export interface QueryRequest extends DeltaProtocolMessage {
+/**
+ * Super interface for both query request and response messages.
+ */
+export interface QueryMessage extends DeltaProtocolMessage {
     queryId: LionWebId
 }
 
-export interface QueryResponse extends DeltaProtocolMessage {
-    queryId: LionWebId
+
+// in order of the specification:
+
+export interface SubscribeToPartitionChangesParameters {
+    creation: boolean
+    deletion: boolean
+    partitions: boolean
 }
 
-export interface SignOnQueryRequest extends QueryRequest {
+export interface SubscribeToChangingPartitionsRequest extends QueryMessage, SubscribeToPartitionChangesParameters {
+    messageKind: "SubscribeToChangingPartitionsRequest"
+}
+
+export interface SubscribeToChangingPartitionsResponse extends QueryMessage {
+    messageKind: "SubscribeToChangingPartitionsResponse"
+}
+
+
+export interface SubscribeToPartitionContentsRequest extends QueryMessage {
+    messageKind: "SubscribeToPartitionContentsRequest"
+    partition: LionWebId
+}
+
+export interface SubscribeToPartitionContentsResponse extends QueryMessage {
+    messageKind: "SubscribeToPartitionContentsResponse"
+    contents: LionWebJsonChunk
+}
+
+
+export interface UnsubscribeFromPartitionContentsRequest extends QueryMessage {
+    messageKind: "UnsubscribeFromPartitionContentsRequest"
+    partition: LionWebId
+}
+
+export interface UnsubscribeFromPartitionContentsResponse extends QueryMessage {
+    messageKind: "UnsubscribeFromPartitionContentsResponse"
+}
+
+
+export interface SignOnRequest extends QueryMessage {
     messageKind: "SignOnRequest"
     deltaProtocolVersion: "2025.1"
     clientId: LionWebId
 }
 
-export interface SignOnQueryResponse extends QueryResponse {
+export interface SignOnResponse extends QueryMessage {
     messageKind: "SignOnResponse"
     participationId: LionWebId
 }
 
-export interface SignOffQueryRequest extends QueryRequest {
+
+export interface SignOffRequest extends QueryMessage {
     messageKind: "SignOffRequest"
 }
 
-export interface SignOffQueryResponse extends QueryRequest {
+export interface SignOffResponse extends QueryMessage {
     messageKind: "SignOffResponse"
 }
 
 
-const queryResponseMessageKinds = mapFrom(
-    [
-        "SignOn",
-        "SignOff"
-    ],
-    (str) => `${str}Response`,
-    (_) => true
-)
+export interface ReconnectRequest extends QueryMessage {
+    messageKind: "ReconnectRequest"
+    participationId: LionWebId
+    lastReceivedSequenceNumber: number
+}
 
-export const isQueryResponse = (message: Message): message is QueryResponse =>
+export interface ReconnectResponse extends QueryMessage {
+    messageKind: "ReconnectResponse"
+    lastReceivedSequenceNumber: number
+}
+
+
+export interface GetAvailableIdsRequest extends QueryMessage {
+    messageKind: "GetAvailableIdsRequest"
+    count: number
+}
+
+export interface GetAvailableIdsResponse extends QueryMessage {
+    messageKind: "GetAvailableIdsResponse"
+    ids: LionWebId[]
+}
+
+
+export interface ListPartitionsRequest extends QueryMessage {
+    messageKind: "ListPartitionsRequest"
+    partitions: LionWebJsonChunk
+}
+
+
+const queryMessageKinds = [
+    "SubscribeToChangingPartitions",
+    "SubscribeToPartitionContents",
+    "UnsubscribeFromPartitionContents",
+    "SignOn",
+    "SignOff",
+    "Reconnect",
+    "GetAvailableIds",
+    "ListPartitions"
+]
+
+const queryResponseMessageKinds = mapFrom(queryMessageKinds, (str) => `${str}Response`, (_) => true)
+
+export const isQueryResponse = (message: Message): message is QueryMessage =>
     message.messageKind in queryResponseMessageKinds
 
