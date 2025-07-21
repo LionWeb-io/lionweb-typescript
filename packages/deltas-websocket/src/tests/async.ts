@@ -15,13 +15,42 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import { fail } from "assert"
+import { expect } from "chai"
+
 /**
  * @return a {@link Promise} that resolves to the given `value` after `ms` milliseconds have elapsed.
  * *Note*: this function should only be used in test code, not in production code.
  */
 export const delayed = <T>(ms: number, value: T): Promise<T> =>
-    new Promise((resolve) => setTimeout(() => {
-            resolve(value)
-        }, ms)
+    new Promise<T>((resolve) => {
+        setTimeout(
+            () => {
+                resolve(value)
+            },
+            ms
+        )}
     )
+
+
+/**
+ * @return a {@link Promise} that asserts that the {@link Promise} returned by the given `action` “thunk”
+ * rejects with an {@link Error} with the `expectedErrorMessage` as its message.
+ * **Note**: make sure to `return` the {@link Promise} returned by this function from an asynchronous Mocha test.
+ * Code example:
+ * <pre>
+ *     describe("my Mocha test suite", async function() {
+ *         it("my Mocha unit test", async function() {
+ *           return expectedError(() => Promise.reject(new Error("foo")), "foo")
+ *         })
+ *     })
+ * </pre>
+ */
+export const expectError = <T>(action: () => Promise<T>, expectedErrorMessage: string) =>
+    action()
+        .then(() => fail("expected an error"))
+        .catch((error) => {
+            expect(error instanceof Error).to.equal(true)
+            expect((error as Error).message).to.equal(expectedErrorMessage)
+        })
 

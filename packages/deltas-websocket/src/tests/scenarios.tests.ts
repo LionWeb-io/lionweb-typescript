@@ -82,6 +82,11 @@ describe(`scenarios (${withStylesApplied("yellow")("yellow=client")}, ${withStyl
 
         const newPartition = lionWebClient.factory(testLanguageBase.LinkTestConcept, "partition-A")
         lionWebClient.addPartition(newPartition)
+        expect(lionWebClient.model).to.deep.equal([newPartition])
+
+        // assert idempotency of adding a new partition:
+        lionWebClient.addPartition(newPartition)
+        expect(lionWebClient.model).to.deep.equal([newPartition])
 
         await delayed(20, null)
         await lionWebClient.disconnect()

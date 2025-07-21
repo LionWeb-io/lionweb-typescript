@@ -165,14 +165,15 @@ export class LionWebClient {
             combinedFactoryFor(languageBases, commandSender),
             commandSender,
             lowLevelClient
-        ) // (need this constant non-inlined to set participationId later)
+        ) // (need this constant non-inlined for write-access to lastReceivedSequenceNumber and queryResolveById)
         return lionWebClient
     }
 
-    private readonly enqueueQuery = async (queryRequest: QueryMessage): Promise<QueryMessage> =>
-        new Promise((resolveResponse) => {
+    private readonly enqueueQuery = (queryRequest: QueryMessage): Promise<QueryMessage> =>
+        new Promise((resolveResponse, rejectResponse) => {
             this.queryResolveById[queryRequest.queryId] = resolveResponse
-            return this.lowLevelClient.sendMessage(queryRequest)
+            this.lowLevelClient.sendMessage(queryRequest)
+                .catch(rejectResponse)
         })
 
     async subscribeToChangingPartitions(queryId: LionWebId, parameters: SubscribeToPartitionChangesParameters): Promise<void> {
@@ -205,7 +206,7 @@ export class LionWebClient {
 
     async signOn(queryId: LionWebId): Promise<void> {
         if (this.signedOff) {
-            throw new Error(`can't sign on after having signed off`)
+            return Promise.reject(new Error(`can't sign on after having signed off`))
         }
         const response = await this.enqueueQuery({
             messageKind: "SignOnRequest",
@@ -255,6 +256,9 @@ export class LionWebClient {
     }
 
     addPartition(partition: INodeBase): void {
+        if (this._participationId === undefined) {
+            throw new Error(`client ${this.clientId} can't send a command without being signed on`)
+        }
         LionWebClient.checkWhetherPartition(partition)
         if (this.model.indexOf(partition) === -1) {
             this.model.push(partition)

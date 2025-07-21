@@ -118,17 +118,20 @@ describe("priority queue", () => {
         case_([1,2,3,4,5,7], 5);
     })
 
-    it("fuzzing", () => {
+
+    const range = (n: number): number[] =>
+        [...Array(n).keys()]
+
+    const fuzzOnce = (nOffered: number, max: number) => {
         const {accept, processed} = priorityEnqueueFixture()
 
-        const max = 1000
         const offered: number[] = []
 
         const newOffer = () => {
             // eslint-disable-next-line no-constant-condition
             while (true) {
                 const streak = headStreakLengthOf(offered)
-                const newPrio = Math.floor(Math.random() * 10_000)
+                const newPrio = Math.floor(Math.random() * max)
                 const newIndex = insertionIndex(offered, (num) => num, newPrio)
                 if ((newIndex >= offered.length || offered[newIndex] !== newPrio) && newPrio > streak) {
                     offered.splice(newIndex, 0, newPrio)
@@ -137,11 +140,17 @@ describe("priority queue", () => {
             }
         }
 
-        while (offered.length < max) {
+        while (offered.length < nOffered) {
             accept(newOffer())
         }
 
-        expect(processed).to.deep.equal(new Array(headStreakLengthOf(offered)).map((_, index) => index))
+        expect(processed).to.deep.equal(range(headStreakLengthOf(offered)).map((i) => i + 1), `fuzz with offered numbers: ${offered.join(" ")}`)
+    }
+
+    it("fuzzing", () => {
+        range(512).forEach(() => {
+            fuzzOnce(1024, 2048)
+        })
     })
 
 })

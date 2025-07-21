@@ -15,12 +15,11 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { fail } from "assert"
 import { expect } from "chai"
+import { delayed, expectError } from "./async.js"
 
 import { createWebSocketClient } from "../web-socket/client.js"
 import { createWebSocketServer, wsLocalhostUrl } from "../web-socket/server.js"
-import { delayed } from "./async.js"
 import { noOpProcedure } from "../utils/procedure.js"
 import { prefixedWith, timedConsoleLogger } from "../utils/textual-logging.js"
 import { nextPort } from "./port.js"
@@ -77,13 +76,11 @@ describe("WebSocket-driven client and server (in isolation and abstraction)", as
 
     it("client tries to connect to a non-existing server", async function() {
         const url = wsLocalhostUrl(nextPort())  // (differs from already-started servers)
-        try {
-            await createWebSocketClient(url, "client-A", noOpProcedure)
-            fail("expected an error")
-        } catch (error) {
-            expect(error instanceof Error).to.equal(true)
-            expect((error as Error).message).to.equal(`could not connect to WebSocket server at ${url}`)
-        }
+        return expectError(
+            () =>
+                createWebSocketClient(url, "client-A", noOpProcedure),
+            `could not connect to WebSocket server at ${url}`
+        )
     })
 
     it("client disconnects after server shuts down", async function() {
@@ -97,13 +94,7 @@ describe("WebSocket-driven client and server (in isolation and abstraction)", as
         await server.shutdown()
         await delayed(waitTime, null) // need to wait for a bit for the server to actually shut down
 
-        try {
-            await client.disconnect()
-            fail("expected an error")
-        } catch (error) {
-            expect(error instanceof Error).to.equal(true)
-            expect((error as Error).message).to.equal(`disconnected`)
-        }
+        return expectError(() => client.disconnect(), `disconnected`)
     })
 
     it("client tries to send a message after server shuts down", async function() {
@@ -117,13 +108,7 @@ describe("WebSocket-driven client and server (in isolation and abstraction)", as
         await server.shutdown()
         await delayed(waitTime, null) // need to wait for a bit for the server to actually shut down
 
-        try {
-            await client.sendMessage("foo")
-            fail("expected an error")
-        } catch (error) {
-            expect(error instanceof Error).to.equal(true)
-            expect((error as Error).message).to.equal(`can't send message to server when client's state=disconnected`)
-        }
+        return expectError(() => client.sendMessage("foo"), `can't send message to server when client's state=disconnected`)
     })
 
 })
