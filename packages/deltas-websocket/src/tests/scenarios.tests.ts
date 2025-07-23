@@ -35,7 +35,7 @@ import { withStylesApplied } from "../utils/ansi.js"
 import { delayed } from "./async.js"
 import { nextPort } from "./port.js"
 
-describe(`scenarios (${withStylesApplied("yellow")("yellow=client")}, ${withStylesApplied("blue")("blue=server")})`, async function() {
+describe(`scenarios (${withStylesApplied("magenta")("magenta=client")}, ${withStylesApplied("cyan")("cyan=server")})`, async function() {
 
     /**
      * 1. Client signs on to repository with protocol version 2025.1 and client id `myClient`.

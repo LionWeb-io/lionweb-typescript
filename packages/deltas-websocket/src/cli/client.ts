@@ -22,7 +22,7 @@ import { Documentation, Geometry, ShapesBase } from "../gen/Shapes.g.js"
 import { wsLocalhostUrl } from "../web-socket/server.js"
 import { LionWebClient } from "../client/client-impl.js"
 import { ClientAppliedEvent, semanticLogItemStorer } from "../semantic-logging.js"
-import { withStylesApplied } from "../utils/ansi.js"
+import { clientInfo, withStylesApplied } from "../utils/ansi.js"
 import { combine } from "../utils/procedure.js"
 import { waitUntil } from "../utils/async.js"
 import { minimalTestModel } from "../models/test-models.js"
@@ -53,7 +53,7 @@ Parameters (${boldRedIf(true, "bold red")} are missing):
 const port = tryParseInteger(argv[2])
 const clientId = argv[3]
 const instructions = argv[4]?.split(",") ?? []  // TODO  validate instructions?
-console.log(`instructions provided: ${instructions.length === 0 ? "none" : instructions.join(", ")}`)
+console.log(clientInfo(`instructions provided: ${instructions.length === 0 ? "none" : instructions.join(", ")}`))
 
 const serializationChunk = minimalTestModel
 
@@ -68,7 +68,7 @@ await runAsApp(async () => {
         const expectedNumber = numberOfAppliedEvents() + delta  // (precompute here)
         return waitUntil(10, () => numberOfAppliedEvents() >= expectedNumber)
             .then(() => {
-                console.log(withStylesApplied("italic")(`(client applied (the deltas from) a total of ${numberOfAppliedEvents()} events so far)`))
+                console.log(withStylesApplied("magenta", "italic")(`(client applied (the deltas from) a total of ${numberOfAppliedEvents()} events so far)`))
             })
     }
 
@@ -80,9 +80,9 @@ await runAsApp(async () => {
         semanticLogger: combine(semanticConsoleLogger, storingLogger)
     })
 
-    console.log(`LionWeb delta protocol client (with ID=${clientId}) connecting to server on ${url} - press Ctrl to terminate`)
-    console.log(`textualization of model:`)
-    console.log(genericAsTreeText(serializationChunk, [language]))
+    console.log(clientInfo(`LionWeb delta protocol client (with ID=${clientId}) connecting to server on ${url} - press Ctrl to terminate
+textualization of model:
+${genericAsTreeText(serializationChunk, [language])}`))
 
     const partition = lionWebClient.model[0] as Geometry
     const documentation = lionWebClient.factory(languageBase.Documentation, "documentation") as Documentation
@@ -116,7 +116,7 @@ await runAsApp(async () => {
     for (const instruction of instructions) {
         await executeInstruction(instruction)
             .catch((reason) => {
-                console.error(reason)
+                console.error(withStylesApplied("red", "italic")(reason))
                 return Promise.reject(new Error(reason))
             })
     }

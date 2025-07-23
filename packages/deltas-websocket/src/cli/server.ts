@@ -18,6 +18,7 @@
 import { argv, exit } from "process"
 import { runAsApp, semanticConsoleLogger, tryParseInteger } from "./common.js"
 import { LionWebServer } from "../server/server-impl.js"
+import { serverInfo } from "../utils/ansi.js"
 
 if (argv.length < 3) {  // $ node dist/cli/server.js <port>
     console.log(
@@ -39,7 +40,7 @@ await runAsApp(async () => {
         semanticLogger: semanticConsoleLogger
     })
 
-    console.log(`LionWeb delta protocol server running on port ${port} - press Ctrl to terminate`)
+    console.log(serverInfo(`LionWeb delta protocol server running on port ${port} - press Ctrl to terminate`))
 
     return () => {
         return lionWebServer.shutdown()

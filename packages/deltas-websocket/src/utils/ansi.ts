@@ -17,11 +17,16 @@
 
 import { create as ansi } from "ansi-colors"
 
-const { bold, blue, green, italic, red, yellow } = ansi()
+const { bold, blue, cyan, green, italic, magenta, red, yellow } = ansi()
 
-const styles = { bold, blue, green, italic, red, yellow } as const
+const styles = { bold, blue, cyan, green, italic, magenta, red, yellow } as const
 
 export const withStylesApplied = (...styleKeys: (keyof typeof styles)[]) =>
     (text: string) =>
         styleKeys.reduce((str, styleKey) => (styles[styleKey])(str), text)
+
+
+export const clientInfo = withStylesApplied("magenta", "bold")
+export const clientWarning = withStylesApplied("magenta", "italic")
+export const serverInfo = withStylesApplied("cyan", "bold")
 

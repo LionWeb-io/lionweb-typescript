@@ -60,6 +60,7 @@ import {
     SemanticLogger,
     semanticLoggerFunctionFrom
 } from "../semantic-logging.js"
+import { withStylesApplied } from "../utils/ansi.js"
 import { priorityQueueAcceptor } from "../utils/priority-queue.js"
 
 
@@ -148,6 +149,7 @@ export class LionWebClient {
                     delete lionWebClient.queryResolveById[queryId]
                     return  // ~void
                 }
+                console.log(withStylesApplied("cyan", "italic")(`client received query response without having sent a corresponding query request: query-ID="${queryId}"`))
             }
             if (isEvent(message)) {
                 acceptEvent(message)
