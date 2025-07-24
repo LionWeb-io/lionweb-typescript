@@ -171,7 +171,20 @@ export class LionWebClient {
         return lionWebClient
     }
 
-    private readonly enqueueQuery = (queryRequest: QueryMessage): Promise<QueryMessage> =>
+    async disconnect(): Promise<void> {
+        // TODO  abort responses to all queries that the server hasn't responded to?
+        await this.lowLevelClient.disconnect()
+    }
+
+
+    // queries, in order of the specification (§ 6.3):
+
+    /**
+     * Makes the query in the sense that the given query request is sent (as a client message),
+     * and that the `resolve` callback of the associated `Promise` is stored so the promise can be resolved,
+     * so that query call can be `await`ed.
+     */
+    private readonly makeQuery = (queryRequest: QueryMessage): Promise<QueryMessage> =>
         new Promise((resolveResponse, rejectResponse) => {
             this.queryResolveById[queryRequest.queryId] = resolveResponse
             this.lowLevelClient.sendMessage(queryRequest)
@@ -179,7 +192,7 @@ export class LionWebClient {
         })
 
     async subscribeToChangingPartitions(queryId: LionWebId, parameters: SubscribeToPartitionChangesParameters): Promise<void> {
-        await this.enqueueQuery({
+        await this.makeQuery({
             messageKind: "SubscribeToChangingPartitionsRequest",
             queryId,
             ...parameters,
@@ -188,7 +201,7 @@ export class LionWebClient {
     }
 
     async subscribeToPartitionContents(queryId: LionWebId, partition: LionWebId): Promise<LionWebJsonChunk> {   // TODO  already deserialize, because we've got everything we need
-        const response = await this.enqueueQuery({
+        const response = await this.makeQuery({
             messageKind: "SubscribeToPartitionContentsRequest",
             queryId,
             partition,
@@ -198,7 +211,7 @@ export class LionWebClient {
     }
 
     async unsubscribeFromPartitionContents(queryId: LionWebId, partition: LionWebId): Promise<void> {
-        await this.enqueueQuery({
+        await this.makeQuery({
             messageKind: "UnsubscribeFromPartitionContentsRequest",
             queryId,
             partition,
@@ -210,7 +223,7 @@ export class LionWebClient {
         if (this.signedOff) {
             return Promise.reject(new Error(`can't sign on after having signed off`))
         }
-        const response = await this.enqueueQuery({
+        const response = await this.makeQuery({
             messageKind: "SignOnRequest",
             queryId,
             deltaProtocolVersion: "2025.1",
@@ -221,7 +234,7 @@ export class LionWebClient {
     }
 
     async signOff(queryId: LionWebId): Promise<void> {
-        await this.enqueueQuery({
+        await this.makeQuery({
             messageKind: "SignOffRequest",
             queryId,
             protocolMessages: []
@@ -231,7 +244,7 @@ export class LionWebClient {
     }
 
     async reconnect(queryId: LionWebId, participationId: LionWebId, lastReceivedSequenceNumber: number): Promise<void> {
-        const response = await this.enqueueQuery({
+        const response = await this.makeQuery({
             messageKind: "ReconnectRequest",
             queryId,
             participationId,
@@ -242,10 +255,8 @@ export class LionWebClient {
         this.lastReceivedSequenceNumber = response.lastReceivedSequenceNumber
     }
 
-    async disconnect(): Promise<void> {
-        // TODO  abort responses to all queries that the server hasn't responded to?
-        await this.lowLevelClient.disconnect()
-    }
+
+    // commands, in order of the specification (§ 6.5):
 
     private static checkWhetherPartition(node: INodeBase): void {
         const {classifier} = node
