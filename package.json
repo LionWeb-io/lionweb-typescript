@@ -1,7 +1,7 @@
 {
   "name": "lionweb-typescript",
   "version": "0.7.0-dev",
-  "description": "LionWeb core for {Java|Type}Script",
+  "description": "LionWeb implementation for {Java|Type}Script",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
@@ -21,7 +21,7 @@
   "scripts": {
     "clean": "npm run clean -w packages --if-present && npx rimraf node_modules",
     "setup": "npm run setup -w packages --if-present",
-    "initialize": "npm run clean && npm install && npm run setup && sh ./make.sh",
+    "initialize": "npm run clean && npm install && npm run setup && ./make.sh",
     "update-version": "node update-package-versions.js",
     "build": "npm run build -w packages --if-present",
     "test": "npm run test -w packages --if-present",
