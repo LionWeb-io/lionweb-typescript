@@ -27,6 +27,6 @@
     "release": "npm publish"
   },
   "dependencies": {
-    "littoral-templates": "0.4.2"
+    "littoral-templates": "0.5.0"
   }
 }

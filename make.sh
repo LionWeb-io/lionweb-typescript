@@ -1,4 +1,5 @@
 #!/bin/sh
+
 # Script to build all packages — it does so *in their dependency order*.
 
 # Have script exit after first failure is detected:
