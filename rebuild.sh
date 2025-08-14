@@ -1,6 +1,7 @@
 #!/bin/sh
 
-# Script to build all packages — it does so *in their dependency order*.
+# Script to rebuild all packages — from scratch, e.g. after cloning or after running `npm run clean`.
+# It does so *in dependency order*.
 
 # Have script exit after first failure is detected:
 set -e
@@ -75,6 +76,7 @@ npm test
 cd ..
 
 cd test
+mkdir -p metrics
 npm test
 cd ..
 
