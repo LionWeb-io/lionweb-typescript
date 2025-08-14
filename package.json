@@ -21,7 +21,7 @@
   "scripts": {
     "clean": "npm run clean -w packages --if-present && npx rimraf node_modules",
     "setup": "npm run setup -w packages --if-present",
-    "initialize": "npm run clean && npm install && npm run setup && ./make.sh",
+    "initialize": "npm run clean && npm install && npm run setup && ./rebuild.sh",
     "update-version": "node update-package-versions.js",
     "build": "npm run build -w packages --if-present",
     "test": "npm run test -w packages --if-present",

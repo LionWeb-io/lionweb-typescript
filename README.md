@@ -86,7 +86,7 @@ The implementation is divided up in a number of NPM packages in the directory [`
 
   _Note_ that this package – and specifically the `generate-for-class-core.ts` file – depends on `class-core` itself.
   This constitutes a *circular* dependency, but that only exists at compile+build time, so should not be problematic.
-  To ensure that a “clean clone” of this repository is not impacted, the `make.sh` script builds `class-core` first, before compiling and running `build`, and then builds `class-core` again.
+  To ensure that a “clean clone” of this repository is not impacted, the `rebuild.sh` script builds `class-core` first, before compiling and running `build`, and then builds `class-core` again.
 
 Each of these packages have their own `README.md`.
 The following packages are published in the scope of [the `lionweb` organization](https://www.npmjs.com/org/lionweb), meaning that they're all prefixed with `@lionweb/`: `json`, `json-utils`, `js-diff`, `core`, `ts-utils`, `utilities`, `cli`, and `validation`, `class-core`, `class-core-generator`
@@ -100,7 +100,7 @@ This repo relies on the following tools being installed:
 
 - [Node.js](https://nodejs.org/): JavaScript runtime
   - NPM (bundled with Node.js)
-- A shell (compatible with the Bourne shell), to run [`make.sh`](./make.sh) and other `.sh` scripts.
+- A shell (compatible with the Bourne shell), to run [`rebuild.sh`](rebuild.sh) and other `.sh` scripts.
   (This might take a little more effort on Windows machines than on Linux or even macOS.)
 - (optional) [PlantUML](https://plantuml.com/).
   An IDE plugin such as the one [for IntelliJ IDEA](https://plugins.jetbrains.com/plugin/7017-plantuml-integration) also does the trick.
@@ -118,7 +118,7 @@ Run the following command to set up the project:
 npm run clean
 npm install
 npm run setup
-./make.sh
+./rebuild.sh
 ```
 
 The chain of preceding commands can also be run as follows:
@@ -132,7 +132,7 @@ npm run initialize
 Run the following command to **build** (“make”) each of the packages, in dependency order:
 
 ```shell
-./make.sh
+./rebuild.sh
 ```
 
 This script exits – or at least: should – as soon as the first failure it detected.
