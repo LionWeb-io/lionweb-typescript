@@ -12,7 +12,7 @@ import {
     Syntax_VersionFormat_Issue
 } from "../issues/SyntaxIssues.js"
 import { ValidationResult } from "./generic/ValidationResult.js"
-import { PropertyDefinition } from "./generic/ValidationTypes.js"
+import { PropertyDefinition } from "./generic/schema/ValidationTypes.js"
 
 /**
  * Check whether `id` is a valid LionWeb id.
@@ -72,7 +72,7 @@ export function validateBoolean<String>(value: String, result: ValidationResult,
         result.issue(
             new Language_PropertyValue_Issue(
                 context,
-                propDef ? propDef.property : "unknown",
+                propDef ? propDef.name : "unknown",
                 valueAsPrimitive,
                 "boolean " + JSON.stringify(value)
             )
@@ -92,7 +92,7 @@ export function validateInteger<String>(value: String, result: ValidationResult,
     const valueAsPrimitive = "" + value
     const regexp = /^[+-]?(0|[1-9][0-9]*)$/
     if (valueAsPrimitive === null || !regexp.test(valueAsPrimitive)) {
-        result.issue(new Language_PropertyValue_Issue(context, propDef ? propDef.property : "unknown", valueAsPrimitive, "integer"))
+        result.issue(new Language_PropertyValue_Issue(context, propDef ? propDef.name : "unknown", valueAsPrimitive, "integer"))
     }
 }
 
@@ -107,12 +107,12 @@ export function validateInteger<String>(value: String, result: ValidationResult,
 export function validateJSON<String>(value: String, result: ValidationResult, context: JsonContext, propDef?: PropertyDefinition): void {
     const valueAsPrimitive = "" + value
     if (value === null) {
-        result.issue(new Syntax_PropertyNullIssue(context, propDef!.property!))
+        result.issue(new Syntax_PropertyNullIssue(context, propDef!.name!))
     }
     try {
         JSON.parse(valueAsPrimitive)
     } catch (e) {
-        result.issue(new Language_PropertyValue_Issue(context, propDef ? propDef.property : "unknown", valueAsPrimitive, "JSON"))
+        result.issue(new Language_PropertyValue_Issue(context, propDef ? propDef.name : "unknown", valueAsPrimitive, "JSON"))
     }
 }
 
