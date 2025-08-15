@@ -1,6 +1,6 @@
 {
   "name": "@lionweb/json-diff",
-  "version": "0.7.0-beta.9",
+  "version": "0.7.0-beta.10",
   "description": "Find diff between LionWeb JSON chunks",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -27,7 +27,7 @@
     "release": "npm publish"
   },
   "dependencies": {
-    "@lionweb/json": "0.7.0-beta.9",
-    "@lionweb/json-utils": "0.7.0-beta.9"
+    "@lionweb/json": "0.7.0-beta.10",
+    "@lionweb/json-utils": "0.7.0-beta.10"
   }
 }
