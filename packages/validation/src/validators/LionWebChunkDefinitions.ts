@@ -7,7 +7,7 @@ import { validateId, validateKey, validateSerializationFormatVersion, validateVe
  *   - be used by the SyntaxValidator to validate an object sat runtime.
  *   - used to generate all the TypeScript types for a LionWebChunk.
  */
-export const LionWebSchema: DefinitionSchema = new DefinitionSchema([], [
+export const LionWebSchema: DefinitionSchema = new DefinitionSchema([
     {
         name: "LionWebJsonMetaPointer",
         properties: [
