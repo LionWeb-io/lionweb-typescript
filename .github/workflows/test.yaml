@@ -10,8 +10,10 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 22
+      - name: Clean npm cache
+        run: npm cache clean --force
       - name: Install dependencies
-        run: npm install
+        run: npm install --auth-type=legacy
       - name: Setup all packages
         run: npm run setup
       - name: Build all packages
