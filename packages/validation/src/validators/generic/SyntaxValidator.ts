@@ -1,6 +1,5 @@
 import { JsonContext } from "@lionweb/json-utils"
 import {
-    GenericIssue,
     Syntax_ArrayContainsNull_Issue,
     Syntax_PropertyMissingIssue,
     Syntax_PropertyNullIssue,
@@ -11,7 +10,7 @@ import { ValidationResult } from "./ValidationResult.js"
 import {
     isObjectDefinition,
     isPrimitiveDefinition, ObjectDefinition, PrimitiveDefinition, DefinitionSchema,
-    UnknownObjectType, PropertyDefinition
+    UnknownObjectType
 } from "./schema/index.js"
 
 /**
@@ -63,11 +62,11 @@ export class SyntaxValidator {
             return
         }
         for (const propertyDef of typeDef.properties) {
-            const taggedUnion = this.schema.getTaggedUnionDefinition(propertyDef.type)
-            if (taggedUnion !== undefined) {
-                this.validateTaggedUnion(propertyDef, typeDef, object, jsonContext.concat(propertyDef.name))
-                continue
-            }
+            // const taggedUnion = this.schema.getTaggedUnionDefinition(propertyDef.type)
+            // if (taggedUnion !== undefined) {
+            //     this.validateTaggedUnion(propertyDef, typeDef, object, jsonContext.concat(propertyDef.name))
+            //     continue
+            // }
             const expectedTypeDef = this.schema.getDefinition(propertyDef.type)
             const validator = propertyDef.validate!
             const propertyValue = object[propertyDef.name]
@@ -159,45 +158,45 @@ export class SyntaxValidator {
      * @param object The object of type `typeDef` that should have the property described by `propertyDef`
      * @param jsonContext
      */
-    validateTaggedUnion(
-        propertyDef: PropertyDefinition,
-        typeDef: ObjectDefinition,
-        object: UnknownObjectType,
-        jsonContext: JsonContext
-    ): void {
-        // console.log(`validateTaggedUnion ${JSON.stringify(propertyDef)}, typedef ${typeDef.name}  object: ${JSON.stringify(object, null, 3)}`)
-        const taggedObject = object[propertyDef.name]
-        if (propertyDef.isList) {
-            if (!Array.isArray(taggedObject)) {
-                this.validationResult.issue(new GenericIssue(jsonContext, `Property value '${propertyDef.name}' expects an array, found '${typeof taggedObject}'`))
-            } else {
-                taggedObject.forEach((taggedObjectSingle, index) => {
-                    this.validateTaggedObject(taggedObjectSingle, jsonContext.concat(index))
-                })
-            }
-        } else {
-            if (!(typeof taggedObject === "object")) {
-                this.validationResult.issue(new GenericIssue(jsonContext, `Property value '${propertyDef.name}' expects an object, found '${typeof taggedObject}'`))
-            } else {
-                this.validateTaggedObject(taggedObject as UnknownObjectType, jsonContext)
-            }
-        }
-    }
+    // validateTaggedUnion(
+    //     propertyDef: PropertyDefinition,
+    //     typeDef: ObjectDefinition,
+    //     object: UnknownObjectType,
+    //     jsonContext: JsonContext
+    // ): void {
+    //     // console.log(`validateTaggedUnion ${JSON.stringify(propertyDef)}, typedef ${typeDef.name}  object: ${JSON.stringify(object, null, 3)}`)
+    //     const taggedObject = object[propertyDef.name]
+    //     if (propertyDef.isList) {
+    //         if (!Array.isArray(taggedObject)) {
+    //             this.validationResult.issue(new GenericIssue(jsonContext, `Property value '${propertyDef.name}' expects an array, found '${typeof taggedObject}'`))
+    //         } else {
+    //             taggedObject.forEach((taggedObjectSingle, index) => {
+    //                 this.validateTaggedObject(taggedObjectSingle, jsonContext.concat(index))
+    //             })
+    //         }
+    //     } else {
+    //         if (!(typeof taggedObject === "object")) {
+    //             this.validationResult.issue(new GenericIssue(jsonContext, `Property value '${propertyDef.name}' expects an object, found '${typeof taggedObject}'`))
+    //         } else {
+    //             this.validateTaggedObject(taggedObject as UnknownObjectType, jsonContext)
+    //         }
+    //     }
+    // }
 
     /**
      * Validate a single tagged object
      * @param taggedObject
      * @param jsonContext
      */
-    validateTaggedObject(taggedObject: UnknownObjectType, jsonContext: JsonContext): void {
-        const actualTypeName = taggedObject["messageKind"] as string
-        const actualType = this.schema.getDefinition(actualTypeName)
-        if (actualType === undefined || !isObjectDefinition(actualType)) {
-            this.validationResult.issue(new GenericIssue(jsonContext, `Expected object type is ${typeof taggedObject}, should be object`))
-        } else {
-            this.validateObjectProperties(actualTypeName, actualType, taggedObject, jsonContext)
-        }
-    }
+    // validateTaggedObject(taggedObject: UnknownObjectType, jsonContext: JsonContext): void {
+    //     const actualTypeName = taggedObject["messageKind"] as string
+    //     const actualType = this.schema.getDefinition(actualTypeName)
+    //     if (actualType === undefined || !isObjectDefinition(actualType)) {
+    //         this.validationResult.issue(new GenericIssue(jsonContext, `Expected object type is ${typeof taggedObject}, should be object`))
+    //     } else {
+    //         this.validateObjectProperties(actualTypeName, actualType, taggedObject, jsonContext)
+    //     }
+    // }
 
     /**
      * Check whether there are extra properties that should not be there.
