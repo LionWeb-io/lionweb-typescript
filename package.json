@@ -14,6 +14,7 @@
     "@types/node": "22.15.21",
     "@typescript-eslint/eslint-plugin": "6.21.0",
     "@typescript-eslint/parser": "6.21.0",
+    "dpdm": "3.14.0",
     "prettier": "3.6.2",
     "rimraf": "6.0.1",
     "typescript": "5.3.3"
@@ -29,7 +30,8 @@
     "prerelease": "npm run initialize",
     "release-alpha": "npm run release-alpha -w packages --if-present",
     "release-beta": "npm run release-beta -w packages --if-present",
-    "release": "npm run release -w packages --if-present"
+    "release": "npm run release -w packages --if-present",
+    "check-circular-deps": "node check-circular-dependencies.js"
   },
   "private": true,
   "workspaces": [
