@@ -220,6 +220,19 @@ You can also perform an alpha release in exactly the same way as a beta release,
 Alpha releases should be limited to experimental features.
 
 
+## Circular dependencies
+
+Run the NPM task `check-circular-dependencies` to check whether circular dependencies exist in any of the packages.
+A circular dependency is a cycle in `import` statements in TypeScript code.
+Such circular dependencies don't necessarily prevent the code from being compilable and runnable, but problems can arise due to web bundlers, and in debugging.
+Circular dependencies can usually be avoided by using the “internal module pattern”, which is explained in [this blog](https://medium.com/visual-development/how-to-fix-nasty-circular-dependency-issues-once-and-for-all-in-javascript-typescript-a04c987cf0de).
+The TL;DR of that is:
+
+1. Export all *internally*-exposed stuff from a central `index-internal.ts`.
+2. Then, import from that file *only*.
+3. Export everything you want exposed to the outside world from a `index.ts` which imports from `index-internal.ts`.
+
+
 #### Future work
 
 Currently, we're not using a tool like [`changesets`](https://www.npmjs.com/package/changeset) – including [its CLI tool](https://www.npmjs.com/package/@changesets/cli) – to manage the versioning and release/publication.
