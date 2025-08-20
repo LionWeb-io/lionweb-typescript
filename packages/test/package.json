@@ -24,13 +24,11 @@
     "test": "mocha --recursive dist/"
   },
   "devDependencies": {
-    "@types/chai": "5.2.1",
+    "@types/chai": "5.2.2",
     "@types/mocha": "10.0.10",
-    "@types/xml2js": "0.4.14",
-    "chai": "5.2.0",
+    "chai": "5.3.1",
     "degit": "2.8.4",
-    "mocha": "11.1.0",
-    "xml2js": "0.6.2"
+    "mocha": "11.7.1"
   },
   "dependencies": {
     "@lionweb/core": "0.7.0-beta.11",
