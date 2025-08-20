@@ -90,7 +90,7 @@ export const nodeBaseDeserializerWithIdMapping = (languageBases: ILanguageBase[]
 
         const nodesToInstall: NodesToInstall[] = [];
 
-        const createNode = ({id, classifier: classifierMetaPointer, properties, containments, references, annotations}: LionWebJsonNode) => {
+        const createNode = ({id, classifier: classifierMetaPointer, properties, containments, references, annotations}: LionWebJsonNode): (INodeBase | undefined) => {
             const languageMessage = `language ${classifierMetaPointer.language} (${classifierMetaPointer.version})`;
             const classifier = symbolTable.entityMatching(classifierMetaPointer);
             if (classifier === undefined || !(classifier instanceof Classifier)) {

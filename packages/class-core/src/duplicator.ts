@@ -15,7 +15,7 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {  Containment, Feature, idOf, Link, Property, Reference, SingleRef, unresolved } from "@lionweb/core"
+import { Containment, Feature, idOf, Link, Property, Reference, SingleRef, unresolved } from "@lionweb/core"
 import { LionWebId } from "@lionweb/json"
 import { asArray } from "@lionweb/ts-utils"
 
