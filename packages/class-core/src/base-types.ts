@@ -113,7 +113,6 @@ export interface INodeBase extends Node {
      * @return the value manager for the given {@link Feature feature}.
      * @throws if this node('s {@link Classifier classifier}) doesn't have that feature.
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getFeatureValueManager(feature: Feature): FeatureValueManager<Feature>;
 
     /**

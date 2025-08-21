@@ -20,7 +20,6 @@ import { PropertyDefinition } from "./generic/schema/ValidationTypes.js"
  * @param result    Any validation issues found will be put into this object.
  * @param context   The context for the error message in errors.
  */
-// eslint-disable-next-line @typescript-eslint/ban-types
 export function validateId<String>(value: String, result: ValidationResult, context: JsonContext): void {
     const idString: string = "" + value
     const regexp = /^[a-zA-Z0-9_-][a-zA-Z0-9_-]*$/
@@ -35,7 +34,6 @@ export function validateId<String>(value: String, result: ValidationResult, cont
  * @param result    Any validation issues found will be put into this object.
  * @param context   The context for the error message in errors.
  */
-// eslint-disable-next-line @typescript-eslint/ban-types
 export function validateKey<String>(value: String, result: ValidationResult, context: JsonContext): void {
     const keyString: string = "" + value
     const regexp = /^[a-zA-Z0-9_-][a-zA-Z0-9_-]*$/
@@ -50,7 +48,6 @@ export function validateKey<String>(value: String, result: ValidationResult, con
  * @param result    Any validation issues found will be put into this object.
  * @param context   The location in the overall JSON.
  */
-// eslint-disable-next-line @typescript-eslint/ban-types
 export function validateVersion<String>(value: String, result: ValidationResult, context: JsonContext): void {
     const versionString: string = "" + value
     if (versionString.length === 0) {
@@ -65,7 +62,6 @@ export function validateVersion<String>(value: String, result: ValidationResult,
  * @param context   The location in the overall JSON.
  * @param propDef   The PropertyDefinition for this value
  */
-// eslint-disable-next-line @typescript-eslint/ban-types
 export function validateBoolean<String>(value: String, result: ValidationResult, context: JsonContext, propDef?: PropertyDefinition): void {
     const valueAsPrimitive = "" + value
     if (valueAsPrimitive !== "true" && valueAsPrimitive !== "false") {
@@ -87,7 +83,6 @@ export function validateBoolean<String>(value: String, result: ValidationResult,
  * @param context   The location in the overall JSON.
  * @param propDef   The PropertyDefinition for this value
  */
-// eslint-disable-next-line @typescript-eslint/ban-types
 export function validateInteger<String>(value: String, result: ValidationResult, context: JsonContext, propDef?: PropertyDefinition): void {
     const valueAsPrimitive = "" + value
     const regexp = /^[+-]?(0|[1-9][0-9]*)$/
@@ -103,7 +98,6 @@ export function validateInteger<String>(value: String, result: ValidationResult,
  * @param context   The location in the overall JSON.
  * @param propDef   The PropertyDefinition for this value
  */
-// eslint-disable-next-line @typescript-eslint/ban-types
 export function validateJSON<String>(value: String, result: ValidationResult, context: JsonContext, propDef?: PropertyDefinition): void {
     const valueAsPrimitive = "" + value
     if (value === null) {
@@ -111,7 +105,7 @@ export function validateJSON<String>(value: String, result: ValidationResult, co
     }
     try {
         JSON.parse(valueAsPrimitive)
-    } catch (e) {
+    } catch (_) {
         result.issue(new Language_PropertyValue_Issue(context, propDef ? propDef.name : "unknown", valueAsPrimitive, "JSON"))
     }
 }
@@ -122,7 +116,6 @@ export function validateJSON<String>(value: String, result: ValidationResult, co
  * @param result
  * @param context
  */
-// eslint-disable-next-line @typescript-eslint/ban-types
 export function validateSerializationFormatVersion<String>(value: String, result: ValidationResult, context: JsonContext): void {
     if (typeof value !== "string") {
         result.issue(new Syntax_SerializationFormatVersion_Issue(context, JSON.stringify(value)))

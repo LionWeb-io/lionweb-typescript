@@ -66,7 +66,7 @@ export class LionWebLanguageReferenceValidator {
         })
     }
 
-    private validateContainment(node: LionWebJsonNode, nodeConcept: LionWebJsonNode | undefined, containment: LionWebJsonContainment, context: JsonContext) {
+    private validateContainment(_node: LionWebJsonNode, nodeConcept: LionWebJsonNode | undefined, containment: LionWebJsonContainment, context: JsonContext) {
         const metaConcept = this.registry.getNodeByMetaPointer(containment.containment)
         if (metaConcept === null || metaConcept === undefined) {
             this.validationResult.issue(new Language_UnknownContainment_Issue(context, containment.containment))
@@ -85,7 +85,7 @@ export class LionWebLanguageReferenceValidator {
         // TODO check type of children
     }
 
-    private validateReference(node: LionWebJsonNode, nodeConcept: LionWebJsonNode | undefined, ref: LionWebJsonReference, context: JsonContext) {
+    private validateReference(_node: LionWebJsonNode, nodeConcept: LionWebJsonNode | undefined, ref: LionWebJsonReference, context: JsonContext) {
         const referenceDefinition = this.registry.getNodeByMetaPointer(ref.reference)
         if (referenceDefinition === null || referenceDefinition === undefined) {
             this.validationResult.issue(new Language_UnknownReference_Issue(context, ref.reference))
@@ -113,7 +113,7 @@ export class LionWebLanguageReferenceValidator {
      * Checks wwhether the value of `prop1` is correct in relation with its property definition in the referred language.
      * @param prop
      */
-    validateProperty(node: LionWebJsonNode, nodeConcept: LionWebJsonNode | undefined, prop: LionWebJsonProperty, context: JsonContext): void {
+    validateProperty(_node: LionWebJsonNode, nodeConcept: LionWebJsonNode | undefined, prop: LionWebJsonProperty, context: JsonContext): void {
         if (prop.value === null) {
             return
         }
