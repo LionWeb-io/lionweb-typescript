@@ -27,6 +27,7 @@ import {
     PrimitiveType
 } from "@lionweb/core"
 import { indent, withFirstLower } from "@lionweb/textgen-utils"
+import { keepDefineds } from "@lionweb/ts-utils"
 import { asString, Template, when } from "littoral-templates"
 import {
     ConceptDescription,
@@ -73,14 +74,16 @@ const textualizationOfAnnotation = (annotation: IoLionWebMpsSpecificAnnotation):
     }
 
     const textualizePropertiesWithDisplayNames = <T extends IoLionWebMpsSpecificAnnotation>(properties: { [displayName: string]: keyof T}): string[] =>
-        Object.entries(properties)
-            .map(([displayName, propertyName]) => textualizeProperty(propertyName, displayName))
-            .filter((optStr) => optStr !== undefined) as string[]
+        keepDefineds(
+            Object.entries(properties)
+                .map(([displayName, propertyName]) => textualizeProperty(propertyName, displayName))
+        )
 
     const textualizeProperties = <T extends IoLionWebMpsSpecificAnnotation>(...propertyNames: (keyof T)[]): string[] =>
-        propertyNames
-            .map((propertyName) => textualizeProperty(propertyName, propertyName as string))
-            .filter((optStr) => optStr !== undefined) as string[]
+        keepDefineds(
+            propertyNames
+                .map((propertyName) => textualizeProperty(propertyName, propertyName as string))
+        )
 
 
     if (annotation instanceof ConceptDescription) {

@@ -31,7 +31,7 @@ import {
     unresolved
 } from "@lionweb/core"
 import { LionWebId, LionWebJsonChunk, LionWebJsonNode } from "@lionweb/json"
-import { byIdMap } from "@lionweb/ts-utils"
+import { byIdMap, keepDefineds } from "@lionweb/ts-utils"
 
 import { DeltaHandler, IdMapping, ILanguageBase, INodeBase } from "./index.js"
 import { NodesToInstall } from "./linking.js"
@@ -90,7 +90,7 @@ export const nodeBaseDeserializerWithIdMapping = (languageBases: ILanguageBase[]
 
         const nodesToInstall: NodesToInstall[] = [];
 
-        const createNode = ({id, classifier: classifierMetaPointer, properties, containments, references, annotations}: LionWebJsonNode) => {
+        const createNode = ({id, classifier: classifierMetaPointer, properties, containments, references, annotations}: LionWebJsonNode): (INodeBase | undefined) => {
             const languageMessage = `language ${classifierMetaPointer.language} (${classifierMetaPointer.version})`;
             const classifier = symbolTable.entityMatching(classifierMetaPointer);
             if (classifier === undefined || !(classifier instanceof Classifier)) {
@@ -152,9 +152,11 @@ export const nodeBaseDeserializerWithIdMapping = (languageBases: ILanguageBase[]
         };
 
         const nodesById = byIdMap(
-            serializationChunk.nodes
-                .map(createNode)
-                .filter((nodeOrUndef) => nodeOrUndef !== undefined) as INodeBase[]
+            keepDefineds(
+                serializationChunk
+                    .nodes
+                    .map(createNode)
+            )
         );
 
         const dependentNodesById = byIdMap(dependentNodes)

@@ -5,7 +5,7 @@ import {
     LionWebJsonMetaPointer,
     LionWebJsonNode
 } from "@lionweb/json"
-import { asArray } from "@lionweb/ts-utils"
+import { asArray, keepDefineds } from "@lionweb/ts-utils"
 import { asIds } from "./functions.js"
 import { Reader } from "./reading.js"
 import { Node } from "./types.js"
@@ -148,8 +148,7 @@ export const nodeSerializer = <NT extends Node>(reader: Reader<NT>, serializatio
                     }
                     serializedNode.containments.push({
                         containment: featureMetaPointer,
-                        children: asIds(children)
-                            .filter(childId => childId !== null)
+                        children: keepDefineds(asIds(children))
                             .map(childId => childId as string)
                     })
                     children.forEach(childOrNull => {
@@ -167,8 +166,7 @@ export const nodeSerializer = <NT extends Node>(reader: Reader<NT>, serializatio
                     }
                     serializedNode.references.push({
                         reference: featureMetaPointer,
-                        targets: targets
-                            .filter(tOrNull => tOrNull !== null) // (skip "non-connected" targets)
+                        targets: keepDefineds(targets) // (skip "non-connected" targets)
                             .map(t => t as NT)
                             .map(t => ({
                                 resolveInfo:
