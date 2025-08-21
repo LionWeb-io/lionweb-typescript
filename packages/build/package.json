@@ -30,7 +30,6 @@
     "littoral-templates": "0.5.0"
   },
   "devDependencies": {
-    "@types/node": "24.3.0",
-    "typescript": "5.3.3"
+    "@types/node": "24.3.0"
   }
 }
