@@ -15,7 +15,7 @@ describe("metrics computation", () => {
         const path = join("metrics", fileName)
         try {
             deepEqual(removeUndefineds(json), readFileAsJson(path))
-        } catch (e) {
+        } catch (_) {
             console.error(`overwrote ${path} with actual contents`)
             writeJsonAsFile(path, json)
         }
