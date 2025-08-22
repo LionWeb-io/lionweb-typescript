@@ -18,7 +18,17 @@
 import { indent } from "@lionweb/textgen-utils"
 import { asString, commaSeparated, when } from "littoral-templates"
 
-import { Delta, FeatureType, Field, IndexType, NodeType, PrimitiveValueType, RefOnly, Type } from "../definition/Deltas.g.js"
+import {
+    CustomType,
+    Delta,
+    FeatureType,
+    Field,
+    IndexType,
+    NodeType,
+    PrimitiveValueType,
+    RefOnly,
+    Type
+} from "../definition/Deltas.g.js"
 import { tsTypeForFeatureKind } from "./helpers.js"
 
 const tsTypeForClassField = (type: Type) => {
@@ -33,6 +43,9 @@ const tsTypeForClassField = (type: Type) => {
     }
     if (type instanceof PrimitiveValueType) {
         return "T"
+    }
+    if (type instanceof CustomType) {
+        return type.type
     }
     throw new Error(`type ${type.classifier.name} not handled by tsTypeForClassField`)
 }

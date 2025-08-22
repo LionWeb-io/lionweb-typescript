@@ -19,18 +19,31 @@ import { indent } from "@lionweb/textgen-utils"
 import { sortedStrings } from "@lionweb/ts-utils"
 import { asString, commaSeparated } from "littoral-templates"
 
-import { Delta, FeatureType, IndexType, NodeType, PrimitiveValueType, RefOnly, Type } from "../definition/Deltas.g.js"
+import {
+    CustomType,
+    Delta,
+    FeatureType,
+    IndexType,
+    NodeType,
+    PrimitiveValueType,
+    RefOnly,
+    Type
+} from "../definition/Deltas.g.js"
 import { tsTypeForFeatureKind } from "./helpers.js"
 
 const deserializationExpressionForField = (name: string, type: Type) => {
     if (type instanceof FeatureType) {
-        return `symbolTable.featureMatching(${type.container?.name ?? "<?container?>"}.classifier.metaPointer(), delta.${name}) as ${tsTypeForFeatureKind(type.kind)}`
+        const tsMetaType = tsTypeForFeatureKind(type.kind)
+        return `resolved${tsMetaType}From(delta.${name}, ${type.container?.name ?? "<?container?>"})`
     }
     if (type instanceof NodeType) {
         return type.serialization instanceof RefOnly ? `idMapping.fromRefId(delta.${name})` : `idMapping.fromId(delta.${name})`
     }
     if (type instanceof IndexType || type instanceof PrimitiveValueType) {
         return `delta.${name}`
+    }
+    if (type instanceof CustomType) {
+        return type.deserializationExpr
     }
     throw new Error(`unhandled subtype ${type.constructor.name} of Type in deserializationExpressionForField`)
 }
@@ -46,20 +59,30 @@ export const deserializerForDeltas = (deltas: Delta[], header?: string) =>
     asString([
         header ?? [],
         `import { Containment, MemoisingSymbolTable, Property, Reference } from "@lionweb/core";`,
+        `import { LionWebJsonMetaPointer } from "@lionweb/json";`,
         ``,
-        `import { ILanguageBase } from "../../base-types.js";`,
+        `import { ILanguageBase, INodeBase } from "../../base-types.js";`,
         `import { IdMapping } from "../../id-mapping.js";`,
         `import { SerializedDelta } from "./types.g.js";`,
         `import { DeltaDeserializer } from "./base.js";`,
         `import {`,
         indent(commaSeparated(sortedStrings(deltas.map(({name}) => `${name}Delta`)))),
         `} from "../types.g.js";`,
+        `import { IDelta } from "../base.js";`,
         ``,
         ``,
         `export const deltaDeserializer = (languageBases: ILanguageBase[], idMapping: IdMapping): DeltaDeserializer => {`,
         indent([
             `const symbolTable = new MemoisingSymbolTable(languageBases.map(({language}) => language));`,
-            `return (delta: SerializedDelta) => {`,
+            `const resolvedPropertyFrom = (metaPointer: LionWebJsonMetaPointer, container: INodeBase): Property =>`,
+            `    symbolTable.featureMatching(container.classifier.metaPointer(), metaPointer) as Property`,
+            `const resolvedContainmentFrom = (metaPointer: LionWebJsonMetaPointer, container: INodeBase): Containment =>`,
+            `    symbolTable.featureMatching(container.classifier.metaPointer(), metaPointer) as Containment`,
+            `const resolvedReferenceFrom = (metaPointer: LionWebJsonMetaPointer, container: INodeBase): Reference =>`,
+            `    symbolTable.featureMatching(container.classifier.metaPointer(), metaPointer) as Reference`,
+            // `const resolvedRefTo = (ref: LionWebId | null) =>`,
+            // `    ref === null ? unresolved : idMapping.fromId(ref)`,
+            `const deserializedDelta = (delta: SerializedDelta): IDelta => {`,
             indent([
                 `switch (delta.kind) {`,
                 indent([
@@ -71,7 +94,8 @@ export const deserializerForDeltas = (deltas: Delta[], header?: string) =>
                 ]),
                 `}`
             ]),
-            `}`
+            `}`,
+            `return deserializedDelta;`
         ]),
         `}`,
         ``

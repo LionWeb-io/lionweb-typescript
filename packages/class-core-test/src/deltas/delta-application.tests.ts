@@ -21,7 +21,7 @@ import {
     applyDelta,
     ChildAddedDelta,
     ChildDeletedDelta,
-    ChildMovedDelta,
+    ChildMovedFromOtherContainmentDelta,
     ChildReplacedDelta
 } from "@lionweb/class-core"
 import { deepEqual, equal, isUndefined } from "../assertions.js"
@@ -54,7 +54,7 @@ describe("delta application sets parentage correctly", () => {
         const child = LinkTestConcept.create("child");
         parent.containment_0_1 = child;
         const dstLtc = LinkTestConcept.create("dstLtc");
-        const delta = new ChildMovedDelta(parent, testLanguage.LinkTestConcept_containment_0_1, 0, dstLtc, testLanguage.LinkTestConcept_containment_0_1, 0, child);
+        const delta = new ChildMovedFromOtherContainmentDelta(parent, testLanguage.LinkTestConcept_containment_0_1, 0, dstLtc, testLanguage.LinkTestConcept_containment_0_1, 0, child);
 
         applyDelta(delta);
 

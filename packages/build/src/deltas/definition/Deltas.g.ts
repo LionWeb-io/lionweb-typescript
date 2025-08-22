@@ -184,6 +184,32 @@ export class DeltasBase implements ILanguageBase {
         return this._PrimitiveValueType;
     }
 
+    public readonly _CustomType = new Concept(this._language, "CustomType", "Deltas-CustomType", "Deltas-CustomType", false);
+    get CustomType(): Concept {
+        this.ensureWiredUp();
+        return this._CustomType;
+    }
+    private readonly _CustomType_type = new Property(this._CustomType, "type", "Deltas-CustomType-type", "Deltas-CustomType-type");
+    get CustomType_type(): Property {
+        this.ensureWiredUp();
+        return this._CustomType_type;
+    }
+    private readonly _CustomType_serializationType = new Property(this._CustomType, "serializationType", "Deltas-CustomType-serializationType", "Deltas-CustomType-serializationType");
+    get CustomType_serializationType(): Property {
+        this.ensureWiredUp();
+        return this._CustomType_serializationType;
+    }
+    private readonly _CustomType_serializationExpr = new Property(this._CustomType, "serializationExpr", "Deltas-CustomType-serializationExpr", "Deltas-CustomType-serializationExpr");
+    get CustomType_serializationExpr(): Property {
+        this.ensureWiredUp();
+        return this._CustomType_serializationExpr;
+    }
+    private readonly _CustomType_deserializationExpr = new Property(this._CustomType, "deserializationExpr", "Deltas-CustomType-deserializationExpr", "Deltas-CustomType-deserializationExpr");
+    get CustomType_deserializationExpr(): Property {
+        this.ensureWiredUp();
+        return this._CustomType_deserializationExpr;
+    }
+
     public readonly _Delta = new Concept(this._language, "Delta", "Deltas-Delta", "Deltas-Delta", false);
     get Delta(): Concept {
         this.ensureWiredUp();
@@ -205,7 +231,7 @@ export class DeltasBase implements ILanguageBase {
         if (this._wiredUp) {
             return;
         }
-        this._language.havingEntities(this._Deltas, this._Type, this._Field, this._FeatureKinds, this._FeatureType, this._NodeSerialization, this._SerializeSubTree, this._RefOnly, this._NodeType, this._IndexType, this._PrimitiveValueType, this._Delta);
+        this._language.havingEntities(this._Deltas, this._Type, this._Field, this._FeatureKinds, this._FeatureType, this._NodeSerialization, this._SerializeSubTree, this._RefOnly, this._NodeType, this._IndexType, this._PrimitiveValueType, this._CustomType, this._Delta);
         this._Deltas.havingFeatures(this._Deltas_deltas);
         this._Deltas_deltas.ofType(this._Delta);
         this._Field.implementing(LionCore_builtinsBase.INSTANCE._INamed);
@@ -225,6 +251,12 @@ export class DeltasBase implements ILanguageBase {
         this._NodeType_serialization.ofType(this._NodeSerialization);
         this._IndexType.implementing(this._Type);
         this._PrimitiveValueType.implementing(this._Type);
+        this._CustomType.implementing(this._Type);
+        this._CustomType.havingFeatures(this._CustomType_type, this._CustomType_serializationType, this._CustomType_serializationExpr, this._CustomType_deserializationExpr);
+        this._CustomType_type.ofType(LionCore_builtinsBase.INSTANCE._String);
+        this._CustomType_serializationType.ofType(LionCore_builtinsBase.INSTANCE._String);
+        this._CustomType_serializationExpr.ofType(LionCore_builtinsBase.INSTANCE._String);
+        this._CustomType_deserializationExpr.ofType(LionCore_builtinsBase.INSTANCE._String);
         this._Delta.implementing(LionCore_builtinsBase.INSTANCE._INamed);
         this._Delta.havingFeatures(this._Delta_documentation, this._Delta_fields);
         this._Delta_documentation.ofType(LionCore_builtinsBase.INSTANCE._String).isOptional();
@@ -243,6 +275,7 @@ export class DeltasBase implements ILanguageBase {
                 case this._NodeType.key: return NodeType.create(id, handleDelta);
                 case this._IndexType.key: return IndexType.create(id, handleDelta);
                 case this._PrimitiveValueType.key: return PrimitiveValueType.create(id, handleDelta);
+                case this._CustomType.key: return CustomType.create(id, handleDelta);
                 case this._Delta.key: return Delta.create(id, handleDelta);
                 default: {
                     const {language} = classifier;
@@ -286,6 +319,9 @@ export class Deltas extends NodeBase {
     moveDeltas(oldIndex: number, newIndex: number) {
         this._deltas.move(oldIndex, newIndex);
     }
+    replaceDeltasAtIndex(movedChild: Delta, newIndex: number) {
+        this._deltas.replaceAtIndex(movedChild, newIndex);
+    }
 
     public constructor(classifier: Classifier, id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage) {
         super(classifier, id, handleDelta, parentInfo);
@@ -314,6 +350,9 @@ export class Field extends NodeBase implements INamed {
     }
     set type(newValue: Type) {
         this._type.set(newValue);
+    }
+    replaceTypeWith(newValue: Type) {
+        this._type.replaceWith(newValue);
     }
 
     private readonly _name: RequiredPropertyValueManager<string>;
@@ -440,6 +479,9 @@ export class NodeType extends NodeBase implements Type {
     set serialization(newValue: NodeSerialization | undefined) {
         this._serialization.set(newValue);
     }
+    replaceSerializationWith(newValue: NodeSerialization) {
+        this._serialization.replaceWith(newValue);
+    }
 
     public constructor(classifier: Classifier, id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage) {
         super(classifier, id, handleDelta, parentInfo);
@@ -463,6 +505,62 @@ export class IndexType extends NodeBase implements Type {
 export class PrimitiveValueType extends NodeBase implements Type {
     static create(id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage): PrimitiveValueType {
         return new PrimitiveValueType(DeltasBase.INSTANCE.PrimitiveValueType, id, handleDelta, parentInfo);
+    }
+}
+
+export class CustomType extends NodeBase implements Type {
+    static create(id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage): CustomType {
+        return new CustomType(DeltasBase.INSTANCE.CustomType, id, handleDelta, parentInfo);
+    }
+
+    private readonly _type: RequiredPropertyValueManager<string>;
+    get type(): string {
+        return this._type.get();
+    }
+    set type(newValue: string) {
+        this._type.set(newValue);
+    }
+
+    private readonly _serializationType: RequiredPropertyValueManager<string>;
+    get serializationType(): string {
+        return this._serializationType.get();
+    }
+    set serializationType(newValue: string) {
+        this._serializationType.set(newValue);
+    }
+
+    private readonly _serializationExpr: RequiredPropertyValueManager<string>;
+    get serializationExpr(): string {
+        return this._serializationExpr.get();
+    }
+    set serializationExpr(newValue: string) {
+        this._serializationExpr.set(newValue);
+    }
+
+    private readonly _deserializationExpr: RequiredPropertyValueManager<string>;
+    get deserializationExpr(): string {
+        return this._deserializationExpr.get();
+    }
+    set deserializationExpr(newValue: string) {
+        this._deserializationExpr.set(newValue);
+    }
+
+    public constructor(classifier: Classifier, id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage) {
+        super(classifier, id, handleDelta, parentInfo);
+        this._type = new RequiredPropertyValueManager<string>(DeltasBase.INSTANCE.CustomType_type, this);
+        this._serializationType = new RequiredPropertyValueManager<string>(DeltasBase.INSTANCE.CustomType_serializationType, this);
+        this._serializationExpr = new RequiredPropertyValueManager<string>(DeltasBase.INSTANCE.CustomType_serializationExpr, this);
+        this._deserializationExpr = new RequiredPropertyValueManager<string>(DeltasBase.INSTANCE.CustomType_deserializationExpr, this);
+    }
+
+    getPropertyValueManager(property: Property): PropertyValueManager<unknown> {
+        switch (property.key) {
+            case DeltasBase.INSTANCE.CustomType_type.key: return this._type;
+            case DeltasBase.INSTANCE.CustomType_serializationType.key: return this._serializationType;
+            case DeltasBase.INSTANCE.CustomType_serializationExpr.key: return this._serializationExpr;
+            case DeltasBase.INSTANCE.CustomType_deserializationExpr.key: return this._deserializationExpr;
+            default: return super.getPropertyValueManager(property);
+        }
     }
 }
 
@@ -494,6 +592,9 @@ export class Delta extends NodeBase implements INamed {
     }
     moveFields(oldIndex: number, newIndex: number) {
         this._fields.move(oldIndex, newIndex);
+    }
+    replaceFieldsAtIndex(movedChild: Field, newIndex: number) {
+        this._fields.replaceAtIndex(movedChild, newIndex);
     }
 
     private readonly _name: RequiredPropertyValueManager<string>;

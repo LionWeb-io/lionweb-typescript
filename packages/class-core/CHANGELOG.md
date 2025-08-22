@@ -5,6 +5,11 @@
 * Replace util functions with ones from `ts-utils`.
 * Add a method `tryFromId` to the `IdMapping` class that returns `undefined` on an unknown ID, rather than throwing an error.
 * Add a method `combinedFactoryFor` to combine(/“compose”) (at runtime) the factories from multiple languages (represented by their `ILanguageBase` implementations) into one factory.
+* Add multiple deltas – in all their aspects: types, (de-)serializers, appliers, inverters – that correspond to events from the delta protocol specification.
+* Expand value managers with methods:
+  * annotations: `moveAndReplaceAtIndex[Directly]`
+  * containments: `replace{With|AtIndex}`
+  * references: `removeAtIndexDirectly`, `moveAndReplaceDirectly`
 
 
 ## 0.6.13

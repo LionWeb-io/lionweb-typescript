@@ -18,6 +18,7 @@
 import {
     builtinClassifiers,
     Classifier,
+    Containment,
     Enumeration,
     Feature,
     featureMetaType,
@@ -95,36 +96,49 @@ export const typeForLanguageEntity = (imports: Imports) => {
         ]
     }
 
-    const tsTypeForLink = (link: Link) =>
-        wrapInIf(link instanceof Reference, () => `${imports.core("SingleRef")}<`, ">")(tsTypeForClassifier(link.type, imports))
-            + (link.multiple ? "[]" : optionalityPostfix(link))
-
     const classMembersForLink = (link: Link) => {
         const {name, type, multiple} = link
+        const nameWithFirstUpper = withFirstUpper(name)
+        const tsTypeForClassifier_ = tsTypeForClassifier(type, imports)
+        const tsTypeForLink_ = wrapInIf(
+            link instanceof Reference,
+            () => `${imports.core("SingleRef")}<`, ">")(tsTypeForClassifier_)
+                + (link.multiple ? "[]" : optionalityPostfix(link)
+        )
         return [
-            `private readonly _${name}: ${imports.generic(valueManagerFor(link))}<${tsTypeForClassifier(type, imports)}>;`,
+            `private readonly _${name}: ${imports.generic(valueManagerFor(link))}<${tsTypeForClassifier_}>;`,
             jsDocFor(link),
-            `get ${name}(): ${tsTypeForLink(link)} {`,
+            `get ${name}(): ${tsTypeForLink_} {`,
             indent(`return this._${name}.get();`),
             `}`,
             when(!multiple)([
-                `set ${name}(newValue: ${tsTypeForLink(link)}) {`,
+                `set ${name}(newValue: ${tsTypeForLink_}) {`,
                 indent(`this._${name}.set(newValue);`),
-                `}`
+                `}`,
+                when(link instanceof Containment)([
+                    `replace${nameWithFirstUpper}With(newValue: ${tsTypeForClassifier_}) {`,
+                    indent(`this._${name}.replaceWith(newValue);`),
+                    `}`
+                ])
             ]),
             when(multiple)([
-                `add${withFirstUpper(name)}(newValue: ${tsTypeForClassifier(type, imports)}) {`,
+                `add${nameWithFirstUpper}(newValue: ${tsTypeForClassifier_}) {`,
                 indent(`this._${name}.add(newValue);`),
                 `}`,
-                `remove${withFirstUpper(name)}(valueToRemove: ${tsTypeForClassifier(type, imports)}) {`,
+                `remove${nameWithFirstUpper}(valueToRemove: ${tsTypeForClassifier_}) {`,
                 indent(`this._${name}.remove(valueToRemove);`),
                 `}`,
-                `add${withFirstUpper(name)}AtIndex(newValue: ${tsTypeForClassifier(type, imports)}, index: number) {`,
+                `add${nameWithFirstUpper}AtIndex(newValue: ${tsTypeForClassifier_}, index: number) {`,
                 indent(`this._${name}.insertAtIndex(newValue, index);`),
                 `}`,
-                `move${withFirstUpper(name)}(oldIndex: number, newIndex: number) {`,
+                `move${nameWithFirstUpper}(oldIndex: number, newIndex: number) {`,
                 indent(`this._${name}.move(oldIndex, newIndex);`),
-                `}`
+                `}`,
+                when(link instanceof Containment)([
+                    `replace${nameWithFirstUpper}AtIndex(movedChild: ${tsTypeForClassifier_}, newIndex: number) {`,
+                    indent(`this._${name}.replaceAtIndex(movedChild, newIndex);`),
+                    `}`
+                ])
             ])
         ]
     }

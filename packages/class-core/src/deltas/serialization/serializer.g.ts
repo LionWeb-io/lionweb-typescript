@@ -23,60 +23,96 @@ import { IDelta } from "../base.js";
 import {
     AnnotationAddedDelta,
     AnnotationDeletedDelta,
+    AnnotationMovedAndReplacedFromOtherParentDelta,
+    AnnotationMovedAndReplacedInSameParentDelta,
     AnnotationMovedFromOtherParentDelta,
     AnnotationMovedInSameParentDelta,
     AnnotationReplacedDelta,
     ChildAddedDelta,
     ChildDeletedDelta,
-    ChildMovedDelta,
+    ChildMovedAndReplacedFromOtherContainmentDelta,
+    ChildMovedAndReplacedFromOtherContainmentInSameParentDelta,
+    ChildMovedAndReplacedInSameContainmentDelta,
+    ChildMovedFromOtherContainmentDelta,
+    ChildMovedFromOtherContainmentInSameParentDelta,
     ChildMovedInSameContainmentDelta,
     ChildReplacedDelta,
+    CompositeDelta,
+    EntryMovedAndReplacedFromOtherReferenceDelta,
+    EntryMovedAndReplacedFromOtherReferenceInSameParentDelta,
+    EntryMovedAndReplacedInSameReferenceDelta,
+    EntryMovedFromOtherReferenceDelta,
+    EntryMovedFromOtherReferenceInSameParentDelta,
+    EntryMovedInSameReferenceDelta,
     NoOpDelta,
+    PartitionAddedDelta,
+    PartitionDeletedDelta,
     PropertyAddedDelta,
     PropertyChangedDelta,
     PropertyDeletedDelta,
     ReferenceAddedDelta,
-    ReferenceDeletedDelta,
-    ReferenceMovedDelta,
-    ReferenceMovedInSameReferenceDelta,
-    ReferenceReplacedDelta
+    ReferenceChangedDelta,
+    ReferenceDeletedDelta
 } from "../types.g.js";
 import {
     AnnotationAddedSerializedDelta,
     AnnotationDeletedSerializedDelta,
+    AnnotationMovedAndReplacedFromOtherParentSerializedDelta,
+    AnnotationMovedAndReplacedInSameParentSerializedDelta,
     AnnotationMovedFromOtherParentSerializedDelta,
     AnnotationMovedInSameParentSerializedDelta,
     AnnotationReplacedSerializedDelta,
     ChildAddedSerializedDelta,
     ChildDeletedSerializedDelta,
+    ChildMovedAndReplacedFromOtherContainmentInSameParentSerializedDelta,
+    ChildMovedAndReplacedFromOtherContainmentSerializedDelta,
+    ChildMovedAndReplacedInSameContainmentSerializedDelta,
+    ChildMovedFromOtherContainmentInSameParentSerializedDelta,
+    ChildMovedFromOtherContainmentSerializedDelta,
     ChildMovedInSameContainmentSerializedDelta,
-    ChildMovedSerializedDelta,
     ChildReplacedSerializedDelta,
+    CompositeSerializedDelta,
+    EntryMovedAndReplacedFromOtherReferenceInSameParentSerializedDelta,
+    EntryMovedAndReplacedFromOtherReferenceSerializedDelta,
+    EntryMovedAndReplacedInSameReferenceSerializedDelta,
+    EntryMovedFromOtherReferenceInSameParentSerializedDelta,
+    EntryMovedFromOtherReferenceSerializedDelta,
+    EntryMovedInSameReferenceSerializedDelta,
     NoOpSerializedDelta,
+    PartitionAddedSerializedDelta,
+    PartitionDeletedSerializedDelta,
     PropertyAddedSerializedDelta,
     PropertyChangedSerializedDelta,
     PropertyDeletedSerializedDelta,
     ReferenceAddedSerializedDelta,
+    ReferenceChangedSerializedDelta,
     ReferenceDeletedSerializedDelta,
-    ReferenceMovedInSameReferenceSerializedDelta,
-    ReferenceMovedSerializedDelta,
-    ReferenceReplacedSerializedDelta
+    SerializedDelta
 } from "./types.g.js";
 import { idFrom, serializePropertyValue } from "./serializer-helpers.js";
 import { serializeNodeBases } from "../../serializer.js";
 
 
-export const serializeDelta = (delta: IDelta) => {
-    if (delta instanceof NoOpDelta) {
+export const serializeDelta = (delta: IDelta): SerializedDelta => {
+    if (delta instanceof PartitionAddedDelta) {
         return {
-            kind: "NoOp"
-        } as NoOpSerializedDelta;
+            kind: "PartitionAdded",
+            newPartition: delta.newPartition.id,
+            newNodes: serializeNodeBases([delta.newPartition])
+        } as PartitionAddedSerializedDelta;
+    }
+
+    if (delta instanceof PartitionDeletedDelta) {
+        return {
+            kind: "PartitionDeleted",
+            deletedPartition: delta.deletedPartition.id
+        } as PartitionDeletedSerializedDelta;
     }
 
     if (delta instanceof PropertyAddedDelta) {
         return {
             kind: "PropertyAdded",
-            container: delta.container.id,
+            node: delta.node.id,
             property: metaPointerFor(delta.property),
             value: serializePropertyValue(delta.value, delta.property)
         } as PropertyAddedSerializedDelta;
@@ -85,7 +121,7 @@ export const serializeDelta = (delta: IDelta) => {
     if (delta instanceof PropertyDeletedDelta) {
         return {
             kind: "PropertyDeleted",
-            container: delta.container.id,
+            node: delta.node.id,
             property: metaPointerFor(delta.property),
             oldValue: serializePropertyValue(delta.oldValue, delta.property)
         } as PropertyDeletedSerializedDelta;
@@ -94,7 +130,7 @@ export const serializeDelta = (delta: IDelta) => {
     if (delta instanceof PropertyChangedDelta) {
         return {
             kind: "PropertyChanged",
-            container: delta.container.id,
+            node: delta.node.id,
             property: metaPointerFor(delta.property),
             oldValue: serializePropertyValue(delta.oldValue, delta.property),
             newValue: serializePropertyValue(delta.newValue, delta.property)
@@ -136,17 +172,29 @@ export const serializeDelta = (delta: IDelta) => {
         } as ChildReplacedSerializedDelta;
     }
 
-    if (delta instanceof ChildMovedDelta) {
+    if (delta instanceof ChildMovedFromOtherContainmentDelta) {
         return {
-            kind: "ChildMoved",
+            kind: "ChildMovedFromOtherContainment",
             oldParent: delta.oldParent.id,
             oldContainment: metaPointerFor(delta.oldContainment),
             oldIndex: delta.oldIndex,
             newParent: delta.newParent.id,
             newContainment: metaPointerFor(delta.newContainment),
             newIndex: delta.newIndex,
-            child: delta.child.id
-        } as ChildMovedSerializedDelta;
+            movedChild: delta.movedChild.id
+        } as ChildMovedFromOtherContainmentSerializedDelta;
+    }
+
+    if (delta instanceof ChildMovedFromOtherContainmentInSameParentDelta) {
+        return {
+            kind: "ChildMovedFromOtherContainmentInSameParent",
+            parent: delta.parent.id,
+            oldContainment: metaPointerFor(delta.oldContainment),
+            oldIndex: delta.oldIndex,
+            movedChild: delta.movedChild.id,
+            newContainment: metaPointerFor(delta.newContainment),
+            newIndex: delta.newIndex
+        } as ChildMovedFromOtherContainmentInSameParentSerializedDelta;
     }
 
     if (delta instanceof ChildMovedInSameContainmentDelta) {
@@ -156,63 +204,50 @@ export const serializeDelta = (delta: IDelta) => {
             containment: metaPointerFor(delta.containment),
             oldIndex: delta.oldIndex,
             newIndex: delta.newIndex,
-            child: delta.child.id
+            movedChild: delta.movedChild.id
         } as ChildMovedInSameContainmentSerializedDelta;
     }
 
-    if (delta instanceof ReferenceAddedDelta) {
+    if (delta instanceof ChildMovedAndReplacedFromOtherContainmentDelta) {
         return {
-            kind: "ReferenceAdded",
-            container: delta.container.id,
-            reference: metaPointerFor(delta.reference),
-            index: delta.index,
-            newTarget: idFrom(delta.newTarget)
-        } as ReferenceAddedSerializedDelta;
-    }
-
-    if (delta instanceof ReferenceDeletedDelta) {
-        return {
-            kind: "ReferenceDeleted",
-            container: delta.container.id,
-            reference: metaPointerFor(delta.reference),
-            index: delta.index,
-            deletedTarget: idFrom(delta.deletedTarget)
-        } as ReferenceDeletedSerializedDelta;
-    }
-
-    if (delta instanceof ReferenceReplacedDelta) {
-        return {
-            kind: "ReferenceReplaced",
-            container: delta.container.id,
-            reference: metaPointerFor(delta.reference),
-            index: delta.index,
-            replacedTarget: idFrom(delta.replacedTarget),
-            newTarget: idFrom(delta.newTarget)
-        } as ReferenceReplacedSerializedDelta;
-    }
-
-    if (delta instanceof ReferenceMovedDelta) {
-        return {
-            kind: "ReferenceMoved",
-            oldContainer: delta.oldContainer.id,
-            oldReference: metaPointerFor(delta.oldReference),
-            oldIndex: delta.oldIndex,
-            newContainer: delta.newContainer.id,
-            newReference: metaPointerFor(delta.newReference),
+            kind: "ChildMovedAndReplacedFromOtherContainment",
+            newParent: delta.newParent.id,
+            newContainment: metaPointerFor(delta.newContainment),
             newIndex: delta.newIndex,
-            target: idFrom(delta.target)
-        } as ReferenceMovedSerializedDelta;
+            movedChild: delta.movedChild.id,
+            oldParent: delta.oldParent.id,
+            oldContainment: metaPointerFor(delta.oldContainment),
+            oldIndex: delta.oldIndex,
+            replacedChild: delta.replacedChild.id,
+            replacedChildAsNodes: serializeNodeBases([delta.replacedChild])
+        } as ChildMovedAndReplacedFromOtherContainmentSerializedDelta;
     }
 
-    if (delta instanceof ReferenceMovedInSameReferenceDelta) {
+    if (delta instanceof ChildMovedAndReplacedFromOtherContainmentInSameParentDelta) {
         return {
-            kind: "ReferenceMovedInSameReference",
-            container: delta.container.id,
-            reference: metaPointerFor(delta.reference),
+            kind: "ChildMovedAndReplacedFromOtherContainmentInSameParent",
+            parent: delta.parent.id,
+            oldContainment: metaPointerFor(delta.oldContainment),
+            oldIndex: delta.oldIndex,
+            newContainment: metaPointerFor(delta.newContainment),
+            newIndex: delta.newIndex,
+            movedChild: delta.movedChild.id,
+            replacedChild: delta.replacedChild.id,
+            replacedChildAsNodes: serializeNodeBases([delta.replacedChild])
+        } as ChildMovedAndReplacedFromOtherContainmentInSameParentSerializedDelta;
+    }
+
+    if (delta instanceof ChildMovedAndReplacedInSameContainmentDelta) {
+        return {
+            kind: "ChildMovedAndReplacedInSameContainment",
+            parent: delta.parent.id,
+            containment: metaPointerFor(delta.containment),
             oldIndex: delta.oldIndex,
             newIndex: delta.newIndex,
-            target: idFrom(delta.target)
-        } as ReferenceMovedInSameReferenceSerializedDelta;
+            movedChild: delta.movedChild.id,
+            replacedChild: delta.replacedChild.id,
+            replacedChildAsNodes: serializeNodeBases([delta.replacedChild])
+        } as ChildMovedAndReplacedInSameContainmentSerializedDelta;
     }
 
     if (delta instanceof AnnotationAddedDelta) {
@@ -266,6 +301,150 @@ export const serializeDelta = (delta: IDelta) => {
             newIndex: delta.newIndex,
             movedAnnotation: delta.movedAnnotation.id
         } as AnnotationMovedInSameParentSerializedDelta;
+    }
+
+    if (delta instanceof AnnotationMovedAndReplacedFromOtherParentDelta) {
+        return {
+            kind: "AnnotationMovedAndReplacedFromOtherParent",
+            oldParent: delta.oldParent.id,
+            oldIndex: delta.oldIndex,
+            replacedAnnotation: delta.replacedAnnotation.id,
+            replacedAnnotationNodes: serializeNodeBases([delta.replacedAnnotation]),
+            newParent: delta.newParent.id,
+            newIndex: delta.newIndex,
+            movedAnnotation: delta.movedAnnotation.id
+        } as AnnotationMovedAndReplacedFromOtherParentSerializedDelta;
+    }
+
+    if (delta instanceof AnnotationMovedAndReplacedInSameParentDelta) {
+        return {
+            kind: "AnnotationMovedAndReplacedInSameParent",
+            parent: delta.parent.id,
+            oldIndex: delta.oldIndex,
+            newIndex: delta.newIndex,
+            replacedAnnotation: delta.replacedAnnotation.id,
+            replacedAnnotationNodes: serializeNodeBases([delta.replacedAnnotation]),
+            movedAnnotation: delta.movedAnnotation.id
+        } as AnnotationMovedAndReplacedInSameParentSerializedDelta;
+    }
+
+    if (delta instanceof ReferenceAddedDelta) {
+        return {
+            kind: "ReferenceAdded",
+            parent: delta.parent.id,
+            reference: metaPointerFor(delta.reference),
+            index: delta.index,
+            newTarget: idFrom(delta.newTarget)
+        } as ReferenceAddedSerializedDelta;
+    }
+
+    if (delta instanceof ReferenceDeletedDelta) {
+        return {
+            kind: "ReferenceDeleted",
+            parent: delta.parent.id,
+            reference: metaPointerFor(delta.reference),
+            index: delta.index,
+            deletedTarget: idFrom(delta.deletedTarget)
+        } as ReferenceDeletedSerializedDelta;
+    }
+
+    if (delta instanceof ReferenceChangedDelta) {
+        return {
+            kind: "ReferenceChanged",
+            parent: delta.parent.id,
+            reference: metaPointerFor(delta.reference),
+            index: delta.index,
+            newTarget: idFrom(delta.newTarget),
+            oldTarget: idFrom(delta.oldTarget)
+        } as ReferenceChangedSerializedDelta;
+    }
+
+    if (delta instanceof EntryMovedFromOtherReferenceDelta) {
+        return {
+            kind: "EntryMovedFromOtherReference",
+            oldParent: delta.oldParent.id,
+            oldReference: metaPointerFor(delta.oldReference),
+            oldIndex: delta.oldIndex,
+            newParent: delta.newParent.id,
+            newReference: metaPointerFor(delta.newReference),
+            newIndex: delta.newIndex,
+            movedTarget: idFrom(delta.movedTarget)
+        } as EntryMovedFromOtherReferenceSerializedDelta;
+    }
+
+    if (delta instanceof EntryMovedFromOtherReferenceInSameParentDelta) {
+        return {
+            kind: "EntryMovedFromOtherReferenceInSameParent",
+            parent: delta.parent.id,
+            oldReference: metaPointerFor(delta.oldReference),
+            oldIndex: delta.oldIndex,
+            newReference: metaPointerFor(delta.newReference),
+            newIndex: delta.newIndex,
+            movedTarget: idFrom(delta.movedTarget)
+        } as EntryMovedFromOtherReferenceInSameParentSerializedDelta;
+    }
+
+    if (delta instanceof EntryMovedInSameReferenceDelta) {
+        return {
+            kind: "EntryMovedInSameReference",
+            parent: delta.parent.id,
+            reference: metaPointerFor(delta.reference),
+            oldIndex: delta.oldIndex,
+            newIndex: delta.newIndex,
+            movedTarget: idFrom(delta.movedTarget)
+        } as EntryMovedInSameReferenceSerializedDelta;
+    }
+
+    if (delta instanceof EntryMovedAndReplacedFromOtherReferenceDelta) {
+        return {
+            kind: "EntryMovedAndReplacedFromOtherReference",
+            newParent: delta.newParent.id,
+            newReference: metaPointerFor(delta.newReference),
+            newIndex: delta.newIndex,
+            movedTarget: idFrom(delta.movedTarget),
+            oldParent: delta.oldParent.id,
+            oldReference: metaPointerFor(delta.oldReference),
+            oldIndex: delta.oldIndex,
+            replacedTarget: idFrom(delta.replacedTarget)
+        } as EntryMovedAndReplacedFromOtherReferenceSerializedDelta;
+    }
+
+    if (delta instanceof EntryMovedAndReplacedFromOtherReferenceInSameParentDelta) {
+        return {
+            kind: "EntryMovedAndReplacedFromOtherReferenceInSameParent",
+            parent: delta.parent.id,
+            oldReference: metaPointerFor(delta.oldReference),
+            oldIndex: delta.oldIndex,
+            newReference: metaPointerFor(delta.newReference),
+            newIndex: delta.newIndex,
+            movedTarget: idFrom(delta.movedTarget),
+            replacedTarget: idFrom(delta.replacedTarget)
+        } as EntryMovedAndReplacedFromOtherReferenceInSameParentSerializedDelta;
+    }
+
+    if (delta instanceof EntryMovedAndReplacedInSameReferenceDelta) {
+        return {
+            kind: "EntryMovedAndReplacedInSameReference",
+            parent: delta.parent.id,
+            reference: metaPointerFor(delta.reference),
+            oldIndex: delta.oldIndex,
+            newIndex: delta.newIndex,
+            movedTarget: idFrom(delta.movedTarget),
+            replacedTarget: idFrom(delta.replacedTarget)
+        } as EntryMovedAndReplacedInSameReferenceSerializedDelta;
+    }
+
+    if (delta instanceof CompositeDelta) {
+        return {
+            kind: "Composite",
+            parts: delta.parts.map(serializeDelta)
+        } as CompositeSerializedDelta;
+    }
+
+    if (delta instanceof NoOpDelta) {
+        return {
+            kind: "NoOp"
+        } as NoOpSerializedDelta;
     }
 
     throw new Error(`serialization of delta of class ${delta.constructor.name} not implemented`);

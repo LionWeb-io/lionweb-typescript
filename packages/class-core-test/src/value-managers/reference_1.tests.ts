@@ -19,7 +19,7 @@ import {
     collectingDeltaHandler,
     nodeBaseDeserializer,
     ReferenceAddedDelta,
-    ReferenceReplacedDelta,
+    ReferenceChangedDelta,
     serializeNodeBases
 } from "@lionweb/class-core"
 import { AccumulatingSimplisticHandler, BuiltinPropertyValueDeserializer } from "@lionweb/core"
@@ -113,7 +113,7 @@ describe("[1] reference", () => {
         equal(deltas.length, 2);
         deepEqual(
             deltas[1],
-            new ReferenceReplacedDelta(src, testLanguageBase.LinkTestConcept_reference_1, 0, dst1, dst2)
+            new ReferenceChangedDelta(src, testLanguageBase.LinkTestConcept_reference_1, 0, dst1, dst2)
         );
     });
 
