@@ -9,11 +9,14 @@ const versions = require("./versions.json")
 const {
     "publish-version": publishVersion,
     "internal-version": internalVersion,
-    "internal-packages": internalPackages,
+    "internal-packages": internalPackages
 } = versions.lionweb
 const {"external-deps": externalDeps} = versions
 
-const ownPackageVersion = (dep) => internalPackages.indexOf(dep) === -1 ? publishVersion : internalVersion
+const ownPackageVersion = (dep) =>
+    internalPackages.indexOf(dep) > -1
+        ? internalVersion
+        : publishVersion
 
 const fqPrefix = "@lionweb/"
 
