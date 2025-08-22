@@ -1,0 +1,35 @@
+{
+  "name": "@lionweb/delta-protocol-test",
+  "version": "0.7.0-beta.11",
+  "description": "Tests for the delta protocol implementation",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "typings": "dist/index.d.ts",
+  "type": "module",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LionWeb-io/lionweb-typescript.git"
+  },
+  "bugs": {
+    "url": "https://github.com/LionWeb-io/lionweb-typescript/issues"
+  },
+  "scripts": {
+    "clean": "npx rimraf dist node_modules delta-protocol-test-*.tgz",
+    "build": "tsc",
+    "lint": "eslint src",
+    "pretest": "npm run build",
+    "test": "mocha --recursive dist/tests/"
+  },
+  "dependencies": {
+    "@lionweb/delta-protocol-impl": "0.7.0-beta.11",
+    "@lionweb/delta-protocol-test-cli": "0.7.0-beta.11"
+  },
+  "devDependencies": {
+    "@types/chai": "5.2.2",
+    "@types/mocha": "10.0.10",
+    "ansi-colors": "4.1.3",
+    "chai": "5.3.1",
+    "mocha": "11.7.1"
+  }
+}

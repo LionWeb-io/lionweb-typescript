@@ -71,3 +71,12 @@ export const lazyMapGet = <T>(map: { [key: string]: T }, key: string, createThun
     return value
 }
 
+
+/**
+ * @return a map with each key-value pair the result of mapping an item in the given list using the given key and value functions.
+ */
+export const mapFrom = <T, V>(ts: T[], keyFunc: (t: T) => string, valueFunc: (t: T) => V): Record<string, V> =>
+    Object.fromEntries(
+        ts.map((t) => [keyFunc(t), valueFunc(t)])
+    )
+

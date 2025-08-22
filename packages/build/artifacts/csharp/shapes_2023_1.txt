@@ -1,0 +1,81 @@
+language Shapes
+    version: 1
+    entities (↓name):
+
+        annotation BillOfMaterials
+            annotates: Node
+            features (↓name):
+                altGroups: MaterialGroup[0..*]
+                defaultGroup: MaterialGroup?
+                groups: MaterialGroup[0..*]
+                materials -> IShape[0..*]
+
+        concept Circle extends Shape
+            features (↓name):
+                center: Coord
+                r: Integer
+
+        concept CompositeShape extends Shape
+            features (↓name):
+                disabledParts: IShape[1..*]
+                evilPart: IShape
+                parts: IShape[1..*]
+
+        concept Coord
+            features (↓name):
+                x: Integer
+                y: Integer
+                z: Integer
+
+        annotation Documentation
+            annotates: Shape
+            features (↓name):
+                technical: Boolean?
+                text: String?
+
+        <<partition>> concept Geometry
+            features (↓name):
+                documentation: Documentation?
+                shapes: IShape[0..*]
+
+        interface IShape
+            features (↓name):
+                fixpoints: Coord[0..*]
+                uuid: String
+
+        concept Line extends Shape implements INamed
+            features (↓name):
+                end: Coord
+                start: Coord
+
+        concept MaterialGroup
+            features (↓name):
+                defaultShape: IShape?
+                materials -> IShape[1..*]
+                matterState: MatterState?
+
+        enumeration MatterState
+            literals:
+                solid
+                liquid
+                gas
+
+        concept OffsetDuplicate extends Shape
+            features (↓name):
+                altSource -> Shape?
+                docs: Documentation?
+                offset: Coord
+                secretDocs: Documentation?
+                source -> Shape
+
+        <<partition>> concept ReferenceGeometry
+            features (↓name):
+                shapes -> IShape[0..*]
+
+        abstract concept Shape implements INamed, IShape
+            features (↓name):
+                shapeDocs: Documentation?
+
+        primitive type Time
+
+

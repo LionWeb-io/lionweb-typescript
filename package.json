@@ -53,6 +53,9 @@
     "./packages/class-core-generator",
     "./packages/artifacts",
     "./packages/build",
-    "./packages/class-core-test"
+    "./packages/class-core-test",
+    "./packages/delta-protocol-impl",
+    "./packages/delta-protocol-test-cli",
+    "./packages/delta-protocol-test"
   ]
 }

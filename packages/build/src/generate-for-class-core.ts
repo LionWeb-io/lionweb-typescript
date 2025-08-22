@@ -53,4 +53,5 @@ generateDeltaCode("../class-core/src/deltas", defaultTrumpfOriginatingApache2_0L
 const TestLanguage = deserializeLanguages(readFileAsJson(inArtifactsPath("TestLanguage.json")) as LionWebJsonChunk)[0]
 writeFileSync(inArtifactsPath("TestLanguage.txt"), languageAsText(TestLanguage))
 generateLanguage(TestLanguage, "../class-core-test/src/gen", { header: defaultTrumpfOriginatingApache2_0LicensedHeader })
+generateLanguage(TestLanguage, "../delta-protocol-test-cli/src/gen", { header: defaultTrumpfOriginatingApache2_0LicensedHeader })
 

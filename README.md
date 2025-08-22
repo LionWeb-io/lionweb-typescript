@@ -87,6 +87,14 @@ The implementation is divided up in a number of NPM packages in the directory [`
 - `artifacts`
   A package that generates artifacts (serialization chunks, diagrams, JSON Schemas) from some of the models constructed in the `core` and `test` packages.
 
+- `delta-protocol-impl`
+  A package that contains the implementation of the delta protocol — both client and (vestigial!) repository.
+
+- `delta-protocol-test-cli`
+  A package that contains CLI programs for starting a client and repository *for testing purposes*.
+
+- `delta-protocol-test`
+  A package that contains tests for the delta protocol implementation.
 
   _Note_ that this package – and specifically the `generate-for-class-core.ts` file – depends on `class-core` itself.
   This constitutes a *circular* dependency, but that only exists at compile+build time, so should not be problematic.
