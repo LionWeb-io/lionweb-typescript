@@ -17,7 +17,7 @@
     "clean": "npx rimraf dist node_modules",
     "build": "tsc",
     "pregenerate": "npm run build",
-    "generate": "node dist/generate-for-class-core.js && node dist/generate-for-io.lionweb.mps.specific.js",
+    "generate": "node dist/generate-for-class-core.js && node dist/generate-for-io.lionweb.mps.specific.js && node dist/generate-shapes-language-from-csharp.js",
     "lint": "eslint src"
   },
   "dependencies": {

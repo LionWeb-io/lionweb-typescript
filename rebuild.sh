@@ -84,6 +84,18 @@ cd artifacts
 npm run generate
 cd ..
 
+cd delta-protocol-impl
+npm run build
+cd ..
+
+cd delta-protocol-test-cli
+npm run build
+cd ..
+
+cd delta-protocol-test
+npm run build
+cd ..
+
 cd .. # (/<root>)
 
 # (doesn't bother with dependency order:)
