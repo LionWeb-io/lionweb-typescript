@@ -19,7 +19,12 @@ import { Reference, SingleRef } from "@lionweb/core"
 import { action, observable } from "mobx"
 
 import { INodeBase } from "../base-types.js"
-import { ReferenceAddedDelta, ReferenceDeletedDelta, ReferenceMovedInSameReferenceDelta, ReferenceReplacedDelta } from "../deltas/index.js"
+import {
+    EntryMovedInSameReferenceDelta,
+    ReferenceAddedDelta,
+    ReferenceChangedDelta,
+    ReferenceDeletedDelta
+} from "../deltas/index.js"
 import { checkIndex, FeatureValueManager } from "./base.js"
 
 
@@ -37,6 +42,7 @@ export abstract class ReferenceValueManager<T extends INodeBase> extends Feature
     /**
      * Adds the given target to the reference.
      * For a single-valued reference, this replaces an already-present target.
+     * **Note**: this method predominantly exists for the benefit of the deserializer and duplicator!
      */
     abstract addDirectly(newTarget: SingleRef<T> | undefined): void;
 
@@ -89,18 +95,18 @@ export class OptionalSingleReferenceValueManager<T extends INodeBase> extends Si
             return
         }
         if (newTarget === undefined) {
-            this.addDirectly(undefined);
+            this.setDirectly(undefined);
             if (oldTarget === undefined) {
                 // (nothing)
             } else {
                 this.emitDelta(() => new ReferenceDeletedDelta(this.container, this.reference, 0, oldTarget));
             }
         } else {
-            this.addDirectly(newTarget);
+            this.setDirectly(newTarget);
             if (oldTarget === undefined) {
                 this.emitDelta(() => new ReferenceAddedDelta(this.container, this.reference, 0, newTarget));
             } else {
-                this.emitDelta(() => new ReferenceReplacedDelta(this.container, this.reference, 0, oldTarget, newTarget));
+                this.emitDelta(() => new ReferenceChangedDelta(this.container, this.reference, 0, oldTarget, newTarget));
             }
         }
     }
@@ -132,11 +138,11 @@ export class RequiredSingleReferenceValueManager<T extends INodeBase> extends Si
         if (newTarget === undefined) {
             this.throwOnUnset();
         } else {
-            this.addDirectly(newTarget);
+            this.setDirectly(newTarget);
             if (oldTarget === undefined) {
                 this.emitDelta(() => new ReferenceAddedDelta(this.container, this.reference, 0, newTarget));
             } else {
-                this.emitDelta(() => new ReferenceReplacedDelta(this.container, this.reference, 0, oldTarget, newTarget));
+                this.emitDelta(() => new ReferenceChangedDelta(this.container, this.reference, 0, oldTarget, newTarget));
             }
         }
     }
@@ -158,7 +164,7 @@ export abstract class MultiReferenceValueManager<T extends INodeBase> extends Re
     }
 
     get(): SingleRef<T>[] {
-        return this.getDirectly().slice();
+        return this.getDirectly().slice();  // make defensive copy
     }
 
     isSet(): boolean {
@@ -194,6 +200,11 @@ export abstract class MultiReferenceValueManager<T extends INodeBase> extends Re
 
     abstract remove(targetToRemove: SingleRef<T>): void;
 
+    @action removeAtIndexDirectly(index: number): SingleRef<T> {
+        checkIndex(index, this.targets.length, false);
+        return this.targets.splice(index, 1)[0];
+    }
+
     @action moveDirectly(oldIndex: number, newIndex: number): SingleRef<T> | undefined {
         checkIndex(oldIndex, this.targets.length, false);
         checkIndex(newIndex, this.targets.length, false);
@@ -208,7 +219,16 @@ export abstract class MultiReferenceValueManager<T extends INodeBase> extends Re
     @action move(oldIndex: number, newIndex: number) {
         const target = this.moveDirectly(oldIndex, newIndex);
         if (target !== undefined) {
-            this.emitDelta(() => new ReferenceMovedInSameReferenceDelta(this.container, this.reference, oldIndex, newIndex, target));
+            this.emitDelta(() => new EntryMovedInSameReferenceDelta(this.container, this.reference, oldIndex, newIndex, target));
+        }
+    }
+
+    @action moveAndReplaceDirectly(oldIndex: number, newIndex: number) {
+        checkIndex(oldIndex, this.targets.length, false);
+        checkIndex(newIndex, this.targets.length, false);
+        if (oldIndex !== newIndex) {
+            this.targets.splice(newIndex, 1, this.targets[oldIndex]);
+            this.targets.splice(oldIndex, 1);
         }
     }
 

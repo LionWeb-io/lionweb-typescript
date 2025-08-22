@@ -397,6 +397,9 @@ export class LinkTestConcept extends NodeBase implements INamed {
     set containment_0_1(newValue: LinkTestConcept | undefined) {
         this._containment_0_1.set(newValue);
     }
+    replaceContainment_0_1With(newValue: LinkTestConcept) {
+        this._containment_0_1.replaceWith(newValue);
+    }
 
     private readonly _containment_1: RequiredSingleContainmentValueManager<LinkTestConcept>;
     get containment_1(): LinkTestConcept {
@@ -404,6 +407,9 @@ export class LinkTestConcept extends NodeBase implements INamed {
     }
     set containment_1(newValue: LinkTestConcept) {
         this._containment_1.set(newValue);
+    }
+    replaceContainment_1With(newValue: LinkTestConcept) {
+        this._containment_1.replaceWith(newValue);
     }
 
     private readonly _containment_0_n: OptionalMultiContainmentValueManager<LinkTestConcept>;
@@ -422,6 +428,9 @@ export class LinkTestConcept extends NodeBase implements INamed {
     moveContainment_0_n(oldIndex: number, newIndex: number) {
         this._containment_0_n.move(oldIndex, newIndex);
     }
+    replaceContainment_0_nAtIndex(movedChild: LinkTestConcept, newIndex: number) {
+        this._containment_0_n.replaceAtIndex(movedChild, newIndex);
+    }
 
     private readonly _containment_1_n: RequiredMultiContainmentValueManager<LinkTestConcept>;
     get containment_1_n(): LinkTestConcept[] {
@@ -438,6 +447,9 @@ export class LinkTestConcept extends NodeBase implements INamed {
     }
     moveContainment_1_n(oldIndex: number, newIndex: number) {
         this._containment_1_n.move(oldIndex, newIndex);
+    }
+    replaceContainment_1_nAtIndex(movedChild: LinkTestConcept, newIndex: number) {
+        this._containment_1_n.replaceAtIndex(movedChild, newIndex);
     }
 
     private readonly _reference_0_1: OptionalSingleReferenceValueManager<LinkTestConcept>;

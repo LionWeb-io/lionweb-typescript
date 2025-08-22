@@ -19,139 +19,164 @@
 // Modifying it by hand is useless at best, and sabotage at worst.
 
 import { Containment, MemoisingSymbolTable, Property, Reference } from "@lionweb/core";
+import { LionWebJsonMetaPointer } from "@lionweb/json";
 
-import { ILanguageBase } from "../../base-types.js";
+import { ILanguageBase, INodeBase } from "../../base-types.js";
 import { IdMapping } from "../../id-mapping.js";
 import { SerializedDelta } from "./types.g.js";
 import { DeltaDeserializer } from "./base.js";
 import {
     AnnotationAddedDelta,
     AnnotationDeletedDelta,
+    AnnotationMovedAndReplacedFromOtherParentDelta,
+    AnnotationMovedAndReplacedInSameParentDelta,
     AnnotationMovedFromOtherParentDelta,
     AnnotationMovedInSameParentDelta,
     AnnotationReplacedDelta,
     ChildAddedDelta,
     ChildDeletedDelta,
-    ChildMovedDelta,
+    ChildMovedAndReplacedFromOtherContainmentDelta,
+    ChildMovedAndReplacedFromOtherContainmentInSameParentDelta,
+    ChildMovedAndReplacedInSameContainmentDelta,
+    ChildMovedFromOtherContainmentDelta,
+    ChildMovedFromOtherContainmentInSameParentDelta,
     ChildMovedInSameContainmentDelta,
     ChildReplacedDelta,
+    CompositeDelta,
+    EntryMovedAndReplacedFromOtherReferenceDelta,
+    EntryMovedAndReplacedFromOtherReferenceInSameParentDelta,
+    EntryMovedAndReplacedInSameReferenceDelta,
+    EntryMovedFromOtherReferenceDelta,
+    EntryMovedFromOtherReferenceInSameParentDelta,
+    EntryMovedInSameReferenceDelta,
     NoOpDelta,
+    PartitionAddedDelta,
+    PartitionDeletedDelta,
     PropertyAddedDelta,
     PropertyChangedDelta,
     PropertyDeletedDelta,
     ReferenceAddedDelta,
-    ReferenceDeletedDelta,
-    ReferenceMovedDelta,
-    ReferenceMovedInSameReferenceDelta,
-    ReferenceReplacedDelta
+    ReferenceChangedDelta,
+    ReferenceDeletedDelta
 } from "../types.g.js";
+import { IDelta } from "../base.js";
 
 
 export const deltaDeserializer = (languageBases: ILanguageBase[], idMapping: IdMapping): DeltaDeserializer => {
     const symbolTable = new MemoisingSymbolTable(languageBases.map(({language}) => language));
-    return (delta: SerializedDelta) => {
+    const resolvedPropertyFrom = (metaPointer: LionWebJsonMetaPointer, container: INodeBase): Property =>
+        symbolTable.featureMatching(container.classifier.metaPointer(), metaPointer) as Property
+    const resolvedContainmentFrom = (metaPointer: LionWebJsonMetaPointer, container: INodeBase): Containment =>
+        symbolTable.featureMatching(container.classifier.metaPointer(), metaPointer) as Containment
+    const resolvedReferenceFrom = (metaPointer: LionWebJsonMetaPointer, container: INodeBase): Reference =>
+        symbolTable.featureMatching(container.classifier.metaPointer(), metaPointer) as Reference
+    const deserializedDelta = (delta: SerializedDelta): IDelta => {
         switch (delta.kind) {
-            case "NoOp": {
-                return new NoOpDelta();
+            case "PartitionAdded": {
+                const newPartition = idMapping.fromId(delta.newPartition);
+                return new PartitionAddedDelta(newPartition);
+            }
+            case "PartitionDeleted": {
+                const deletedPartition = idMapping.fromId(delta.deletedPartition);
+                return new PartitionDeletedDelta(deletedPartition);
             }
             case "PropertyAdded": {
-                const container = idMapping.fromId(delta.container);
-                const property = symbolTable.featureMatching(container.classifier.metaPointer(), delta.property) as Property;
+                const node = idMapping.fromId(delta.node);
+                const property = resolvedPropertyFrom(delta.property, node);
                 const value = delta.value;
-                return new PropertyAddedDelta(container, property, value);
+                return new PropertyAddedDelta(node, property, value);
             }
             case "PropertyDeleted": {
-                const container = idMapping.fromId(delta.container);
-                const property = symbolTable.featureMatching(container.classifier.metaPointer(), delta.property) as Property;
+                const node = idMapping.fromId(delta.node);
+                const property = resolvedPropertyFrom(delta.property, node);
                 const oldValue = delta.oldValue;
-                return new PropertyDeletedDelta(container, property, oldValue);
+                return new PropertyDeletedDelta(node, property, oldValue);
             }
             case "PropertyChanged": {
-                const container = idMapping.fromId(delta.container);
-                const property = symbolTable.featureMatching(container.classifier.metaPointer(), delta.property) as Property;
+                const node = idMapping.fromId(delta.node);
+                const property = resolvedPropertyFrom(delta.property, node);
                 const oldValue = delta.oldValue;
                 const newValue = delta.newValue;
-                return new PropertyChangedDelta(container, property, oldValue, newValue);
+                return new PropertyChangedDelta(node, property, oldValue, newValue);
             }
             case "ChildAdded": {
                 const parent = idMapping.fromId(delta.parent);
-                const containment = symbolTable.featureMatching(parent.classifier.metaPointer(), delta.containment) as Containment;
+                const containment = resolvedContainmentFrom(delta.containment, parent);
                 const index = delta.index;
                 const newChild = idMapping.fromId(delta.newChild);
                 return new ChildAddedDelta(parent, containment, index, newChild);
             }
             case "ChildDeleted": {
                 const parent = idMapping.fromId(delta.parent);
-                const containment = symbolTable.featureMatching(parent.classifier.metaPointer(), delta.containment) as Containment;
+                const containment = resolvedContainmentFrom(delta.containment, parent);
                 const index = delta.index;
                 const deletedChild = idMapping.fromId(delta.deletedChild);
                 return new ChildDeletedDelta(parent, containment, index, deletedChild);
             }
             case "ChildReplaced": {
                 const parent = idMapping.fromId(delta.parent);
-                const containment = symbolTable.featureMatching(parent.classifier.metaPointer(), delta.containment) as Containment;
+                const containment = resolvedContainmentFrom(delta.containment, parent);
                 const index = delta.index;
                 const replacedChild = idMapping.fromId(delta.replacedChild);
                 const newChild = idMapping.fromId(delta.newChild);
                 return new ChildReplacedDelta(parent, containment, index, replacedChild, newChild);
             }
-            case "ChildMoved": {
+            case "ChildMovedFromOtherContainment": {
                 const oldParent = idMapping.fromId(delta.oldParent);
-                const oldContainment = symbolTable.featureMatching(oldParent.classifier.metaPointer(), delta.oldContainment) as Containment;
+                const oldContainment = resolvedContainmentFrom(delta.oldContainment, oldParent);
                 const oldIndex = delta.oldIndex;
                 const newParent = idMapping.fromId(delta.newParent);
-                const newContainment = symbolTable.featureMatching(newParent.classifier.metaPointer(), delta.newContainment) as Containment;
+                const newContainment = resolvedContainmentFrom(delta.newContainment, newParent);
                 const newIndex = delta.newIndex;
-                const child = idMapping.fromId(delta.child);
-                return new ChildMovedDelta(oldParent, oldContainment, oldIndex, newParent, newContainment, newIndex, child);
+                const movedChild = idMapping.fromId(delta.movedChild);
+                return new ChildMovedFromOtherContainmentDelta(oldParent, oldContainment, oldIndex, newParent, newContainment, newIndex, movedChild);
+            }
+            case "ChildMovedFromOtherContainmentInSameParent": {
+                const parent = idMapping.fromId(delta.parent);
+                const oldContainment = resolvedContainmentFrom(delta.oldContainment, parent);
+                const oldIndex = delta.oldIndex;
+                const movedChild = idMapping.fromId(delta.movedChild);
+                const newContainment = resolvedContainmentFrom(delta.newContainment, parent);
+                const newIndex = delta.newIndex;
+                return new ChildMovedFromOtherContainmentInSameParentDelta(parent, oldContainment, oldIndex, movedChild, newContainment, newIndex);
             }
             case "ChildMovedInSameContainment": {
                 const parent = idMapping.fromId(delta.parent);
-                const containment = symbolTable.featureMatching(parent.classifier.metaPointer(), delta.containment) as Containment;
+                const containment = resolvedContainmentFrom(delta.containment, parent);
                 const oldIndex = delta.oldIndex;
                 const newIndex = delta.newIndex;
-                const child = idMapping.fromId(delta.child);
-                return new ChildMovedInSameContainmentDelta(parent, containment, oldIndex, newIndex, child);
+                const movedChild = idMapping.fromId(delta.movedChild);
+                return new ChildMovedInSameContainmentDelta(parent, containment, oldIndex, newIndex, movedChild);
             }
-            case "ReferenceAdded": {
-                const container = idMapping.fromId(delta.container);
-                const reference = symbolTable.featureMatching(container.classifier.metaPointer(), delta.reference) as Reference;
-                const index = delta.index;
-                const newTarget = idMapping.fromRefId(delta.newTarget);
-                return new ReferenceAddedDelta(container, reference, index, newTarget);
-            }
-            case "ReferenceDeleted": {
-                const container = idMapping.fromId(delta.container);
-                const reference = symbolTable.featureMatching(container.classifier.metaPointer(), delta.reference) as Reference;
-                const index = delta.index;
-                const deletedTarget = idMapping.fromRefId(delta.deletedTarget);
-                return new ReferenceDeletedDelta(container, reference, index, deletedTarget);
-            }
-            case "ReferenceReplaced": {
-                const container = idMapping.fromId(delta.container);
-                const reference = symbolTable.featureMatching(container.classifier.metaPointer(), delta.reference) as Reference;
-                const index = delta.index;
-                const replacedTarget = idMapping.fromRefId(delta.replacedTarget);
-                const newTarget = idMapping.fromRefId(delta.newTarget);
-                return new ReferenceReplacedDelta(container, reference, index, replacedTarget, newTarget);
-            }
-            case "ReferenceMoved": {
-                const oldContainer = idMapping.fromId(delta.oldContainer);
-                const oldReference = symbolTable.featureMatching(oldContainer.classifier.metaPointer(), delta.oldReference) as Reference;
-                const oldIndex = delta.oldIndex;
-                const newContainer = idMapping.fromId(delta.newContainer);
-                const newReference = symbolTable.featureMatching(newContainer.classifier.metaPointer(), delta.newReference) as Reference;
+            case "ChildMovedAndReplacedFromOtherContainment": {
+                const newParent = idMapping.fromId(delta.newParent);
+                const newContainment = resolvedContainmentFrom(delta.newContainment, newParent);
                 const newIndex = delta.newIndex;
-                const target = idMapping.fromRefId(delta.target);
-                return new ReferenceMovedDelta(oldContainer, oldReference, oldIndex, newContainer, newReference, newIndex, target);
+                const movedChild = idMapping.fromId(delta.movedChild);
+                const oldParent = idMapping.fromId(delta.oldParent);
+                const oldContainment = resolvedContainmentFrom(delta.oldContainment, oldParent);
+                const oldIndex = delta.oldIndex;
+                const replacedChild = idMapping.fromId(delta.replacedChild);
+                return new ChildMovedAndReplacedFromOtherContainmentDelta(newParent, newContainment, newIndex, movedChild, oldParent, oldContainment, oldIndex, replacedChild);
             }
-            case "ReferenceMovedInSameReference": {
-                const container = idMapping.fromId(delta.container);
-                const reference = symbolTable.featureMatching(container.classifier.metaPointer(), delta.reference) as Reference;
+            case "ChildMovedAndReplacedFromOtherContainmentInSameParent": {
+                const parent = idMapping.fromId(delta.parent);
+                const oldContainment = resolvedContainmentFrom(delta.oldContainment, parent);
+                const oldIndex = delta.oldIndex;
+                const newContainment = resolvedContainmentFrom(delta.newContainment, parent);
+                const newIndex = delta.newIndex;
+                const movedChild = idMapping.fromId(delta.movedChild);
+                const replacedChild = idMapping.fromId(delta.replacedChild);
+                return new ChildMovedAndReplacedFromOtherContainmentInSameParentDelta(parent, oldContainment, oldIndex, newContainment, newIndex, movedChild, replacedChild);
+            }
+            case "ChildMovedAndReplacedInSameContainment": {
+                const parent = idMapping.fromId(delta.parent);
+                const containment = resolvedContainmentFrom(delta.containment, parent);
                 const oldIndex = delta.oldIndex;
                 const newIndex = delta.newIndex;
-                const target = idMapping.fromRefId(delta.target);
-                return new ReferenceMovedInSameReferenceDelta(container, reference, oldIndex, newIndex, target);
+                const movedChild = idMapping.fromId(delta.movedChild);
+                const replacedChild = idMapping.fromId(delta.replacedChild);
+                return new ChildMovedAndReplacedInSameContainmentDelta(parent, containment, oldIndex, newIndex, movedChild, replacedChild);
             }
             case "AnnotationAdded": {
                 const parent = idMapping.fromId(delta.parent);
@@ -187,7 +212,111 @@ export const deltaDeserializer = (languageBases: ILanguageBase[], idMapping: IdM
                 const movedAnnotation = idMapping.fromId(delta.movedAnnotation);
                 return new AnnotationMovedInSameParentDelta(parent, oldIndex, newIndex, movedAnnotation);
             }
+            case "AnnotationMovedAndReplacedFromOtherParent": {
+                const oldParent = idMapping.fromId(delta.oldParent);
+                const oldIndex = delta.oldIndex;
+                const replacedAnnotation = idMapping.fromId(delta.replacedAnnotation);
+                const newParent = idMapping.fromId(delta.newParent);
+                const newIndex = delta.newIndex;
+                const movedAnnotation = idMapping.fromId(delta.movedAnnotation);
+                return new AnnotationMovedAndReplacedFromOtherParentDelta(oldParent, oldIndex, replacedAnnotation, newParent, newIndex, movedAnnotation);
+            }
+            case "AnnotationMovedAndReplacedInSameParent": {
+                const parent = idMapping.fromId(delta.parent);
+                const oldIndex = delta.oldIndex;
+                const newIndex = delta.newIndex;
+                const replacedAnnotation = idMapping.fromId(delta.replacedAnnotation);
+                const movedAnnotation = idMapping.fromId(delta.movedAnnotation);
+                return new AnnotationMovedAndReplacedInSameParentDelta(parent, oldIndex, newIndex, replacedAnnotation, movedAnnotation);
+            }
+            case "ReferenceAdded": {
+                const parent = idMapping.fromId(delta.parent);
+                const reference = resolvedReferenceFrom(delta.reference, parent);
+                const index = delta.index;
+                const newTarget = idMapping.fromRefId(delta.newTarget);
+                return new ReferenceAddedDelta(parent, reference, index, newTarget);
+            }
+            case "ReferenceDeleted": {
+                const parent = idMapping.fromId(delta.parent);
+                const reference = resolvedReferenceFrom(delta.reference, parent);
+                const index = delta.index;
+                const deletedTarget = idMapping.fromRefId(delta.deletedTarget);
+                return new ReferenceDeletedDelta(parent, reference, index, deletedTarget);
+            }
+            case "ReferenceChanged": {
+                const parent = idMapping.fromId(delta.parent);
+                const reference = resolvedReferenceFrom(delta.reference, parent);
+                const index = delta.index;
+                const newTarget = idMapping.fromRefId(delta.newTarget);
+                const oldTarget = idMapping.fromRefId(delta.oldTarget);
+                return new ReferenceChangedDelta(parent, reference, index, newTarget, oldTarget);
+            }
+            case "EntryMovedFromOtherReference": {
+                const oldParent = idMapping.fromId(delta.oldParent);
+                const oldReference = resolvedReferenceFrom(delta.oldReference, oldParent);
+                const oldIndex = delta.oldIndex;
+                const newParent = idMapping.fromId(delta.newParent);
+                const newReference = resolvedReferenceFrom(delta.newReference, newParent);
+                const newIndex = delta.newIndex;
+                const movedTarget = idMapping.fromRefId(delta.movedTarget);
+                return new EntryMovedFromOtherReferenceDelta(oldParent, oldReference, oldIndex, newParent, newReference, newIndex, movedTarget);
+            }
+            case "EntryMovedFromOtherReferenceInSameParent": {
+                const parent = idMapping.fromId(delta.parent);
+                const oldReference = resolvedReferenceFrom(delta.oldReference, parent);
+                const oldIndex = delta.oldIndex;
+                const newReference = resolvedReferenceFrom(delta.newReference, parent);
+                const newIndex = delta.newIndex;
+                const movedTarget = idMapping.fromRefId(delta.movedTarget);
+                return new EntryMovedFromOtherReferenceInSameParentDelta(parent, oldReference, oldIndex, newReference, newIndex, movedTarget);
+            }
+            case "EntryMovedInSameReference": {
+                const parent = idMapping.fromId(delta.parent);
+                const reference = resolvedReferenceFrom(delta.reference, parent);
+                const oldIndex = delta.oldIndex;
+                const newIndex = delta.newIndex;
+                const movedTarget = idMapping.fromRefId(delta.movedTarget);
+                return new EntryMovedInSameReferenceDelta(parent, reference, oldIndex, newIndex, movedTarget);
+            }
+            case "EntryMovedAndReplacedFromOtherReference": {
+                const newParent = idMapping.fromId(delta.newParent);
+                const newReference = resolvedReferenceFrom(delta.newReference, newParent);
+                const newIndex = delta.newIndex;
+                const movedTarget = idMapping.fromRefId(delta.movedTarget);
+                const oldParent = idMapping.fromId(delta.oldParent);
+                const oldReference = resolvedReferenceFrom(delta.oldReference, oldParent);
+                const oldIndex = delta.oldIndex;
+                const replacedTarget = idMapping.fromRefId(delta.replacedTarget);
+                return new EntryMovedAndReplacedFromOtherReferenceDelta(newParent, newReference, newIndex, movedTarget, oldParent, oldReference, oldIndex, replacedTarget);
+            }
+            case "EntryMovedAndReplacedFromOtherReferenceInSameParent": {
+                const parent = idMapping.fromId(delta.parent);
+                const oldReference = resolvedReferenceFrom(delta.oldReference, parent);
+                const oldIndex = delta.oldIndex;
+                const newReference = resolvedReferenceFrom(delta.newReference, parent);
+                const newIndex = delta.newIndex;
+                const movedTarget = idMapping.fromRefId(delta.movedTarget);
+                const replacedTarget = idMapping.fromRefId(delta.replacedTarget);
+                return new EntryMovedAndReplacedFromOtherReferenceInSameParentDelta(parent, oldReference, oldIndex, newReference, newIndex, movedTarget, replacedTarget);
+            }
+            case "EntryMovedAndReplacedInSameReference": {
+                const parent = idMapping.fromId(delta.parent);
+                const reference = resolvedReferenceFrom(delta.reference, parent);
+                const oldIndex = delta.oldIndex;
+                const newIndex = delta.newIndex;
+                const movedTarget = idMapping.fromRefId(delta.movedTarget);
+                const replacedTarget = idMapping.fromRefId(delta.replacedTarget);
+                return new EntryMovedAndReplacedInSameReferenceDelta(parent, reference, oldIndex, newIndex, movedTarget, replacedTarget);
+            }
+            case "Composite": {
+                const parts = delta.parts.map(deserializedDelta);
+                return new CompositeDelta(parts);
+            }
+            case "NoOp": {
+                return new NoOpDelta();
+            }
         }
     }
+    return deserializedDelta;
 }
 

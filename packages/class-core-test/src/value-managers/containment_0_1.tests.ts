@@ -18,7 +18,7 @@
 import {
     ChildAddedDelta,
     ChildDeletedDelta,
-    ChildMovedDelta,
+    ChildMovedFromOtherContainmentDelta,
     ChildReplacedDelta,
     collectingDeltaHandler,
     nodeBaseDeserializer,
@@ -111,7 +111,7 @@ describe("read+write access to a [0..1] containment", () => {
         equal(child.containment, testLanguageBase.LinkTestConcept_containment_0_1);
         equal(srcParent.containment_0_1, undefined);
         equal(deltas.length, 2);
-        deepEqual(deltas[1], new ChildMovedDelta(srcParent, testLanguageBase.LinkTestConcept_containment_0_1, 0, dstParent, testLanguageBase.LinkTestConcept_containment_0_1, 0, child));
+        deepEqual(deltas[1], new ChildMovedFromOtherContainmentDelta(srcParent, testLanguageBase.LinkTestConcept_containment_0_1, 0, dstParent, testLanguageBase.LinkTestConcept_containment_0_1, 0, child));
     });
 
     it("moving a child (through a [0..1] containment) directly between parents, replacing an already-present child", () => {

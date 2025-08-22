@@ -19,7 +19,14 @@ import { Containment } from "@lionweb/core"
 import { action, observable } from "mobx"
 
 import { INodeBase, removeFromParent } from "../base-types.js"
-import { ChildAddedDelta, ChildDeletedDelta, ChildMovedDelta, ChildMovedInSameContainmentDelta, ChildReplacedDelta } from "../deltas/index.js"
+import {
+    ChildAddedDelta,
+    ChildDeletedDelta,
+    ChildMovedAndReplacedFromOtherContainmentInSameParentDelta, ChildMovedAndReplacedInSameContainmentDelta,
+    ChildMovedFromOtherContainmentDelta,
+    ChildMovedInSameContainmentDelta,
+    ChildReplacedDelta
+} from "../deltas/index.js"
 import { checkIndex, FeatureValueManager } from "./base.js"
 
 
@@ -68,9 +75,31 @@ export abstract class SingleContainmentValueManager<T extends INodeBase> extends
     @action addDirectly(newChild: T) {
         const oldChild = this.getDirectly();
         if (oldChild !== undefined) {
-            throw new Error(`replacing a child using addDirectly on a value manager for a single-valued containment isn't allowed`);    // FIXME  unit test this
+            throw new Error(`replacing a child using addDirectly on a value manager for a single-valued containment isn't allowed`);    // TODO  unit test this
         }
         this.child.set(newChild);
+    }
+
+    @action replaceWith(newChild: T) {
+        const oldChild = this.getDirectly();
+        if (oldChild === undefined) {
+            // not a proper replace, but an add-set => delegate to regular setter (— unfortunately, through necessarily “unfolding the hierarchy”):
+            if (this instanceof OptionalSingleContainmentValueManager) {
+                this.set(newChild);
+            }
+            if (this instanceof RequiredSingleContainmentValueManager) {
+                this.set(newChild);
+            }
+        } else {
+            if (oldChild === newChild) {
+                // do nothing: nothing's changed
+            } else {
+                oldChild.detach();
+                this.setDirectly(newChild);
+                newChild.attachTo(this.container, this.feature);
+                this.emitDelta(() => new ChildReplacedDelta(this.container, this.feature, 0, oldChild, newChild));
+            }
+        }
     }
 
 }
@@ -96,7 +125,7 @@ export class OptionalSingleContainmentValueManager<T extends INodeBase> extends 
                 if (newChild.parent && newChild.containment) {
                     const oldParent = newChild.parent;
                     removeFromParent(oldParent, newChild);
-                    this.emitDelta(() => new ChildMovedDelta(oldParent, newChild.containment!, 0, this.container, this.feature, 0, newChild));
+                    this.emitDelta(() => new ChildMovedFromOtherContainmentDelta(oldParent, newChild.containment!, 0, this.container, this.feature, 0, newChild));
                 } else {
                     this.emitDelta(() => new ChildAddedDelta(this.container, this.feature, 0, newChild));
                 }
@@ -155,7 +184,7 @@ export class RequiredSingleContainmentValueManager<T extends INodeBase> extends 
                 if (newChild.parent && newChild.containment) {
                     const oldParent = newChild.parent;
                     removeFromParent(oldParent, newChild);
-                    this.emitDelta(() => new ChildMovedDelta(oldParent, newChild.containment!, 0, this.container, this.feature, 0, newChild));
+                    this.emitDelta(() => new ChildMovedFromOtherContainmentDelta(oldParent, newChild.containment!, 0, this.container, this.feature, 0, newChild));
                 } else {
                     this.emitDelta(() => new ChildAddedDelta(this.container, this.feature, 0, newChild));
                 }
@@ -228,7 +257,7 @@ export abstract class MultiContainmentValueManager<T extends INodeBase> extends 
             this.emitDelta(() => new ChildAddedDelta(this.container, this.containment, index, newChild));
         } else {
             const oldIndex = removeFromParent(newChild.parent, newChild);
-            this.emitDelta(() => new ChildMovedDelta(newChild.parent!, newChild.containment!, oldIndex, this.container, this.containment, index, newChild));
+            this.emitDelta(() => new ChildMovedFromOtherContainmentDelta(newChild.parent!, newChild.containment!, oldIndex, this.container, this.containment, index, newChild));
             newChild.detach();
         }
         newChild.attachTo(this.container, this.containment);
@@ -236,12 +265,17 @@ export abstract class MultiContainmentValueManager<T extends INodeBase> extends 
 
     @action removeDirectly(childToRemove: T): number {
         const children = this.getDirectly();
-        const index = children.findIndex((child) => child === childToRemove);
+        const index = children.indexOf(childToRemove);
         if (index > -1) {
             children.splice(index, 1);
             return index;
         }
         return -1;
+    }
+
+    @action removeAtIndexDirectly(index: number) {
+        checkIndex(index, this.children.length, false);
+        this.getDirectly().splice(index, 1);
     }
 
     @action moveDirectly(oldIndex: number, newIndex: number): T | undefined {
@@ -262,6 +296,37 @@ export abstract class MultiContainmentValueManager<T extends INodeBase> extends 
         }
     }
 
+    @action replaceAtIndex(movedChild: T, newIndex: number) {
+        checkIndex(newIndex, this.children.length, false);
+        const replacedChild = this.children[newIndex];
+        if (replacedChild === movedChild) {
+            // do nothing: nothing's changed
+        } else {
+            this.children.splice(newIndex, 1, movedChild);
+            if (replacedChild.parent) {
+                const oldValueManager = replacedChild.parent.getContainmentValueManager(replacedChild.containment!);
+                const oldIndex = oldValueManager instanceof SingleContainmentValueManager
+                    ? 0
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    : (oldValueManager as MultiContainmentValueManager<any>).children.indexOf(replacedChild);
+                replacedChild.detach();
+                if (replacedChild.parent === movedChild.parent) {
+                    if (replacedChild.containment === movedChild.containment) {
+                        this.emitDelta(() => new ChildMovedAndReplacedInSameContainmentDelta(this.container, this.containment, oldIndex, newIndex, movedChild, replacedChild));
+                    } else {
+                        this.emitDelta(() => new ChildMovedAndReplacedFromOtherContainmentInSameParentDelta(this.container, replacedChild.containment!, oldIndex, this.containment, newIndex, movedChild, replacedChild));
+                    }
+                } else {
+                    this.emitDelta(() => new ChildMovedFromOtherContainmentDelta(replacedChild.parent!, replacedChild.containment!, oldIndex, this.container, this.containment, newIndex, movedChild));
+                }
+            } else {
+                // not a move+replace, but a regular replace instead:
+                this.emitDelta(() => new ChildReplacedDelta(this.container, this.containment, newIndex, replacedChild, movedChild));
+            }
+            movedChild.attachTo(this.container, this.containment);
+        }
+    }
+
 }
 
 
@@ -274,7 +339,7 @@ export class OptionalMultiContainmentValueManager<T extends INodeBase> extends M
 
     @action remove(childToRemove: T) {
         const children = this.getDirectly();
-        const index = children.findIndex((child) => child === childToRemove);
+        const index = children.indexOf(childToRemove);
         if (index > -1) {
             children.splice(index, 1);
             childToRemove.detach();
@@ -302,7 +367,7 @@ export class RequiredMultiContainmentValueManager<T extends INodeBase> extends M
 
     @action remove(childToRemove: T) {
         const children = this.getDirectly();
-        const index = children.findIndex((child) => child === childToRemove);
+        const index = children.indexOf(childToRemove);
         if (index > -1) {
             if (children.length === 1) {
                 this.throwOnUnset();

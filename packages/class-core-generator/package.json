@@ -26,7 +26,7 @@
     "prerelease": "npm run prep:pre-release",
     "release": "npm publish"
   },
-  "devDependencies": {
+  "dependencies": {
     "@lionweb/core": "0.7.0-beta.11",
     "@lionweb/io-lionweb-mps-specific": "0.7.0-beta.11",
     "@lionweb/json": "0.7.0-beta.11",

@@ -18,7 +18,7 @@
 import {
     ChildAddedDelta,
     ChildDeletedDelta,
-    ChildMovedDelta,
+    ChildMovedFromOtherContainmentDelta,
     ChildReplacedDelta,
     collectingDeltaHandler,
     nodeBaseDeserializer,
@@ -116,7 +116,7 @@ describe("[1] containment", () => {
             `can't read required containment "containment_1" that's unset on instance of TestLanguage.LinkTestConcept with id=srcParent`
         );
         equal(deltas.length, 2);
-        deepEqual(deltas[1], new ChildMovedDelta(srcParent, testLanguageBase.LinkTestConcept_containment_1, 0, dstParent, testLanguageBase.LinkTestConcept_containment_1, 0, child));
+        deepEqual(deltas[1], new ChildMovedFromOtherContainmentDelta(srcParent, testLanguageBase.LinkTestConcept_containment_1, 0, dstParent, testLanguageBase.LinkTestConcept_containment_1, 0, child));
     });
 
     it("moving a child (through a [1] containment) directly between parents, replacing an already-present child", () => {

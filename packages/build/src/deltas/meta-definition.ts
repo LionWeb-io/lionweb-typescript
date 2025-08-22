@@ -26,8 +26,7 @@ const Deltas = factory.concept("Deltas", false).isPartition()
 const Type = factory.interface("Type")
 
 const Field = factory.concept("Field", false).implementing(builtinClassifiers.inamed)
-const Field_type = factory.containment(Field, "type").ofType(Type)
-Field.havingFeatures(Field_type)
+factory.containment(Field, "type").ofType(Type)
 
 
 const FeatureKinds = factory.enumeration("FeatureKinds")
@@ -39,47 +38,32 @@ FeatureKinds
     )
 
 const FeatureType = factory.concept("FeatureType", false).implementing(Type)
-const FeatureType_kind = factory.property(FeatureType, "kind").ofType(FeatureKinds)
-const FeatureType_container = factory.reference(FeatureType, "container").ofType(Field)
-    .isOptional()   // FIXME  make required later
-FeatureType.havingFeatures(FeatureType_kind, FeatureType_container)
+factory.property(FeatureType, "kind").ofType(FeatureKinds)
+factory.reference(FeatureType, "container").ofType(Field).isOptional()   // FIXME  make required later
 
 const NodeSerialization = factory.interface("NodeSerialization")
 
 const SerializeSubTree = factory.concept("SerializeSubTree", false).implementing(NodeSerialization)
-const SerializeSubTree_fieldName = factory.property(SerializeSubTree, "fieldName").ofType(builtinPrimitives.stringDataType)
-SerializeSubTree.havingFeatures(SerializeSubTree_fieldName)
+factory.property(SerializeSubTree, "fieldName").ofType(builtinPrimitives.stringDatatype)
 
-const RefOnly = factory.concept("RefOnly", false).implementing(NodeSerialization)
+factory.concept("RefOnly", false).implementing(NodeSerialization)
 
 const NodeType = factory.concept("NodeType", false).implementing(Type)
-const NodeType_serialization = factory.containment(NodeType, "serialization").isOptional().ofType(NodeSerialization)
-NodeType.havingFeatures(NodeType_serialization)
+factory.containment(NodeType, "serialization").isOptional().ofType(NodeSerialization)
 
-const IndexType = factory.concept("IndexType", false).implementing(Type)
+factory.concept("IndexType", false).implementing(Type)
 
-const PrimitiveValueType = factory.concept("PrimitiveValueType", false).implementing(Type)
+factory.concept("PrimitiveValueType", false).implementing(Type)
+
+const CustomType = factory.concept("CustomType", false).implementing(Type)
+factory.property(CustomType, "type").ofType(builtinPrimitives.stringDatatype)
+factory.property(CustomType, "serializationType").ofType(builtinPrimitives.stringDatatype)
+factory.property(CustomType, "serializationExpr").ofType(builtinPrimitives.stringDatatype)
+factory.property(CustomType, "deserializationExpr").ofType(builtinPrimitives.stringDatatype)
 
 const Delta = factory.concept("Delta", false).implementing(builtinClassifiers.inamed)
-const Delta_documentation = factory.property(Delta, "documentation").isOptional().ofType(builtinPrimitives.stringDataType)
-const Delta_fields = factory.containment(Delta, "fields").isOptional().isMultiple().ofType(Field)
-Delta.havingFeatures(Delta_documentation, Delta_fields)
+factory.property(Delta, "documentation").isOptional().ofType(builtinPrimitives.stringDatatype)
+factory.containment(Delta, "fields").isOptional().isMultiple().ofType(Field)
 
-const Deltas_deltas = factory.containment(Deltas, "deltas").isOptional().isMultiple().ofType(Delta)
-Deltas.havingFeatures(Deltas_deltas)
-
-deltasLanguage.havingEntities(
-    Deltas,
-    Delta,
-    Field,
-    Type,
-    FeatureKinds,
-    FeatureType,
-    NodeType,
-    NodeSerialization,
-    SerializeSubTree,
-    RefOnly,
-    IndexType,
-    PrimitiveValueType
-)
+factory.containment(Deltas, "deltas").isOptional().isMultiple().ofType(Delta)
 

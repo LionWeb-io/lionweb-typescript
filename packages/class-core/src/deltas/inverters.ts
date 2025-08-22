@@ -18,23 +18,36 @@
 import {
     AnnotationAddedDelta,
     AnnotationDeletedDelta,
+    AnnotationMovedAndReplacedFromOtherParentDelta,
+    AnnotationMovedAndReplacedInSameParentDelta,
     AnnotationMovedFromOtherParentDelta,
     AnnotationMovedInSameParentDelta,
     AnnotationReplacedDelta,
     ChildAddedDelta,
     ChildDeletedDelta,
-    ChildMovedDelta,
+    ChildMovedAndReplacedFromOtherContainmentDelta,
+    ChildMovedAndReplacedFromOtherContainmentInSameParentDelta,
+    ChildMovedAndReplacedInSameContainmentDelta,
+    ChildMovedFromOtherContainmentDelta,
+    ChildMovedFromOtherContainmentInSameParentDelta,
     ChildMovedInSameContainmentDelta,
     ChildReplacedDelta,
+    CompositeDelta,
+    EntryMovedAndReplacedFromOtherReferenceDelta,
+    EntryMovedAndReplacedFromOtherReferenceInSameParentDelta,
+    EntryMovedAndReplacedInSameReferenceDelta,
+    EntryMovedFromOtherReferenceDelta,
+    EntryMovedFromOtherReferenceInSameParentDelta,
+    EntryMovedInSameReferenceDelta,
     NoOpDelta,
+    PartitionAddedDelta,
+    PartitionDeletedDelta,
     PropertyAddedDelta,
     PropertyChangedDelta,
     PropertyDeletedDelta,
     ReferenceAddedDelta,
-    ReferenceDeletedDelta,
-    ReferenceMovedDelta,
-    ReferenceMovedInSameReferenceDelta,
-    ReferenceReplacedDelta
+    ReferenceChangedDelta,
+    ReferenceDeletedDelta
 } from "./types.g.js"
 import { IDelta } from "./base.js"
 
@@ -44,52 +57,48 @@ import { IDelta } from "./base.js"
  * in the sense that it undoes that delta after it has been applied.
  */
 export const invertDelta = (delta: IDelta): IDelta => {
-    if (delta instanceof NoOpDelta) {
-        return delta;
+    if (delta instanceof PartitionAddedDelta) {
+        return new PartitionDeletedDelta(delta.newPartition);
     }
-
+    if (delta instanceof PartitionDeletedDelta) {
+        return new PartitionAddedDelta(delta.deletedPartition);
+    }
     if (delta instanceof PropertyAddedDelta) {
-        return new PropertyDeletedDelta(delta.container, delta.property, delta.value);
-    }
-    if (delta instanceof PropertyChangedDelta) {
-        return new PropertyChangedDelta(delta.container, delta.property, delta.newValue, delta.oldValue);
+        return new PropertyDeletedDelta(delta.node, delta.property, delta.value);
     }
     if (delta instanceof PropertyDeletedDelta) {
-        return new PropertyAddedDelta(delta.container, delta.property, delta.oldValue);
+        return new PropertyAddedDelta(delta.node, delta.property, delta.oldValue);
     }
-
+    if (delta instanceof PropertyChangedDelta) {
+        return new PropertyChangedDelta(delta.node, delta.property, delta.newValue, delta.oldValue);
+    }
     if (delta instanceof ChildAddedDelta) {
         return new ChildDeletedDelta(delta.parent, delta.containment, delta.index, delta.newChild);
-    }
-    if (delta instanceof ChildReplacedDelta) {
-        return new ChildReplacedDelta(delta.parent, delta.containment, delta.index, delta.newChild, delta.replacedChild);
-    }
-    if (delta instanceof ChildMovedDelta) {
-        return new ChildMovedDelta(delta.newParent, delta.newContainment, delta.newIndex, delta.oldParent, delta.oldContainment, delta.oldIndex, delta.child);
-    }
-    if (delta instanceof ChildMovedInSameContainmentDelta) {
-        return new ChildMovedInSameContainmentDelta(delta.parent, delta.containment, delta.newIndex, delta.oldIndex, delta.child);
     }
     if (delta instanceof ChildDeletedDelta) {
         return new ChildAddedDelta(delta.parent, delta.containment, delta.index, delta.deletedChild);
     }
-
-    if (delta instanceof ReferenceAddedDelta) {
-        return new ReferenceDeletedDelta(delta.container, delta.reference, delta.index, delta.newTarget);
+    if (delta instanceof ChildReplacedDelta) {
+        return new ChildReplacedDelta(delta.parent, delta.containment, delta.index, delta.newChild, delta.replacedChild);
     }
-    if (delta instanceof ReferenceReplacedDelta) {
-        return new ReferenceReplacedDelta(delta.container, delta.reference, delta.index, delta.newTarget, delta.replacedTarget);
+    if (delta instanceof ChildMovedFromOtherContainmentDelta) {
+        return new ChildMovedFromOtherContainmentDelta(delta.newParent, delta.newContainment, delta.newIndex, delta.oldParent, delta.oldContainment, delta.oldIndex, delta.movedChild);
     }
-    if (delta instanceof ReferenceMovedDelta) {
-        return new ReferenceMovedDelta(delta.newContainer, delta.newReference, delta.newIndex, delta.oldContainer, delta.oldReference, delta.oldIndex, delta.target);
+    if (delta instanceof ChildMovedFromOtherContainmentInSameParentDelta) {
+        return new ChildMovedFromOtherContainmentInSameParentDelta(delta.parent, delta.newContainment, delta.newIndex, delta.movedChild, delta.oldContainment, delta.oldIndex);
     }
-    if (delta instanceof ReferenceMovedInSameReferenceDelta) {
-        return new ReferenceMovedInSameReferenceDelta(delta.container, delta.reference, delta.newIndex, delta.oldIndex, delta.target);
+    if (delta instanceof ChildMovedInSameContainmentDelta) {
+        return new ChildMovedInSameContainmentDelta(delta.parent, delta.containment, delta.newIndex, delta.oldIndex, delta.movedChild);
     }
-    if (delta instanceof ReferenceDeletedDelta) {
-        return new ReferenceAddedDelta(delta.container, delta.reference, delta.index, delta.deletedTarget);
+    if (delta instanceof ChildMovedAndReplacedFromOtherContainmentDelta) {
+        // TODO  implement
     }
-
+    if (delta instanceof ChildMovedAndReplacedFromOtherContainmentInSameParentDelta) {
+        // TODO  implement
+    }
+    if (delta instanceof ChildMovedAndReplacedInSameContainmentDelta) {
+        // TODO  implement
+    }
     if (delta instanceof AnnotationAddedDelta) {
         return new AnnotationDeletedDelta(delta.parent, delta.index, delta.newAnnotation);
     }
@@ -104,6 +113,45 @@ export const invertDelta = (delta: IDelta): IDelta => {
     }
     if (delta instanceof AnnotationMovedInSameParentDelta) {
         return new AnnotationMovedInSameParentDelta(delta.parent, delta.newIndex, delta.oldIndex, delta.movedAnnotation);
+    }
+    if (delta instanceof AnnotationMovedAndReplacedFromOtherParentDelta) {
+        // TODO  implement
+    }
+    if (delta instanceof AnnotationMovedAndReplacedInSameParentDelta) {
+        // TODO  implement
+    }
+    if (delta instanceof ReferenceAddedDelta) {
+        return new ReferenceDeletedDelta(delta.parent, delta.reference, delta.index, delta.newTarget);
+    }
+    if (delta instanceof ReferenceDeletedDelta) {
+        return new ReferenceAddedDelta(delta.parent, delta.reference, delta.index, delta.deletedTarget);
+    }
+    if (delta instanceof ReferenceChangedDelta) {
+        return new ReferenceChangedDelta(delta.parent, delta.reference, delta.index, delta.oldTarget, delta.newTarget);
+    }
+    if (delta instanceof EntryMovedFromOtherReferenceDelta) {
+        return new EntryMovedFromOtherReferenceDelta(delta.newParent, delta.newReference, delta.newIndex, delta.oldParent, delta.oldReference, delta.oldIndex, delta.movedTarget);
+    }
+    if (delta instanceof EntryMovedFromOtherReferenceInSameParentDelta) {
+        // TODO  implement
+    }
+    if (delta instanceof EntryMovedInSameReferenceDelta) {
+        return new EntryMovedInSameReferenceDelta(delta.parent, delta.reference, delta.newIndex, delta.oldIndex, delta.movedTarget);
+    }
+    if (delta instanceof EntryMovedAndReplacedFromOtherReferenceDelta) {
+        // TODO  implement
+    }
+    if (delta instanceof EntryMovedAndReplacedFromOtherReferenceInSameParentDelta) {
+        return new EntryMovedAndReplacedFromOtherReferenceInSameParentDelta(delta.parent, delta.newReference, delta.newIndex, delta.oldReference, delta.oldIndex, delta.replacedTarget, delta.movedTarget);
+    }
+    if (delta instanceof EntryMovedAndReplacedInSameReferenceDelta) {
+        // TODO  implement
+    }
+    if (delta instanceof CompositeDelta) {
+        return new CompositeDelta(delta.parts.map(invertDelta));
+    }
+    if (delta instanceof NoOpDelta) {
+        return delta;
     }
 
     throw new Error(`inversion of delta of class ${delta.constructor.name} not implemented`);

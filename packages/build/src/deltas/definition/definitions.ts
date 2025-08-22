@@ -15,123 +15,398 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { defineDelta, index, node, parentage, primitiveValue, refOnly, serializeSubTreeAs } from "./definition-base.js"
 import { FeatureKinds } from "./Deltas.g.js"
+import {
+    customField,
+    defineDelta,
+    feature,
+    index,
+    node,
+    parentage,
+    primitiveValue,
+    refOnly,
+    serializeSubTreeAs
+} from "./definition-base.js"
+
 
 export const defineDeltas = () => {
-    defineDelta("NoOp", [], "Delta that does nothing.\nWarning: should only be used for development purposes!")
 
-    defineDelta("PropertyAdded", [...parentage("container", "property", FeatureKinds.property), primitiveValue("value")])
+    // TODO  consider compounding the delta's name, e.g.: noun-verb style so we can derive past tense and such
 
-    defineDelta("PropertyDeleted", [...parentage("container", "property", FeatureKinds.property), primitiveValue("oldValue")])
+    /* ~ § 6.6.1.1 */
+    defineDelta(
+        "PartitionAdded",
+        [
+            node("newPartition", serializeSubTreeAs("newNodes"))
+        ]
+    )
 
-    defineDelta("PropertyChanged", [
-        ...parentage("container", "property", FeatureKinds.property),
-        primitiveValue("oldValue"),
-        primitiveValue("newValue")
-    ])
+    /* ~ § 6.6.1.2 */
+    defineDelta(
+        "PartitionDeleted",
+        [
+            node("deletedPartition")
+        ]
+    )
+
+    /*
+     * Note: no delta counterpart for the ClassifierChanged event exists because no API exists to cause such a delta.
+     */
+
+    /* ~ § 6.6.3.3 */
+    defineDelta(
+        "PropertyAdded",
+        [
+            ...parentage("node", "property", FeatureKinds.property),
+            primitiveValue("value")
+        ]
+    )
+
+    /* ~ § 6.6.3.2 */
+    defineDelta(
+        "PropertyDeleted",
+        [
+            ...parentage("node", "property", FeatureKinds.property),
+            primitiveValue("oldValue")
+        ]
+    )
+
+    /* ~ § 6.6.3.3 */
+    defineDelta(
+        "PropertyChanged",
+        [
+            ...parentage("node", "property", FeatureKinds.property),
+            primitiveValue("oldValue"),
+            primitiveValue("newValue")
+        ]
+    )
 
     // Note:Each link-related ∂'s fields typically start with [parent, link, index]
 
-    defineDelta("ChildAdded", [
-        ...parentage("parent", "containment", FeatureKinds.containment),
-        index("index"),
-        node("newChild", serializeSubTreeAs("newNodes"))
-    ])
-
-    defineDelta("ChildDeleted", [
-        ...parentage("parent", "containment", FeatureKinds.containment),
-        index("index"),
-        node("deletedChild", serializeSubTreeAs("deletedNodes"))
-    ])
-
-    defineDelta("ChildReplaced", [
-        ...parentage("parent", "containment", FeatureKinds.containment),
-        index("index"),
-        node("replacedChild", serializeSubTreeAs("replacedNodes")),
-        node("newChild", serializeSubTreeAs("newNodes"))
-    ])
-
-    defineDelta("ChildMoved", [
-        ...parentage("oldParent", "oldContainment", FeatureKinds.containment),
-        index("oldIndex"),
-        ...parentage("newParent", "newContainment", FeatureKinds.containment),
-        index("newIndex"),
-        node("child")
-    ])
-
-    defineDelta("ChildMovedInSameContainment", [
-        ...parentage("parent", "containment", FeatureKinds.containment),
-        index("oldIndex"),
-        index("newIndex"),
-        node("child")
-    ])
-
-    defineDelta("ReferenceAdded", [
-        ...parentage("container", "reference", FeatureKinds.reference),
-        index("index"),
-        node("newTarget", refOnly())
-    ])
-
-    defineDelta("ReferenceDeleted", [
-        ...parentage("container", "reference", FeatureKinds.reference),
-        index("index"),
-        node("deletedTarget", refOnly())
-    ])
-
+    /* ~ § 6.6.4.1 */
     defineDelta(
-        "ReferenceReplaced",
+        "ChildAdded",
         [
-            ...parentage("container", "reference", FeatureKinds.reference),
+            ...parentage("parent", "containment", FeatureKinds.containment),
             index("index"),
-            node("replacedTarget", refOnly()),
-            node("newTarget", refOnly())
-        ],
-        `Note: corresponds to "reference changed" in delta proposal!`
+            node("newChild", serializeSubTreeAs("newNodes"))
+        ]
     )
 
+    /* ~ § 6.6.4.2 */
     defineDelta(
-        "ReferenceMoved",
+        "ChildDeleted",
         [
-            ...parentage("oldContainer", "oldReference", FeatureKinds.reference),
-            index("oldIndex"),
-            ...parentage("newContainer", "newReference", FeatureKinds.reference),
-            index("newIndex"),
-            node("target", refOnly())
-        ],
-        `Note: corresponds to "entry moved from other reference" in delta proposal!`
+            ...parentage("parent", "containment", FeatureKinds.containment),
+            index("index"),
+            node("deletedChild", serializeSubTreeAs("deletedNodes"))
+        ]
     )
 
-    defineDelta("ReferenceMovedInSameReference", [
-        ...parentage("container", "reference", FeatureKinds.reference),
-        index("oldIndex"),
-        index("newIndex"),
-        node("target", refOnly())
-    ])
+    /* ~ § 6.6.4.3 */
+    defineDelta(
+        "ChildReplaced",
+        [
+            ...parentage("parent", "containment", FeatureKinds.containment),
+            index("index"),
+            node("replacedChild", serializeSubTreeAs("replacedNodes")),
+            node("newChild", serializeSubTreeAs("newNodes"))
+        ]
+    )
 
-    defineDelta("AnnotationAdded", [node("parent"), index("index"), node("newAnnotation", serializeSubTreeAs("newAnnotationNodes"))])
+    /* ~ § 6.6.4.4 */
+    defineDelta(
+        "ChildMovedFromOtherContainment",
+        [
+            ...parentage("oldParent", "oldContainment", FeatureKinds.containment),
+            index("oldIndex"),
+            ...parentage("newParent", "newContainment", FeatureKinds.containment),
+            index("newIndex"),
+            node("movedChild")
+        ],
+    )
 
-    defineDelta("AnnotationDeleted", [
-        node("parent"),
-        index("index"),
-        node("deletedAnnotation", serializeSubTreeAs("deletedAnnotationNodes"))
-    ])
+    /* ~ § 6.6.4.5 */
+    {
+        const origin = parentage("parent", "oldContainment", FeatureKinds.containment)
+        defineDelta(
+            "ChildMovedFromOtherContainmentInSameParent",
+            [
+                ...origin,
+                index("oldIndex"),
+                node("movedChild"),
+                feature("newContainment", FeatureKinds.containment, origin[0]),
+                index("newIndex"),
+            ]
+        )
+    }
 
-    defineDelta("AnnotationReplaced", [
-        node("parent"),
-        index("index"),
-        node("replacedAnnotation", serializeSubTreeAs("replacedAnnotationNodes")),
-        node("newAnnotation", serializeSubTreeAs("newAnnotationNodes"))
-    ])
+    /* ~ § 6.6.4.6 */
+    defineDelta(
+        "ChildMovedInSameContainment",
+        [
+            ...parentage("parent", "containment", FeatureKinds.containment),
+            index("oldIndex"),
+            index("newIndex"),
+            node("movedChild")
+        ]
+    )
 
-    defineDelta("AnnotationMovedFromOtherParent", [
-        node("oldParent"),
-        index("oldIndex"),
-        node("newParent"),
-        index("newIndex"),
-        node("movedAnnotation")
-    ])
+    /* ~ § 6.6.4.7 */
+    defineDelta(
+        "ChildMovedAndReplacedFromOtherContainment",
+        [
+            ...parentage("newParent", "newContainment", FeatureKinds.containment),
+            index("newIndex"),
+            node("movedChild"),
+            ...parentage("oldParent", "oldContainment", FeatureKinds.containment),
+            index("oldIndex"),
+            node("replacedChild", serializeSubTreeAs("replacedChildAsNodes"))
+        ]
+    )
 
-    defineDelta("AnnotationMovedInSameParent", [node("parent"), index("oldIndex"), index("newIndex"), node("movedAnnotation")])
+    /* ~ § 6.6.4.8 */
+    {
+        const origin = parentage("parent", "oldContainment", FeatureKinds.containment)
+        defineDelta(
+            "ChildMovedAndReplacedFromOtherContainmentInSameParent",
+            [
+                ...origin,
+                index("oldIndex"),
+                feature("newContainment", FeatureKinds.containment, origin[0]),
+                index("newIndex"),
+                node("movedChild"),
+                node("replacedChild", serializeSubTreeAs("replacedChildAsNodes"))
+            ]
+        )
+    }
+
+    /* ~ § 6.6.6.4.9 */
+    defineDelta(
+        "ChildMovedAndReplacedInSameContainment",
+        [
+            ...parentage("parent", "containment", FeatureKinds.containment),
+            index("oldIndex"),
+            index("newIndex"),
+            node("movedChild"),
+            node("replacedChild", serializeSubTreeAs("replacedChildAsNodes"))
+        ]
+    )
+
+    /* ~ § 6.6.5.1 */
+    defineDelta(
+        "AnnotationAdded",
+        [
+            node("parent"),
+            index("index"),
+            node("newAnnotation", serializeSubTreeAs("newAnnotationNodes"))
+        ]
+    )
+
+    /* ~ § 6.6.5.2 */
+    defineDelta(
+        "AnnotationDeleted",
+        [
+            node("parent"),
+            index("index"),
+            node("deletedAnnotation", serializeSubTreeAs("deletedAnnotationNodes"))
+        ]
+    )
+
+    /* ~ § 6.6.5.3 */
+    defineDelta(
+        "AnnotationReplaced",
+        [
+            node("parent"),
+            index("index"),
+            node("replacedAnnotation", serializeSubTreeAs("replacedAnnotationNodes")),
+            node("newAnnotation", serializeSubTreeAs("newAnnotationNodes"))
+        ]
+    )
+
+    /* ~ § 6.6.5.4 */
+    defineDelta(
+        "AnnotationMovedFromOtherParent",
+        [
+            node("oldParent"),
+            index("oldIndex"),
+            node("newParent"),
+            index("newIndex"),
+            node("movedAnnotation")
+        ]
+    )
+
+    /* ~ § 6.6.5.5 */
+    defineDelta(
+        "AnnotationMovedInSameParent",
+        [
+            node("parent"),
+            index("oldIndex"),
+            index("newIndex"),
+            node("movedAnnotation")
+        ]
+    )
+
+    /* ~ § 6.6.5.6 */
+    defineDelta(
+        "AnnotationMovedAndReplacedFromOtherParent",
+        [
+            node("oldParent"),
+            index("oldIndex"),
+            node("replacedAnnotation", serializeSubTreeAs("replacedAnnotationNodes")),
+            node("newParent"),
+            index("newIndex"),
+            node("movedAnnotation")
+        ]
+    )
+
+    /* ~ § 6.6.5.7 */
+    defineDelta(
+        "AnnotationMovedAndReplacedInSameParent",
+        [
+            node("parent"),
+            index("oldIndex"),
+            index("newIndex"),
+            node("replacedAnnotation", serializeSubTreeAs("replacedAnnotationNodes")),
+            node("movedAnnotation")
+        ]
+    )
+
+    /* ~ § 6.6.6.1 */
+    defineDelta(
+        "ReferenceAdded",
+        [
+            ...parentage("parent", "reference", FeatureKinds.reference),
+            index("index"),
+            node("newTarget", refOnly())
+        ]
+    )
+
+    /* ~ § 6.6.6.2 */
+    defineDelta(
+        "ReferenceDeleted",
+        [
+            ...parentage("parent", "reference", FeatureKinds.reference),
+            index("index"),
+            node("deletedTarget", refOnly())
+        ]
+    )
+
+    /* ~ § 6.6.6.3 */
+    defineDelta(
+        "ReferenceChanged",
+        [
+            ...parentage("parent", "reference", FeatureKinds.reference),
+            index("index"),
+            node("newTarget", refOnly()),
+            node("oldTarget", refOnly())
+        ]
+    )
+
+    /* ~ § 6.6.6.4 */
+    defineDelta(
+        "EntryMovedFromOtherReference",
+        [
+            ...parentage("oldParent", "oldReference", FeatureKinds.reference),
+            index("oldIndex"),
+            ...parentage("newParent", "newReference", FeatureKinds.reference),
+            index("newIndex"),
+            node("movedTarget", refOnly())
+        ]
+    )
+
+    /* ~ § 6.6.6.5 */
+    {
+        const origin = parentage("parent", "oldReference", FeatureKinds.reference)
+        defineDelta(
+            "EntryMovedFromOtherReferenceInSameParent",
+            [
+                ...origin,
+                index("oldIndex"),
+                feature("newReference", FeatureKinds.reference, origin[0]),
+                index("newIndex"),
+                node("movedTarget", refOnly())
+            ]
+        )
+
+    }
+
+    /* ~ § 6.6.6.6 */
+    defineDelta(
+        "EntryMovedInSameReference",
+        [
+            ...parentage("parent", "reference", FeatureKinds.reference),
+            index("oldIndex"),
+            index("newIndex"),
+            node("movedTarget", refOnly())
+        ],
+    )
+
+    /* ~ § 6.6.6.7 */
+    defineDelta(
+        "EntryMovedAndReplacedFromOtherReference",
+        [
+            ...parentage("newParent", "newReference", FeatureKinds.reference),
+            index("newIndex"),
+            node("movedTarget", refOnly()),
+            ...parentage("oldParent", "oldReference", FeatureKinds.reference),
+            index("oldIndex"),
+            node("replacedTarget", refOnly())
+        ]
+    )
+
+    /* ~ § 6.6.6.8 */
+    {
+        const origin = parentage("parent", "oldReference", FeatureKinds.reference)
+        defineDelta(
+            "EntryMovedAndReplacedFromOtherReferenceInSameParent",
+            [
+                ...origin,
+                index("oldIndex"),
+                feature("newReference", FeatureKinds.reference, origin[0]),
+                index("newIndex"),
+                node("movedTarget", refOnly()),
+                node("replacedTarget", refOnly())
+            ]
+        )
+    }
+
+    /* ~ § 6.6.6.9 */
+    defineDelta(
+        "EntryMovedAndReplacedInSameReference",
+        [
+            ...parentage("parent", "reference", FeatureKinds.reference),
+            index("oldIndex"),
+            index("newIndex"),
+            node("movedTarget", refOnly()),
+            node("replacedTarget", refOnly())
+        ]
+    )
+
+    /*
+     * The following events don't have a delta counterpart because no API exists to cause such deltas:
+     *
+     *      Reference{ResolveInfo|Target}{Added|Deleted|Changed}
+     */
+
+    /* ~ § 6.6.7.1 */
+    defineDelta(
+        "Composite",
+        [
+            customField(
+                "parts",
+                "IDelta[]",
+                "SerializedDelta[]",
+                "delta.parts.map(serializeDelta)",
+                "delta.parts.map(deserializedDelta)"
+            )
+        ]
+    )
+
+    /* ~ § 6.6.7.2 */
+    defineDelta("NoOp", [], "Delta that does nothing.")
+
+    // Note: no delta is equivalent to ErrorEvent.
+
 }
 

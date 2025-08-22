@@ -103,7 +103,7 @@ describe("TestConcept", () => {
         const delta1 = deltas[0]
         isTrue(delta1 instanceof PropertyAddedDelta)
         const pcd1 = delta1 as PropertyAddedDelta<string>
-        equal(pcd1.container, instance)
+        equal(pcd1.node, instance)
         equal(pcd1.property, testLanguageBase.DataTypeTestConcept_stringValue_1)
         equal(pcd1.value, "bar")
 
@@ -171,7 +171,7 @@ describe("TestConcept", () => {
         const delta1 = deltas[0]
         isTrue(delta1 instanceof PropertyChangedDelta)
         const pcd1 = delta1 as PropertyChangedDelta<string>
-        equal(pcd1.container, instance)
+        equal(pcd1.node, instance)
         equal(pcd1.property, testLanguageBase.DataTypeTestConcept_stringValue_1)
         equal(pcd1.oldValue, "bar")
         equal(pcd1.newValue, "fiddlesticks")
@@ -180,7 +180,7 @@ describe("TestConcept", () => {
         const delta2 = deltas[1]
         isTrue(delta2 instanceof PropertyChangedDelta)
         const pcd2 = delta2 as PropertyChangedDelta<TestEnumeration>
-        equal(pcd2.container, instance)
+        equal(pcd2.node, instance)
         equal(pcd2.property, testLanguageBase.DataTypeTestConcept_enumValue_1)
         equal(pcd2.oldValue, TestEnumeration.literal3)
         equal(pcd2.newValue, TestEnumeration.literal2)

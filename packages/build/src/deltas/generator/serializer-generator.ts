@@ -20,6 +20,7 @@ import { indent } from "@lionweb/textgen-utils"
 import { asString, commaSeparated } from "littoral-templates"
 
 import {
+    CustomType,
     Delta,
     FeatureType,
     Field,
@@ -44,6 +45,9 @@ const serializationExpressionFor = (name: string, type: Type) => {
     }
     if (type instanceof PrimitiveValueType) {
         return `serializePropertyValue(delta.${name}, delta.property)`
+    }
+    if (type instanceof CustomType) {
+        return type.serializationExpr
     }
     throw new Error(`type ${type.classifier.name} not handled by serializationExpressionFor`)
 }
@@ -86,14 +90,14 @@ export const serializerForDeltas = (deltas: Delta[], header?: string) =>
         `} from "../types.g.js";`,
         `import {`,
         indent(
-            commaSeparated(sortedStrings(deltas.map(({name}) => `${name}SerializedDelta`)))
+            commaSeparated(sortedStrings([...(deltas.map(({name}) => `${name}SerializedDelta`)), `SerializedDelta`]))
         ),
         `} from "./types.g.js";`,
         `import { idFrom, serializePropertyValue } from "./serializer-helpers.js";`,
         `import { serializeNodeBases } from "../../serializer.js";`,
         ``,
         ``,
-        `export const serializeDelta = (delta: IDelta) => {`,
+        `export const serializeDelta = (delta: IDelta): SerializedDelta => {`,
         indent([
             deltas.map(serializationOf),
             "throw new Error(`serialization of delta of class ${delta.constructor.name} not implemented`);"
