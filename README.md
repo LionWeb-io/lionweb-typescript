@@ -69,20 +69,24 @@ The implementation is divided up in a number of NPM packages in the directory [`
 - `cli`
   A package with an executable to trigger some of the functionality in `utilities` through a commandline interface (CLI), i.e. from the commandline.
 
+- `test`
+  A package containing (unit) tests for the packages above.
+
 - `class-core`
   A package that contains a framework for the implementation of `INode` that's class-based, and can handle deltas.
 
 - `class-core-generator`
   A package that contains a code generator to generate classes based on the `class-core` package from an M2.
 
-- `test`
-  A package containing (unit) tests for the packages above.
+- `class-core-test`
+  A package that contains tests that specifically test the `class-core` package.
+
+- `build`
+  A package that builds part of the code in `class-core` — specifically the part related to the delta protocol.
 
 - `artifacts`
   A package that generates artifacts (serialization chunks, diagrams, JSON Schemas) from some of the models constructed in the `core` and `test` packages.
 
-- `build`
-  A package that builds part of the code in `class-core` — specifically the part related to the delta protocol.
 
   _Note_ that this package – and specifically the `generate-for-class-core.ts` file – depends on `class-core` itself.
   This constitutes a *circular* dependency, but that only exists at compile+build time, so should not be problematic.
