@@ -7,4 +7,5 @@
   **Note**: this slightly breaks the API of the generator, but in such a trivial way (because of the use of defaults) that it doesn't warrant an increment in major version, IOHO.
 * Partition concepts are now marked as such in their `ILanguageBase` implementation.
 * Constructors of abstract concepts are now declared `protected` instead of `public`.
+* Make `console.log` verbosity of the generator calls `generateApiFromLanguages[Json]` (for language**s**) configurable, through an extra property `verbose` of the `GeneratorOptions` which defaults to `true`.
 

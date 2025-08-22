@@ -31,51 +31,61 @@ const properGenericImportLocation = "@lionweb/class-core"
 export type GeneratorOptions = {
     genericImportLocation: string
     header?: string
+    verbose: boolean
 }
 
 
 const withDefaults = (options?: Partial<GeneratorOptions>): GeneratorOptions => ({
     genericImportLocation: options?.genericImportLocation ?? properGenericImportLocation,
-    header: options?.header
+    header: options?.header,
+    verbose: options?.verbose ?? true
 })
 
 
-export const generateLanguage = (language: Language, generationPath: string, options?: Partial<GeneratorOptions>): string => {
+export const generateLanguage = (language: Language, generationPath: string, mayBeOptions?: Partial<GeneratorOptions>): string => {
     const {name} = language
     const fileName = `${name}.g.ts`
-    writeFileSync(join(generationPath, fileName), languageFileFor(language, withDefaults(options)))
+    writeFileSync(join(generationPath, fileName), languageFileFor(language, withDefaults(mayBeOptions)))
     return fileName
 }
 
 
-export const generateApiFromLanguagesJson = (languagesJsonPath: string, generationPath: string, options?: Partial<GeneratorOptions>) => {
-    console.log(`Running API generator with cwd: ${cwd()}`)
-    console.log(`   Path to languages: ${languagesJsonPath}`)
-    console.log(`   Generation path:   ${generationPath}`)
+const logger = (verbose?: boolean): ((text?: string) => void) =>
+    verbose ?? true
+        ? (_text?: string) => {}
+        : (text?: string) => { console.log(text ?? ``) }
+
+
+export const generateApiFromLanguagesJson = (languagesJsonPath: string, generationPath: string, mayBeOptions?: Partial<GeneratorOptions>) => {
+    const log = logger(mayBeOptions?.verbose)
+    log(`Running API generator with cwd: ${cwd()}`)
+    log(`   Path to languages: ${languagesJsonPath}`)
+    log(`   Generation path:   ${generationPath}`)
 
     const languagesJson = readFileAsJson(languagesJsonPath) as LionWebJsonChunk
     const languages = deserializeLanguages(languagesJson, lioncore)
-    generateApiFromLanguages(languages, generationPath, options)
+    generateApiFromLanguages(languages, generationPath, mayBeOptions)
 }
 
 
 export const generateApiFromLanguages = (languages: Language[], generationPath: string, maybeOptions?: Partial<GeneratorOptions>) => {
-    console.log(`   Generated:`)
+    const log = logger(maybeOptions?.verbose)
+    log(`   Generated:`)
 
     const options = withDefaults(maybeOptions)
 
     if (languages.length > 1) {
         writeFileSync(join(generationPath, "index.g.ts"), indexTsFor(languages, options))
-        console.log(`       index.g.ts`)
+        log(`       index.g.ts`)
     }
 
     languages.forEach((language) => {
         const {name, version, key, id} = language
         const fileName = generateLanguage(language, generationPath, options)
-        console.log(`       ${fileName} -> language: ${name} (version=${version}, key=${key}, id=${id})`)
+        log(`       ${fileName} -> language: ${name} (version=${version}, key=${key}, id=${id})`)
     })
 
-    console.log(`[done]`)
-    console.log()
+    log(`[done]`)
+    log()
 }
 
