@@ -2,11 +2,13 @@
 
 ## 0.7.0
 
-* Refactored validation schema to enable generation ot TypeScript types with discriminator.
+* Refactor validation schema to enable generation ot TypeScript types with discriminator.
+* (Don't publish TypeScript sources to NPM.)
+
 
 ## 0.6.3
 
-* Made validation aware that the `value` field of a property serialization is allowed to be `null`.
+* Make validation aware that the `value` field of a property serialization is allowed to be `null`.
 
 
 ## 0.6.2
