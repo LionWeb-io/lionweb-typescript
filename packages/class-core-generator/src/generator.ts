@@ -51,9 +51,9 @@ export const generateLanguage = (language: Language, generationPath: string, may
 
 
 const logger = (verbose?: boolean): ((text?: string) => void) =>
-    verbose ?? true
-        ? (_text?: string) => {}
-        : (text?: string) => { console.log(text ?? ``) }
+    (verbose ?? true)
+        ? (text) => { console.log(text ?? ``) }
+        : (_) => {}
 
 
 export const generateApiFromLanguagesJson = (languagesJsonPath: string, generationPath: string, mayBeOptions?: Partial<GeneratorOptions>) => {
