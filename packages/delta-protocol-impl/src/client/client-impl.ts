@@ -62,7 +62,7 @@ import {
     SemanticLogger,
     semanticLoggerFunctionFrom
 } from "../semantic-logging.js"
-import { withStylesApplied } from "../utils/ansi.js"
+import { clientWarning } from "../utils/ansi.js"
 import { priorityQueueAcceptor } from "../utils/priority-queue.js"
 
 
@@ -91,9 +91,11 @@ export class LionWebClient {
     }
 
     private signedOff = false
-    private lastReceivedSequenceNumber = -1
 
-    constructor(
+    private lastReceivedSequenceNumber = -1
+    // TODO  could also get this from the priority queue (which would need to be adapted for that)
+
+    private constructor(
         public readonly clientId: LionWebId,
         public model: INodeBase[],
         private idMapping: IdMapping,
@@ -152,18 +154,19 @@ export class LionWebClient {
         const receiveMessageOnClient = (message: Event | QueryMessage) => {
             log(new ClientReceivedMessage(clientId, message))
             if (isQueryResponse(message)) {
-                const {queryId} = message
+                const { queryId } = message
                 if (queryId in lionWebClient.queryResolveById) {
                     const resolveResponse = lionWebClient.queryResolveById[queryId]
                     resolveResponse(message)
                     delete lionWebClient.queryResolveById[queryId]
                     return  // ~void
                 }
-                console.log(withStylesApplied("cyan", "italic")(`client received query response without having sent a corresponding query request: query-ID="${queryId}"`))
+                console.log(clientWarning(`client received response for a query with ID="${queryId} without having sent a corresponding request - ignoring`))
             }
             if (isEvent(message)) {
                 acceptEvent(message)
             }
+            console.log(clientWarning(`client received a message of kind "${message.messageKind}" that it doesn't know how to handle - ignoring`))
         }
 
         const lowLevelClient = await
