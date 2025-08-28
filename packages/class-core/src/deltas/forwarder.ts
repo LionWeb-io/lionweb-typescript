@@ -15,11 +15,14 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-export * from "./appliers.js";
-export * from "./base.js";
-export * from "./forwarder.js";
-export * from "./handlers.js";
-export * from "./inverters.js";
-export * from "./types.g.js";
-export * from "./serialization/index.js";
+import { DeltaHandler } from "../index.js"
+
+/**
+ * @return a {@link DeltaHandler delta handler} implementation that forwards received deltas to the given {@link DeltaHandler delta handlers}.
+ * This is necessary e.g. for combining using the delta protocol with an undo mechanism.
+ */
+export const deltaHandlerForwardingTo = (...deltaHandlers: DeltaHandler[]): DeltaHandler =>
+    (delta) => {
+        deltaHandlers.forEach((handleDelta) => handleDelta(delta));
+    };
 
