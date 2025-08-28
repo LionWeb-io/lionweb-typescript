@@ -16,9 +16,10 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { DeltaHandler, latching, NoOpDelta } from "@lionweb/class-core"
-import { equal } from "./assertions.js"
+import { equal } from "../assertions.js"
 
-describe("deltas", () => {
+describe("handlers", () => {
+
     it("latching delta handler", () => {
         let counter = 0
         const countingDeltaHandler: DeltaHandler = _ => {
@@ -41,5 +42,6 @@ describe("deltas", () => {
         latchingDeltaHandler(dummyDelta)
         equal(counter, 4)
     })
+
 })
 
