@@ -11,6 +11,7 @@
   * containments: `replace{With|AtIndex}`
   * references: `removeAtIndexDirectly`, `moveAndReplaceDirectly`
 * Add a `deltaHandlerForwardingTo` function that returns a delta handler function that forwards received deltas to the given delta handlers.
+* Add a `Compositor` class that can be used to gather deltas into composite deltas.
 
 
 ## 0.6.13

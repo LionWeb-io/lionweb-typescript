@@ -17,6 +17,7 @@
 
 export * from "./appliers.js";
 export * from "./base.js";
+export * from "./compositor.js";
 export * from "./forwarder.js";
 export * from "./handlers.js";
 export * from "./inverters.js";
