@@ -99,8 +99,8 @@ export class LionWebClient {
         public readonly clientId: LionWebId,
         public model: INodeBase[],
         private idMapping: IdMapping,
-        public readonly factory: NodeBaseFactory,
         private readonly commandSender: DeltaHandler,
+        public readonly createNode: NodeBaseFactory,
         private readonly lowLevelClient: LowLevelClient<Command | QueryMessage>
     ) {}
 

@@ -81,7 +81,7 @@ describe(`scenarios (${colorSchemeExplanationString})`, async function() {
 
         expect(lionWebClient.participationId!).to.equal("participation-a")
 
-        const newPartition = lionWebClient.factory(testLanguageBase.LinkTestConcept, "partition-A")
+        const newPartition = lionWebClient.createNode(testLanguageBase.LinkTestConcept, "partition-A")
         lionWebClient.addPartition(newPartition)
         expect(lionWebClient.model).to.deep.equal([newPartition])
 

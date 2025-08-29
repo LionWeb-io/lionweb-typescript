@@ -93,12 +93,12 @@ export const taskExecutor = (lionWebClient: LionWebClient, partition: INodeBase,
     }
 
     const annotation = (id: LionWebId) =>
-        lionWebClient.factory(testLanguageBase.TestAnnotation, id) as TestAnnotation
+        lionWebClient.createNode(testLanguageBase.TestAnnotation, id) as TestAnnotation
 
     const linkTestConcept = (id?: LionWebId) =>
         id === undefined
             ? partition as LinkTestConcept
-            : lionWebClient.factory(testLanguageBase.LinkTestConcept, id) as LinkTestConcept
+            : lionWebClient.createNode(testLanguageBase.LinkTestConcept, id) as LinkTestConcept
 
     return async (task: string, queryId: string) => {
         switch (task) {
@@ -110,7 +110,7 @@ export const taskExecutor = (lionWebClient: LionWebClient, partition: INodeBase,
                 return waitForReceived(1)
             }
             case "AddDocs": {
-                (partition as Geometry).documentation = lionWebClient.factory(shapesLanguageBase.Documentation, "documentation") as Documentation
+                (partition as Geometry).documentation = lionWebClient.createNode(shapesLanguageBase.Documentation, "documentation") as Documentation
                 return waitForReceived(1)
             }
             case "SetDocsText": {
