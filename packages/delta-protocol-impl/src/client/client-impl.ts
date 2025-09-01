@@ -74,6 +74,7 @@ export type LionWebClientParameters = {
     url: string
     languageBases: ILanguageBase[]
     serializationChunk?: LionWebJsonChunk
+    instantiateDeltaHandlerForwardingTo?: (commandSender: DeltaHandler) => DeltaHandler
     semanticLogger?: SemanticLogger
     lowLevelClientInstantiator?: LowLevelClientInstantiator<Event | QueryMessage, Command | QueryMessage>
 }
@@ -99,8 +100,8 @@ export class LionWebClient {
         public readonly clientId: LionWebId,
         public model: INodeBase[],
         private idMapping: IdMapping,
-        private readonly commandSender: DeltaHandler,
         public readonly createNode: NodeBaseFactory,
+        private readonly effectiveHandleDelta: DeltaHandler,
         private readonly lowLevelClient: LowLevelClient<Command | QueryMessage>
     ) {}
 
@@ -109,7 +110,7 @@ export class LionWebClient {
     private static readonly idMappingFrom = (model: INodeBase[]) =>
         new IdMapping(byIdMap(model.flatMap(allNodesFrom)))
 
-    static async create({clientId, url, languageBases, serializationChunk, semanticLogger, lowLevelClientInstantiator}: LionWebClientParameters): Promise<LionWebClient> {
+    static async create({clientId, url, languageBases, instantiateDeltaHandlerForwardingTo, serializationChunk, semanticLogger, lowLevelClientInstantiator}: LionWebClientParameters): Promise<LionWebClient> {
         const log = semanticLoggerFunctionFrom(semanticLogger)
 
         let loading = true
@@ -127,8 +128,9 @@ export class LionWebClient {
                 }
             }
         }
+        const globalHandleDelta = instantiateDeltaHandlerForwardingTo === undefined ? commandSender : instantiateDeltaHandlerForwardingTo(commandSender)
 
-        const deserialized = nodeBaseDeserializer(languageBases, commandSender)
+        const deserialized = nodeBaseDeserializer(languageBases, globalHandleDelta)
         const model = serializationChunk === undefined ? [] : deserialized(serializationChunk)
         const idMapping = this.idMappingFrom(model)
         const eventAsDelta = eventToDeltaTranslator(languageBases, idMapping, deserialized)
@@ -177,10 +179,10 @@ export class LionWebClient {
             clientId,
             model,
             idMapping,
-            combinedFactoryFor(languageBases, commandSender),
-            commandSender,
+            combinedFactoryFor(languageBases, globalHandleDelta),
+            globalHandleDelta,
             lowLevelClient
-        ) // (need this constant non-inlined for write-access to lastReceivedSequenceNumber and queryResolveById)
+        ) // Note: we need this `lionWebClient` constant non-inlined for write-access to lastReceivedSequenceNumber and queryResolveById.
         return lionWebClient
     }
 
@@ -302,7 +304,7 @@ export class LionWebClient {
         if (this.model.indexOf(partition) === -1) {
             this.model.push(partition)
             this.idMapping.updateWith(partition)
-            this.commandSender(new PartitionAddedDelta(partition))
+            this.effectiveHandleDelta(new PartitionAddedDelta(partition))
         } // else: ignore; already done
     }
 
@@ -311,7 +313,7 @@ export class LionWebClient {
         const index = this.model.indexOf(partition)
         if (index > -1) {
             this.model.splice(index, 1)
-            this.commandSender(new PartitionDeletedDelta(partition))
+            this.effectiveHandleDelta(new PartitionDeletedDelta(partition))
         } else {
             throw new Error(`node with id "${partition.id}" is not a partition in the current model`)
         }
