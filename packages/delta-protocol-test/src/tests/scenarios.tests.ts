@@ -64,7 +64,7 @@ describe(`scenarios (${colorSchemeExplanationString})`, async function() {
 
         // create repository:
         const port = nextPort()
-        const lionWebRepository = await LionWebRepository.setUp({ port, semanticLogger: log })
+        const lionWebRepository = await LionWebRepository.create({ port, semanticLogger: log })
 
         // create client:
         const clientId = "myClient" // but participation ID is handed out by the repository!

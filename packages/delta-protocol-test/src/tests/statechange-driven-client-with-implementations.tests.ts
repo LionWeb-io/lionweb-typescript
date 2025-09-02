@@ -32,7 +32,7 @@ describe("WebSocket-driven implementations of client and repository", async func
     it("[with 2 clients] client A sends a command, repository broadcasts event, clients receive it, client B updates its model accordingly", async function() {
         // begin Arrange
         const port = nextPort()
-        const lionWebRepository = await LionWebRepository.setUp({ port })
+        const lionWebRepository = await LionWebRepository.create({ port })
 
         const languageBases = [ShapesBase.INSTANCE]
 
