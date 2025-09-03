@@ -31,10 +31,10 @@
     "mocha": "11.7.1"
   },
   "dependencies": {
-    "@lionweb/core": "0.7.0-beta.13",
-    "@lionweb/json": "0.7.0-beta.13",
-    "@lionweb/ts-utils": "0.7.0-beta.13",
-    "@lionweb/utilities": "0.7.0-beta.13",
-    "@lionweb/validation": "0.7.0-beta.13"
+    "@lionweb/core": "0.7.0-beta.14",
+    "@lionweb/json": "0.7.0-beta.14",
+    "@lionweb/ts-utils": "0.7.0-beta.14",
+    "@lionweb/utilities": "0.7.0-beta.14",
+    "@lionweb/validation": "0.7.0-beta.14"
   }
 }
