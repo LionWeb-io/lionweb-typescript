@@ -16,7 +16,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import {
-    collectingDeltaHandler,
+    collectingDeltaReceiver,
     nodeBaseDeserializer,
     PropertyAddedDelta,
     PropertyChangedDelta,
@@ -35,8 +35,8 @@ const testLanguageBase = TestLanguageBase.INSTANCE
 describe("[0..1] string property", () => {
 
     it("getting an unset [0..1] string property", () => {
-        const [handleDelta, deltas] = collectingDeltaHandler();
-        const node = DataTypeTestConcept.create("node", handleDelta);
+        const [receiveDelta, deltas] = collectingDeltaReceiver();
+        const node = DataTypeTestConcept.create("node", receiveDelta);
 
         // pre-check:
         equal(deltas.length, 0);
@@ -59,8 +59,8 @@ describe("[0..1] string property", () => {
         equal(nodes.length, 1);
         equal(nodes[0].properties.length, 0);
 
-        const [handleDelta, deltas] = collectingDeltaHandler();
-        const deserialize = nodeBaseDeserializer([testLanguageBase], handleDelta);
+        const [receiveDelta, deltas] = collectingDeltaReceiver();
+        const deserialize = nodeBaseDeserializer([testLanguageBase], receiveDelta);
         const problemHandler = new AccumulatingSimplisticHandler();
         const deserializedNodes = deserialize(serializationChunk, [], new BuiltinPropertyValueDeserializer(), problemHandler);
         equal(problemHandler.allProblems.length, 0);
@@ -76,8 +76,8 @@ describe("[0..1] string property", () => {
     });
 
     it("setting a [0..1] string property", () => {
-        const [handleDelta, deltas] = collectingDeltaHandler();
-        const node = DataTypeTestConcept.create("node", handleDelta);
+        const [receiveDelta, deltas] = collectingDeltaReceiver();
+        const node = DataTypeTestConcept.create("node", receiveDelta);
 
         // pre-check:
         equal(deltas.length, 0);
@@ -107,8 +107,8 @@ describe("[0..1] string property", () => {
             }
         );
 
-        const [handleDelta, deltas] = collectingDeltaHandler();
-        const deserialize = nodeBaseDeserializer([testLanguageBase], handleDelta);
+        const [receiveDelta, deltas] = collectingDeltaReceiver();
+        const deserialize = nodeBaseDeserializer([testLanguageBase], receiveDelta);
         const problemHandler = new AccumulatingSimplisticHandler();
         const deserializedNodes = deserialize(serializationChunk, [], new BuiltinPropertyValueDeserializer(), problemHandler);
         equal(problemHandler.allProblems.length, 0);
@@ -124,8 +124,8 @@ describe("[0..1] string property", () => {
     });
 
     it("unsetting a [0..1] string property", () => {
-        const [handleDelta, deltas] = collectingDeltaHandler();
-        const node = DataTypeTestConcept.create("node", handleDelta);
+        const [receiveDelta, deltas] = collectingDeltaReceiver();
+        const node = DataTypeTestConcept.create("node", receiveDelta);
 
         // pre-check:
         node.stringValue_0_1 = "foo";
@@ -142,8 +142,8 @@ describe("[0..1] string property", () => {
     });
 
     it("changing a [0..1] string property", () => {
-        const [handleDelta, deltas] = collectingDeltaHandler();
-        const node = DataTypeTestConcept.create("node", handleDelta);
+        const [receiveDelta, deltas] = collectingDeltaReceiver();
+        const node = DataTypeTestConcept.create("node", receiveDelta);
 
         // pre-check:
         node.stringValue_0_1 = "foo";

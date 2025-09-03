@@ -31,16 +31,16 @@ describe("delta compositor", () => {
     }
 
     it("throws on invalid maximum nesting depth", () => {
-        const dummyDeltaHandler = (_delta: IDelta) => {}
+        const dummyDeltaReceiver = (_delta: IDelta) => {}
         throws(
-            () => new DeltaCompositor(dummyDeltaHandler, -1),
+            () => new DeltaCompositor(dummyDeltaReceiver, -1),
             `maximum nesting depth must be a non-negative integer`
         )
         throws(
-            () => new DeltaCompositor(dummyDeltaHandler, Math.PI),
+            () => new DeltaCompositor(dummyDeltaReceiver, Math.PI),
             `maximum nesting depth must be a non-negative integer`
         )
-        new DeltaCompositor(dummyDeltaHandler, Infinity)    // no problem
+        new DeltaCompositor(dummyDeltaReceiver, Infinity)    // no problem
     })
 
     it("forwards deltas when no composite is opened", () => {
@@ -48,9 +48,9 @@ describe("delta compositor", () => {
         const delta = new NoOpDelta()
 
         deepEqual(deltas, [])
-        compositor.upstreamHandleDelta(delta)
+        compositor.upstreamReceiveDelta(delta)
         deepEqual(deltas, [delta])
-        compositor.upstreamHandleDelta(delta)
+        compositor.upstreamReceiveDelta(delta)
         deepEqual(deltas, [delta, delta])
     })
 
@@ -98,9 +98,9 @@ describe("delta compositor", () => {
         const delta = new NoOpDelta()
 
         compositor.openComposite()
-        compositor.upstreamHandleDelta(delta)
+        compositor.upstreamReceiveDelta(delta)
         deepEqual(deltas, [])
-        compositor.upstreamHandleDelta(delta)
+        compositor.upstreamReceiveDelta(delta)
         deepEqual(deltas, [])
         compositor.closeComposite()
         deepEqual(deltas, [new CompositeDelta([delta, delta])])
@@ -111,14 +111,14 @@ describe("delta compositor", () => {
         const delta = new NoOpDelta()
 
         compositor.openComposite()
-        compositor.upstreamHandleDelta(delta)
+        compositor.upstreamReceiveDelta(delta)
         deepEqual(deltas, [])
         compositor.openComposite()
-        compositor.upstreamHandleDelta(delta)
+        compositor.upstreamReceiveDelta(delta)
         deepEqual(deltas, [])
         compositor.closeComposite()
         deepEqual(deltas, [])
-        compositor.upstreamHandleDelta(delta)
+        compositor.upstreamReceiveDelta(delta)
         compositor.closeComposite()
         deepEqual(deltas, [new CompositeDelta([delta, new CompositeDelta([delta]), delta])])
     })

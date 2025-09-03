@@ -10,4 +10,5 @@
 * Make `console.log` verbosity of the generator calls `generateApiFromLanguages[Json]` (for language**s**) configurable, through an extra property `verbose` of the `GeneratorOptions` which defaults to `true`.
 * Add `replace<1-containment>With` and `replace<*-containment>AtIndex` methods.
 * Turn dev-dependencies into real ones — (as they're all used in shipped code).
+* Rename `DeltaHandler` &rarr; `DeltaReceiver`, `handleDelta` &rarr; `receiveDelta` to be more in line with the C# implementation.
 

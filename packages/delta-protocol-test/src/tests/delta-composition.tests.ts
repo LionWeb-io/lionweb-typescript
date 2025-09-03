@@ -20,7 +20,7 @@ import { expect } from "chai"
 import {
     CompositeDelta,
     DeltaCompositor,
-    deltaHandlerForwardingTo,
+    deltaReceiverForwardingTo,
     IDelta,
     PartitionAddedDelta
 } from "@lionweb/class-core"
@@ -30,7 +30,7 @@ import { semanticConsoleLogger } from "@lionweb/delta-protocol-impl/dist/semanti
 import { TestLanguageBase } from "@lionweb/class-core-test/dist/gen/TestLanguage.g.js"
 
 
-describe("combining delta protocol and an “adjacent” delta handler", () => {
+describe("combining delta protocol and an “adjacent” delta receiver", () => {
 
     it("using a compositor works", async function() {
         const deltas: IDelta[] = []
@@ -43,14 +43,14 @@ describe("combining delta protocol and an “adjacent” delta handler", () => {
             clientId: "A",
             url: "",
             languageBases: [testLanguageBase],
-            instantiateDeltaHandlerForwardingTo: (commandSender) => {
-                compositorToCreate = new DeltaCompositor(deltaHandlerForwardingTo(
+            instantiateDeltaReceiverForwardingTo: (commandSender) => {
+                compositorToCreate = new DeltaCompositor(deltaReceiverForwardingTo(
                     (delta) => {
                         deltas.push(delta)
                     },
                     commandSender
                 ))
-                return compositorToCreate.upstreamHandleDelta
+                return compositorToCreate.upstreamReceiveDelta
             },
             lowLevelClientInstantiator: (_url, _clientId, receiveMessageOnClient) =>
                 Promise.resolve({

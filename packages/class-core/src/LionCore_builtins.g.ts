@@ -42,7 +42,7 @@ import {
 } from "@lionweb/json";
 
 import {
-    DeltaHandler,
+    DeltaReceiver,
     ILanguageBase,
     INodeBase,
     NodeBase,
@@ -110,7 +110,7 @@ export class LionCore_builtinsBase implements ILanguageBase {
         this._wiredUp = true;
     }
 
-    factory(_handleDelta?: DeltaHandler): NodeBaseFactory {
+    factory(_receiveDelta?: DeltaReceiver): NodeBaseFactory {
         return (classifier: Classifier, _id: LionWebId) => {
             const {language} = classifier;
             throw new Error(`can't instantiate ${classifier.name} (key=${classifier.key}): classifier is not known in language ${language.name} (key=${language.key}, version=${language.version})`);

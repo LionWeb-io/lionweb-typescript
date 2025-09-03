@@ -469,7 +469,7 @@ export const applyDelta = deltaApplier()
  * @usage should look as follows.
  *
  * ```typescript
- * const {roots, idMapping} = deserializeAsLDMModelWithMapping(serializationChunk, handleDelta);
+ * const {roots, idMapping} = deserializeAsLDMModelWithMapping(serializationChunk, receiveDelta);
  * applyDeltasWithLookup(idMapping, deltas);
  * ```
  */
@@ -485,7 +485,7 @@ export const applyDeltasWithLookup = (idMapping: IdMapping, deltas: IDelta[], up
  * @usage should look as follows.
  *
  * ```typescript
- * const {roots, idMapping} = deserializeAsLDMModelWithMapping(serializationChunk, handleDelta);
+ * const {roots, idMapping} = deserializeAsLDMModelWithMapping(serializationChunk, receiveDelta);
  * applyDeltaWithLookup(idMapping, delta);
  * ```
  */

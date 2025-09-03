@@ -29,12 +29,12 @@ export abstract class ValueManager {
     }
 
     /**
-     * Emits a delta if a {@link DeltaHandler} is registered with the container.
-     * @param deltaThunk a thunk that generates the delta, and is only called when a delta handler is registered with the container.
+     * Emits a delta if a {@link DeltaReceiver} is registered with the container.
+     * @param deltaThunk a thunk that generates the delta, and is only called when a delta receiver is registered with the container.
      */
     emitDelta(deltaThunk: () => IDelta) {
-        if (this.container.handleDelta) {
-            this.container.handleDelta(deltaThunk());
+        if (this.container.receiveDelta) {
+            this.container.receiveDelta(deltaThunk());
         }
     }
 

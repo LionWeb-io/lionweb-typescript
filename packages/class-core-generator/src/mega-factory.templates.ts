@@ -34,7 +34,7 @@ export const megaFactoryFor = (megaFactoryName: string, languages: Language[], h
                     .filter(requiresFactoryMethod)
                     .map(
                         classifier =>
-                            `create${classifier.name}: () => ${asJSIdentifier(language.name)}.${classifier.name}.create(newId(), this.handleDelta)`
+                            `create${classifier.name}: () => ${asJSIdentifier(language.name)}.${classifier.name}.create(newId(), this.receiveDelta)`
                     )
             )
         ),
@@ -46,7 +46,7 @@ export const megaFactoryFor = (megaFactoryName: string, languages: Language[], h
 
     return asString([
         header ?? [],
-        `import {DeltaHandler} from "@lionweb/class-core";`,
+        `import {DeltaReceiver} from "@lionweb/class-core";`,
         ``,
         `import {`,
         indent(commaSeparated(languagesWithFactoryMethods.map(({ name }) => asJSIdentifier(name)))),
@@ -59,7 +59,7 @@ export const megaFactoryFor = (megaFactoryName: string, languages: Language[], h
         indent([
             ``,
             `constructor(`,
-            indent([`public readonly handleDelta?: DeltaHandler`]),
+            indent([`public readonly receiveDelta?: DeltaReceiver`]),
             `) {`,
             `}`,
             ``,

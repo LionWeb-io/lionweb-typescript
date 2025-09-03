@@ -57,9 +57,9 @@ The properties of the `<parameter object>` are as follows:
 * `languageBases`: (required) an array containing the implementations of `ILanguageBase` for the languages of the model managed by the client.
 * `serializationChunk`: (optional) a `LionWebJsonChunk` that represents the initial state of the model managed by the client.
   If no serialization chunk is provided, the model’s initial state is *empty* — i.e., no roots/partitions.
-* `instantiateDeltaHandlerForwardingTo`: (optional) a function that, given a (so-called) “downstream” delta handler, returns an “upstream/forwarding” delta handler that forwards deltas (that result from changes to the managed model) to that downstream delta handler.
+* `instantiateDeltaReceiverForwardingTo`: (optional) a function that, given a (so-called) “downstream” delta receiver, returns an “upstream/forwarding” delta receiver that forwards deltas (that result from changes to the managed model) to that downstream delta receiver.
   This mechanism is used to intercept changes (as deltas) to the model for purposes other than turning these directly into commands to the LionWeb repository.
-  The “upstream/forwarding” delta handler has the obligations to (eventually) forward all deltas it receives as commands to the LionWeb repository.
+  The “upstream/forwarding” delta receiver has the obligations to (eventually) forward all deltas it receives as commands to the LionWeb repository.
 * `semanticLogger`: (optional) a `SemanticLogger` instance that accepts semantic log items (`ISemanticLogItem`), to be able to provide verbosity on what’s going on.
   (This is predominantly useful for testing.)
 * `lowLevelClientInstantiator`: (optional) a function that instantiates a `LowLevelClient`, given a client ID, an URL, and a `receiveMessageOnClient` function that handles incoming messages.
@@ -71,7 +71,7 @@ After creation of the client, it exposes the following data:
 * `.clientId`: the client’s ID.
 * `.model`: the managed model, as an array of nodes of `Concept`s that are marked as partition.
 * `.createNode`: a factory function that instantiates a node having the given classifier and ID.
-  The client ensures that that node is wired-up with an appropriate delta handler that intercepts changes and propagates these as commands to the connected LionWeb repository.
+  The client ensures that that node is wired-up with an appropriate delta receiver that intercepts changes and propagates these as commands to the connected LionWeb repository.
 * `.participationId`: defined after establishing a participation – see below.
 
 The first thing to do before manipulating the model, is to establish a **participation**, which is done as follows:
@@ -85,7 +85,7 @@ Provided this call succeeds, the ID of the established participation can be retr
 
 After having established a participation through signing on, the model available through `lionWebClient.model` can be manipulated.
 Adding and deleting partitions is done through the `.addPartition(<partition>)` and `.deletePartition(<partition>)` methods.
-Changes made to the model are propagated to the effective delta handler – see the explanation of `instantiateDeltaHandlerForwardingTo` above –, and eventually to the LionWeb repository, as commands.
+Changes made to the model are propagated to the effective delta receiver – see the explanation of `instantiateDeltaReceiverForwardingTo` above –, and eventually to the LionWeb repository, as commands.
 
 When you are finished with a client, you can disconnect it from the repository as follows:
 
@@ -99,21 +99,21 @@ After this, the client can’t send any queries nor commands, nor receive any ev
 ### Hooking up an undo stack
 
 ```typescript
-import { DeltaCompositor, deltaHandlerForwardingTo, IDelta } from "@lionweb/class-core"
+import { DeltaCompositor, deltaReceiverForwardingTo, IDelta } from "@lionweb/class-core"
 import { LionWebClient } from "@lionweb/delta-protocol-impl"
 
 const deltas: IDelta[] = []
 let compositorToCreate: DeltaCompositor
 const lionWebClient = await LionWebClient.create({
     // ...other parameters...
-    instantiateDeltaHandlerForwardingTo: (commandSender) => {
-        compositorToCreate = new DeltaCompositor(deltaHandlerForwardingTo(
+    instantiateDeltaReceiverForwardingTo: (commandSender) => {
+        compositorToCreate = new DeltaCompositor(deltaReceiverForwardingTo(
             (delta) => {
                 deltas.push(delta)
             },
             commandSender
         ))
-        return compositorToCreate.upstreamHandleDelta
+        return compositorToCreate.upstreamReceiveDelta
     }
 })
 const compositor = compositorToCreate!

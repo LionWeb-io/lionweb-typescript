@@ -19,7 +19,7 @@ import {
     allNodesFrom,
     applyDelta,
     combinedFactoryFor,
-    DeltaHandler,
+    DeltaReceiver,
     IdMapping,
     ILanguageBase,
     INodeBase,
@@ -74,7 +74,7 @@ export type LionWebClientParameters = {
     url: string
     languageBases: ILanguageBase[]
     serializationChunk?: LionWebJsonChunk
-    instantiateDeltaHandlerForwardingTo?: (commandSender: DeltaHandler) => DeltaHandler
+    instantiateDeltaReceiverForwardingTo?: (commandSender: DeltaReceiver) => DeltaReceiver
     semanticLogger?: SemanticLogger
     lowLevelClientInstantiator?: LowLevelClientInstantiator<Event | QueryMessage, Command | QueryMessage>
 }
@@ -101,7 +101,7 @@ export class LionWebClient {
         public model: INodeBase[],
         private idMapping: IdMapping,
         public readonly createNode: NodeBaseFactory,
-        private readonly effectiveHandleDelta: DeltaHandler,
+        private readonly effectiveReceiveDelta: DeltaReceiver,
         private readonly lowLevelClient: LowLevelClient<Command | QueryMessage>
     ) {}
 
@@ -110,13 +110,13 @@ export class LionWebClient {
     private static readonly idMappingFrom = (model: INodeBase[]) =>
         new IdMapping(byIdMap(model.flatMap(allNodesFrom)))
 
-    static async create({clientId, url, languageBases, instantiateDeltaHandlerForwardingTo, serializationChunk, semanticLogger, lowLevelClientInstantiator}: LionWebClientParameters): Promise<LionWebClient> {
+    static async create({clientId, url, languageBases, instantiateDeltaReceiverForwardingTo, serializationChunk, semanticLogger, lowLevelClientInstantiator}: LionWebClientParameters): Promise<LionWebClient> {
         const log = semanticLoggerFunctionFrom(semanticLogger)
 
         let loading = true
         let commandNumber = 0
         const issuedCommandIds: string[] = []
-        const commandSender: DeltaHandler = (delta) => {
+        const commandSender: DeltaReceiver = (delta) => {
             log(new DeltaOccurredOnClient(clientId, serializeDelta(delta)))
             if (!loading) {
                 const commandId = `cmd-${++commandNumber}`
@@ -128,9 +128,9 @@ export class LionWebClient {
                 }
             }
         }
-        const globalHandleDelta = instantiateDeltaHandlerForwardingTo === undefined ? commandSender : instantiateDeltaHandlerForwardingTo(commandSender)
+        const effectiveReceiveDelta = instantiateDeltaReceiverForwardingTo === undefined ? commandSender : instantiateDeltaReceiverForwardingTo(commandSender)
 
-        const deserialized = nodeBaseDeserializer(languageBases, globalHandleDelta)
+        const deserialized = nodeBaseDeserializer(languageBases, effectiveReceiveDelta)
         const model = serializationChunk === undefined ? [] : deserialized(serializationChunk)
         const idMapping = this.idMappingFrom(model)
         const eventAsDelta = eventToDeltaTranslator(languageBases, idMapping, deserialized)
@@ -179,8 +179,8 @@ export class LionWebClient {
             clientId,
             model,
             idMapping,
-            combinedFactoryFor(languageBases, globalHandleDelta),
-            globalHandleDelta,
+            combinedFactoryFor(languageBases, effectiveReceiveDelta),
+            effectiveReceiveDelta,
             lowLevelClient
         ) // Note: we need this `lionWebClient` constant non-inlined for write-access to lastReceivedSequenceNumber and queryResolveById.
         return lionWebClient
@@ -304,7 +304,7 @@ export class LionWebClient {
         if (this.model.indexOf(partition) === -1) {
             this.model.push(partition)
             this.idMapping.updateWith(partition)
-            this.effectiveHandleDelta(new PartitionAddedDelta(partition))
+            this.effectiveReceiveDelta(new PartitionAddedDelta(partition))
         } // else: ignore; already done
     }
 
@@ -313,7 +313,7 @@ export class LionWebClient {
         const index = this.model.indexOf(partition)
         if (index > -1) {
             this.model.splice(index, 1)
-            this.effectiveHandleDelta(new PartitionDeletedDelta(partition))
+            this.effectiveReceiveDelta(new PartitionDeletedDelta(partition))
         } else {
             throw new Error(`node with id "${partition.id}" is not a partition in the current model`)
         }

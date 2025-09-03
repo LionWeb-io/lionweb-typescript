@@ -18,7 +18,7 @@
 import { incomingReferences as lwIncomingReferences, ReferenceValue } from "@lionweb/core"
 import { LionWebId } from "@lionweb/json"
 import { NodeDuplicator } from "./duplicator.js"
-import { deepDuplicateWith, DeltaHandler, IdMapping, ILanguageBase, INodeBase } from "./index.js"
+import { deepDuplicateWith, DeltaReceiver, IdMapping, ILanguageBase, INodeBase } from "./index.js"
 import { nodeBaseReader } from "./serializer.js"
 
 
@@ -57,10 +57,10 @@ export const incomingReferences = (targetNodeOrNodes: INodeBase | INodeBase[], r
  * *without* generating new IDs.
  * @param languageBases the {@link ILanguageBase language bases} of the languages that the nodes might come from
  *  — these are necessary for their factories
- * @param handleDelta an optional {@link DeltaHandler} that gets installed on the deep-cloned nodes
+ * @param receiveDelta an optional {@link DeltaReceiver} that gets installed on the deep-cloned nodes
  */
-export const deepClonerFor = (languageBases: ILanguageBase[], handleDelta?: DeltaHandler) =>
-    deepDuplicatorFor(languageBases, (originalNode) => originalNode.id, handleDelta);
+export const deepClonerFor = (languageBases: ILanguageBase[], receiveDelta?: DeltaReceiver) =>
+    deepDuplicatorFor(languageBases, (originalNode) => originalNode.id, receiveDelta);
 
 
 /**
@@ -73,13 +73,13 @@ export type NewIdFunction = (originalNode: INodeBase) => LionWebId;
  * @return a {@link NodeDuplicator} function that does the “obvious” thing, given the parameters:
  * @param languageBases an array of languages in the form of {@link ILanguageBase}s
  * @param newIdFunc a function that computes a – not necessarily new – ID from a given original {@link INodeBase node}
- * @param handleDelta an optional {@link DeltaHandler}
+ * @param receiveDelta an optional {@link DeltaReceiver}
  * @param idMapping an optional {@link IdMapping}
  */
-export const defaultNodeDuplicatorFor = (languageBases: ILanguageBase[], newIdFunc: NewIdFunction, handleDelta?: DeltaHandler, idMapping?: IdMapping): NodeDuplicator =>
+export const defaultNodeDuplicatorFor = (languageBases: ILanguageBase[], newIdFunc: NewIdFunction, receiveDelta?: DeltaReceiver, idMapping?: IdMapping): NodeDuplicator =>
     (originalNode: INodeBase) => {
         const languageBase = languageBases.find((languageBase) => languageBase.language === originalNode.classifier.language)!;
-        const duplicatedNode = languageBase.factory(handleDelta)(originalNode.classifier, newIdFunc(originalNode));
+        const duplicatedNode = languageBase.factory(receiveDelta)(originalNode.classifier, newIdFunc(originalNode));
         idMapping?.updateWith(duplicatedNode);
         return [duplicatedNode, originalNode.setFeatures];
     };
@@ -91,8 +91,8 @@ export const defaultNodeDuplicatorFor = (languageBases: ILanguageBase[], newIdFu
  * @param languageBases the {@link ILanguageBase language bases} of the languages that the nodes might come from
  *  — these are necessary for their factories
  * @param newIdFunc a function that computes a – not necessarily new – ID from a given original {@link INodeBase node}
- * @param handleDelta an optional {@link DeltaHandler} that gets installed on the deep-cloned nodes
+ * @param receiveDelta an optional {@link DeltaReceiver} that gets installed on the deep-cloned nodes
  */
-export const deepDuplicatorFor = (languageBases: ILanguageBase[], newIdFunc: NewIdFunction, handleDelta?: DeltaHandler, idMapping?: IdMapping) =>
-    deepDuplicateWith(defaultNodeDuplicatorFor(languageBases, newIdFunc, handleDelta, idMapping));
+export const deepDuplicatorFor = (languageBases: ILanguageBase[], newIdFunc: NewIdFunction, receiveDelta?: DeltaReceiver, idMapping?: IdMapping) =>
+    deepDuplicateWith(defaultNodeDuplicatorFor(languageBases, newIdFunc, receiveDelta, idMapping));
 

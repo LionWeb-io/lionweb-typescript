@@ -20,7 +20,7 @@ import {
     ChildDeletedDelta,
     ChildMovedFromOtherContainmentDelta,
     ChildReplacedDelta,
-    collectingDeltaHandler,
+    collectingDeltaReceiver,
     nodeBaseDeserializer,
     serializeNodeBases
 } from "@lionweb/class-core"
@@ -36,8 +36,8 @@ const testLanguageBase = TestLanguageBase.INSTANCE
 describe("[1] containment", () => {
 
     it("getting an unset required containment throws", () => {
-        const [handleDeltas, deltas] = collectingDeltaHandler();
-        const node = LinkTestConcept.create("node", handleDeltas);
+        const [receiveDeltas, deltas] = collectingDeltaReceiver();
+        const node = LinkTestConcept.create("node", receiveDeltas);
 
         // pre-check:
         equal(deltas.length, 0);
@@ -52,9 +52,9 @@ describe("[1] containment", () => {
     });
 
     it("setting a single value works", () => {
-        const [handleDeltas, deltas] = collectingDeltaHandler();
-        const child = LinkTestConcept.create("child", handleDeltas);
-        const parent = LinkTestConcept.create("parent", handleDeltas);
+        const [receiveDeltas, deltas] = collectingDeltaReceiver();
+        const child = LinkTestConcept.create("child", receiveDeltas);
+        const parent = LinkTestConcept.create("parent", receiveDeltas);
 
         // pre-check:
         equal(deltas.length, 0);
@@ -86,10 +86,10 @@ describe("[1] containment", () => {
     });
 
     it("moving a child in 1 step between parents", () => {
-        const [handleDelta, deltas] = collectingDeltaHandler();
-        const child = LinkTestConcept.create("child", handleDelta);
-        const srcParent = LinkTestConcept.create("srcParent", handleDelta);
-        const dstParent = LinkTestConcept.create("dstParent", handleDelta);
+        const [receiveDelta, deltas] = collectingDeltaReceiver();
+        const child = LinkTestConcept.create("child", receiveDelta);
+        const srcParent = LinkTestConcept.create("srcParent", receiveDelta);
+        const dstParent = LinkTestConcept.create("dstParent", receiveDelta);
 
         // action+check:
         srcParent.containment_1 = child;
@@ -120,12 +120,12 @@ describe("[1] containment", () => {
     });
 
     it("moving a child (through a [1] containment) directly between parents, replacing an already-present child", () => {
-        const [handleDelta, deltas] = collectingDeltaHandler();
-        const childAlreadyAssigned = LinkTestConcept.create("childAlreadyAssigned", handleDelta);
-        const dstParent = LinkTestConcept.create("dstParent", handleDelta);
+        const [receiveDelta, deltas] = collectingDeltaReceiver();
+        const childAlreadyAssigned = LinkTestConcept.create("childAlreadyAssigned", receiveDelta);
+        const dstParent = LinkTestConcept.create("dstParent", receiveDelta);
         dstParent.containment_1 = childAlreadyAssigned;
-        const srcParent = LinkTestConcept.create("srcParent", handleDelta);
-        const childToMove = LinkTestConcept.create("childToMove", handleDelta);
+        const srcParent = LinkTestConcept.create("srcParent", receiveDelta);
+        const childToMove = LinkTestConcept.create("childToMove", receiveDelta);
         srcParent.containment_1 = childToMove;
 
         // pre-check:

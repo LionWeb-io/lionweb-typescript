@@ -15,7 +15,7 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { CompositeDelta, DeltaHandler, IDelta } from "../index.js"
+import { CompositeDelta, DeltaReceiver, IDelta } from "../index.js"
 
 
 /**
@@ -23,10 +23,10 @@ import { CompositeDelta, DeltaHandler, IDelta } from "../index.js"
  *
  * Usage:
  * ```typescript
- * const compositor = new Compositor(downstreamHandleDelta);
+ * const compositor = new Compositor(downstreamReceiveDelta);
  * compositor.openComposite();
  * // ...
- * compositor.upstreamHandleDelta(<delta>);
+ * compositor.upstreamReceiveDelta(<delta>);
  * // ...
  * compositor.closeComposite();
  * ```
@@ -34,10 +34,10 @@ import { CompositeDelta, DeltaHandler, IDelta } from "../index.js"
 export class DeltaCompositor {
 
     /**
-     * The {@link DeltaHandler} implementation that either forwards to the given downstream delta handle
-     * or gathers deltas into composite deltas to forward to the downstream delta handler later.
+     * The {@link DeltaReceiver} implementation that either forwards to the given downstream delta handle
+     * or gathers deltas into composite deltas to forward to the downstream delta receiver later.
      */
-    readonly upstreamHandleDelta: DeltaHandler;
+    readonly upstreamReceiveDelta: DeltaReceiver;
 
     /**
      * An array of arrays of {@link IDelta deltas}, comprising a “stack”.
@@ -49,18 +49,18 @@ export class DeltaCompositor {
     private deltasStack: IDelta[][] | undefined = undefined;
 
     /**
-     * @param downstreamHandleDelta the {@link DeltaHandler} that deltas get passed to.
+     * @param downstreamReceiveDelta the {@link DeltaReceiver} that deltas get passed to.
      * @param maximumNestingDepth the maximum depth that composites can be nested.
      *  A maximum depth of e.g. 1 means that at most 1 composite can be open at any time.
      */
-    constructor(private readonly downstreamHandleDelta: DeltaHandler, private readonly maximumNestingDepth: number = Infinity) {
+    constructor(private readonly downstreamReceiveDelta: DeltaReceiver, private readonly maximumNestingDepth: number = Infinity) {
         if (maximumNestingDepth !== Infinity && (!Number.isInteger(maximumNestingDepth) || maximumNestingDepth < 0)) {
             throw new Error(`maximum nesting depth must be a non-negative integer`);
         }
-        this.upstreamHandleDelta = (delta) => {
+        this.upstreamReceiveDelta = (delta) => {
             if (this.deltasStack === undefined) {
                 // pass on immediately:
-                this.downstreamHandleDelta(delta);
+                this.downstreamReceiveDelta(delta);
             } else {
                 // store for later:
                 this.deltasStack[this.deltasStack.length - 1].push(delta);  // (I2)
@@ -69,8 +69,8 @@ export class DeltaCompositor {
     }
 
     /**
-     * Opens a composite, meaning that all deltas passed to the {@link upstreamHandleDelta} are gathered into a composite delta
-     * that gets forwarded to the downstream delta handler as soon as the composite is closed.
+     * Opens a composite, meaning that all deltas passed to the {@link upstreamReceiveDelta} are gathered into a composite delta
+     * that gets forwarded to the downstream delta receiver as soon as the composite is closed.
      *
      * Composites can be nested, to the maximum depth configured through this class’ constructor,
      * beyond which an error gets thrown.
@@ -87,7 +87,7 @@ export class DeltaCompositor {
 
     /**
      * Closes the current composite, producing the deltas gathered for this composite into a composite delta.
-     * Composites can be nested, and deltas only get forwarded to the downstream delta handler after the top-level composite has been closed.
+     * Composites can be nested, and deltas only get forwarded to the downstream delta receiver after the top-level composite has been closed.
      */
     closeComposite = (): void => {
         if (this.deltasStack === undefined) {
@@ -99,7 +99,7 @@ export class DeltaCompositor {
             this.deltasStack = undefined;   // maintain (I2)
         }
         if (parts.length > 0) {
-            this.upstreamHandleDelta(new CompositeDelta(parts));
+            this.upstreamReceiveDelta(new CompositeDelta(parts));
         }
     }
 
