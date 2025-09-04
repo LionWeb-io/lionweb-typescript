@@ -34,42 +34,6 @@ interface SymbolTable {
 }
 
 
-/**
- * Naive, non-performant implementation of {@link SymbolTable}.
- */
-class NaiveSymbolTable implements SymbolTable {
-
-    private readonly languages: Language[]
-
-    constructor(languages: Language[]) {
-        this.languages = languages
-    }
-
-    languageMatching(key: LionWebKey, version: string): Language | undefined {
-        return this.languages.find((language) =>
-               language.key === key
-            && language.version === version
-        )
-    }
-
-    entityMatching(entityMetaPointer: LionWebJsonMetaPointer): LanguageEntity | undefined {
-        return this.languageMatching(entityMetaPointer.language, entityMetaPointer.version)
-            ?.entities
-            .find((entity) => entity.key === entityMetaPointer.key)
-    }
-
-    featureMatching(classifierMetaPointer: LionWebJsonMetaPointer, featureMetaPointer: LionWebJsonMetaPointer): Feature | undefined {
-        const classifier = this.entityMatching(classifierMetaPointer)
-        if (classifier === undefined || !(classifier instanceof Classifier)) {
-            return undefined
-        }
-        const allFeatures = allFeaturesOf(classifier)
-        return allFeatures.find((feature) => feature.key === featureMetaPointer.key)
-    }
-
-}
-
-
 type EntityInfo = {
     entity: LanguageEntity
     allFeatures: Feature[]                                      // === [] if entity is not a Classifier
@@ -86,8 +50,8 @@ class MemoisingSymbolTable implements SymbolTable {
 
     private readonly languageKey2version2language: { [languageKey: LionWebKey]: { [version: string]: Language } } = {}
 
-    languageMatching(languageKey: LionWebKey, version: string): Language | undefined {
-        return lazyMapGet(
+    languageMatching = (languageKey: LionWebKey, version: string): Language | undefined =>
+        lazyMapGet(
             lazyMapGet(this.languageKey2version2language, languageKey, () => ({})),
             version,
             () => this.languages.find((language) =>
@@ -95,13 +59,12 @@ class MemoisingSymbolTable implements SymbolTable {
                 && language.version === version
             )
         )
-    }
 
 
     private readonly languageKey2version2entityKey2entityInfo: { [languageKey: LionWebKey]: { [version: string]: { [entityKey: LionWebKey]: (EntityInfo | undefined) } } } = {}
 
-    private entityInfoMatching(entityMetaPointer: LionWebJsonMetaPointer): undefined | EntityInfo {
-        return lazyMapGet(
+    private entityInfoMatching = (entityMetaPointer: LionWebJsonMetaPointer): undefined | EntityInfo =>
+        lazyMapGet(
             lazyMapGet(
                 lazyMapGet(this.languageKey2version2entityKey2entityInfo, entityMetaPointer.language, () => ({})),
                 entityMetaPointer.version,
@@ -112,14 +75,24 @@ class MemoisingSymbolTable implements SymbolTable {
                 const entity = this.languageMatching(entityMetaPointer.language, entityMetaPointer.version)
                     ?.entities
                     .find((entity) => entity.key === entityMetaPointer.key)
-                return entity && { entity, allFeatures: entity instanceof Classifier ? allFeaturesOf(entity) : [], featureKey2feature: {} }
+                return entity === undefined
+                    ? undefined
+                    : {
+                        entity,
+                        allFeatures: entity instanceof Classifier ? allFeaturesOf(entity) : [], featureKey2feature: {}
+                }
             }
         )
-    }
 
-    entityMatching(entityMetaPointer: LionWebJsonMetaPointer): LanguageEntity | undefined {
-        return this.entityInfoMatching(entityMetaPointer)?.entity
-    }
+    entityMatching = (entityMetaPointer: LionWebJsonMetaPointer): LanguageEntity | undefined =>
+        this.entityInfoMatching(entityMetaPointer)?.entity
+
+    /**
+     * Looks up the {@link LanguageEntity}, as pointed to by the given {@link LionWebJsonMetaPointer},
+     * and @returns all its {@link Feature features} or an empty array if it couldn't be found.
+     */
+    allFeaturesOfEntityMatching = (entityMetaPointer: LionWebJsonMetaPointer): Feature[] =>
+        this.entityInfoMatching(entityMetaPointer)?.allFeatures ?? []
 
     featureMatching(classifierMetaPointer: LionWebJsonMetaPointer, featureMetaPointer: LionWebJsonMetaPointer): Feature | undefined {
         const entityInfo = this.entityInfoMatching(classifierMetaPointer)
@@ -141,7 +114,6 @@ export type {
 }
 
 export {
-    MemoisingSymbolTable,
-    NaiveSymbolTable
+    MemoisingSymbolTable
 }
 
