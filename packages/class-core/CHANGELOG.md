@@ -14,6 +14,8 @@
 * Add a `Compositor` class that can be used to gather deltas into composite deltas.
 * Rename `DeltaHandler`, `handleDelta`, etc. to `DeltaReceiver`, `receiveDelta`, etc. to be more in line with C# implementation — keeping the previous names as legacy aliases.
   (And: `latching` &rarr; `latchingDeltaReceiverFrom`)
+* Improve performance of deserializer a little bit (— potentially).
+
 
 ## 0.6.13
 

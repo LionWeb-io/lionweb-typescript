@@ -21,7 +21,6 @@ import {
     Containment,
     defaultSimplisticHandler,
     Enumeration,
-    Language,
     MemoisingSymbolTable,
     PrimitiveType,
     Property,
@@ -34,6 +33,7 @@ import { LionWebId, LionWebJsonChunk, LionWebJsonNode } from "@lionweb/json"
 import { byIdMap, keepDefineds } from "@lionweb/ts-utils"
 
 import { DeltaReceiver, IdMapping, ILanguageBase, INodeBase } from "./index.js"
+import { combinedLanguageBaseLookupFor } from "./factory.js"
 import { NodesToInstall } from "./linking.js"
 
 
@@ -46,21 +46,6 @@ export type Deserializer<T> = (
     propertyValueDeserializer?: PropertyValueDeserializer,
     problemHandler?: SimplisticHandler
 ) => T;
-
-
-const languageBaseLookupFor = (languageBases: ILanguageBase[]) =>
-    (language: Language) => {
-        const languageBase = languageBases.find((languageBase) => languageBase.language === language);
-        if (languageBase === undefined) {
-            throw new Error(`language ${language.name} (with key=${language.key} and version=${language.version}) not known`);
-        }
-        return languageBase;
-    };
-
-const factoryLookupFor = (languageBases: ILanguageBase[], receiveDelta?: DeltaReceiver) => {
-    const lookup = languageBaseLookupFor(languageBases);
-    return (language: Language) => lookup(language).factory(receiveDelta);
-}
 
 
 /**
@@ -78,8 +63,7 @@ export type RootsWithIdMapping = { roots: INodeBase[], idMapping: IdMapping };
 export const nodeBaseDeserializerWithIdMapping = (languageBases: ILanguageBase[], receiveDelta?: DeltaReceiver): Deserializer<RootsWithIdMapping> => {
 
     const symbolTable = new MemoisingSymbolTable(languageBases.map(({language}) => language));
-    const languageBaseFor = languageBaseLookupFor(languageBases);
-    const factoryFor = factoryLookupFor(languageBases, receiveDelta);
+    const languageBaseFor = combinedLanguageBaseLookupFor(languageBases);
 
     return (
         serializationChunk: LionWebJsonChunk,
@@ -98,7 +82,7 @@ export const nodeBaseDeserializerWithIdMapping = (languageBases: ILanguageBase[]
                 return undefined;
             }
 
-            const node = factoryFor(classifier.language)(classifier, id);
+            const node = languageBaseFor(classifier.language).factory(receiveDelta)(classifier, id);
 
             properties.forEach(({property: propertyMetaPointer, value}) => {
                 const feature = symbolTable.featureMatching(classifierMetaPointer, propertyMetaPointer);
