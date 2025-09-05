@@ -5,7 +5,7 @@ import {
     LionWebJsonMetaPointer,
     LionWebJsonNode
 } from "@lionweb/json"
-import { asArray, keepDefineds } from "@lionweb/ts-utils"
+import { asArray, keepDefineds, lazyMapGet } from "@lionweb/ts-utils"
 import { asIds } from "./functions.js"
 import { Reader } from "./reading.js"
 import { Node } from "./types.js"
@@ -45,6 +45,7 @@ const isPropertyValueSerializer = (value: unknown): value is PropertyValueSerial
  * Type to provide (non-required) options to the serializer.
  */
 export type SerializationOptions = Partial<{
+
     /**
      * Determines whether empty feature values are explicitly serialized or skipped during serialization.
      * (The specification states that empty feature values SHOULD be serialized, but not that they MUST be.)
@@ -62,6 +63,7 @@ export type SerializationOptions = Partial<{
      * Misspelled alias of {@link #propertyValueSerializer}, kept for backward compatibility, and to be deprecated and removed later.
      */
     primitiveTypeSerializer: PropertyValueSerializer
+
 }>
 
 /**
@@ -89,11 +91,13 @@ export const nodeSerializer = <NT extends Node>(reader: Reader<NT>, serializatio
         const serializedNodes: LionWebJsonNode[] = [] // keep nodes as much as possible "in order"
         const ids: { [id: LionWebId]: boolean } = {} // maintain a map to keep track of IDs of nodes that have been serialized
         const languagesUsed: Language[] = []
+        const usedLanguageKey2Version2Boolean: { [key: string]: { [version: string]: boolean } } = {}
         const registerLanguageUsed = (language: Language) => {
-            if (!languagesUsed.some(languageUsed => language.equals(languageUsed))) {
+            const version2Boolean = lazyMapGet<{ [version: string]: boolean }>(usedLanguageKey2Version2Boolean, language.key, () => ({}))
+            if (!version2Boolean[language.version]) {
+                version2Boolean[language.version] = true
                 languagesUsed.push(language)
             }
-            // TODO  could make this more efficient by using a hash table
         }
 
         const visit = (node: NT, parent?: NT) => {

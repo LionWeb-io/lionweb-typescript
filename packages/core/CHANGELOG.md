@@ -29,6 +29,7 @@
 * Add function `isPartition`.
 * Improve performance of `deserializeSerializationChunk` function ever so slightly.
 * Remove the unused (and non-performant) `NaiveSymbolTable` class.
+* Improve performance of `nodeSerializer` function a tiny bit.
 
 
 ## 0.6.12
