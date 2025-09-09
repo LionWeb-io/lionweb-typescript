@@ -5,13 +5,14 @@ import {
     LionWebJsonMetaPointer,
     LionWebJsonNode
 } from "@lionweb/json"
-import { asArray, keepDefineds, lazyMapGet } from "@lionweb/ts-utils"
+import { asArray, keepDefineds, lazyMapGet, Nested3Map } from "@lionweb/ts-utils"
 import { asIds } from "./functions.js"
 import { Reader } from "./reading.js"
 import { Node } from "./types.js"
 import { BuiltinPropertyValueSerializer } from "./m3/builtins.js"
-import { allFeaturesOf } from "./m3/functions.js"
+import { inheritsDirectlyFrom } from "./m3/functions.js"
 import {
+    Classifier,
     Containment,
     Enumeration,
     Feature,
@@ -87,6 +88,22 @@ export const nodeSerializer = <NT extends Node>(reader: Reader<NT>, serializatio
         serializationOptions?.propertyValueSerializer ?? serializationOptions?.primitiveTypeSerializer ?? new BuiltinPropertyValueSerializer()
     const serializeEmptyFeatures = serializationOptions?.serializeEmptyFeatures ?? true
 
+    const languageKey2version2classifierKey2allFeatures: Nested3Map<Feature[]> = {}
+    const memoisedAllFeaturesOf = (classifier: Classifier): Feature[] =>
+        lazyMapGet(
+            lazyMapGet(
+                lazyMapGet(
+                    languageKey2version2classifierKey2allFeatures,
+                    classifier.language.key,
+                    () => ({})
+                ),
+                classifier.language.version,
+                () => ({})
+            ),
+            classifier.key,
+            () => [ ...classifier.features, ...(inheritsDirectlyFrom(classifier).flatMap(memoisedAllFeaturesOf)) ]
+        )
+
     return (nodes: NT[]): LionWebJsonChunk => {
         const serializedNodes: LionWebJsonNode[] = [] // keep nodes as much as possible "in order"
         const ids: { [id: LionWebId]: boolean } = {} // maintain a map to keep track of IDs of nodes that have been serialized
@@ -119,7 +136,7 @@ export const nodeSerializer = <NT extends Node>(reader: Reader<NT>, serializatio
             }
             serializedNodes.push(serializedNode)
             ids[node.id] = true
-            allFeaturesOf(classifier).forEach(feature => {  // TODO  can be made more efficient by caching allFeaturesOf(classifier)
+            memoisedAllFeaturesOf(classifier).forEach(feature => {
                 const value = reader.getFeatureValue(node, feature)
                 const featureLanguage = feature.classifier.language
                 registerLanguageUsed(featureLanguage)
