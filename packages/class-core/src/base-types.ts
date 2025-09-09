@@ -35,7 +35,7 @@ import { makeObservable } from "mobx"
 import {
     AnnotationsValueManager,
     ContainmentValueManager,
-    DeltaHandler,
+    DeltaReceiver,
     FeatureValueManager,
     MultiContainmentValueManager,
     MultiReferenceValueManager,
@@ -178,9 +178,9 @@ export interface INodeBase extends Node {
     get referenceTargets(): INodeBase[];
 
     /**
-     * An optionally-installed {@link DeltaHandler}.
+     * An optionally-installed {@link DeltaReceiver}.
      */
-    handleDelta?: DeltaHandler;
+    receiveDelta?: DeltaReceiver;
 
 
     /**
@@ -194,7 +194,7 @@ export interface INodeBase extends Node {
 /**
  * The base type for any node that's managed by a, potentially delta-emitting, API.
  *
- * It receives a {@link DeltaHandler} to pass {@link IDelta deltas} to
+ * It receives a {@link DeltaReceiver} to pass {@link IDelta deltas} to
  * that occur due to changes to values of its features,
  * as well as moving among parents and deletion.
  *
@@ -225,7 +225,7 @@ export abstract class NodeBase implements INodeBase {
     }
 
 
-    protected constructor(readonly classifier: Classifier, readonly id: LionWebId, readonly handleDelta?: DeltaHandler, parentage?: Parentage) {
+    protected constructor(readonly classifier: Classifier, readonly id: LionWebId, readonly receiveDelta?: DeltaReceiver, parentage?: Parentage) {
         this.classifier = classifier;
         this.id = id;
         if (parentage) {
@@ -347,7 +347,7 @@ export type NodeBaseFactory = (classifier: Classifier, id: LionWebId) => INodeBa
  */
 export interface ILanguageBase {
     language: Language;
-    factory(handleDelta?: DeltaHandler): NodeBaseFactory;
+    factory(receiveDelta?: DeltaReceiver): NodeBaseFactory;
     enumLiteralFrom<T>(enumerationLiteral: EnumerationLiteral): T;
 }
 

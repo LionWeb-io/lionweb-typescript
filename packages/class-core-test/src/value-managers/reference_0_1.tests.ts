@@ -16,7 +16,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import {
-    collectingDeltaHandler,
+    collectingDeltaReceiver,
     nodeBaseDeserializer,
     ReferenceAddedDelta,
     ReferenceChangedDelta,
@@ -35,8 +35,8 @@ const testLanguageBase = TestLanguageBase.INSTANCE
 describe("[0..1] reference", () => {
 
     it("getting an unset [0..1] reference", () => {
-        const [handleDeltas, deltas] = collectingDeltaHandler();
-        const node = LinkTestConcept.create("node", handleDeltas);
+        const [receiveDeltas, deltas] = collectingDeltaReceiver();
+        const node = LinkTestConcept.create("node", receiveDeltas);
 
         // pre-check:
         equal(deltas.length, 0);
@@ -46,9 +46,9 @@ describe("[0..1] reference", () => {
     });
 
     it("setting a [0..1] reference", () => {
-        const [handleDeltas, deltas] = collectingDeltaHandler();
-        const dst = LinkTestConcept.create("dst", handleDeltas);
-        const src = LinkTestConcept.create("src", handleDeltas);
+        const [receiveDeltas, deltas] = collectingDeltaReceiver();
+        const dst = LinkTestConcept.create("dst", receiveDeltas);
+        const src = LinkTestConcept.create("src", receiveDeltas);
 
         // pre-check:
         equal(deltas.length, 0);
@@ -71,9 +71,9 @@ describe("[0..1] reference", () => {
     });
 
     it("unsetting a [0..1] reference", () => {
-        const [handleDeltas, deltas] = collectingDeltaHandler();
-        const dst = LinkTestConcept.create("dst", handleDeltas);
-        const src = LinkTestConcept.create("src", handleDeltas);
+        const [receiveDeltas, deltas] = collectingDeltaReceiver();
+        const dst = LinkTestConcept.create("dst", receiveDeltas);
+        const src = LinkTestConcept.create("src", receiveDeltas);
 
         // pre-check:
         src.reference_0_1 = dst;
@@ -90,10 +90,10 @@ describe("[0..1] reference", () => {
     });
 
     it("setting a [0..1] reference, replacing an already set target", () => {
-        const [handleDeltas, deltas] = collectingDeltaHandler();
-        const dst1 = LinkTestConcept.create("dst1", handleDeltas);
-        const dst2 = LinkTestConcept.create("dst2", handleDeltas);
-        const src = LinkTestConcept.create("src", handleDeltas);
+        const [receiveDeltas, deltas] = collectingDeltaReceiver();
+        const dst1 = LinkTestConcept.create("dst1", receiveDeltas);
+        const dst2 = LinkTestConcept.create("dst2", receiveDeltas);
+        const src = LinkTestConcept.create("src", receiveDeltas);
 
         // pre-check:
         src.reference_0_1 = dst1;

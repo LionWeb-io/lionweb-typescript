@@ -86,7 +86,7 @@ describe("implementation of LionWeb client", async function() {
             )
         })
 
-        const partitionA = lionWebClient.factory(testLanguageBase.LinkTestConcept, "partition-A")
+        const partitionA = lionWebClient.createNode(testLanguageBase.LinkTestConcept, "partition-A")
         throws(
             () => {
                 lionWebClient.addPartition(partitionA)
@@ -107,7 +107,7 @@ describe("implementation of LionWeb client", async function() {
         await lionWebClient.signOff("query-2")
         expect(lionWebClient.participationId).to.equal(undefined)
 
-        const partitionB = lionWebClient.factory(testLanguageBase.LinkTestConcept, "partition-B")
+        const partitionB = lionWebClient.createNode(testLanguageBase.LinkTestConcept, "partition-B")
         throws(
             () => {
                 lionWebClient.addPartition(partitionB)
@@ -185,10 +185,10 @@ describe("implementation of LionWeb client", async function() {
             semanticLogger: semanticConsoleLogger
         })
         await lionWebClient.signOn("query-1")
-        const partitionA = lionWebClient.factory(testLanguageBase.LinkTestConcept, "partition-A")
+        const partitionA = lionWebClient.createNode(testLanguageBase.LinkTestConcept, "partition-A")
         lionWebClient.addPartition(partitionA)
 
-        const partitionB = lionWebClient.factory(testLanguageBase.LinkTestConcept, "partition-B")
+        const partitionB = lionWebClient.createNode(testLanguageBase.LinkTestConcept, "partition-B")
         throws(
             () => {
                 lionWebClient.deletePartition(partitionB)

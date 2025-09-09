@@ -33,7 +33,7 @@ import {
 import { LionWebId, LionWebJsonChunk, LionWebJsonNode } from "@lionweb/json"
 import { byIdMap, keepDefineds } from "@lionweb/ts-utils"
 
-import { DeltaHandler, IdMapping, ILanguageBase, INodeBase } from "./index.js"
+import { DeltaReceiver, IdMapping, ILanguageBase, INodeBase } from "./index.js"
 import { NodesToInstall } from "./linking.js"
 
 
@@ -57,9 +57,9 @@ const languageBaseLookupFor = (languageBases: ILanguageBase[]) =>
         return languageBase;
     };
 
-const factoryLookupFor = (languageBases: ILanguageBase[], handleDelta?: DeltaHandler) => {
+const factoryLookupFor = (languageBases: ILanguageBase[], receiveDelta?: DeltaReceiver) => {
     const lookup = languageBaseLookupFor(languageBases);
-    return (language: Language) => lookup(language).factory(handleDelta);
+    return (language: Language) => lookup(language).factory(receiveDelta);
 }
 
 
@@ -73,13 +73,13 @@ export type RootsWithIdMapping = { roots: INodeBase[], idMapping: IdMapping };
 /**
  * @return a {@link Deserializer} function for the given languages (given as {@link ILanguageBase}s) that returns a {@link RootsWithIdMapping}.
  * @param languageBases the {@link ILanguageBase}s for (at least) all the languages used in the {@link LionWebJsonChunk} to deserialize, minus LionCore M3 and built-ins.
- * @param handleDelta an optional {@link DeltaHandler} that will be injected in all {@link INodeBase nodes} created.
+ * @param receiveDelta an optional {@link DeltaReceiver} that will be injected in all {@link INodeBase nodes} created.
  */
-export const nodeBaseDeserializerWithIdMapping = (languageBases: ILanguageBase[], handleDelta?: DeltaHandler): Deserializer<RootsWithIdMapping> => {
+export const nodeBaseDeserializerWithIdMapping = (languageBases: ILanguageBase[], receiveDelta?: DeltaReceiver): Deserializer<RootsWithIdMapping> => {
 
     const symbolTable = new MemoisingSymbolTable(languageBases.map(({language}) => language));
     const languageBaseFor = languageBaseLookupFor(languageBases);
-    const factoryFor = factoryLookupFor(languageBases, handleDelta);
+    const factoryFor = factoryLookupFor(languageBases, receiveDelta);
 
     return (
         serializationChunk: LionWebJsonChunk,
@@ -219,10 +219,10 @@ export const nodeBaseDeserializerWithIdMapping = (languageBases: ILanguageBase[]
 /**
  * @return a {@link Deserializer} function for the languages (given as {@link ILanguageBase}s) that returns the roots (of type {@link INodeBase}) of the deserialized model.
  * @param languageBases the {@link ILanguageBase}s for (at least) all the languages used in the {@link LionWebJsonChunk} to deserialize, minus LionCore M3 and built-ins.
- * @param handleDelta an optional {@link DeltaHandler} that will be injected in all {@link INodeBase nodes} created.
+ * @param receiveDelta an optional {@link DeltaReceiver} that will be injected in all {@link INodeBase nodes} created.
  */
-export const nodeBaseDeserializer = (languageBases: ILanguageBase[], handleDelta?: DeltaHandler): Deserializer<INodeBase[]> => {
-    const deserializerWithIdMapping = nodeBaseDeserializerWithIdMapping(languageBases, handleDelta);
+export const nodeBaseDeserializer = (languageBases: ILanguageBase[], receiveDelta?: DeltaReceiver): Deserializer<INodeBase[]> => {
+    const deserializerWithIdMapping = nodeBaseDeserializerWithIdMapping(languageBases, receiveDelta);
     return (
         serializationChunk: LionWebJsonChunk,
         dependentNodes: INodeBase[] = [],

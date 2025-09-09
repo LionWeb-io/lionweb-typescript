@@ -15,7 +15,7 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { collectingDeltaHandler, ReferenceAddedDelta, ReferenceDeletedDelta } from "@lionweb/class-core"
+import { collectingDeltaReceiver, ReferenceAddedDelta, ReferenceDeletedDelta } from "@lionweb/class-core"
 
 import { deepEqual, equal } from "../assertions.js"
 import { LinkTestConcept, TestLanguageBase } from "../gen/TestLanguage.g.js"
@@ -26,8 +26,8 @@ const testLanguageBase = TestLanguageBase.INSTANCE
 describe("[0..n] reference", () => {
 
     it("getting an unset [0..n] reference", () => {
-        const [handleDeltas, deltas] = collectingDeltaHandler();
-        const node = LinkTestConcept.create("node", handleDeltas);
+        const [receiveDeltas, deltas] = collectingDeltaReceiver();
+        const node = LinkTestConcept.create("node", receiveDeltas);
 
         // pre-check:
         equal(deltas.length, 0);
@@ -37,9 +37,9 @@ describe("[0..n] reference", () => {
     });
 
     it("adding to a [0..n] reference", () => {
-        const [handleDeltas, deltas] = collectingDeltaHandler();
-        const dst1 = LinkTestConcept.create("dst1", handleDeltas);
-        const src = LinkTestConcept.create("src", handleDeltas);
+        const [receiveDeltas, deltas] = collectingDeltaReceiver();
+        const dst1 = LinkTestConcept.create("dst1", receiveDeltas);
+        const src = LinkTestConcept.create("src", receiveDeltas);
 
         // pre-check:
         equal(deltas.length, 0);
@@ -55,7 +55,7 @@ describe("[0..n] reference", () => {
         );
 
         // action+check:
-        const dst2 = LinkTestConcept.create("dst2", handleDeltas);
+        const dst2 = LinkTestConcept.create("dst2", receiveDeltas);
         src.addReference_0_n(dst2);
         deepEqual(src.reference_0_n, [dst1, dst2]);
         equal(dst2.parent, undefined);
@@ -67,9 +67,9 @@ describe("[0..n] reference", () => {
     });
 
     it("unsetting a [0..n] reference", () => {
-        const [handleDeltas, deltas] = collectingDeltaHandler();
-        const dst = LinkTestConcept.create("dst", handleDeltas);
-        const src = LinkTestConcept.create("src", handleDeltas);
+        const [receiveDeltas, deltas] = collectingDeltaReceiver();
+        const dst = LinkTestConcept.create("dst", receiveDeltas);
+        const src = LinkTestConcept.create("src", receiveDeltas);
 
         // pre-check:
         src.addReference_0_n(dst);
@@ -86,11 +86,11 @@ describe("[0..n] reference", () => {
     });
 
     it("remove a target", () => {
-        const [handleDeltas, deltas] = collectingDeltaHandler();
-        const dst1 = LinkTestConcept.create("dst1", handleDeltas);
-        const dst2 = LinkTestConcept.create("dst2", handleDeltas);
-        const dst3 = LinkTestConcept.create("dst3", handleDeltas);
-        const src = LinkTestConcept.create("src", handleDeltas);
+        const [receiveDeltas, deltas] = collectingDeltaReceiver();
+        const dst1 = LinkTestConcept.create("dst1", receiveDeltas);
+        const dst2 = LinkTestConcept.create("dst2", receiveDeltas);
+        const dst3 = LinkTestConcept.create("dst3", receiveDeltas);
+        const src = LinkTestConcept.create("src", receiveDeltas);
 
         // pre-check:
         src.addReference_0_n(dst1);
@@ -113,16 +113,16 @@ describe("[0..n] reference", () => {
 
 
     it("trying to remove a target that wasn't in there", () => {
-        const [handleDeltas, deltas] = collectingDeltaHandler();
-        const dst1 = LinkTestConcept.create("dst1", handleDeltas);
-        const src = LinkTestConcept.create("src", handleDeltas);
+        const [receiveDeltas, deltas] = collectingDeltaReceiver();
+        const dst1 = LinkTestConcept.create("dst1", receiveDeltas);
+        const src = LinkTestConcept.create("src", receiveDeltas);
 
         // pre-check:
         src.addReference_0_n(dst1);
         equal(dst1.parent, undefined);
         equal(deltas.length, 1);
 
-        const dst2 = LinkTestConcept.create("dst2", handleDeltas);
+        const dst2 = LinkTestConcept.create("dst2", receiveDeltas);
 
         // action+check:
         src.removeReference_0_n(dst2);

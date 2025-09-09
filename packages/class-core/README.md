@@ -24,9 +24,9 @@ The following top-level members of this package are suitable and intended to be 
 
 * `allNodesFrom` — Computes all descendant nodes from the given node, including that node itself.
 
-* `deepClonerFor` — Given `ILanguageBase`s and an optional `DeltaHandler`, it returns a function that clones the given nodes, *without* altering the IDs.
+* `deepClonerFor` — Given `ILanguageBase`s and an optional `DeltaReceiver`, it returns a function that clones the given nodes, *without* altering the IDs.
 
-* `deepCopierFor` — Given `ILanguageBase`s and an optional `DeltaHandler`, it returns a function that clones the given nodes, generating new IDs for all the duplicated nodes.
+* `deepCopierFor` — Given `ILanguageBase`s and an optional `DeltaReceiver`, it returns a function that clones the given nodes, generating new IDs for all the duplicated nodes.
 
 * `incomingReferences` — Finds all references coming into the given target node or any of the given target nodes, within the given search scope.
 
@@ -51,9 +51,9 @@ The list above does not contain the top-level members of this package specifical
 
 * All deltas implement the `IDelta` interface.
 
-* The `DeltaHandler` type represents functions that handles a delta.
-  Such a function has to be passed to invocations `<concrete classifier>.create(<id>, <handleDelta>)` and various other places, in order to “hook up” to the delta protocol.
-  Such a place is recognizable from the presence of an argument `handleDelta?: DeltaHandler`.
+* The `DeltaReceiver` type represents functions that handles a delta.
+  Such a function has to be passed to invocations `<concrete classifier>.create(<id>, <receiveDelta>)` and various other places, in order to “hook up” to the delta protocol.
+  Such a place is recognizable from the presence of an argument `receiveDelta?: DeltaReceiver`.
 
 * Deltas can be applied to a model state using the `applyDelta[s]` and `applyDelta[s]applyDeltaWithLookup` functions.
     The functions with plural `Deltas` in their names apply the given array of `IDelta`s in that order.
@@ -82,7 +82,7 @@ A node object represented as an `INodeBase` has (at least) the following charact
 An implementation of the `ILanguageBase` interface captures three base aspects of a language:
 
 1. Its language definition of type `Language` as a static member `INSTANCE`.
-2. A `factory` method that – given an optional `DeltaHandler` produces a `NodeBaseFactory`, which (in turn) is a function that, given a `Classifier` instance, produces the appropriate `INodeBase` instance with the provided `id`, `classifier`, and `handleDelta` arguments.
+2. A `factory` method that – given an optional `DeltaReceiver` produces a `NodeBaseFactory`, which (in turn) is a function that, given a `Classifier` instance, produces the appropriate `INodeBase` instance with the provided `id`, `classifier`, and `receiveDelta` arguments.
 3. A `enumLiteralFrom` method that produces a runtime representation of a given `EnumerationLiteral`.
 
 ### Value managers

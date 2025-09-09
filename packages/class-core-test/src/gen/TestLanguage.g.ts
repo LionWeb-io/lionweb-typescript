@@ -46,7 +46,7 @@ import {
 
 import {
     ContainmentValueManager,
-    DeltaHandler,
+    DeltaReceiver,
     ILanguageBase,
     INamed,
     INodeBase,
@@ -247,12 +247,12 @@ export class TestLanguageBase implements ILanguageBase {
         this._wiredUp = true;
     }
 
-    factory(handleDelta?: DeltaHandler): NodeBaseFactory {
+    factory(receiveDelta?: DeltaReceiver): NodeBaseFactory {
         return (classifier: Classifier, id: LionWebId) => {
             switch (classifier.key) {
-                case this._DataTypeTestConcept.key: return DataTypeTestConcept.create(id, handleDelta);
-                case this._LinkTestConcept.key: return LinkTestConcept.create(id, handleDelta);
-                case this._TestAnnotation.key: return TestAnnotation.create(id, handleDelta);
+                case this._DataTypeTestConcept.key: return DataTypeTestConcept.create(id, receiveDelta);
+                case this._LinkTestConcept.key: return LinkTestConcept.create(id, receiveDelta);
+                case this._TestAnnotation.key: return TestAnnotation.create(id, receiveDelta);
                 default: {
                     const {language} = classifier;
                     throw new Error(`can't instantiate ${classifier.name} (key=${classifier.key}): classifier is not known in language ${language.name} (key=${language.key}, version=${language.version})`);
@@ -290,8 +290,8 @@ export enum SecondTestEnumeration {
 }
 
 export class DataTypeTestConcept extends NodeBase {
-    static create(id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage): DataTypeTestConcept {
-        return new DataTypeTestConcept(TestLanguageBase.INSTANCE.DataTypeTestConcept, id, handleDelta, parentInfo);
+    static create(id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage): DataTypeTestConcept {
+        return new DataTypeTestConcept(TestLanguageBase.INSTANCE.DataTypeTestConcept, id, receiveDelta, parentInfo);
     }
 
     private readonly _booleanValue_1: RequiredPropertyValueManager<boolean>;
@@ -358,8 +358,8 @@ export class DataTypeTestConcept extends NodeBase {
         this._enumValue_0_1.set(newValue);
     }
 
-    public constructor(classifier: Classifier, id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage) {
-        super(classifier, id, handleDelta, parentInfo);
+    public constructor(classifier: Classifier, id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage) {
+        super(classifier, id, receiveDelta, parentInfo);
         this._booleanValue_1 = new RequiredPropertyValueManager<boolean>(TestLanguageBase.INSTANCE.DataTypeTestConcept_booleanValue_1, this);
         this._integerValue_1 = new RequiredPropertyValueManager<number>(TestLanguageBase.INSTANCE.DataTypeTestConcept_integerValue_1, this);
         this._stringValue_1 = new RequiredPropertyValueManager<string>(TestLanguageBase.INSTANCE.DataTypeTestConcept_stringValue_1, this);
@@ -386,8 +386,8 @@ export class DataTypeTestConcept extends NodeBase {
 }
 
 export class LinkTestConcept extends NodeBase implements INamed {
-    static create(id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage): LinkTestConcept {
-        return new LinkTestConcept(TestLanguageBase.INSTANCE.LinkTestConcept, id, handleDelta, parentInfo);
+    static create(id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage): LinkTestConcept {
+        return new LinkTestConcept(TestLanguageBase.INSTANCE.LinkTestConcept, id, receiveDelta, parentInfo);
     }
 
     private readonly _containment_0_1: OptionalSingleContainmentValueManager<LinkTestConcept>;
@@ -510,8 +510,8 @@ export class LinkTestConcept extends NodeBase implements INamed {
         this._name.set(newValue);
     }
 
-    public constructor(classifier: Classifier, id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage) {
-        super(classifier, id, handleDelta, parentInfo);
+    public constructor(classifier: Classifier, id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage) {
+        super(classifier, id, receiveDelta, parentInfo);
         this._containment_0_1 = new OptionalSingleContainmentValueManager<LinkTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_containment_0_1, this);
         this._containment_1 = new RequiredSingleContainmentValueManager<LinkTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_containment_1, this);
         this._containment_0_n = new OptionalMultiContainmentValueManager<LinkTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_containment_0_n, this);
@@ -552,8 +552,8 @@ export class LinkTestConcept extends NodeBase implements INamed {
 }
 
 export class TestAnnotation extends NodeBase {
-    static create(id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage): TestAnnotation {
-        return new TestAnnotation(TestLanguageBase.INSTANCE.TestAnnotation, id, handleDelta, parentInfo);
+    static create(id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage): TestAnnotation {
+        return new TestAnnotation(TestLanguageBase.INSTANCE.TestAnnotation, id, receiveDelta, parentInfo);
     }
 }
 

@@ -17,18 +17,18 @@
 
 import { lazyMapGet } from "@lionweb/ts-utils"
 import { ILanguageBase, NodeBaseFactory } from "./base-types.js"
-import { DeltaHandler } from "./deltas/index.js"
+import { DeltaReceiver } from "./deltas/index.js"
 
 /**
  * @return a {@link NodeBaseFactory factory function} that works for all given {@link ILanguageBase language bases}.
  */
-export const combinedFactoryFor = (languageBases: ILanguageBase[], handleDelta?: DeltaHandler): NodeBaseFactory => {
+export const combinedFactoryFor = (languageBases: ILanguageBase[], receiveDelta?: DeltaReceiver): NodeBaseFactory => {
     // create lookup map:
     const languageKey2version2factory: { [key: string]: { [version: string]: NodeBaseFactory } } = {}
     languageBases.forEach((languageBase) => {
         const {key, version} = languageBase.language
         const version2factory = lazyMapGet(languageKey2version2factory, key, () => ({}))
-        lazyMapGet(version2factory, version, () => languageBase.factory(handleDelta))
+        lazyMapGet(version2factory, version, () => languageBase.factory(receiveDelta))
             // (Note: don't destructure factory from languageBase, as that will unbind it as "this"!)
     })
 

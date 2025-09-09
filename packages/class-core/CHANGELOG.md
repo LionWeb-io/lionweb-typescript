@@ -10,7 +10,10 @@
   * annotations: `moveAndReplaceAtIndex[Directly]`
   * containments: `replace{With|AtIndex}`
   * references: `removeAtIndexDirectly`, `moveAndReplaceDirectly`
-
+* Add a `deltaReceiverForwardingTo` function that returns a delta receiver function that forwards received deltas to the given delta receivers.
+* Add a `Compositor` class that can be used to gather deltas into composite deltas.
+* Rename `DeltaHandler`, `handleDelta`, etc. to `DeltaReceiver`, `receiveDelta`, etc. to be more in line with C# implementation — keeping the previous names as legacy aliases.
+  (And: `latching` &rarr; `latchingDeltaReceiverFrom`)
 
 ## 0.6.13
 

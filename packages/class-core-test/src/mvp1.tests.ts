@@ -16,7 +16,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import {
-    collectingDeltaHandler,
+    collectingDeltaReceiver,
     INodeBase,
     nodeBaseDeserializer,
     PropertyAddedDelta,
@@ -91,8 +91,8 @@ describe("TestConcept", () => {
     })
 
     it("receiving ∂s when changing .stringValue_1", done => {
-        const [deltaHandler, deltas] = collectingDeltaHandler()
-        const instance = DataTypeTestConcept.create("foo", deltaHandler)
+        const [deltaReceiver, deltas] = collectingDeltaReceiver()
+        const instance = DataTypeTestConcept.create("foo", deltaReceiver)
 
         // pre-check:
         equal(deltas.length, 0)
@@ -151,8 +151,8 @@ describe("TestConcept", () => {
         const serializationChunk = readFileAsJson(
             join(artifactsPath, "DataTypeTestConcept-value=bar-enumValue_1=literal3.expected.json")
         ) as LionWebJsonChunk
-        const [deltaHandler, deltas] = collectingDeltaHandler()
-        const deserialized = nodeBaseDeserializer([testLanguageBase], deltaHandler)
+        const [deltaReceiver, deltas] = collectingDeltaReceiver()
+        const deserialized = nodeBaseDeserializer([testLanguageBase], deltaReceiver)
         const nodes = deserialized(serializationChunk, [])
         equal(deltas.length, 0)
         equal(nodes.length, 1)

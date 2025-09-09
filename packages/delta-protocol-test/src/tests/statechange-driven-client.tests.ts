@@ -21,7 +21,7 @@ import {
     allNodesFrom,
     applyDelta,
     deltaDeserializer,
-    DeltaHandler,
+    DeltaReceiver,
     IdMapping,
     INodeBase,
     nodeBaseDeserializer,
@@ -111,7 +111,7 @@ describe("WebSocket-driven client and repository", async function() {
 
         let loading = true
         let commandNumber = 0
-        const commandSender: DeltaHandler = (delta) => {
+        const commandSender: DeltaReceiver = (delta) => {
             if (!loading) {
                 const command: Payload = { commandID: `${clientId}-${commandNumber++}`, serializedDelta: serializeDelta(delta) }
                 lowLevelClient.sendMessage(command)
@@ -189,7 +189,7 @@ describe("WebSocket-driven client and repository including translation, without 
             let loading = true
             let commandNumber = 0
             const commandIds: string[] = []
-            const commandSender: DeltaHandler = (delta) => {
+            const commandSender: DeltaReceiver = (delta) => {
                 if (!loading) {
                     const commandId = `${clientId}-${commandNumber++}`
                     const command = deltaAsCommand(delta, commandId)

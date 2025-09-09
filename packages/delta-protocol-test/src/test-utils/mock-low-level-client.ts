@@ -21,7 +21,7 @@ import { clientInfo, repositoryWarning } from "@lionweb/delta-protocol-impl/dist
 import { TextualLogger, textualLoggerFunctionFrom } from "@lionweb/delta-protocol-impl/dist/utils/textual-logging.js"
 
 /**
- * @return a {@link LowLevelClientInstantiator} instance that can be passed to {@link LionWebClient}`.create(...)`,
+ * @return a {@link LowLevelClientInstantiator} instance that can be passed to {@link LionWebClient}`.createNode(...)`,
  * so that the latter can instantiate a suitable {@link LowLevelClient} mock instance without the need for an actual WebSocket connection.
  * @param commandResponsesById the {@link Event} responses for commands issued by client, indexed by their command ID.
  * @param queryResponsesById the {@link QueryMessage} responses for queries issued by the client, indexed by their query ID.

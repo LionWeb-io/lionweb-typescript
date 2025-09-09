@@ -19,7 +19,7 @@ import {
     allNodesFrom,
     applyDelta,
     combinedFactoryFor,
-    DeltaHandler,
+    DeltaReceiver,
     IdMapping,
     ILanguageBase,
     INodeBase,
@@ -62,7 +62,7 @@ import {
     SemanticLogger,
     semanticLoggerFunctionFrom
 } from "../semantic-logging.js"
-import { withStylesApplied } from "../utils/ansi.js"
+import { clientWarning } from "../utils/ansi.js"
 import { priorityQueueAcceptor } from "../utils/priority-queue.js"
 
 
@@ -74,6 +74,7 @@ export type LionWebClientParameters = {
     url: string
     languageBases: ILanguageBase[]
     serializationChunk?: LionWebJsonChunk
+    instantiateDeltaReceiverForwardingTo?: (commandSender: DeltaReceiver) => DeltaReceiver
     semanticLogger?: SemanticLogger
     lowLevelClientInstantiator?: LowLevelClientInstantiator<Event | QueryMessage, Command | QueryMessage>
 }
@@ -91,14 +92,16 @@ export class LionWebClient {
     }
 
     private signedOff = false
-    private lastReceivedSequenceNumber = -1
 
-    constructor(
+    private lastReceivedSequenceNumber = -1
+    // TODO  could also get this from the priority queue (which would need to be adapted for that)
+
+    private constructor(
         public readonly clientId: LionWebId,
         public model: INodeBase[],
         private idMapping: IdMapping,
-        public readonly factory: NodeBaseFactory,
-        private readonly commandSender: DeltaHandler,
+        public readonly createNode: NodeBaseFactory,
+        private readonly effectiveReceiveDelta: DeltaReceiver,
         private readonly lowLevelClient: LowLevelClient<Command | QueryMessage>
     ) {}
 
@@ -107,13 +110,13 @@ export class LionWebClient {
     private static readonly idMappingFrom = (model: INodeBase[]) =>
         new IdMapping(byIdMap(model.flatMap(allNodesFrom)))
 
-    static async create({clientId, url, languageBases, serializationChunk, semanticLogger, lowLevelClientInstantiator}: LionWebClientParameters): Promise<LionWebClient> {
+    static async create({clientId, url, languageBases, instantiateDeltaReceiverForwardingTo, serializationChunk, semanticLogger, lowLevelClientInstantiator}: LionWebClientParameters): Promise<LionWebClient> {
         const log = semanticLoggerFunctionFrom(semanticLogger)
 
         let loading = true
         let commandNumber = 0
         const issuedCommandIds: string[] = []
-        const commandSender: DeltaHandler = (delta) => {
+        const commandSender: DeltaReceiver = (delta) => {
             log(new DeltaOccurredOnClient(clientId, serializeDelta(delta)))
             if (!loading) {
                 const commandId = `cmd-${++commandNumber}`
@@ -125,8 +128,9 @@ export class LionWebClient {
                 }
             }
         }
+        const effectiveReceiveDelta = instantiateDeltaReceiverForwardingTo === undefined ? commandSender : instantiateDeltaReceiverForwardingTo(commandSender)
 
-        const deserialized = nodeBaseDeserializer(languageBases, commandSender)
+        const deserialized = nodeBaseDeserializer(languageBases, effectiveReceiveDelta)
         const model = serializationChunk === undefined ? [] : deserialized(serializationChunk)
         const idMapping = this.idMappingFrom(model)
         const eventAsDelta = eventToDeltaTranslator(languageBases, idMapping, deserialized)
@@ -152,18 +156,19 @@ export class LionWebClient {
         const receiveMessageOnClient = (message: Event | QueryMessage) => {
             log(new ClientReceivedMessage(clientId, message))
             if (isQueryResponse(message)) {
-                const {queryId} = message
+                const { queryId } = message
                 if (queryId in lionWebClient.queryResolveById) {
                     const resolveResponse = lionWebClient.queryResolveById[queryId]
                     resolveResponse(message)
                     delete lionWebClient.queryResolveById[queryId]
                     return  // ~void
                 }
-                console.log(withStylesApplied("cyan", "italic")(`client received query response without having sent a corresponding query request: query-ID="${queryId}"`))
+                console.log(clientWarning(`client received response for a query with ID="${queryId} without having sent a corresponding request - ignoring`))
             }
             if (isEvent(message)) {
                 acceptEvent(message)
             }
+            console.log(clientWarning(`client received a message of kind "${message.messageKind}" that it doesn't know how to handle - ignoring`))
         }
 
         const lowLevelClient = await
@@ -174,10 +179,10 @@ export class LionWebClient {
             clientId,
             model,
             idMapping,
-            combinedFactoryFor(languageBases, commandSender),
-            commandSender,
+            combinedFactoryFor(languageBases, effectiveReceiveDelta),
+            effectiveReceiveDelta,
             lowLevelClient
-        ) // (need this constant non-inlined for write-access to lastReceivedSequenceNumber and queryResolveById)
+        ) // Note: we need this `lionWebClient` constant non-inlined for write-access to lastReceivedSequenceNumber and queryResolveById.
         return lionWebClient
     }
 
@@ -299,7 +304,7 @@ export class LionWebClient {
         if (this.model.indexOf(partition) === -1) {
             this.model.push(partition)
             this.idMapping.updateWith(partition)
-            this.commandSender(new PartitionAddedDelta(partition))
+            this.effectiveReceiveDelta(new PartitionAddedDelta(partition))
         } // else: ignore; already done
     }
 
@@ -308,7 +313,7 @@ export class LionWebClient {
         const index = this.model.indexOf(partition)
         if (index > -1) {
             this.model.splice(index, 1)
-            this.commandSender(new PartitionDeletedDelta(partition))
+            this.effectiveReceiveDelta(new PartitionDeletedDelta(partition))
         } else {
             throw new Error(`node with id "${partition.id}" is not a partition in the current model`)
         }

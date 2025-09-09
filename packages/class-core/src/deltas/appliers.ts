@@ -469,7 +469,7 @@ export const applyDelta = deltaApplier()
  * @usage should look as follows.
  *
  * ```typescript
- * const {roots, idMapping} = deserializeAsLDMModelWithMapping(serializationChunk, handleDelta);
+ * const {roots, idMapping} = deserializeAsLDMModelWithMapping(serializationChunk, receiveDelta);
  * applyDeltasWithLookup(idMapping, deltas);
  * ```
  */
@@ -485,7 +485,7 @@ export const applyDeltasWithLookup = (idMapping: IdMapping, deltas: IDelta[], up
  * @usage should look as follows.
  *
  * ```typescript
- * const {roots, idMapping} = deserializeAsLDMModelWithMapping(serializationChunk, handleDelta);
+ * const {roots, idMapping} = deserializeAsLDMModelWithMapping(serializationChunk, receiveDelta);
  * applyDeltaWithLookup(idMapping, delta);
  * ```
  */
@@ -507,6 +507,9 @@ export const updateIdMappingWithDelta = (idMapping: IdMapping, delta: IDelta) =>
     }
     if (delta instanceof AnnotationAddedDelta) {
         idMapping.updateWith(delta.newAnnotation);
+    }
+    if (delta instanceof PartitionAddedDelta) {
+        idMapping.updateWith(delta.newPartition);
     }
     // (nothing to be done: no need –yet?- to take deleted child nodes out of the ID mapping)
 };

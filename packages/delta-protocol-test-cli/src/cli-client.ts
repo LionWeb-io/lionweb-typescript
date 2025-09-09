@@ -79,7 +79,7 @@ await runAsApp(async () => {
 
     console.log(clientInfo(`LionWeb delta protocol client (with ID=${clientId}) connecting to repository on ${url} - press Ctrl+C to terminate`))
 
-    const partition = lionWebClient.factory(partitionConcepts[partitionConcept], "a")
+    const partition = lionWebClient.createNode(partitionConcepts[partitionConcept], "a")
     lionWebClient.setModel([partition])
 
     const executeTask = taskExecutor(lionWebClient, partition, semanticLogItems)

@@ -20,7 +20,7 @@ import {
     ChildDeletedDelta,
     ChildMovedFromOtherContainmentDelta,
     ChildReplacedDelta,
-    collectingDeltaHandler,
+    collectingDeltaReceiver,
     nodeBaseDeserializer,
     serializeNodeBases
 } from "@lionweb/class-core"
@@ -36,9 +36,9 @@ const testLanguageBase = TestLanguageBase.INSTANCE
 describe("read+write access to a [0..1] containment", () => {
 
     it("setting of a [0..1] containment", () => {
-        const [handleDelta, deltas] = collectingDeltaHandler();
-        const child = LinkTestConcept.create("child", handleDelta);
-        const parent = LinkTestConcept.create("parent", handleDelta);
+        const [receiveDelta, deltas] = collectingDeltaReceiver();
+        const child = LinkTestConcept.create("child", receiveDelta);
+        const parent = LinkTestConcept.create("parent", receiveDelta);
 
         // pre-check:
         equal(parent.containment_0_1, undefined);
@@ -52,10 +52,10 @@ describe("read+write access to a [0..1] containment", () => {
     });
 
     it("moving a child (through a [0..1] containment) from parent to parent", () => {
-        const [handleDelta, deltas] = collectingDeltaHandler();
-        const child = LinkTestConcept.create("child", handleDelta);
-        const srcParent = LinkTestConcept.create("srcParent", handleDelta);
-        const dstParent = LinkTestConcept.create("dstParent", handleDelta);
+        const [receiveDelta, deltas] = collectingDeltaReceiver();
+        const child = LinkTestConcept.create("child", receiveDelta);
+        const srcParent = LinkTestConcept.create("srcParent", receiveDelta);
+        const dstParent = LinkTestConcept.create("dstParent", receiveDelta);
 
         // pre-check:
         equal(srcParent.containment_0_1, undefined);
@@ -87,10 +87,10 @@ describe("read+write access to a [0..1] containment", () => {
     });
 
     it("moving a child (through a [0..1] containment) directly between parents", () => {
-        const [handleDelta, deltas] = collectingDeltaHandler();
-        const child = LinkTestConcept.create("child", handleDelta);
-        const srcParent = LinkTestConcept.create("srcParent", handleDelta);
-        const dstParent = LinkTestConcept.create("dstParent", handleDelta);
+        const [receiveDelta, deltas] = collectingDeltaReceiver();
+        const child = LinkTestConcept.create("child", receiveDelta);
+        const srcParent = LinkTestConcept.create("srcParent", receiveDelta);
+        const dstParent = LinkTestConcept.create("dstParent", receiveDelta);
 
         // pre-check:
         equal(srcParent.containment_0_1, undefined);
@@ -115,12 +115,12 @@ describe("read+write access to a [0..1] containment", () => {
     });
 
     it("moving a child (through a [0..1] containment) directly between parents, replacing an already-present child", () => {
-        const [handleDelta, deltas] = collectingDeltaHandler();
-        const childAlreadyAssigned = LinkTestConcept.create("childAlreadyAssigned", handleDelta);
-        const dstParent = LinkTestConcept.create("dstParent", handleDelta);
+        const [receiveDelta, deltas] = collectingDeltaReceiver();
+        const childAlreadyAssigned = LinkTestConcept.create("childAlreadyAssigned", receiveDelta);
+        const dstParent = LinkTestConcept.create("dstParent", receiveDelta);
         dstParent.containment_0_1 = childAlreadyAssigned;
-        const srcParent = LinkTestConcept.create("srcParent", handleDelta);
-        const childToMove = LinkTestConcept.create("childToMove", handleDelta);
+        const srcParent = LinkTestConcept.create("srcParent", receiveDelta);
+        const childToMove = LinkTestConcept.create("childToMove", receiveDelta);
         srcParent.containment_0_1 = childToMove;
 
         // pre-check:

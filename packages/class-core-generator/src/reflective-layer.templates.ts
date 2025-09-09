@@ -208,7 +208,7 @@ export const reflectiveClassFor = (imports: Imports) => {
                 ]),
                 `}`,
                 ``,
-                `factory(${parameterPrefix}handleDelta?: ${imports.generic("DeltaHandler")}): ${imports.generic("NodeBaseFactory")} {`,
+                `factory(${parameterPrefix}receiveDelta?: ${imports.generic("DeltaReceiver")}): ${imports.generic("NodeBaseFactory")} {`,
                 indent([
                     `return (classifier: ${imports.core("Classifier")}, ${parameterPrefix}id: ${imports.json("LionWebId")}) => {`,
                     indent(
@@ -219,7 +219,7 @@ export const reflectiveClassFor = (imports: Imports) => {
                                     // case's key:
                                     `this._${classifier.name}.key`,
                                     // return value:
-                                    `${classifier.name}.create(id, ${parameterPrefix}handleDelta)`
+                                    `${classifier.name}.create(id, ${parameterPrefix}receiveDelta)`
                                 ]),
                             [
                                 `const {language} = classifier;`,

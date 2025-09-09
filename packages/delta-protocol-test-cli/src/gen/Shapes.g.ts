@@ -48,7 +48,7 @@ import {
 
 import {
     ContainmentValueManager,
-    DeltaHandler,
+    DeltaReceiver,
     ILanguageBase,
     INamed,
     INodeBase,
@@ -386,19 +386,19 @@ export class ShapesBase implements ILanguageBase {
         this._wiredUp = true;
     }
 
-    factory(handleDelta?: DeltaHandler): NodeBaseFactory {
+    factory(receiveDelta?: DeltaReceiver): NodeBaseFactory {
         return (classifier: Classifier, id: LionWebId) => {
             switch (classifier.key) {
-                case this._Circle.key: return Circle.create(id, handleDelta);
-                case this._Coord.key: return Coord.create(id, handleDelta);
-                case this._Geometry.key: return Geometry.create(id, handleDelta);
-                case this._Line.key: return Line.create(id, handleDelta);
-                case this._OffsetDuplicate.key: return OffsetDuplicate.create(id, handleDelta);
-                case this._CompositeShape.key: return CompositeShape.create(id, handleDelta);
-                case this._ReferenceGeometry.key: return ReferenceGeometry.create(id, handleDelta);
-                case this._Documentation.key: return Documentation.create(id, handleDelta);
-                case this._BillOfMaterials.key: return BillOfMaterials.create(id, handleDelta);
-                case this._MaterialGroup.key: return MaterialGroup.create(id, handleDelta);
+                case this._Circle.key: return Circle.create(id, receiveDelta);
+                case this._Coord.key: return Coord.create(id, receiveDelta);
+                case this._Geometry.key: return Geometry.create(id, receiveDelta);
+                case this._Line.key: return Line.create(id, receiveDelta);
+                case this._OffsetDuplicate.key: return OffsetDuplicate.create(id, receiveDelta);
+                case this._CompositeShape.key: return CompositeShape.create(id, receiveDelta);
+                case this._ReferenceGeometry.key: return ReferenceGeometry.create(id, receiveDelta);
+                case this._Documentation.key: return Documentation.create(id, receiveDelta);
+                case this._BillOfMaterials.key: return BillOfMaterials.create(id, receiveDelta);
+                case this._MaterialGroup.key: return MaterialGroup.create(id, receiveDelta);
                 default: {
                     const {language} = classifier;
                     throw new Error(`can't instantiate ${classifier.name} (key=${classifier.key}): classifier is not known in language ${language.name} (key=${language.key}, version=${language.version})`);
@@ -469,8 +469,8 @@ export abstract class Shape extends NodeBase implements INamed, IShape {
         this._fixpoints.replaceAtIndex(movedChild, newIndex);
     }
 
-    protected constructor(classifier: Classifier, id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage) {
-        super(classifier, id, handleDelta, parentInfo);
+    protected constructor(classifier: Classifier, id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage) {
+        super(classifier, id, receiveDelta, parentInfo);
         this._shapeDocs = new OptionalSingleContainmentValueManager<Documentation>(ShapesBase.INSTANCE.Shape_shapeDocs, this);
         this._name = new RequiredPropertyValueManager<string>(LionCore_builtinsBase.INSTANCE.INamed_name, this);
         this._uuid = new RequiredPropertyValueManager<string>(ShapesBase.INSTANCE.IShape_uuid, this);
@@ -495,8 +495,8 @@ export abstract class Shape extends NodeBase implements INamed, IShape {
 }
 
 export class Circle extends Shape {
-    static create(id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage): Circle {
-        return new Circle(ShapesBase.INSTANCE.Circle, id, handleDelta, parentInfo);
+    static create(id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage): Circle {
+        return new Circle(ShapesBase.INSTANCE.Circle, id, receiveDelta, parentInfo);
     }
 
     private readonly _r: RequiredPropertyValueManager<number>;
@@ -518,8 +518,8 @@ export class Circle extends Shape {
         this._center.replaceWith(newValue);
     }
 
-    public constructor(classifier: Classifier, id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage) {
-        super(classifier, id, handleDelta, parentInfo);
+    public constructor(classifier: Classifier, id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage) {
+        super(classifier, id, receiveDelta, parentInfo);
         this._r = new RequiredPropertyValueManager<number>(ShapesBase.INSTANCE.Circle_r, this);
         this._center = new RequiredSingleContainmentValueManager<Coord>(ShapesBase.INSTANCE.Circle_center, this);
     }
@@ -540,8 +540,8 @@ export class Circle extends Shape {
 }
 
 export class Coord extends NodeBase {
-    static create(id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage): Coord {
-        return new Coord(ShapesBase.INSTANCE.Coord, id, handleDelta, parentInfo);
+    static create(id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage): Coord {
+        return new Coord(ShapesBase.INSTANCE.Coord, id, receiveDelta, parentInfo);
     }
 
     private readonly _x: RequiredPropertyValueManager<number>;
@@ -568,8 +568,8 @@ export class Coord extends NodeBase {
         this._z.set(newValue);
     }
 
-    public constructor(classifier: Classifier, id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage) {
-        super(classifier, id, handleDelta, parentInfo);
+    public constructor(classifier: Classifier, id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage) {
+        super(classifier, id, receiveDelta, parentInfo);
         this._x = new RequiredPropertyValueManager<number>(ShapesBase.INSTANCE.Coord_x, this);
         this._y = new RequiredPropertyValueManager<number>(ShapesBase.INSTANCE.Coord_y, this);
         this._z = new RequiredPropertyValueManager<number>(ShapesBase.INSTANCE.Coord_z, this);
@@ -586,8 +586,8 @@ export class Coord extends NodeBase {
 }
 
 export class Geometry extends NodeBase {
-    static create(id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage): Geometry {
-        return new Geometry(ShapesBase.INSTANCE.Geometry, id, handleDelta, parentInfo);
+    static create(id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage): Geometry {
+        return new Geometry(ShapesBase.INSTANCE.Geometry, id, receiveDelta, parentInfo);
     }
 
     private readonly _shapes: OptionalMultiContainmentValueManager<IShape>;
@@ -621,8 +621,8 @@ export class Geometry extends NodeBase {
         this._documentation.replaceWith(newValue);
     }
 
-    public constructor(classifier: Classifier, id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage) {
-        super(classifier, id, handleDelta, parentInfo);
+    public constructor(classifier: Classifier, id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage) {
+        super(classifier, id, receiveDelta, parentInfo);
         this._shapes = new OptionalMultiContainmentValueManager<IShape>(ShapesBase.INSTANCE.Geometry_shapes, this);
         this._documentation = new OptionalSingleContainmentValueManager<Documentation>(ShapesBase.INSTANCE.Geometry_documentation, this);
     }
@@ -642,8 +642,8 @@ export interface IShape extends INodeBase {
 }
 
 export class Line extends Shape implements INamed {
-    static create(id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage): Line {
-        return new Line(ShapesBase.INSTANCE.Line, id, handleDelta, parentInfo);
+    static create(id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage): Line {
+        return new Line(ShapesBase.INSTANCE.Line, id, receiveDelta, parentInfo);
     }
 
     private readonly _start: RequiredSingleContainmentValueManager<Coord>;
@@ -668,8 +668,8 @@ export class Line extends Shape implements INamed {
         this._end.replaceWith(newValue);
     }
 
-    public constructor(classifier: Classifier, id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage) {
-        super(classifier, id, handleDelta, parentInfo);
+    public constructor(classifier: Classifier, id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage) {
+        super(classifier, id, receiveDelta, parentInfo);
         this._start = new RequiredSingleContainmentValueManager<Coord>(ShapesBase.INSTANCE.Line_start, this);
         this._end = new RequiredSingleContainmentValueManager<Coord>(ShapesBase.INSTANCE.Line_end, this);
     }
@@ -684,8 +684,8 @@ export class Line extends Shape implements INamed {
 }
 
 export class OffsetDuplicate extends Shape {
-    static create(id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage): OffsetDuplicate {
-        return new OffsetDuplicate(ShapesBase.INSTANCE.OffsetDuplicate, id, handleDelta, parentInfo);
+    static create(id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage): OffsetDuplicate {
+        return new OffsetDuplicate(ShapesBase.INSTANCE.OffsetDuplicate, id, receiveDelta, parentInfo);
     }
 
     private readonly _offset: RequiredSingleContainmentValueManager<Coord>;
@@ -737,8 +737,8 @@ export class OffsetDuplicate extends Shape {
         this._secretDocs.replaceWith(newValue);
     }
 
-    public constructor(classifier: Classifier, id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage) {
-        super(classifier, id, handleDelta, parentInfo);
+    public constructor(classifier: Classifier, id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage) {
+        super(classifier, id, receiveDelta, parentInfo);
         this._offset = new RequiredSingleContainmentValueManager<Coord>(ShapesBase.INSTANCE.OffsetDuplicate_offset, this);
         this._source = new RequiredSingleReferenceValueManager<Shape>(ShapesBase.INSTANCE.OffsetDuplicate_source, this);
         this._altSource = new OptionalSingleReferenceValueManager<Shape>(ShapesBase.INSTANCE.OffsetDuplicate_altSource, this);
@@ -765,8 +765,8 @@ export class OffsetDuplicate extends Shape {
 }
 
 export class CompositeShape extends Shape {
-    static create(id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage): CompositeShape {
-        return new CompositeShape(ShapesBase.INSTANCE.CompositeShape, id, handleDelta, parentInfo);
+    static create(id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage): CompositeShape {
+        return new CompositeShape(ShapesBase.INSTANCE.CompositeShape, id, receiveDelta, parentInfo);
     }
 
     private readonly _parts: RequiredMultiContainmentValueManager<IShape>;
@@ -820,8 +820,8 @@ export class CompositeShape extends Shape {
         this._evilPart.replaceWith(newValue);
     }
 
-    public constructor(classifier: Classifier, id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage) {
-        super(classifier, id, handleDelta, parentInfo);
+    public constructor(classifier: Classifier, id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage) {
+        super(classifier, id, receiveDelta, parentInfo);
         this._parts = new RequiredMultiContainmentValueManager<IShape>(ShapesBase.INSTANCE.CompositeShape_parts, this);
         this._disabledParts = new RequiredMultiContainmentValueManager<IShape>(ShapesBase.INSTANCE.CompositeShape_disabledParts, this);
         this._evilPart = new RequiredSingleContainmentValueManager<IShape>(ShapesBase.INSTANCE.CompositeShape_evilPart, this);
@@ -838,8 +838,8 @@ export class CompositeShape extends Shape {
 }
 
 export class ReferenceGeometry extends NodeBase {
-    static create(id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage): ReferenceGeometry {
-        return new ReferenceGeometry(ShapesBase.INSTANCE.ReferenceGeometry, id, handleDelta, parentInfo);
+    static create(id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage): ReferenceGeometry {
+        return new ReferenceGeometry(ShapesBase.INSTANCE.ReferenceGeometry, id, receiveDelta, parentInfo);
     }
 
     private readonly _shapes: OptionalMultiReferenceValueManager<IShape>;
@@ -859,8 +859,8 @@ export class ReferenceGeometry extends NodeBase {
         this._shapes.move(oldIndex, newIndex);
     }
 
-    public constructor(classifier: Classifier, id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage) {
-        super(classifier, id, handleDelta, parentInfo);
+    public constructor(classifier: Classifier, id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage) {
+        super(classifier, id, receiveDelta, parentInfo);
         this._shapes = new OptionalMultiReferenceValueManager<IShape>(ShapesBase.INSTANCE.ReferenceGeometry_shapes, this);
     }
 
@@ -873,8 +873,8 @@ export class ReferenceGeometry extends NodeBase {
 }
 
 export class Documentation extends NodeBase {
-    static create(id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage): Documentation {
-        return new Documentation(ShapesBase.INSTANCE.Documentation, id, handleDelta, parentInfo);
+    static create(id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage): Documentation {
+        return new Documentation(ShapesBase.INSTANCE.Documentation, id, receiveDelta, parentInfo);
     }
 
     private readonly _text: OptionalPropertyValueManager<string>;
@@ -893,8 +893,8 @@ export class Documentation extends NodeBase {
         this._technical.set(newValue);
     }
 
-    public constructor(classifier: Classifier, id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage) {
-        super(classifier, id, handleDelta, parentInfo);
+    public constructor(classifier: Classifier, id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage) {
+        super(classifier, id, receiveDelta, parentInfo);
         this._text = new OptionalPropertyValueManager<string>(ShapesBase.INSTANCE.Documentation_text, this);
         this._technical = new OptionalPropertyValueManager<boolean>(ShapesBase.INSTANCE.Documentation_technical, this);
     }
@@ -909,8 +909,8 @@ export class Documentation extends NodeBase {
 }
 
 export class BillOfMaterials extends NodeBase {
-    static create(id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage): BillOfMaterials {
-        return new BillOfMaterials(ShapesBase.INSTANCE.BillOfMaterials, id, handleDelta, parentInfo);
+    static create(id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage): BillOfMaterials {
+        return new BillOfMaterials(ShapesBase.INSTANCE.BillOfMaterials, id, receiveDelta, parentInfo);
     }
 
     private readonly _materials: OptionalMultiReferenceValueManager<IShape>;
@@ -981,8 +981,8 @@ export class BillOfMaterials extends NodeBase {
         this._defaultGroup.replaceWith(newValue);
     }
 
-    public constructor(classifier: Classifier, id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage) {
-        super(classifier, id, handleDelta, parentInfo);
+    public constructor(classifier: Classifier, id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage) {
+        super(classifier, id, receiveDelta, parentInfo);
         this._materials = new OptionalMultiReferenceValueManager<IShape>(ShapesBase.INSTANCE.BillOfMaterials_materials, this);
         this._groups = new OptionalMultiContainmentValueManager<MaterialGroup>(ShapesBase.INSTANCE.BillOfMaterials_groups, this);
         this._altGroups = new OptionalMultiContainmentValueManager<MaterialGroup>(ShapesBase.INSTANCE.BillOfMaterials_altGroups, this);
@@ -1007,8 +1007,8 @@ export class BillOfMaterials extends NodeBase {
 }
 
 export class MaterialGroup extends NodeBase {
-    static create(id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage): MaterialGroup {
-        return new MaterialGroup(ShapesBase.INSTANCE.MaterialGroup, id, handleDelta, parentInfo);
+    static create(id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage): MaterialGroup {
+        return new MaterialGroup(ShapesBase.INSTANCE.MaterialGroup, id, receiveDelta, parentInfo);
     }
 
     private readonly _matterState: OptionalPropertyValueManager<MatterState>;
@@ -1047,8 +1047,8 @@ export class MaterialGroup extends NodeBase {
         this._defaultShape.replaceWith(newValue);
     }
 
-    public constructor(classifier: Classifier, id: LionWebId, handleDelta?: DeltaHandler, parentInfo?: Parentage) {
-        super(classifier, id, handleDelta, parentInfo);
+    public constructor(classifier: Classifier, id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage) {
+        super(classifier, id, receiveDelta, parentInfo);
         this._matterState = new OptionalPropertyValueManager<MatterState>(ShapesBase.INSTANCE.MaterialGroup_matterState, this);
         this._materials = new RequiredMultiReferenceValueManager<IShape>(ShapesBase.INSTANCE.MaterialGroup_materials, this);
         this._defaultShape = new OptionalSingleContainmentValueManager<IShape>(ShapesBase.INSTANCE.MaterialGroup_defaultShape, this);

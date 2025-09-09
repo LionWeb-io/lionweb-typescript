@@ -39,7 +39,7 @@ export class LionWebRepository {
 
     constructor(private readonly lowLevelServer: LowLevelServer<Event>) {}
 
-    static async setUp({port, semanticLogger}: LionWebRepositoryParameters) {
+    static async create({port, semanticLogger}: LionWebRepositoryParameters) {
         const log = semanticLoggerFunctionFrom(semanticLogger)
 
         let nextParticipationIdSequenceNumber = 0

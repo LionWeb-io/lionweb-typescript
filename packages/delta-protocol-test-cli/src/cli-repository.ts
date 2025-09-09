@@ -38,7 +38,7 @@ Parameter (missing):
 const port = tryParseInteger(argv[2])
 
 await runAsApp(async () => {
-    const lionWebRepository = await LionWebRepository.setUp({
+    const lionWebRepository = await LionWebRepository.create({
         port,
         semanticLogger: semanticConsoleLogger
     })
