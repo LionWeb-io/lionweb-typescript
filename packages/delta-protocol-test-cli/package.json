@@ -19,7 +19,7 @@
     "cli-repository": "dist/cli-repository.js"
   },
   "scripts": {
-    "clean": "npx rimraf dist node_modules delta-protocol-test-cli-*.tgz",
+    "clean": "npx rimraf dist node_modules -g delta-protocol-test-cli-*.tgz",
     "build": "tsc",
     "lint": "eslint src",
     "start-client": "npm run build && node --trace-uncaught dist/cli-client.js 40000 client-A LinkTestConcept Bogus,SignOn,AddDocs,SetDocs,SignOff,Wait",
