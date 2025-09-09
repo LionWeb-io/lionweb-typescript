@@ -15,7 +15,7 @@
     "url": "https://github.com/LionWeb-io/lionweb-typescript/issues"
   },
   "scripts": {
-    "clean": "npx rimraf dist node_modules delta-protocol-test-*.tgz",
+    "clean": "npx rimraf dist node_modules -g delta-protocol-test-*.tgz",
     "build": "tsc",
     "lint": "eslint src",
     "pretest": "npm run build",
