@@ -17,6 +17,7 @@
 
 import { SerializedDelta } from "@lionweb/class-core"
 import { LionWebId } from "@lionweb/json"
+import { asMinimalJsonString } from "@lionweb/ts-utils"
 
 import { Event } from "./payload/event-types.js"
 import { clientInfo, clientWarning, repositoryInfo, withStylesApplied } from "./utils/ansi.js"
@@ -41,22 +42,22 @@ export const semanticConsoleLogger = (semanticLogItem: ISemanticLogItem) => {
 
 export class DeltaOccurredOnClient implements ISemanticLogItem {
     constructor(public readonly clientId: LionWebId, public readonly serializedDelta: SerializedDelta) {}
-    asText = () => `${clientInfo(`delta occurred on client "${this.clientId}"`)}: ${JSON.stringify(this.serializedDelta)}`
+    asText = () => `${clientInfo(`delta occurred on client "${this.clientId}"`)}: ${asMinimalJsonString(this.serializedDelta)}`
 }
 
 export class ClientSentMessage<TMessageForRepository> implements ISemanticLogItem {
     constructor(public readonly clientId: LionWebId, public readonly message: TMessageForRepository) {}
-    asText = () => `${clientInfo(`client "${this.clientId}" sent message`)}: ${JSON.stringify(this.message)}`
+    asText = () => `${clientInfo(`client "${this.clientId}" sent message`)}: ${asMinimalJsonString(this.message)}`
 }
 
 export class ClientReceivedMessage<TMessageForClient> implements ISemanticLogItem {
     constructor(public readonly clientId: LionWebId, public readonly message: TMessageForClient) {}
-    asText = () => `${clientInfo(`client "${this.clientId}" received message`)}: ${JSON.stringify(this.message)}`
+    asText = () => `${clientInfo(`client "${this.clientId}" received message`)}: ${asMinimalJsonString(this.message)}`
 }
 
 export class ClientAppliedEvent implements ISemanticLogItem {
     constructor(public readonly clientId: LionWebId, public readonly event: Event) {}
-    asText = () => `${clientInfo(`client "${this.clientId}" applied (the delta from) the following event`)}: ${JSON.stringify(this.event)}`
+    asText = () => `${clientInfo(`client "${this.clientId}" applied (the delta from) the following event`)}: ${asMinimalJsonString(this.event)}`
 }
 
 export class ClientDidNotApplyEventFromOwnCommand implements ISemanticLogItem {
@@ -66,7 +67,7 @@ export class ClientDidNotApplyEventFromOwnCommand implements ISemanticLogItem {
 
 export class RepositoryReceivedMessage<TClientMetadata, TIncomingMessage> implements ISemanticLogItem {
     constructor(public readonly knownMetadata: Partial<TClientMetadata>, public readonly message: TIncomingMessage) {}
-    asText = () => `${repositoryInfo(`repository received message`)} ${withStylesApplied("magenta")(`(client's known metadata: ${JSON.stringify(this.knownMetadata)})`)}: ${JSON.stringify(this.message)}`
+    asText = () => `${repositoryInfo(`repository received message`)} ${withStylesApplied("magenta")(`(client's known metadata: ${asMinimalJsonString(this.knownMetadata)})`)}: ${asMinimalJsonString(this.message)}`
 }
 
 

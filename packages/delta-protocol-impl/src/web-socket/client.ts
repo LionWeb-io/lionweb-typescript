@@ -15,8 +15,9 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { WebSocket } from "ws"
 import { LionWebId } from "@lionweb/json"
+import { asMinimalJsonString } from "@lionweb/ts-utils"
+import { WebSocket } from "ws"
 
 import { wrappedAsPromise } from "../utils/async.js"
 import { tryParseJson } from "../utils/json.js"
@@ -62,7 +63,7 @@ export const createWebSocketClient = async <TMessageForClient, TMessageToServer>
         const lowLevelWebSocketClient: LowLevelClient<TMessageToServer> = {
             sendMessage: (message) => {
                 if (state === "connected") {
-                    const messageText = JSON.stringify(message)
+                    const messageText = asMinimalJsonString(message)
                     log(`sending message to server: ${messageText}`)
                     return wrappedAsPromise((callback) => {
                         webSocket.send(messageText, callback)

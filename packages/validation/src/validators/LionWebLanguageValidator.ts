@@ -1,5 +1,6 @@
 import { isEqualMetaPointer, LionWebJsonChunk, LionWebJsonNode } from "@lionweb/json"
 import { isLionWebM3Language, JsonContext, LionWebJsonChunkWrapper, MetaPointers } from "@lionweb/json-utils"
+import { asMinimalJsonString } from "@lionweb/ts-utils"
 import { GenericIssue } from "../issues/index.js"
 import { MissingM3Language_Issue } from "../issues/LanguageIssues.js"
 import { isConcept, LanguageRegistry } from "../languages/index.js"
@@ -33,7 +34,7 @@ export class LionWebLanguageValidator {
         const languageNodes = this.chunkWrapper.findNodesOfClassifier(MetaPointers.Language)
         if (languageNodes.length !== 1) {
             // TODO Better error handling.
-            console.error("Error: xpected exactly one Language node, found " + languageNodes.length + " => " + JSON.stringify(languageNodes))
+            console.error("Error: xpected exactly one Language node, found " + languageNodes.length + " => " + asMinimalJsonString(languageNodes))
         }
         chunk.nodes.forEach((node, index) => {
             if (!isConcept(node)) {

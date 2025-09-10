@@ -15,6 +15,7 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import { asMinimalJsonString } from "@lionweb/ts-utils"
 import { IncomingMessage } from "http"
 import { WebSocketServer } from "ws"
 
@@ -56,7 +57,7 @@ export const createWebSocketServer = <TClientMetadata, TMessageForServer, TRespo
             log(`received a message from client: ${messageText}`)
             const response = receiveMessageOnServer(clientMetadata, tryParseJson(messageText, log) as TMessageForServer)
             if (response !== undefined) {
-                const responseText = JSON.stringify(response)
+                const responseText = asMinimalJsonString(response)
                 // send back to this client (only):
                 webSocket.send(responseText)    // TODO  handle error
             }
@@ -65,7 +66,7 @@ export const createWebSocketServer = <TClientMetadata, TMessageForServer, TRespo
     return {
         // TODO  rethink broadcasting: need to make a different message _per client_, based on its metadata (which then should include nextSequenceNumber)
         broadcastMessage: async (message: TBroadcastMessage) => {
-            const messageText = JSON.stringify(message)
+            const messageText = asMinimalJsonString(message)
             log(`broadcasting message to all clients: ${messageText}`)
             await Promise.all(setMap(webSocketServer.clients, (client) =>
                 wrappedAsPromise((callback) => {

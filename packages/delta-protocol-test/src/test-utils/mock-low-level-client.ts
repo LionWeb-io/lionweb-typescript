@@ -16,6 +16,7 @@
 
 import { LionWebId } from "@lionweb/json"
 import { Command, Event, QueryMessage } from "@lionweb/delta-protocol-impl"
+import { asMinimalJsonString } from "@lionweb/ts-utils"
 import { LowLevelClientInstantiator } from "@lionweb/delta-protocol-impl/dist/web-socket/client.js"
 import { clientInfo, repositoryWarning } from "@lionweb/delta-protocol-impl/dist/utils/ansi.js"
 import { TextualLogger, textualLoggerFunctionFrom } from "@lionweb/delta-protocol-impl/dist/utils/textual-logging.js"
@@ -50,7 +51,7 @@ export const mockLowLevelClientInstantiator = (
                         return Promise.resolve()
                     }
                     const logMessage = `mock low-level client doesn't have a response configured for query with ID="${queryId}"`
-                    log(`${repositoryWarning(logMessage)}: ${JSON.stringify(message)}`)
+                    log(`${repositoryWarning(logMessage)}: ${asMinimalJsonString(message)}`)
                     return Promise.reject(new Error(logMessage))
                 }
                 const { commandId } = message as Command
@@ -59,7 +60,7 @@ export const mockLowLevelClientInstantiator = (
                     return Promise.resolve()
                 }
                 const logMessage = `mock low-level client doesn't have a response configured for command with ID="${commandId}"`
-                log(`${repositoryWarning(logMessage)}: ${JSON.stringify(message)}`)
+                log(`${repositoryWarning(logMessage)}: ${asMinimalJsonString(message)}`)
                 return Promise.reject(new Error(logMessage))
             },
             disconnect: () => {

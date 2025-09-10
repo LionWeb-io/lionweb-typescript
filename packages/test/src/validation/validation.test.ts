@@ -1,3 +1,4 @@
+import { asMinimalJsonString } from "@lionweb/ts-utils"
 import {
     getAllDirectories,
     getFilesDirect,
@@ -27,7 +28,7 @@ type TestDir = { dir: string; lang: string[] }
 const verbose = false
 
 function validationTest(testDir: TestDir, validateAgainstLanguage: boolean, registry: LanguageRegistry) {
-    console.log("validationTest " + JSON.stringify(testDir))
+    console.log("validationTest " + asMinimalJsonString(testDir))
     const directories = getAllDirectories(testDir.dir, [])
 
     for (const dir of directories) {
@@ -47,7 +48,7 @@ function validationTest(testDir: TestDir, validateAgainstLanguage: boolean, regi
                 continue
             }
             const expectedError = testExpectations.find(expect => file === expect.file)
-            const msg = expectedError == undefined ? "none" : JSON.stringify(expectedError)
+            const msg = expectedError == undefined ? "none" : asMinimalJsonString(expectedError)
             it("Validate file " + dir + "/" + file + " expected error: " + msg, () => {
                 const result: ValidationResult = validateFileResult(dir + "/" + file, validateAgainstLanguage, registry)
                 const success =
@@ -83,7 +84,7 @@ function registerLanguage(registry: LanguageRegistry, fileName: string) {
 }
 
 tests.forEach(async testDir => {
-    console.log("testDir " + JSON.stringify(testDir))
+    console.log("testDir " + asMinimalJsonString(testDir))
     // await to ensure tests won't go in parallel because the KnownLanguages is static
     const registry = new LanguageRegistry()
     testDir.lang.forEach(lang => registerLanguage(registry, lang))

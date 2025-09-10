@@ -15,6 +15,7 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import { asPrettyJsonString } from "@lionweb/ts-utils"
 import { IDelta } from "./base.js"
 import { serializeDelta } from "./serialization/index.js"
 
@@ -37,7 +38,7 @@ export const collectingDeltaReceiver = (printSerializations = false): [DeltaRece
     const receiveDelta: DeltaReceiver = (delta) => {
         deltas.push(delta);
         if (printSerializations) {
-            console.log(JSON.stringify(serializeDelta(delta), null, 4));
+            console.log(asPrettyJsonString(serializeDelta(delta)));
         }
     };
     return [receiveDelta, deltas];

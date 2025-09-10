@@ -1,4 +1,4 @@
-import { StringsMapper } from "@lionweb/ts-utils"
+import { asMinimalJsonString, StringsMapper } from "@lionweb/ts-utils"
 import { PropertyValueDeserializer } from "../deserializer.js"
 import { PropertyValueSerializer } from "../serializer.js"
 import { currentReleaseVersion } from "../version.js"
@@ -139,7 +139,7 @@ export class BuiltinPropertyValueSerializer extends DataTypeRegister<(value: unk
         this.register(stringDataType, value => value as string)
         this.register(booleanDataType, value => `${value as boolean}`)
         this.register(integerDataType, value => `${value as number}`)
-        this.register(jsonDataType, value => JSON.stringify(value, null))
+        this.register(jsonDataType, value => asMinimalJsonString(value))
     }
 
     serializeValue(value: unknown | undefined, property: Property): string | null {
