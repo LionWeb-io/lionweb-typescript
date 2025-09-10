@@ -14,9 +14,12 @@ const writeTextFile = (fileName: string, data: string) => {
     writeFileSync(join(diagramsPath, fileName), data, { encoding: "utf8" })
 }
 
+const normalizeNewlines = (data: string): string =>
+    data.replaceAll("\r\n", "\n") // normalize Windows EOLs
+
 const rendersEqualToFileOrOverwrite = (renderer: (language: Language) => string, fileName: string) => {
-    const actual = renderer(testLanguage).replaceAll("\r\n", "\n") // normalize Windows EOLs
-    const expected = readTextFile(fileName)
+    const actual = normalizeNewlines(renderer(testLanguage))
+    const expected = normalizeNewlines(readTextFile(fileName))
     if (actual !== expected) {
         writeTextFile(fileName, actual)
     }
@@ -40,14 +43,16 @@ const testLanguage = (() => {
     return factory.language
 })()
 
-describe("rendering languages as PlantUML diagrams", () => {
-    it("is improved", () => {
+
+describe("rendering languages as diagrams", () => {
+
+    it("PlantUML", () => {
         rendersEqualToFileOrOverwrite(generatePlantUmlForLanguage, "test-diagram-expected.puml")
     })
-})
 
-describe("rendering languages as Mermaid diagrams", () => {
-    it("is improved", () => {
+    it("Mermaid", () => {
         rendersEqualToFileOrOverwrite(generateMermaidForLanguage, "test-diagram-expected.md")
     })
+
 })
+
