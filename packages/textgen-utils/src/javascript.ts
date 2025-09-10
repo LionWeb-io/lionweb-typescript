@@ -15,6 +15,7 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import { asPrettyJsonString } from "@lionweb/ts-utils"
 import { Template } from "littoral-templates"
 import { indent } from "./general.js"
 
@@ -68,5 +69,5 @@ export const switchOrIf = (expression: string, cases: MatchCase[], defaultBlock:
  * @return the given JSON as valid TypeScript source, meaning: without quotation marks around object keys.
  */
 export const asTypeScript = (json: unknown) =>
-    JSON.stringify(json, null, 4).replaceAll(/"(.+?)": /g, `$1: `)
+    asPrettyJsonString(json).replaceAll(/"(.+?)": /g, `$1: `)
 

@@ -51,7 +51,7 @@ const readFileAsJson = (path) =>
     JSON.parse(readFileSync(path, { encoding: "utf8" }))
 
 const writeJsonAsFile = (path, json) => {
-    writeFileSync(path, JSON.stringify(json, null, 2) + EOL)
+    writeFileSync(path, JSON.stringify(json, null, 4) + EOL)
 }
 
 readFileAsJson("package.json")

@@ -1,4 +1,5 @@
 import { nodeSerializer } from "@lionweb/core"
+import { asMinimalJsonString } from "@lionweb/ts-utils"
 import { measure, readFileAsJson, writeJsonAsFile } from "@lionweb/utilities"
 import { join } from "path"
 
@@ -9,7 +10,7 @@ import { multiLanguage } from "../languages/multi.js"
 import { deepEqual } from "../test-utils/assertions.js"
 
 describe("metrics computation", () => {
-    const removeUndefineds = (json: unknown) => JSON.parse(JSON.stringify(json))
+    const removeUndefineds = (json: unknown) => JSON.parse(asMinimalJsonString(json))
 
     const compareWithFile = (json: unknown, fileName: string) => {
         const path = join("metrics", fileName)

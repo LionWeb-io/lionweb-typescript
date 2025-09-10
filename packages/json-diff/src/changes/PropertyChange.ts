@@ -1,5 +1,6 @@
 import { LionWebId, LionWebJsonMetaPointer, LionWebJsonNode } from "@lionweb/json"
 import { JsonContext } from "@lionweb/json-utils"
+import { asMinimalJsonString } from "@lionweb/ts-utils"
 import { Change, Missing } from "./Change.js"
 
 export abstract class PropertyChange extends Change {
@@ -31,5 +32,5 @@ export class PropertyAdded extends Change {
         super(ctx)
     }
 
-    protected msg = () => `Node "${this.node.id}" containment added: "${JSON.stringify(this.property)}"`
+    protected msg = () => `Node "${this.node.id}" containment added: "${asMinimalJsonString(this.property)}"`
 }

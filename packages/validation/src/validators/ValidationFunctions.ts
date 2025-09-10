@@ -3,6 +3,7 @@
  * Used in the LionWebSyntaxValidator.
  */
 import { JsonContext } from "@lionweb/json-utils"
+import { asMinimalJsonString } from "@lionweb/ts-utils"
 import { Language_PropertyValue_Issue } from "../issues/LanguageIssues.js"
 import {
     Syntax_IdFormat_Issue,
@@ -70,7 +71,7 @@ export function validateBoolean<String>(value: String, result: ValidationResult,
                 context,
                 propDef ? propDef.name : "unknown",
                 valueAsPrimitive,
-                "boolean " + JSON.stringify(value)
+                "boolean " + asMinimalJsonString(value)
             )
         )
     }
@@ -118,7 +119,7 @@ export function validateJSON<String>(value: String, result: ValidationResult, co
  */
 export function validateSerializationFormatVersion<String>(value: String, result: ValidationResult, context: JsonContext): void {
     if (typeof value !== "string") {
-        result.issue(new Syntax_SerializationFormatVersion_Issue(context, JSON.stringify(value)))
+        result.issue(new Syntax_SerializationFormatVersion_Issue(context, asMinimalJsonString(value)))
         return
     }
     if (value.length === 0) {

@@ -1,36 +1,36 @@
 {
-  "name": "@lionweb/class-core",
-  "version": "0.7.0-beta.14",
-  "description": "Generic, language-aspecific base types for generated TypeScript APIs",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "typings": "dist/index.d.ts",
-  "type": "module",
-  "license": "Apache-2.0",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/LionWeb-io/lionweb-typescript.git"
-  },
-  "bugs": {
-    "url": "https://github.com/LionWeb-io/lionweb-typescript/issues"
-  },
-  "scripts": {
-    "clean": "npx rimraf dist node_modules -g lionweb-class-core-*.tgz",
-    "build": "npx rimraf dist && tsc",
-    "lint": "eslint src",
-    "prep:pre-release": "npm run clean && npm install && npm run build",
-    "prerelease-alpha": "npm run prep:pre-release",
-    "release-alpha": "npm publish --tag alpha",
-    "prerelease-beta": "npm run prep:pre-release",
-    "release-beta": "npm publish --tag beta",
-    "prerelease": "npm run prep:pre-release",
-    "release": "npm publish"
-  },
-  "dependencies": {
-    "@lionweb/core": "0.7.0-beta.14",
-    "@lionweb/json": "0.7.0-beta.14",
-    "@lionweb/ts-utils": "0.7.0-beta.14",
-    "littoral-templates": "0.5.0",
-    "mobx": "6.13.7"
-  }
+    "name": "@lionweb/class-core",
+    "version": "0.7.0-beta.14",
+    "description": "Generic, language-aspecific base types for generated TypeScript APIs",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "typings": "dist/index.d.ts",
+    "type": "module",
+    "license": "Apache-2.0",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/LionWeb-io/lionweb-typescript.git"
+    },
+    "bugs": {
+        "url": "https://github.com/LionWeb-io/lionweb-typescript/issues"
+    },
+    "scripts": {
+        "clean": "npx rimraf dist node_modules -g lionweb-class-core-*.tgz",
+        "build": "npx rimraf dist && tsc",
+        "lint": "eslint src",
+        "prep:pre-release": "npm run clean && npm install && npm run build",
+        "prerelease-alpha": "npm run prep:pre-release",
+        "release-alpha": "npm publish --tag alpha",
+        "prerelease-beta": "npm run prep:pre-release",
+        "release-beta": "npm publish --tag beta",
+        "prerelease": "npm run prep:pre-release",
+        "release": "npm publish"
+    },
+    "dependencies": {
+        "@lionweb/core": "0.7.0-beta.14",
+        "@lionweb/json": "0.7.0-beta.14",
+        "@lionweb/ts-utils": "0.7.0-beta.14",
+        "littoral-templates": "0.5.0",
+        "mobx": "6.13.7"
+    }
 }

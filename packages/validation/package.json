@@ -1,39 +1,39 @@
 {
-  "name": "@lionweb/validation",
-  "version": "0.7.0-beta.14",
-  "license": "Apache 2.0",
-  "description": "LionWeb Serialization validation",
-  "author": "jos.warmer@openmodeling.nl",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "typings": "dist/index.d.ts",
-  "type": "module",
-  "keywords": [
-    "lionweb",
-    "serialization",
-    "testing"
-  ],
-  "scripts": {
-    "clean": "npx rimraf dist node_modules -g lionweb-validation-*.tgz",
-    "build": "tsc && npm run copyM3 && npm run copyBuiltins",
-    "copyM3": "node -e \"const fs = require('fs'); fs.copyFileSync('./src/languages/LionCore-M3.json', './dist/languages/LionCore-M3.json');\"",
-    "copyBuiltins": "node -e \"const fs = require('fs'); fs.copyFileSync('./src/languages/LionCore-builtins.json', './dist/languages/LionCore-builtins.json');\"",
-    "lint": "eslint src",
-    "test-here": "cd ../test && find dist/validation -type d | sed '1!G;h;$!d' | xargs npx mocha",
-    "release-alpha": "npm publish --registry https://registry.npmjs.org --tag alpha",
-    "release-beta": "npm publish --registry https://registry.npmjs.org --tag beta",
-    "release": "npm publish --registry https://registry.npmjs.org",
-    "testValid": "node dist/runners/RunCheckFolder.js ../test/testset/valid",
-    "testInvalid": "node dist/runners/RunCheckFolder.js ../test/testset/invalid",
-    "testInvalidWithLanguage": "node dist/runners/RunCheckFolderWithLanguage.js ../test/testset/withLanguage/invalid/ ../test/testset/withLanguage/myLang.language.json",
-    "testValidWithLanguage": "node dist/runners/RunCheckFolderWithLanguage.js ../test/testset/withLanguage/valid/ ../test/testset/withLanguage/myLang.language.json",
-    "publish-local": "npm publish --registry http://localhost:4873",
-    "unpublish-local": "npm unpublish --force --registry http://localhost:4873",
-    "republish-local": "yarn unpublish-local && yarn publish-local"
-  },
-  "dependencies": {
-    "@lionweb/json": "0.7.0-beta.14",
-    "@lionweb/ts-utils": "0.7.0-beta.14",
-    "@lionweb/json-utils": "0.7.0-beta.14"
-  }
+    "name": "@lionweb/validation",
+    "version": "0.7.0-beta.14",
+    "license": "Apache 2.0",
+    "description": "LionWeb Serialization validation",
+    "author": "jos.warmer@openmodeling.nl",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "typings": "dist/index.d.ts",
+    "type": "module",
+    "keywords": [
+        "lionweb",
+        "serialization",
+        "testing"
+    ],
+    "scripts": {
+        "clean": "npx rimraf dist node_modules -g lionweb-validation-*.tgz",
+        "build": "tsc && npm run copyM3 && npm run copyBuiltins",
+        "copyM3": "node -e \"const fs = require('fs'); fs.copyFileSync('./src/languages/LionCore-M3.json', './dist/languages/LionCore-M3.json');\"",
+        "copyBuiltins": "node -e \"const fs = require('fs'); fs.copyFileSync('./src/languages/LionCore-builtins.json', './dist/languages/LionCore-builtins.json');\"",
+        "lint": "eslint src",
+        "test-here": "cd ../test && find dist/validation -type d | sed '1!G;h;$!d' | xargs npx mocha",
+        "release-alpha": "npm publish --registry https://registry.npmjs.org --tag alpha",
+        "release-beta": "npm publish --registry https://registry.npmjs.org --tag beta",
+        "release": "npm publish --registry https://registry.npmjs.org",
+        "testValid": "node dist/runners/RunCheckFolder.js ../test/testset/valid",
+        "testInvalid": "node dist/runners/RunCheckFolder.js ../test/testset/invalid",
+        "testInvalidWithLanguage": "node dist/runners/RunCheckFolderWithLanguage.js ../test/testset/withLanguage/invalid/ ../test/testset/withLanguage/myLang.language.json",
+        "testValidWithLanguage": "node dist/runners/RunCheckFolderWithLanguage.js ../test/testset/withLanguage/valid/ ../test/testset/withLanguage/myLang.language.json",
+        "publish-local": "npm publish --registry http://localhost:4873",
+        "unpublish-local": "npm unpublish --force --registry http://localhost:4873",
+        "republish-local": "yarn unpublish-local && yarn publish-local"
+    },
+    "dependencies": {
+        "@lionweb/json": "0.7.0-beta.14",
+        "@lionweb/ts-utils": "0.7.0-beta.14",
+        "@lionweb/json-utils": "0.7.0-beta.14"
+    }
 }

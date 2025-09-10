@@ -7,6 +7,7 @@ import {
     LionWebJsonNode,
     LionWebJsonReference
 } from "@lionweb/json"
+import { asMinimalJsonString } from "@lionweb/ts-utils"
 import { MetaPointers } from "./M3definitions.js"
 import { NodeUtils } from "./NodeUtils.js"
 
@@ -108,7 +109,7 @@ export class LionWebJsonChunkWrapper {
             result += this.indent(depth + 1) + "*Annotations*" + "\n"
             node.annotations.forEach(ann => {
                 result += this.recursiveToString(this.getNode(ann), depth + 1)
-                // result += this.indent(depth) + "[[" + JSON.stringify(ann) + "]]\n"
+                // result += this.indent(depth) + "[[" + asMinimalJsonString(ann) + "]]\n"
             })
         }
         node.properties
@@ -117,7 +118,7 @@ export class LionWebJsonChunkWrapper {
                 result += this.indent(depth + 1) + "*property* " + property.property.key + ": " + property.value + "\n"
             })
         node.references.forEach(ref => {
-            result += this.indent(depth + 1) + "*" + ref.reference.key + "*: " + JSON.stringify(ref.targets) + "\n"
+            result += this.indent(depth + 1) + "*" + ref.reference.key + "*: " + asMinimalJsonString(ref.targets) + "\n"
         })
         node.containments.forEach(cont => {
             if (cont.children.length !== 0) {

@@ -10,6 +10,7 @@ import {
     LionWebJsonUsedLanguage
 } from "@lionweb/json"
 import { ChunkUtils, JsonContext, NodeUtils } from "@lionweb/json-utils"
+import { asMinimalJsonString } from "@lionweb/ts-utils"
 import { Change, GenericChange, Missing } from "./changes/Change.js"
 import { LanguageAdded, LanguageRemoved, NodeAdded, NodeRemoved, SerializationFormatChange } from "./changes/ChunkChange.js"
 import { ChildAdded, ChildOrderChanged, ChildRemoved } from "./changes/ContainmentChange.js"
@@ -208,7 +209,7 @@ export class LionWebJsonDiff {
             console.error("diffContainment: MetaPointers of containments should be identical")
             this.diff(
                 ctx,
-                `Containment Object has concept ${JSON.stringify(beforeContainment.containment)} vs ${JSON.stringify(
+                `Containment Object has concept ${asMinimalJsonString(beforeContainment.containment)} vs ${JSON.stringify(
                     afterContainment.containment,
                 )}`,
             )
@@ -241,7 +242,7 @@ export class LionWebJsonDiff {
     diffLwReference(ctx: JsonContext, node: LionWebJsonNode, beforeRef: LionWebJsonReference, afterRef: LionWebJsonReference): void {
         if (!isEqualMetaPointer(beforeRef.reference, afterRef.reference)) {
             console.error("diffContainment: MetaPointers of references should be identical")
-            this.diff(ctx, `Reference has concept ${JSON.stringify(beforeRef.reference)} vs ${JSON.stringify(afterRef.reference)}`)
+            this.diff(ctx, `Reference has concept ${asMinimalJsonString(beforeRef.reference)} vs ${asMinimalJsonString(afterRef.reference)}`)
         }
         let diffFound = false;
         beforeRef.targets.forEach((beforeTarget: LionWebJsonReferenceTarget, index: number) => {
@@ -253,7 +254,7 @@ export class LionWebJsonDiff {
                 if (!isEqualReferenceTarget(beforeTarget, afterTarget)) {
                     this.diff(
                         ctx.concat("targets", index),
-                        `ERROR: reference target ${JSON.stringify(beforeTarget)} vs ${JSON.stringify(afterTarget)}`,
+                        `ERROR: reference target ${asMinimalJsonString(beforeTarget)} vs ${asMinimalJsonString(afterTarget)}`,
                     )
                 }
             }
@@ -267,7 +268,7 @@ export class LionWebJsonDiff {
                 if (!isEqualReferenceTarget(beforeTarget, afterTarget)) {
                     this.diff(
                         ctx.concat("targets", index),
-                        `ERROR: reference target ${JSON.stringify(beforeTarget)} vs ${JSON.stringify(afterTarget)}`,
+                        `ERROR: reference target ${asMinimalJsonString(beforeTarget)} vs ${asMinimalJsonString(afterTarget)}`,
                     )
                 }
             }
@@ -284,7 +285,7 @@ export class LionWebJsonDiff {
 
     private diffLwUsedLanguage(ctx: JsonContext, obj1: LionWebJsonUsedLanguage, obj2: LionWebJsonUsedLanguage) {
         if (obj1.key !== obj2.key || obj1.version !== obj2.version) {
-            this.diff(ctx, `Different used languages ${JSON.stringify(obj1)} vs ${JSON.stringify(obj2)}`)
+            this.diff(ctx, `Different used languages ${asMinimalJsonString(obj1)} vs ${asMinimalJsonString(obj2)}`)
         }
     }
 
@@ -298,7 +299,7 @@ export class LionWebJsonDiff {
             console.error("diffContainment: MetaPointers of properties should be identical")
             this.diff(
                 ctx,
-                `Property Object has concept ${JSON.stringify(beforeProperty.property)} vs ${JSON.stringify(afterProperty.property)}`,
+                `Property Object has concept ${asMinimalJsonString(beforeProperty.property)} vs ${asMinimalJsonString(afterProperty.property)}`,
             )
         }
         if (beforeProperty.value !== afterProperty.value) {
