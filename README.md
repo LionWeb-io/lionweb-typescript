@@ -130,7 +130,6 @@ Run the following command to set up the project:
 npm run clean
 npm install
 npm run setup
-./rebuild.sh
 ```
 
 The chain of preceding commands can also be run as follows:
@@ -141,20 +140,20 @@ npm run initialize
 
 ### Building, testing, linting
 
-Run the following command to **build** (“make”) each of the packages, in dependency order:
-
-```shell
-./rebuild.sh
-```
-
+Run the `rebuild.sh` script (re-)**build** (“make”) each of the packages, in dependency order.
 This script exits – or at least: should – as soon as the first failure it detected.
-It also triggers the `generate` scriptlet of the `build` package, which generates a couple of source files in other packages.
+It also triggers the `generate` scriptlet of the `build` package, which generates a couple of source files in other packages from various sources across this repo.
+It's necessary to run this script when these sources have changed, or when the code of the `class-core` has changed significantly.
+Note that there a cyclic dependency between the `class-core` and `build` packages, which sometimes necessitates running this script twice to arrive at a stable state.
+(The `rebuild` scriptlet in the top-level `package.json` runs (only) the `rebuild.sh` script.)
 
 Run the following command to just com-/transpile the TypeScript source code in all packages:
 
 ```shell
 npm run build
 ```
+
+(This is typically enough.)
 
 Run the following command to run all the tests:
 
