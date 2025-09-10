@@ -15,35 +15,49 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import { Language } from "@lionweb/core"
 import { lazyMapGet } from "@lionweb/ts-utils"
 import { ILanguageBase, NodeBaseFactory } from "./base-types.js"
 import { DeltaReceiver } from "./deltas/index.js"
+
+
+/**
+ * @return a function that looks up the {@link ILanguageBase language base} for the {@link Language language} passed to it,
+ * from among the given language bases.
+ * The returned function throws when the language wasn't among the languages the given bases were for.
+ * The lookup is hashmap-backed, so efficient.
+ */
+export const combinedLanguageBaseLookupFor = (languageBases: ILanguageBase[]): ((language: Language) => ILanguageBase) => {
+    // create lookup map:
+    const languageKey2version2base: { [key: string]: { [version: string]: ILanguageBase } } = {}
+    languageBases.forEach((languageBase) => {
+        const {key, version} = languageBase.language
+        const version2base = lazyMapGet(languageKey2version2base, key, () => ({}))
+        lazyMapGet(version2base, version, () => languageBase)
+    })
+
+    return (language) => {
+        const {key, version, name} = language
+        const version2base = languageKey2version2base[key]
+        if (version2base === undefined) {
+            throw new Error(`language ${name} with key=${key} not registered`)
+        }
+        const base = version2base[version]
+        if (base === undefined) {
+            const candidateVersions = Object.keys(version2base)
+            throw new Error(`language ${name} with key=${key} and version=${version} not registered${candidateVersions.length > 0 ? `- candidate version${candidateVersions.length > 1 ? `s` : ``}: ${candidateVersions.join(", ")}` : ``}`)
+        }
+        return base
+    }
+}
+
 
 /**
  * @return a {@link NodeBaseFactory factory function} that works for all given {@link ILanguageBase language bases}.
  */
 export const combinedFactoryFor = (languageBases: ILanguageBase[], receiveDelta?: DeltaReceiver): NodeBaseFactory => {
-    // create lookup map:
-    const languageKey2version2factory: { [key: string]: { [version: string]: NodeBaseFactory } } = {}
-    languageBases.forEach((languageBase) => {
-        const {key, version} = languageBase.language
-        const version2factory = lazyMapGet(languageKey2version2factory, key, () => ({}))
-        lazyMapGet(version2factory, version, () => languageBase.factory(receiveDelta))
-            // (Note: don't destructure factory from languageBase, as that will unbind it as "this"!)
-    })
-
-    return (classifier, id) => {
-        const {key, version, name} = classifier.language
-        const version2factory = languageKey2version2factory[key]
-        if (version2factory === undefined) {
-            throw new Error(`language ${name} with key=${key} not known`)
-        }
-        const factory = version2factory[version]
-        if (factory === undefined) {
-            const candidateVersions = Object.keys(version2factory)
-            throw new Error(`language ${name} with key=${key} and version=${version} not known${candidateVersions.length > 0 ? `- candidate version${candidateVersions.length > 1 ? `s` : ``}: ${candidateVersions.join(", ")}` : ``}`)
-        }
-        return factory(classifier, id)
-    }
+    const baseOf = combinedLanguageBaseLookupFor(languageBases)
+    return (classifier, id) =>
+        baseOf(classifier.language).factory(receiveDelta)(classifier, id)
 }
 

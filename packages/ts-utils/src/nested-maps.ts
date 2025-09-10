@@ -5,15 +5,20 @@ export type Nested1Map<T> = Record<string, T> // (for conceptual continuity)
 export type Nested2Map<T> = Record<string, Record<string, T>>
 export type Nested3Map<T> = Record<string, Record<string, Record<string, T>>>
 
+export type Nested1Mapper<T, R> = (nested1Map: Nested1Map<T>) => Nested1Map<R>
 export const mapValuesMapper =
-    <T, R>(valueMapFunc: (t: T) => R) =>
+    <T, R>(valueMapFunc: (t: T) => R): Nested1Mapper<T, R> =>
     (map: Record<string, T>): Record<string, R> =>
         Object.fromEntries(Object.entries(map).map(([key, value]) => [key, valueMapFunc(value)]))
 // === mapValues(map, valueFunc)
 
-export const nested2Mapper = <T, R>(valueMapFunc: (t: T) => R) => mapValuesMapper(mapValuesMapper(valueMapFunc))
+export type Nested2Mapper<T, R> = (nested2Map: Nested2Map<T>) => Nested2Map<R>
+export const nested2Mapper = <T, R>(valueMapFunc: (t: T) => R): Nested2Mapper<T, R> =>
+    mapValuesMapper(mapValuesMapper(valueMapFunc))
 
-export const nested3Mapper = <T, R>(valueMapFunc: (t: T) => R) => mapValuesMapper(nested2Mapper(valueMapFunc))
+export type Nested3Mapper<T, R> = (nested3Map: Nested3Map<T>) => Nested3Map<R>
+export const nested3Mapper = <T, R>(valueMapFunc: (t: T) => R): Nested3Mapper<T, R> =>
+    mapValuesMapper(nested2Mapper(valueMapFunc))
 
 /**
  * Return a function that groups an array of things using a group function as a

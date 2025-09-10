@@ -9,7 +9,6 @@ import { byIdMap, groupBy, keepDefineds } from "@lionweb/ts-utils"
 import { Writer } from "./writing.js"
 import { defaultSimplisticHandler, SimplisticHandler } from "./handler.js"
 import { BuiltinPropertyValueDeserializer } from "./m3/builtins.js"
-import { allFeaturesOf } from "./m3/functions.js"
 import { Classifier, Containment, Enumeration, Language, PrimitiveType, Property, Reference } from "./m3/types.js"
 import { unresolved } from "./references.js"
 import { MemoisingSymbolTable } from "./symbol-table.js"
@@ -113,7 +112,7 @@ export const deserializeSerializationChunk = <NT extends Node>(
             return null
         }
 
-        const allFeatures = allFeaturesOf(classifier)
+        const allFeatures = symbolTable.allFeaturesOfEntityMatching(classifierMetaPointer)
 
         const propertySettings: { [propertyKey: LionWebKey]: unknown } = {}
 

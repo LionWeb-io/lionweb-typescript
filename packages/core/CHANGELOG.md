@@ -27,6 +27,10 @@
 * Expose functions `areSameClassifiers` and `areSameLanguages` that compare two given classifiers, resp., languages by their meta-pointers.
 * Rename `inheritsFrom` &rarr; `inheritsDirectlyFrom`, and `inheritedCycleWith` &rarr; `inheritanceCycleWith` for more naming clarity, keeping aliases for backward compatibility, to be deprecated and removed later.
 * Add function `isPartition`.
+* Improve performance of `deserializeSerializationChunk` function ever so slightly.
+* Remove the unused (and non-performant) `NaiveSymbolTable` class.
+* Improve performance of `nodeSerializer` function a tiny bit.
+
 
 ## 0.6.12
 
