@@ -1,35 +1,35 @@
 {
-  "name": "@lionweb/build",
-  "version": "0.7.0-dev.0",
-  "description": "Build the deltas language, and the delta types in -class-core from their specification",
-  "private": true,
-  "main": "dist/generate-for-class-core.js",
-  "type": "module",
-  "license": "Apache-2.0",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/LionWeb-io/lionweb-typescript.git"
-  },
-  "bugs": {
-    "url": "https://github.com/LionWeb-io/lionweb-typescript/issues"
-  },
-  "scripts": {
-    "clean": "npx rimraf dist node_modules",
-    "build": "tsc",
-    "pregenerate": "npm run build",
-    "generate": "node dist/generate-for-class-core.js && node dist/generate-for-io.lionweb.mps.specific.js && node dist/generate-shapes-language-from-csharp.js",
-    "lint": "eslint src"
-  },
-  "dependencies": {
-    "@lionweb/core": "0.7.0-beta.14",
-    "@lionweb/class-core": "0.7.0-beta.14",
-    "@lionweb/class-core-generator": "0.7.0-beta.14",
-    "@lionweb/json": "0.7.0-beta.14",
-    "@lionweb/textgen-utils": "0.7.0-beta.14",
-    "@lionweb/ts-utils": "0.7.0-beta.14",
-    "littoral-templates": "0.5.0"
-  },
-  "devDependencies": {
-    "@types/node": "24.3.0"
-  }
+    "name": "@lionweb/build",
+    "version": "0.7.0-dev.0",
+    "description": "Build the deltas language, and the delta types in -class-core from their specification",
+    "private": true,
+    "main": "dist/generate-for-class-core.js",
+    "type": "module",
+    "license": "Apache-2.0",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/LionWeb-io/lionweb-typescript.git"
+    },
+    "bugs": {
+        "url": "https://github.com/LionWeb-io/lionweb-typescript/issues"
+    },
+    "scripts": {
+        "clean": "npx rimraf dist node_modules",
+        "build": "tsc",
+        "pregenerate": "npm run build",
+        "generate": "node dist/generate-for-class-core.js && node dist/generate-for-io.lionweb.mps.specific.js && node dist/generate-shapes-language-from-csharp.js",
+        "lint": "eslint src"
+    },
+    "dependencies": {
+        "@lionweb/core": "0.7.0-beta.14",
+        "@lionweb/class-core": "0.7.0-beta.14",
+        "@lionweb/class-core-generator": "0.7.0-beta.14",
+        "@lionweb/json": "0.7.0-beta.14",
+        "@lionweb/textgen-utils": "0.7.0-beta.14",
+        "@lionweb/ts-utils": "0.7.0-beta.14",
+        "littoral-templates": "0.5.0"
+    },
+    "devDependencies": {
+        "@types/node": "24.3.0"
+    }
 }
