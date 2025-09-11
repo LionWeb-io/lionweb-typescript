@@ -490,7 +490,7 @@ const eventMessageKinds = mapFrom(
         "NoOp",
         "Error"
     ],
-    (_) => _,
+    (messageKind) => messageKind,
     (_) => true
 )
 

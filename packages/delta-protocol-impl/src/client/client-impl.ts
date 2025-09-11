@@ -164,11 +164,12 @@ export class LionWebClient {
                     return  // ~void
                 }
                 console.log(clientWarning(`client received response for a query with ID="${queryId} without having sent a corresponding request - ignoring`))
+                return
             }
             if (isEvent(message)) {
                 acceptEvent(message)
+                return
             }
-            console.log(clientWarning(`client received a message of kind "${message.messageKind}" that it doesn't know how to handle - ignoring`))
         }
 
         const lowLevelClient = await

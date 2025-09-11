@@ -26,6 +26,7 @@ import { TextualLogger, textualLoggerFunctionFrom } from "@lionweb/delta-protoco
  * so that the latter can instantiate a suitable {@link LowLevelClient} mock instance without the need for an actual WebSocket connection.
  * @param commandResponsesById the {@link Event} responses for commands issued by client, indexed by their command ID.
  * @param queryResponsesById the {@link QueryMessage} responses for queries issued by the client, indexed by their query ID.
+ * @param optionalTextualLogger an optional {@link TextualLogger}.
  */
 export const mockLowLevelClientInstantiator = (
     commandResponsesById: { [commandId: string]: Event },
@@ -45,7 +46,7 @@ export const mockLowLevelClientInstantiator = (
                     return Promise.reject(new Error(`low-level client not connected to repository`))
                 }
                 if ("queryId" in message) {
-                    const { queryId } = message as QueryMessage
+                    const { queryId } = message
                     if (queryId in queryResponsesById) {
                         receiveMessageOnClient(queryResponsesById[queryId])
                         return Promise.resolve()
@@ -54,7 +55,7 @@ export const mockLowLevelClientInstantiator = (
                     log(`${repositoryWarning(logMessage)}: ${asMinimalJsonString(message)}`)
                     return Promise.reject(new Error(logMessage))
                 }
-                const { commandId } = message as Command
+                const { commandId } = message
                 if (commandId in commandResponsesById) {
                     receiveMessageOnClient(commandResponsesById[commandId])
                     return Promise.resolve()
@@ -65,7 +66,7 @@ export const mockLowLevelClientInstantiator = (
             },
             disconnect: () => {
                 connected = false
-                log(`${clientInfo(`client disconnected from repository`)}`)
+                log(clientInfo(`client disconnected from repository`))
                 return Promise.resolve()
             }
         })
