@@ -17,6 +17,7 @@
 * Improve performance of deserializer a little bit (— potentially).
 * Add a `reinitializeWith` method to `IdMapping`.
   (Plus: add documentation to existing methods.)
+* Implement inverters for all deltas.
 
 
 ## 0.6.13
