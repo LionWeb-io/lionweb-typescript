@@ -56,6 +56,7 @@ import {
 import {
     ClientAppliedEvent,
     ClientDidNotApplyEventFromOwnCommand,
+    ClientHadProblem,
     ClientReceivedMessage,
     ClientSentMessage,
     DeltaOccurredOnClient,
@@ -99,7 +100,7 @@ export class LionWebClient {
     private constructor(
         public readonly clientId: LionWebId,
         public model: INodeBase[],
-        private idMapping: IdMapping,
+        public readonly idMapping: IdMapping,
         public readonly createNode: NodeBaseFactory,
         private readonly effectiveReceiveDelta: DeltaReceiver,
         private readonly lowLevelClient: LowLevelClient<Command | QueryMessage>
@@ -107,8 +108,8 @@ export class LionWebClient {
 
     private readonly queryResolveById: { [queryId: string]: (value: QueryMessage) => void } = {}
 
-    private static readonly idMappingFrom = (model: INodeBase[]) =>
-        new IdMapping(byIdMap(model.flatMap(allNodesFrom)))
+    private static readonly nodesByIdFrom = (model: INodeBase[]) =>
+        byIdMap(model.flatMap(allNodesFrom))
 
     static async create({clientId, url, languageBases, instantiateDeltaReceiverForwardingTo, serializationChunk, semanticLogger, lowLevelClientInstantiator}: LionWebClientParameters): Promise<LionWebClient> {
         const log = semanticLoggerFunctionFrom(semanticLogger)
@@ -132,22 +133,30 @@ export class LionWebClient {
 
         const deserialized = nodeBaseDeserializer(languageBases, effectiveReceiveDelta)
         const model = serializationChunk === undefined ? [] : deserialized(serializationChunk)
-        const idMapping = this.idMappingFrom(model)
+        const idMapping = new IdMapping(LionWebClient.nodesByIdFrom(model))
         const eventAsDelta = eventToDeltaTranslator(languageBases, idMapping, deserialized)
         loading = false
 
         const processEvent = (event: Event) => {
             lionWebClient.lastReceivedSequenceNumber = event.sequenceNumber
-            const originatingCommand = event.originCommands.find(({ commandId }) => issuedCommandIds.indexOf(commandId) > -1)
+            const commandOriginatingFromSelf = event.originCommands.find(({ commandId }) => issuedCommandIds.indexOf(commandId) > -1)
             // Note: we can't remove members from issuedCommandIds because there may be multiple events originating fom a single command.
-            if (originatingCommand === undefined) {
-                const delta = eventAsDelta(event)
-                if (delta !== undefined) {
-                    applyDelta(delta)
+            if (commandOriginatingFromSelf === undefined) {
+                try {
+                    const delta = eventAsDelta(event)
+                    if (delta !== undefined) {
+                        try {
+                            applyDelta(delta)
+                            log(new ClientAppliedEvent(clientId, event))
+                        } catch (e) {
+                            log(new ClientHadProblem(clientId, `couldn't apply delta of type ${delta.constructor.name} because of: ${(e as Error).message}`))
+                        }
+                    }
+                } catch (eventTranslationError) {
+                    log(new ClientHadProblem(clientId, `couldn't translate event to a delta because of: ${(eventTranslationError as Error).message}\n\tdelta = ${JSON.stringify(event)}`))
                 }
-                log(new ClientAppliedEvent(clientId, event))
             } else {
-                log(new ClientDidNotApplyEventFromOwnCommand(clientId, originatingCommand.commandId))
+                log(new ClientDidNotApplyEventFromOwnCommand(clientId, commandOriginatingFromSelf.commandId))
             }
         }
 
@@ -193,7 +202,7 @@ export class LionWebClient {
      */
     setModel(newModel: INodeBase[]) {
         this.model = newModel
-        this.idMapping = LionWebClient.idMappingFrom(newModel)
+        this.idMapping.reinitializeWith(LionWebClient.nodesByIdFrom(newModel))
     }
 
     async disconnect(): Promise<void> {

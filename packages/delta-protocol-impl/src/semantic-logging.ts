@@ -65,6 +65,11 @@ export class ClientDidNotApplyEventFromOwnCommand implements ISemanticLogItem {
     asText = () => clientWarning(`client "${this.clientId}" didn't apply (the delta from) an event because it's the result of a command (with ID="${this.originatingCommandId}") it sent itself`)
 }
 
+export class ClientHadProblem implements ISemanticLogItem {
+    constructor(public readonly clientId: LionWebId, public readonly message: string) {}
+    asText = () => clientWarning(`client "${this.clientId}" had a problem: ${this.message}`)
+}
+
 export class RepositoryReceivedMessage<TClientMetadata, TIncomingMessage> implements ISemanticLogItem {
     constructor(public readonly knownMetadata: Partial<TClientMetadata>, public readonly message: TIncomingMessage) {}
     asText = () => `${repositoryInfo(`repository received message`)} ${withColorAndStyleApplied("magenta", "default")(`(client's known metadata: ${asMinimalJsonString(this.knownMetadata)})`)}: ${asMinimalJsonString(this.message)}`
