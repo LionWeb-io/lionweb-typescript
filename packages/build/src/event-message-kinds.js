@@ -19,12 +19,9 @@ import { readFileSync } from "fs"
 
 const messageKinds = readFileSync("../delta-protocol-impl/src/payload/event-types.ts", { encoding: "utf8" })
     .split(/\r*\n/)
-    .map((line) =>
-        line.match(/^ {4}messageKind: "(\w+)"$/)
-            ? line.substring("    messageKind: \"".length, line.length - 1)
-            : undefined
-    )
+    .map((line) => line.match(/^ {4}messageKind: "(\w+)"$/))
     .filter((matchOrUndefined) => !!matchOrUndefined)
+    .map((match) => match[1])
 
 messageKinds.forEach((messageKind, index) => {
     console.log(`        "${messageKind}"${index < messageKinds.length - 1 ? "," : ""}`)

@@ -17,13 +17,13 @@
 
 import { readFileSync } from "fs"
 
-const messageKinds = readFileSync("../delta-protocol-impl/src/payload/command-types.ts", { encoding: "utf8" })
+const taskNames = readFileSync("../../../lionweb-integration-testing/src/cs/LionWeb.Integration.WebSocket.Client/Tasks.cs", { encoding: "utf8" })
     .split(/\r*\n/)
-    .map((line) => line.match(/^ {4}messageKind: "(\w+)"$/))
+    .map((line) => line.match(/^ {4}(\w+),?$/))
     .filter((matchOrUndefined) => !!matchOrUndefined)
     .map((match) => match[1])
 
-messageKinds.forEach((messageKind) => {
-    console.log(`                case "${messageKind}":`)
+taskNames.forEach((taskName, index) => {
+    console.log(`    "${taskName}": true${index < taskNames.length - 1 ? "," : ""}`)
 })
 

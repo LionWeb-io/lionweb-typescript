@@ -33,6 +33,13 @@ const lastOf = <T>(ts: T[]): T => {
 }
 
 
+/**
+ * **DEV note**: run
+ *
+ *  $ node derive-tasks-from-csharp.js
+ *
+  * inside this package to generate the contents of the following object.
+ */
 export const recognizedTasks: Record<string, boolean> = {
     "SignOn": true,
     "SignOff": true,
@@ -58,6 +65,7 @@ export const recognizedTasks: Record<string, boolean> = {
     "AddContainment_0_1_Containment_0_1": true,
     "AddContainment_1_Containment_0_1": true,
     "AddContainment_0_n": true,
+    "AddContainment_0_n_Containment_0_n": true,
     "AddContainment_1_n": true,
     "MoveAndReplaceChildFromOtherContainment_Single": true,
     "MoveAndReplaceChildFromOtherContainmentInSameParent_Single": true,
@@ -66,8 +74,8 @@ export const recognizedTasks: Record<string, boolean> = {
     "MoveChildFromOtherContainment_Single": true,
     "MoveChildFromOtherContainment_Multiple": true,
     "MoveChildFromOtherContainmentInSameParent_Single": true,
-    "MoveChildFromOtherContainmentInSameParent_Multiple": true,
-    "AddPartition": true
+    "AddPartition": true,
+    "MoveChildFromOtherContainmentInSameParent_Multiple": true
 }
 
 
@@ -173,6 +181,12 @@ export const taskExecutor = (lionWebClient: LionWebClient, partition: INodeBase,
                 linkTestConcept().addContainment_0_n(linkTestConcept("containment_0_n_child0"));   // (keep ;!)
                 linkTestConcept().addContainment_0_n(linkTestConcept("containment_0_n_child1"))
                 return waitForReceivedMessages(2)
+            case "AddContainment_0_n_Containment_0_n": {
+                const outerChild = linkTestConcept("containment_0_n_child0")
+                outerChild.addContainment_0_n(linkTestConcept("containment_0_n_containment_0_n_child0"))
+                linkTestConcept().addContainment_0_n(outerChild)
+                return waitForReceivedMessages(1)
+            }
             case "AddContainment_1_n":
                 linkTestConcept().addContainment_1_n(linkTestConcept("containment_1_n_child0"));   // (keep ;!)
                 linkTestConcept().addContainment_1_n(linkTestConcept("containment_1_n_child1"))
