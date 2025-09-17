@@ -18,16 +18,11 @@
 import { INodeBase } from "@lionweb/class-core"
 import { LionWebClient } from "@lionweb/delta-protocol-impl"
 import { LionWebId } from "@lionweb/json"
-import { ClientAppliedEvent, ISemanticLogItem } from "@lionweb/delta-protocol-impl/dist/semantic-logging.js"
-import { withColorAndStyleApplied } from "@lionweb/delta-protocol-impl/dist/utils/ansi.js"
+import { ClientReceivedMessage, ISemanticLogItem } from "@lionweb/delta-protocol-impl/dist/semantic-logging.js"
+import { clientInfo, withColorAndStyleApplied } from "@lionweb/delta-protocol-impl/dist/utils/ansi.js"
 import { waitUntil } from "@lionweb/delta-protocol-impl/dist/utils/async.js"
 import { Documentation, Geometry, ShapesBase } from "./gen/Shapes.g.js"
-import {
-    DataTypeTestConcept,
-    LinkTestConcept,
-    TestAnnotation,
-    TestLanguageBase
-} from "./gen/TestLanguage.g.js"
+import { DataTypeTestConcept, LinkTestConcept, TestAnnotation, TestLanguageBase } from "./gen/TestLanguage.g.js"
 
 
 const lastOf = <T>(ts: T[]): T => {
@@ -81,14 +76,15 @@ const testLanguageBase = TestLanguageBase.INSTANCE
 
 
 export const taskExecutor = (lionWebClient: LionWebClient, partition: INodeBase, semanticLogItems: ISemanticLogItem[]) => {
-    const numberOfAppliedEvents = () =>
-        semanticLogItems.filter((item) => item instanceof ClientAppliedEvent).length
 
-    const waitForReceived = async (delta: number) => {
-        const expectedNumber = numberOfAppliedEvents() + delta  // (precompute here)
-        return waitUntil(10, () => numberOfAppliedEvents() >= expectedNumber)
+    const numberOfReceivedMessages = () =>
+        semanticLogItems.filter((item) => item instanceof ClientReceivedMessage).length
+
+    const waitForReceivedMessages = async (numberOfMessagesToReceive: number) => {
+        const expectedNumber = numberOfReceivedMessages() + numberOfMessagesToReceive  // (precompute here)
+        return waitUntil(10, () => numberOfReceivedMessages() >= expectedNumber)
             .then(() => {
-                console.log(withColorAndStyleApplied("default", "italic")(`(client applied (the deltas from) a total of ${numberOfAppliedEvents()} events so far)`))
+                console.log(clientInfo(`(client "${lionWebClient.clientId}" received a total of ${numberOfReceivedMessages()} messages so far)`))
             })
     }
 
@@ -101,112 +97,113 @@ export const taskExecutor = (lionWebClient: LionWebClient, partition: INodeBase,
             : lionWebClient.createNode(testLanguageBase.LinkTestConcept, id) as LinkTestConcept
 
     return async (task: string, queryId: string) => {
+        console.log(clientInfo(`client "${lionWebClient.clientId}" is executing task "${task}"`))
         switch (task) {
             case "SignOn":
                 return await lionWebClient.signOn(queryId)
             case "SignOff":
                 return await lionWebClient.signOff(queryId)
             case "Wait": {
-                return waitForReceived(1)
+                return waitForReceivedMessages(1)
             }
             case "AddDocs": {
                 (partition as Geometry).documentation = lionWebClient.createNode(shapesLanguageBase.Documentation, "documentation") as Documentation
-                return waitForReceived(1)
+                return waitForReceivedMessages(1)
             }
             case "SetDocsText": {
                 (partition as Geometry).documentation!.text = "hello there"
-                return waitForReceived(1)
+                return waitForReceivedMessages(1)
             }
             case "AddStringValue_0_1":
                 (partition as DataTypeTestConcept).stringValue_0_1 = "new property"
-                return waitForReceived(1)
+                return waitForReceivedMessages(1)
             case "SetStringValue_0_1":
                 (partition as DataTypeTestConcept).stringValue_0_1 = "changed property"
-                return waitForReceived(1)
+                return waitForReceivedMessages(1)
             case "DeleteStringValue_0_1":
                 (partition as DataTypeTestConcept).stringValue_0_1 = undefined
-                return waitForReceived(1)
+                return waitForReceivedMessages(1)
             case "AddAnnotation":
                 linkTestConcept().addAnnotation(annotation("annotation"))
-                return waitForReceived(1)
+                return waitForReceivedMessages(1)
             case "AddAnnotations":
                 linkTestConcept().addAnnotation(annotation("annotation0"));   // (keep ;!)
                 linkTestConcept().addAnnotation(annotation("annotation1"))
-                return waitForReceived(2)
+                return waitForReceivedMessages(2)
             case "AddAnnotation_to_Containment_0_1":
                 linkTestConcept().containment_0_1!.addAnnotation(annotation("annotation"))
-                return waitForReceived(1)
+                return waitForReceivedMessages(1)
             case "DeleteAnnotation":
                 linkTestConcept().removeAnnotation(linkTestConcept().annotations[0])
-                return waitForReceived(1)
+                return waitForReceivedMessages(1)
             case "MoveAnnotationInSameParent":
                 linkTestConcept().insertAnnotationAtIndex(lastOf(linkTestConcept().annotations), 0)
-                return waitForReceived(1)
+                return waitForReceivedMessages(1)
             case "MoveAnnotationFromOtherParent":
                 linkTestConcept().addAnnotation(linkTestConcept().containment_0_1!.annotations[0])
-                return waitForReceived(1)
+                return waitForReceivedMessages(1)
             case "AddReference_0_1_to_Containment_0_1":
                 linkTestConcept().reference_0_1 = linkTestConcept().containment_0_1
-                return waitForReceived(1)
+                return waitForReceivedMessages(1)
             case "AddReference_0_1_to_Containment_1":
                 linkTestConcept().reference_0_1 = linkTestConcept().containment_1
-                return waitForReceived(1)
+                return waitForReceivedMessages(1)
             case "DeleteReference_0_1":
                 linkTestConcept().reference_0_1 = undefined
-                return waitForReceived(1)
+                return waitForReceivedMessages(1)
             case "AddContainment_0_1":
                 linkTestConcept().containment_0_1 = linkTestConcept("containment_0_1")
-                return waitForReceived(1)
+                return waitForReceivedMessages(1)
             case "AddContainment_1":
                 linkTestConcept().containment_1 = linkTestConcept("containment_1")
-                return waitForReceived(1)
+                return waitForReceivedMessages(1)
             case "ReplaceContainment_0_1":
                 linkTestConcept().containment_0_1 = linkTestConcept("substitute")
-                return waitForReceived(1)
+                return waitForReceivedMessages(1)
             case "DeleteContainment_0_1":
                 linkTestConcept().containment_0_1 = undefined
-                return waitForReceived(1)
+                return waitForReceivedMessages(1)
             case "AddContainment_0_1_Containment_0_1":
                 linkTestConcept().containment_0_1!.containment_0_1 = linkTestConcept("containment_0_1_containment_0_1")
-                return waitForReceived(1)
+                return waitForReceivedMessages(1)
             case "AddContainment_1_Containment_0_1":
                 linkTestConcept().containment_1.containment_0_1 = linkTestConcept("containment_1_containment_0_1")
-                return waitForReceived(1)
+                return waitForReceivedMessages(1)
             case "AddContainment_0_n":
                 linkTestConcept().addContainment_0_n(linkTestConcept("containment_0_n_child0"));   // (keep ;!)
                 linkTestConcept().addContainment_0_n(linkTestConcept("containment_0_n_child1"))
-                return waitForReceived(2)
+                return waitForReceivedMessages(2)
             case "AddContainment_1_n":
                 linkTestConcept().addContainment_1_n(linkTestConcept("containment_1_n_child0"));   // (keep ;!)
                 linkTestConcept().addContainment_1_n(linkTestConcept("containment_1_n_child1"))
-                return waitForReceived(2)
+                return waitForReceivedMessages(2)
             case "MoveAndReplaceChildFromOtherContainment_Single":
                 linkTestConcept().containment_1.replaceContainment_0_1With(linkTestConcept().containment_0_1!.containment_0_1!)
-                return waitForReceived(1)
+                return waitForReceivedMessages(1)
             case "MoveAndReplaceChildFromOtherContainmentInSameParent_Single":
                 linkTestConcept().replaceContainment_1With(linkTestConcept().containment_0_1!)
-                return waitForReceived(1)
+                return waitForReceivedMessages(1)
             case "MoveAndReplaceChildFromOtherContainment_Multiple":
                 linkTestConcept().replaceContainment_1_nAtIndex(lastOf(linkTestConcept().containment_0_n), linkTestConcept().containment_1_n.length - 1)
-                return waitForReceived(1)
+                return waitForReceivedMessages(1)
             case "MoveChildInSameContainment":
                 linkTestConcept().addContainment_0_nAtIndex(lastOf(linkTestConcept().containment_0_n), 0)
-                return waitForReceived(1)
+                return waitForReceivedMessages(1)
             case "MoveChildFromOtherContainment_Single":
                 linkTestConcept().containment_1 = linkTestConcept().containment_0_1!.containment_0_1!
-                return waitForReceived(1)
+                return waitForReceivedMessages(1)
             case "MoveChildFromOtherContainment_Multiple":
                 linkTestConcept().addContainment_1_nAtIndex(lastOf(linkTestConcept().containment_0_n).containment_0_n[0], 1)
-                return waitForReceived(1)
+                return waitForReceivedMessages(1)
             case "MoveChildFromOtherContainmentInSameParent_Single":
                 linkTestConcept().containment_1 = linkTestConcept().containment_0_1!
-                return waitForReceived(1)
+                return waitForReceivedMessages(1)
             case "MoveChildFromOtherContainmentInSameParent_Multiple":
                 linkTestConcept().addContainment_1_nAtIndex(lastOf(linkTestConcept().containment_0_n), 1)
-                return waitForReceived(1)
+                return waitForReceivedMessages(1)
             case "AddPartition":
                 lionWebClient.addPartition(linkTestConcept("partition"))
-                return waitForReceived(1)
+                return waitForReceivedMessages(1)
 
             default: {
                 console.log(withColorAndStyleApplied("red", "italic")(`task "${task}" is unknown => ignored`))
