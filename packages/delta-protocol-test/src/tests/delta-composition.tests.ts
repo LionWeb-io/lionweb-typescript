@@ -52,7 +52,7 @@ describe("combining delta protocol and an “adjacent” delta receiver", () => 
                 ))
                 return compositorToCreate.upstreamReceiveDelta
             },
-            lowLevelClientInstantiator: (_url, _clientId, receiveMessageOnClient) =>
+            lowLevelClientInstantiator: ({ receiveMessageOnClient }) =>
                 Promise.resolve({
                     sendMessage: (message) => {
                         if (message.messageKind === "SignOnRequest") {

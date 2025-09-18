@@ -68,7 +68,7 @@ import { priorityQueueAcceptor } from "../utils/priority-queue.js"
 
 
 /**
- * Parameters – required and optional – for instantiating a {@link LionWebClient LionWeb delta protocol client}.
+ * Type def. for parameters – required and optional – for instantiating a {@link LionWebClient LionWeb delta protocol client}.
  */
 export type LionWebClientParameters = {
     clientId: LionWebId
@@ -183,7 +183,7 @@ export class LionWebClient {
 
         const lowLevelClient = await
             (lowLevelClientInstantiator ?? createWebSocketClient<(Event | QueryMessage), (Command | QueryMessage)>)
-                .apply(this, [url, clientId, receiveMessageOnClient])
+                .apply(this, [{ url, clientId, receiveMessageOnClient } /* no logging parameter */])
 
         const lionWebClient = new LionWebClient(
             clientId,

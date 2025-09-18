@@ -41,7 +41,7 @@ describe("implementation of LionWeb client", async function() {
             clientId: "A",
             url: "",
             languageBases: [testLanguageBase],
-            lowLevelClientInstantiator: (_url, _clientId, _receiveMessageOnClient) =>
+            lowLevelClientInstantiator: (_) =>
                 Promise.resolve({
                     sendMessage: (_message) => Promise.reject(new Error(`I refuse to send messages`)),
                     disconnect: () => Promise.resolve()
@@ -180,7 +180,9 @@ describe("implementation of LionWeb client", async function() {
                         protocolMessages: []
                     } as SignOffResponse
                 },
-                simpleConsoleLogger
+                {
+                    textualLogger: simpleConsoleLogger
+                }
             ),
             semanticLogger: semanticConsoleLogger
         })

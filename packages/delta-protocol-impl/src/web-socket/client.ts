@@ -21,7 +21,6 @@ import { WebSocket } from "ws"
 
 import { wrappedAsPromise } from "../utils/async.js"
 import { tryParseJson } from "../utils/json.js"
-import { Procedure } from "../utils/procedure.js"
 import { TextualLogger, textualLoggerFunctionFrom } from "../utils/textual-logging.js"
 
 
@@ -33,43 +32,67 @@ export type LowLevelClient<TMessageToServer> = {
     disconnect: () => Promise<void>
 }
 
-export type LowLevelClientInstantiator<TMessageForClient, TMessageToServer> = (
-    url: string,
-    clientId: LionWebId,
+/**
+ * Type def. for parameters *required* for instantiating a {@link LowLevelClient low-level client}.
+ */
+export type LowLevelClientParameters<TMessageForClient> = {
+    /** The URL of the WebSocket server to connect to. */
+    url: string
+    /** An ID for the created client. */
+    clientId: LionWebId
+    /** A function that's called with a received message. */
     receiveMessageOnClient: (message: TMessageForClient) => void
-) => Promise<LowLevelClient<TMessageToServer>>
+    /** An optional {@link TextualLogger textual logger}. */
+}
+
+/**
+ * Type def. for optional parameters for a {@link LowLevelClient low-level client} regarding logging.
+ */
+export type LowLevelClientLoggingParameters<TMessageForClient, TMessageToServer> = {
+    /** An optional {@link TextualLogger textual logger}. */
+    textualLogger?: TextualLogger
+    /** An optional message logger. */
+    messageLogger?: (message: (TMessageForClient | TMessageToServer)) => void
+}
+
+/**
+ * Type def. for functions that instantiate a {@link LowLevelClient}.
+ *
+ * Note that the instantiator implementation is responsible for passing logging parameters.
+ */
+export type LowLevelClientInstantiator<TMessageForClient, TMessageToServer> =
+    (lowLevelClientParameters: LowLevelClientParameters<TMessageForClient>) =>
+        Promise<LowLevelClient<TMessageToServer>>
 
 type ClientState = "connecting" | "connected" | "disconnected"
 
 /**
  * @return a WebSocket-driven implementation of a {@link LowLevelClient low-level client},
  *  as a {@link Promise} that resolves as soon the client was able to connect to the WebSocket server.
- * @param url The URL of the WebSocket server to connect to.
- * @param clientId An ID for the created client.
- * @param receiveMessage A function that's called with a received message.
- * @param optionalTextualLogger An optional {@link TextualLogger textual logger}.
+ * @param lowLevelClientParameters Parameters required to create/instantiate the low-level client.
+ * @param optionalLoggingParameters Optional parameters regarding logging.
  */
 export const createWebSocketClient = async <TMessageForClient, TMessageToServer>(
-    url: string,
-    clientId: string,
-    receiveMessage: Procedure<TMessageForClient>,
-    optionalTextualLogger?: TextualLogger
+    { url, clientId, receiveMessageOnClient }: LowLevelClientParameters<TMessageForClient>,
+    optionalLoggingParameters?: LowLevelClientLoggingParameters<TMessageForClient, TMessageToServer>
 ): Promise<LowLevelClient<TMessageToServer>> => {
     const webSocket = new WebSocket(url)
-    const log = textualLoggerFunctionFrom(optionalTextualLogger)
-    log(`client ${clientId} started`)
+    const logText = textualLoggerFunctionFrom(optionalLoggingParameters?.textualLogger)
+    logText(`client ${clientId} started`)
     let state: ClientState = "connecting"
+    const logMessage = optionalLoggingParameters?.messageLogger ?? ((_message: (TMessageForClient | TMessageToServer)) => {})
     return new Promise((resolveClientStart, rejectClientStart) => {
         const lowLevelWebSocketClient: LowLevelClient<TMessageToServer> = {
             sendMessage: (message) => {
                 if (state === "connected") {
+                    logMessage(message)
                     const messageText = asMinimalJsonString(message)
-                    log(`sending message to server: ${messageText}`)
+                    logText(`sending message to server: ${messageText}`)
                     return wrappedAsPromise((callback) => {
                         webSocket.send(messageText, callback)
                     })
                 } else {
-                    log(`state=${state}`)
+                    logText(`state=${state}`)
                     return Promise.reject(new Error(`can't send message to server when client's state=${state}`))
                 }
             },
@@ -85,15 +108,17 @@ export const createWebSocketClient = async <TMessageForClient, TMessageToServer>
         webSocket
             .on("open", () => {
                 state = "connected"
-                log(`connected to server`)
+                logText(`connected to server`)
                 resolveClientStart(lowLevelWebSocketClient)
             })
             .on("message", (messageText: string) => {
-                log(`received message from server: ${messageText}`)
-                receiveMessage(tryParseJson(messageText, log) as TMessageForClient)
+                logText(`received message from server: ${messageText}`)
+                const message = tryParseJson(messageText, logText) as TMessageForClient
+                logMessage(message)
+                receiveMessageOnClient(message)
             })
             .on("error", (error) => {
-                log(`error occurred: ${error}`, true)
+                logText(`error occurred: ${error}`, true)
                 if (isConnectionRefusedError(firstRealError(error))) {
                     if (state === "connecting") {
                         rejectClientStart(new Error(`could not connect to WebSocket server at ${url}`))
@@ -105,7 +130,7 @@ export const createWebSocketClient = async <TMessageForClient, TMessageToServer>
             })
             .on("close", () => {
                 state = "disconnected"
-                log(`disconnected from server`)
+                logText(`disconnected from server`)
             })
     })
 }

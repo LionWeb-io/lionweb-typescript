@@ -106,7 +106,7 @@ describe("WebSocket-driven client and repository", async function() {
 
         const [ lowLevelServer, lowLevelClient ] = await Promise.all([  // (do in parallel)
             createWebSocketServer<void, Payload, void, Payload>(port, (_) => undefined, receiveMessageOnServer, repositoryLogger),
-            createWebSocketClient<Payload, Payload>(wsLocalhostUrl(port), clientId, receiveMessageOnClient, clientLogger)
+            createWebSocketClient<Payload, Payload>({ url: wsLocalhostUrl(port), clientId, receiveMessageOnClient }, { textualLogger: clientLogger })
         ])
 
         let loading = true
@@ -214,7 +214,7 @@ describe("WebSocket-driven client and repository including translation, without 
                 }
             }
 
-            const lowLevelClient = await createWebSocketClient<Event, Command>(wsLocalhostUrl(port), clientId, receiveMessageOnClient)
+            const lowLevelClient = await createWebSocketClient<Event, Command>({ url: wsLocalhostUrl(port), clientId, receiveMessageOnClient })
 
             return [lowLevelClient, model]
         }
