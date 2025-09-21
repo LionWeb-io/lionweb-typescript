@@ -18,7 +18,7 @@
 import { Containment } from "@lionweb/core"
 import { action, observable } from "mobx"
 
-import { INodeBase, removeFromParent } from "../base-types.js"
+import { INodeBase } from "../base-types.js"
 import {
     ChildAddedDelta,
     ChildDeletedDelta,
@@ -126,7 +126,7 @@ export class OptionalSingleContainmentValueManager<T extends INodeBase> extends 
             } else {
                 if (newChild.parent && newChild.containment) {
                     const oldParent = newChild.parent;
-                    removeFromParent(oldParent, newChild);
+                    removeFromContainment(newChild);
                     this.emitDelta(() => new ChildMovedFromOtherContainmentDelta(oldParent, newChild.containment!, 0, this.container, this.feature, 0, newChild));
                 } else {
                     this.emitDelta(() => new ChildAddedDelta(this.container, this.feature, 0, newChild));
@@ -149,7 +149,7 @@ export class OptionalSingleContainmentValueManager<T extends INodeBase> extends 
                     }
                     oldChild.detach();
                     if (newChild.parent && newChild.containment) {
-                        removeFromParent(newChild.parent, newChild);
+                        removeFromContainment(newChild);
                     }
                     this.setDirectly(newChild);
                     newChild.attachTo(this.container, this.feature);
@@ -185,7 +185,7 @@ export class RequiredSingleContainmentValueManager<T extends INodeBase> extends 
             } else {
                 if (newChild.parent && newChild.containment) {
                     const oldParent = newChild.parent;
-                    removeFromParent(oldParent, newChild);
+                    removeFromContainment(newChild);
                     this.emitDelta(() => new ChildMovedFromOtherContainmentDelta(oldParent, newChild.containment!, 0, this.container, this.feature, 0, newChild));
                 } else {
                     this.emitDelta(() => new ChildAddedDelta(this.container, this.feature, 0, newChild));
@@ -206,7 +206,7 @@ export class RequiredSingleContainmentValueManager<T extends INodeBase> extends 
                     }
                     oldChild.detach();
                     if (newChild.parent && newChild.containment) {
-                        removeFromParent(newChild.parent, newChild);
+                        removeFromContainment(newChild);
                     }
                     this.setDirectly(newChild);
                     newChild.attachTo(this.container, this.feature);
@@ -258,7 +258,7 @@ export abstract class MultiContainmentValueManager<T extends INodeBase> extends 
         if (newChild.parent === undefined && newChild.containment === undefined) {
             this.emitDelta(() => new ChildAddedDelta(this.container, this.containment, index, newChild));
         } else {
-            const oldIndex = removeFromParent(newChild.parent, newChild);
+            const oldIndex = removeFromContainment(newChild);
             this.emitDelta(() => new ChildMovedFromOtherContainmentDelta(newChild.parent!, newChild.containment!, oldIndex, this.container, this.containment, index, newChild));
             newChild.detach();
         }
@@ -383,5 +383,29 @@ export class RequiredMultiContainmentValueManager<T extends INodeBase> extends M
         }
     }
 
+}
+
+/**
+ * Removes the given child node from its containment, and returns the containment index it had before removal.
+ */
+const removeFromContainment = (child: INodeBase): number => {
+    if (child.parent === undefined) {
+        throw new Error(`can't remove an orphan from its parent`)
+    }
+    if (child.containment === undefined) {
+        throw new Error(`can't remove an orphan from its containing feature`)
+    }
+    if (child.containment === null) {
+        throw new Error(`can't remove an annotation`)
+    }
+    const valueManager = child.parent.getContainmentValueManager(child.containment)
+    if (valueManager instanceof SingleContainmentValueManager) {
+        valueManager.setDirectly(undefined)
+        return 0
+    } else if (valueManager instanceof MultiContainmentValueManager) {
+        return valueManager.removeDirectly(child)
+    } else {
+        throw new Error(`don't know how to remove a child that's contained through a value manager of type ${valueManager.constructor.name}`)
+    }
 }
 

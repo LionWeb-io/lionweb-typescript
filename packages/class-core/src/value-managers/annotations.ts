@@ -17,7 +17,7 @@
 
 import { action, observable } from "mobx"
 
-import { INodeBase, removeFromParent } from "../base-types.js"
+import { INodeBase } from "../base-types.js"
 import { checkIndex, ValueManager } from "./base.js"
 import {
     AnnotationAddedDelta,
@@ -67,7 +67,7 @@ export class AnnotationsValueManager extends ValueManager {
             newAnnotation.attachTo(this.container, null);
             return false;
         } else {
-            const oldIndex = removeFromParent(oldParent, newAnnotation);
+            const oldIndex = oldParent.annotationsValueManager.removeDirectly(newAnnotation);
             newAnnotation.attachTo(this.container, null);
             return [oldParent, oldIndex];
         }
