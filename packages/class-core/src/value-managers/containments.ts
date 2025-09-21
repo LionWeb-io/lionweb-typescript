@@ -22,7 +22,9 @@ import { INodeBase, removeFromParent } from "../base-types.js"
 import {
     ChildAddedDelta,
     ChildDeletedDelta,
-    ChildMovedAndReplacedFromOtherContainmentInSameParentDelta, ChildMovedAndReplacedInSameContainmentDelta,
+    ChildMovedAndReplacedFromOtherContainmentDelta,
+    ChildMovedAndReplacedFromOtherContainmentInSameParentDelta,
+    ChildMovedAndReplacedInSameContainmentDelta,
     ChildMovedFromOtherContainmentDelta,
     ChildMovedInSameContainmentDelta,
     ChildReplacedDelta
@@ -298,12 +300,15 @@ export abstract class MultiContainmentValueManager<T extends INodeBase> extends 
 
     @action replaceAtIndex(movedChild: T, newIndex: number) {
         checkIndex(newIndex, this.children.length, false);
+        if (movedChild.parent === undefined) {
+            throw new Error(`a child-to-move (id=${movedChild.id}) must already be contained`);
+        }
         const replacedChild = this.children[newIndex];
         if (replacedChild === movedChild) {
             // do nothing: nothing's changed
         } else {
             this.children.splice(newIndex, 1, movedChild);
-            if (replacedChild.parent) {
+            if (replacedChild.parent !== undefined) {
                 const oldValueManager = replacedChild.parent.getContainmentValueManager(replacedChild.containment!);
                 const oldIndex = oldValueManager instanceof SingleContainmentValueManager
                     ? 0
@@ -317,7 +322,7 @@ export abstract class MultiContainmentValueManager<T extends INodeBase> extends 
                         this.emitDelta(() => new ChildMovedAndReplacedFromOtherContainmentInSameParentDelta(this.container, replacedChild.containment!, oldIndex, this.containment, newIndex, movedChild, replacedChild));
                     }
                 } else {
-                    this.emitDelta(() => new ChildMovedFromOtherContainmentDelta(replacedChild.parent!, replacedChild.containment!, oldIndex, this.container, this.containment, newIndex, movedChild));
+                    this.emitDelta(() => new ChildMovedAndReplacedFromOtherContainmentDelta(this.container, this.containment, newIndex, movedChild, movedChild.parent!, movedChild.containment!, oldIndex, replacedChild));
                 }
             } else {
                 // not a move+replace, but a regular replace instead:

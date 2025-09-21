@@ -198,10 +198,17 @@ export const taskExecutor = (lionWebClient: LionWebClient, partition: INodeBase,
                 linkTestConcept().replaceContainment_1With(linkTestConcept().containment_0_1!)
                 return waitForReceivedMessages(1)
             case "MoveAndReplaceChildFromOtherContainment_Multiple":
-                linkTestConcept().replaceContainment_1_nAtIndex(lastOf(linkTestConcept().containment_0_n), linkTestConcept().containment_1_n.length - 1)
+                if (linkTestConcept().containment_1_n.length === 0) {
+                    throw new Error(`can't replace an item of an array with no items`)
+                }
+                linkTestConcept().replaceContainment_1_nAtIndex(
+                    lastOf(lastOf(linkTestConcept().containment_0_n).containment_0_n),
+                    linkTestConcept().containment_1_n.length - 1
+                )
                 return waitForReceivedMessages(1)
             case "MoveChildInSameContainment":
                 linkTestConcept().addContainment_0_nAtIndex(lastOf(linkTestConcept().containment_0_n), 0)
+                // Note: this is effectively a move rather than an insert — hence the name of the task.
                 return waitForReceivedMessages(1)
             case "MoveChildFromOtherContainment_Single":
                 linkTestConcept().containment_1 = linkTestConcept().containment_0_1!.containment_0_1!

@@ -118,15 +118,21 @@ export class LionWebClient {
         let commandNumber = 0
         const issuedCommandIds: string[] = []
         const commandSender: DeltaReceiver = (delta) => {
-            log(new DeltaOccurredOnClient(clientId, serializeDelta(delta)))
-            if (!loading) {
-                const commandId = `cmd-${++commandNumber}`
-                const command = deltaAsCommand(delta, commandId)
-                if (command !== undefined) {
-                    issuedCommandIds.push(commandId)  // (register the ID before actually sending the command so that effectively-synchronous tests mimic the actual behavior more reliably)
-                    lowLevelClient.sendMessage(command)
-                    log(new ClientSentMessage(clientId, command))
+            try {
+                const serializedDelta = serializeDelta(delta)
+                log(new DeltaOccurredOnClient(clientId, serializedDelta))
+                if (!loading) {
+                    const commandId = `cmd-${++commandNumber}`
+                    const command = deltaAsCommand(delta, commandId)
+                    if (command !== undefined) {
+                        issuedCommandIds.push(commandId)  // (register the ID before actually sending the command so that effectively-synchronous tests mimic the actual behavior more reliably)
+                        lowLevelClient.sendMessage(command)
+                        log(new ClientSentMessage(clientId, command))
+                    }
                 }
+            } catch (e: unknown) {
+                console.error(`error occurred during serialization of delta: ${(e as Error).message}`)
+                console.dir(delta)
             }
         }
         const effectiveReceiveDelta = instantiateDeltaReceiverForwardingTo === undefined ? commandSender : instantiateDeltaReceiverForwardingTo(commandSender)
