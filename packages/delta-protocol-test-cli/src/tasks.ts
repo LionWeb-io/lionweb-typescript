@@ -19,7 +19,7 @@ import { INodeBase } from "@lionweb/class-core"
 import { LionWebClient } from "@lionweb/delta-protocol-impl"
 import { LionWebId } from "@lionweb/json"
 import { ClientAppliedEvent, ISemanticLogItem } from "@lionweb/delta-protocol-impl/dist/semantic-logging.js"
-import { withStylesApplied } from "@lionweb/delta-protocol-impl/dist/utils/ansi.js"
+import { withColorAndStyleApplied } from "@lionweb/delta-protocol-impl/dist/utils/ansi.js"
 import { waitUntil } from "@lionweb/delta-protocol-impl/dist/utils/async.js"
 import { Documentation, Geometry, ShapesBase } from "./gen/Shapes.g.js"
 import {
@@ -88,7 +88,7 @@ export const taskExecutor = (lionWebClient: LionWebClient, partition: INodeBase,
         const expectedNumber = numberOfAppliedEvents() + delta  // (precompute here)
         return waitUntil(10, () => numberOfAppliedEvents() >= expectedNumber)
             .then(() => {
-                console.log(withStylesApplied("italic")(`(client applied (the deltas from) a total of ${numberOfAppliedEvents()} events so far)`))
+                console.log(withColorAndStyleApplied("default", "italic")(`(client applied (the deltas from) a total of ${numberOfAppliedEvents()} events so far)`))
             })
     }
 
@@ -209,7 +209,7 @@ export const taskExecutor = (lionWebClient: LionWebClient, partition: INodeBase,
                 return waitForReceived(1)
 
             default: {
-                console.log(withStylesApplied("italic", "red")(`task "${task}" is unknown => ignored`))
+                console.log(withColorAndStyleApplied("red", "italic")(`task "${task}" is unknown => ignored`))
                 return Promise.resolve()
             }
         }

@@ -20,7 +20,7 @@ import { LionWebId } from "@lionweb/json"
 import { asMinimalJsonString } from "@lionweb/ts-utils"
 
 import { Event } from "./payload/event-types.js"
-import { clientInfo, clientWarning, repositoryInfo, withStylesApplied } from "./utils/ansi.js"
+import { clientInfo, clientWarning, repositoryInfo, withColorAndStyleApplied } from "./utils/ansi.js"
 
 
 export interface ISemanticLogItem {
@@ -67,7 +67,7 @@ export class ClientDidNotApplyEventFromOwnCommand implements ISemanticLogItem {
 
 export class RepositoryReceivedMessage<TClientMetadata, TIncomingMessage> implements ISemanticLogItem {
     constructor(public readonly knownMetadata: Partial<TClientMetadata>, public readonly message: TIncomingMessage) {}
-    asText = () => `${repositoryInfo(`repository received message`)} ${withStylesApplied("magenta")(`(client's known metadata: ${asMinimalJsonString(this.knownMetadata)})`)}: ${asMinimalJsonString(this.message)}`
+    asText = () => `${repositoryInfo(`repository received message`)} ${withColorAndStyleApplied("magenta", "default")(`(client's known metadata: ${asMinimalJsonString(this.knownMetadata)})`)}: ${asMinimalJsonString(this.message)}`
 }
 
 

@@ -15,21 +15,35 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { create as ansi } from "ansi-colors"
+export const colors = {
+    black: 30,
+    red: 31,
+    green: 32,
+    yellow: 33,
+    blue: 34,
+    magenta: 35,
+    cyan: 36,
+    white: 37,
+    default: 39
+} as const
 
-const { bold, blue, cyan, green, italic, magenta, red, yellow } = ansi()
+export const styles = {
+    default: 0,
+    bold: 1,
+    italic: 3
+} as const
 
-const styles = { bold, blue, cyan, green, italic, magenta, red, yellow } as const
 
-export const withStylesApplied = (...styleKeys: (keyof typeof styles)[]) =>
+export const withColorAndStyleApplied = (color: keyof typeof colors, style: keyof typeof styles) =>
     (text: string) =>
-        styleKeys.reduce((str, styleKey) => (styles[styleKey])(str), text)
+        `\x1b[${style === "default" ? "" : `${styles[style]}`}${color === "default" ? "" : `;${colors[color]}m`}${text}\x1b[0m`
 
 
-export const clientInfo = withStylesApplied("magenta", "bold")
-export const clientWarning = withStylesApplied("magenta", "italic")
-export const repositoryInfo = withStylesApplied("cyan", "bold")
-export const repositoryWarning = withStylesApplied("cyan", "italic")
+export const clientInfo = withColorAndStyleApplied("magenta", "bold")
+export const clientWarning = withColorAndStyleApplied("magenta", "italic")
+export const repositoryInfo = withColorAndStyleApplied("cyan", "bold")
+export const repositoryWarning = withColorAndStyleApplied("cyan", "italic")
 
-export const colorSchemeExplanationString = `${withStylesApplied("magenta")("magenta=client")}, ${withStylesApplied("cyan")("cyan=repository")}`
+export const colorSchemeExplanationString = `${withColorAndStyleApplied("magenta", "default")("magenta=client")}, ${withColorAndStyleApplied("cyan", "default")("cyan=repository")}`
+
 
