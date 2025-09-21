@@ -17,16 +17,11 @@
 
 import { assert } from "chai"
 
-export const { deepEqual, equal, fail, notEqual, throws } = assert
+export const { deepEqual, equal, fail, notEqual, sameMembers, throws } = assert
 
 export const isTrue = (value: unknown, message?: string): void =>
     assert.isTrue(value, message);
 
 export const isUndefined = (value: unknown, message?: string): void =>
     assert.isUndefined(value, message);
-
-export const isSameSet = <T>(actual: T[], expected: T[]): void => {
-    assert.containsSubset(actual, expected, "actual ⊈ expected");
-    assert.containsSubset(expected, actual, "actual ⊉ expected");
-};
 

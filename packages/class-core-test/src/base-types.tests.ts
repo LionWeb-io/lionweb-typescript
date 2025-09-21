@@ -15,7 +15,7 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { isSameSet } from "./assertions.js"
+import { sameMembers } from "./assertions.js"
 
 import { LinkTestConcept } from "./gen/TestLanguage.g.js"
 
@@ -34,7 +34,7 @@ describe("internals of base types", () => {
         parent.addContainment_1_n(child2)
         parent.addContainment_1_n(child3)
         parent.addAnnotation(child4)
-        isSameSet(parent.children, [child1, child2, child3, child4])
+        sameMembers(parent.children, [child1, child2, child3, child4])
     })
 
     it("referenceTargets", () => {
@@ -50,7 +50,7 @@ describe("internals of base types", () => {
         parent.addReference_1_n(child1)
         parent.addReference_1_n(child2)
         parent.addReference_1_n(child3)
-        isSameSet(parent.referenceTargets, [child1, child2, child3, child4])
+        sameMembers(parent.referenceTargets, [child1, child2, child3, child4])
     })
 })
 
