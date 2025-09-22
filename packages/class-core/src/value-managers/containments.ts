@@ -83,24 +83,38 @@ export abstract class SingleContainmentValueManager<T extends INodeBase> extends
         this.child.set(newChild);
     }
 
-    @action replaceWith(newChild: T) {
-        const oldChild = this.getDirectly();
-        if (oldChild === undefined) {
+    @action replaceWith(movedChild: T) {
+        const replacedChild = this.getDirectly();
+        if (replacedChild === undefined) {
             // not a proper replace, but an add-set => delegate to regular setter (— unfortunately, through necessarily “unfolding the hierarchy”):
             if (this instanceof OptionalSingleContainmentValueManager) {
-                this.set(newChild);
+                this.set(movedChild);
             }
             if (this instanceof RequiredSingleContainmentValueManager) {
-                this.set(newChild);
+                this.set(movedChild);
             }
         } else {
-            if (oldChild === newChild) {
+            if (replacedChild === movedChild) {
                 // do nothing: nothing's changed
             } else {
-                oldChild.detach();
-                this.setDirectly(newChild);
-                newChild.attachTo(this.container, this.feature);
-                this.emitDelta(() => new ChildReplacedDelta(this.container, this.feature, 0, oldChild, newChild));
+                if (movedChild.parent === undefined) {
+                    this.emitDelta(() => new ChildReplacedDelta(this.container, this.feature, 0, replacedChild, movedChild));
+                } else {
+                    if (movedChild.parent === this.container) {
+                        if (movedChild.containment === this.containment) {
+                            this.emitDelta(() => new ChildMovedAndReplacedInSameContainmentDelta(this.container, this.containment, 0, 0, movedChild, replacedChild));
+                        } else {
+                            const oldIndex = removeFromContainment(replacedChild);
+                            this.emitDelta(() => new ChildMovedAndReplacedFromOtherContainmentInSameParentDelta(this.container, movedChild.containment!, oldIndex, this.containment, 0, movedChild, replacedChild));
+                        }
+                    } else {
+                        const oldIndex = removeFromContainment(replacedChild);
+                        this.emitDelta(() => new ChildMovedAndReplacedFromOtherContainmentDelta(this.container, this.containment, 0, movedChild, movedChild.parent!, movedChild.containment!, oldIndex, replacedChild));
+                    }
+                }
+                this.setDirectly(movedChild);
+                movedChild.attachTo(this.container, this.containment);
+                replacedChild.detach();
             }
         }
     }
@@ -330,7 +344,6 @@ export abstract class MultiContainmentValueManager<T extends INodeBase> extends 
                     ? 0
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     : (oldValueManager as MultiContainmentValueManager<any>).children.indexOf(replacedChild);
-                replacedChild.detach();
                 if (replacedChild.parent === movedChild.parent) {
                     if (replacedChild.containment === movedChild.containment) {
                         this.emitDelta(() => new ChildMovedAndReplacedInSameContainmentDelta(this.container, this.containment, oldIndex, newIndex, movedChild, replacedChild));
@@ -340,6 +353,7 @@ export abstract class MultiContainmentValueManager<T extends INodeBase> extends 
                 } else {
                     this.emitDelta(() => new ChildMovedAndReplacedFromOtherContainmentDelta(this.container, this.containment, newIndex, movedChild, movedChild.parent!, movedChild.containment!, oldIndex, replacedChild));
                 }
+                replacedChild.detach();
             } else {
                 // not a move+replace, but a regular replace instead:
                 this.emitDelta(() => new ChildReplacedDelta(this.container, this.containment, newIndex, replacedChild, movedChild));

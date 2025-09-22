@@ -54,7 +54,7 @@ export const asTreeTextWith = (identificationFor: (node: INodeBase) => string): 
                 const valueManager = node.getPropertyValueManager(feature)
                 const displayValue = (() => {
                     if (!valueManager.isSet()) {
-                        return `$<not set>`
+                        return `<not set>`
                     }
                     const value = valueManager.getDirectly()
                     if (feature.type === LionCore_builtinsBase.INSTANCE.String) {

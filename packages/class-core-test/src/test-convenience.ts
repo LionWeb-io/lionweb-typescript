@@ -15,22 +15,18 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { assert } from "chai"
-import { IDelta, serializeDelta } from "@lionweb/class-core"
+import { asTreeTextWith, INodeBase } from "@lionweb/class-core"
+import { idOf } from "@lionweb/core"
 
-export const { deepEqual, equal, fail, notEqual, sameMembers, throws } = assert
 
-export const isTrue = (value: unknown, message?: string): void =>
-    assert.isTrue(value, message);
-
-export const isUndefined = (value: unknown, message?: string): void =>
-    assert.isUndefined(value, message);
-
-export const latestDeltaAsserter = (deltas: IDelta[]) => {
-    let numberOfExpectedDeltas = 0;
-    return (expectedDelta: IDelta) => {
-        equal(deltas.length, ++numberOfExpectedDeltas, `number of expected deltas`);
-        deepEqual(serializeDelta(deltas[numberOfExpectedDeltas - 1]), serializeDelta(expectedDelta));
-    }
-}
+/**
+ * Render the give `node` as a textual tree but skipping every feature value that's unset — hence “anemic”.
+ */
+export const asAnemicTextualTree = (node: INodeBase) =>
+    asTreeTextWith(idOf)([node])
+        .split("\n")
+        .filter((line) => !(
+            ["nothing", "none", "not set"].some((term) => line.endsWith(`<${term}>`))
+        ))
+        .join("\n");
 

@@ -18,6 +18,8 @@
 * Add a `reinitializeWith` method to `IdMapping`.
   (Plus: add documentation to existing methods.)
 * Implement inverters for all deltas.
+* Fix single-containment and -reference value managers.
+* (Fix a small cosmetic thing in `asTreeTextWith`: unset properties’ values now get shown as “`<not set>`” instead of as “`$<not set>`” — note the removed `$`.)
 
 
 ## 0.6.13
