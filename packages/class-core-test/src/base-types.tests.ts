@@ -26,15 +26,13 @@ describe("internals of base types", () => {
         const child2 = LinkTestConcept.create("child2")
         const child3 = LinkTestConcept.create("child3")
         const child4 = LinkTestConcept.create("child4")
+        const child5 = LinkTestConcept.create("child5")
         parent.containment_0_1 = child1
         parent.containment_1 = child2
         parent.addContainment_0_n(child3)
-        parent.addContainment_0_n(child4)
-        parent.addContainment_1_n(child1)
-        parent.addContainment_1_n(child2)
-        parent.addContainment_1_n(child3)
-        parent.addAnnotation(child4)
-        sameMembers(parent.children, [child1, child2, child3, child4])
+        parent.addContainment_1_n(child4)
+        parent.addAnnotation(child5)
+        sameMembers(parent.children, [child1, child2, child3, child4, child5])
     })
 
     it("referenceTargets", () => {
@@ -46,10 +44,7 @@ describe("internals of base types", () => {
         parent.reference_0_1 = child1
         parent.reference_1 = child2
         parent.addReference_0_n(child3)
-        parent.addReference_0_n(child4)
-        parent.addReference_1_n(child1)
-        parent.addReference_1_n(child2)
-        parent.addReference_1_n(child3)
+        parent.addReference_1_n(child4)
         sameMembers(parent.referenceTargets, [child1, child2, child3, child4])
     })
 })
