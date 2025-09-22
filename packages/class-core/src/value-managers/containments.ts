@@ -26,6 +26,7 @@ import {
     ChildMovedAndReplacedFromOtherContainmentInSameParentDelta,
     ChildMovedAndReplacedInSameContainmentDelta,
     ChildMovedFromOtherContainmentDelta,
+    ChildMovedFromOtherContainmentInSameParentDelta,
     ChildMovedInSameContainmentDelta,
     ChildReplacedDelta
 } from "../deltas/index.js"
@@ -253,16 +254,31 @@ export abstract class MultiContainmentValueManager<T extends INodeBase> extends 
         this.children.splice(index, 0, newChild);
     }
 
-    @action insertAtIndex(newChild: T, index: number) {
-        this.insertAtIndexDirectly(newChild, index);
-        if (newChild.parent === undefined && newChild.containment === undefined) {
-            this.emitDelta(() => new ChildAddedDelta(this.container, this.containment, index, newChild));
+    @action insertAtIndex(newChild: T, newIndex: number) {
+        if (newChild.parent === undefined) {
+            this.insertAtIndexDirectly(newChild, newIndex);
+            newChild.attachTo(this.container, this.containment);
+            this.emitDelta(() => new ChildAddedDelta(this.container, this.containment, newIndex, newChild));
         } else {
-            const oldIndex = removeFromContainment(newChild);
-            this.emitDelta(() => new ChildMovedFromOtherContainmentDelta(newChild.parent!, newChild.containment!, oldIndex, this.container, this.containment, index, newChild));
-            newChild.detach();
+            if (newChild.parent === this.container) {
+                if (newChild.containment === this.containment) {
+                    const oldIndex = this.children.indexOf(newChild);
+                    this.moveDirectly(oldIndex, newIndex);
+                    this.emitDelta(() => new ChildMovedInSameContainmentDelta(this.container, this.containment, oldIndex, newIndex, newChild));
+                } else {
+                    const oldIndex = removeFromContainment(newChild);
+                    checkIndex(newIndex, this.children.length, true);
+                    this.insertAtIndexDirectly(newChild, newIndex);
+                    this.emitDelta(() => new ChildMovedFromOtherContainmentInSameParentDelta(this.container, newChild.containment!, oldIndex, newChild, this.containment, newIndex));
+                    newChild.attachTo(this.container, this.containment);
+                }
+            } else {
+                const oldIndex = removeFromContainment(newChild);
+                this.insertAtIndexDirectly(newChild, newIndex);
+                this.emitDelta(() => new ChildMovedFromOtherContainmentDelta(newChild.parent!, newChild.containment!, oldIndex, this.container, this.containment, newIndex, newChild));
+                newChild.attachTo(this.container, this.containment);
+            }
         }
-        newChild.attachTo(this.container, this.containment);
     }
 
     @action removeDirectly(childToRemove: T): number {

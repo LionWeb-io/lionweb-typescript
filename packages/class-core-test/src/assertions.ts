@@ -16,6 +16,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { assert } from "chai"
+import { IDelta } from "@lionweb/class-core"
 
 export const { deepEqual, equal, fail, notEqual, sameMembers, throws } = assert
 
@@ -24,4 +25,12 @@ export const isTrue = (value: unknown, message?: string): void =>
 
 export const isUndefined = (value: unknown, message?: string): void =>
     assert.isUndefined(value, message);
+
+export const latestDeltaAsserter = (deltas: IDelta[]) => {
+    let numberOfExpectedDeltas = 0;
+    return (expectedDelta: IDelta) => {
+        equal(deltas.length, ++numberOfExpectedDeltas, `number of expected deltas`);
+        deepEqual(deltas[numberOfExpectedDeltas - 1], expectedDelta);
+    }
+}
 
