@@ -43,7 +43,8 @@ export const clientInfo = withColorAndStyleApplied("magenta", "bold")
 export const clientWarning = withColorAndStyleApplied("magenta", "italic")
 export const repositoryInfo = withColorAndStyleApplied("cyan", "bold")
 export const repositoryWarning = withColorAndStyleApplied("cyan", "italic")
+export const genericError = withColorAndStyleApplied("red", "bold")
+export const genericWarning = withColorAndStyleApplied("red", "italic")
 
 export const colorSchemeExplanationString = `${withColorAndStyleApplied("magenta", "default")("magenta=client")}, ${withColorAndStyleApplied("cyan", "default")("cyan=repository")}`
-
 

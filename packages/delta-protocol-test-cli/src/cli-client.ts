@@ -30,7 +30,7 @@ import {
 import { writeJsonAsFile } from "@lionweb/utilities"
 import { runAsApp, tryParseInteger } from "./common.js"
 import { recognizedTasks, taskExecutor } from "./tasks.js"
-import { clientInfo, withColorAndStyleApplied } from "@lionweb/delta-protocol-impl/dist/utils/ansi.js"
+import { clientInfo, genericError } from "@lionweb/delta-protocol-impl/dist/utils/ansi.js"
 import { combine } from "@lionweb/delta-protocol-impl/dist/utils/procedure.js"
 import { ShapesBase } from "./gen/Shapes.g.js"
 import { TestLanguageBase } from "./gen/TestLanguage.g.js"
@@ -41,7 +41,7 @@ const testLanguageBase = TestLanguageBase.INSTANCE
 const languageBases = [shapesLanguageBase, testLanguageBase]
 
 const boldRedIf = (apply: boolean, text: string) =>
-    apply ? withColorAndStyleApplied("red", "bold")(text) : text
+    apply ? genericError(text) : text
 
 const partitionConcepts: Record<string, Concept> = Object.fromEntries(
     [testLanguageBase.DataTypeTestConcept, shapesLanguageBase.Geometry, testLanguageBase.LinkTestConcept]

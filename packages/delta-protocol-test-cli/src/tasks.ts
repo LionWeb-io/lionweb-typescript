@@ -19,7 +19,7 @@ import { INodeBase } from "@lionweb/class-core"
 import { LionWebClient } from "@lionweb/delta-protocol-impl"
 import { LionWebId } from "@lionweb/json"
 import { ClientReceivedMessage, ISemanticLogItem } from "@lionweb/delta-protocol-impl/dist/semantic-logging.js"
-import { clientInfo, withColorAndStyleApplied } from "@lionweb/delta-protocol-impl/dist/utils/ansi.js"
+import { clientInfo, genericWarning } from "@lionweb/delta-protocol-impl/dist/utils/ansi.js"
 import { waitUntil } from "@lionweb/delta-protocol-impl/dist/utils/async.js"
 import { Documentation, Geometry, ShapesBase } from "./gen/Shapes.g.js"
 import { DataTypeTestConcept, LinkTestConcept, TestAnnotation, TestLanguageBase } from "./gen/TestLanguage.g.js"
@@ -227,7 +227,7 @@ export const taskExecutor = (lionWebClient: LionWebClient, partition: INodeBase,
                 return waitForReceivedMessages(1)
 
             default: {
-                console.log(withColorAndStyleApplied("red", "italic")(`task "${task}" is unknown => ignored`))
+                console.log(genericWarning(`task "${task}" is unknown => ignored`))
                 return Promise.resolve()
             }
         }
