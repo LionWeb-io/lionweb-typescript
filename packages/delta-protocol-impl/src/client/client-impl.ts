@@ -56,6 +56,7 @@ import {
 import {
     ClientAppliedEvent,
     ClientDidNotApplyEventFromOwnCommand,
+    ClientHadProblem,
     ClientReceivedMessage,
     ClientSentMessage,
     DeltaOccurredOnClient,
@@ -67,7 +68,7 @@ import { priorityQueueAcceptor } from "../utils/priority-queue.js"
 
 
 /**
- * Parameters – required and optional – for instantiating a {@link LionWebClient LionWeb delta protocol client}.
+ * Type def. for parameters – required and optional – for instantiating a {@link LionWebClient LionWeb delta protocol client}.
  */
 export type LionWebClientParameters = {
     clientId: LionWebId
@@ -99,7 +100,7 @@ export class LionWebClient {
     private constructor(
         public readonly clientId: LionWebId,
         public model: INodeBase[],
-        private idMapping: IdMapping,
+        public readonly idMapping: IdMapping,
         public readonly createNode: NodeBaseFactory,
         private readonly effectiveReceiveDelta: DeltaReceiver,
         private readonly lowLevelClient: LowLevelClient<Command | QueryMessage>
@@ -107,8 +108,8 @@ export class LionWebClient {
 
     private readonly queryResolveById: { [queryId: string]: (value: QueryMessage) => void } = {}
 
-    private static readonly idMappingFrom = (model: INodeBase[]) =>
-        new IdMapping(byIdMap(model.flatMap(allNodesFrom)))
+    private static readonly nodesByIdFrom = (model: INodeBase[]) =>
+        byIdMap(model.flatMap(allNodesFrom))
 
     static async create({clientId, url, languageBases, instantiateDeltaReceiverForwardingTo, serializationChunk, semanticLogger, lowLevelClientInstantiator}: LionWebClientParameters): Promise<LionWebClient> {
         const log = semanticLoggerFunctionFrom(semanticLogger)
@@ -117,37 +118,51 @@ export class LionWebClient {
         let commandNumber = 0
         const issuedCommandIds: string[] = []
         const commandSender: DeltaReceiver = (delta) => {
-            log(new DeltaOccurredOnClient(clientId, serializeDelta(delta)))
-            if (!loading) {
-                const commandId = `cmd-${++commandNumber}`
-                const command = deltaAsCommand(delta, commandId)
-                if (command !== undefined) {
-                    issuedCommandIds.push(commandId)  // (register the ID before actually sending the command so that effectively-synchronous tests mimic the actual behavior more reliably)
-                    lowLevelClient.sendMessage(command)
-                    log(new ClientSentMessage(clientId, command))
+            try {
+                const serializedDelta = serializeDelta(delta)
+                log(new DeltaOccurredOnClient(clientId, serializedDelta))
+                if (!loading) {
+                    const commandId = `cmd-${++commandNumber}`
+                    const command = deltaAsCommand(delta, commandId)
+                    if (command !== undefined) {
+                        issuedCommandIds.push(commandId)  // (register the ID before actually sending the command so that effectively-synchronous tests mimic the actual behavior more reliably)
+                        lowLevelClient.sendMessage(command)
+                        log(new ClientSentMessage(clientId, command))
+                    }
                 }
+            } catch (e: unknown) {
+                console.error(`error occurred during serialization of delta: ${(e as Error).message}`)
+                console.dir(delta)
             }
         }
         const effectiveReceiveDelta = instantiateDeltaReceiverForwardingTo === undefined ? commandSender : instantiateDeltaReceiverForwardingTo(commandSender)
 
         const deserialized = nodeBaseDeserializer(languageBases, effectiveReceiveDelta)
         const model = serializationChunk === undefined ? [] : deserialized(serializationChunk)
-        const idMapping = this.idMappingFrom(model)
+        const idMapping = new IdMapping(LionWebClient.nodesByIdFrom(model))
         const eventAsDelta = eventToDeltaTranslator(languageBases, idMapping, deserialized)
         loading = false
 
         const processEvent = (event: Event) => {
             lionWebClient.lastReceivedSequenceNumber = event.sequenceNumber
-            const originatingCommand = event.originCommands.find(({ commandId }) => issuedCommandIds.indexOf(commandId) > -1)
+            const commandOriginatingFromSelf = event.originCommands.find(({ commandId }) => issuedCommandIds.indexOf(commandId) > -1)
             // Note: we can't remove members from issuedCommandIds because there may be multiple events originating fom a single command.
-            if (originatingCommand === undefined) {
-                const delta = eventAsDelta(event)
-                if (delta !== undefined) {
-                    applyDelta(delta)
+            if (commandOriginatingFromSelf === undefined) {
+                try {
+                    const delta = eventAsDelta(event)
+                    if (delta !== undefined) {
+                        try {
+                            applyDelta(delta)
+                            log(new ClientAppliedEvent(clientId, event))
+                        } catch (e) {
+                            log(new ClientHadProblem(clientId, `couldn't apply delta of type ${delta.constructor.name} because of: ${(e as Error).message}`))
+                        }
+                    }
+                } catch (eventTranslationError) {
+                    log(new ClientHadProblem(clientId, `couldn't translate event to a delta because of: ${(eventTranslationError as Error).message}\n\tdelta = ${JSON.stringify(event)}`))
                 }
-                log(new ClientAppliedEvent(clientId, event))
             } else {
-                log(new ClientDidNotApplyEventFromOwnCommand(clientId, originatingCommand.commandId))
+                log(new ClientDidNotApplyEventFromOwnCommand(clientId, commandOriginatingFromSelf.commandId))
             }
         }
 
@@ -164,16 +179,17 @@ export class LionWebClient {
                     return  // ~void
                 }
                 console.log(clientWarning(`client received response for a query with ID="${queryId} without having sent a corresponding request - ignoring`))
+                return
             }
             if (isEvent(message)) {
                 acceptEvent(message)
+                return
             }
-            console.log(clientWarning(`client received a message of kind "${message.messageKind}" that it doesn't know how to handle - ignoring`))
         }
 
         const lowLevelClient = await
             (lowLevelClientInstantiator ?? createWebSocketClient<(Event | QueryMessage), (Command | QueryMessage)>)
-                .apply(this, [url, clientId, receiveMessageOnClient])
+                .apply(this, [{ url, clientId, receiveMessageOnClient } /* no logging parameter */])
 
         const lionWebClient = new LionWebClient(
             clientId,
@@ -192,7 +208,7 @@ export class LionWebClient {
      */
     setModel(newModel: INodeBase[]) {
         this.model = newModel
-        this.idMapping = LionWebClient.idMappingFrom(newModel)
+        this.idMapping.reinitializeWith(LionWebClient.nodesByIdFrom(newModel))
     }
 
     async disconnect(): Promise<void> {
@@ -243,13 +259,14 @@ export class LionWebClient {
         } as UnsubscribeFromPartitionContentsRequest)
     }
 
-    async signOn(queryId: LionWebId): Promise<void> {
+    async signOn(queryId: LionWebId, repositoryId: LionWebId): Promise<void> {
         if (this.signedOff) {
             return Promise.reject(new Error(`can't sign on after having signed off`))
         }
         const response = await this.makeQuery({
             messageKind: "SignOnRequest",
             queryId,
+            repositoryId,
             deltaProtocolVersion: "2025.1",
             clientId: this.clientId,
             protocolMessages: []

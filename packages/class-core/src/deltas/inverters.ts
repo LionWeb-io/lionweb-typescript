@@ -91,13 +91,22 @@ export const invertDelta = (delta: IDelta): IDelta => {
         return new ChildMovedInSameContainmentDelta(delta.parent, delta.containment, delta.newIndex, delta.oldIndex, delta.movedChild);
     }
     if (delta instanceof ChildMovedAndReplacedFromOtherContainmentDelta) {
-        // TODO  implement
+        return new CompositeDelta([
+            new ChildMovedFromOtherContainmentDelta(delta.newParent, delta.newContainment, delta.newIndex, delta.oldParent, delta.oldContainment, delta.oldIndex, delta.movedChild),
+            new ChildAddedDelta(delta.newParent, delta.newContainment, delta.newIndex, delta.replacedChild)
+        ]);
     }
     if (delta instanceof ChildMovedAndReplacedFromOtherContainmentInSameParentDelta) {
-        // TODO  implement
+        return new CompositeDelta([
+            new ChildMovedFromOtherContainmentInSameParentDelta(delta.parent, delta.newContainment, delta.newIndex, delta.movedChild, delta.oldContainment, delta.oldIndex),
+            new ChildAddedDelta(delta.parent, delta.newContainment, delta.newIndex, delta.replacedChild)
+        ]);
     }
     if (delta instanceof ChildMovedAndReplacedInSameContainmentDelta) {
-        // TODO  implement
+        return new CompositeDelta([
+            new ChildMovedInSameContainmentDelta(delta.parent, delta.containment, delta.newIndex, delta.oldIndex, delta.movedChild),
+            new ChildAddedDelta(delta.parent, delta.containment, delta.newIndex, delta.replacedChild)
+        ]);
     }
     if (delta instanceof AnnotationAddedDelta) {
         return new AnnotationDeletedDelta(delta.parent, delta.index, delta.newAnnotation);
@@ -115,10 +124,16 @@ export const invertDelta = (delta: IDelta): IDelta => {
         return new AnnotationMovedInSameParentDelta(delta.parent, delta.newIndex, delta.oldIndex, delta.movedAnnotation);
     }
     if (delta instanceof AnnotationMovedAndReplacedFromOtherParentDelta) {
-        // TODO  implement
+        return new CompositeDelta([
+            new AnnotationMovedFromOtherParentDelta(delta.newParent, delta.newIndex, delta.oldParent, delta.oldIndex, delta.movedAnnotation),
+            new AnnotationAddedDelta(delta.newParent, delta.newIndex, delta.replacedAnnotation)
+        ]);
     }
     if (delta instanceof AnnotationMovedAndReplacedInSameParentDelta) {
-        // TODO  implement
+        return new CompositeDelta([
+            new AnnotationMovedInSameParentDelta(delta.parent, delta.newIndex, delta.oldIndex, delta.movedAnnotation),
+            new AnnotationAddedDelta(delta.parent, delta.newIndex, delta.replacedAnnotation)
+        ]);
     }
     if (delta instanceof ReferenceAddedDelta) {
         return new ReferenceDeletedDelta(delta.parent, delta.reference, delta.index, delta.newTarget);
@@ -133,19 +148,28 @@ export const invertDelta = (delta: IDelta): IDelta => {
         return new EntryMovedFromOtherReferenceDelta(delta.newParent, delta.newReference, delta.newIndex, delta.oldParent, delta.oldReference, delta.oldIndex, delta.movedTarget);
     }
     if (delta instanceof EntryMovedFromOtherReferenceInSameParentDelta) {
-        // TODO  implement
+        return new EntryMovedFromOtherReferenceInSameParentDelta(delta.parent, delta.newReference, delta.newIndex, delta.oldReference, delta.oldIndex, delta.movedTarget);
     }
     if (delta instanceof EntryMovedInSameReferenceDelta) {
         return new EntryMovedInSameReferenceDelta(delta.parent, delta.reference, delta.newIndex, delta.oldIndex, delta.movedTarget);
     }
     if (delta instanceof EntryMovedAndReplacedFromOtherReferenceDelta) {
-        // TODO  implement
+        return new CompositeDelta([
+            new EntryMovedFromOtherReferenceDelta(delta.newParent, delta.newReference, delta.newIndex, delta.oldParent, delta.oldReference, delta.oldIndex, delta.movedTarget),
+            new ReferenceAddedDelta(delta.newParent, delta.newReference, delta.newIndex, delta.replacedTarget)
+        ]);
     }
     if (delta instanceof EntryMovedAndReplacedFromOtherReferenceInSameParentDelta) {
-        return new EntryMovedAndReplacedFromOtherReferenceInSameParentDelta(delta.parent, delta.newReference, delta.newIndex, delta.oldReference, delta.oldIndex, delta.replacedTarget, delta.movedTarget);
+        return new CompositeDelta([
+            new EntryMovedFromOtherReferenceInSameParentDelta(delta.parent, delta.newReference, delta.newIndex, delta.oldReference, delta.oldIndex, delta.movedTarget),
+            new ReferenceAddedDelta(delta.parent, delta.newReference, delta.newIndex, delta.replacedTarget)
+        ]);
     }
     if (delta instanceof EntryMovedAndReplacedInSameReferenceDelta) {
-        // TODO  implement
+        return new CompositeDelta([
+            new EntryMovedInSameReferenceDelta(delta.parent, delta.reference, delta.newIndex, delta.oldIndex, delta.movedTarget),
+            new ReferenceAddedDelta(delta.parent, delta.reference, delta.newIndex, delta.replacedTarget)
+        ]);
     }
     if (delta instanceof CompositeDelta) {
         return new CompositeDelta(delta.parts.map(invertDelta));

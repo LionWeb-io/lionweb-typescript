@@ -19,36 +19,50 @@
 
 import { argv, exit } from "process"
 import { Concept } from "@lionweb/core"
-import { LionWebClient, wsLocalhostUrl } from "@lionweb/delta-protocol-impl"
+import {
+    Command,
+    createWebSocketClient,
+    Event,
+    LionWebClient,
+    QueryMessage,
+    wsLocalhostUrl
+} from "@lionweb/delta-protocol-impl"
+import { writeJsonAsFile } from "@lionweb/utilities"
 import { runAsApp, tryParseInteger } from "./common.js"
 import { recognizedTasks, taskExecutor } from "./tasks.js"
-import { clientInfo, withColorAndStyleApplied } from "@lionweb/delta-protocol-impl/dist/utils/ansi.js"
+import { clientInfo, genericError } from "@lionweb/delta-protocol-impl/dist/utils/ansi.js"
 import { combine } from "@lionweb/delta-protocol-impl/dist/utils/procedure.js"
-import { ShapesBase } from "./gen/Shapes.g.js"
 import { TestLanguageBase } from "./gen/TestLanguage.g.js"
 import { semanticConsoleLogger, semanticLogItemStorer } from "@lionweb/delta-protocol-impl/dist/semantic-logging.js"
 
-const shapesLanguageBase = ShapesBase.INSTANCE
 const testLanguageBase = TestLanguageBase.INSTANCE
-const languageBases = [shapesLanguageBase, testLanguageBase]
+const languageBases = [testLanguageBase]
 
 const boldRedIf = (apply: boolean, text: string) =>
-    apply ? withColorAndStyleApplied("red", "bold")(text) : text
+    apply ? genericError(text) : text
 
 const partitionConcepts: Record<string, Concept> = Object.fromEntries(
-    [testLanguageBase.DataTypeTestConcept, shapesLanguageBase.Geometry, testLanguageBase.LinkTestConcept]
+    [testLanguageBase.DataTypeTestConcept, testLanguageBase.LinkTestConcept]
         .map((concept) => [concept.name, concept])
 )
 
-if (argv.length < 5) {  // $ node dist/cli-client.js <port> <clientID> <partitionConcept> [tasks]
+// $ node dist/cli-client.js <port> <clientID> <partitionConcept> [tasks] [--${protocolLogOptionPrefix}=<path>]
+
+const protocolLogOptionPrefix = "--protocol-log="
+const protocolLogPathIndex = argv.findIndex((argument) => argument.startsWith(protocolLogOptionPrefix))
+// arguments without "node" (index=0), "dist/cli-client.js" (index=1), and `${protocolLogOptionPrefix}=<path>` (optional)
+const trueArguments = argv.filter((_, index) => !(index === 0 || index === 1 || index === protocolLogPathIndex))
+
+if (trueArguments.length < 3) {
     console.log(
 `A Node.js-based app that implements a LionWeb delta protocol client.
 
 Parameters (${boldRedIf(true, "bold red")} are missing):
-  - ${boldRedIf(argv.length < 3, `<port>: the port of the WebSocket where the LionWeb delta protocol repository is running on localhost`)}
-  - ${boldRedIf(argv.length < 4, `<clientID>: the ID that the client identifies itself with at the repository`)}
-  - ${boldRedIf(argv.length < 5, `<partitionConcept>: the name of a partition concept that gets instantiated as the model's primary partition — one of: ${Object.keys(partitionConcepts).join(", ")}`)}
-  - ${boldRedIf(argv.length < 6, `[tasks]: a comma-separated list of tasks — one of ${Object.keys(recognizedTasks).sort().join(", ")}`)}
+  - ${boldRedIf(trueArguments.length < 1, `<port>: the port of the WebSocket where the LionWeb delta protocol repository is running on localhost`)}
+  - ${boldRedIf(trueArguments.length < 2, `<clientID>: the ID that the client identifies itself with at the repository`)}
+  - ${boldRedIf(trueArguments.length < 3, `<partitionConcept>: the name of a partition concept that gets instantiated as the model's primary partition — one of: ${Object.keys(partitionConcepts).join(", ")}`)}
+  - ${boldRedIf(trueArguments.length < 4, `[tasks]: a comma-separated list of tasks — one of ${Object.keys(recognizedTasks).sort().join(", ")}`)}
+  - ${boldRedIf(protocolLogPathIndex === -1, `${protocolLogOptionPrefix}=<path>: option to configure that the client logs all messages exchanged with the repository to a file with the given path`)}
 
     ASSUMPTION: the initial (states of the models) on client(s) and repository are identical!
 `)
@@ -69,12 +83,22 @@ await runAsApp(async () => {
     const url = wsLocalhostUrl(port)
 
     const [storingLogger, semanticLogItems] = semanticLogItemStorer()
+    const protocolMessages: unknown[] = []
 
     const lionWebClient = await LionWebClient.create({
         clientId,
         url,
         languageBases,
-        semanticLogger: combine(semanticConsoleLogger, storingLogger)
+        semanticLogger: combine(semanticConsoleLogger, storingLogger),
+        lowLevelClientInstantiator: async (lowLevelClientParameters) =>
+            await createWebSocketClient<(Event | QueryMessage), (Command | QueryMessage)>(
+                lowLevelClientParameters,
+                {
+                    messageLogger: (message) => {
+                        protocolMessages.push(message)
+                    }
+                }
+            )
     })
 
     console.log(clientInfo(`LionWeb delta protocol client (with ID=${clientId}) connecting to repository on ${url} - press Ctrl+C to terminate`))
@@ -89,6 +113,10 @@ await runAsApp(async () => {
 
     for (const task of tasks) {
         await executeTask(task, queryId())
+    }
+
+    if (protocolLogPathIndex > -1) {
+        writeJsonAsFile(argv[protocolLogPathIndex].substring(protocolLogOptionPrefix.length), protocolMessages)
     }
 
     return () => {

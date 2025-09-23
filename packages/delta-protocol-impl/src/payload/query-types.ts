@@ -69,6 +69,7 @@ export interface SignOnRequest extends QueryMessage {
     messageKind: "SignOnRequest"
     deltaProtocolVersion: "2025.1"
     clientId: LionWebId
+    repositoryId: LionWebId
 }
 
 export interface SignOnResponse extends QueryMessage {

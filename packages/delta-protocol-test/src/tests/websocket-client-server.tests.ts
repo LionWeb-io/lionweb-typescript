@@ -52,14 +52,15 @@ describe("WebSocket-driven client and server (in isolation and abstraction)", as
                 },
                 prefixedWith(logger, "[server] ")
             ),
-            createWebSocketClient<TestPayload, TestPayload>(
-                wsLocalhostUrl(port),
+            createWebSocketClient<TestPayload, TestPayload>({
+                url: wsLocalhostUrl(port),
                 clientId,
-                (message) => {
+                receiveMessageOnClient: (message) => {
                     messagesReceivedByClient.push(message)
-                },
-                prefixedWith(logger, `[client ${clientId}] `)
-            )
+                }
+            }, {
+                textualLogger: prefixedWith(logger, `[client ${clientId}] `)
+            })
         ])
 
         const testPayload: TestPayload = { foo: "bar" }
@@ -78,7 +79,7 @@ describe("WebSocket-driven client and server (in isolation and abstraction)", as
         const url = wsLocalhostUrl(nextPort())  // (differs from already-started servers)
         return expectError(
             () =>
-                createWebSocketClient(url, "client-A", noOpProcedure),
+                createWebSocketClient({ url, clientId: "client-A", receiveMessageOnClient: noOpProcedure }),
             `could not connect to WebSocket server at ${url}`
         )
     })
@@ -87,7 +88,7 @@ describe("WebSocket-driven client and server (in isolation and abstraction)", as
         const port = nextPort()
 
         const [client, server] = await Promise.all([
-            createWebSocketClient(wsLocalhostUrl(port), "client-A", noOpProcedure),
+            createWebSocketClient({ url: wsLocalhostUrl(port), clientId: "client-A", receiveMessageOnClient: noOpProcedure }),
             createWebSocketServer(port, (_) => undefined, noOpProcedure)
         ])
 
@@ -101,7 +102,7 @@ describe("WebSocket-driven client and server (in isolation and abstraction)", as
         const port = nextPort()
 
         const [client, server] = await Promise.all([
-            createWebSocketClient(wsLocalhostUrl(port), "client-A", noOpProcedure),
+            createWebSocketClient({ url: wsLocalhostUrl(port), clientId: "client-A", receiveMessageOnClient: noOpProcedure }),
             createWebSocketServer(port, (_) => undefined, noOpProcedure)
         ])
 

@@ -442,7 +442,7 @@ export interface ErrorEvent extends Event {
 /*
  * **DEV note**: run
  *
- *  $ node src/event-message-kinds.js
+ *  $ node src/code-reading/event-message-kinds.js
  *
  * inside the build package to generate the contents of the following array.
  */
@@ -490,7 +490,7 @@ const eventMessageKinds = mapFrom(
         "NoOp",
         "Error"
     ],
-    (_) => _,
+    (messageKind) => messageKind,
     (_) => true
 )
 

@@ -13,8 +13,13 @@
 * Add a `deltaReceiverForwardingTo` function that returns a delta receiver function that forwards received deltas to the given delta receivers.
 * Add a `Compositor` class that can be used to gather deltas into composite deltas.
 * Rename `DeltaHandler`, `handleDelta`, etc. to `DeltaReceiver`, `receiveDelta`, etc. to be more in line with C# implementation — keeping the previous names as legacy aliases.
-  (And: `latching` &rarr; `latchingDeltaReceiverFrom`)
+  (And: `latching` &rarr; `latchingDeltaReceiverFrom`.)
 * Improve performance of deserializer a little bit (— potentially).
+* Add a `reinitializeWith` method to `IdMapping`.
+  (Plus: add documentation to existing methods.)
+* Implement inverters for all deltas.
+* Fix single-containment and -reference value managers.
+* (Fix a small cosmetic thing in `asTreeTextWith`: unset properties’ values now get shown as “`<not set>`” instead of as “`$<not set>`” — note the removed `$`.)
 
 
 ## 0.6.13

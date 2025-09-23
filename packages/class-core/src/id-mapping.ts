@@ -30,34 +30,55 @@ type NodesById = { [id: LionWebId]: INodeBase }
  */
 export class IdMapping {
 
-    nodesById: NodesById;
+    private nodesById: NodesById;
     constructor(nodesById: NodesById) {
         this.nodesById = {...nodesById};
     }
     // TODO  consider using an instance of Map<Id, INodeBase> instead
 
-    fromId(id: LionWebId): INodeBase {
+    /**
+     * @return the {@link INodeBase node} with the given {@link LionWebId `id`}, or
+     * @throws an Error if no node with the given ID was registered.
+     */
+    fromId = (id: LionWebId): INodeBase => {
         if (!(id in this.nodesById)) {
             throw new Error(`node with id=${id} not in ID mapping`);
         }
         return this.nodesById[id];
     }
 
+    /**
+     * @return the {@link INodeBase node} with the given {@link LionWebId `id`},
+     * or `undefined` if no node with the given ID was registered.
+     */
     tryFromId = (id: LionWebId): (INodeBase | undefined) =>
         this.nodesById[id];
 
+    /**
+     * @return the {@link INodeBase node} referenced from the given {@link LionWebId ID},
+     * or `unresolved` if `unresolved` was passed in or no node with the given ID was registered.
+     */
     fromRefId = (idOrUnresolved: IdOrUnresolved): SingleRef<INodeBase> =>
-        idOrUnresolved === null
-            ? null
+        idOrUnresolved === unresolved
+            ? unresolved
             : (this.nodesById[idOrUnresolved] ?? unresolved);
 
     /**
      * Updates this {@link IdMapping} with the given `node` *and all its descendants* (recursively).
      */
-    updateWith(node: INodeBase) {
+    updateWith= (node: INodeBase) => {
         this.nodesById[node.id] = node;
         node.children   // recurse into all children
             .forEach((child) => this.updateWith(child));
+    }
+
+    /**
+     * Re-initializes this {@link IdMapping ID mapping} with the given nodes-by-ID.
+     * This completely removes all registrations of nodes,
+     * and should only be used by components which are in complete control of the nodes being passed to this method.
+     */
+    reinitializeWith = (nodesById: NodesById) => {
+        this.nodesById = nodesById
     }
 
 }

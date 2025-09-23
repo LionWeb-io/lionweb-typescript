@@ -25,6 +25,7 @@ export type { LionWebClientParameters } from "./client/client-impl.js"
 export { LionWebRepository } from "./repository/repository-impl.js"
 export type { LionWebRepositoryParameters } from "./repository/repository-impl.js"
 
-export type { createWebSocketClient, LowLevelClientInstantiator } from "./web-socket/client.js"
+export { createWebSocketClient } from "./web-socket/client.js"
+export type { LowLevelClientInstantiator, LowLevelClientLoggingParameters, LowLevelClientParameters } from "./web-socket/client.js"
 export { createWebSocketServer, wsLocalhostUrl } from "./web-socket/server.js"
 

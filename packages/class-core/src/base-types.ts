@@ -351,28 +351,3 @@ export interface ILanguageBase {
     enumLiteralFrom<T>(enumerationLiteral: EnumerationLiteral): T;
 }
 
-
-/**
- * Removes the given child node from its parent, and returns its containment index.
- */
-export const removeFromParent = (parent: INodeBase | undefined, child: INodeBase): number => {
-    if (parent === undefined) {
-        throw new Error(`can't remove an orphan from its parent`);
-    }
-    if (child.containment instanceof Containment) {
-        const valueManager = parent.getContainmentValueManager(child.containment);
-        if (valueManager instanceof SingleContainmentValueManager) {
-            valueManager.setDirectly(undefined);
-            return 0;
-        } else if (valueManager instanceof MultiContainmentValueManager) {
-            return valueManager.removeDirectly(child);
-        } else {
-            throw new Error(`don't know how to remove a child that's contained through a value manager of type ${valueManager.constructor.name}`);
-        }
-    }
-    if (child.containment === null) {
-        return parent.annotationsValueManager.removeDirectly(child);
-    }
-    throw new Error(`not going to remove a child from its parent without knowing how it's contained`);
-}
-

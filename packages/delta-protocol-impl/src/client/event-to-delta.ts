@@ -287,7 +287,7 @@ export const eventToDeltaTranslator = (languageBases: ILanguageBase[], idMapping
                 const resolvedReference = resolvedReferenceFrom(reference, resolvedParent)
                 const resolvedOldTarget = resolvedRefTo(oldTarget)
                 const resolvedNewTarget = resolvedRefTo(newTarget)
-                return new ReferenceChangedDelta(resolvedParent, resolvedReference, index, resolvedOldTarget, resolvedNewTarget)
+                return new ReferenceChangedDelta(resolvedParent, resolvedReference, index, resolvedNewTarget, resolvedOldTarget)
             }
             case "EntryMovedFromOtherReference": { // § 6.6.6.4
                 const {newParent, newReference, newIndex, oldParent, oldReference, oldIndex, movedTarget} = event as EntryMovedFromOtherReferenceEvent

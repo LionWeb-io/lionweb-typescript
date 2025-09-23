@@ -15,18 +15,27 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
+/**
+ * Extracts all the (technical names of) deltas that can be emitted by any of the value managers.
+ */
+
 import { readFileSync } from "fs"
 
-const messageKinds = readFileSync("../delta-protocol-impl/src/payload/command-types.ts", { encoding: "utf8" })
-    .split(/\r*\n/)
-    .map((line) =>
-        line.match(/^ {4}messageKind: "(\w+)"$/)
-            ? line.substring("    messageKind: \"".length, line.length - 1)
-            : undefined
-    )
-    .filter((matchOrUndefined) => !!matchOrUndefined)
+const uniquesAmong = (ts) => [...new Set(ts)]
 
-messageKinds.forEach((messageKind) => {
-    console.log(`                case "${messageKind}":`)
-})
+const extractFromValueManager = (kind) =>
+    uniquesAmong(
+        readFileSync(`../class-core/src/value-managers/${kind}.ts`, { encoding: "utf8" })
+            .split(/\r*\n/)
+            .map((line) => line.match(/this\.emitDelta\(\(\) => new (\w+)Delta\(.+?\)/))
+            .filter((matchOrUndefined) => !!matchOrUndefined)
+            .map((match) => match[1])
+    )
+
+const emittedDeltas = ["properties", "containments", "annotations", "references"]
+    .flatMap(extractFromValueManager)
+
+for (const delta of emittedDeltas) {
+    console.log(delta)
+}
 

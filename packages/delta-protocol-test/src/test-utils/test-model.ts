@@ -16,7 +16,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { serializeNodeBases } from "@lionweb/class-core"
-import { Documentation, Geometry, ShapesBase } from "@lionweb/delta-protocol-test-cli"
+import { Documentation, Geometry, ShapesBase } from "../gen/Shapes.g.js"
 
 const language = ShapesBase.INSTANCE
 const factory = language.factory()

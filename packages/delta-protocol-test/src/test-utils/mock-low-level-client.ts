@@ -14,58 +14,65 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { LionWebId } from "@lionweb/json"
-import { Command, Event, QueryMessage } from "@lionweb/delta-protocol-impl"
+import {
+    Command,
+    Event,
+    LowLevelClientInstantiator,
+    LowLevelClientParameters,
+    QueryMessage
+} from "@lionweb/delta-protocol-impl"
 import { asMinimalJsonString } from "@lionweb/ts-utils"
-import { LowLevelClientInstantiator } from "@lionweb/delta-protocol-impl/dist/web-socket/client.js"
+import { DeltaProtocolMessage } from "@lionweb/delta-protocol-impl/dist/payload/common.js"
 import { clientInfo, repositoryWarning } from "@lionweb/delta-protocol-impl/dist/utils/ansi.js"
-import { TextualLogger, textualLoggerFunctionFrom } from "@lionweb/delta-protocol-impl/dist/utils/textual-logging.js"
+import { textualLoggerFunctionFrom } from "@lionweb/delta-protocol-impl/dist/utils/textual-logging.js"
+import { LowLevelClientLoggingParameters } from "@lionweb/delta-protocol-impl/dist/web-socket/client.js"
 
 /**
  * @return a {@link LowLevelClientInstantiator} instance that can be passed to {@link LionWebClient}`.createNode(...)`,
  * so that the latter can instantiate a suitable {@link LowLevelClient} mock instance without the need for an actual WebSocket connection.
  * @param commandResponsesById the {@link Event} responses for commands issued by client, indexed by their command ID.
  * @param queryResponsesById the {@link QueryMessage} responses for queries issued by the client, indexed by their query ID.
+ * @param optionalLoggingParameters optional parameters w.r.t. logging.
  */
 export const mockLowLevelClientInstantiator = (
     commandResponsesById: { [commandId: string]: Event },
     queryResponsesById: { [queryId: string]: QueryMessage },
-    optionalTextualLogger?: TextualLogger
+    optionalLoggingParameters?: LowLevelClientLoggingParameters<Event | QueryMessage, Command | QueryMessage>
 ): LowLevelClientInstantiator<Event | QueryMessage, Command | QueryMessage> => {
-    const log = textualLoggerFunctionFrom(optionalTextualLogger)
-    return (
-        _url: string,
-        _clientId: LionWebId,
-        receiveMessageOnClient: (message: Event | QueryMessage) => void
-    ) => {
+    return ({ receiveMessageOnClient }: LowLevelClientParameters<(Event | QueryMessage)>) => {
+        const logText = textualLoggerFunctionFrom(optionalLoggingParameters?.textualLogger)
+        const logMessage = optionalLoggingParameters?.messageLogger ?? ((_message: DeltaProtocolMessage) => {})
         let connected = true
         return Promise.resolve({
             sendMessage: (message: Command | QueryMessage) => {
                 if (!connected) {
                     return Promise.reject(new Error(`low-level client not connected to repository`))
                 }
+                logMessage(message)
                 if ("queryId" in message) {
-                    const { queryId } = message as QueryMessage
+                    const { queryId } = message
                     if (queryId in queryResponsesById) {
                         receiveMessageOnClient(queryResponsesById[queryId])
                         return Promise.resolve()
                     }
                     const logMessage = `mock low-level client doesn't have a response configured for query with ID="${queryId}"`
-                    log(`${repositoryWarning(logMessage)}: ${asMinimalJsonString(message)}`)
+                    logText(`${repositoryWarning(logMessage)}: ${asMinimalJsonString(message)}`)
                     return Promise.reject(new Error(logMessage))
                 }
-                const { commandId } = message as Command
+                const { commandId } = message
                 if (commandId in commandResponsesById) {
-                    receiveMessageOnClient(commandResponsesById[commandId])
+                    const responseMessage = commandResponsesById[commandId]
+                    receiveMessageOnClient(responseMessage)
+                    logMessage(responseMessage)
                     return Promise.resolve()
                 }
-                const logMessage = `mock low-level client doesn't have a response configured for command with ID="${commandId}"`
-                log(`${repositoryWarning(logMessage)}: ${asMinimalJsonString(message)}`)
-                return Promise.reject(new Error(logMessage))
+                const textMessageToLog = `mock low-level client doesn't have a response configured for command with ID="${commandId}"`
+                logText(`${repositoryWarning(textMessageToLog)}: ${asMinimalJsonString(message)}`)
+                return Promise.reject(new Error(textMessageToLog))
             },
             disconnect: () => {
                 connected = false
-                log(`${clientInfo(`client disconnected from repository`)}`)
+                logText(clientInfo(`client disconnected from repository`))
                 return Promise.resolve()
             }
         })

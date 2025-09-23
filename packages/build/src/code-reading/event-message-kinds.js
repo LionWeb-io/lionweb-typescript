@@ -15,22 +15,19 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { assert } from "chai"
-import { IDelta, serializeDelta } from "@lionweb/class-core"
+/**
+ * Extracts the various message kinds from the type definitions of the **events** payloads.
+ */
 
-export const { deepEqual, equal, fail, notEqual, sameMembers, throws } = assert
+import { readFileSync } from "fs"
 
-export const isTrue = (value: unknown, message?: string): void =>
-    assert.isTrue(value, message);
+const messageKinds = readFileSync("../delta-protocol-impl/src/payload/event-types.ts", { encoding: "utf8" })
+    .split(/\r*\n/)
+    .map((line) => line.match(/^ {4}messageKind: "(\w+)"$/))
+    .filter((matchOrUndefined) => !!matchOrUndefined)
+    .map((match) => match[1])
 
-export const isUndefined = (value: unknown, message?: string): void =>
-    assert.isUndefined(value, message);
-
-export const latestDeltaAsserter = (deltas: IDelta[]) => {
-    let numberOfExpectedDeltas = 0;
-    return (expectedDelta: IDelta) => {
-        equal(deltas.length, ++numberOfExpectedDeltas, `number of expected deltas`);
-        deepEqual(serializeDelta(deltas[numberOfExpectedDeltas - 1]), serializeDelta(expectedDelta));
-    }
-}
+messageKinds.forEach((messageKind, index) => {
+    console.log(`        "${messageKind}"${index < messageKinds.length - 1 ? "," : ""}`)
+})
 

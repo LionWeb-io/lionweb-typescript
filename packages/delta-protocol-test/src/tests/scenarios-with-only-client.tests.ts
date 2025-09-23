@@ -95,7 +95,7 @@ describe(`scenarios where TypeScript client is the only system under test (using
         })
 
         // Action
-        await lionWebClient.signOn(queryId)
+        await lionWebClient.signOn(queryId, "myRepo")
 
         expect(lionWebClient.participationId!).to.equal("participation-a")
 

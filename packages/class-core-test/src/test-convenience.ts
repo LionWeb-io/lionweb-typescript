@@ -15,18 +15,18 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { readFileSync } from "fs"
+import { asTreeTextWith, INodeBase } from "@lionweb/class-core"
+import { idOf } from "@lionweb/core"
 
-const messageKinds = readFileSync("../delta-protocol-impl/src/payload/event-types.ts", { encoding: "utf8" })
-    .split(/\r*\n/)
-    .map((line) =>
-        line.match(/^ {4}messageKind: "(\w+)"$/)
-            ? line.substring("    messageKind: \"".length, line.length - 1)
-            : undefined
-    )
-    .filter((matchOrUndefined) => !!matchOrUndefined)
 
-messageKinds.forEach((messageKind, index) => {
-    console.log(`        "${messageKind}"${index < messageKinds.length - 1 ? "," : ""}`)
-})
+/**
+ * Render the give `node` as a textual tree but skipping every feature value that's unset — hence “anemic”.
+ */
+export const asAnemicTextualTree = (node: INodeBase) =>
+    asTreeTextWith(idOf)([node])
+        .split("\n")
+        .filter((line) => !(
+            ["nothing", "none", "not set"].some((term) => line.endsWith(`<${term}>`))
+        ))
+        .join("\n");
 

@@ -35,3 +35,15 @@ export const uniquesAmong = <T>(ts: T[]): T[] =>
 export const keepDefineds = <T>(ts: (T | null | undefined)[]): T[] =>
     ts.filter((t) => t !== undefined && t !== null) as T[]
 
+
+/**
+ * @return the last element of the given `ts` array.
+ * @throws an {@link Error} if the array is empty, so it doesn't have a last element.
+ */
+export const lastOfArray = <T>(ts: T[]): T => {
+    if (ts.length === 0) {
+        throw new Error(`empty array doesn't have a last element`)
+    }
+    return ts[ts.length - 1]
+}
+

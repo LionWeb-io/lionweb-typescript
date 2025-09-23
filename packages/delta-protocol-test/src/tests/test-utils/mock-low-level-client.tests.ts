@@ -20,6 +20,7 @@ import { expectError } from "../../test-utils/async.js"
 
 import {
     AddPartitionCommand,
+    LowLevelClientParameters,
     PartitionAddedEvent,
     SignOnRequest,
     SignOnResponse
@@ -41,10 +42,19 @@ describe("mock low-level client", async function() {
         deltaProtocolVersion: "2025.1",
         clientId: "A",
         queryId: "query-1",
+        repositoryId: "myRepo",
         protocolMessages: []
     }
 
     // positive tests:
+
+    const dummyLowLevelClientParametersWith = <TMessageForClient>(
+        receiveMessageOnClient: (message: TMessageForClient) => void
+    ): LowLevelClientParameters<TMessageForClient> => ({
+        url: "",
+        clientId: "",
+        receiveMessageOnClient
+    })
 
     it("responds to a query for which it has a response configured", async function() {
         const signOnQueryResponse: SignOnResponse = {
@@ -58,17 +68,14 @@ describe("mock low-level client", async function() {
             {
                 "query-1":  signOnQueryResponse
             }
-        )(
-            "",
-            "",
-            (message) => {
+        )(dummyLowLevelClientParametersWith((message) => {
                 expect(message).to.deep.equal(signOnQueryResponse)
-            }
-        )
+        }))
         await mockLowLevelClient.sendMessage(signOnQueryRequest)
     })
 
     it("responds to a command for which it has a response configured", async function() {
+        const messages: unknown[] = []
         const partitionAddedEvent: PartitionAddedEvent = {
             messageKind: "PartitionAdded",
             newPartition: emptySerializationChunk,
@@ -85,27 +92,60 @@ describe("mock low-level client", async function() {
             {
                 "command-1": partitionAddedEvent
             },
-            {}
-        )(
-            "",
-            "",
+            {},
+            {
+                messageLogger: (message) => {
+                    messages.push(message)
+                }
+            }
+        )(dummyLowLevelClientParametersWith(
             (message) => {
                 expect(message).to.deep.equal(partitionAddedEvent)
-            }
-        )
+            },
+        ))
         await mockLowLevelClient.sendMessage({
             messageKind: "AddPartition",
             commandId: "command-1",
             newPartition: emptySerializationChunk,
             protocolMessages: []
         } as AddPartitionCommand)
+        expect(messages).to.deep.equal([
+            {
+                "messageKind": "AddPartition",
+                "commandId": "command-1",
+                "newPartition": {
+                    "serializationFormatVersion": "2023.1",
+                    "languages": [],
+                    "nodes": []
+                },
+                "protocolMessages": []
+            },
+            {
+                "messageKind": "PartitionAdded",
+                "newPartition": {
+                    "serializationFormatVersion": "2023.1",
+                    "languages": [],
+                    "nodes": []
+                },
+                "sequenceNumber": 0,
+                "originCommands": [
+                    {
+                        "participationId": "participation-1",
+                        "commandId": "command-1"
+                    }
+                ],
+                "protocolMessages": []
+            }
+        ])
     })
 
 
     // negative tests:
 
+    const dummyLowLevelClientParameters: LowLevelClientParameters<unknown> = dummyLowLevelClientParametersWith((_) => {})
+
     it("refuses to send messages after disconnect", async function() {
-        const mockLowLevelClient = await mockLowLevelClientInstantiator({}, {})("", "", (_) => undefined)
+        const mockLowLevelClient = await mockLowLevelClientInstantiator({}, {})(dummyLowLevelClientParameters)
         await mockLowLevelClient.disconnect()
         return expectError(
             () => mockLowLevelClient.sendMessage(signOnQueryRequest),
@@ -113,7 +153,7 @@ describe("mock low-level client", async function() {
     })
 
     it("rejects (on) queries for which it doesn't have a response configured", async function() {
-        const mockLowLevelClient = await mockLowLevelClientInstantiator({}, {})("", "", (_) => undefined)
+        const mockLowLevelClient = await mockLowLevelClientInstantiator({}, {})(dummyLowLevelClientParameters)
         return expectError(
             () => mockLowLevelClient.sendMessage(signOnQueryRequest),
             `mock low-level client doesn't have a response configured for query with ID="query-1"`
@@ -121,7 +161,7 @@ describe("mock low-level client", async function() {
     })
 
     it("rejects (on) commands for which it doesn't have a response configured", async function() {
-        const mockLowLevelClient = await mockLowLevelClientInstantiator({}, {})("", "", (_) => undefined)
+        const mockLowLevelClient = await mockLowLevelClientInstantiator({}, {})(dummyLowLevelClientParameters)
         return expectError(
             () => mockLowLevelClient.sendMessage({
                 messageKind: "AddPartition",

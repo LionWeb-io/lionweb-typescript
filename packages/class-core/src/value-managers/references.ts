@@ -106,7 +106,7 @@ export class OptionalSingleReferenceValueManager<T extends INodeBase> extends Si
             if (oldTarget === undefined) {
                 this.emitDelta(() => new ReferenceAddedDelta(this.container, this.reference, 0, newTarget));
             } else {
-                this.emitDelta(() => new ReferenceChangedDelta(this.container, this.reference, 0, oldTarget, newTarget));
+                this.emitDelta(() => new ReferenceChangedDelta(this.container, this.reference, 0, newTarget, oldTarget));
             }
         }
     }
@@ -142,7 +142,7 @@ export class RequiredSingleReferenceValueManager<T extends INodeBase> extends Si
             if (oldTarget === undefined) {
                 this.emitDelta(() => new ReferenceAddedDelta(this.container, this.reference, 0, newTarget));
             } else {
-                this.emitDelta(() => new ReferenceChangedDelta(this.container, this.reference, 0, oldTarget, newTarget));
+                this.emitDelta(() => new ReferenceChangedDelta(this.container, this.reference, 0, newTarget, oldTarget));
             }
         }
     }

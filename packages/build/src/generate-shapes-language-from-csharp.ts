@@ -94,5 +94,5 @@ shapesJson.nodes.forEach(fixNode)
 const shapesLanguage = deserializeLanguages(shapesJson, lioncoreBuiltins)[0]
 writeJsonAsFile(join(csharpPath, "shapes_2023_1-fixed.json"), serializeLanguages(shapesLanguage))
 writeFileSync(join(csharpPath, "shapes_2023_1.txt"), languageAsText(shapesLanguage))
-generateLanguage(shapesLanguage, "../delta-protocol-test-cli/src/gen", { header: defaultTrumpfOriginatingApache2_0LicensedHeader })
+generateLanguage(shapesLanguage, "../delta-protocol-test/src/gen", { header: defaultTrumpfOriginatingApache2_0LicensedHeader })
 

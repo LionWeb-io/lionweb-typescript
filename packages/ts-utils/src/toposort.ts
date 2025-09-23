@@ -34,9 +34,6 @@ export const dependencyOrderOf = <T>(vertices: T[], edgesOf: (vertex: T) => T[])
             (edge) => visit(edge, extendedChain)
         )
         ordered.push(current)
-        if (hasCycle) {
-            console.dir(ordered)
-        }
         return hasCycle
     }
 
