@@ -32,19 +32,17 @@ import { runAsApp, tryParseInteger } from "./common.js"
 import { recognizedTasks, taskExecutor } from "./tasks.js"
 import { clientInfo, genericError } from "@lionweb/delta-protocol-impl/dist/utils/ansi.js"
 import { combine } from "@lionweb/delta-protocol-impl/dist/utils/procedure.js"
-import { ShapesBase } from "./gen/Shapes.g.js"
 import { TestLanguageBase } from "./gen/TestLanguage.g.js"
 import { semanticConsoleLogger, semanticLogItemStorer } from "@lionweb/delta-protocol-impl/dist/semantic-logging.js"
 
-const shapesLanguageBase = ShapesBase.INSTANCE
 const testLanguageBase = TestLanguageBase.INSTANCE
-const languageBases = [shapesLanguageBase, testLanguageBase]
+const languageBases = [testLanguageBase]
 
 const boldRedIf = (apply: boolean, text: string) =>
     apply ? genericError(text) : text
 
 const partitionConcepts: Record<string, Concept> = Object.fromEntries(
-    [testLanguageBase.DataTypeTestConcept, shapesLanguageBase.Geometry, testLanguageBase.LinkTestConcept]
+    [testLanguageBase.DataTypeTestConcept, testLanguageBase.LinkTestConcept]
         .map((concept) => [concept.name, concept])
 )
 

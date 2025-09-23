@@ -18,19 +18,11 @@
 import { INodeBase } from "@lionweb/class-core"
 import { LionWebClient } from "@lionweb/delta-protocol-impl"
 import { LionWebId } from "@lionweb/json"
+import { lastOfArray } from "@lionweb/ts-utils"
 import { ClientReceivedMessage, ISemanticLogItem } from "@lionweb/delta-protocol-impl/dist/semantic-logging.js"
 import { clientInfo, genericWarning } from "@lionweb/delta-protocol-impl/dist/utils/ansi.js"
 import { waitUntil } from "@lionweb/delta-protocol-impl/dist/utils/async.js"
-import { Documentation, Geometry, ShapesBase } from "./gen/Shapes.g.js"
 import { DataTypeTestConcept, LinkTestConcept, TestAnnotation, TestLanguageBase } from "./gen/TestLanguage.g.js"
-
-
-const lastOf = <T>(ts: T[]): T => {
-    if (ts.length === 0) {
-        throw new Error(`empty array doesn't have a last element`)
-    }
-    return ts[ts.length - 1]
-}
 
 
 /**
@@ -44,11 +36,10 @@ export const recognizedTasks: Record<string, boolean> = {
     "SignOn": true,
     "SignOff": true,
     "Wait": true,
-    "AddDocs": true,
-    "SetDocsText": true,
     "AddStringValue_0_1": true,
     "SetStringValue_0_1": true,
     "DeleteStringValue_0_1": true,
+    "AddName_Containment_0_1": true,
     "AddAnnotation": true,
     "AddAnnotations": true,
     "AddAnnotation_to_Containment_0_1": true,
@@ -79,7 +70,6 @@ export const recognizedTasks: Record<string, boolean> = {
 }
 
 
-const shapesLanguageBase = ShapesBase.INSTANCE
 const testLanguageBase = TestLanguageBase.INSTANCE
 
 
@@ -114,14 +104,6 @@ export const taskExecutor = (lionWebClient: LionWebClient, partition: INodeBase,
             case "Wait": {
                 return waitForReceivedMessages(1)
             }
-            case "AddDocs": {
-                (partition as Geometry).documentation = lionWebClient.createNode(shapesLanguageBase.Documentation, "documentation") as Documentation
-                return waitForReceivedMessages(1)
-            }
-            case "SetDocsText": {
-                (partition as Geometry).documentation!.text = "hello there"
-                return waitForReceivedMessages(1)
-            }
             case "AddStringValue_0_1":
                 (partition as DataTypeTestConcept).stringValue_0_1 = "new property"
                 return waitForReceivedMessages(1)
@@ -130,6 +112,9 @@ export const taskExecutor = (lionWebClient: LionWebClient, partition: INodeBase,
                 return waitForReceivedMessages(1)
             case "DeleteStringValue_0_1":
                 (partition as DataTypeTestConcept).stringValue_0_1 = undefined
+                return waitForReceivedMessages(1)
+            case "AddName_Containment_0_1":
+                linkTestConcept().containment_0_1!.name = "my name"
                 return waitForReceivedMessages(1)
             case "AddAnnotation":
                 linkTestConcept().addAnnotation(annotation("annotation"))
@@ -145,7 +130,7 @@ export const taskExecutor = (lionWebClient: LionWebClient, partition: INodeBase,
                 linkTestConcept().removeAnnotation(linkTestConcept().annotations[0])
                 return waitForReceivedMessages(1)
             case "MoveAnnotationInSameParent":
-                linkTestConcept().insertAnnotationAtIndex(lastOf(linkTestConcept().annotations), 0)
+                linkTestConcept().insertAnnotationAtIndex(lastOfArray(linkTestConcept().annotations), 0)
                 return waitForReceivedMessages(1)
             case "MoveAnnotationFromOtherParent":
                 linkTestConcept().addAnnotation(linkTestConcept().containment_0_1!.annotations[0])
@@ -202,25 +187,25 @@ export const taskExecutor = (lionWebClient: LionWebClient, partition: INodeBase,
                     throw new Error(`can't replace an item of an array with no items`)
                 }
                 linkTestConcept().replaceContainment_1_nAtIndex(
-                    lastOf(lastOf(linkTestConcept().containment_0_n).containment_0_n),
+                    lastOfArray(lastOfArray(linkTestConcept().containment_0_n).containment_0_n),
                     linkTestConcept().containment_1_n.length - 1
                 )
                 return waitForReceivedMessages(1)
             case "MoveChildInSameContainment":
-                linkTestConcept().addContainment_0_nAtIndex(lastOf(linkTestConcept().containment_0_n), 0)
+                linkTestConcept().addContainment_0_nAtIndex(lastOfArray(linkTestConcept().containment_0_n), 0)
                 // Note: this is effectively a move rather than an insert — hence the name of the task.
                 return waitForReceivedMessages(1)
             case "MoveChildFromOtherContainment_Single":
                 linkTestConcept().containment_1 = linkTestConcept().containment_0_1!.containment_0_1!
                 return waitForReceivedMessages(1)
             case "MoveChildFromOtherContainment_Multiple":
-                linkTestConcept().addContainment_1_nAtIndex(lastOf(linkTestConcept().containment_0_n).containment_0_n[0], 1)
+                linkTestConcept().addContainment_1_nAtIndex(lastOfArray(linkTestConcept().containment_0_n).containment_0_n[0], 1)
                 return waitForReceivedMessages(1)
             case "MoveChildFromOtherContainmentInSameParent_Single":
                 linkTestConcept().containment_1 = linkTestConcept().containment_0_1!
                 return waitForReceivedMessages(1)
             case "MoveChildFromOtherContainmentInSameParent_Multiple":
-                linkTestConcept().addContainment_1_nAtIndex(lastOf(linkTestConcept().containment_0_n), 1)
+                linkTestConcept().addContainment_1_nAtIndex(lastOfArray(linkTestConcept().containment_0_n), 1)
                 return waitForReceivedMessages(1)
             case "AddPartition":
                 lionWebClient.addPartition(linkTestConcept("partition"))

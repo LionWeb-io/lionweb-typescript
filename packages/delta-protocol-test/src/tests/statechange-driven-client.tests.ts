@@ -29,7 +29,6 @@ import {
     serializeDelta
 } from "@lionweb/class-core"
 import { Command, Event } from "@lionweb/delta-protocol-impl"
-import { Geometry, ShapesBase } from "@lionweb/delta-protocol-test-cli"
 import { byIdMap } from "@lionweb/ts-utils"
 
 import { createWebSocketClient, LowLevelClient } from "@lionweb/delta-protocol-impl/dist/web-socket/client.js"
@@ -40,6 +39,7 @@ import { prefixedWith, timedConsoleLogger } from "@lionweb/delta-protocol-impl/d
 import { commandAsEvent } from "@lionweb/delta-protocol-impl/dist/repository/command-to-event.js"
 import { deltaAsCommand } from "@lionweb/delta-protocol-impl/dist/client/delta-to-command.js"
 import { eventToDeltaTranslator } from "@lionweb/delta-protocol-impl/dist/client/event-to-delta.js"
+import { Geometry, ShapesBase } from "../gen/Shapes.g.js"
 import { testModelChunk } from "../test-utils/test-model.js"
 import { delayed } from "../test-utils/async.js"
 import { nextPort } from "../test-utils/port.js"
