@@ -151,7 +151,7 @@ export const taskExecutor = (lionWebClient: LionWebClient, partition: INodeBase,
                 linkTestConcept().containment_1 = linkTestConcept("containment_1")
                 return waitForReceivedMessages(1)
             case "ReplaceContainment_0_1":
-                linkTestConcept().containment_0_1 = linkTestConcept("substitute")
+                linkTestConcept().replaceContainment_0_1With(linkTestConcept("substitute"))
                 return waitForReceivedMessages(1)
             case "DeleteContainment_0_1":
                 linkTestConcept().containment_0_1 = undefined
