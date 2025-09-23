@@ -158,6 +158,7 @@ export class OptionalSingleContainmentValueManager<T extends INodeBase> extends 
                 if (oldChild === newChild) {
                     // do nothing: nothing's changed
                 } else {
+                    // FIXME  this could emit 2 deltas where it should be a single ChildReplaced-delta
                     if (oldChild.parent && oldChild.containment && oldChild.parent === this.container && oldChild.containment === this.feature) {
                         // FIXME  oldChild.parent COULD be this.container
                         this.emitDelta(() => new ChildDeletedDelta(this.container, this.feature, 0, oldChild));
