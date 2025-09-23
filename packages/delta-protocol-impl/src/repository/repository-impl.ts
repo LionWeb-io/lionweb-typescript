@@ -77,7 +77,7 @@ export class LionWebRepository {
                 /*
                  * **DEV note**: run
                  *
-                 *  $ node src/command-message-kinds.js
+                 *  $ node src/code-reading/command-message-kinds.js
                  *
                  * inside the build package to generate the following cases.
                  */

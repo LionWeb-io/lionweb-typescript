@@ -15,6 +15,10 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
+/**
+ * Extracts the various message kinds from the type definitions of the **events** payloads.
+ */
+
 import { readFileSync } from "fs"
 
 const messageKinds = readFileSync("../delta-protocol-impl/src/payload/event-types.ts", { encoding: "utf8" })

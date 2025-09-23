@@ -15,6 +15,10 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
+/**
+ * Extracts the various tasks that the C# delta protocol test-client knows about.
+ */
+
 import { readFileSync } from "fs"
 
 const taskNames = readFileSync("../../../lionweb-integration-testing/src/cs/LionWeb.Integration.WebSocket.Client/Tasks.cs", { encoding: "utf8" })

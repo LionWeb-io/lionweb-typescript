@@ -28,9 +28,9 @@ import { DataTypeTestConcept, LinkTestConcept, TestAnnotation, TestLanguageBase 
 /**
  * **DEV note**: run
  *
- *  $ node derive-tasks-from-csharp.js
+ *  $ node src/code-reading/tasks-from-csharp.js
  *
-  * inside this package to generate the contents of the following object.
+  * inside the build package to generate the contents of the following object.
  */
 export const recognizedTasks: Record<string, boolean> = {
     "SignOn": true,
