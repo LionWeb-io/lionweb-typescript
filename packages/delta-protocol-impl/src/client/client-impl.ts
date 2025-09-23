@@ -259,13 +259,14 @@ export class LionWebClient {
         } as UnsubscribeFromPartitionContentsRequest)
     }
 
-    async signOn(queryId: LionWebId): Promise<void> {
+    async signOn(queryId: LionWebId, repositoryId: LionWebId): Promise<void> {
         if (this.signedOff) {
             return Promise.reject(new Error(`can't sign on after having signed off`))
         }
         const response = await this.makeQuery({
             messageKind: "SignOnRequest",
             queryId,
+            repositoryId,
             deltaProtocolVersion: "2025.1",
             clientId: this.clientId,
             protocolMessages: []

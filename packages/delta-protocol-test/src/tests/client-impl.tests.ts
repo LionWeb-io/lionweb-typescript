@@ -47,7 +47,7 @@ describe("implementation of LionWeb client", async function() {
                     disconnect: () => Promise.resolve()
                 })
         })
-        return expectError(() => lionWebClient.signOn("query-1"), `I refuse to send messages`)
+        return expectError(() => lionWebClient.signOn("query-1", "myRepo"), `I refuse to send messages`)
     })
 
     it("can disconnect", async function() {
@@ -60,7 +60,7 @@ describe("implementation of LionWeb client", async function() {
 
         await lionWebClient.disconnect()
 
-        return expectError(() => lionWebClient.signOn("query-1"), `low-level client not connected to repository`)
+        return expectError(() => lionWebClient.signOn("query-1", "myRepo"), `low-level client not connected to repository`)
     })
 
     it("can sign on and off (and add a partition)", async function() {
@@ -94,7 +94,7 @@ describe("implementation of LionWeb client", async function() {
             new Error(`client A can't send a command without being signed on`)
         )
 
-        await lionWebClient.signOn("query-1")
+        await lionWebClient.signOn("query-1", "myRepo")
         expect(lionWebClient.participationId).to.equal("participation-a")
 
         lionWebClient.addPartition(partitionA)
@@ -186,7 +186,7 @@ describe("implementation of LionWeb client", async function() {
             ),
             semanticLogger: semanticConsoleLogger
         })
-        await lionWebClient.signOn("query-1")
+        await lionWebClient.signOn("query-1", "myRepo")
         const partitionA = lionWebClient.createNode(testLanguageBase.LinkTestConcept, "partition-A")
         lionWebClient.addPartition(partitionA)
 

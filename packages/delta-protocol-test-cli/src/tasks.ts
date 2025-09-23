@@ -98,7 +98,7 @@ export const taskExecutor = (lionWebClient: LionWebClient, partition: INodeBase,
         console.log(clientInfo(`client "${lionWebClient.clientId}" is executing task "${task}"`))
         switch (task) {
             case "SignOn":
-                return await lionWebClient.signOn(queryId)
+                return await lionWebClient.signOn(queryId, "myRepo")
             case "SignOff":
                 return await lionWebClient.signOff(queryId)
             case "Wait": {

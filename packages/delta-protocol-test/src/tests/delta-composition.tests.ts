@@ -70,7 +70,7 @@ describe("combining delta protocol and an “adjacent” delta receiver", () => 
                 }),
             semanticLogger: semanticConsoleLogger
         })
-        await lionWebClient.signOn("q1")
+        await lionWebClient.signOn("q1", "myRepo")
 
         const compositor = compositorToCreate!
 

@@ -42,8 +42,9 @@ describe("WebSocket-driven implementations of client and repository", async func
         const clientB = await createClient("B")
         // end Arrange
 
-        await clientA.signOn("query-A")
-        await clientB.signOn("query-B")
+        const repositoryId = "myRepo"
+        await clientA.signOn("query-A", repositoryId)
+        await clientB.signOn("query-B", repositoryId)
 
         // Action:
         ;(clientA.model[0] as Geometry).documentation!.text = "bye bye"

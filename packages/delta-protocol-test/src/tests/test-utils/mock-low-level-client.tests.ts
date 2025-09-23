@@ -42,6 +42,7 @@ describe("mock low-level client", async function() {
         deltaProtocolVersion: "2025.1",
         clientId: "A",
         queryId: "query-1",
+        repositoryId: "myRepo",
         protocolMessages: []
     }
 
