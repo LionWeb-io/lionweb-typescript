@@ -27,14 +27,14 @@ import {
     QueryMessage,
     wsLocalhostUrl
 } from "@lionweb/delta-protocol-impl"
+import { semanticConsoleLogger, semanticLogItemStorer } from "@lionweb/delta-protocol-impl/dist/semantic-logging.js"
+import { clientInfo, genericError } from "@lionweb/delta-protocol-impl/dist/utils/ansi.js"
+import { combine } from "@lionweb/delta-protocol-impl/dist/utils/procedure.js"
+import { LowLevelClientLogItem } from "@lionweb/delta-protocol-impl/dist/web-socket/client-log-types.js"
 import { writeJsonAsFile } from "@lionweb/utilities"
 import { runAsApp, tryParseInteger } from "./common.js"
 import { recognizedTasks, taskExecutor } from "./tasks.js"
-import { clientInfo, genericError } from "@lionweb/delta-protocol-impl/dist/utils/ansi.js"
-import { combine } from "@lionweb/delta-protocol-impl/dist/utils/procedure.js"
 import { TestLanguageBase } from "./gen/TestLanguage.g.js"
-import { semanticConsoleLogger, semanticLogItemStorer } from "@lionweb/delta-protocol-impl/dist/semantic-logging.js"
-import { LowLevelClientLogItem } from "@lionweb/delta-protocol-impl/dist/web-socket/client-log-types.js"
 
 const testLanguageBase = TestLanguageBase.INSTANCE
 const languageBases = [testLanguageBase]

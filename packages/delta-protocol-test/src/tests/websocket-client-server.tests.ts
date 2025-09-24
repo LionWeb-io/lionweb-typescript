@@ -18,8 +18,7 @@
 import { expect } from "chai"
 import { delayed, expectError } from "../test-utils/async.js"
 
-import { createWebSocketClient } from "@lionweb/delta-protocol-impl/dist/web-socket/client.js"
-import { createWebSocketServer, wsLocalhostUrl } from "@lionweb/delta-protocol-impl/dist/web-socket/server.js"
+import { createWebSocketClient, createWebSocketServer, wsLocalhostUrl } from "@lionweb/delta-protocol-impl"
 import { noOpProcedure } from "@lionweb/delta-protocol-impl/dist/utils/procedure.js"
 import {
     asLowLevelClientLogger,

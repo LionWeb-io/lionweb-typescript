@@ -18,9 +18,7 @@
 import { expect } from "chai"
 
 import { LionWebId } from "@lionweb/json"
-import { LionWebClient } from "@lionweb/delta-protocol-impl/dist/client/client-impl.js"
-import { LionWebRepository } from "@lionweb/delta-protocol-impl/dist/repository/repository-impl.js"
-import { wsLocalhostUrl } from "@lionweb/delta-protocol-impl/dist/web-socket/server.js"
+import { LionWebClient, LionWebRepository, wsLocalhostUrl } from "@lionweb/delta-protocol-impl"
 import { Geometry, ShapesBase } from "../gen/Shapes.g.js"
 import { delayed } from "../test-utils/async.js"
 import { nextPort } from "../test-utils/port.js"
