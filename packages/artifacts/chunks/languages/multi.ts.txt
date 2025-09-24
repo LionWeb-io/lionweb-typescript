@@ -8,7 +8,7 @@
  */
 
 import {DynamicNode} from "@lionweb/core";
-import {Library} from "./library.js";
+import {Library} from "./library.g.js";
 
 
 export type Container = DynamicNode & {

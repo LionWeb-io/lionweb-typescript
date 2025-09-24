@@ -74,7 +74,7 @@
     * Provide factory getter and `setFeatureValue` that knows about moving children between parents in writable part.
 
 * Issues:
-  * [Update top-level `README.md` to also document release process](https://github.com/LionWeb-io/lionweb-typescript/issues/152)
+  * &#10003; [Update top-level `README.md` to also document release process](https://github.com/LionWeb-io/lionweb-typescript/issues/152)
 
 
 ## Way of working

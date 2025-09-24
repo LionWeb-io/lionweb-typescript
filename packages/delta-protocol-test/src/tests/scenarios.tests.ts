@@ -17,11 +17,13 @@
 
 import { expect } from "chai"
 
-import { SignOnRequest, SignOnResponse } from "@lionweb/delta-protocol-impl"
-import { LionWebClient } from "@lionweb/delta-protocol-impl/dist/client/client-impl.js"
-import { LionWebRepository } from "@lionweb/delta-protocol-impl/dist/repository/repository-impl.js"
-import { wsLocalhostUrl } from "@lionweb/delta-protocol-impl/dist/web-socket/server.js"
-import { TestLanguageBase } from "@lionweb/class-core-test/dist/gen/TestLanguage.g.js"
+import {
+    LionWebClient,
+    LionWebRepository,
+    SignOnRequest,
+    SignOnResponse,
+    wsLocalhostUrl
+} from "@lionweb/delta-protocol-impl"
 import {
     ClientDidNotApplyEventFromOwnCommand,
     ClientReceivedMessage,
@@ -32,6 +34,7 @@ import {
     semanticLogItemsToConsole
 } from "@lionweb/delta-protocol-impl/dist/semantic-logging.js"
 import { colorSchemeExplanationString } from "@lionweb/delta-protocol-impl/dist/utils/ansi.js"
+import { TestLanguageBase } from "@lionweb/class-core-test/dist/gen/TestLanguage.g.js"
 import { delayed } from "../test-utils/async.js"
 import { nextPort } from "../test-utils/port.js"
 

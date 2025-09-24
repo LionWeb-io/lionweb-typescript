@@ -3,6 +3,8 @@
 0.7.0
 
 * Move `dependenciesThroughDirectInheritanceOf` and `verboseDependencies` functions from `class-core-generator` to `utilities` package, and expose it.
+* Rename `tsTypesForLanguage` &rarr; `tsTypeDefsForLanguage`.
+  (This is a breaking change, but that function's hardly used anyway, and it's trivial to detect and fix.)
 
 
 ## 0.6.12

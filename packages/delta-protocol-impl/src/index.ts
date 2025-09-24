@@ -21,6 +21,8 @@ export * from "./payload/query-types.js"
 
 export { LionWebClient } from "./client/client-impl.js"
 export type { LionWebClientParameters } from "./client/client-impl.js"
+export { eventToDeltaTranslator } from "./client/event-to-delta.js"
+export type { EventToDeltaTranslator } from "./client/event-to-delta.js"
 
 export { LionWebRepository } from "./repository/repository-impl.js"
 export type { LionWebRepositoryParameters } from "./repository/repository-impl.js"

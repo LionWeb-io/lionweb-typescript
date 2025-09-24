@@ -15,6 +15,8 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import { LowLevelClientLogger } from "../web-socket/client-log-types.js"
+
 
 export type TextualLogger = (message: string, error?: boolean) => void
 
@@ -63,4 +65,15 @@ export const timedConsoleLogger = (unit: "ns" | "µs" | "ms" | "s"): TextualLogg
         (isError ? console.error : console.log)(`{${((process.hrtime.bigint() - start)/divider).toLocaleString()}${unit}} ${message}`)
     }
 }
+
+
+/**
+ * @return a {@link LowLevelClientLogger low-level client logger implementation} that just logs the {@link TextualLogItem}s using the given {@link TextualLogger}.
+ */
+export const asLowLevelClientLogger = <TMessageForClient, TMessageForServer>(textualLogger: TextualLogger): LowLevelClientLogger<TMessageForClient, TMessageForServer> =>
+    (logItem) => {
+        if ("message" in logItem) {
+            textualLogger(logItem.message, logItem.error)
+        }
+    }
 

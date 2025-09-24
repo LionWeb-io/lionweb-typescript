@@ -17,11 +17,9 @@
 
 import { expect } from "chai"
 
-import { PartitionAddedEvent, SignOnResponse } from "@lionweb/delta-protocol-impl"
-import { LionWebClient } from "@lionweb/delta-protocol-impl/dist/client/client-impl.js"
-import { wsLocalhostUrl } from "@lionweb/delta-protocol-impl/dist/web-socket/server.js"
-import { nextPort } from "../test-utils/port.js"
+import { LionWebClient, PartitionAddedEvent, SignOnResponse, wsLocalhostUrl } from "@lionweb/delta-protocol-impl"
 import { TestLanguageBase } from "@lionweb/class-core-test/dist/gen/TestLanguage.g.js"
+import { nextPort } from "../test-utils/port.js"
 import { mockLowLevelClientInstantiator } from "../test-utils/mock-low-level-client.js"
 
 

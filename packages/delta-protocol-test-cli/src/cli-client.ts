@@ -27,13 +27,14 @@ import {
     QueryMessage,
     wsLocalhostUrl
 } from "@lionweb/delta-protocol-impl"
+import { semanticConsoleLogger, semanticLogItemStorer } from "@lionweb/delta-protocol-impl/dist/semantic-logging.js"
+import { clientInfo, genericError } from "@lionweb/delta-protocol-impl/dist/utils/ansi.js"
+import { combine } from "@lionweb/delta-protocol-impl/dist/utils/procedure.js"
+import { LowLevelClientLogItem } from "@lionweb/delta-protocol-impl/dist/web-socket/client-log-types.js"
 import { writeJsonAsFile } from "@lionweb/utilities"
 import { runAsApp, tryParseInteger } from "./common.js"
 import { recognizedTasks, taskExecutor } from "./tasks.js"
-import { clientInfo, genericError } from "@lionweb/delta-protocol-impl/dist/utils/ansi.js"
-import { combine } from "@lionweb/delta-protocol-impl/dist/utils/procedure.js"
 import { TestLanguageBase } from "./gen/TestLanguage.g.js"
-import { semanticConsoleLogger, semanticLogItemStorer } from "@lionweb/delta-protocol-impl/dist/semantic-logging.js"
 
 const testLanguageBase = TestLanguageBase.INSTANCE
 const languageBases = [testLanguageBase]
@@ -93,7 +94,7 @@ await runAsApp(async () => {
     const url = wsLocalhostUrl(port)
 
     const [storingLogger, semanticLogItems] = semanticLogItemStorer()
-    const protocolMessages: unknown[] = []
+    const logItems: LowLevelClientLogItem<unknown, unknown>[] = []
 
     const lionWebClient = await LionWebClient.create({
         clientId,
@@ -103,10 +104,8 @@ await runAsApp(async () => {
         lowLevelClientInstantiator: async (lowLevelClientParameters) =>
             await createWebSocketClient<(Event | QueryMessage), (Command | QueryMessage)>(
                 lowLevelClientParameters,
-                {
-                    messageLogger: (message) => {
-                        protocolMessages.push(message)
-                    }
+                (logItem) => {
+                    logItems.push(logItem)
                 }
             )
     })
@@ -126,7 +125,7 @@ await runAsApp(async () => {
     }
 
     if (protocolLogPathIndex > -1) {
-        writeJsonAsFile(argv[protocolLogPathIndex].substring(protocolLogOptionPrefix.length), protocolMessages)
+        writeJsonAsFile(argv[protocolLogPathIndex].substring(protocolLogOptionPrefix.length), logItems)
     }
 
     return () => {

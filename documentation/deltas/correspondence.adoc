@@ -45,7 +45,7 @@
 |  &cross;                                            | —        | ErrorEvent                                            | 6.6.7.3  | &cross;
 |===
 
-If a delta corresponding to an event exists, it'll have an identifier of the format `<technical name of event>Delta` except when the technical already has postfix `Event`, in which case that postifx gets replaced with `Event`.
+If a delta corresponding to an event exists, it'll have an identifier of the format `<technical name of event>Delta` except when the technical already has postfix `Event`, in which case that postfix gets replaced with `Event`.
 
 |===
 | verbalization    | TS API call — singular                                                             | TS API call — plural

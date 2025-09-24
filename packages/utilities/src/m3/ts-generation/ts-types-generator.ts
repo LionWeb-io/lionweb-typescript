@@ -1,12 +1,9 @@
 import {
     allFeaturesOf,
     Annotation,
-    builtinClassifiers,
-    builtinPrimitives,
     Classifier,
     Concept,
     conceptsOf,
-    DataType,
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
     DynamicNode,
     Enumeration,
@@ -22,13 +19,14 @@ import {
     nameSorted,
     PrimitiveType,
     Property,
-    SingleRef,
     unresolved
 } from "@lionweb/core"
 import { indent } from "@lionweb/textgen-utils"
 import { groupBy, mapValues, uniquesAmong } from "@lionweb/ts-utils"
 import { asString, Template, when } from "littoral-templates"
 import { Field, tsFromTypeDef, TypeDefModifier } from "./type-def.js"
+import { tsTypeFor, usesINamedDirectly } from "./common.js"
+
 
 const fieldForFeature = (feature: Feature) => {
     if (feature instanceof Link) {
@@ -44,84 +42,67 @@ const fieldForFeature = (feature: Feature) => {
     }
 }
 
-const fieldForLink = ({ name, type, optional, multiple }: Link): Field => ({
-    name,
-    optional: optional && !multiple,
-    type: `${type === unresolved ? `unknown` : type.name}${multiple ? `[]` : ``}`
-})
 
-const tsTypeFor = (dataType: SingleRef<DataType>): string => {
-    if (dataType instanceof PrimitiveType) {
-        switch (dataType) {
-            case builtinPrimitives.booleanDataType:
-                return `boolean`
-            case builtinPrimitives.stringDataType:
-                return `string`
-            case builtinPrimitives.integerDataType:
-                return `number`
-            case builtinPrimitives.jsonDataType:
-                return `unknown`
-            default:
-                return `string`
-        }
-    }
-    if (dataType instanceof Enumeration) {
-        return dataType.name
-    }
-    return `unknown /* [ERROR] can't compute a TS type for this data type: ${dataType} */`
-}
+const fieldForLink = ({name, type, optional, multiple}: Link): Field =>
+    ({
+        name,
+        optional: optional && !multiple,
+        type: `${type === unresolved ? `unknown` : type.name}${multiple ? `[]` : ``}`
+    })
 
-const fieldForProperty = ({ name, type, optional }: Property): Field => ({
-    name,
-    optional,
-    type: tsTypeFor(type)
-})
 
-const isINamed = (entity: LanguageEntity): boolean => entity === builtinClassifiers.inamed
+const fieldForProperty = ({name, type, optional}: Property): Field =>
+    ({
+        name,
+        optional,
+        type: tsTypeFor(type)
+    })
 
-const usesINamedDirectly = (entity: LanguageEntity): boolean => {
-    if (entity instanceof Annotation) {
-        return entity.implements.some(isINamed)
-    }
-    if (entity instanceof Concept) {
-        return entity.implements.some(isINamed)
-    }
-    if (entity instanceof Interface) {
-        return entity.extends.some(isINamed)
-    }
-    return false
-}
 
-const typeForEnumeration = (enumeration: Enumeration): Template => [
-    `enum ${enumeration.name} {`,
-    indent(enumeration.literals.map(nameOf).join(`, `)),
-    `}`,
-    ``
-]
+const typeForEnumeration = (enumeration: Enumeration): Template =>
+    [
+        `enum ${enumeration.name} {`,
+        indent(enumeration.literals.map(nameOf).join(`, `)),
+        `}`,
+        ``
+    ]
 
-const typeForPrimitiveType = (primitiveType: PrimitiveType): Template => [`export type ${primitiveType.name} = ${tsTypeFor(primitiveType)};`, ``]
+
+const typeForPrimitiveType = (datatype: PrimitiveType): Template =>
+    [
+        `export type ${datatype.name} = ${tsTypeFor(datatype)};`,
+        ``
+    ]
+
 
 export enum GenerationOptions {
     assumeSealed
 }
 
+
 /**
  * @return string generated TypeScript source code that contains type definitions that match the given {@link Language language}
  *  in combination with using the {@link DynamicNode} base type and corresponding facades.
  */
-export const tsTypesForLanguage = (language: Language, ...generationOptions: GenerationOptions[]) => {
+export const tsTypeDefsForLanguage = (language: Language, ...generationOptions: GenerationOptions[]) => {
+
     const fieldsForClassifier = (classifier: Classifier) => {
-        const map = mapValues<Feature[], [Feature, Field][]>(groupBy(allFeaturesOf(classifier), nameOf), features =>
-            features.map(feature => [feature, fieldForFeature(feature)])
+        const map = mapValues<Feature[], [Feature, Field][]>(
+            groupBy(allFeaturesOf(classifier), nameOf),
+            (features) => features.map((feature) => ([feature, fieldForFeature(feature)]))
         )
+        // ensure that features with duplicate names get a postfix indicating the classifier they originate from:
         Object.values(map)
-            .filter(fieldsWithOrigin => fieldsWithOrigin.length > 1)
-            .forEach(fieldsWithOrigin => {
+            .filter((fieldsWithOrigin) => fieldsWithOrigin.length > 1)
+            .forEach((fieldsWithOrigin) => {
                 fieldsWithOrigin.forEach(([feature, field]) => {
                     field.name = `${field.name}_${feature.parent!.name}`
                 })
             })
-        return Object.values(map).flatMap(fieldsWithOrigin => fieldsWithOrigin.map(([_, field]) => field))
+        return Object.values(map)
+            .flatMap((fieldsWithOrigin) =>
+                fieldsWithOrigin.map(([_, field]) => field)
+            )
     }
 
     const typeForAnnotation = (annotation: Annotation) => {
@@ -137,11 +118,14 @@ export const tsTypesForLanguage = (language: Language, ...generationOptions: Gen
 
     const typeForConcept = (concept: Concept) => {
         const superTypes = inheritsDirectlyFrom(concept)
-        const subClassifiers = concept.abstract
-            ? generationOptions.indexOf(GenerationOptions.assumeSealed) > -1
-                ? conceptsOf(language).filter(entity => entity.extends === concept)
-                : []
-            : [concept]
+        const subClassifiers =
+            concept.abstract
+                ? (
+                    generationOptions.indexOf(GenerationOptions.assumeSealed) > -1
+                        ? conceptsOf(language).filter((entity) => entity.extends === concept)
+                        : []
+                )
+                : [concept]
 
         return tsFromTypeDef({
             modifier: concept.abstract ? TypeDefModifier.abstract : TypeDefModifier.none,
@@ -176,18 +160,22 @@ export const tsTypesForLanguage = (language: Language, ...generationOptions: Gen
         if (entity instanceof PrimitiveType) {
             return typeForPrimitiveType(entity)
         }
-        return [`// unhandled language entity <${entity.constructor.name}>"${entity.name}"`, ``]
+        return [
+            `// unhandled language entity <${entity.constructor.name}>"${entity.name}"`,
+            ``
+        ]
     }
 
-    const dependenciesOfClassifier = (classifier: Classifier): Classifier[] => [
-        ...inheritsDirectlyFrom(classifier),
-        ...allFeaturesOf(classifier)
-            .filter(feature => feature instanceof Link)
-            .map(feature => feature as Link)
-            .flatMap(({type}) => type)
-            .filter(type => type instanceof Classifier)
-            .map(classifier => classifier as Classifier)
-    ]
+    const dependenciesOfClassifier = (classifier: Classifier): Classifier[] =>
+        [
+            ...inheritsDirectlyFrom(classifier),
+            ...allFeaturesOf(classifier)
+                .filter((feature) => feature instanceof Link)
+                .map((feature) => feature as Link)
+                .flatMap(({type}) => type)
+                .filter((type) => type instanceof Classifier)
+                .map((classifier) => classifier as Classifier)
+        ]
 
     const coreImports = [
         ...(language.entities.every(usesINamedDirectly) ? [] : [`DynamicNode`]),
@@ -195,36 +183,44 @@ export const tsTypesForLanguage = (language: Language, ...generationOptions: Gen
     ]
 
     const generatedDependencies = uniquesAmong(
-        language.entities.filter(entity => entity instanceof Classifier).flatMap(entity => dependenciesOfClassifier(entity as Classifier))
-    ).filter(classifier => classifier.language !== language && classifier.language !== lioncoreBuiltins)
-    const importsPerPackage = groupBy(generatedDependencies, ({ language }) => language.name)
+        language.entities
+            .filter((entity) => entity instanceof Classifier)
+            .flatMap((entity) => dependenciesOfClassifier(entity as Classifier))
+    )
+        .filter((classifier) => classifier.language !== language && classifier.language !== lioncoreBuiltins)
+    const importsPerPackage = groupBy(
+        generatedDependencies,
+        ({language}) => language.name
+    )
 
     const concreteClassifiers = language.entities.filter(isConcrete)
 
-    return asString([
-        `// Warning: this file is generated!`,
-        `// Modifying it by hand is useless at best, and sabotage at worst.`,
-        ``,
-        `/*
+    return asString(
+        [
+            `// Warning: this file is generated!`,
+            `// Modifying it by hand is useless at best, and sabotage at worst.`,
+            ``,
+            `/*
  * language's metadata:
  *     name:    ${language.name}
  *     version: ${language.version}
  */`,
-        ``,
-        when(coreImports.length > 0)(`import {${coreImports.join(`, `)}} from "@lionweb/core";`),
-        Object.keys(importsPerPackage)
-            .sort()
-            .map(
-                packageName => `import {${nameSorted(importsPerPackage[packageName]).map(nameOf).join(", ")}} from "./${packageName}.js";`
-            ),
-        ``,
-        ``,
-        nameSorted(language.entities).map(typeForLanguageEntity),
-        when(concreteClassifiers.length > 0)([
             ``,
-            `/** sum type of all types for all concrete classifiers of ${language.name}: */`,
-            `export type Nodes = ${nameSorted(concreteClassifiers).map(nameOf).join(` | `)};`,
-            ``
-        ])
-    ])
+            when(coreImports.length > 0)(`import {${coreImports.join(`, `)}} from "@lionweb/core";`),
+            Object.keys(importsPerPackage)
+                .sort()
+                .map((packageName) => `import {${nameSorted(importsPerPackage[packageName]).map(nameOf).join(", ")}} from "./${packageName}.g.js";`),
+            ``,
+            ``,
+            nameSorted(language.entities).map(typeForLanguageEntity),
+            when(concreteClassifiers.length > 0)([
+                ``,
+                `/** sum type of all types for all concrete classifiers of ${language.name}: */`,
+                `export type Nodes = ${nameSorted(concreteClassifiers).map(nameOf).join(` | `)};`,
+                ``
+            ])
+        ]
+    )
+
 }
+
