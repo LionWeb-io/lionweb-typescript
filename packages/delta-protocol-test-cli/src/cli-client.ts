@@ -57,7 +57,7 @@ if (trueArguments.length < 3) {
     console.log(
 `A Node.js-based app that implements a LionWeb delta protocol client.
 
-Parameters (${boldRedIf(true, "bold red")} are missing):
+Parameters (${genericError("bold red")} are missing):
   - ${boldRedIf(trueArguments.length < 1, `<port>: the port of the WebSocket where the LionWeb delta protocol repository is running on localhost`)}
   - ${boldRedIf(trueArguments.length < 2, `<clientID>: the ID that the client identifies itself with at the repository`)}
   - ${boldRedIf(trueArguments.length < 3, `<partitionConcept>: the name of a partition concept that gets instantiated as the model's primary partition — one of: ${Object.keys(partitionConcepts).join(", ")}`)}
@@ -73,11 +73,21 @@ const port = tryParseInteger(argv[2])
 const clientId = argv[3]
 const partitionConcept = argv[4]
 if (!(partitionConcept in partitionConcepts)) {
-    console.log(boldRedIf(true, `unknown partition concept specified: ${partitionConcept} — must be one of: ${Object.keys(partitionConcepts).join(", ")}`))
+    console.error(genericError(`unknown partition concept specified: ${partitionConcept} — must be one of: ${Object.keys(partitionConcepts).join(", ")}`))
     exit(2)
 }
-const tasks = argv[5]?.split(",") ?? []  // unknown tasks will be ignored
+const tasks = argv[5]?.split(",") ?? []
 console.log(clientInfo(`tasks provided: ${tasks.length === 0 ? "none" : tasks.join(", ")}`))
+const infoUnrecognizedTasks = tasks
+    .map((task, index) => task in recognizedTasks ? undefined : [task, index] as [string, number])
+    .filter((taskInfoOrUndefined) => taskInfoOrUndefined !== undefined)
+if (infoUnrecognizedTasks.length > 0) {
+    console.error(genericError(`unrecognized tasks encountered:`))
+    infoUnrecognizedTasks.forEach(([task, index]) => {
+            console.error(genericError(`\t${task} (#${index + 1})`))
+        })
+    exit(2)
+}
 
 await runAsApp(async () => {
     const url = wsLocalhostUrl(port)

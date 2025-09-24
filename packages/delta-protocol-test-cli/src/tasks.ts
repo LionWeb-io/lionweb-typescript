@@ -94,7 +94,7 @@ export const taskExecutor = (lionWebClient: LionWebClient, partition: INodeBase,
             ? partition as LinkTestConcept
             : lionWebClient.createNode(testLanguageBase.LinkTestConcept, id) as LinkTestConcept
 
-    return async (task: string, queryId: string) => {
+    return async (task: keyof typeof recognizedTasks, queryId: string) => {
         console.log(clientInfo(`client "${lionWebClient.clientId}" is executing task "${task}"`))
         switch (task) {
             case "SignOn":
@@ -212,6 +212,7 @@ export const taskExecutor = (lionWebClient: LionWebClient, partition: INodeBase,
                 return waitForReceivedMessages(1)
 
             default: {
+                // (shouldn't happen because of upfront validation of tasks)
                 console.log(genericWarning(`task "${task}" is unknown => ignored`))
                 return Promise.resolve()
             }
