@@ -27,6 +27,7 @@ import {
 } from "@lionweb/delta-protocol-impl"
 import { LionWebJsonChunk } from "@lionweb/json"
 import { mockLowLevelClientInstantiator } from "../../test-utils/mock-low-level-client.js"
+import { LowLevelClientLogItem } from "@lionweb/delta-protocol-impl/dist/web-socket/client-log-types.js"
 
 
 describe("mock low-level client", async function() {
@@ -75,7 +76,7 @@ describe("mock low-level client", async function() {
     })
 
     it("responds to a command for which it has a response configured", async function() {
-        const messages: unknown[] = []
+        const logItems: LowLevelClientLogItem<unknown, unknown>[] = []
         const partitionAddedEvent: PartitionAddedEvent = {
             messageKind: "PartitionAdded",
             newPartition: emptySerializationChunk,
@@ -93,10 +94,8 @@ describe("mock low-level client", async function() {
                 "command-1": partitionAddedEvent
             },
             {},
-            {
-                messageLogger: (message) => {
-                    messages.push(message)
-                }
+            (logItem) => {
+                logItems.push(logItem)
             }
         )(dummyLowLevelClientParametersWith(
             (message) => {
@@ -109,32 +108,36 @@ describe("mock low-level client", async function() {
             newPartition: emptySerializationChunk,
             protocolMessages: []
         } as AddPartitionCommand)
-        expect(messages).to.deep.equal([
+        expect(logItems).to.deep.equal([
             {
-                "messageKind": "AddPartition",
-                "commandId": "command-1",
-                "newPartition": {
-                    "serializationFormatVersion": "2023.1",
-                    "languages": [],
-                    "nodes": []
-                },
-                "protocolMessages": []
+                sentToServer: {
+                    "messageKind": "AddPartition",
+                    "commandId": "command-1",
+                    "newPartition": {
+                        "serializationFormatVersion": "2023.1",
+                        "languages": [],
+                        "nodes": []
+                    },
+                    "protocolMessages": []
+                }
             },
             {
-                "messageKind": "PartitionAdded",
-                "newPartition": {
-                    "serializationFormatVersion": "2023.1",
-                    "languages": [],
-                    "nodes": []
-                },
-                "sequenceNumber": 0,
-                "originCommands": [
-                    {
-                        "participationId": "participation-1",
-                        "commandId": "command-1"
-                    }
-                ],
-                "protocolMessages": []
+                receivedOnClient: {
+                    "messageKind": "PartitionAdded",
+                    "newPartition": {
+                        "serializationFormatVersion": "2023.1",
+                        "languages": [],
+                        "nodes": []
+                    },
+                    "sequenceNumber": 0,
+                    "originCommands": [
+                        {
+                            "participationId": "participation-1",
+                            "commandId": "command-1"
+                        }
+                    ],
+                    "protocolMessages": []
+                }
             }
         ])
     })

@@ -21,7 +21,8 @@ import { WebSocket } from "ws"
 
 import { wrappedAsPromise } from "../utils/async.js"
 import { tryParseJson } from "../utils/json.js"
-import { TextualLogger, textualLoggerFunctionFrom } from "../utils/textual-logging.js"
+import { TextualLogger } from "../utils/textual-logging.js"
+import { LowLevelClientLogger, noOpLogger } from "./client-log-types.js"
 
 
 /**
@@ -74,26 +75,24 @@ type ClientState = "connecting" | "connected" | "disconnected"
  */
 export const createWebSocketClient = async <TMessageForClient, TMessageToServer>(
     { url, clientId, receiveMessageOnClient }: LowLevelClientParameters<TMessageForClient>,
-    optionalLoggingParameters?: LowLevelClientLoggingParameters<TMessageForClient, TMessageToServer>
+    optionalLogger?: LowLevelClientLogger<TMessageForClient, TMessageToServer>
 ): Promise<LowLevelClient<TMessageToServer>> => {
     const webSocket = new WebSocket(url)
-    const logText = textualLoggerFunctionFrom(optionalLoggingParameters?.textualLogger)
-    logText(`client ${clientId} started`)
+    const log = optionalLogger ?? noOpLogger
+    log({ message: `client ${clientId} started` })
     let state: ClientState = "connecting"
-    const logMessage = optionalLoggingParameters?.messageLogger ?? ((_message: (TMessageForClient | TMessageToServer)) => {})
     return new Promise((resolveClientStart, rejectClientStart) => {
         const lowLevelWebSocketClient: LowLevelClient<TMessageToServer> = {
             sendMessage: (message) => {
                 if (state === "connected") {
-                    logMessage(message)
-                    const messageText = asMinimalJsonString(message)
-                    logText(`sending message to server: ${messageText}`)
+                    log({ sentToServer: message })
                     return wrappedAsPromise((callback) => {
-                        webSocket.send(messageText, callback)
+                        webSocket.send(asMinimalJsonString(message), callback)
                     })
                 } else {
-                    logText(`state=${state}`)
-                    return Promise.reject(new Error(`can't send message to server when client's state=${state}`))
+                    const messageText = `can't send message to server when client's state=${state}`
+                    log({ message: messageText })
+                    return Promise.reject(new Error(messageText))
                 }
             },
             disconnect: () => new Promise((resolveDisconnect, rejectDisconnect) => {
@@ -108,17 +107,16 @@ export const createWebSocketClient = async <TMessageForClient, TMessageToServer>
         webSocket
             .on("open", () => {
                 state = "connected"
-                logText(`connected to server`)
+                log({ message: `connected to server` })
                 resolveClientStart(lowLevelWebSocketClient)
             })
             .on("message", (messageText: string) => {
-                logText(`received message from server: ${messageText}`)
-                const message = tryParseJson(messageText, logText) as TMessageForClient
-                logMessage(message)
+                const message = tryParseJson(messageText, (message) => log({ message })) as TMessageForClient
+                log({ receivedOnClient: message })
                 receiveMessageOnClient(message)
             })
             .on("error", (error) => {
-                logText(`error occurred: ${error}`, true)
+                log({ message: `error occurred: ${error}`, error: true })
                 if (isConnectionRefusedError(firstRealError(error))) {
                     if (state === "connecting") {
                         rejectClientStart(new Error(`could not connect to WebSocket server at ${url}`))
@@ -130,7 +128,7 @@ export const createWebSocketClient = async <TMessageForClient, TMessageToServer>
             })
             .on("close", () => {
                 state = "disconnected"
-                logText(`disconnected from server`)
+                log({ message: `disconnected from server` })
             })
     })
 }

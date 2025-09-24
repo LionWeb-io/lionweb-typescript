@@ -28,7 +28,10 @@ import {
 import { LionWebClient } from "@lionweb/delta-protocol-impl/dist/client/client-impl.js"
 import { mockLowLevelClientInstantiator } from "../test-utils/mock-low-level-client.js"
 import { TestLanguageBase } from "@lionweb/class-core-test/dist/gen/TestLanguage.g.js"
-import { simpleConsoleLogger } from "@lionweb/delta-protocol-impl/dist/utils/textual-logging.js"
+import {
+    simpleConsoleLogger,
+    asLowLevelClientLogger
+} from "@lionweb/delta-protocol-impl/dist/utils/textual-logging.js"
 import { semanticConsoleLogger } from "@lionweb/delta-protocol-impl/dist/semantic-logging.js"
 
 
@@ -180,9 +183,7 @@ describe("implementation of LionWeb client", async function() {
                         protocolMessages: []
                     } as SignOffResponse
                 },
-                {
-                    textualLogger: simpleConsoleLogger
-                }
+                asLowLevelClientLogger(simpleConsoleLogger)
             ),
             semanticLogger: semanticConsoleLogger
         })

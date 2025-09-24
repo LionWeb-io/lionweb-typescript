@@ -21,7 +21,11 @@ import { delayed, expectError } from "../test-utils/async.js"
 import { createWebSocketClient } from "@lionweb/delta-protocol-impl/dist/web-socket/client.js"
 import { createWebSocketServer, wsLocalhostUrl } from "@lionweb/delta-protocol-impl/dist/web-socket/server.js"
 import { noOpProcedure } from "@lionweb/delta-protocol-impl/dist/utils/procedure.js"
-import { prefixedWith, timedConsoleLogger } from "@lionweb/delta-protocol-impl/dist/utils/textual-logging.js"
+import {
+    asLowLevelClientLogger,
+    prefixedWith,
+    timedConsoleLogger
+} from "@lionweb/delta-protocol-impl/dist/utils/textual-logging.js"
 import { nextPort } from "../test-utils/port.js"
 
 
@@ -53,14 +57,14 @@ describe("WebSocket-driven client and server (in isolation and abstraction)", as
                 prefixedWith(logger, "[server] ")
             ),
             createWebSocketClient<TestPayload, TestPayload>({
-                url: wsLocalhostUrl(port),
-                clientId,
-                receiveMessageOnClient: (message) => {
-                    messagesReceivedByClient.push(message)
-                }
-            }, {
-                textualLogger: prefixedWith(logger, `[client ${clientId}] `)
-            })
+                    url: wsLocalhostUrl(port),
+                    clientId,
+                    receiveMessageOnClient: (message) => {
+                        messagesReceivedByClient.push(message)
+                    }
+                },
+                asLowLevelClientLogger(prefixedWith(logger, `[client ${clientId}] `))
+            )
         ])
 
         const testPayload: TestPayload = { foo: "bar" }
