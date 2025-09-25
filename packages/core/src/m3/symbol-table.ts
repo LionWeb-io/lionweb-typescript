@@ -1,7 +1,7 @@
 import { LionWebJsonMetaPointer, LionWebKey } from "@lionweb/json"
 import { lazyMapGet } from "@lionweb/ts-utils"
-import { allFeaturesOf } from "./m3/functions.js"
-import { Classifier, Feature, Language, LanguageEntity } from "./m3/types.js"
+import { allFeaturesOf } from "./functions.js"
+import { Classifier, Feature, Language, LanguageEntity } from "./types.js"
 
 
 /**

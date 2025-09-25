@@ -30,6 +30,8 @@
 * Improve performance of `deserializeSerializationChunk` function ever so slightly.
 * Remove the unused (and non-performant) `NaiveSymbolTable` class.
 * Improve performance of `nodeSerializer` function a tiny bit.
+* Expose feature resolution, through the `featureResolversFor` function (and associated types), which performs proper checking.
+  This avoids undebuggable `undefined` dereferencing at runtime in `deltaDeserializer` and `eventToDeltaTranslator` functions.
 
 
 ## 0.6.12

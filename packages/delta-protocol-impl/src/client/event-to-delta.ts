@@ -54,8 +54,8 @@ import {
     ReferenceChangedDelta,
     ReferenceDeletedDelta
 } from "@lionweb/class-core"
-import { Containment, MemoisingSymbolTable, Property, Reference, unresolved } from "@lionweb/core"
-import { LionWebId, LionWebJsonChunk, LionWebJsonMetaPointer } from "@lionweb/json"
+import { featureResolversFor, unresolved } from "@lionweb/core"
+import { LionWebId, LionWebJsonChunk } from "@lionweb/json"
 import {
     AnnotationAddedEvent,
     AnnotationDeletedEvent,
@@ -102,15 +102,9 @@ export type EventToDeltaTranslator = (event: Event) => IDelta | undefined
  * with the given {@link IdMapping `idMapping`} and {@link Deserializer `deserialized` deserializer function}.
  */
 export const eventToDeltaTranslator = (languageBases: ILanguageBase[], idMapping: IdMapping, deserialized: Deserializer<INodeBase[]>): EventToDeltaTranslator => {
-    const symbolTable = new MemoisingSymbolTable(languageBases.map(({language}) => language))
     const deserializedNodeFrom = (chunk: LionWebJsonChunk): INodeBase =>
         deserialized(chunk)[0]
-    const resolvedPropertyFrom = (metaPointer: LionWebJsonMetaPointer, container: INodeBase): Property =>
-        symbolTable.featureMatching(container.classifier.metaPointer(), metaPointer) as Property
-    const resolvedContainmentFrom = (metaPointer: LionWebJsonMetaPointer, container: INodeBase): Containment =>
-        symbolTable.featureMatching(container.classifier.metaPointer(), metaPointer) as Containment
-    const resolvedReferenceFrom = (metaPointer: LionWebJsonMetaPointer, container: INodeBase): Reference =>
-        symbolTable.featureMatching(container.classifier.metaPointer(), metaPointer) as Reference
+    const { resolvedPropertyFrom, resolvedContainmentFrom, resolvedReferenceFrom } = featureResolversFor(languageBases.map(({language}) => language));
     const resolvedRefTo = (ref: LionWebId | null) =>
         ref === null ? unresolved : idMapping.fromId(ref)
 
@@ -134,82 +128,82 @@ export const eventToDeltaTranslator = (languageBases: ILanguageBase[], idMapping
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const {node, property, newValue} = event as PropertyAddedEvent<any>
                 const resolvedNode = idMapping.fromId(node)
-                const resolvedProperty = resolvedPropertyFrom(property, resolvedNode)
+                const resolvedProperty = resolvedPropertyFrom(property, resolvedNode.classifier)
                 return new PropertyAddedDelta(resolvedNode, resolvedProperty, newValue)
             }
             case "PropertyDeleted": { // § 6.6.3.2
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const {node, property, oldValue} = event as PropertyDeletedEvent<any>
                 const resolvedNode = idMapping.fromId(node)
-                const resolvedProperty = resolvedPropertyFrom(property, resolvedNode)
+                const resolvedProperty = resolvedPropertyFrom(property, resolvedNode.classifier)
                 return new PropertyDeletedDelta(resolvedNode, resolvedProperty, oldValue)
             }
             case "PropertyChanged": { // § 6.6.3.3
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const {node, property, newValue, oldValue} = event as PropertyChangedEvent<any>
                 const resolvedNode = idMapping.fromId(node)
-                const resolvedProperty = resolvedPropertyFrom(property, resolvedNode)
+                const resolvedProperty = resolvedPropertyFrom(property, resolvedNode.classifier)
                 return new PropertyChangedDelta(resolvedNode, resolvedProperty, oldValue, newValue)
             }
             case "ChildAdded": { // § 6.6.4.1
                 const {parent, newChild, containment, index} = event as ChildAddedEvent
                 const resolvedNode = idMapping.fromId(parent)
-                const resolvedContainment = resolvedContainmentFrom(containment, resolvedNode)
-                return new ChildAddedDelta(resolvedNode, resolvedContainment, index, deserialized(newChild)[0])
+                const resolvedContainment = resolvedContainmentFrom(containment, resolvedNode.classifier)
+                return new ChildAddedDelta(resolvedNode, resolvedContainment, index, deserializedNodeFrom(newChild))
             }
             case "ChildDeleted": { // § 6.6.4.2
                 const {parent, deletedChild, containment, index} = event as ChildDeletedEvent
                 const resolvedNode = idMapping.fromId(parent)
-                const resolvedContainment = resolvedContainmentFrom(containment, resolvedNode)
+                const resolvedContainment = resolvedContainmentFrom(containment, resolvedNode.classifier)
                 const resolvedDeletedChild = idMapping.fromId(deletedChild)
                 return new ChildDeletedDelta(resolvedNode, resolvedContainment, index, resolvedDeletedChild)
             }
             case "ChildReplaced": { // § 6.6.4.3
                 const {newChild, replacedChild, parent, containment, index} = event as ChildReplacedEvent
                 const resolvedParent = idMapping.fromId(parent)
-                const resolvedContainment = resolvedContainmentFrom(containment, resolvedParent)
+                const resolvedContainment = resolvedContainmentFrom(containment, resolvedParent.classifier)
                 const resolvedReplacedChild = idMapping.fromId(replacedChild)
                 return new ChildReplacedDelta(resolvedParent, resolvedContainment, index, resolvedReplacedChild, deserialized(newChild)[0])
             }
             case "ChildMovedFromOtherContainment": { // § 6.6.4.4
                 const {newParent, newContainment, newIndex, movedChild, oldParent, oldContainment, oldIndex} = event as ChildMovedFromOtherContainmentEvent
                 const resolvedOldParent = idMapping.fromId(oldParent)
-                const resolvedOldContainment = resolvedContainmentFrom(oldContainment, resolvedOldParent)
+                const resolvedOldContainment = resolvedContainmentFrom(oldContainment, resolvedOldParent.classifier)
                 const resolvedNewParent = idMapping.fromId(newParent)
-                const resolvedNewContainment = resolvedContainmentFrom(newContainment, resolvedOldParent)
+                const resolvedNewContainment = resolvedContainmentFrom(newContainment, resolvedOldParent.classifier)
                 const resolvedMovedChild = idMapping.fromId(movedChild)
                 return new ChildMovedFromOtherContainmentDelta(resolvedOldParent, resolvedOldContainment, oldIndex, resolvedNewParent, resolvedNewContainment, newIndex, resolvedMovedChild)
             }
             case "ChildMovedFromOtherContainmentInSameParent": { // § 6.6.4.5
                 const {parent, oldContainment, oldIndex, newContainment, newIndex, movedChild} = event as ChildMovedFromOtherContainmentInSameParentEvent
                 const resolvedParent = idMapping.fromId(parent)
-                const resolvedOldContainment = resolvedContainmentFrom(oldContainment, resolvedParent)
-                const resolvedNewContainment = resolvedContainmentFrom(newContainment, resolvedParent)
+                const resolvedOldContainment = resolvedContainmentFrom(oldContainment, resolvedParent.classifier)
+                const resolvedNewContainment = resolvedContainmentFrom(newContainment, resolvedParent.classifier)
                 const resolvedMovedChild = idMapping.fromId(movedChild)
                 return new ChildMovedFromOtherContainmentInSameParentDelta(resolvedParent, resolvedOldContainment, oldIndex, resolvedMovedChild, resolvedNewContainment, newIndex)
             }
             case "ChildMovedInSameContainment": { // § 6.6.4.6
                 const {parent, containment, oldIndex, newIndex, movedChild} = event as ChildMovedInSameContainmentEvent
                 const resolvedParent = idMapping.fromId(parent)
-                const resolvedContainment = resolvedContainmentFrom(containment, resolvedParent)
+                const resolvedContainment = resolvedContainmentFrom(containment, resolvedParent.classifier)
                 const resolvedMovedChild = idMapping.fromId(movedChild)
                 return new ChildMovedInSameContainmentDelta(resolvedParent, resolvedContainment, oldIndex, newIndex, resolvedMovedChild)
             }
             case "ChildMovedAndReplacedFromOtherContainment": { // § 6.6.4.7
                 const {newParent, newContainment, newIndex, movedChild, oldParent, oldContainment, oldIndex, replacedChild} = event as ChildMovedAndReplacedFromOtherContainmentEvent
                 const resolvedNewParent = idMapping.fromId(newParent)
-                const resolvedNewContainment = resolvedContainmentFrom(newContainment, resolvedNewParent)
+                const resolvedNewContainment = resolvedContainmentFrom(newContainment, resolvedNewParent.classifier)
                 const resolvedMovedChild = idMapping.fromId(movedChild)
                 const resolvedOldParent = idMapping.fromId(oldParent)
-                const resolvedOldContainment = resolvedContainmentFrom(oldContainment, resolvedOldParent)
+                const resolvedOldContainment = resolvedContainmentFrom(oldContainment, resolvedOldParent.classifier)
                 const resolvedReplacedChild = idMapping.fromId(replacedChild)
                 return new ChildMovedAndReplacedFromOtherContainmentDelta(resolvedNewParent, resolvedNewContainment, newIndex, resolvedMovedChild, resolvedOldParent, resolvedOldContainment, oldIndex, resolvedReplacedChild)
             }
             case "ChildMovedAndReplacedFromOtherContainmentInSameParent": { // § 6.6.4.8
                 const {parent, oldContainment, oldIndex, newContainment, newIndex, movedChild, replacedChild} = event as ChildMovedAndReplacedFromOtherContainmentInSameParentEvent
                 const resolvedParent = idMapping.fromId(parent)
-                const resolvedOldContainment = resolvedContainmentFrom(oldContainment, resolvedParent)
-                const resolvedNewContainment = resolvedContainmentFrom(newContainment, resolvedParent)
+                const resolvedOldContainment = resolvedContainmentFrom(oldContainment, resolvedParent.classifier)
+                const resolvedNewContainment = resolvedContainmentFrom(newContainment, resolvedParent.classifier)
                 const resolvedMovedChild = idMapping.fromId(movedChild)
                 const resolvedReplacedChild = idMapping.fromId(replacedChild)
                 return new ChildMovedAndReplacedFromOtherContainmentInSameParentDelta(resolvedParent, resolvedOldContainment, oldIndex, resolvedNewContainment, newIndex, resolvedMovedChild, resolvedReplacedChild)
@@ -217,7 +211,7 @@ export const eventToDeltaTranslator = (languageBases: ILanguageBase[], idMapping
             case "ChildMovedAndReplacedInSameContainment": { // § 6.6.4.9
                 const {parent, containment, oldIndex, newIndex, movedChild, replacedChild} = event as ChildMovedAndReplacedInSameContainmentEvent
                 const resolvedParent = idMapping.fromId(parent)
-                const resolvedContainment = resolvedContainmentFrom(containment, resolvedParent)
+                const resolvedContainment = resolvedContainmentFrom(containment, resolvedParent.classifier)
                 const resolvedMovedChild = idMapping.fromId(movedChild)
                 const resolvedReplacedChild = idMapping.fromId(replacedChild)
                 return new ChildMovedAndReplacedInSameContainmentDelta(resolvedParent, resolvedContainment, oldIndex, newIndex, resolvedMovedChild, resolvedReplacedChild)
@@ -270,21 +264,21 @@ export const eventToDeltaTranslator = (languageBases: ILanguageBase[], idMapping
             case "ReferenceAdded": { // § 6.6.6.1
                 const {parent, reference, index, newTarget} = event as ReferenceAddedEvent
                 const resolvedParent = idMapping.fromId(parent)
-                const resolvedReference = resolvedReferenceFrom(reference, resolvedParent)
+                const resolvedReference = resolvedReferenceFrom(reference, resolvedParent.classifier)
                 const resolvedNewTarget = resolvedRefTo(newTarget)
                 return new ReferenceAddedDelta(resolvedParent, resolvedReference, index, resolvedNewTarget)
             }
             case "ReferenceDeleted": { // § 6.6.6.2
                 const {parent, reference, index, deletedTarget} = event as ReferenceDeletedEvent
                 const resolvedParent = idMapping.fromId(parent)
-                const resolvedReference = resolvedReferenceFrom(reference, resolvedParent)
+                const resolvedReference = resolvedReferenceFrom(reference, resolvedParent.classifier)
                 const resolvedDeletedTarget = resolvedRefTo(deletedTarget)
                 return new ReferenceDeletedDelta(resolvedParent, resolvedReference, index, resolvedDeletedTarget)
             }
             case "ReferenceChanged": { // § 6.6.6.3
                 const {parent, reference, index, oldTarget, newTarget} = event as ReferenceChangedEvent
                 const resolvedParent = idMapping.fromId(parent)
-                const resolvedReference = resolvedReferenceFrom(reference, resolvedParent)
+                const resolvedReference = resolvedReferenceFrom(reference, resolvedParent.classifier)
                 const resolvedOldTarget = resolvedRefTo(oldTarget)
                 const resolvedNewTarget = resolvedRefTo(newTarget)
                 return new ReferenceChangedDelta(resolvedParent, resolvedReference, index, resolvedNewTarget, resolvedOldTarget)
@@ -292,42 +286,42 @@ export const eventToDeltaTranslator = (languageBases: ILanguageBase[], idMapping
             case "EntryMovedFromOtherReference": { // § 6.6.6.4
                 const {newParent, newReference, newIndex, oldParent, oldReference, oldIndex, movedTarget} = event as EntryMovedFromOtherReferenceEvent
                 const resolvedNewParent = idMapping.fromId(newParent)
-                const resolvedNewReference = resolvedReferenceFrom(newReference, resolvedNewParent)
+                const resolvedNewReference = resolvedReferenceFrom(newReference, resolvedNewParent.classifier)
                 const resolvedOldParent = idMapping.fromId(oldParent)
-                const resolvedOldReference = resolvedReferenceFrom(oldReference, resolvedOldParent)
+                const resolvedOldReference = resolvedReferenceFrom(oldReference, resolvedOldParent.classifier)
                 const resolvedMovedTarget = resolvedRefTo(movedTarget)
                 return new EntryMovedFromOtherReferenceDelta(resolvedOldParent, resolvedOldReference, oldIndex, resolvedNewParent, resolvedNewReference, newIndex, resolvedMovedTarget)
             }
             case "EntryMovedFromOtherReferenceInSameParent": { // § 6.6.6.5
                 const {parent, oldReference, oldIndex, newReference, newIndex, movedTarget} = event as EntryMovedFromOtherReferenceInSameParentEvent
                 const resolvedParent = idMapping.fromId(parent)
-                const resolvedOldReference = resolvedReferenceFrom(oldReference, resolvedParent)
-                const resolvedNewReference = resolvedReferenceFrom(newReference, resolvedParent)
+                const resolvedOldReference = resolvedReferenceFrom(oldReference, resolvedParent.classifier)
+                const resolvedNewReference = resolvedReferenceFrom(newReference, resolvedParent.classifier)
                 const resolvedMovedTarget = resolvedRefTo(movedTarget)
                 return new EntryMovedFromOtherReferenceInSameParentDelta(resolvedParent, resolvedOldReference, oldIndex, resolvedNewReference, newIndex, resolvedMovedTarget)
             }
             case "EntryMovedInSameReference": { // § 6.6.6.6
                 const {parent, reference, oldIndex, newIndex, movedTarget} = event as EntryMovedInSameReferenceEvent
                 const resolvedParent = idMapping.fromId(parent)
-                const resolvedReference = resolvedReferenceFrom(reference, resolvedParent)
+                const resolvedReference = resolvedReferenceFrom(reference, resolvedParent.classifier)
                 const resolvedMovedTarget = resolvedRefTo(movedTarget)
                 return new EntryMovedInSameReferenceDelta(resolvedParent, resolvedReference, oldIndex, newIndex, resolvedMovedTarget)
             }
             case "EntryMovedAndReplacedFromOtherReference": { // § 6.6.6.7
                 const {newParent, newReference, newIndex, movedTarget, oldParent, oldReference, oldIndex, replacedTarget} = event as EntryMovedAndReplacedFromOtherReferenceEvent
                 const resolvedNewParent = idMapping.fromId(newParent)
-                const resolvedNewReference = resolvedReferenceFrom(newReference, resolvedNewParent)
+                const resolvedNewReference = resolvedReferenceFrom(newReference, resolvedNewParent.classifier)
                 const resolvedMovedTarget = resolvedRefTo(movedTarget)
                 const resolvedOldParent = idMapping.fromId(oldParent)
-                const resolvedOldReference = resolvedReferenceFrom(oldReference, resolvedOldParent)
+                const resolvedOldReference = resolvedReferenceFrom(oldReference, resolvedOldParent.classifier)
                 const resolvedReplacedTarget = resolvedRefTo(replacedTarget)
                 return new EntryMovedAndReplacedFromOtherReferenceDelta(resolvedNewParent, resolvedNewReference, newIndex, resolvedMovedTarget, resolvedOldParent, resolvedOldReference, oldIndex, resolvedReplacedTarget)
             }
             case "EntryMovedAndReplacedFromOtherReferenceInSameParent": { // § 6.6.6.8
                 const {parent, oldReference, oldIndex, newReference, newIndex, movedTarget, replacedTarget} = event as EntryMovedAndReplacedFromOtherReferenceInSameParentEvent
                 const resolvedParent = idMapping.fromId(parent)
-                const resolvedOldReference = resolvedReferenceFrom(oldReference, resolvedParent)
-                const resolvedNewReference = resolvedReferenceFrom(newReference, resolvedParent)
+                const resolvedOldReference = resolvedReferenceFrom(oldReference, resolvedParent.classifier)
+                const resolvedNewReference = resolvedReferenceFrom(newReference, resolvedParent.classifier)
                 const resolvedMovedTarget = resolvedRefTo(movedTarget)
                 const resolvedReplacedTarget= resolvedRefTo(replacedTarget)
                 return new EntryMovedAndReplacedFromOtherReferenceInSameParentDelta(resolvedParent, resolvedOldReference, oldIndex, resolvedNewReference, newIndex, resolvedMovedTarget, resolvedReplacedTarget)
@@ -335,7 +329,7 @@ export const eventToDeltaTranslator = (languageBases: ILanguageBase[], idMapping
             case "EntryMovedAndReplacedInSameReference": { // § 6.6.6.9
                 const {parent, reference, oldIndex, newIndex, movedTarget, replacedTarget} = event as EntryMovedAndReplacedInSameReferenceEvent
                 const resolvedParent = idMapping.fromId(parent)
-                const resolvedReference = resolvedReferenceFrom(reference, resolvedParent)
+                const resolvedReference = resolvedReferenceFrom(reference, resolvedParent.classifier)
                 const resolvedMovedTarget = resolvedRefTo(movedTarget)
                 const resolvedReplacedTarget = resolvedRefTo(replacedTarget)
                 return new EntryMovedAndReplacedInSameReferenceDelta(resolvedParent, resolvedReference, oldIndex, newIndex, resolvedMovedTarget, resolvedReplacedTarget)

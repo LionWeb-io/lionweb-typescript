@@ -66,7 +66,8 @@ import { IDelta } from "./base.js"
  * If an {@link IdMapping} is provided, the {@link INodeBase nodes} relevant for the delta are looked up from that;
  * otherwise, the delta is applied directly to (object-)referenced nodes.
  *
- * This is an internal function, solely meant to DRY the delta application with and without lookup in
+ * This is an internal function, solely meant to DRY the delta application
+ * with and without lookup in an {@link IdMapping ID mapping object}.
  */
 const deltaApplier = (idMapping?: IdMapping, updatablePartitions?: () => INodeBase[]) =>
     (delta: IDelta): void => {

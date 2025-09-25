@@ -9,9 +9,9 @@ import { byIdMap, groupBy, keepDefineds } from "@lionweb/ts-utils"
 import { Writer } from "./writing.js"
 import { defaultSimplisticHandler, SimplisticHandler } from "./handler.js"
 import { BuiltinPropertyValueDeserializer } from "./m3/builtins.js"
+import { MemoisingSymbolTable } from "./m3/symbol-table.js"
 import { Classifier, Containment, Enumeration, Language, PrimitiveType, Property, Reference } from "./m3/types.js"
 import { unresolved } from "./references.js"
-import { MemoisingSymbolTable } from "./symbol-table.js"
 import { Node } from "./types.js"
 
 /**
