@@ -95,20 +95,27 @@ import {
  * Type def. for a function that translates {@link Event events} to their corresponding {@link IDelta deltas},
  * or {@code undefined} in case no equivalent delta exists for a given event.
  */
-export type EventToDeltaTranslator = (event: Event) => IDelta | undefined
+export type EventToDeltaTranslator = (event: Event, idMapping: IdMapping) => IDelta | undefined
 
 /**
  * @return a {@link EventToDeltaTranslator} for the languages given as {@link ILanguageBase language bases},
  * with the given {@link IdMapping `idMapping`} and {@link Deserializer `deserialized` deserializer function}.
  */
-export const eventToDeltaTranslator = (languageBases: ILanguageBase[], idMapping: IdMapping, deserialized: Deserializer<INodeBase[]>): EventToDeltaTranslator => {
-    const deserializedNodeFrom = (chunk: LionWebJsonChunk): INodeBase =>
-        deserialized(chunk)[0]
-    const { resolvedPropertyFrom, resolvedContainmentFrom, resolvedReferenceFrom } = featureResolversFor(languageBases.map(({language}) => language));
-    const resolvedRefTo = (ref: LionWebId | null) =>
-        ref === null ? unresolved : idMapping.fromId(ref)
+export const eventToDeltaTranslator = (languageBases: ILanguageBase[], deserialized: Deserializer<INodeBase[]>): EventToDeltaTranslator => {
 
-    const eventAsDelta = (event: Event): IDelta | undefined => {
+    const eventAsDelta = (event: Event, idMapping: IdMapping): IDelta | undefined => {
+
+        const deserializedNodeFrom = (chunk: LionWebJsonChunk): INodeBase => {
+            const nodes = deserialized(chunk, undefined, idMapping)    // (deserializer should take care of installing delta receiver)
+            if (nodes.length !== 1) {
+                throw new Error(`expected exactly 1 root node in deserialization of chunk in event, but got ${nodes.length}`)
+            }
+            return nodes[0]
+        }
+        const { resolvedPropertyFrom, resolvedContainmentFrom, resolvedReferenceFrom } = featureResolversFor(languageBases.map(({language}) => language));
+        const resolvedRefTo = (ref: LionWebId | null) =>
+            ref === null ? unresolved : idMapping.fromId(ref)
+
         switch (event.messageKind) {
 
             // in order of the specification (§ 6.6):
@@ -163,7 +170,7 @@ export const eventToDeltaTranslator = (languageBases: ILanguageBase[], idMapping
                 const resolvedParent = idMapping.fromId(parent)
                 const resolvedContainment = resolvedContainmentFrom(containment, resolvedParent.classifier)
                 const resolvedReplacedChild = idMapping.fromId(replacedChild)
-                return new ChildReplacedDelta(resolvedParent, resolvedContainment, index, resolvedReplacedChild, deserialized(newChild)[0])
+                return new ChildReplacedDelta(resolvedParent, resolvedContainment, index, resolvedReplacedChild, deserializedNodeFrom(newChild))
             }
             case "ChildMovedFromOtherContainment": { // § 6.6.4.4
                 const { newParent, newContainment, newIndex, movedChild, oldParent, oldContainment, oldIndex } = event as ChildMovedFromOtherContainmentEvent
@@ -219,7 +226,7 @@ export const eventToDeltaTranslator = (languageBases: ILanguageBase[], idMapping
             case "AnnotationAdded": { // § 6.6.5.1
                 const { parent, index, newAnnotation } = event as AnnotationAddedEvent
                 const resolvedParent = idMapping.fromId(parent)
-                return new AnnotationAddedDelta(resolvedParent, index, deserialized(newAnnotation)[0])
+                return new AnnotationAddedDelta(resolvedParent, index, deserializedNodeFrom(newAnnotation))
             }
             case "AnnotationDeleted": { // § 6.6.5.2
                 const { parent, index, deletedAnnotation } = event as AnnotationDeletedEvent
@@ -231,7 +238,7 @@ export const eventToDeltaTranslator = (languageBases: ILanguageBase[], idMapping
                 const { newAnnotation, replacedAnnotation, parent, index } = event as AnnotationReplacedEvent
                 const resolvedParent = idMapping.fromId(parent)
                 const resolvedReplacedAnnotation = idMapping.fromId(replacedAnnotation)
-                return new AnnotationReplacedDelta(resolvedParent, index, resolvedReplacedAnnotation, deserialized(newAnnotation)[0])
+                return new AnnotationReplacedDelta(resolvedParent, index, resolvedReplacedAnnotation, deserializedNodeFrom(newAnnotation))
             }
             case "AnnotationMovedFromOtherParent": { // § 6.6.5.4
                 const { oldParent, oldIndex, newParent, newIndex, movedAnnotation } = event as AnnotationMovedFromOtherParentEvent
@@ -356,7 +363,7 @@ export const eventToDeltaTranslator = (languageBases: ILanguageBase[], idMapping
                 const { parts } = event as CompositeEvent
                 return new CompositeDelta(
                     parts
-                        .map(eventAsDelta)
+                        .map((part) => eventAsDelta(part, idMapping))
                         .filter((deltaOrUndefined) => deltaOrUndefined !== undefined) as IDelta[]
                 )
             }

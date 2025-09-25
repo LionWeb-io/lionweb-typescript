@@ -210,12 +210,12 @@ describe("WebSocket-driven client and repository including translation, without 
 
             const model = nodeBaseDeserializer(languageBases, commandSender)(testModelChunk)
             const idMapping = new IdMapping(byIdMap(model.flatMap(allNodesFrom)))
-            const eventAsDelta = eventToDeltaTranslator(languageBases, idMapping, nodeBaseDeserializer(languageBases, commandSender))
+            const eventAsDelta = eventToDeltaTranslator(languageBases, nodeBaseDeserializer(languageBases, commandSender))
             loading = false
 
             const receiveMessageOnClient = (event: Event) => {
                 if (event.originCommands.every(({ commandId }) => commandIds.indexOf(commandId) === -1)) {
-                    const delta = eventAsDelta(event)
+                    const delta = eventAsDelta(event, idMapping)
                     if (delta !== undefined) {
                         applyDelta(delta)
                     }

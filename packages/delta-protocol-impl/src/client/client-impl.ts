@@ -140,7 +140,7 @@ export class LionWebClient {
         const deserialized = nodeBaseDeserializer(languageBases, effectiveReceiveDelta)
         const model = serializationChunk === undefined ? [] : deserialized(serializationChunk)
         const idMapping = new IdMapping(LionWebClient.nodesByIdFrom(model))
-        const eventAsDelta = eventToDeltaTranslator(languageBases, idMapping, deserialized)
+        const eventAsDelta = eventToDeltaTranslator(languageBases, deserialized)
         loading = false
 
         const processEvent = (event: Event) => {
@@ -149,7 +149,7 @@ export class LionWebClient {
             // Note: we can't remove members from issuedCommandIds because there may be multiple events originating fom a single command.
             if (commandOriginatingFromSelf === undefined) {
                 try {
-                    const delta = eventAsDelta(event)
+                    const delta = eventAsDelta(event, idMapping)
                     if (delta !== undefined) {
                         try {
                             applyDelta(delta)
