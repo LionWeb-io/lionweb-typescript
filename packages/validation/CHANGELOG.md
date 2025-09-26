@@ -3,7 +3,6 @@
 ## 0.7.0
 
 * Refactor validation schema to enable generation ot TypeScript types with discriminator.
-* (Don't publish TypeScript sources to NPM.)
 
 
 ## 0.6.3

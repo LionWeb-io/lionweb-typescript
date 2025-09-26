@@ -33,6 +33,7 @@
     * Fix a bug where some features’ values are serialized multiple times.
 * Expose feature resolution, through the `featureResolversFor` function (and associated types), which performs proper checking.
   This avoids undebuggable `undefined` dereferencing at runtime in `deltaDeserializer` and `eventToDeltaTranslator` functions.
+* Package `src/` again (— i.e., don't ignore for NPM packaging.)
 
 
 ## 0.6.12
