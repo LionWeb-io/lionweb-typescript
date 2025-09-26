@@ -23,7 +23,7 @@ import { asString, indentWith, Template } from "littoral-templates"
 
 const indented = indentWith(`  `)(1)
 
-const block = (header: Template, elements: Template): Template =>
+const block = (header: Template, elements: Template[]): Template =>
     elements.length === 0 ? header : [`${header} {`, indented(elements), `}`]
 
 const withNewLine = (content: Template): Template => [content, ``]
