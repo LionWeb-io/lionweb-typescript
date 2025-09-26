@@ -33,7 +33,8 @@
     },
     "dependencies": {
         "@lionweb/json": "0.7.0-beta.15",
-        "@lionweb/ts-utils": "0.7.0-beta.15",
-        "@lionweb/json-utils": "0.7.0-beta.15"
+        "@lionweb/json-diff": "0.7.0-beta.15",
+        "@lionweb/json-utils": "0.7.0-beta.15",
+        "@lionweb/ts-utils": "0.7.0-beta.15"
     }
 }
