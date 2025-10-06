@@ -26,7 +26,7 @@ interface SymbolTable {
      * Looks up the {@link Feature}, as pointed to by the {@link LionWebJsonMetaPointer} given second,
      * as a feature of the {@link Classifier}, as pointed to by the {@link LionWebJsonMetaPointer} given first,
      * or {@code undefined} it it couldn't be found.
-     * <em>Note</em> that the {@code language} and {@code version} values of both {@link LionWebJsonMetaPointer}-typed arguments should coincide,
+     * *Note* that the {@code language} and {@code version} values of both {@link LionWebJsonMetaPointer}-typed arguments should coincide,
      * although this is typically not checked!
      */
     featureMatching(entityMetaPointer: LionWebJsonMetaPointer, featureMetaPointer: LionWebJsonMetaPointer): Feature | undefined
@@ -40,6 +40,12 @@ type EntityInfo = {
     featureKey2feature: { [featureKey: LionWebKey]: Feature }   // populated through memoisation
 }
 
+
+/**
+ * A {@link SymbolTable} implementation that *memoises* the items it has looked up.
+ * This helps with performance, because otherwise lookup might be linear in the (max.) number of languages,
+ * entities in a language, features in classifiers — taking inheritance into account.
+ */
 class MemoisingSymbolTable implements SymbolTable {
 
     private readonly languages: Language[]
@@ -94,7 +100,7 @@ class MemoisingSymbolTable implements SymbolTable {
     allFeaturesOfEntityMatching = (entityMetaPointer: LionWebJsonMetaPointer): Feature[] =>
         this.entityInfoMatching(entityMetaPointer)?.allFeatures ?? []
 
-    featureMatching(classifierMetaPointer: LionWebJsonMetaPointer, featureMetaPointer: LionWebJsonMetaPointer): Feature | undefined {
+    featureMatching = (classifierMetaPointer: LionWebJsonMetaPointer, featureMetaPointer: LionWebJsonMetaPointer): Feature | undefined => {
         const entityInfo = this.entityInfoMatching(classifierMetaPointer)
         if (entityInfo === undefined || !(entityInfo.entity instanceof Classifier)) {
             return undefined

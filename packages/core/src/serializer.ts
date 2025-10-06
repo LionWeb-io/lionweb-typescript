@@ -226,7 +226,7 @@ export const nodeSerializer = <NT extends Node>(reader: Reader<NT>, serializatio
 
 /**
  * @return a {@link LionWebJsonChunk} of the given model (i.e., an array of {@link Node nodes} - the first argument) to the LionWeb serialization JSON format.
- *  <em>Note:</em> this function will be deprecated and removed later — use {@link nodeSerializer} instead.
+ *  *Note:* this function will be deprecated and removed later — use {@link nodeSerializer} instead.
  */
 export const serializeNodes = <NT extends Node>(
     nodes: NT[],

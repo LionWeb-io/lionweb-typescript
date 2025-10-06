@@ -19,7 +19,7 @@ import { CompositeDelta, DeltaReceiver, IDelta } from "../index.js"
 
 
 /**
- * A <em>delta compositor</em> is used to <em>aggregate</em> deltas as {@link CompositeDelta composite deltas}.
+ * A *delta compositor* is used to *aggregate* deltas as {@link CompositeDelta composite deltas}.
  *
  * Usage:
  * ```typescript
