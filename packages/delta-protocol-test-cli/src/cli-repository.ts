@@ -17,11 +17,11 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { LionWebRepository } from "@lionweb/delta-protocol-impl"
+import { ansi, semanticConsoleLogger } from "@lionweb/delta-protocol-common"
+import { LionWebRepository } from "@lionweb/delta-protocol-repository-ws"
 import { argv, exit } from "process"
+
 import { runAsApp, tryParseInteger } from "./common.js"
-import { semanticConsoleLogger } from "@lionweb/delta-protocol-impl/dist/semantic-logging.js"
-import { repositoryInfo } from "@lionweb/delta-protocol-impl/dist/utils/ansi.js"
 
 if (argv.length < 3) {  // $ node dist/cli-repository.js <port>
     console.log(
@@ -43,7 +43,7 @@ await runAsApp(async () => {
         semanticLogger: semanticConsoleLogger
     })
 
-    console.log(repositoryInfo(`LionWeb delta protocol repository running on port ${port} - press Ctrl+C to terminate`))
+    console.log(ansi.repositoryInfo(`LionWeb delta protocol repository running on port ${port} - press Ctrl+C to terminate`))
 
     return () => {
         return lionWebRepository.shutdown()

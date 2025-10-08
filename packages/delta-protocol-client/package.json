@@ -1,0 +1,37 @@
+{
+    "name": "@lionweb/delta-protocol-client",
+    "version": "0.7.0-beta.21",
+    "description": "Part of the implementation of a delta protocol client not tied to a specific message transport protocol",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "typings": "dist/index.d.ts",
+    "type": "module",
+    "license": "Apache-2.0",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/LionWeb-io/lionweb-typescript.git"
+    },
+    "bugs": {
+        "url": "https://github.com/LionWeb-io/lionweb-typescript/issues"
+    },
+    "scripts": {
+        "clean": "npx rimraf dist node_modules",
+        "build": "tsc",
+        "lint": "eslint src",
+        "prep:pre-release": "npm run clean && npm install && npm run build",
+        "prerelease-alpha": "npm run prep:pre-release",
+        "release-alpha": "npm publish --tag alpha",
+        "prerelease-beta": "npm run prep:pre-release",
+        "release-beta": "npm publish --tag beta",
+        "prerelease": "npm run prep:pre-release",
+        "release": "npm publish"
+    },
+    "dependencies": {
+        "@lionweb/class-core": "0.7.0-beta.21",
+        "@lionweb/core": "0.7.0-beta.21",
+        "@lionweb/delta-protocol-common": "0.7.0-beta.21",
+        "@lionweb/delta-protocol-client": "0.7.0-beta.21",
+        "@lionweb/json": "0.7.0-beta.21",
+        "@lionweb/ts-utils": "0.7.0-beta.21"
+    }
+}

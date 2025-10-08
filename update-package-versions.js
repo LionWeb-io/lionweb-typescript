@@ -39,7 +39,7 @@ const replaceVersionsIn = (deps, doNotWarnOnUnlisted) => {
                     }
                 } else {
                     if (!doNotWarnOnUnlisted) {
-                        console.log(`   encountered unlisted external dep: ${dep} @ ${currentVersion}`)
+                        console.log(`   encountered unlisted external dep -> "${dep}": "${currentVersion}"`)
                     }
                 }
             }

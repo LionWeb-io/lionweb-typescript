@@ -15,13 +15,12 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import {
-    Command,
-    Event,
     LowLevelClientInstantiator,
+    LowLevelClientLogger,
     LowLevelClientParameters,
-    QueryMessage
-} from "@lionweb/delta-protocol-impl"
-import { LowLevelClientLogger, noOpLogger } from "@lionweb/delta-protocol-impl/dist/web-socket/client-log-types.js"
+    noOpLowLevelClientLogger
+} from "@lionweb/delta-protocol-client"
+import { Command, Event, QueryMessage } from "@lionweb/delta-protocol-common"
 
 /**
  * @return a {@link LowLevelClientInstantiator} instance that can be passed to {@link LionWebClient}`.createNode(...)`,
@@ -36,7 +35,7 @@ export const mockLowLevelClientInstantiator = (
     optionalClientLogger?: LowLevelClientLogger<Event | QueryMessage, Command | QueryMessage>
 ): LowLevelClientInstantiator<Event | QueryMessage, Command | QueryMessage> => {
     return ({ receiveMessageOnClient }: LowLevelClientParameters<(Event | QueryMessage)>) => {
-        const log = optionalClientLogger ?? noOpLogger
+        const log = optionalClientLogger ?? noOpLowLevelClientLogger
         let connected = true
         return Promise.resolve({
             sendMessage: (message: Command | QueryMessage) => {

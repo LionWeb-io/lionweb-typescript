@@ -17,24 +17,20 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { argv, exit } from "process"
 import { Concept } from "@lionweb/core"
-import {
-    Command,
-    createWebSocketClient,
-    Event,
-    LionWebClient,
-    QueryMessage,
-    wsLocalhostUrl
-} from "@lionweb/delta-protocol-impl"
-import { semanticConsoleLogger, semanticLogItemStorer } from "@lionweb/delta-protocol-impl/dist/semantic-logging.js"
-import { clientInfo, genericError } from "@lionweb/delta-protocol-impl/dist/utils/ansi.js"
-import { combine } from "@lionweb/delta-protocol-impl/dist/utils/procedure.js"
-import { LowLevelClientLogItem } from "@lionweb/delta-protocol-impl/dist/web-socket/client-log-types.js"
+import { LionWebClient, LowLevelClientLogItem } from "@lionweb/delta-protocol-client"
+import { ansi, combine, semanticConsoleLogger, semanticLogItemStorer } from "@lionweb/delta-protocol-common"
+import { createWSLowLevelClient } from "@lionweb/delta-protocol-low-level-client-ws"
+import { wsLocalhostUrl } from "@lionweb/delta-protocol-repository-ws"
 import { writeJsonAsFile } from "@lionweb/utilities"
+import { argv, exit } from "process"
+
 import { runAsApp, tryParseInteger } from "./common.js"
 import { recognizedTasks, taskExecutor } from "./tasks.js"
 import { TestLanguageBase } from "./gen/TestLanguage.g.js"
+
+const { clientInfo, genericError } = ansi
+
 
 const testLanguageBase = TestLanguageBase.INSTANCE
 const languageBases = [testLanguageBase]
@@ -102,7 +98,7 @@ await runAsApp(async () => {
         languageBases,
         semanticLogger: combine(semanticConsoleLogger, storingLogger),
         lowLevelClientInstantiator: async (lowLevelClientParameters) =>
-            await createWebSocketClient<(Event | QueryMessage), (Command | QueryMessage)>(
+            await createWSLowLevelClient(
                 lowLevelClientParameters,
                 (logItem) => {
                     logItems.push(logItem)

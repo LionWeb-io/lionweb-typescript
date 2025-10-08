@@ -15,17 +15,15 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import { noOpProcedure, prefixedWith, timedConsoleLogger } from "@lionweb/delta-protocol-common"
+import { createWSLowLevelClient } from "@lionweb/delta-protocol-low-level-client-ws"
+import { createWebSocketServer, wsLocalhostUrl } from "@lionweb/delta-protocol-repository-ws"
+
 import { expect } from "chai"
 import { delayed, expectError } from "../test-utils/async.js"
 
-import { createWebSocketClient, createWebSocketServer, wsLocalhostUrl } from "@lionweb/delta-protocol-impl"
-import { noOpProcedure } from "@lionweb/delta-protocol-impl/dist/utils/procedure.js"
-import {
-    asLowLevelClientLogger,
-    prefixedWith,
-    timedConsoleLogger
-} from "@lionweb/delta-protocol-impl/dist/utils/textual-logging.js"
 import { nextPort } from "../test-utils/port.js"
+import { asLowLevelClientLogger } from "../test-utils/logging.js"
 
 
 /**
@@ -55,7 +53,7 @@ describe("WebSocket-driven client and server (in isolation and abstraction)", as
                 },
                 prefixedWith(logger, "[server] ")
             ),
-            createWebSocketClient<TestPayload, TestPayload>({
+            createWSLowLevelClient<TestPayload, TestPayload>({
                     url: wsLocalhostUrl(port),
                     clientId,
                     receiveMessageOnClient: (message) => {
@@ -82,7 +80,7 @@ describe("WebSocket-driven client and server (in isolation and abstraction)", as
         const url = wsLocalhostUrl(nextPort())  // (differs from already-started servers)
         return expectError(
             () =>
-                createWebSocketClient({ url, clientId: "client-A", receiveMessageOnClient: noOpProcedure }),
+                createWSLowLevelClient({ url, clientId: "client-A", receiveMessageOnClient: noOpProcedure }),
             `could not connect to WebSocket server at ${url}`
         )
     })
@@ -91,7 +89,7 @@ describe("WebSocket-driven client and server (in isolation and abstraction)", as
         const port = nextPort()
 
         const [client, server] = await Promise.all([
-            createWebSocketClient({ url: wsLocalhostUrl(port), clientId: "client-A", receiveMessageOnClient: noOpProcedure }),
+            createWSLowLevelClient({ url: wsLocalhostUrl(port), clientId: "client-A", receiveMessageOnClient: noOpProcedure }),
             createWebSocketServer(port, (_) => undefined, noOpProcedure)
         ])
 
@@ -105,7 +103,7 @@ describe("WebSocket-driven client and server (in isolation and abstraction)", as
         const port = nextPort()
 
         const [client, server] = await Promise.all([
-            createWebSocketClient({ url: wsLocalhostUrl(port), clientId: "client-A", receiveMessageOnClient: noOpProcedure }),
+            createWSLowLevelClient({ url: wsLocalhostUrl(port), clientId: "client-A", receiveMessageOnClient: noOpProcedure }),
             createWebSocketServer(port, (_) => undefined, noOpProcedure)
         ])
 

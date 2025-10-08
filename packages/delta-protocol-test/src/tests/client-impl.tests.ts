@@ -19,17 +19,18 @@ import { throws } from "assert"
 import { expect } from "chai"
 import { expectError } from "../test-utils/async.js"
 
+import { LionWebClient } from "@lionweb/delta-protocol-client"
 import {
-    LionWebClient,
     PartitionAddedEvent,
     PartitionDeletedEvent,
+    semanticConsoleLogger,
     SignOffResponse,
-    SignOnResponse
-} from "@lionweb/delta-protocol-impl"
-import { semanticConsoleLogger } from "@lionweb/delta-protocol-impl/dist/semantic-logging.js"
-import { asLowLevelClientLogger, simpleConsoleLogger } from "@lionweb/delta-protocol-impl/dist/utils/textual-logging.js"
+    SignOnResponse,
+    simpleConsoleLogger
+} from "@lionweb/delta-protocol-common"
 import { TestLanguageBase } from "@lionweb/class-core-test/dist/gen/TestLanguage.g.js"
 import { mockLowLevelClientInstantiator } from "../test-utils/mock-low-level-client.js"
+import { asLowLevelClientLogger } from "../test-utils/logging.js"
 
 
 describe("implementation of LionWeb client", async function() {

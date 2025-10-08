@@ -24,9 +24,8 @@ import {
     IDelta,
     PartitionAddedDelta
 } from "@lionweb/class-core"
-import { LionWebClient, SignOnResponse } from "@lionweb/delta-protocol-impl"
-import { Message } from "@lionweb/delta-protocol-impl/dist/payload/common.js"
-import { semanticConsoleLogger } from "@lionweb/delta-protocol-impl/dist/semantic-logging.js"
+import { LionWebClient } from "@lionweb/delta-protocol-client"
+import { Message, semanticConsoleLogger, SignOnResponse } from "@lionweb/delta-protocol-common"
 import { TestLanguageBase } from "@lionweb/class-core-test/dist/gen/TestLanguage.g.js"
 
 

@@ -17,29 +17,28 @@
 
 import { expect } from "chai"
 
+
+import { LionWebClient } from "@lionweb/delta-protocol-client"
 import {
-    LionWebClient,
-    LionWebRepository,
-    SignOnRequest,
-    SignOnResponse,
-    wsLocalhostUrl
-} from "@lionweb/delta-protocol-impl"
-import {
+    ansi,
     ClientDidNotApplyEventFromOwnCommand,
     ClientReceivedMessage,
     ClientSentMessage,
     DeltaOccurredOnClient,
     ISemanticLogItem,
     RepositoryReceivedMessage,
-    semanticLogItemsToConsole
-} from "@lionweb/delta-protocol-impl/dist/semantic-logging.js"
-import { colorSchemeExplanationString } from "@lionweb/delta-protocol-impl/dist/utils/ansi.js"
+    semanticLogItemsToConsole,
+    SignOnRequest,
+    SignOnResponse
+} from "@lionweb/delta-protocol-common"
+import { LionWebRepository, wsLocalhostUrl } from "@lionweb/delta-protocol-repository-ws"
 import { TestLanguageBase } from "@lionweb/class-core-test/dist/gen/TestLanguage.g.js"
 import { delayed } from "../test-utils/async.js"
 import { nextPort } from "../test-utils/port.js"
+import { createWSLowLevelClient } from "@lionweb/delta-protocol-low-level-client-ws"
 
 
-describe(`scenarios (${colorSchemeExplanationString})`, async function() {
+describe(`scenarios (${ansi.colorSchemeExplanationString})`, async function() {
 
     /**
      * 1. Client signs on to repository with protocol version 2025.1 and client id `myClient`.
@@ -76,6 +75,7 @@ describe(`scenarios (${colorSchemeExplanationString})`, async function() {
             clientId,
             url: wsLocalhostUrl(port),
             languageBases: [testLanguageBase],
+            lowLevelClientInstantiator: createWSLowLevelClient,
             semanticLogger: log
         })
 

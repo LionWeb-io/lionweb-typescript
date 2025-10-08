@@ -17,7 +17,7 @@
 
 import { expect } from "chai"
 
-import { insertionIndex, priorityQueueAcceptor } from "@lionweb/delta-protocol-impl/dist/utils/priority-queue.js"
+import { insertionIndex, priorityQueueAcceptor } from "@lionweb/delta-protocol-client/dist/priority-queue.js"
 
 
 describe("insertionIndex", () => {

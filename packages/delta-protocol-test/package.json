@@ -22,12 +22,12 @@
         "test": "mocha --recursive dist/tests/"
     },
     "dependencies": {
-        "@lionweb/class-core": "0.7.0-beta.15",
-        "@lionweb/class-core-test": "0.7.0-dev.0",
-        "@lionweb/core": "0.7.0-beta.15",
-        "@lionweb/delta-protocol-impl": "0.7.0-beta.15",
-        "@lionweb/json": "0.7.0-beta.15",
-        "@lionweb/ts-utils": "0.7.0-beta.15"
+        "@lionweb/delta-protocol-client": "0.7.0-beta.21",
+        "@lionweb/delta-protocol-common": "0.7.0-beta.21",
+        "@lionweb/delta-protocol-low-level-client-ws": "0.7.0-beta.21",
+        "@lionweb/delta-protocol-repository-ws": "0.7.0-beta.21",
+        "@lionweb/delta-protocol-test-cli": "0.7.0-beta.21",
+        "@lionweb/ts-utils": "0.7.0-beta.21"
     },
     "devDependencies": {
         "@types/chai": "5.2.2",

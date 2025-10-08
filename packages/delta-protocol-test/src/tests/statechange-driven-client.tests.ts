@@ -28,29 +28,25 @@ import {
     SerializedDelta,
     serializeDelta
 } from "@lionweb/class-core"
+import { LowLevelClient } from "@lionweb/delta-protocol-client"
 import {
+    combine,
     Command,
-    createWebSocketClient,
-    createWebSocketServer,
+    deltaAsCommand,
     Event,
     eventToDeltaTranslator,
-    wsLocalhostUrl
-} from "@lionweb/delta-protocol-impl"
-import { byIdMap } from "@lionweb/ts-utils"
-
-import { LowLevelClient } from "@lionweb/delta-protocol-impl/dist/web-socket/client.js"
-import { combine } from "@lionweb/delta-protocol-impl/dist/utils/procedure.js"
-import {
-    asLowLevelClientLogger,
     prefixedWith,
     timedConsoleLogger
-} from "@lionweb/delta-protocol-impl/dist/utils/textual-logging.js"
-import { commandAsEvent } from "@lionweb/delta-protocol-impl/dist/repository/command-to-event.js"
-import { deltaAsCommand } from "@lionweb/delta-protocol-impl/dist/client/delta-to-command.js"
+} from "@lionweb/delta-protocol-common"
+import { createWSLowLevelClient } from "@lionweb/delta-protocol-low-level-client-ws"
+import { commandAsEvent, createWebSocketServer, wsLocalhostUrl } from "@lionweb/delta-protocol-repository-ws"
+import { byIdMap } from "@lionweb/ts-utils"
+
 import { Geometry, ShapesBase } from "../gen/Shapes.g.js"
 import { testModelChunk } from "../test-utils/test-model.js"
 import { delayed } from "../test-utils/async.js"
 import { nextPort } from "../test-utils/port.js"
+import { asLowLevelClientLogger } from "../test-utils/logging.js"
 
 
 const languageBases = [ShapesBase.INSTANCE]
@@ -114,7 +110,7 @@ describe("WebSocket-driven client and repository", async function() {
 
         const [ lowLevelServer, lowLevelClient ] = await Promise.all([  // (do in parallel)
             createWebSocketServer<void, Payload, void, Payload>(port, (_) => undefined, receiveMessageOnServer, repositoryLogger),
-            createWebSocketClient<Payload, Payload>({ url: wsLocalhostUrl(port), clientId, receiveMessageOnClient }, asLowLevelClientLogger(clientLogger))
+            createWSLowLevelClient<Payload, Payload>({ url: wsLocalhostUrl(port), clientId, receiveMessageOnClient }, asLowLevelClientLogger(clientLogger))
         ])
 
         let loading = true
@@ -222,7 +218,7 @@ describe("WebSocket-driven client and repository including translation, without 
                 }
             }
 
-            const lowLevelClient = await createWebSocketClient<Event, Command>({ url: wsLocalhostUrl(port), clientId, receiveMessageOnClient })
+            const lowLevelClient = await createWSLowLevelClient<Event, Command>({ url: wsLocalhostUrl(port), clientId, receiveMessageOnClient })
 
             return [lowLevelClient, model]
         }
