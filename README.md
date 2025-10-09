@@ -188,7 +188,7 @@ To keep the version numbers of the various packages under `packages/` aligned th
 You execute this script as follows from the repo's root:
 
 ```shell
-node update-package-versions.js
+./update-package-versions.js
 ```
 
 This reads the file [`packages/versions.json`](versions.json) and updates the `package.json` files of all *workspace packages* (as listed in the root-level `package.json`) under `packages/` according to it, as well as the main(/root-level) `package.json`.
