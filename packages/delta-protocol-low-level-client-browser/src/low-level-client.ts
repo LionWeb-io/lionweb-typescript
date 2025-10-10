@@ -21,7 +21,7 @@ import {
     LowLevelClientParameters,
     noOpLowLevelClientLogger
 } from "@lionweb/delta-protocol-client"
-import { tryParseJson, wrappedAsPromise } from "@lionweb/delta-protocol-common"
+import { tryParseJson } from "@lionweb/delta-protocol-common"
 import { asMinimalJsonString } from "@lionweb/ts-utils"
 
 
@@ -47,9 +47,8 @@ export const createBrowserLowLevelClient = async <TMessageForClient, TMessageToS
             sendMessage: (message) => {
                 if (state === "connected") {
                     log({ sentToServer: message })
-                    return wrappedAsPromise((_callback) => {
-                        webSocket.send(asMinimalJsonString(message))
-                    })
+                    webSocket.send(asMinimalJsonString(message))
+                    return Promise.resolve()
                 } else {
                     const messageText = `can't send message to server when client's state=${state}`
                     log({ message: messageText })
