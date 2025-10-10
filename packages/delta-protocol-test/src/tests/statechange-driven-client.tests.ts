@@ -35,18 +35,18 @@ import {
     deltaAsCommand,
     Event,
     eventToDeltaTranslator,
-    prefixedWith,
-    timedConsoleLogger
+    prefixedWith
 } from "@lionweb/delta-protocol-common"
 import { createWSLowLevelClient } from "@lionweb/delta-protocol-low-level-client-ws"
 import { commandAsEvent, createWebSocketServer, wsLocalhostUrl } from "@lionweb/delta-protocol-repository-ws"
 import { byIdMap } from "@lionweb/ts-utils"
 
 import { Geometry, ShapesBase } from "../gen/Shapes.g.js"
-import { testModelChunk } from "../test-utils/test-model.js"
 import { delayed } from "../test-utils/async.js"
-import { nextPort } from "../test-utils/port.js"
 import { asLowLevelClientLogger } from "../test-utils/logging.js"
+import { nextPort } from "../test-utils/port.js"
+import { testModelChunk } from "../test-utils/test-model.js"
+import { timedConsoleLogger } from "../test-utils/time.js"
 
 
 const languageBases = [ShapesBase.INSTANCE]

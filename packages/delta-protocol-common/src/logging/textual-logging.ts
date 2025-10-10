@@ -41,25 +41,3 @@ export const textualLoggerFunctionFrom = (optionalLogger?: TextualLogger): Textu
 export const prefixedWith = (logger: TextualLogger, prefix: string): TextualLogger =>
     (message, error) => logger(`${prefix}${message}`, error)
 
-
-const unit2divider: { [id: string]: bigint } = {
-    "ns": 1n,
-    "µs": 1000n,
-    "ms": 1000_000n,
-    "s": 1000_000_000n
-} as const
-
-/**
- * A {@link TextualLogger textual logger} that logs to the console, also showing the time elapsed since the creation of it.
- */
-export const timedConsoleLogger = (unit: "ns" | "µs" | "ms" | "s"): TextualLogger => {
-    if (!(unit in unit2divider)) {
-        throw new Error(`unknown time unit: "${unit}"`)
-    }
-    const divider = unit2divider[unit]
-    const start = process.hrtime.bigint()
-    return (message, isError) => {
-        (isError ? console.error : console.log)(`{${((process.hrtime.bigint() - start)/divider).toLocaleString()}${unit}} ${message}`)
-    }
-}
-

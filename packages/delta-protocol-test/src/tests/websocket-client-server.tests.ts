@@ -15,15 +15,16 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { noOpProcedure, prefixedWith, timedConsoleLogger } from "@lionweb/delta-protocol-common"
+import { noOpProcedure, prefixedWith } from "@lionweb/delta-protocol-common"
 import { createWSLowLevelClient } from "@lionweb/delta-protocol-low-level-client-ws"
 import { createWebSocketServer, wsLocalhostUrl } from "@lionweb/delta-protocol-repository-ws"
 
 import { expect } from "chai"
 import { delayed, expectError } from "../test-utils/async.js"
 
-import { nextPort } from "../test-utils/port.js"
 import { asLowLevelClientLogger } from "../test-utils/logging.js"
+import { nextPort } from "../test-utils/port.js"
+import { timedConsoleLogger } from "../test-utils/time.js"
 
 
 /**

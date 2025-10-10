@@ -15,6 +15,10 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import { TextualLogger } from "@lionweb/delta-protocol-common"
+import { hrtime } from "process"
+
+
 type StringNumberPair = [str: string, num: number]
 const unitAndNextDividers: StringNumberPair[] = [
     ["ms", 1000],
@@ -37,4 +41,26 @@ export const prettyPrintedMs = (ms: number) =>
         const nextNumber = (currentNum - ofCurrentUnit)/nextDivider
         return [`${ofCurrentUnit}${currentUnit}${str}`, nextNumber]
     }, ["", ms] as StringNumberPair)[0]
+
+
+const unit2divider: { [id: string]: bigint } = {
+    "ns": 1n,
+    "µs": 1000n,
+    "ms": 1000_000n,
+    "s": 1000_000_000n
+} as const
+
+/**
+ * A {@link TextualLogger textual logger} that logs to the console, also showing the time elapsed since the creation of it.
+ */
+export const timedConsoleLogger = (unit: keyof typeof unit2divider): TextualLogger => {
+    if (!(unit in unit2divider)) {
+        throw new Error(`unknown time unit: "${unit}"`)
+    }
+    const divider = unit2divider[unit]
+    const start = hrtime.bigint()
+    return (message, isError) => {
+        (isError ? console.error : console.log)(`{${((hrtime.bigint() - start)/divider).toLocaleString()}${unit}} ${message}`)
+    }
+}
 
