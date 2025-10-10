@@ -51,7 +51,7 @@ import {
     ReferenceDeletedDelta,
     serializeNodeBases
 } from "@lionweb/class-core"
-import { metaPointerFor, Node, SingleRef, unresolved } from "@lionweb/core"
+import { metaPointerFor, serializedRef } from "@lionweb/core"
 import {
     AddAnnotationCommand,
     AddChildCommand,
@@ -85,7 +85,7 @@ import {
     MoveEntryInSameReferenceCommand,
     ReplaceAnnotationCommand,
     ReplaceChildCommand
-} from "../payload/command-types.js"
+} from "../payload/index.js"
 
 
 /**
@@ -103,9 +103,6 @@ export const deltaAsCommand = (delta: IDelta, commandId: string): Command | unde
         protocolMessages: []
     })
 
-    const serializedRef = <NT extends Node>(ref: SingleRef<NT>): string | null =>
-        ref === unresolved ? null : ref.id
-
     // in order of the specification (§ 6.5):
 
     if (delta instanceof PartitionAddedDelta) {
@@ -119,8 +116,7 @@ export const deltaAsCommand = (delta: IDelta, commandId: string): Command | unde
         })
     }
     if (delta instanceof PropertyAddedDelta) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return completed<AddPropertyCommand<any>>("AddProperty", { // § 6.5.4.1
+        return completed<AddPropertyCommand<unknown>>("AddProperty", { // § 6.5.4.1
             node: delta.node.id,
             property: metaPointerFor(delta.property),
             newValue: delta.value
@@ -133,8 +129,7 @@ export const deltaAsCommand = (delta: IDelta, commandId: string): Command | unde
         })
     }
     if (delta instanceof PropertyChangedDelta) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return completed<ChangePropertyCommand<any>>("ChangeProperty", { // § 6.5.4.3
+        return completed<ChangePropertyCommand<unknown>>("ChangeProperty", { // § 6.5.4.3
             node: delta.node.id,
             property: metaPointerFor(delta.property),
             newValue: delta.newValue
@@ -365,7 +360,7 @@ export const deltaAsCommand = (delta: IDelta, commandId: string): Command | unde
     if (delta instanceof CompositeDelta) {
         return completed<CompositeCommand>("CompositeCommand", { // § 6.5.8.1
             parts: delta.parts
-                .map((part, index) => deltaAsCommand(part, `${commandId}-${index}`))  // TODO  inject ID generator!
+                .map((part, index) => deltaAsCommand(part, `${commandId}-${index}`))  // TODO  inject proper ID generator!
                 .filter((command) => command !== undefined) as Command[]
         })
     }

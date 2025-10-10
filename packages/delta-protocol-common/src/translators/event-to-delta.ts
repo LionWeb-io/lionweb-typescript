@@ -113,8 +113,8 @@ export const eventToDeltaTranslator = (languageBases: ILanguageBase[], deseriali
             return nodes[0]
         }
         const { resolvedPropertyFrom, resolvedContainmentFrom, resolvedReferenceFrom } = featureResolversFor(languageBases.map(({language}) => language));
-        const resolvedRefTo = (ref: LionWebId | null) =>
-            ref === null ? unresolved : idMapping.fromId(ref)
+        const resolvedRefTo = (ref: LionWebId | typeof unresolved) =>
+            ref === unresolved ? unresolved : idMapping.fromId(ref)
 
         switch (event.messageKind) {
 
@@ -132,22 +132,19 @@ export const eventToDeltaTranslator = (languageBases: ILanguageBase[], deseriali
                 return undefined
             }
             case "PropertyAdded": { // § 6.6.3.1
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const { node, property, newValue } = event as PropertyAddedEvent<any>
+                const { node, property, newValue } = event as PropertyAddedEvent<unknown>
                 const resolvedNode = idMapping.fromId(node)
                 const resolvedProperty = resolvedPropertyFrom(property, resolvedNode.classifier)
                 return new PropertyAddedDelta(resolvedNode, resolvedProperty, newValue)
             }
             case "PropertyDeleted": { // § 6.6.3.2
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const { node, property, oldValue } = event as PropertyDeletedEvent<any>
+                const { node, property, oldValue } = event as PropertyDeletedEvent<unknown>
                 const resolvedNode = idMapping.fromId(node)
                 const resolvedProperty = resolvedPropertyFrom(property, resolvedNode.classifier)
                 return new PropertyDeletedDelta(resolvedNode, resolvedProperty, oldValue)
             }
             case "PropertyChanged": { // § 6.6.3.3
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const { node, property, newValue, oldValue } = event as PropertyChangedEvent<any>
+                const { node, property, newValue, oldValue } = event as PropertyChangedEvent<unknown>
                 const resolvedNode = idMapping.fromId(node)
                 const resolvedProperty = resolvedPropertyFrom(property, resolvedNode.classifier)
                 return new PropertyChangedDelta(resolvedNode, resolvedProperty, oldValue, newValue)

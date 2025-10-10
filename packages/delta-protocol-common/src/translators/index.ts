@@ -16,6 +16,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 export { deltaAsCommand } from "./delta-to-command.js"
+export { deltaAsEvent } from "./delta-to-event.js"
 export { eventToDeltaTranslator } from "./event-to-delta.js"
 export type { EventToDeltaTranslator } from "./event-to-delta.js"
 

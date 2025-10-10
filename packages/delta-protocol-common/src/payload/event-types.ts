@@ -57,7 +57,7 @@ export interface PropertyAddedEvent<T> extends Event {
     messageKind: "PropertyAdded"
     node: LionWebId
     property: LionWebJsonMetaPointer
-    newValue: T
+    newValue: T // TODO  could replace with a sum types of the exact types we know (the serialization of) a property's value can have
 }
 
 /** § 6.6.3.2 */

@@ -152,10 +152,8 @@ export const commandAsEvent = (command: Command, participationId: string): Event
                 })
             }
             case "AddProperty": {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const {node, property, newValue} = command as AddPropertyCommand<any> // § 6.5.4.1
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                return completed<PropertyAddedEvent<any>>("PropertyAdded", { // § 6.6.3.1
+                const {node, property, newValue} = command as AddPropertyCommand<unknown> // § 6.5.4.1
+                return completed<PropertyAddedEvent<unknown>>("PropertyAdded", { // § 6.6.3.1
                     node,
                     property,
                     newValue
@@ -163,18 +161,15 @@ export const commandAsEvent = (command: Command, participationId: string): Event
             }
             case "DeleteProperty": {
                 const {node, property} = command as DeletePropertyCommand // § 6.5.4.2
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                return completed<PropertyDeletedEvent<any>>("PropertyDeleted", { // § 6.6.3.2
+                return completed<PropertyDeletedEvent<unknown>>("PropertyDeleted", { // § 6.6.3.2
                     node,
                     property,
                     oldValue: "???" // TODO  get from own model
                 })
             }
             case "ChangeProperty": {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const {node, property, newValue} = command as ChangePropertyCommand<any> // § 6.5.4.3
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                return completed<PropertyChangedEvent<any>>("PropertyChanged", { // § 6.6.3.3
+                const {node, property, newValue} = command as ChangePropertyCommand<unknown> // § 6.5.4.3
+                return completed<PropertyChangedEvent<unknown>>("PropertyChanged", { // § 6.6.3.3
                     node,
                     property,
                     newValue,

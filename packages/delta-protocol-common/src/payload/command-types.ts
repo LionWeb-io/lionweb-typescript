@@ -49,7 +49,7 @@ export interface AddPropertyCommand<T> extends Command {
     messageKind: "AddProperty"
     node: LionWebId
     property: LionWebJsonMetaPointer
-    newValue: T
+    newValue: T // TODO  could replace with a sum types of the exact types we know (the serialization of) a property's value can have
 }
 
 /** § 6.5.4.2 */

@@ -34,6 +34,7 @@
 * Expose feature resolution, through the `featureResolversFor` function (and associated types), which performs proper checking.
   This avoids undebuggable `undefined` dereferencing at runtime in `deltaDeserializer` and `eventToDeltaTranslator` functions.
 * Package `src/` again (— i.e., don't ignore for NPM packaging.)
+* Add `serializedRef` function that serializes a single reference target.
 
 
 ## 0.6.12
