@@ -20,10 +20,12 @@ import {
     applyDelta,
     combinedFactoryFor,
     DeltaReceiver,
+    Deserializer,
     IdMapping,
     ILanguageBase,
     INodeBase,
     nodeBaseDeserializer,
+    nodeBaseDeserializerWithIdMapping,
     NodeBaseFactory,
     PartitionAddedDelta,
     PartitionDeletedDelta,
@@ -102,6 +104,7 @@ export class LionWebClient {
         public model: INodeBase[],
         public readonly idMapping: IdMapping,
         public readonly createNode: NodeBaseFactory,
+        public readonly deserializer: Deserializer<INodeBase[]>,
         private readonly effectiveReceiveDelta: DeltaReceiver,
         private readonly lowLevelClient: LowLevelClient<Command | QueryMessage>
     ) {}
@@ -136,11 +139,11 @@ export class LionWebClient {
             }
         }
         const effectiveReceiveDelta = instantiateDeltaReceiverForwardingTo === undefined ? commandSender : instantiateDeltaReceiverForwardingTo(commandSender)
-
-        const deserialized = nodeBaseDeserializer(languageBases, effectiveReceiveDelta)
-        const model = serializationChunk === undefined ? [] : deserialized(serializationChunk)
-        const idMapping = new IdMapping(LionWebClient.nodesByIdFrom(model))
-        const eventAsDelta = eventToDeltaTranslator(languageBases, deserialized)
+        const { roots: model, idMapping } = serializationChunk === undefined
+            ? { roots: [], idMapping: new IdMapping({}) }
+            : nodeBaseDeserializerWithIdMapping(languageBases, effectiveReceiveDelta)(serializationChunk)
+        const deserializer = nodeBaseDeserializer(languageBases, effectiveReceiveDelta)
+        const eventAsDelta = eventToDeltaTranslator(languageBases, deserializer)
         loading = false
 
         const processEvent = (event: Event) => {
@@ -195,6 +198,7 @@ export class LionWebClient {
             model,
             idMapping,
             combinedFactoryFor(languageBases, effectiveReceiveDelta),
+            deserializer,
             effectiveReceiveDelta,
             lowLevelClient
         ) // Note: we need this `lionWebClient` constant non-inlined for write-access to lastReceivedSequenceNumber and queryResolveById.
@@ -203,7 +207,9 @@ export class LionWebClient {
 
     /**
      * Sets the model held by the client to the given model, discarding the previous one.
-     * No commands will be sent because of this action.
+     * **Note**:
+     *  - The model is assumed to be injected with `this.effectiveReceiveDelta` — e.g. using this.createNode(...) or this.deserialize(...)`!
+     *  - No commands will be sent because of this action.
      */
     setModel(newModel: INodeBase[]) {
         this.model = newModel
