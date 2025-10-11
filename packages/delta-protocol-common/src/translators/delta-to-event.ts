@@ -16,6 +16,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import {
+    allNodesFrom,
     AnnotationAddedDelta,
     AnnotationDeletedDelta,
     AnnotationMovedAndReplacedFromOtherParentDelta,
@@ -40,6 +41,7 @@ import {
     EntryMovedFromOtherReferenceInSameParentDelta,
     EntryMovedInSameReferenceDelta,
     IDelta,
+    INodeBase,
     NoOpDelta,
     PartitionAddedDelta,
     PartitionDeletedDelta,
@@ -51,7 +53,7 @@ import {
     ReferenceDeletedDelta,
     serializeNodeBases
 } from "@lionweb/class-core"
-import { metaPointerFor, serializedRef } from "@lionweb/core"
+import { idOf, metaPointerFor, serializedRef } from "@lionweb/core"
 import {
     AnnotationAddedEvent,
     AnnotationDeletedEvent,
@@ -103,6 +105,9 @@ export const deltaAsEvent = (delta: IDelta, lastUsedSequenceNumber: number): [ev
         protocolMessages: []
     })
 
+    const allIdsOfDescendantsFrom = (node: INodeBase) =>
+        allNodesFrom(node).slice(1).map(idOf)
+
     const translated = (delta: IDelta): Event => {
         if (delta instanceof PartitionAddedDelta) {
             return completed<PartitionAddedEvent>("PartitionAdded", { // § 6.6.1.1
@@ -150,7 +155,7 @@ export const deltaAsEvent = (delta: IDelta, lastUsedSequenceNumber: number): [ev
                 containment: metaPointerFor(delta.containment),
                 index: delta.index,
                 deletedChild: delta.deletedChild.id,
-                deletedDescendants: []  // FIXME  implement
+                deletedDescendants: allIdsOfDescendantsFrom(delta.deletedChild)
             })
         }
         if (delta instanceof ChildReplacedDelta) {
@@ -160,7 +165,7 @@ export const deltaAsEvent = (delta: IDelta, lastUsedSequenceNumber: number): [ev
                 containment: metaPointerFor(delta.containment),
                 index: delta.index,
                 replacedChild: delta.replacedChild.id,
-                replacedDescendants: []  // FIXME  implement
+                replacedDescendants: allIdsOfDescendantsFrom(delta.replacedChild)
             })
         }
         if (delta instanceof ChildMovedFromOtherContainmentDelta) {
@@ -203,7 +208,7 @@ export const deltaAsEvent = (delta: IDelta, lastUsedSequenceNumber: number): [ev
                 oldIndex: delta.oldIndex,
                 movedChild: delta.movedChild.id,
                 replacedChild: delta.replacedChild.id,
-                replacedDescendants: []  // FIXME  implement
+                replacedDescendants: allIdsOfDescendantsFrom(delta.replacedChild)
             })
         }
         if (delta instanceof ChildMovedAndReplacedFromOtherContainmentInSameParentDelta) {
@@ -214,7 +219,7 @@ export const deltaAsEvent = (delta: IDelta, lastUsedSequenceNumber: number): [ev
                 newContainment: metaPointerFor(delta.newContainment),
                 newIndex: delta.newIndex,
                 replacedChild: delta.replacedChild.id,
-                replacedDescendants: [],  // FIXME  implement
+                replacedDescendants: allIdsOfDescendantsFrom(delta.replacedChild),
                 movedChild: delta.movedChild.id
             })
         }
@@ -226,7 +231,7 @@ export const deltaAsEvent = (delta: IDelta, lastUsedSequenceNumber: number): [ev
                 newIndex: delta.newIndex,
                 movedChild: delta.movedChild.id,
                 replacedChild: delta.replacedChild.id,
-                replacedDescendants: []  // FIXME  implement
+                replacedDescendants: allIdsOfDescendantsFrom(delta.replacedChild)
             })
         }
         if (delta instanceof AnnotationAddedDelta) {
@@ -241,7 +246,7 @@ export const deltaAsEvent = (delta: IDelta, lastUsedSequenceNumber: number): [ev
                 parent: delta.parent.id,
                 deletedAnnotation: delta.deletedAnnotation.id,
                 index: delta.index,
-                deletedDescendants: []  // FIXME  implement
+                deletedDescendants: allIdsOfDescendantsFrom(delta.deletedAnnotation)
             })
         }
         if (delta instanceof AnnotationReplacedDelta) {
@@ -250,7 +255,7 @@ export const deltaAsEvent = (delta: IDelta, lastUsedSequenceNumber: number): [ev
                 parent: delta.parent.id,
                 index: delta.index,
                 replacedAnnotation: delta.replacedAnnotation.id,
-                replacedDescendants: []  // FIXME  implement
+                replacedDescendants: allIdsOfDescendantsFrom(delta.replacedAnnotation)
             })
         }
         if (delta instanceof AnnotationMovedFromOtherParentDelta) {
@@ -277,7 +282,7 @@ export const deltaAsEvent = (delta: IDelta, lastUsedSequenceNumber: number): [ev
                 newParent: delta.newParent.id,
                 newIndex: delta.newIndex,
                 replacedAnnotation: delta.replacedAnnotation.id,
-                replacedDescendants: [],    // FIXME  implement
+                replacedDescendants: allIdsOfDescendantsFrom(delta.replacedAnnotation),
                 movedAnnotation: delta.movedAnnotation.id
             })
         }
@@ -287,7 +292,7 @@ export const deltaAsEvent = (delta: IDelta, lastUsedSequenceNumber: number): [ev
                 oldIndex: delta.oldIndex,
                 newIndex: delta.newIndex,
                 replacedAnnotation: delta.replacedAnnotation.id,
-                replacedDescendants: [],    // FIXME  implement
+                replacedDescendants: allIdsOfDescendantsFrom(delta.replacedAnnotation),
                 movedAnnotation: delta.movedAnnotation.id
             })
         }
@@ -297,7 +302,7 @@ export const deltaAsEvent = (delta: IDelta, lastUsedSequenceNumber: number): [ev
                 reference: metaPointerFor(delta.reference),
                 index: delta.index,
                 newTarget: serializedRef(delta.newTarget),
-                newResolveInfo: null
+                newResolveInfo: null    // TODO  implement properly
             })
         }
         if (delta instanceof ReferenceDeletedDelta) {
@@ -306,7 +311,7 @@ export const deltaAsEvent = (delta: IDelta, lastUsedSequenceNumber: number): [ev
                 reference: metaPointerFor(delta.reference),
                 index: delta.index,
                 deletedTarget: serializedRef(delta.deletedTarget),
-                deletedResolveInfo: null
+                deletedResolveInfo: null    // TODO  implement properly
             })
         }
         if (delta instanceof ReferenceChangedDelta) {
@@ -315,9 +320,9 @@ export const deltaAsEvent = (delta: IDelta, lastUsedSequenceNumber: number): [ev
                 reference: metaPointerFor(delta.reference),
                 index: delta.index,
                 oldTarget: serializedRef(delta.oldTarget),
-                oldResolveInfo: null,
+                oldResolveInfo: null,    // TODO  implement properly
                 newTarget: serializedRef(delta.newTarget),
-                newResolveInfo: null
+                newResolveInfo: null    // TODO  implement properly
             })
         }
         if (delta instanceof EntryMovedFromOtherReferenceDelta) {
@@ -329,7 +334,7 @@ export const deltaAsEvent = (delta: IDelta, lastUsedSequenceNumber: number): [ev
                 oldReference: metaPointerFor(delta.oldReference),
                 oldIndex: delta.oldIndex,
                 movedTarget: serializedRef(delta.movedTarget),
-                movedResolveInfo: null
+                movedResolveInfo: null    // TODO  implement properly
             })
         }
         if (delta instanceof EntryMovedFromOtherReferenceInSameParentDelta) {
@@ -340,7 +345,7 @@ export const deltaAsEvent = (delta: IDelta, lastUsedSequenceNumber: number): [ev
                 oldReference: metaPointerFor(delta.oldReference),
                 oldIndex: delta.oldIndex,
                 movedTarget: serializedRef(delta.movedTarget),
-                movedResolveInfo: null
+                movedResolveInfo: null    // TODO  implement properly
             })
         }
         if (delta instanceof EntryMovedInSameReferenceDelta) {
@@ -350,7 +355,7 @@ export const deltaAsEvent = (delta: IDelta, lastUsedSequenceNumber: number): [ev
                 oldIndex: delta.oldIndex,
                 newIndex: delta.newIndex,
                 movedTarget: serializedRef(delta.movedTarget),
-                movedResolveInfo: null
+                movedResolveInfo: null    // TODO  implement properly
             })
         }
         if (delta instanceof EntryMovedAndReplacedFromOtherReferenceDelta) {
@@ -359,12 +364,12 @@ export const deltaAsEvent = (delta: IDelta, lastUsedSequenceNumber: number): [ev
                 newReference: metaPointerFor(delta.newReference),
                 newIndex: delta.newIndex,
                 replacedTarget: serializedRef(delta.replacedTarget),
-                replacedResolveInfo: null,
+                replacedResolveInfo: null,    // TODO  implement properly
                 oldParent: delta.oldParent.id,
                 oldReference: metaPointerFor(delta.oldReference),
                 oldIndex: delta.oldIndex,
                 movedTarget: serializedRef(delta.movedTarget),
-                movedResolveInfo: null
+                movedResolveInfo: null    // TODO  implement properly
             })
         }
         if (delta instanceof EntryMovedAndReplacedFromOtherReferenceInSameParentDelta) {
@@ -373,11 +378,11 @@ export const deltaAsEvent = (delta: IDelta, lastUsedSequenceNumber: number): [ev
                 newReference: metaPointerFor(delta.newReference),
                 newIndex: delta.newIndex,
                 replacedTarget: serializedRef(delta.replacedTarget),
-                replacedResolveInfo: null,
+                replacedResolveInfo: null,    // TODO  implement properly
                 oldReference: metaPointerFor(delta.oldReference),
                 oldIndex: delta.oldIndex,
                 movedTarget: serializedRef(delta.movedTarget),
-                movedResolveInfo: null
+                movedResolveInfo: null    // TODO  implement properly
             })
         }
         if (delta instanceof EntryMovedAndReplacedInSameReferenceDelta) {
@@ -386,10 +391,10 @@ export const deltaAsEvent = (delta: IDelta, lastUsedSequenceNumber: number): [ev
                 reference: metaPointerFor(delta.reference),
                 oldIndex: delta.oldIndex,
                 movedTarget: serializedRef(delta.movedTarget),
-                movedResolveInfo: null,
+                movedResolveInfo: null,    // TODO  implement properly
                 newIndex: delta.newIndex,
                 replacedTarget: serializedRef(delta.replacedTarget),
-                replacedResolveInfo: null
+                replacedResolveInfo: null    // TODO  implement properly
             })
         }
         if (delta instanceof CompositeDelta) {

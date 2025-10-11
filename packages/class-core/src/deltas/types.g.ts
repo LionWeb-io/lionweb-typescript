@@ -47,7 +47,7 @@ export class PropertyAddedDelta<T> implements IDelta {
     constructor(
         public readonly node: INodeBase,
         public readonly property: Property,
-        public readonly value: T // TODO  could replace with a sum types of the exact types we know (the serialization of) a property's value can have
+        public readonly value: T
     ) {
     }
 }
