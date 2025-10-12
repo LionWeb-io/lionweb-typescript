@@ -15,8 +15,8 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-export { deltaAsCommand } from "./delta-to-command.js"
-export { deltaAsEvent } from "./delta-to-event.js"
+export { deltaToCommandTranslator } from "./delta-to-command.js"
+export { deltaToEventTranslator } from "./delta-to-event.js"
 export { eventToDeltaTranslator } from "./event-to-delta.js"
 export type { EventToDeltaTranslator } from "./event-to-delta.js"
 

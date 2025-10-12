@@ -43,8 +43,8 @@ import {
     ClientReceivedMessage,
     ClientSentMessage,
     Command,
-    deltaAsCommand,
     DeltaOccurredOnClient,
+    deltaToCommandTranslator,
     Event,
     eventToDeltaTranslator,
     isEvent,
@@ -116,6 +116,8 @@ export class LionWebClient {
 
     static async create({clientId, url, languageBases, instantiateDeltaReceiverForwardingTo, serializationChunk, semanticLogger, lowLevelClientInstantiator}: LionWebClientParameters): Promise<LionWebClient> {
         const log = semanticLoggerFunctionFrom(semanticLogger)
+
+        const deltaAsCommand = deltaToCommandTranslator()
 
         let loading = true
         let commandNumber = 0

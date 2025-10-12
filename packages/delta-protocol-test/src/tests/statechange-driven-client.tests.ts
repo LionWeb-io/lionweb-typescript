@@ -32,7 +32,7 @@ import { LowLevelClient } from "@lionweb/delta-protocol-client"
 import {
     combine,
     Command,
-    deltaAsCommand,
+    deltaToCommandTranslator,
     Event,
     eventToDeltaTranslator,
     prefixedWith
@@ -189,6 +189,7 @@ describe("WebSocket-driven client and repository including translation, without 
         const lowLevelServer = createWebSocketServer<void, Command, void, Event>(port, (_) => undefined, receiveMessageOnServer)
 
         // create clients:
+        const deltaAsCommand = deltaToCommandTranslator()
         const createClient = async (clientId: string): Promise<[client: LowLevelClient<Command>, model: INodeBase[]]> => {
             let loading = true
             let commandNumber = 0

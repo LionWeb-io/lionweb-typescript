@@ -152,8 +152,8 @@ export const commandAsEvent = (command: Command, participationId: string): Event
                 })
             }
             case "AddProperty": {
-                const {node, property, newValue} = command as AddPropertyCommand<unknown> // § 6.5.4.1
-                return completed<PropertyAddedEvent<unknown>>("PropertyAdded", { // § 6.6.3.1
+                const {node, property, newValue} = command as AddPropertyCommand // § 6.5.4.1
+                return completed<PropertyAddedEvent>("PropertyAdded", { // § 6.6.3.1
                     node,
                     property,
                     newValue
@@ -161,15 +161,15 @@ export const commandAsEvent = (command: Command, participationId: string): Event
             }
             case "DeleteProperty": {
                 const {node, property} = command as DeletePropertyCommand // § 6.5.4.2
-                return completed<PropertyDeletedEvent<unknown>>("PropertyDeleted", { // § 6.6.3.2
+                return completed<PropertyDeletedEvent>("PropertyDeleted", { // § 6.6.3.2
                     node,
                     property,
                     oldValue: "???" // TODO  get from own model
                 })
             }
             case "ChangeProperty": {
-                const {node, property, newValue} = command as ChangePropertyCommand<unknown> // § 6.5.4.3
-                return completed<PropertyChangedEvent<unknown>>("PropertyChanged", { // § 6.6.3.3
+                const {node, property, newValue} = command as ChangePropertyCommand // § 6.5.4.3
+                return completed<PropertyChangedEvent>("PropertyChanged", { // § 6.6.3.3
                     node,
                     property,
                     newValue,

@@ -45,11 +45,11 @@ export interface ChangeClassifierCommand extends Command {
 }
 
 /** § 6.5.4.1 */
-export interface AddPropertyCommand<T> extends Command {
+export interface AddPropertyCommand extends Command {
     messageKind: "AddProperty"
     node: LionWebId
     property: LionWebJsonMetaPointer
-    newValue: T // TODO  could replace with a sum types of the exact types we know (the serialization of) a property's value can have
+    newValue: string
 }
 
 /** § 6.5.4.2 */
@@ -60,11 +60,11 @@ export interface DeletePropertyCommand extends Command {
 }
 
 /** § 6.5.4.3 */
-export interface ChangePropertyCommand<T> extends Command {
+export interface ChangePropertyCommand extends Command {
     messageKind: "ChangeProperty"
     node: LionWebId
     property: LionWebJsonMetaPointer
-    newValue: T
+    newValue: string
 }
 
 /** § 6.5.5.1 */

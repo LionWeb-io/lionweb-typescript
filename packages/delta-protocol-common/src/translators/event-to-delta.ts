@@ -54,7 +54,12 @@ import {
     ReferenceChangedDelta,
     ReferenceDeletedDelta
 } from "@lionweb/class-core"
-import { featureResolversFor, unresolved } from "@lionweb/core"
+import {
+    builtinPropertyValueDeserializer,
+    featureResolversFor,
+    PropertyValueDeserializer,
+    unresolved
+} from "@lionweb/core"
 import { LionWebId, LionWebJsonChunk } from "@lionweb/json"
 import {
     AnnotationAddedEvent,
@@ -89,7 +94,7 @@ import {
     ReferenceAddedEvent,
     ReferenceChangedEvent,
     ReferenceDeletedEvent
-} from "../payload/event-types.js"
+} from "../payload/index.js"
 
 /**
  * Type def. for a function that translates {@link Event events} to their corresponding {@link IDelta deltas},
@@ -101,12 +106,16 @@ export type EventToDeltaTranslator = (event: Event, idMapping: IdMapping) => IDe
  * @return a {@link EventToDeltaTranslator} for the languages given as {@link ILanguageBase language bases},
  * with the given {@link IdMapping `idMapping`} and {@link Deserializer `deserialized` deserializer function}.
  */
-export const eventToDeltaTranslator = (languageBases: ILanguageBase[], deserialized: Deserializer<INodeBase[]>): EventToDeltaTranslator => {
+export const eventToDeltaTranslator = (
+    languageBases: ILanguageBase[],
+    deserialized: Deserializer<INodeBase[]>,
+    propertyValueDeserializer: PropertyValueDeserializer = builtinPropertyValueDeserializer
+): EventToDeltaTranslator => {
 
     const eventAsDelta = (event: Event, idMapping: IdMapping): IDelta | undefined => {
 
         const deserializedNodeFrom = (chunk: LionWebJsonChunk): INodeBase => {
-            const nodes = deserialized(chunk, undefined, idMapping)    // (deserializer should take care of installing delta receiver)
+            const nodes = deserialized(chunk, /* dependentNodes: */ [], idMapping)    // (deserializer should take care of installing delta receiver)
             if (nodes.length !== 1) {
                 throw new Error(`expected exactly 1 root node in deserialization of chunk in event, but got ${nodes.length}`)
             }
@@ -132,22 +141,22 @@ export const eventToDeltaTranslator = (languageBases: ILanguageBase[], deseriali
                 return undefined
             }
             case "PropertyAdded": { // § 6.6.3.1
-                const { node, property, newValue } = event as PropertyAddedEvent<unknown>
+                const { node, property, newValue } = event as PropertyAddedEvent
                 const resolvedNode = idMapping.fromId(node)
                 const resolvedProperty = resolvedPropertyFrom(property, resolvedNode.classifier)
-                return new PropertyAddedDelta(resolvedNode, resolvedProperty, newValue)
+                return new PropertyAddedDelta(resolvedNode, resolvedProperty, propertyValueDeserializer.deserializeValue(newValue, resolvedProperty))
             }
             case "PropertyDeleted": { // § 6.6.3.2
-                const { node, property, oldValue } = event as PropertyDeletedEvent<unknown>
+                const { node, property, oldValue } = event as PropertyDeletedEvent
                 const resolvedNode = idMapping.fromId(node)
                 const resolvedProperty = resolvedPropertyFrom(property, resolvedNode.classifier)
-                return new PropertyDeletedDelta(resolvedNode, resolvedProperty, oldValue)
+                return new PropertyDeletedDelta(resolvedNode, resolvedProperty, propertyValueDeserializer.deserializeValue(oldValue, resolvedProperty))
             }
             case "PropertyChanged": { // § 6.6.3.3
-                const { node, property, newValue, oldValue } = event as PropertyChangedEvent<unknown>
+                const { node, property, newValue, oldValue } = event as PropertyChangedEvent
                 const resolvedNode = idMapping.fromId(node)
                 const resolvedProperty = resolvedPropertyFrom(property, resolvedNode.classifier)
-                return new PropertyChangedDelta(resolvedNode, resolvedProperty, oldValue, newValue)
+                return new PropertyChangedDelta(resolvedNode, resolvedProperty, propertyValueDeserializer.deserializeValue(oldValue, resolvedProperty), propertyValueDeserializer.deserializeValue(newValue, resolvedProperty))
             }
             case "ChildAdded": { // § 6.6.4.1
                 const { parent, newChild, containment, index } = event as ChildAddedEvent

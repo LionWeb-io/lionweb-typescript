@@ -53,28 +53,28 @@ export interface ClassifierChangedEvent extends Event {
 }
 
 /** § 6.6.3.1 */
-export interface PropertyAddedEvent<T> extends Event {
+export interface PropertyAddedEvent extends Event {
     messageKind: "PropertyAdded"
     node: LionWebId
     property: LionWebJsonMetaPointer
-    newValue: T // TODO  could replace with a sum types of the exact types we know (the serialization of) a property's value can have
+    newValue: string
 }
 
 /** § 6.6.3.2 */
-export interface PropertyDeletedEvent<T> extends Event {
+export interface PropertyDeletedEvent extends Event {
     messageKind: "PropertyDeleted"
     node: LionWebId
     property: LionWebJsonMetaPointer
-    oldValue: T
+    oldValue: string
 }
 
 /** § 6.6.3.3 */
-export interface PropertyChangedEvent<T> extends Event {
+export interface PropertyChangedEvent extends Event {
     messageKind: "PropertyChanged"
     node: LionWebId
     property: LionWebJsonMetaPointer
-    oldValue: T
-    newValue: T
+    oldValue: string
+    newValue: string
 }
 
 /** § 6.6.4.1 */
