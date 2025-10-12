@@ -9,7 +9,7 @@ import { asArray, keepDefineds, lazyMapGet, Nested3Map, uniquesAmong } from "@li
 import { asIds } from "./functions.js"
 import { Reader } from "./reading.js"
 import { Node } from "./types.js"
-import { BuiltinPropertyValueSerializer } from "./m3/builtins.js"
+import { builtinPropertyValueSerializer } from "./m3/builtins.js"
 import { inheritsDirectlyFrom } from "./m3/functions.js"
 import {
     Classifier,
@@ -85,7 +85,7 @@ export const metaPointerFor = (feature: Feature): LionWebJsonMetaPointer => {
  */
 export const nodeSerializer = <NT extends Node>(reader: Reader<NT>, serializationOptions?: SerializationOptions) => {
     const propertyValueSerializer =
-        serializationOptions?.propertyValueSerializer ?? serializationOptions?.primitiveTypeSerializer ?? new BuiltinPropertyValueSerializer()
+        serializationOptions?.propertyValueSerializer ?? serializationOptions?.primitiveTypeSerializer ?? builtinPropertyValueSerializer
     const serializeEmptyFeatures = serializationOptions?.serializeEmptyFeatures ?? true
 
     const languageKey2version2classifierKey2allFeatures: Nested3Map<Feature[]> = {}

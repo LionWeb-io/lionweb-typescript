@@ -35,6 +35,8 @@
   This avoids undebuggable `undefined` dereferencing at runtime in `deltaDeserializer` and `eventToDeltaTranslator` functions.
 * Package `src/` again (— i.e., don't ignore for NPM packaging.)
 * Add `serializedRef` function that serializes a single reference target.
+* Introduce singleton instances `builtinPropertyValue{Deserializer|Serializer}` of `BuiltinPropertyValue{Deserializer|Serializer}` which are properly sealed, and use them wherever possible
+    — also in other packages, without explicit mention in their changelogs.
 
 
 ## 0.6.12

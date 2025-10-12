@@ -16,7 +16,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import {
-    BuiltinPropertyValueDeserializer,
+    builtinPropertyValueDeserializer,
     Classifier,
     Containment,
     defaultSimplisticHandler,
@@ -70,7 +70,7 @@ export const nodeBaseDeserializerWithIdMapping = (languageBases: ILanguageBase[]
         serializationChunk,
         dependentNodes = [],
         idMapping,
-        propertyValueDeserializer = new BuiltinPropertyValueDeserializer(),
+        propertyValueDeserializer = builtinPropertyValueDeserializer,
         problemsHandler = defaultSimplisticHandler
     ): RootsWithIdMapping => {
 
@@ -213,7 +213,7 @@ export const nodeBaseDeserializer = (languageBases: ILanguageBase[], receiveDelt
         serializationChunk,
         dependentNodes,
         idMapping,
-        propertyValueDeserializer = new BuiltinPropertyValueDeserializer(),
+        propertyValueDeserializer = builtinPropertyValueDeserializer,
         problemsHandler = defaultSimplisticHandler
     ): INodeBase[] =>
         deserializerWithIdMapping(serializationChunk, dependentNodes, idMapping, propertyValueDeserializer, problemsHandler).roots
