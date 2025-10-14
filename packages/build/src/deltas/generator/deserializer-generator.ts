@@ -34,7 +34,7 @@ import { tsTypeForFeatureKind } from "./helpers.js"
 const deserializationExpressionForField = (name: string, type: Type) => {
     if (type instanceof FeatureType) {
         const tsMetaType = tsTypeForFeatureKind(type.kind)
-        return `resolved${tsMetaType}From(delta.${name}, ${type.container?.name ?? "<?container?>"})`
+        return `resolved${tsMetaType}From(delta.${name}, ${type.container?.name ?? "<?container?>"}.classifier)`
     }
     if (type instanceof NodeType) {
         return type.serialization instanceof RefOnly ? `idMapping.fromRefId(delta.${name})` : `idMapping.fromId(delta.${name})`
@@ -58,30 +58,20 @@ const deserializationBlockForDelta = ({name, fields}: Delta) =>
 export const deserializerForDeltas = (deltas: Delta[], header?: string) =>
     asString([
         header ?? [],
-        `import { Containment, MemoisingSymbolTable, Property, Reference } from "@lionweb/core";`,
-        `import { LionWebJsonMetaPointer } from "@lionweb/json";`,
-        ``,
-        `import { ILanguageBase, INodeBase } from "../../base-types.js";`,
+        `import { featureResolversFor } from "@lionweb/core";`,
+        `import { ILanguageBase } from "../../base-types.js";`,
+        `import { IDelta } from "../base.js";`,
         `import { IdMapping } from "../../id-mapping.js";`,
         `import { SerializedDelta } from "./types.g.js";`,
         `import { DeltaDeserializer } from "./base.js";`,
         `import {`,
         indent(commaSeparated(sortedStrings(deltas.map(({name}) => `${name}Delta`)))),
         `} from "../types.g.js";`,
-        `import { IDelta } from "../base.js";`,
         ``,
         ``,
         `export const deltaDeserializer = (languageBases: ILanguageBase[], idMapping: IdMapping): DeltaDeserializer => {`,
         indent([
-            `const symbolTable = new MemoisingSymbolTable(languageBases.map(({language}) => language));`,
-            `const resolvedPropertyFrom = (metaPointer: LionWebJsonMetaPointer, container: INodeBase): Property =>`,
-            `    symbolTable.featureMatching(container.classifier.metaPointer(), metaPointer) as Property`,
-            `const resolvedContainmentFrom = (metaPointer: LionWebJsonMetaPointer, container: INodeBase): Containment =>`,
-            `    symbolTable.featureMatching(container.classifier.metaPointer(), metaPointer) as Containment`,
-            `const resolvedReferenceFrom = (metaPointer: LionWebJsonMetaPointer, container: INodeBase): Reference =>`,
-            `    symbolTable.featureMatching(container.classifier.metaPointer(), metaPointer) as Reference`,
-            // `const resolvedRefTo = (ref: LionWebId | null) =>`,
-            // `    ref === null ? unresolved : idMapping.fromId(ref)`,
+            `const { resolvedPropertyFrom, resolvedContainmentFrom, resolvedReferenceFrom } = featureResolversFor(languageBases.map(({language}) => language));`,
             `const deserializedDelta = (delta: SerializedDelta): IDelta => {`,
             indent([
                 `switch (delta.kind) {`,

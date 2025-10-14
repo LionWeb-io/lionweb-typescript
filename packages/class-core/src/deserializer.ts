@@ -16,7 +16,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import {
-    BuiltinPropertyValueDeserializer,
+    builtinPropertyValueDeserializer,
     Classifier,
     Containment,
     defaultSimplisticHandler,
@@ -43,6 +43,7 @@ import { NodesToInstall } from "./linking.js"
 export type Deserializer<T> = (
     serializationChunk: LionWebJsonChunk,
     dependentNodes?: INodeBase[],
+    idMapping?: IdMapping,
     propertyValueDeserializer?: PropertyValueDeserializer,
     problemHandler?: SimplisticHandler
 ) => T;
@@ -66,10 +67,11 @@ export const nodeBaseDeserializerWithIdMapping = (languageBases: ILanguageBase[]
     const languageBaseFor = combinedLanguageBaseLookupFor(languageBases);
 
     return (
-        serializationChunk: LionWebJsonChunk,
-        dependentNodes: INodeBase[] = [],
-        propertyValueDeserializer: PropertyValueDeserializer = new BuiltinPropertyValueDeserializer(),
-        problemsHandler: SimplisticHandler = defaultSimplisticHandler
+        serializationChunk,
+        dependentNodes = [],
+        idMapping,
+        propertyValueDeserializer = builtinPropertyValueDeserializer,
+        problemsHandler = defaultSimplisticHandler
     ): RootsWithIdMapping => {
 
         const nodesToInstall: NodesToInstall[] = [];
@@ -143,10 +145,10 @@ export const nodeBaseDeserializerWithIdMapping = (languageBases: ILanguageBase[]
             )
         );
 
-        const dependentNodesById = byIdMap(dependentNodes)
+        const dependentNodesById = byIdMap(dependentNodes);
 
-        const lookupNodeById = (id: LionWebId) =>
-            nodesById[id] ?? dependentNodesById[id];
+        const lookupNodeById = (id: LionWebId): (INodeBase | undefined) =>
+            nodesById[id] ?? dependentNodesById[id] ?? idMapping?.tryFromId(id);
 
         nodesToInstall.forEach(([node, feature, ids]) => {
             if (feature instanceof Containment) {
@@ -208,11 +210,12 @@ export const nodeBaseDeserializerWithIdMapping = (languageBases: ILanguageBase[]
 export const nodeBaseDeserializer = (languageBases: ILanguageBase[], receiveDelta?: DeltaReceiver): Deserializer<INodeBase[]> => {
     const deserializerWithIdMapping = nodeBaseDeserializerWithIdMapping(languageBases, receiveDelta);
     return (
-        serializationChunk: LionWebJsonChunk,
-        dependentNodes: INodeBase[] = [],
-        propertyValueDeserializer: PropertyValueDeserializer = new BuiltinPropertyValueDeserializer(),
-        problemsHandler: SimplisticHandler = defaultSimplisticHandler
+        serializationChunk,
+        dependentNodes,
+        idMapping,
+        propertyValueDeserializer = builtinPropertyValueDeserializer,
+        problemsHandler = defaultSimplisticHandler
     ): INodeBase[] =>
-        deserializerWithIdMapping(serializationChunk, dependentNodes, propertyValueDeserializer, problemsHandler).roots
+        deserializerWithIdMapping(serializationChunk, dependentNodes, idMapping, propertyValueDeserializer, problemsHandler).roots
 }
 

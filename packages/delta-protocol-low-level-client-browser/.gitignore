@@ -1,0 +1,6 @@
+/dist
+/delta-protocol-low-level-client-browser-*.tgz
+
+# shouldn't be necessary!:
+/node_modules
+

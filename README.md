@@ -84,21 +84,23 @@ The implementation is divided up in a number of NPM packages in the directory [`
 - `build`
   A package that builds part of the code in `class-core` — specifically the part related to the delta protocol.
 
-- `artifacts`
-  A package that generates artifacts (serialization chunks, diagrams, JSON Schemas) from some of the models constructed in the `core` and `test` packages.
-
-- `delta-protocol-impl`
-  A package that contains the implementation of the delta protocol — both client and (vestigial!) repository.
-
-- `delta-protocol-test-cli`
-  A package that contains CLI programs for starting a client and repository *for testing purposes*.
-
-- `delta-protocol-test`
-  A package that contains tests for the delta protocol implementation.
-
   _Note_ that this package – and specifically the `generate-for-class-core.ts` file – depends on `class-core` itself.
   This constitutes a *circular* dependency, but that only exists at compile+build time, so should not be problematic.
   To ensure that a “clean clone” of this repository is not impacted, the `rebuild.sh` script builds `class-core` first, before compiling and running `build`, and then builds `class-core` again.
+
+- `artifacts`
+  A package that generates artifacts (serialization chunks, diagrams, JSON Schemas) from some of the models constructed in the `core` and `test` packages.
+
+- Various packages related to the delta protocol:
+  - `delta-protocol-common`
+  - `delta-protocol-client`
+  - `delta-protocol-low-level-client-browser`
+  - `delta-protocol-low-level-client-ws`
+  - `delta-protocol-repository-ws`
+  - `delta-protocol-test-cli`
+    A package that contains CLI programs for starting a client and repository *for testing purposes*.
+  - `delta-protocol-test`
+    A package that contains tests for the delta protocol implementation.
 
 Each of these packages have their own `README.md`.
 The following packages are published in the scope of [the `lionweb` organization](https://www.npmjs.com/org/lionweb), meaning that they're all prefixed with `@lionweb/`: `json`, `json-utils`, `js-diff`, `core`, `ts-utils`, `utilities`, `cli`, and `validation`, `class-core`, `class-core-generator`
@@ -186,7 +188,7 @@ To keep the version numbers of the various packages under `packages/` aligned th
 You execute this script as follows from the repo's root:
 
 ```shell
-node update-package-versions.js
+./update-package-versions.js
 ```
 
 This reads the file [`packages/versions.json`](versions.json) and updates the `package.json` files of all *workspace packages* (as listed in the root-level `package.json`) under `packages/` according to it, as well as the main(/root-level) `package.json`.

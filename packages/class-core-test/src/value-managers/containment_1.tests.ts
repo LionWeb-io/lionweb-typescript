@@ -24,7 +24,7 @@ import {
     nodeBaseDeserializer,
     serializeNodeBases
 } from "@lionweb/class-core"
-import { AccumulatingSimplisticHandler, BuiltinPropertyValueDeserializer } from "@lionweb/core"
+import { AccumulatingSimplisticHandler } from "@lionweb/core"
 import { LionWebJsonMetaPointer } from "@lionweb/json"
 
 import { deepEqual, equal, isTrue, isUndefined, throws } from "../assertions.js"
@@ -170,7 +170,7 @@ describe("serialization and deserialization w.r.t. a [1] containment", () => {
 
         const deserialize = nodeBaseDeserializer([testLanguageBase]);
         const problemHandler = new AccumulatingSimplisticHandler();
-        const deserializedNodes = deserialize(serializationChunk, [], new BuiltinPropertyValueDeserializer(), problemHandler);
+        const deserializedNodes = deserialize(serializationChunk, undefined, undefined, undefined, problemHandler);
         equal(problemHandler.allProblems.length, 0);
         equal(deserializedNodes.length, 1);
         const root = deserializedNodes[0];
@@ -202,7 +202,7 @@ describe("serialization and deserialization w.r.t. a [1] containment", () => {
 
         const deserialize = nodeBaseDeserializer([testLanguageBase]);
         const problemHandler = new AccumulatingSimplisticHandler();
-        const deserializedNodes = deserialize(serializationChunk, [], new BuiltinPropertyValueDeserializer(), problemHandler);
+        const deserializedNodes = deserialize(serializationChunk, undefined, undefined, undefined, problemHandler);
         equal(problemHandler.allProblems.length, 0);
         equal(deserializedNodes.length, 1); // (because there's only one “root”)
         const root = deserializedNodes[0];

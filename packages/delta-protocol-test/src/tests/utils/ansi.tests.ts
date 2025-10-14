@@ -17,7 +17,9 @@
 
 import { expect } from "chai"
 
-import { colors, styles, withColorAndStyleApplied } from "@lionweb/delta-protocol-impl/dist/utils/ansi.js"
+import { ansi } from "@lionweb/delta-protocol-common"
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const { colors, styles, withColorAndStyleApplied } = ansi
 
 
 describe("ANSI colors", function() {

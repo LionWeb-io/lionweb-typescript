@@ -5,18 +5,19 @@ const factory = new LanguageFactory("meta", "1", concatenator("-"), lastOf)
 
 /**
  * A "meta" language in which every instance of a meta concept has name "{A|a}[n]<name of meta concept>".
- * This is useful to test {@link ClassifierDeducer classifier deducers} with.
+ * This is useful to test {@link ClassifierDeducer classifier deducers} and {@link FeatureResolvers feature resolvers} with.
  */
 export const metaLanguage = factory.language
 
 factory.annotation("AnAnnotation")
 
-const aConcept = factory.concept("AConcept", false)
-factory.property(aConcept, "aProperty").ofType(builtinPrimitives.jsonDataType)
-factory.containment(aConcept, "aContainment").ofType(aConcept)
-factory.reference(aConcept, "aReference").ofType(aConcept)
+export const aConcept = factory.concept("AConcept", false)
+export const aConcept_aProperty = factory.property(aConcept, "aProperty").ofType(builtinPrimitives.jsonDataType)
+export const aConcept_aContainment = factory.containment(aConcept, "aContainment").ofType(aConcept)
+export const aConcept_aReference = factory.reference(aConcept, "aReference").ofType(aConcept)
 
-const anEnumeration = factory.enumeration("AnEnumeration")
+export const anEnumeration = factory.enumeration("AnEnumeration")
 factory.enumerationLiteral(anEnumeration, "anEnumerationLiteral")
 
-factory.interface("AnInterface")
+export const anInterface = factory.interface("AnInterface")
+

@@ -343,8 +343,7 @@ export abstract class MultiContainmentValueManager<T extends INodeBase> extends 
                 const oldValueManager = replacedChild.parent.getContainmentValueManager(replacedChild.containment!);
                 const oldIndex = oldValueManager instanceof SingleContainmentValueManager
                     ? 0
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    : (oldValueManager as MultiContainmentValueManager<any>).children.indexOf(replacedChild);
+                    : (oldValueManager as MultiContainmentValueManager<INodeBase>).children.indexOf(replacedChild);
                 if (replacedChild.parent === movedChild.parent) {
                     if (replacedChild.containment === movedChild.containment) {
                         this.emitDelta(() => new ChildMovedAndReplacedInSameContainmentDelta(this.container, this.containment, oldIndex, newIndex, movedChild, replacedChild));

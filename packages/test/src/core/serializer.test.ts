@@ -31,7 +31,7 @@ describe("serialization", () => {
     })
 
     it("serializes node with custom primitive type, works when registering custom deserializer", () => {
-        const builtinsPropertyValueSerializer = new BuiltinPropertyValueSerializer()
+        const builtinsPropertyValueSerializer = new BuiltinPropertyValueSerializer()    // (can't use the sealed builtinPropertyValueSerializer singleton instance!)
         builtinsPropertyValueSerializer.register(dateDataType, (value: unknown) => {
             const d = value as Date
             return `${Number(d.getFullYear()).toString().padStart(4, "0")}-${Number(d.getMonth() + 1)

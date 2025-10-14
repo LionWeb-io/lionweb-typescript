@@ -16,13 +16,14 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { INodeBase } from "@lionweb/class-core"
-import { LionWebClient } from "@lionweb/delta-protocol-impl"
+import { LionWebClient } from "@lionweb/delta-protocol-client"
+import { ansi, ClientReceivedMessage, ISemanticLogItem } from "@lionweb/delta-protocol-common"
 import { LionWebId } from "@lionweb/json"
 import { lastOfArray } from "@lionweb/ts-utils"
-import { ClientReceivedMessage, ISemanticLogItem } from "@lionweb/delta-protocol-impl/dist/semantic-logging.js"
-import { clientInfo, genericWarning } from "@lionweb/delta-protocol-impl/dist/utils/ansi.js"
-import { waitUntil } from "@lionweb/delta-protocol-impl/dist/utils/async.js"
 import { DataTypeTestConcept, LinkTestConcept, TestAnnotation, TestLanguageBase } from "./gen/TestLanguage.g.js"
+
+import { waitUntil } from "./async.js"
+const { clientInfo, genericWarning } = ansi
 
 
 /**

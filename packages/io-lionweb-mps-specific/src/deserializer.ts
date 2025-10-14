@@ -17,7 +17,7 @@
 
 import { LionWebJsonChunk } from "@lionweb/json"
 import {
-    DefaultPrimitiveTypeDeserializer,
+    builtinPropertyValueDeserializer,
     defaultSimplisticHandler,
     deserializeChunk,
     Language,
@@ -41,7 +41,7 @@ export const deserializeLanguagesWithIoLionWebMpsSpecific = (serializationChunk:
         combinedWriter,
         [lioncore, ioLionWebMpsSpecificLanguage],
         [lioncore, lioncoreBuiltins].flatMap(nodesExtractorUsing(lioncoreExtractionFacade)),
-        new DefaultPrimitiveTypeDeserializer(),
+        builtinPropertyValueDeserializer,
         problemHandler
     ).filter((node) => node instanceof Language) as Language[]
 

@@ -49,7 +49,7 @@ export type SettingsUpdater = (settings: Record<string, unknown>, feature: Featu
 /**
  * @return a {@link SettingsUpdater} that uses the given “meta key” – which is a property/key on the {@link Feature} type –
  *  to look up what key to look a feature’s value up on a settings object.
- *  <em>Note:</em> for internal use only — use with some care!
+ *  *Note:* for internal use only — use with some care!
  */
 const settingsUpdater = (metaKey: keyof Feature): SettingsUpdater =>
     (settings: Record<string, unknown>, feature: Feature, value: unknown): void => {

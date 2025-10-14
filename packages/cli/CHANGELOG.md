@@ -7,6 +7,7 @@ From now on, the versions of all published packages will always be aligned, so a
 Changes in this version:
 
 * The `generate-ts-types` now also produces a `index.g.ts` file when called with a multi-language serialization chunk.
+* Package `src/` again (— i.e., don't ignore for NPM packaging.)
 
 
 ## 0.6.13

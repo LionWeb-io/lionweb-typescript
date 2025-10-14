@@ -55,7 +55,11 @@
         "./packages/class-core-test",
         "./packages/test",
         "./packages/artifacts",
-        "./packages/delta-protocol-impl",
+        "./packages/delta-protocol-common",
+        "./packages/delta-protocol-client",
+        "./packages/delta-protocol-low-level-client-ws",
+        "./packages/delta-protocol-low-level-client-browser",
+        "./packages/delta-protocol-repository-ws",
         "./packages/delta-protocol-test-cli",
         "./packages/delta-protocol-test"
     ]

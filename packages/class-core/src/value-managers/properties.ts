@@ -29,6 +29,7 @@ import { FeatureValueManager } from "./base.js"
 export abstract class PropertyValueManager<T> extends FeatureValueManager<Property> {
 
     private readonly observableValue: IObservableValue<T | undefined> = observable.box<T | undefined>(undefined, {deep: false});
+        // TODO  could replace T with a sum types of the exact types we know a property's value can have
 
     get property(): Property {
         return this.feature;

@@ -1,3 +1,6 @@
+#!/usr/bin/env node
+
+
 const { exec } = require("child_process")
 const { writeFileSync, readdirSync, readFileSync } = require("fs")
 const { join } = require("path")
@@ -39,7 +42,7 @@ const replaceVersionsIn = (deps, doNotWarnOnUnlisted) => {
                     }
                 } else {
                     if (!doNotWarnOnUnlisted) {
-                        console.log(`   encountered unlisted external dep: ${dep} @ ${currentVersion}`)
+                        console.log(`   encountered unlisted external dep -> "${dep}": "${currentVersion}"`)
                     }
                 }
             }

@@ -5,11 +5,11 @@ import {
     LionWebJsonMetaPointer,
     LionWebJsonNode
 } from "@lionweb/json"
-import { asArray, keepDefineds, lazyMapGet, Nested3Map } from "@lionweb/ts-utils"
+import { asArray, keepDefineds, lazyMapGet, Nested3Map, uniquesAmong } from "@lionweb/ts-utils"
 import { asIds } from "./functions.js"
 import { Reader } from "./reading.js"
 import { Node } from "./types.js"
-import { BuiltinPropertyValueSerializer } from "./m3/builtins.js"
+import { builtinPropertyValueSerializer } from "./m3/builtins.js"
 import { inheritsDirectlyFrom } from "./m3/functions.js"
 import {
     Classifier,
@@ -85,7 +85,7 @@ export const metaPointerFor = (feature: Feature): LionWebJsonMetaPointer => {
  */
 export const nodeSerializer = <NT extends Node>(reader: Reader<NT>, serializationOptions?: SerializationOptions) => {
     const propertyValueSerializer =
-        serializationOptions?.propertyValueSerializer ?? serializationOptions?.primitiveTypeSerializer ?? new BuiltinPropertyValueSerializer()
+        serializationOptions?.propertyValueSerializer ?? serializationOptions?.primitiveTypeSerializer ?? builtinPropertyValueSerializer
     const serializeEmptyFeatures = serializationOptions?.serializeEmptyFeatures ?? true
 
     const languageKey2version2classifierKey2allFeatures: Nested3Map<Feature[]> = {}
@@ -101,7 +101,15 @@ export const nodeSerializer = <NT extends Node>(reader: Reader<NT>, serializatio
                 () => ({})
             ),
             classifier.key,
-            () => [ ...classifier.features, ...(inheritsDirectlyFrom(classifier).flatMap(memoisedAllFeaturesOf)) ]
+            () => uniquesAmong( // make unique in case a feature was inherited from multiple super-classifiers
+                [ ...classifier.features, ...(inheritsDirectlyFrom(classifier).flatMap(memoisedAllFeaturesOf)) ]
+                /*
+                 * [NOTE]
+                 * The allFeaturesOf function uses flatMapNonCyclingFollowing which avoids that features of a super-classifier are added multiple times.
+                 * Unfortunately, to make use of the memoising, we can't use flatMapNonCyclingFollowing in the same way here.
+                 * So, we have to remove duplicates ourselves.
+                 */
+            )
         )
 
     return (nodes: NT[]): LionWebJsonChunk => {
@@ -136,7 +144,7 @@ export const nodeSerializer = <NT extends Node>(reader: Reader<NT>, serializatio
             }
             serializedNodes.push(serializedNode)
             ids[node.id] = true
-            memoisedAllFeaturesOf(classifier).forEach(feature => {
+            memoisedAllFeaturesOf(classifier).forEach((feature) => {
                 const value = reader.getFeatureValue(node, feature)
                 const featureLanguage = feature.classifier.language
                 registerLanguageUsed(featureLanguage)
@@ -218,7 +226,7 @@ export const nodeSerializer = <NT extends Node>(reader: Reader<NT>, serializatio
 
 /**
  * @return a {@link LionWebJsonChunk} of the given model (i.e., an array of {@link Node nodes} - the first argument) to the LionWeb serialization JSON format.
- *  <em>Note:</em> this function will be deprecated and removed later — use {@link nodeSerializer} instead.
+ *  *Note:* this function will be deprecated and removed later — use {@link nodeSerializer} instead.
  */
 export const serializeNodes = <NT extends Node>(
     nodes: NT[],

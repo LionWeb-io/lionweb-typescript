@@ -17,8 +17,10 @@
 
 import { expect } from "chai"
 
+import { LionWebClient } from "@lionweb/delta-protocol-client"
+import { createWSLowLevelClient } from "@lionweb/delta-protocol-low-level-client-ws"
+import { LionWebRepository, wsLocalhostUrl } from "@lionweb/delta-protocol-repository-ws"
 import { LionWebId } from "@lionweb/json"
-import { LionWebClient, LionWebRepository, wsLocalhostUrl } from "@lionweb/delta-protocol-impl"
 import { Geometry, ShapesBase } from "../gen/Shapes.g.js"
 import { delayed } from "../test-utils/async.js"
 import { nextPort } from "../test-utils/port.js"
@@ -35,7 +37,7 @@ describe("WebSocket-driven implementations of client and repository", async func
         const languageBases = [ShapesBase.INSTANCE]
 
         const createClient = (clientId: LionWebId) =>
-            LionWebClient.create({ clientId, url: wsLocalhostUrl(port), languageBases, serializationChunk: testModelChunk })
+            LionWebClient.create({ clientId, url: wsLocalhostUrl(port), languageBases, serializationChunk: testModelChunk, lowLevelClientInstantiator: createWSLowLevelClient })
         const clientA = await createClient("A")
         const clientB = await createClient("B")
         // end Arrange

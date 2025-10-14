@@ -8,10 +8,14 @@ import {
 import { byIdMap, groupBy, keepDefineds } from "@lionweb/ts-utils"
 import { Writer } from "./writing.js"
 import { defaultSimplisticHandler, SimplisticHandler } from "./handler.js"
-import { BuiltinPropertyValueDeserializer } from "./m3/builtins.js"
+import {
+    builtinPropertyValueDeserializer,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    BuiltinPropertyValueDeserializer
+} from "./m3/builtins.js"
+import { MemoisingSymbolTable } from "./m3/symbol-table.js"
 import { Classifier, Containment, Enumeration, Language, PrimitiveType, Property, Reference } from "./m3/types.js"
 import { unresolved } from "./references.js"
-import { MemoisingSymbolTable } from "./symbol-table.js"
 import { Node } from "./types.js"
 
 /**
@@ -43,7 +47,7 @@ export const deserializeSerializationChunk = <NT extends Node>(
     // TODO  facades <--> languages, so it's weird that it looks split up like this
     dependentNodes: Node[],
     // TODO (#13)  see if you can turn this into [nodes: Node[], writer: Writer<Node>][] after all
-    propertyValueDeserializer: BuiltinPropertyValueDeserializer = new BuiltinPropertyValueDeserializer(),
+    propertyValueDeserializer: PropertyValueDeserializer = builtinPropertyValueDeserializer,
     problemHandler: SimplisticHandler = defaultSimplisticHandler
 ): NT[] => {
     if (serializationChunk.serializationFormatVersion !== currentSerializationFormatVersion) {

@@ -1,6 +1,0 @@
-/dist
-/delta-protocol-impl-*.tgz
-
-# shouldn't be necessary!:
-/node_modules
-

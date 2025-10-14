@@ -30,6 +30,13 @@
 * Improve performance of `deserializeSerializationChunk` function ever so slightly.
 * Remove the unused (and non-performant) `NaiveSymbolTable` class.
 * Improve performance of `nodeSerializer` function a tiny bit.
+    * Fix a bug where some features’ values are serialized multiple times.
+* Expose feature resolution, through the `featureResolversFor` function (and associated types), which performs proper checking.
+  This avoids undebuggable `undefined` dereferencing at runtime in `deltaDeserializer` and `eventToDeltaTranslator` functions.
+* Package `src/` again (— i.e., don't ignore for NPM packaging.)
+* Add `serializedRef` function that serializes a single reference target.
+* Introduce singleton instances `builtinPropertyValue{Deserializer|Serializer}` of `BuiltinPropertyValue{Deserializer|Serializer}` which are properly sealed, and use them wherever possible
+    — also in other packages, without explicit mention in their changelogs.
 
 
 ## 0.6.12

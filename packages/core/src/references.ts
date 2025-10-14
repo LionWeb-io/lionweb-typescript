@@ -1,4 +1,5 @@
 import { LionWebId } from "@lionweb/json"
+import { Node } from "./types.js"
 
 
 /**
@@ -13,7 +14,7 @@ export const unresolved = null
 export type SingleRef<T> = typeof unresolved | T
 
 /**
- * Checks whether a given (at most) single-valued reference actually refers to something.
+ * @return whether a given (at most) single-valued reference actually refers to something.
  */
 export const isRef = <T>(ref?: SingleRef<T>): ref is T =>
     ref !== undefined && ref !== unresolved
@@ -28,4 +29,11 @@ export type MultiRef<T> = T[]
  * A type that expresses a value is either an {@link LionWebId} or a value to indicate that resolution to a node previously failed.
  */
 export type IdOrUnresolved = LionWebId | typeof unresolved;
+
+
+/**
+ * @return the serialization of the given {@link SingleRef single reference target}, as a {@link LionWebId LionWeb ID}.
+ */
+export const serializedRef = <NT extends Node>(ref: SingleRef<NT>): LionWebId | typeof unresolved =>
+    ref === unresolved ? unresolved : ref.id
 

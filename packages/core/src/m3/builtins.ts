@@ -81,7 +81,17 @@ const shouldBeIdentical = (left: DataType, right: DataType): boolean =>
 abstract class DataTypeRegister<T> {
     private map = new Map<DataType, T>()
 
+    private _sealed = false
+
+    sealed() {
+        this._sealed = true
+        return this
+    }
+
     public register(dataType: DataType, t: T) {
+        if (this._sealed) {
+            throw new Error(`can't register a data type with a register that has been sealed`)
+        }
         this.map.set(dataType, t)
     }
 
@@ -95,6 +105,9 @@ abstract class DataTypeRegister<T> {
     }
 }
 
+/**
+ * An implementation of {@link PropertyValueDeserializer} that knows how to deserialize serialized values of all the built-in primitive types.
+ */
 export class BuiltinPropertyValueDeserializer
     extends DataTypeRegister<(value: string) => unknown>
     implements PropertyValueDeserializer
@@ -128,11 +141,19 @@ export class BuiltinPropertyValueDeserializer
 }
 
 /**
+ * Singleton instance of {@link BuiltinPropertyValueDeserializer}.
+ */
+export const builtinPropertyValueDeserializer = new BuiltinPropertyValueDeserializer().sealed()
+
+/**
  * Misspelled alias of {@link BuiltinPropertyValueDeserializer}, kept for backward compatibility, and to be deprecated and removed later.
  */
 export class DefaultPrimitiveTypeDeserializer extends BuiltinPropertyValueDeserializer {}
 
 
+/**
+ * An implementation of {@link PropertyValueSerializer} that knows how to serialize values of all the built-in primitive types.
+ */
 export class BuiltinPropertyValueSerializer extends DataTypeRegister<(value: unknown) => string> implements PropertyValueSerializer {
     constructor() {
         super()
@@ -161,6 +182,11 @@ export class BuiltinPropertyValueSerializer extends DataTypeRegister<(value: unk
         }
     }
 }
+
+/**
+ * Singleton instance of {@link BuiltinPropertyValueSerializer}.
+ */
+export const builtinPropertyValueSerializer = new BuiltinPropertyValueSerializer().sealed()
 
 /**
  * Misspelled alias of {@link BuiltinPropertyValueSerializer}, kept for backward compatibility, and to be deprecated and removed later.

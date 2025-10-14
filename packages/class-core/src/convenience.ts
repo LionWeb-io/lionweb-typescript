@@ -23,16 +23,17 @@ import { nodeBaseReader } from "./serializer.js"
 
 
 /**
- * @return all descendant nodes from the given node, including that node itself.
+ * @return all descendant nodes from the given top node, including that node itself.
+ * (The top node is always the first of the array returned.)
  */
-export const allNodesFrom = (rootNode: INodeBase): INodeBase[] => {
-    const nodes: INodeBase[] = [rootNode];
+export const allNodesFrom = (topNode: INodeBase): INodeBase[] => {
+    const nodes: INodeBase[] = [topNode];
     const visit = (node: INodeBase) => {
         const children = node.children;
         nodes.push(...children);
         children.forEach(visit);
     }
-    visit(rootNode);
+    visit(topNode);
     return nodes;
 }
 

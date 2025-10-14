@@ -20,6 +20,10 @@ import { LionWebId } from "@lionweb/json"
 
 import { INodeBase } from "./index.js"
 
+
+/**
+ * Type def. for a (hash-)map {@link LionWebId ID} &rarr; {@link INodeBase}.
+ */
 type NodesById = { [id: LionWebId]: INodeBase }
 
 
@@ -70,6 +74,7 @@ export class IdMapping {
         this.nodesById[node.id] = node;
         node.children   // recurse into all children
             .forEach((child) => this.updateWith(child));
+        // TODO  figure out when it's really necessary to call this, as it's potentially *very* expensive
     }
 
     /**
@@ -78,7 +83,7 @@ export class IdMapping {
      * and should only be used by components which are in complete control of the nodes being passed to this method.
      */
     reinitializeWith = (nodesById: NodesById) => {
-        this.nodesById = nodesById
+        this.nodesById = nodesById;
     }
 
 }

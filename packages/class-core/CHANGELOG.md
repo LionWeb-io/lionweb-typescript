@@ -20,6 +20,7 @@
 * Implement inverters for all deltas.
 * Fix single-containment and -reference value managers.
 * (Fix a small cosmetic thing in `asTreeTextWith`: unset properties’ values now get shown as “`<not set>`” instead of as “`$<not set>`” — note the removed `$`.)
+* Dependent nodes can now be passed to a deserializer as an `IdMapping` instance as well.
 
 
 ## 0.6.13

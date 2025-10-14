@@ -18,16 +18,10 @@
 import { expect } from "chai"
 import { expectError } from "../../test-utils/async.js"
 
-import {
-    AddPartitionCommand,
-    LowLevelClientParameters,
-    PartitionAddedEvent,
-    SignOnRequest,
-    SignOnResponse
-} from "@lionweb/delta-protocol-impl"
+import { LowLevelClientLogItem, LowLevelClientParameters } from "@lionweb/delta-protocol-client"
+import { AddPartitionCommand, PartitionAddedEvent, SignOnRequest, SignOnResponse } from "@lionweb/delta-protocol-common"
 import { LionWebJsonChunk } from "@lionweb/json"
 import { mockLowLevelClientInstantiator } from "../../test-utils/mock-low-level-client.js"
-import { LowLevelClientLogItem } from "@lionweb/delta-protocol-impl/dist/web-socket/client-log-types.js"
 
 
 describe("mock low-level client", async function() {
