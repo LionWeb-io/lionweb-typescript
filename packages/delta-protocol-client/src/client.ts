@@ -47,8 +47,12 @@ import {
     deltaToCommandTranslator,
     Event,
     eventToDeltaTranslator,
+    GetAvailableIdsRequest,
+    GetAvailableIdsResponse,
     isEvent,
     isQueryResponse,
+    ListPartitionsRequest,
+    ListPartitionsResponse,
     QueryMessage,
     ReconnectRequest,
     ReconnectResponse,
@@ -301,6 +305,25 @@ export class LionWebClient {
         } as ReconnectRequest) as ReconnectResponse
         this._participationId = participationId
         this.lastReceivedSequenceNumber = response.lastReceivedSequenceNumber
+    }
+
+    async getAvailableIds(queryId: LionWebId, count: number): Promise<LionWebId[]> {
+        const response = await this.makeQuery({
+            messageKind: "GetAvailableIdsRequest",
+            queryId,
+            count,
+            protocolMessages: []
+        } as GetAvailableIdsRequest) as GetAvailableIdsResponse
+        return response.ids
+    }
+
+    async listPartitions(queryId: LionWebId): Promise<LionWebJsonChunk> {
+        const response = await this.makeQuery({
+            messageKind: "ListPartitionsRequest",
+            queryId,
+            protocolMessages: []
+        } as ListPartitionsRequest) as ListPartitionsResponse
+        return response.partitions
     }
 
 
