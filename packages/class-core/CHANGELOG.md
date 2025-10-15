@@ -3,7 +3,10 @@
 ## 0.7.0
 
 * Replace util functions with ones from `ts-utils`.
-* Add a method `tryFromId` to the `IdMapping` class that returns `undefined` on an unknown ID, rather than throwing an error.
+* For the `IdMapping` class:
+  * Add a method `tryFromId` that returns `undefined` on an unknown ID, rather than throwing an error.
+  * Add `reinitializeWith` and `mergeIn` methods.
+  * (Plus: add documentation to existing methods.)
 * Add a method `combinedFactoryFor` to combine(/“compose”) (at runtime) the factories from multiple languages (represented by their `ILanguageBase` implementations) into one factory.
 * Add multiple deltas – in all their aspects: types, (de-)serializers, appliers, inverters – that correspond to events from the delta protocol specification.
 * Expand value managers with methods:
@@ -15,8 +18,6 @@
 * Rename `DeltaHandler`, `handleDelta`, etc. to `DeltaReceiver`, `receiveDelta`, etc. to be more in line with C# implementation — keeping the previous names as legacy aliases.
   (And: `latching` &rarr; `latchingDeltaReceiverFrom`.)
 * Improve performance of deserializer a little bit (— potentially).
-* Add a `reinitializeWith` method to `IdMapping`.
-  (Plus: add documentation to existing methods.)
 * Implement inverters for all deltas.
 * Fix single-containment and -reference value managers.
 * (Fix a small cosmetic thing in `asTreeTextWith`: unset properties’ values now get shown as “`<not set>`” instead of as “`$<not set>`” — note the removed `$`.)

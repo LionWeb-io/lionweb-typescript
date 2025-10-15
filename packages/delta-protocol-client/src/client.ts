@@ -24,11 +24,11 @@ import {
     IdMapping,
     ILanguageBase,
     INodeBase,
-    nodeBaseDeserializer,
     nodeBaseDeserializerWithIdMapping,
     NodeBaseFactory,
     PartitionAddedDelta,
     PartitionDeletedDelta,
+    RootsWithIdMapping,
     serializeDelta
 } from "@lionweb/class-core"
 import { Concept } from "@lionweb/core"
@@ -108,7 +108,8 @@ export class LionWebClient {
         public model: INodeBase[],
         public readonly idMapping: IdMapping,
         public readonly createNode: NodeBaseFactory,
-        public readonly deserializer: Deserializer<INodeBase[]>,
+        public readonly deserialize: Deserializer<INodeBase[]>,
+        public readonly deserializeWithIdMapping: Deserializer<RootsWithIdMapping>,
         private readonly effectiveReceiveDelta: DeltaReceiver,
         private readonly lowLevelClient: LowLevelClient<Command | QueryMessage>
     ) {}
@@ -148,8 +149,8 @@ export class LionWebClient {
         const { roots: model, idMapping } = serializationChunk === undefined
             ? { roots: [], idMapping: new IdMapping({}) }
             : nodeBaseDeserializerWithIdMapping(languageBases, effectiveReceiveDelta)(serializationChunk)
-        const deserializer = nodeBaseDeserializer(languageBases, effectiveReceiveDelta)
-        const eventAsDelta = eventToDeltaTranslator(languageBases, deserializer)
+        const deserializerWithIdMapping = nodeBaseDeserializerWithIdMapping(languageBases, effectiveReceiveDelta)
+        const eventAsDelta = eventToDeltaTranslator(languageBases, deserializerWithIdMapping)
         loading = false
 
         const processEvent = (event: Event) => {
@@ -204,7 +205,8 @@ export class LionWebClient {
             model,
             idMapping,
             combinedFactoryFor(languageBases, effectiveReceiveDelta),
-            deserializer,
+            (serializationChunk) => deserializerWithIdMapping(serializationChunk).roots,
+            deserializerWithIdMapping,
             effectiveReceiveDelta,
             lowLevelClient
         ) // Note: we need this `lionWebClient` constant non-inlined for write-access to lastReceivedSequenceNumber and queryResolveById.
