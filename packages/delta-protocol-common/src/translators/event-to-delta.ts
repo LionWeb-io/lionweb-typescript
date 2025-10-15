@@ -52,7 +52,8 @@ import {
     PropertyDeletedDelta,
     ReferenceAddedDelta,
     ReferenceChangedDelta,
-    ReferenceDeletedDelta
+    ReferenceDeletedDelta,
+    RootsWithIdMapping
 } from "@lionweb/class-core"
 import {
     builtinPropertyValueDeserializer,
@@ -104,22 +105,23 @@ export type EventToDeltaTranslator = (event: Event, idMapping: IdMapping) => IDe
 
 /**
  * @return a {@link EventToDeltaTranslator} for the languages given as {@link ILanguageBase language bases},
- * with the given {@link IdMapping `idMapping`} and {@link Deserializer `deserialized` deserializer function}.
+ * with the given {@link IdMapping `idMapping`} and {@link Deserializer `deserializeWithIdMapping` deserializer function}.
  */
 export const eventToDeltaTranslator = (
     languageBases: ILanguageBase[],
-    deserialized: Deserializer<INodeBase[]>,
+    deserializeWithIdMapping: Deserializer<RootsWithIdMapping>,
     propertyValueDeserializer: PropertyValueDeserializer = builtinPropertyValueDeserializer
 ): EventToDeltaTranslator => {
 
     const eventAsDelta = (event: Event, idMapping: IdMapping): IDelta | undefined => {
 
         const deserializedNodeFrom = (chunk: LionWebJsonChunk): INodeBase => {
-            const nodes = deserialized(chunk, /* dependentNodes: */ [], idMapping)    // (deserializer should take care of installing delta receiver)
-            if (nodes.length !== 1) {
-                throw new Error(`expected exactly 1 root node in deserialization of chunk in event, but got ${nodes.length}`)
+            const { roots, idMapping: newIdMapping } = deserializeWithIdMapping(chunk, /* dependentNodes: */ [], idMapping)    // (deserializer should take care of installing delta receiver)
+            if (roots.length !== 1) {
+                throw new Error(`expected exactly 1 root node in deserialization of chunk in event, but got ${roots.length}`)
             }
-            return nodes[0]
+            idMapping.mergeIn(newIdMapping)
+            return roots[0]
         }
         const { resolvedPropertyFrom, resolvedContainmentFrom, resolvedReferenceFrom } = featureResolversFor(languageBases.map(({language}) => language));
         const resolvedRefTo = (ref: LionWebId | typeof unresolved) =>

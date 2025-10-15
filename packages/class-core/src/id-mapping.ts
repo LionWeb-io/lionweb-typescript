@@ -86,5 +86,14 @@ export class IdMapping {
         this.nodesById = nodesById;
     }
 
+    /**
+     * Merges the given `that` {@link IdMapping} **in**to `this`.
+     */
+    mergeIn = (that: IdMapping) => {
+        for (const id in that.nodesById) {
+            this.nodesById[id] = that.nodesById[id];
+        }
+    }
+
 }
 
