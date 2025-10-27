@@ -21,12 +21,12 @@
         "lint": "eslint src"
     },
     "dependencies": {
-        "@lionweb/core": "0.7.0-beta.26",
-        "@lionweb/class-core": "0.7.0-beta.26",
-        "@lionweb/class-core-generator": "0.7.0-beta.26",
-        "@lionweb/json": "0.7.0-beta.26",
-        "@lionweb/textgen-utils": "0.7.0-beta.26",
-        "@lionweb/ts-utils": "0.7.0-beta.26",
+        "@lionweb/core": "0.7.0-beta.29",
+        "@lionweb/class-core": "0.7.0-beta.29",
+        "@lionweb/class-core-generator": "0.7.0-beta.29",
+        "@lionweb/json": "0.7.0-beta.29",
+        "@lionweb/textgen-utils": "0.7.0-beta.29",
+        "@lionweb/ts-utils": "0.7.0-beta.29",
         "littoral-templates": "0.5.1"
     },
     "devDependencies": {

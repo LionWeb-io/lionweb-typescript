@@ -20,11 +20,11 @@
         "lint": "eslint src"
     },
     "dependencies": {
-        "@lionweb/class-core": "0.7.0-beta.26",
-        "@lionweb/core": "0.7.0-beta.26",
-        "@lionweb/json": "0.7.0-beta.26",
-        "@lionweb/utilities": "0.7.0-beta.26",
-        "@lionweb/validation": "0.7.0-beta.26",
+        "@lionweb/class-core": "0.7.0-beta.29",
+        "@lionweb/core": "0.7.0-beta.29",
+        "@lionweb/json": "0.7.0-beta.29",
+        "@lionweb/utilities": "0.7.0-beta.29",
+        "@lionweb/validation": "0.7.0-beta.29",
         "chai": "5.3.1",
         "mocha": "11.7.1"
     },
