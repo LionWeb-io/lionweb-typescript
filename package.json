@@ -1,40 +1,66 @@
 {
-  "name": "lionweb-typescript",
-  "version": "0.7.0-dev",
-  "description": "LionWeb core for {Java|Type}Script",
-  "license": "Apache-2.0",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/LionWeb-io/lionweb-typescript.git"
-  },
-  "bugs": {
-    "url": "https://github.com/LionWeb-io/lionweb-typescript/issues"
-  },
-  "devDependencies": {
-    "@types/node": "20.11.25",
-    "@typescript-eslint/eslint-plugin": "6.21.0",
-    "@typescript-eslint/parser": "6.21.0",
-    "prettier": "3.2.5",
-    "typescript": "5.3.3"
-  },
-  "scripts": {
-    "initialize": "npm run clean && npm install && npm run setup && npm run build",
-    "clean": "rm -rf node_modules/ && npm run clean -w packages --if-present",
-    "build": "npm run build -w packages --if-present",
-    "lint": "npm run lint -w packages --if-present",
-    "setup": "npm run setup -w packages --if-present",
-    "test": "npm run test -w packages --if-present",
-    "prerelease": "npm run initialize",
-    "release": "npm run release -w packages --if-present",
-    "release-beta": "npm run release-beta -w packages --if-present"
-  },
-  "private": true,
-  "workspaces": [
-    "./packages/core",
-    "./packages/utilities",
-    "./packages/validation",
-    "./packages/cli",
-    "./packages/test",
-    "./packages/artifacts"
-  ]
+    "name": "lionweb-typescript",
+    "version": "0.7.0-dev",
+    "description": "LionWeb implementation for {Java|Type}Script",
+    "license": "Apache-2.0",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/LionWeb-io/lionweb-typescript.git"
+    },
+    "bugs": {
+        "url": "https://github.com/LionWeb-io/lionweb-typescript/issues"
+    },
+    "devDependencies": {
+        "@eslint/eslintrc": "3.3.1",
+        "@eslint/js": "9.33.0",
+        "@types/node": "24.3.0",
+        "@typescript-eslint/eslint-plugin": "8.40.0",
+        "@typescript-eslint/parser": "8.40.0",
+        "dpdm": "3.14.0",
+        "globals": "16.3.0",
+        "prettier": "3.6.2",
+        "rimraf": "6.0.1",
+        "typescript": "5.9.2"
+    },
+    "scripts": {
+        "clean": "npm run clean -w packages --if-present && npx rimraf node_modules",
+        "setup": "npm run setup -w packages --if-present",
+        "initialize": "npm run clean && npm install && npm run setup",
+        "rebuild": "sh rebuild.sh",
+        "update-version": "node update-package-versions.js",
+        "build": "npm run build -w packages --if-present",
+        "test": "npm run test -w packages --if-present",
+        "lint": "npm run lint -w packages --if-present",
+        "prerelease": "npm run initialize",
+        "release-alpha": "npm run release-alpha -w packages --if-present",
+        "release-beta": "npm run release-beta -w packages --if-present",
+        "release": "npm run release -w packages --if-present",
+        "check-circular-deps": "node check-circular-dependencies.js"
+    },
+    "private": true,
+    "workspaces": [
+        "./packages/ts-utils",
+        "./packages/textgen-utils",
+        "./packages/json",
+        "./packages/json-utils",
+        "./packages/json-diff",
+        "./packages/core",
+        "./packages/utilities",
+        "./packages/validation",
+        "./packages/cli",
+        "./packages/io-lionweb-mps-specific",
+        "./packages/class-core-generator",
+        "./packages/class-core",
+        "./packages/build",
+        "./packages/class-core-test",
+        "./packages/test",
+        "./packages/artifacts",
+        "./packages/delta-protocol-common",
+        "./packages/delta-protocol-client",
+        "./packages/delta-protocol-low-level-client-ws",
+        "./packages/delta-protocol-low-level-client-browser",
+        "./packages/delta-protocol-repository-ws",
+        "./packages/delta-protocol-test-cli",
+        "./packages/delta-protocol-test"
+    ]
 }

@@ -1,6 +1,6 @@
 import fs from "fs"
 import path from "path"
-import { ValidationResult } from "../validators/ValidationResult.js"
+import { ValidationResult } from "../validators/generic/ValidationResult.js"
 
 export function getFilesRecursive(dirPath: string, arrayOfFiles: string[]) {
     const files = fs.readdirSync(dirPath)
@@ -48,7 +48,7 @@ export function printIssues(result: ValidationResult, file?: string): void {
 }
 
 export function issuestoString(vresult: ValidationResult, file?: string): string {
-    let result = ""
-    vresult.issues.forEach(issue => (result += (file == undefined ? "" : `File ${file}: `) + issue.errorMsg() + "\n"))
+    let result = "ISSUES: "
+    vresult.issues.forEach(issue => (result += (file === undefined ? "NOFILE" : `File ${file}: `) + issue.errorMsg() + "\n"))
     return result
 }

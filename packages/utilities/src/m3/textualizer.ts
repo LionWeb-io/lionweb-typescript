@@ -17,33 +17,22 @@ import {
     SingleRef,
     unresolved
 } from "@lionweb/core"
-import {asString, indentWith, Template} from "littoral-templates"
-
+import { asString, indentWith, Template } from "littoral-templates"
 
 const indented = indentWith("    ")(1)
 
-const refAsText = <T extends INamed>(ref: SingleRef<T>): string =>
-    ref === unresolved ? `???` : ref.name
+const refAsText = <T extends INamed>(ref: SingleRef<T>): string => (ref === unresolved ? `???` : ref.name)
 
 const recurse = <T extends M3Node>(ts: T[], header: string, func: (t: T) => Template = asText): Template =>
-    ts.length === 0
-        ? []
-        : indented([
-            header,
-            indented(ts.map(func))
-        ])
+    ts.length === 0 ? [] : indented([header, indented(ts.map(func))])
 
-const featuresOf = (classifier: Classifier): Template =>
-    recurse(nameSorted(classifier.features), `features (↓name):`)
+const featuresOf = (classifier: Classifier): Template => recurse(nameSorted(classifier.features), `features (↓name):`)
 
 const asText = (node: M3Node): Template => {
-
     if (node instanceof Annotation) {
         return [
             `annotation ${node.name}${node.extends === undefined ? `` : ` extends ${refAsText(node.extends)}`}${node.implements.length === 0 ? `` : ` implements ${nameSorted(node.implements).map(nameOf).join(", ")}`}`,
-            indented([
-                `annotates: ${refAsText(node.annotates)}`
-            ]),
+            indented([`annotates: ${refAsText(node.annotates)}`]),
             featuresOf(node)
         ]
     }
@@ -67,10 +56,7 @@ const asText = (node: M3Node): Template => {
     }
 
     if (node instanceof Enumeration) {
-        return [
-            `enumeration ${node.name}`,
-            recurse(node.literals, `literals:`)
-        ]
+        return [`enumeration ${node.name}`, recurse(node.literals, `literals:`)]
     }
 
     if (node instanceof EnumerationLiteral) {
@@ -84,13 +70,10 @@ const asText = (node: M3Node): Template => {
                 `version: ${node.version}`,
                 node.dependsOn.length === 0
                     ? []
-                    : [
-                        `dependsOn:`,
-                        indented(node.dependsOn.map((language) => `${language.name} (${language.version})`))
-                    ],
+                    : [`dependsOn:`, indented(node.dependsOn.map(language => `${language.name} (${language.version})`))],
                 `entities (↓name):`,
                 ``,
-                indented(nameSorted(node.entities).map((entity) => [asText(entity), ``]))
+                indented(nameSorted(node.entities).map(entity => [asText(entity), ``]))
             ]),
             ``
         ]
@@ -105,15 +88,8 @@ const asText = (node: M3Node): Template => {
     }
 
     return `node (key=${node.key}, ID=${node.id}) of class ${node.constructor.name} not handled`
-
 }
 
+export const languageAsText = (language: Language) => asString(asText(language))
 
-export const languageAsText = (language: Language) =>
-    asString(asText(language))
-
-export const languagesAsText = (languages: Language[]): string =>
-    asString(
-        nameSorted(languages).map((language) => [asText(language), ``])
-    )
-
+export const languagesAsText = (languages: Language[]): string => asString(nameSorted(languages).map(language => [asText(language), ``]))

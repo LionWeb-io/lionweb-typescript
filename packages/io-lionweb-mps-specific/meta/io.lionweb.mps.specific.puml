@@ -1,0 +1,39 @@
+@startuml
+hide empty members
+
+' qualified name: "io.lionweb.mps.specific"
+
+
+annotation ConceptDescription {
+  conceptAlias: String?
+  conceptShortDescription: String?
+  helpUrl: String?
+}
+
+annotation Deprecated {
+  comment: String?
+  build: String?
+}
+
+annotation KeyedDescription {
+  documentation: String?
+}
+
+annotation ShortDescription {
+  description: String?
+}
+
+annotation VirtualPackage implements INamed
+VirtualPackage ..> Node
+
+
+
+' relations:
+
+
+
+KeyedDescription "*" --> "*" Node: seeAlso
+
+
+
+@enduml

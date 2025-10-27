@@ -1,5 +1,13 @@
 # Changelog
 
+0.7.0
+
+* Move `dependenciesThroughDirectInheritanceOf` and `verboseDependencies` functions from `class-core-generator` to `utilities` package, and expose it.
+* Rename `tsTypesForLanguage` &rarr; `tsTypeDefsForLanguage`.
+  (This is a breaking change, but that function's hardly used anyway, and it's trivial to detect and fix.)
+* Package `src/` again (— i.e., don't ignore for NPM packaging.)
+
+
 ## 0.6.12
 
 Dependencies: `@lionweb/core` version 0.6.12

@@ -1,0 +1,41 @@
+{
+  "serializationFormatVersion": "2023.1",
+  "languages": [
+    {
+      "key": "TestLanguage",
+      "version": "0"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "foo",
+      "classifier": {
+        "language": "TestLanguage",
+        "version": "0",
+        "key": "DataTypeTestConcept"
+      },
+      "properties": [
+        {
+          "property": {
+            "language": "TestLanguage",
+            "version": "0",
+            "key": "DataTypeTestConcept-stringValue_1"
+          },
+          "value": "bar"
+        },
+        {
+          "property": {
+            "language": "TestLanguage",
+            "version": "0",
+            "key": "DataTypeTestConcept-enumValue_1"
+          },
+          "value": "TestEnumeration-literal3"
+        }
+      ],
+      "containments": [],
+      "references": [],
+      "annotations": [],
+      "parent": null
+    }
+  ]
+}

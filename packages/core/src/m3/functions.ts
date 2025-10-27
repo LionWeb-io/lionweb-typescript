@@ -3,12 +3,18 @@
  */
 
 
+import { LionWebId, LionWebKey } from "@lionweb/json"
+import { cycleWith, flatMapNonCyclingFollowing, sortByStringKey } from "@lionweb/ts-utils"
+import { containmentChain } from "../functions.js"
+import { ClassifierDeducer } from "../reading.js"
+import { isRef, unresolved } from "../references.js"
+import { Node } from "../types.js"
 import {
     Annotation,
     Classifier,
     Concept,
     Containment,
-    Datatype,
+    DataType,
     Enumeration,
     Feature,
     IKeyed,
@@ -23,19 +29,12 @@ import {
     Property,
     Reference
 } from "./types.js"
-import {isRef, unresolved} from "../references.js"
-import {sortByStringKey} from "../utils/sorting.js"
-import {cycleWith} from "../utils/cycles.js"
-import {flatMapNonCyclingFollowing} from "../utils/recursion.js"
-import {Id, Node} from "../types.js"
-import {ClassifierDeducer} from "../facade.js"
-import {containmentChain} from "../functions.js"
 
 
 /**
  * @return The type of the given {@link Feature}
  */
-const type = (feature: Feature): Classifier | Datatype | typeof unresolved =>
+const type = (feature: Feature): Classifier | DataType | typeof unresolved =>
     (feature as (Link | Property)).type
 
 
@@ -188,15 +187,8 @@ const namedsOf = (language: Language): M3Concept[] =>
 /**
  * @return the key of the given {@link INamed named thing}.
  */
-const keyOf = <T extends IKeyed>({key}: T): string =>
+const keyOf = <T extends IKeyed>({key}: T): LionWebKey =>
     key
-
-
-/**
- * Sorts the given {@link LanguageEntity language entities} by name.
- */
-const entitiesSortedByName = (entities: LanguageEntity[]) =>
-    sortByStringKey(entities, nameOf)
 
 
 type ConcreteClassifier = Concept | Annotation
@@ -209,7 +201,17 @@ type ConcreteClassifier = Concept | Annotation
 const isConcrete = (thing: LanguageEntity): thing is ConcreteClassifier =>
     (thing instanceof Concept && !thing.abstract) || (thing instanceof Annotation)
 
-const inheritsFrom = (classifier: Classifier): Classifier[] => {
+/**
+ * Determines whether the given {@link LanguageEntity metamodel element} is a {@link Concept concept}
+ * which is a partition.
+ */
+const isPartition = (thing: LanguageEntity): thing is Concept =>
+    thing instanceof Concept && thing.partition
+
+/**
+ * @return an array of {@link Classifier classifiers} that it **directly** inherits from.
+ */
+const inheritsDirectlyFrom = (classifier: Classifier): Classifier[] => {
     if (classifier instanceof Concept || classifier instanceof Annotation) {
         return [
             ...(
@@ -227,17 +229,26 @@ const inheritsFrom = (classifier: Classifier): Classifier[] => {
 }
 
 /**
+ * Alias for {@link inheritsDirectlyFrom}, kept for backward compatibility, and to be deprecated and removed later.
+ */
+const inheritsFrom = inheritsDirectlyFrom;
+
+/**
  * @return an array that's either an inheritance cycle, or empty (meaning: no inheritance cycle).
  */
-const inheritedCycleWith = (classifier: Classifier) =>
-    cycleWith(classifier, inheritsFrom)
+const inheritanceCycleWith = (classifier: Classifier) =>
+    cycleWith(classifier, inheritsDirectlyFrom)
 
+/**
+ * Alias for {@link inheritanceCycleWith}, kept for backward compatibility, and to be deprecated and removed later.
+ */
+const inheritedCycleWith = inheritanceCycleWith;
 
 /**
  * @return *all* super types (through `extends` or `implements`) of the given {@link Classifier classifier}.
  */
 const allSuperTypesOf = (classifier: Classifier): Classifier[] =>
-    flatMapNonCyclingFollowing(inheritsFrom, inheritsFrom)(classifier)
+    flatMapNonCyclingFollowing(inheritsDirectlyFrom, inheritsDirectlyFrom)(classifier)
 
 
 /**
@@ -245,7 +256,7 @@ const allSuperTypesOf = (classifier: Classifier): Classifier[] =>
  * including the inherited ones.
  */
 const allFeaturesOf = (classifier: Classifier): Feature[] =>
-    flatMapNonCyclingFollowing((ci) => ci.features, inheritsFrom)(classifier)
+    flatMapNonCyclingFollowing((ci) => ci.features, inheritsDirectlyFrom)(classifier)
 
 
 /**
@@ -259,7 +270,7 @@ const isEnumeration = (element: LanguageEntity): element is Enumeration =>
  * @return a function that looks up a classifier from the given {@link Language language} by its ID.
  */
 const idBasedClassifierDeducerFor = (language: Language) =>
-    (id: Id) =>
+    (id: LionWebId) =>
         language.entities.find((element) => element instanceof Classifier && element.id === id) as Classifier
 
 /**
@@ -307,26 +318,47 @@ const instantiableClassifiersOf = (language: Language): Classifier[] =>
     language.entities.filter(isInstantiableClassifier) as Classifier[]
 
 
+/**
+ * @return whether the two given {@link Classifiers classifiers} are the same (/identical by meta-pointer).
+ */
+const areSameClassifiers = (left: Classifier, right: Classifier) =>
+    (left === right) || (
+        areSameLanguages(left.language, right.language) && left.key === right.key
+    )
+
+/**
+ * @return whether the two given {@link Language languages} are the same (/identical by meta-pointer).
+ */
+const areSameLanguages = (left: Language, right: Language) =>
+    (left === right) || (
+        left.key === right.key && left.version === right.version
+    )
+
+
 export {
     allContaineds,
     allFeaturesOf,
     allSuperTypesOf,
+    areSameClassifiers,
+    areSameLanguages,
     classBasedClassifierDeducerFor,
     concatenateNamesOf,
     conceptsOf,
     containmentChain,
     directlyContaineds,
-    entitiesSortedByName,
     featureMetaType,
     flatMap,
     idBasedClassifierDeducerFor,
+    inheritanceCycleWith,
     inheritedCycleWith,
     inheritsFrom,
+    inheritsDirectlyFrom,
     instantiableClassifiersOf,
     isConcrete,
     isContainment,
     isEnumeration,
     isMultiple,
+    isPartition,
     isProperty,
     isReference,
     keyOf,

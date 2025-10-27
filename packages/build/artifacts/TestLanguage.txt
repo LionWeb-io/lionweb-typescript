@@ -1,0 +1,42 @@
+language TestLanguage
+    version: 0
+    entities (↓name):
+
+        <<partition>> concept DataTypeTestConcept
+            features (↓name):
+                booleanValue_0_1: Boolean?
+                booleanValue_1: Boolean
+                enumValue_0_1: TestEnumeration?
+                enumValue_1: TestEnumeration
+                integerValue_0_1: Integer?
+                integerValue_1: Integer
+                stringValue_0_1: String?
+                stringValue_1: String
+
+        <<partition>> concept LinkTestConcept implements INamed
+            features (↓name):
+                containment_0_1: LinkTestConcept?
+                containment_0_n: LinkTestConcept[0..*]
+                containment_1: LinkTestConcept
+                containment_1_n: LinkTestConcept[1..*]
+                reference_0_1 -> LinkTestConcept?
+                reference_0_n -> LinkTestConcept[0..*]
+                reference_1 -> LinkTestConcept
+                reference_1_n -> LinkTestConcept[1..*]
+
+        enumeration SecondTestEnumeration
+            literals:
+                literal1
+                literal2
+                literal3
+
+        annotation TestAnnotation
+            annotates: Node
+
+        enumeration TestEnumeration
+            literals:
+                literal1
+                literal2
+                literal3
+
+

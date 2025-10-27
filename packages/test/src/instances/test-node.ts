@@ -1,18 +1,18 @@
-import {BaseNode} from "./base.js"
 import {
     Classifier,
     Containment,
     Enumeration,
     EnumerationLiteral,
-    ExtractionFacade,
     Feature,
-    Id,
     Language,
     Link,
     Property,
+    Reader,
     Reference,
     unresolved
 } from "@lionweb/core"
+import { LionWebId } from "@lionweb/json"
+import { BaseNode } from "./base.js"
 
 
 /**
@@ -24,12 +24,12 @@ export class TestNode implements BaseNode {
     public readonly references: Record<string, (BaseNode | typeof unresolved)[]> = {}
     public readonly annotations: BaseNode[] = []
 
-    constructor(public readonly id: Id, public readonly classifier: string) {
+    constructor(public readonly id: LionWebId, public readonly classifier: string) {
     }
 }
 
 
-export class TestNodeReader implements ExtractionFacade<TestNode> {
+export class TestNodeReader implements Reader<TestNode> {
 
     constructor(public readonly knownLanguages: Language[] = []) {
     }

@@ -1,0 +1,84 @@
+// Copyright 2025 TRUMPF Laser SE and other contributors
+//
+// Licensed under the Apache License, Version 2.0 (the "License")
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+// SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
+// SPDX-License-Identifier: Apache-2.0
+
+// Warning: this file is generated!
+// Modifying it by hand is useless at best, and sabotage at worst.
+
+@startuml
+hide empty members
+
+' qualified name: "Deltas"
+
+
+class CustomType implements Type {
+  type: String
+  serializationType: String
+  serializationExpr: String
+  deserializationExpr: String
+}
+
+class Delta implements INamed {
+  documentation: String?
+}
+
+class Deltas <<partition>>
+
+enum FeatureKinds {
+  property
+  containment
+  reference
+}
+
+class FeatureType implements Type {
+  kind: FeatureKinds
+}
+
+class Field implements INamed
+
+class IndexType implements Type
+
+interface NodeSerialization
+class NodeType implements Type
+
+class PrimitiveValueType implements Type
+
+class RefOnly implements NodeSerialization
+
+class SerializeSubTree implements NodeSerialization {
+  fieldName: String
+}
+
+interface Type
+
+
+' relations:
+
+
+Delta "1" o--> "*" Field: fields
+Deltas "1" o--> "*" Delta: deltas
+
+FeatureType "*" --> "0..1" Field: container
+Field "1" o--> "1" Type: type
+
+
+NodeType "1" o--> "0..1" NodeSerialization: serialization
+
+
+
+
+
+@enduml

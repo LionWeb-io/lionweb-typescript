@@ -6,6 +6,12 @@
 [![CI](https://github.com/LionWeb-io/lionweb-typescript/actions/workflows/test.yaml/badge.svg)
 ](https://github.com/LionWeb-io/lionweb-typescript/actions/workflows/test.yaml)
 
+[![npm](https://img.shields.io/npm/v/%40lionweb%2Fjson?label=%40lionweb%2Fjson)
+](https://www.npmjs.com/package/@lionweb/json)
+[![npm](https://img.shields.io/npm/v/%40lionweb%2Fjson-utils?label=%40lionweb%2Fjson-utils)
+](https://www.npmjs.com/package/@lionweb/json-utils)
+[![npm](https://img.shields.io/npm/v/%40lionweb%2Fjson-diff?label=%40lionweb%2Fjson-diff)
+](https://www.npmjs.com/package/@lionweb/json-diff)
 [![npm](https://img.shields.io/npm/v/%40lionweb%2Fcore?label=%40lionweb%2Fcore)
 ](https://www.npmjs.com/package/@lionweb/core)
 [![npm](https://img.shields.io/npm/v/%40lionweb%2Fcli?label=%40lionweb%2Fcli)
@@ -14,6 +20,10 @@
 ](https://www.npmjs.com/package/@lionweb/utilities)
 [![npm](https://img.shields.io/npm/v/%40lionweb%2Fvalidation?label=%40lionweb%2Fvalidation)
 ](https://www.npmjs.com/package/@lionweb/validation)
+[![npm](https://img.shields.io/npm/v/%40lionweb%2Fts-utils?label=%40lionweb%2Fts-utils)
+](https://www.npmjs.com/package/@lionweb/ts-utils)
+[![npm](https://img.shields.io/npm/v/%40lionweb%2Ftextgen-utils?label=%40lionweb%2Ftextgen-utils)
+](https://www.npmjs.com/package/@lionweb/textgen-utils)
 
 
 This repository contains a TypeScript implementation for (parts of) the [LionWeb specification](https://lionweb-io.github.io/specification/) – specifically: release version **2023.1** of the LionWeb specification.
@@ -21,6 +31,7 @@ This repository contains a TypeScript implementation for (parts of) the [LionWeb
 _Note_ that this repo doesn't implement the specification completely.
 In particular:
 
+* No support for release version 2024.1 (yet).
 * Not all constraints on the LionCore M3 have been implemented.
 * The functionality in the `utilities` and `validation` packages is provided “as-is”.
 
@@ -29,23 +40,70 @@ The implementation of the JSON serialization format, serialization from in-memor
 
 ## Repo org
 
-The implementation is divided up in a number of NPM packages in the directory [`packages`](./packages) (in order of importance):
+The implementation is divided up in a number of NPM packages in the directory [`packages`](./packages) (in order of importance) — see their READMEs for more details:
+
+- `json`
+  Encapsulates the JSON serialization format.
+
+- `json-utils`
+  Utilities around the JSON serialization format, also i.c.w. LionCore M3.
+
+- `json-diff`
+  Computes differences between LionWeb serialization chunks.
 
 - `core`
   The "core stuff" such as: base types, the LionCore M3 (including the `builtins` language), and (de-)serialization.
+
 - `utilities`
   Utilities on top of the `core` packages that might be broadly useful, but should not go into the `core` package.
+
 - `validation`
   Validators that validate a JSON serialization.
-- `test`
-  A package containing (unit) tests for the packages above.
+
+- `ts-utils`
+  General TypeScript utilities, e.g. for working with maps and such.
+
+- `textgen-utils`
+  General utilities for doing text – i.e.: code – generation, typically based on the `littoral-templates` package.
+
 - `cli`
   A package with an executable to trigger some of the functionality in `utilities` through a commandline interface (CLI), i.e. from the commandline.
+
+- `test`
+  A package containing (unit) tests for the packages above.
+
+- `class-core`
+  A package that contains a framework for the implementation of `INode` that's class-based, and can work with deltas.
+
+- `class-core-generator`
+  A package that contains a code generator to generate classes based on the `class-core` package from an M2.
+
+- `class-core-test`
+  A package that contains tests that specifically test the `class-core` package.
+
+- `build`
+  A package that builds part of the code in `class-core` — specifically the part related to the delta protocol.
+
+  _Note_ that this package – and specifically the `generate-for-class-core.ts` file – depends on `class-core` itself.
+  This constitutes a *circular* dependency, but that only exists at compile+build time, so should not be problematic.
+  To ensure that a “clean clone” of this repository is not impacted, the `rebuild.sh` script builds `class-core` first, before compiling and running `build`, and then builds `class-core` again.
+
 - `artifacts`
   A package that generates artifacts (serialization chunks, diagrams, JSON Schemas) from some of the models constructed in the `core` and `test` packages.
 
+- Various packages related to the delta protocol:
+  - `delta-protocol-common`
+  - `delta-protocol-client`
+  - `delta-protocol-low-level-client-browser`
+  - `delta-protocol-low-level-client-ws`
+  - `delta-protocol-repository-ws`
+  - `delta-protocol-test-cli`
+    A package that contains CLI programs for starting a client and repository *for testing purposes*.
+  - `delta-protocol-test`
+    A package that contains tests for the delta protocol implementation.
+
 Each of these packages have their own `README.md`.
-The `core`, `utilities`, `cli`, and `validation` packages are published in the scope of [the `lionweb` organization](https://www.npmjs.com/org/lionweb), meaning that they're all prefixed with `@lionweb/`.
+The following packages are published in the scope of [the `lionweb` organization](https://www.npmjs.com/org/lionweb), meaning that they're all prefixed with `@lionweb/`: `json`, `json-utils`, `js-diff`, `core`, `ts-utils`, `utilities`, `cli`, and `validation`, `class-core`, `class-core-generator`
 The other packages are for internal use only.
 All these packages declare their own NPM semver identification, which isn't directly related to the release version of the LionWeb specification.
 
@@ -56,6 +114,8 @@ This repo relies on the following tools being installed:
 
 - [Node.js](https://nodejs.org/): JavaScript runtime
   - NPM (bundled with Node.js)
+- A shell (compatible with the Bourne shell), to run [`rebuild.sh`](rebuild.sh) and other `.sh` scripts.
+  (This might take a little more effort on Windows machines than on Linux or even macOS.)
 - (optional) [PlantUML](https://plantuml.com/).
   An IDE plugin such as the one [for IntelliJ IDEA](https://plugins.jetbrains.com/plugin/7017-plantuml-integration) also does the trick.
 
@@ -64,28 +124,51 @@ This repo relies on the following tools being installed:
 
 ## Development
 
-### Commands
+### Making everything
 
-Run the following command to setup the project:
+Run the following command to set up the project:
 
 ```shell
 npm run clean
 npm install
 npm run setup
 ```
-Run the following command to **build** each of the packages:
 
-```shell
-# Build the project
-npm run build
-```
-
-This includes cleaning up and installing any NPM (dev) dependencies.
-
-The preceding commands can also be run as follows:
+The chain of preceding commands can also be run as follows:
 
 ```shell
 npm run initialize
+```
+
+### Building, testing, linting
+
+Run the `rebuild.sh` script (re-)**build** (“make”) each of the packages, in dependency order.
+This script exits – or at least: should – as soon as the first failure it detected.
+It also triggers the `generate` scriptlet of the `build` package, which generates a couple of source files in other packages from various sources across this repo.
+It's necessary to run this script when these sources have changed, or when the code of the `class-core` has changed significantly.
+Note that there a cyclic dependency between the `class-core` and `build` packages, which sometimes necessitates running this script twice to arrive at a stable state.
+(The `rebuild` scriptlet in the top-level `package.json` runs (only) the `rebuild.sh` script.)
+
+Run the following command to just com-/transpile the TypeScript source code in all packages:
+
+```shell
+npm run build
+```
+
+(This is typically enough.)
+
+Run the following command to run all the tests:
+
+```shell
+npm test
+```
+
+The output should look similar to this (but much longer):
+
+```html
+<br />
+<br />
+<img src="./documentation/images/test-output.png" alt="test" width="50%"/>
 ```
 
 The following command statically _style_-checks the source code in all the packages:
@@ -98,40 +181,27 @@ npm run lint
 *Note* that this does not catch TypeScript compilation errors!
 (That's because linting only does parsing, not full compilation.)
 
-Run the following command to run the tests:
 
-```shell
-# Run the tests
-npm run test
-```
+### Version numbers
 
-<br />
-
-The output should look similar to this (but much longer):
-<br />
-<br />
-<img src="./documentation/images/test-output.png" alt="test" width="50%"/>
-
-
-### Updating version numbers
-
-To keep the version numbers of the various packages under `packages/` aligned throughout this repository, you can use the Node.js script [`update-package-versions.js`](./update-package-versions.js).
+To keep the version numbers of the various packages under `packages/` aligned throughout this repository, you use the Node.js script [`update-package-versions.js`](./update-package-versions.js).
 You execute this script as follows from the repo's root:
 
 ```shell
-node update-package-versions.js
+./update-package-versions.js
 ```
 
-This reads the file [`packages/versions.json`](./packages/versions.json) and updates the `package.json` files of all packages under `packages/` according to it.
+This reads the file [`packages/versions.json`](versions.json) and updates the `package.json` files of all *workspace packages* (as listed in the root-level `package.json`) under `packages/` according to it, as well as the main(/root-level) `package.json`.
+The format of that `versions.json` file is self-explanatory.
 This script runs `npm install` afterward to update the `package-lock.json`.
-Inspect the resulting diffs to ensure correctness, and don't forget to run `npm install` to update the `package-lock.json` in case you made corrections.
+Inspect the resulting diffs to ensure correctness, and don't forget to run `npm install` to update the `package-lock.json` in case you made corrections outside of/after running this script.
 
 
 ### Releasing/publishing packages
 
 Packages are released to the [npm registry (website)](https://www.npmjs.com/): see the badges at the top of this document.
 We'll use the terms “release/releasing” from now on, instead of “publication/publishing” as npm itself does.
-We only release the following packages: `core`, `validation`, `utilities`, `cli`.
+We (only) release the following packages: `core`, `validation`, `utilities`, `cli`, `class-core`, `class-core-generator`, `ts-utils`, `textgen-utils`, `io-lionweb-mps-specific`.
 
 Releasing a package involves the following steps:
 
@@ -158,6 +228,22 @@ Note that beta releases are different in a couple of ways:
 
 Releasing all (releasable) packages at the same time can be done through the top-level `release` script.
 If you do that, you can perform the manual steps above all at the same time, which might save time and commits.
+
+You can also perform an alpha release in exactly the same way as a beta release, but with all occurrences of "`beta`" replaced with "`alpha`".
+Alpha releases should be limited to experimental features.
+
+
+## Circular dependencies
+
+Run the NPM task `check-circular-dependencies` to check whether circular dependencies exist in any of the packages.
+A circular dependency is a cycle in `import` statements in TypeScript code.
+Such circular dependencies don't necessarily prevent the code from being compilable and runnable, but problems can arise due to web bundlers, and in debugging.
+Circular dependencies can usually be avoided by using the “internal module pattern”, which is explained in [this blog](https://medium.com/visual-development/how-to-fix-nasty-circular-dependency-issues-once-and-for-all-in-javascript-typescript-a04c987cf0de).
+The TL;DR of that is:
+
+1. Export all *internally*-exposed stuff from a central `index-internal.ts`.
+2. Then, import from that file *only*.
+3. Export everything you want exposed to the outside world from a `index.ts` which imports from `index-internal.ts`.
 
 
 #### Future work

@@ -1,5 +1,6 @@
 export * from "./diagrams/Mermaid-generator.js"
 export * from "./diagrams/PlantUML-generator.js"
+export * from "./dependencies.js"
 export * from "./infer-languages.js"
 export * from "./textualizer.js"
 export * from "./ts-generation/ts-types-generator.js"

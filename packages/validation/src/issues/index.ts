@@ -1,4 +1,3 @@
-export * from "../json/JsonContext.js"
 export * from "./ValidationIssue.js"
 export * from "./SyntaxIssues.js"
 export * from "./ReferenceIssues.js"

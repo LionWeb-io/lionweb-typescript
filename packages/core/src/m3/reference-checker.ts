@@ -1,6 +1,6 @@
-import {Concept, Containment, Language, Property, Reference} from "./types.js"
-import {flatMap, qualifiedNameOf} from "./functions.js"
-import {SingleRef, unresolved} from "../references.js"
+import { SingleRef, unresolved } from "../references.js"
+import { flatMap, qualifiedNameOf } from "./functions.js"
+import { Concept, Containment, Language, Property, Reference } from "./types.js"
 
 
 /**

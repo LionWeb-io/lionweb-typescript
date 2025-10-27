@@ -1,66 +1,66 @@
 {
-  "languagesWithInstantiations": [
-    {
-      "key": "library",
-      "version": "1",
-      "name": "library",
-      "instantiations": 3
-    }
-  ],
-  "instantiatedClassifiers": [
-    {
-      "language": {
-        "key": "library",
-        "version": "1",
-        "name": "library"
-      },
-      "key": "Library",
-      "name": "Library",
-      "metaType": "concept",
-      "instantiations": 1
-    },
-    {
-      "language": {
-        "key": "library",
-        "version": "1",
-        "name": "library"
-      },
-      "key": "Book",
-      "name": "Book",
-      "metaType": "concept",
-      "instantiations": 1
-    },
-    {
-      "language": {
-        "key": "library",
-        "version": "1",
-        "name": "library"
-      },
-      "key": "GuideBookWriter",
-      "name": "GuideBookWriter",
-      "metaType": "concept",
-      "instantiations": 1
-    }
-  ],
-  "languagesWithoutInstantiations": [],
-  "uninstantiatedInstantiableClassifiers": [
-    {
-      "language": {
-        "key": "library",
-        "version": "1",
-        "name": "library"
-      },
-      "key": "Writer",
-      "name": "Writer"
-    },
-    {
-      "language": {
-        "key": "library",
-        "version": "1",
-        "name": "library"
-      },
-      "key": "SpecialistBookWriter",
-      "name": "SpecialistBookWriter"
-    }
-  ]
+    "languagesWithInstantiations": [
+        {
+            "key": "library",
+            "version": "1",
+            "name": "library",
+            "instantiations": 3
+        }
+    ],
+    "instantiatedClassifiers": [
+        {
+            "language": {
+                "key": "library",
+                "version": "1",
+                "name": "library"
+            },
+            "key": "Library",
+            "name": "Library",
+            "metaType": "concept",
+            "instantiations": 1
+        },
+        {
+            "language": {
+                "key": "library",
+                "version": "1",
+                "name": "library"
+            },
+            "key": "Book",
+            "name": "Book",
+            "metaType": "concept",
+            "instantiations": 1
+        },
+        {
+            "language": {
+                "key": "library",
+                "version": "1",
+                "name": "library"
+            },
+            "key": "GuideBookWriter",
+            "name": "GuideBookWriter",
+            "metaType": "concept",
+            "instantiations": 1
+        }
+    ],
+    "languagesWithoutInstantiations": [],
+    "uninstantiatedInstantiableClassifiers": [
+        {
+            "language": {
+                "key": "library",
+                "version": "1",
+                "name": "library"
+            },
+            "key": "Writer",
+            "name": "Writer"
+        },
+        {
+            "language": {
+                "key": "library",
+                "version": "1",
+                "name": "library"
+            },
+            "key": "SpecialistBookWriter",
+            "name": "SpecialistBookWriter"
+        }
+    ]
 }

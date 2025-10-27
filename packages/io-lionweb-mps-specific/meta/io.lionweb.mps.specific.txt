@@ -1,0 +1,34 @@
+language io.lionweb.mps.specific
+    version: 2024-01
+    dependsOn:
+        LionCore_M3 (2023.1)
+    entities (↓name):
+
+        annotation ConceptDescription
+            annotates: Classifier
+            features (↓name):
+                conceptAlias: String?
+                conceptShortDescription: String?
+                helpUrl: String?
+
+        annotation Deprecated
+            annotates: IKeyed
+            features (↓name):
+                build: String?
+                comment: String?
+
+        annotation KeyedDescription
+            annotates: IKeyed
+            features (↓name):
+                documentation: String?
+                seeAlso -> Node[0..*]
+
+        annotation ShortDescription
+            annotates: Node
+            features (↓name):
+                description: String?
+
+        annotation VirtualPackage implements INamed
+            annotates: Node
+
+

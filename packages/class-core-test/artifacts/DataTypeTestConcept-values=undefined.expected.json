@@ -1,0 +1,24 @@
+{
+  "serializationFormatVersion": "2023.1",
+  "languages": [
+    {
+      "key": "TestLanguage",
+      "version": "0"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "foo",
+      "classifier": {
+        "language": "TestLanguage",
+        "version": "0",
+        "key": "DataTypeTestConcept"
+      },
+      "properties": [],
+      "containments": [],
+      "references": [],
+      "annotations": [],
+      "parent": null
+    }
+  ]
+}

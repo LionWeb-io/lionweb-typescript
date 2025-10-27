@@ -1,5 +1,44 @@
 # Changelog
 
+## 0.7.0
+
+* Fix [bug #203](https://github.com/LionWeb-io/lionweb-typescript/issues/203).
+* (Fix that running setup on the test package for a second time fails.)
+* Extract utility functions to `@lionweb/ts-utils`, and `Id` (as `LionWebId`) to `@lionweb/json`.
+* Errors thrown by the built-in `DefaultPrimitiveTypeDeserializer` and `DefaultPrimitiveTypeSerializer` are improved to say what `Property` they pertain to.
+* Fix that `PrimitiveTypeSerializer.serializeValue` returns `undefined` instead of `null` – which is according to spec – for an empty property value.
+* Fix misspellings of “data type” including camel-cased versions, particularly:
+    * Classes `Datatype[Register]` &rarr; `DataType[Register]`, which are part of the LionCore built-ins or the infrastructure around that.
+        The original class `Datatype` is kept in a backward compatible way (by extending from the renamed class), and is to be deprecated and removed at some point.
+    * Members `{string|boolean|integer|json}Datatype` of `builtinPrimitives` &rarr; `<*>DataType` with the former kept as aliases – to be deprecated and removed at some point.
+* Remove type `BuiltinPrimitive` that couldn't really be used sensibly anywhere.
+* Introduce interface `PropertyValueSerializer` that will replace `PrimitiveTypeSerializer` – which is kept for backward compatibility, for now – in the next major release.
+    This includes:
+    * Introduce class `BuiltinsPropertyValueSerializer` as a future replacement for `DefaultPrimitiveTypeSerializer`.
+    * Introduce field `SerializationOptions.propertyValueSerializer` as a future replacement for `SerializationOptions.primitiveTypeSerializer`.
+* Introduce interface `PropertyValueDeserializer` that will replace `PrimitiveTypeDeserializer` – which is kept for backward compatibility, for now – in the next major release.
+  This includes introducing class `BuiltinsPropertyValueDeserializer` as a future replacement for `DefaultPrimitiveTypeDeserializer`.
+* Introduce a function `nodeSerializer` that takes configuration consisting of an `ExtractionFacade` instance and an optional configuration object, and returns a function that takes (an array of) nodes and returns a serialization chunk.
+    **Note** that this function is essentially experimental, and that its signature might change in the near future!
+* Rename `ExtractionFacade` (and its instances) to `Reader`, keeping aliases for backward compatibility, to be deprecated and removed later.
+* Rename `InstantiationFacade` (and its instances) to `Writer`, keeping aliases for backward compatibility, to be deprecated and removed later.
+* Expose `classifier` and `ikeyed` through `metaConcepts`, and expose `lioncoreReader` and `lioncoreWriter` as well.
+* Added a type parameter `PNT` to the `Writer` interface, which is the type for the parent node passed to the `.nodeFor(...)` method (as its first argument), and which equals the `NT` type parameter by default.
+* Expose functions `areSameClassifiers` and `areSameLanguages` that compare two given classifiers, resp., languages by their meta-pointers.
+* Rename `inheritsFrom` &rarr; `inheritsDirectlyFrom`, and `inheritedCycleWith` &rarr; `inheritanceCycleWith` for more naming clarity, keeping aliases for backward compatibility, to be deprecated and removed later.
+* Add function `isPartition`.
+* Improve performance of `deserializeSerializationChunk` function ever so slightly.
+* Remove the unused (and non-performant) `NaiveSymbolTable` class.
+* Improve performance of `nodeSerializer` function a tiny bit.
+    * Fix a bug where some features’ values are serialized multiple times.
+* Expose feature resolution, through the `featureResolversFor` function (and associated types), which performs proper checking.
+  This avoids undebuggable `undefined` dereferencing at runtime in `deltaDeserializer` and `eventToDeltaTranslator` functions.
+* Package `src/` again (— i.e., don't ignore for NPM packaging.)
+* Add `serializedRef` function that serializes a single reference target.
+* Introduce singleton instances `builtinPropertyValue{Deserializer|Serializer}` of `BuiltinPropertyValue{Deserializer|Serializer}` which are properly sealed, and use them wherever possible
+    — also in other packages, without explicit mention in their changelogs.
+
+
 ## 0.6.12
 
 * `LanguageFactory` instances take care of containment: e.g., creating an entity automatically adds that to the language, and likewise for features (to classifiers) and literals (to enumerations). 
@@ -25,9 +64,9 @@
 
 * Add `featureMetaType` function and `FeatureMetaType` type.
 
-* Expose `metaPointerFor` function that computes the `MetaPointer` for a `Feature`.
+* Expose `metaPointerFor` function that computes the `LionWebJsonMetaPointer` for a `Feature`.
 
-* Expose `IdOrUnresolved` type that expresses a value is either an `Id` or a value to indicate that resolution to a node previously failed.
+* Expose `IdOrUnresolved` type that expresses a value is either an `LionWebId` or a value to indicate that resolution to a node previously failed.
 
 * Expose `isMultiple` function that determines whether a `Feature` is multi-valued.
 
@@ -43,8 +82,8 @@
 
 ## 0.6.10
 
-* Make `DefaultPrimitiveTypeDeserializer` and `DefaultPrimitiveTypeSerializer` be able to deal with duplicate definitions of datatypes.
-    * Expose a function `shouldBeIdentical` that determines whether two datatypes should be structurally equal based on equality of: meta type, key, and language's key.
+* Make `DefaultPrimitiveTypeDeserializer` and `DefaultPrimitiveTypeSerializer` be able to deal with duplicate definitions of data types.
+    * Expose a function `shouldBeIdentical` that determines whether two data types should be structurally equal based on equality of: meta type, key, and language's key.
 * Make serializer more resilient against unresolved (i.e., `null`-valued) children.
 * Fix that `resolveInfo` of a serialized reference must be `null`, not `undefined`.
 
@@ -69,7 +108,7 @@
     * Fix a bug w.r.t. enumeration literals — deserializing changed the keys of enumeration literals in the language's definition.
     * Deserialization doesn't throw on unresolvable references, but warns on the console and returns `null` (which means “unresolved”).
 * Export `byIdMap` function, which computes a map id &rarr; thing from an array of things with an `id`, from the package.
-* Make `SerializedProperty.value` `null`-able, to align with the specification.
+* Make `LionWebJsonProperty.value` `null`-able, to align with the specification.
 
 
 ## 0.6.7

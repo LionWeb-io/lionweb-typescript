@@ -1,0 +1,67 @@
+= Correspondence between commands, events, and deltas
+
+|===
+| command (technical name)                            |spec. §   | event (technical name)                                |spec. §    |delta?
+
+| AddPartition                                        | 6.5.2.1  | PartitionAdded                                        | 6.6.1.1  | &check;
+| DeletePartition                                     | 6.5.2.2  | PartitionDeleted                                      | 6.6.1.2  | &check;
+| ChangeClassifier                                    | 6.5.3.1  | ClassifierChanged                                     | 6.6.2.1  | &cross;
+| AddProperty                                         | 6.5.4.1  | PropertyAdded                                         | 6.6.3.1  | &check;
+| DeleteProperty                                      | 6.5.4.2  | PropertyDeleted                                       | 6.6.3.2  | &check;
+| ChangeProperty                                      | 6.5.4.3  | PropertyChanged                                       | 6.6.3.2  | &check;
+| AddChild                                            | 6.5.5.1  | ChildAdded                                            | 6.6.4.1  | &check;
+| DeleteChild                                         | 6.5.5.2  | ChildDeleted                                          | 6.6.4.2  | &check;
+| ReplaceChild                                        | 6.5.5.3  | ChildReplaced                                         | 6.6.4.3  | &check;
+| MoveChildFromOtherContainment                       | 6.5.5.4  | ChildMovedFromOtherContainment                        | 6.6.4.4  | &check;
+| MoveChildFromOtherContainmentInSameParent           | 6.5.5.5  | ChildMovedFromOtherContainmentInSameParent            | 6.6.4.5  | &check;
+| MoveChildInSameContainment                          | 6.5.5.6  | ChildMovedInSameContainment                           | 6.6.4.6  | &check;
+| MoveAndReplaceChildFromOtherContainment             | 6.5.5.7  | ChildMovedAndReplacedFromOtherContainment             | 6.6.4.7  | &check;
+| MoveAndReplaceChildFromOtherContainmentInSameParent | 6.5.5.8  | ChildMovedAndReplacedFromOtherContainmentInSameParent | 6.6.4.8  | &check;
+| MoveAndReplaceChildInSameContainment                | 6.5.5.9  | ChildMovedAndReplacedInSameContainment                | 6.6.4.9  | &check;
+| AddAnnotation                                       | 6.5.6.1  | AnnotationAdded                                       | 6.6.5.1  | &check;
+| DeleteAnnotation                                    | 6.5.6.2  | AnnotationDeleted                                     | 6.6.5.2  | &check;
+| ReplaceAnnotation                                   | 6.5.6.3  | AnnotationReplaced                                    | 6.6.5.3  | &check;
+| MoveAnnotationFromOtherParent                       | 6.5.6.4  | AnnotationMovedFromOtherParent                        | 6.6.5.4  | &check;
+| MoveAnnotationInSameParent                          | 6.5.6.5  | AnnotationMovedInSameParent                           | 6.6.5.5  | &check;
+| MoveAndReplaceAnnotationFromOtherParent             | 6.5.6.6  | AnnotationMovedAndReplacedFromOtherParent             | 6.6.5.6  | &check;
+| MoveAndReplaceAnnotationInSameParent                | 6.5.6.7  | AnnotationMovedAndReplacedInSameParent                | 6.6.5.7  | &check;
+| AddReference                                        | 6.5.7.1  | ReferenceAdded                                        | 6.6.6.1  | &check;
+| DeleteReference                                     | 6.5.7.2  | ReferenceDeleted                                      | 6.6.6.2  | &check;
+| ChangeReference                                     | 6.5.7.3  | ReferenceChanged                                      | 6.6.6.3  | &check;
+| MoveEntryFromOtherReference                         | 6.5.7.4  | EntryMovedFromOtherReference                          | 6.6.6.4  | &check;
+| MoveEntryFromOtherReferenceInSameParent             | 6.5.7.5  | EntryMovedFromOtherReferenceInSameParent              | 6.6.6.5  | &check;
+| MoveEntryInSameReference                            | 6.5.7.6  | EntryMovedInSameReference                             | 6.6.6.6  | &check;
+| MoveAndReplaceEntryFromOtherReference               | 6.5.7.7  | EntryMovedAndReplacedFromOtherReference               | 6.6.6.7  | &check;
+| MoveAndReplaceEntryFromOtherReferenceInSameParent   | 6.5.7.8  | EntryMovedAndReplacedFromOtherReferenceInSameParent   | 6.6.6.8  | &check;
+| MoveAndReplaceEntryInSameReference                  | 6.5.7.9  | EntryMovedAndReplacedInSameReference                  | 6.6.6.9  | &check;
+| AddReferenceResolveInfo                             | 6.5.7.10 | ReferenceResolveInfoAdded                             | 6.6.6.10 | &cross;
+| DeleteReferenceResolveInfo                          | 6.5.7.11 | ReferenceResolveInfoDeleted                           | 6.6.6.11 | &cross;
+| ChangeReferenceResolveInfo                          | 6.5.7.12 | ReferenceResolveInfoChanged                           | 6.6.6.12 | &cross;
+| AddReferenceTarget                                  | 6.5.7.13 | ReferenceTargetAdded                                  | 6.6.6.13 | &cross;
+| DeleteReferenceTarget                               | 6.5.7.14 | ReferenceTargetDeleted                                | 6.6.6.14 | &cross;
+| ChangeReferenceTarget                               | 6.5.7.15 | ReferenceTargetChanged                                | 6.6.6.15 | &cross;
+| CompositeCommand                                    | 6.5.8.1  | CompositeEvent                                        | 6.6.7.1  | &check;
+|  &cross;                                            | —        | NoOpEvent                                             | 6.6.7.2  | &check;
+|  &cross;                                            | —        | ErrorEvent                                            | 6.6.7.3  | &cross;
+|===
+
+If a delta corresponding to an event exists, it'll have an identifier of the format `<technical name of event>Delta` except when the technical already has postfix `Event`, in which case that postfix gets replaced with `Event`.
+
+|===
+| verbalization    | TS API call — singular                                                             | TS API call — plural
+
+| add partition    | `<client>.addPartition(newPartition)`                                              | —
+| delete partition | `<client>.deletePartition(deletedPartition)`                                       | —
+
+| add property     | `node.property = newValue` &lrarr; `<propertyValueManager>.set(newValue)`          | —
+| delete property  | `node.property = undefined` &lrarr; `<propertyValueManager>.set(undefined)`        | —
+| change property  | `node.property = newValue` &lrarr; `<propertyValueManager>.set(newValue)`          | —
+
+| add child        | `node.containment = newChild`                                                      | `<containmentValueManager>.add(newChild)`
+| delete child     | `node.containment = undefined` &lrarr; `<containmentValueManager>.set(undefined)`  | ???
+| replace child    | `node.containment = newValue` &lrarr; `<containmentValueManager>.set(newValue)`    | ???
+
+|===
+
+**TODO**  finish this table
+
