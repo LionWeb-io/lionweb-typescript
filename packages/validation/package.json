@@ -1,6 +1,6 @@
 {
     "name": "@lionweb/validation",
-    "version": "0.7.0",
+    "version": "0.7.1",
     "license": "Apache 2.0",
     "description": "LionWeb Serialization validation",
     "author": "jos.warmer@openmodeling.nl",
@@ -20,9 +20,13 @@
         "copyBuiltins": "node -e \"const fs = require('fs'); fs.copyFileSync('./src/languages/LionCore-builtins.json', './dist/languages/LionCore-builtins.json');\"",
         "lint": "eslint src",
         "test-here": "cd ../test && find dist/validation -type d | sed '1!G;h;$!d' | xargs npx mocha",
-        "release-alpha": "npm publish --registry https://registry.npmjs.org --tag alpha",
-        "release-beta": "npm publish --registry https://registry.npmjs.org --tag beta",
-        "release": "npm publish --registry https://registry.npmjs.org",
+        "prep:pre-release": "npm run clean && npm install && npm run build",
+        "prerelease-alpha": "npm run prep:pre-release",
+        "release-alpha": "npm publish --tag alpha",
+        "prerelease-beta": "npm run prep:pre-release",
+        "release-beta": "npm publish --tag beta",
+        "prerelease": "npm run prep:pre-release",
+        "release": "npm publish",
         "testValid": "node dist/runners/RunCheckFolder.js ../test/testset/valid",
         "testInvalid": "node dist/runners/RunCheckFolder.js ../test/testset/invalid",
         "testInvalidWithLanguage": "node dist/runners/RunCheckFolderWithLanguage.js ../test/testset/withLanguage/invalid/ ../test/testset/withLanguage/myLang.language.json",
@@ -32,8 +36,8 @@
         "republish-local": "yarn unpublish-local && yarn publish-local"
     },
     "dependencies": {
-        "@lionweb/json": "0.7.0",
-        "@lionweb/ts-utils": "0.7.0",
-        "@lionweb/json-utils": "0.7.0"
+        "@lionweb/json": "0.7.1",
+        "@lionweb/ts-utils": "0.7.1",
+        "@lionweb/json-utils": "0.7.1"
     }
 }

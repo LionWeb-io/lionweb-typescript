@@ -1,11 +1,12 @@
 {
     "lionweb": {
-        "publish-version" : "0.7.0",
-        "internal-version": "0.7.0-dev.0",
+        "publish-version" : "0.7.1",
+        "internal-version": "0.7.1-dev.0",
         "internal-packages": [
             "artifacts",
             "build",
             "class-core-test",
+            "delta-protocol-test",
             "test"
         ]
     },

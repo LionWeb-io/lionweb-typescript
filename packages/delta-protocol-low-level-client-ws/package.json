@@ -1,6 +1,6 @@
 {
     "name": "@lionweb/delta-protocol-low-level-client-ws",
-    "version": "0.7.0",
+    "version": "0.7.1",
     "description": "Implementation of a low-level client for a delta protocol client using the WebSocket protocol, relying on the 'ws' package",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -27,9 +27,9 @@
         "release": "npm publish"
     },
     "dependencies": {
-        "@lionweb/delta-protocol-common": "0.7.0",
-        "@lionweb/delta-protocol-client": "0.7.0",
-        "@lionweb/ts-utils": "0.7.0",
+        "@lionweb/delta-protocol-common": "0.7.1",
+        "@lionweb/delta-protocol-client": "0.7.1",
+        "@lionweb/ts-utils": "0.7.1",
         "ws": "8.18.2"
     },
     "devDependencies": {

@@ -1,6 +1,6 @@
 {
     "name": "@lionweb/json-utils",
-    "version": "0.7.0",
+    "version": "0.7.1",
     "description": "Utilities for LionWeb JSON",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -27,7 +27,7 @@
         "release": "npm publish"
     },
     "dependencies": {
-        "@lionweb/json": "0.7.0",
-        "@lionweb/ts-utils": "0.7.0"
+        "@lionweb/json": "0.7.1",
+        "@lionweb/ts-utils": "0.7.1"
     }
 }

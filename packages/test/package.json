@@ -1,6 +1,6 @@
 {
     "name": "@lionweb/test",
-    "version": "0.7.0-dev.0",
+    "version": "0.7.1-dev.0",
     "description": "LionWeb test for {Java|Type}Script",
     "private": true,
     "main": "dist/lioncore-cli.js",
@@ -31,10 +31,10 @@
         "mocha": "11.7.1"
     },
     "dependencies": {
-        "@lionweb/core": "0.7.0",
-        "@lionweb/json": "0.7.0",
-        "@lionweb/ts-utils": "0.7.0",
-        "@lionweb/utilities": "0.7.0",
-        "@lionweb/validation": "0.7.0"
+        "@lionweb/core": "0.7.1",
+        "@lionweb/json": "0.7.1",
+        "@lionweb/ts-utils": "0.7.1",
+        "@lionweb/utilities": "0.7.1",
+        "@lionweb/validation": "0.7.1"
     }
 }
