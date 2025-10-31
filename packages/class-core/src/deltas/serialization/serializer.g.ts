@@ -89,7 +89,7 @@ import {
     ReferenceDeletedSerializedDelta,
     SerializedDelta
 } from "./types.g.js";
-import { idFrom, serializePropertyValue } from "./serializer-helpers.js";
+import { idFrom, defaultPropertyValueSerializer } from "./serializer-helpers.js";
 import { serializeNodeBases } from "../../serializer.js";
 
 
@@ -114,7 +114,7 @@ export const serializeDelta = (delta: IDelta): SerializedDelta => {
             kind: "PropertyAdded",
             node: delta.node.id,
             property: metaPointerFor(delta.property),
-            value: serializePropertyValue(delta.value, delta.property)
+            value: defaultPropertyValueSerializer.serializeValue(delta.value, delta.property)
         } as PropertyAddedSerializedDelta;
     }
 
@@ -123,7 +123,7 @@ export const serializeDelta = (delta: IDelta): SerializedDelta => {
             kind: "PropertyDeleted",
             node: delta.node.id,
             property: metaPointerFor(delta.property),
-            oldValue: serializePropertyValue(delta.oldValue, delta.property)
+            oldValue: defaultPropertyValueSerializer.serializeValue(delta.oldValue, delta.property)
         } as PropertyDeletedSerializedDelta;
     }
 
@@ -132,8 +132,8 @@ export const serializeDelta = (delta: IDelta): SerializedDelta => {
             kind: "PropertyChanged",
             node: delta.node.id,
             property: metaPointerFor(delta.property),
-            oldValue: serializePropertyValue(delta.oldValue, delta.property),
-            newValue: serializePropertyValue(delta.newValue, delta.property)
+            oldValue: defaultPropertyValueSerializer.serializeValue(delta.oldValue, delta.property),
+            newValue: defaultPropertyValueSerializer.serializeValue(delta.newValue, delta.property)
         } as PropertyChangedSerializedDelta;
     }
 

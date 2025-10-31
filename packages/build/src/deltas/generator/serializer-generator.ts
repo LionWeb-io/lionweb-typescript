@@ -44,7 +44,7 @@ const serializationExpressionFor = (name: string, type: Type) => {
         return `delta.${name}`
     }
     if (type instanceof PrimitiveValueType) {
-        return `serializePropertyValue(delta.${name}, delta.property)`
+        return `defaultPropertyValueSerializer.serializeValue(delta.${name}, delta.property)`
     }
     if (type instanceof CustomType) {
         return type.serializationExpr
@@ -93,7 +93,7 @@ export const serializerForDeltas = (deltas: Delta[], header?: string) =>
             commaSeparated(sortedStrings([...(deltas.map(({name}) => `${name}SerializedDelta`)), `SerializedDelta`]))
         ),
         `} from "./types.g.js";`,
-        `import { idFrom, serializePropertyValue } from "./serializer-helpers.js";`,
+        `import { idFrom, defaultPropertyValueSerializer } from "./serializer-helpers.js";`,
         `import { serializeNodeBases } from "../../serializer.js";`,
         ``,
         ``,
