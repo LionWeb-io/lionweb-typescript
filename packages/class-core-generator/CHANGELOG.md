@@ -1,6 +1,8 @@
 # Changelog
 
-## 0.7.0
+## 0.7.1
+
+(The 0.7.0 release was deprecated because its `validation` package was faulty.)
 
 * Move `dependenciesThroughDirectInheritanceOf` and `verboseDependencies` functions from `class-core-generator` to `utilities` package.
 * Remove everything specific to annotations coming from the `io.lionweb.mps.specific` language, in favor of using the types and functionality provided by the `@lionweb/io-lionweb-mps-specific` package.
