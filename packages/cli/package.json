@@ -1,6 +1,6 @@
 {
     "name": "@lionweb/cli",
-    "version": "0.7.1",
+    "version": "0.7.2-beta.2",
     "description": "LionWeb CLI for {Java|Type}Script",
     "bin": {
         "lionweb-cli": "./dist/lionweb-cli.js"
@@ -29,10 +29,10 @@
         "release": "npm publish"
     },
     "dependencies": {
-        "@lionweb/core": "0.7.1",
-        "@lionweb/json-diff": "0.7.1",
-        "@lionweb/ts-utils": "0.7.1",
-        "@lionweb/utilities": "0.7.1",
-        "@lionweb/validation": "0.7.1"
+        "@lionweb/core": "0.7.2-beta.2",
+        "@lionweb/json-diff": "0.7.2-beta.2",
+        "@lionweb/ts-utils": "0.7.2-beta.2",
+        "@lionweb/utilities": "0.7.2-beta.2",
+        "@lionweb/validation": "0.7.2-beta.2"
     }
 }

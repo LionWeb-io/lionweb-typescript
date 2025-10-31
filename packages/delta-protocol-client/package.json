@@ -1,6 +1,6 @@
 {
     "name": "@lionweb/delta-protocol-client",
-    "version": "0.7.1",
+    "version": "0.7.2-beta.2",
     "description": "Part of the implementation of a delta protocol client not tied to a specific message transport protocol",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -27,11 +27,11 @@
         "release": "npm publish"
     },
     "dependencies": {
-        "@lionweb/class-core": "0.7.1",
-        "@lionweb/core": "0.7.1",
-        "@lionweb/delta-protocol-common": "0.7.1",
-        "@lionweb/delta-protocol-client": "0.7.1",
-        "@lionweb/json": "0.7.1",
-        "@lionweb/ts-utils": "0.7.1"
+        "@lionweb/class-core": "0.7.2-beta.2",
+        "@lionweb/core": "0.7.2-beta.2",
+        "@lionweb/delta-protocol-common": "0.7.2-beta.2",
+        "@lionweb/delta-protocol-client": "0.7.2-beta.2",
+        "@lionweb/json": "0.7.2-beta.2",
+        "@lionweb/ts-utils": "0.7.2-beta.2"
     }
 }
