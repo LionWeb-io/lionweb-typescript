@@ -1,6 +1,6 @@
 {
     "name": "@lionweb/delta-protocol-test-cli",
-    "version": "0.8.0-beta.0",
+    "version": "0.7.2-beta.0",
     "description": "CLI programs for testing the delta protocol",
     "type": "module",
     "license": "Apache-2.0",
@@ -30,13 +30,13 @@
         "release": "npm publish"
     },
     "dependencies": {
-        "@lionweb/class-core": "0.8.0-beta.0",
-        "@lionweb/core": "0.8.0-beta.0",
-        "@lionweb/delta-protocol-client": "0.8.0-beta.0",
-        "@lionweb/delta-protocol-common": "0.8.0-beta.0",
-        "@lionweb/delta-protocol-low-level-client-ws": "0.8.0-beta.0",
-        "@lionweb/delta-protocol-repository-ws": "0.8.0-beta.0",
-        "@lionweb/json": "0.8.0-beta.0",
-        "@lionweb/utilities": "0.8.0-beta.0"
+        "@lionweb/class-core": "0.7.2-beta.0",
+        "@lionweb/core": "0.7.2-beta.0",
+        "@lionweb/delta-protocol-client": "0.7.2-beta.0",
+        "@lionweb/delta-protocol-common": "0.7.2-beta.0",
+        "@lionweb/delta-protocol-low-level-client-ws": "0.7.2-beta.0",
+        "@lionweb/delta-protocol-repository-ws": "0.7.2-beta.0",
+        "@lionweb/json": "0.7.2-beta.0",
+        "@lionweb/utilities": "0.7.2-beta.0"
     }
 }
