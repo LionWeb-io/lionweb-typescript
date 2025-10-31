@@ -95,7 +95,7 @@ import {
     ReferenceChangedEvent,
     ReferenceDeletedEvent
 } from "../payload/index.js"
-import { nodeBaseReader } from "@lionweb/class-core/dist/serializer.js"
+import { nodeBaseReader, propertyValueSerializerWith } from "@lionweb/class-core/dist/serializer.js"
 
 
 const allIdsOfDescendantsFrom = (node: INodeBase) =>
@@ -118,13 +118,14 @@ export type DeltaToEventTranslator = (
 
 
 /**
- * @return a {@link DeltaToEventTranslator} instance using the given {@link PropertyValueSerializer}
- * (with that defaulting to the {@link builtinPropertyValueSerializer}).
+ * @return a {@link DeltaToEventTranslator} instance using the given {@link PropertyValueSerializer},
+ * that's solely used to serialize primitive values, and defaults to the {@link builtinPropertyValueSerializer}.
  */
 export const deltaToEventTranslator = (
-    propertyValueSerializer: PropertyValueSerializer = builtinPropertyValueSerializer
-): DeltaToEventTranslator =>
-    (delta, lastUsedSequenceNumber) => {
+    primitiveValueSerializer: PropertyValueSerializer = builtinPropertyValueSerializer
+): DeltaToEventTranslator => {
+    const propertyValueSerializer = propertyValueSerializerWith({ primitiveValueSerializer })
+    return (delta, lastUsedSequenceNumber) => {
 
         let sequenceNumber = lastUsedSequenceNumber
         const completed = <ET extends Event>(
@@ -445,4 +446,5 @@ export const deltaToEventTranslator = (
 
         return [translated(delta), sequenceNumber]
     }
+}
 

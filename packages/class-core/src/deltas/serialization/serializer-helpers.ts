@@ -15,15 +15,16 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { builtinPropertyValueSerializer, IdOrUnresolved, Property, SingleRef, unresolved } from "@lionweb/core"
+import { builtinPropertyValueSerializer, IdOrUnresolved, SingleRef, unresolved } from "@lionweb/core"
 import { INodeBase } from "../../base-types.js"
+import { propertyValueSerializerWith } from "../../serializer.js"
 
 /**
  * A function that serializes the given value of the given {@link Property property},
- * using the same {@link builtinPropertyValueSerializer} instance as the {@link serializeNodeBases} function.
+ * using the same {@link builtinPropertyValueSerializer} instance as the {@link serializeNodeBases} function,
+ * and the same treatment of enumeration values.
  */
-export const serializePropertyValue = <T>(value: T, property: Property): string =>
-    builtinPropertyValueSerializer.serializeValue(value, property)!
+export const defaultPropertyValueSerializer = propertyValueSerializerWith({ primitiveValueSerializer: builtinPropertyValueSerializer })
 
 
 /**

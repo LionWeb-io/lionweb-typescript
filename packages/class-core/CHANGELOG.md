@@ -1,6 +1,13 @@
 # Changelog
 
-## 0.7.0
+## 0.7.2
+
+* Implement a `propertyValueSerializerWith` function that produces a `PropertyValueSerializer` instance to serialize properties’ values with, properly dealing with enumerations as well.
+
+
+## 0.7.1
+
+(The 0.7.0 release was deprecated because its `validation` package was faulty.)
 
 * Replace util functions with ones from `ts-utils`.
 * For the `IdMapping` class:
