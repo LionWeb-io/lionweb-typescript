@@ -1,6 +1,8 @@
 # Changelog
 
-## 0.7.0
+## 0.7.1
+
+(The 0.7.0 release was deprecated because its `validation` package was faulty.)
 
 * Refactor validation schema to enable generation ot TypeScript types with discriminator.
 

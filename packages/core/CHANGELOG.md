@@ -1,6 +1,8 @@
 # Changelog
 
-## 0.7.0
+## 0.7.1
+
+(The 0.7.0 release was deprecated because its `validation` package was faulty.)
 
 * Fix [bug #203](https://github.com/LionWeb-io/lionweb-typescript/issues/203).
 * (Fix that running setup on the test package for a second time fails.)

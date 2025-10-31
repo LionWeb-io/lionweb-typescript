@@ -1,6 +1,8 @@
 # Changelog
 
-0.7.0
+## 0.7.1
+
+(The 0.7.0 release was deprecated because its `validation` package was faulty.)
 
 * Move `dependenciesThroughDirectInheritanceOf` and `verboseDependencies` functions from `class-core-generator` to `utilities` package, and expose it.
 * Rename `tsTypesForLanguage` &rarr; `tsTypeDefsForLanguage`.
