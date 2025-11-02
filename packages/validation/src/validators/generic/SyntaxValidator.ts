@@ -36,7 +36,7 @@ export class SyntaxValidator {
         if (primitiveTypeDef === undefined) {
             const objectTypeDef: StructuredType | undefined = this.schema.getStructuredType(expectedType)
             if( objectTypeDef === undefined) {
-                throw new Error(`SyntaxValidator.validate: cannot find definition for '${expectedType}'`)
+                throw new Error(`NewSyntaxValidator.validate: cannot find definition for ${expectedType}`)
             } else {
                 // ObjectType found
                 this.validateObjectProperties(expectedType, objectTypeDef, object, new JsonContext(null, ["$"]))
@@ -66,11 +66,10 @@ export class SyntaxValidator {
         for (const propertyDef of typeDef.properties) {
             const expectedTypeDefPrimitive = this.schema.getPrimitiveType(propertyDef.type)
             const expectedTypeDefStructured = this.schema.getStructuredType(propertyDef.type)
-            const expectedMessageGroup = this.schema.getMessageGroup(propertyDef.type)
             const expectedTypeDef = expectedTypeDefPrimitive ?? expectedTypeDefStructured
-
+            
             const validator = this.schema.getValidator(propertyDef.name)
-
+            
             const propertyValue = object[propertyDef.name]
             if (propertyValue === undefined) {
                 if (!propertyDef.isOptional) {
@@ -113,12 +112,6 @@ export class SyntaxValidator {
                                     validator(item, this.validationResult, newContext)
                                 }
                             }
-                        } else if (expectedMessageGroup !== undefined) {
-                                console.log(`+++++++++++++++++++ ${expectedMessageGroup.name}`)
-                                const messageKind = item[expectedMessageGroup.taggedUnionProperty] as string
-                                    const groupTypeDef = this.schema.getStructuredType(messageKind)!
-                                    this.validateObjectProperties(originalProperty, groupTypeDef, item as UnknownObjectType, newContext)
-                                
                         } else {
                             throw new Error(`Expected type '${propertyDef.type} has neither property defs, nor a validator.`)
                         }
@@ -146,18 +139,12 @@ export class SyntaxValidator {
                         if (validator !== undefined) {
                             validator(propertyValue, this.validationResult, newContext)
                         }
-                    } else if (expectedMessageGroup !== undefined) {
-                        console.log(`+++++++++++++++++++ LIST ${expectedMessageGroup.name}`)
-                        const messageKind = object[expectedMessageGroup.taggedUnionProperty] as string
-                        const groupTypeDef = this.schema.getStructuredType(messageKind)!
-                        this.validateObjectProperties(originalProperty, groupTypeDef, propertyValue as UnknownObjectType, newContext)
                     } else {
                         throw new Error("EXPECTING ObjectDefinition or PrimitiveDefinition, but got something else")
                     }
                 } else {
                     throw new Error(
-                        `Op ${originalProperty}: Expected single type '${propertyDef.type}' for '${propertyDef.name}'  at ${newContext.toString()} has neither property defs, nor a validator.
-                        Typedef is ${JSON.stringify(typeDef)}`
+                        `Expected single type '${propertyDef.type}' for '${propertyDef.name}'  at ${newContext.toString()} has neither property defs, nor a validator.`
                     )
                 }
             }
