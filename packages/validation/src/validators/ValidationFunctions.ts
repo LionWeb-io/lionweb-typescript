@@ -12,8 +12,8 @@ import {
     Syntax_SerializationFormatVersion_Issue,
     Syntax_VersionFormat_Issue
 } from "../issues/SyntaxIssues.js"
+import { PropertyDefinition } from "./generic/index.js"
 import { ValidationResult } from "./generic/ValidationResult.js"
-import { PropertyDefinition } from "./generic/schema/ValidationTypes.js"
 
 /**
  * Check whether `id` is a valid LionWeb id.

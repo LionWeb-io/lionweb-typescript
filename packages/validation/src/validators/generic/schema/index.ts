@@ -1,2 +1,1 @@
-export * from "./ValidationTypes.js"
-export * from "./DefinitionSchema.js"
+export * from "./SyntaxDefinition.js"
