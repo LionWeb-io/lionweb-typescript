@@ -28,7 +28,7 @@ export type StructuredType = {
 export type TypeGroup = {
     name: string;
     primitiveTypes: PrimitiveType[];
-    structuredTypes:  StructuredType[];
+    objectTypes:  StructuredType[];
 
 }
 export type PrimitiveType = {
@@ -39,25 +39,22 @@ export type PrimitiveType = {
 export class SyntaxDefinition {
     // Maps to make searching easier and faster
     allPrimitiveTypes: Map<string, PrimitiveType> = new Map<string, PrimitiveType>()
-    allStructuredTypes: Map<string, StructuredType> = new Map<string, StructuredType>()
+    allObjectTypes: Map<string, StructuredType> = new Map<string, StructuredType>()
     allMessageGroups: Map<string, MessageGroup> = new Map<string, MessageGroup>()
 
     validateFunctions: Map<string, PrimitiveValidatorFunction> = new Map<string, PrimitiveValidatorFunction>()
     
-    constructor(messageGroups: MessageGroup[], typeGroups: TypeGroup[]) {
-        typeGroups.forEach(typeGroup => {
-            typeGroup.primitiveTypes.forEach(primitiveType => {
+    constructor(messageGroups: MessageGroup[], types: TypeGroup[]) {
+        types.forEach(type => {
+            type.primitiveTypes.forEach(primitiveType => {
                 this.allPrimitiveTypes.set(primitiveType.name, primitiveType)
             })
-            typeGroup.structuredTypes.forEach(objectType => {
-                this.allStructuredTypes.set(objectType.name, objectType)
+            type.objectTypes.forEach(objectType => {
+                this.allObjectTypes.set(objectType.name, objectType)
             })
         })
-        messageGroups.forEach(messageGroup => {
-            this.allMessageGroups.set(messageGroup.name, messageGroup)
-            messageGroup.messages.forEach(msg => {
-                this.allStructuredTypes.set(msg.name, msg) 
-            })
+        messageGroups.forEach(msgGroup => {
+            this.allMessageGroups.set(msgGroup.name, msgGroup)
         })
     }
 
@@ -74,7 +71,7 @@ export class SyntaxDefinition {
     }
 
     getStructuredType(name: string): StructuredType | undefined {
-        return this.allStructuredTypes.get(name)
+        return this.allObjectTypes.get(name)
     }
 
     getMessageGroup(name: string): MessageGroup | undefined {
