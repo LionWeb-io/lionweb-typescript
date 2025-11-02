@@ -28,7 +28,7 @@ export const RequestDefinitions: MessageGroup = {
     ],
     messages: [
         {
-            name: "SubscribeToChangingPartitions",
+            name: "SubscribeToChangingPartitionsRequest",
             properties: [
                 {
                     name: "creation",
@@ -51,31 +51,10 @@ export const RequestDefinitions: MessageGroup = {
                     isOptional: false,
                     mayBeNull: false,
                 },
-                {
-                    name: "messageKind",
-                    type: "String",
-                    isList: false,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
-                {
-                    name: "protocolMessages",
-                    type: "ProtocolMessage",
-                    isList: true,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
-                {
-                    name: "queryId",
-                    type: "QueryId",
-                    isList: false,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
             ],
         },
         {
-            name: "SubscribeToPartitionContents",
+            name: "SubscribeToPartitionContentsRequest",
             properties: [
                 {
                     name: "partition",
@@ -84,31 +63,10 @@ export const RequestDefinitions: MessageGroup = {
                     isOptional: false,
                     mayBeNull: false,
                 },
-                {
-                    name: "messageKind",
-                    type: "String",
-                    isList: false,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
-                {
-                    name: "protocolMessages",
-                    type: "ProtocolMessage",
-                    isList: true,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
-                {
-                    name: "queryId",
-                    type: "QueryId",
-                    isList: false,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
             ],
         },
         {
-            name: "UnsubscribeFromPartitionContents",
+            name: "UnsubscribeFromPartitionContentsRequest",
             properties: [
                 {
                     name: "partition",
@@ -117,31 +75,10 @@ export const RequestDefinitions: MessageGroup = {
                     isOptional: false,
                     mayBeNull: false,
                 },
-                {
-                    name: "messageKind",
-                    type: "String",
-                    isList: false,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
-                {
-                    name: "protocolMessages",
-                    type: "ProtocolMessage",
-                    isList: true,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
-                {
-                    name: "queryId",
-                    type: "QueryId",
-                    isList: false,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
             ],
         },
         {
-            name: "SignOn",
+            name: "SignOnRequest",
             properties: [
                 {
                     name: "deltaProtocolVersion",
@@ -164,57 +101,14 @@ export const RequestDefinitions: MessageGroup = {
                     isOptional: false,
                     mayBeNull: false,
                 },
-                {
-                    name: "messageKind",
-                    type: "String",
-                    isList: false,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
-                {
-                    name: "protocolMessages",
-                    type: "ProtocolMessage",
-                    isList: true,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
-                {
-                    name: "queryId",
-                    type: "QueryId",
-                    isList: false,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
             ],
         },
         {
-            name: "SignOff",
-            properties: [
-                {
-                    name: "messageKind",
-                    type: "String",
-                    isList: false,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
-                {
-                    name: "protocolMessages",
-                    type: "ProtocolMessage",
-                    isList: true,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
-                {
-                    name: "queryId",
-                    type: "QueryId",
-                    isList: false,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
-            ],
+            name: "signOffRequest",
+            properties: [],
         },
         {
-            name: "Reconnect",
+            name: "ReconnectRequest",
             properties: [
                 {
                     name: "participationId",
@@ -230,31 +124,10 @@ export const RequestDefinitions: MessageGroup = {
                     isOptional: false,
                     mayBeNull: false,
                 },
-                {
-                    name: "messageKind",
-                    type: "String",
-                    isList: false,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
-                {
-                    name: "protocolMessages",
-                    type: "ProtocolMessage",
-                    isList: true,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
-                {
-                    name: "queryId",
-                    type: "QueryId",
-                    isList: false,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
             ],
         },
         {
-            name: "GetAvailableIds",
+            name: "GetAvailableIdsRequest",
             properties: [
                 {
                     name: "count",
@@ -263,54 +136,11 @@ export const RequestDefinitions: MessageGroup = {
                     isOptional: false,
                     mayBeNull: false,
                 },
-                {
-                    name: "messageKind",
-                    type: "String",
-                    isList: false,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
-                {
-                    name: "protocolMessages",
-                    type: "ProtocolMessage",
-                    isList: true,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
-                {
-                    name: "queryId",
-                    type: "QueryId",
-                    isList: false,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
             ],
         },
         {
-            name: "ListPartitions",
-            properties: [
-                {
-                    name: "messageKind",
-                    type: "String",
-                    isList: false,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
-                {
-                    name: "protocolMessages",
-                    type: "ProtocolMessage",
-                    isList: true,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
-                {
-                    name: "queryId",
-                    type: "QueryId",
-                    isList: false,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
-            ],
+            name: "ListPartitionsRequest",
+            properties: [],
         },
     ],
 };
