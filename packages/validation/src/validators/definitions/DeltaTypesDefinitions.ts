@@ -31,8 +31,12 @@ export const DeltaTypesDefinitions: TypeGroup = {
             name: "Boolean",
             primitiveType: "boolean",
         },
+        {
+            name: "ClientId",
+            primitiveType: "string",
+        },
     ],
-    objectTypes: [
+    structuredTypes: [
         {
             name: "ProtocolMessage",
             properties: [
@@ -99,7 +103,15 @@ export const DeltaTypesDefinitions: TypeGroup = {
         },
         {
             name: "LionWebDeltaJsonChunk",
-            properties: [],
+            properties: [
+                {
+                    name: "nodes",
+                    type: "LionWebJsonNode",
+                    isList: true,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+            ],
         },
     ],
 };

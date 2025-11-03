@@ -20,7 +20,7 @@ export const ChunksDefinitions: TypeGroup = {
             primitiveType: "string",
         },
     ],
-    objectTypes: [
+    structuredTypes: [
         {
             name: "LionWebJsonMetaPointer",
             properties: [
