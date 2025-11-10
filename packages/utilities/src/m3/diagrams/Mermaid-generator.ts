@@ -35,8 +35,8 @@ const withNewLine = (content: Template): Template => [content, ``]
 export const generateMermaidForLanguage = ({ entities }: Language) =>
     asString([
         "```mermaid",
-        `classDiagram
-`,
+        `classDiagram`,
+        ``,
         indented(nameSorted(entities).map(generateForEntity)),
         ``,
         indented(nameSorted(entities).map(generateForRelationsOf)),
@@ -85,10 +85,11 @@ const generateForNonRelationalFeature = (feature: Feature) => {
     return `+${typeText} ${name}`
 }
 
-const generateForPrimitiveType = ({ name }: PrimitiveType) =>
-    `class ${name}
-<<PrimitiveType>> ${name}
-`
+const generateForPrimitiveType = ({ name }: PrimitiveType) => [
+    `class ${name}`,
+    `<<PrimitiveType>> ${name}`,
+    ``
+]
 
 const generateForEntity = (entity: LanguageEntity) => {
     if (entity instanceof Annotation) {

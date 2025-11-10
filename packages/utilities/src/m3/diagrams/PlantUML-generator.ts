@@ -28,27 +28,27 @@ const indented = indentWith(`  `)(1)
  */
 export const generatePlantUmlForLanguage = ({ name, entities }: Language) =>
     asString([
-        `@startuml
-hide empty members
-
-' qualified name: "${name}"
-
-`,
+        `@startuml`,
+        `hide empty members`,
+        ``,
+        `' qualified name: "${name}"`,
+        ``,
+        ``,
         nameSorted(entities).map(generateForEntity),
-        `
-
-' relations:
-`,
+        ``,
+        ``,
+        `' relations:`,
+        ``,
         nameSorted(entities).map(generateForRelationsOf),
-        `
-@enduml`
+        ``,
+        `@enduml`
     ])
 
 const generateForEnumeration = ({ name, literals }: Enumeration) => [
     `enum ${name} {`,
-    indented(literals.map(({name}) => name)),
-    `}
-`
+    indented(literals.map(({ name }) => name)),
+    `}`,
+    ``
 ]
 
 const generateForAnnotation = ({ name, features, extends: extends_, implements: implements_, annotates }: Annotation) => {
@@ -123,8 +123,10 @@ const generateForEntity = (entity: LanguageEntity) => {
     if (entity instanceof PrimitiveType) {
         return generateForPrimitiveType(entity)
     }
-    return `' unhandled language entity: <${entity.constructor.name}>${entity.name}
-`
+    return [
+        `' unhandled language entity: <${entity.constructor.name}>${entity.name}`,
+        ``
+    ]
 }
 
 const generateForRelationsOf = (entity: LanguageEntity) => {
