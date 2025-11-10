@@ -17,7 +17,14 @@
 
 import { serializeNodeBases } from "@lionweb/class-core" // Note: this is a circular dependency!
 import { defaultTrumpfOriginatingApache2_0LicensedHeader, generateLanguage } from "@lionweb/class-core-generator"
-import { deserializeLanguages, lioncoreBuiltins, serializeLanguages } from "@lionweb/core"
+import {
+    builtinClassifiers,
+    Concept,
+    Containment,
+    deserializeLanguages,
+    lioncoreBuiltins,
+    serializeLanguages
+} from "@lionweb/core"
 import { LionWebJsonChunk } from "@lionweb/json"
 import {
     generatePlantUmlForLanguage,
@@ -51,6 +58,14 @@ generateDeltaCode("../class-core/src/deltas", defaultTrumpfOriginatingApache2_0L
 
 // TestLanguage language:
 const TestLanguage = deserializeLanguages(readFileAsJson(inArtifactsPath("TestLanguage.json")) as LionWebJsonChunk)[0]
+
+const PartitionTestConcept = new Concept(TestLanguage, "PartitionTestConcept", "PartitionTestConcept", "PartitionTestConcept", false).isPartition();
+const NonPartitionTestConcept = new Concept(TestLanguage, "NonPartitionTestConcept", "NonPartitionTestConcept", "NonPartitionTestConcept", false).implementing(builtinClassifiers.inamed);
+NonPartitionTestConcept.havingFeatures(new Containment(NonPartitionTestConcept, "nestedChild", "NonPartitionTestConcept-nestedChild", "NonPartitionTestConcept-nestedChild").ofType(NonPartitionTestConcept).isOptional());
+PartitionTestConcept.havingFeatures(new Containment(PartitionTestConcept,  "child","PartitionTestConcept-child", "PartitionTestConcept-child").ofType(NonPartitionTestConcept));
+TestLanguage.entities.push(PartitionTestConcept, NonPartitionTestConcept);
+
 writeFileSync(inArtifactsPath("TestLanguage.txt"), languageAsText(TestLanguage))
 generateLanguage(TestLanguage, "../class-core-test-language/src/gen", { header: defaultTrumpfOriginatingApache2_0LicensedHeader })
+writeFileSync(inArtifactsPath("TestLanguage.puml"), generatePlantUmlForLanguage(TestLanguage))
 

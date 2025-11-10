@@ -19,33 +19,33 @@ import { collectingDeltaReceiver, PropertyAddedDelta } from "@lionweb/class-core
 import { AddPropertyCommand, deltaToCommandTranslator } from "@lionweb/delta-protocol-common"
 
 import { expect } from "chai"
-import { MaterialGroup, MatterState, ShapesBase } from "../gen/Shapes.g.js"
+import { DataTypeTestConcept, TestEnumeration, TestLanguageBase } from "@lionweb/class-core-test-language"
 
-const shapeLanguageBase = ShapesBase.INSTANCE
+const testLanguageBase = TestLanguageBase.INSTANCE
 
 
 describe("delta-to-command translator", () => {
 
     it("works for changing an enumeration-typed property", () => {
         const [receiveDelta, deltas] = collectingDeltaReceiver();
-        const materialGroup = MaterialGroup.create("mg", receiveDelta);
+        const dttc = DataTypeTestConcept.create("mg", receiveDelta);
 
         // pre-check:
-        expect(materialGroup.matterState).to.equal(undefined);
+        expect(dttc.enumValue_0_1).to.equal(undefined);
         expect(deltas.length).to.equal(0);
 
         // action+check:
-        materialGroup.matterState = MatterState.solid;
-        expect(deltas.length).to.equal(1);
-        expect(deltas[0]).to.deep.equal(new PropertyAddedDelta(materialGroup, shapeLanguageBase.MaterialGroup_matterState, MatterState.solid));
+        dttc.enumValue_0_1 = TestEnumeration.literal1;
+        expect(deltas.length).to.equal(1);  // <- failing!
+        expect(deltas[0]).to.deep.equal(new PropertyAddedDelta(dttc, testLanguageBase.DataTypeTestConcept_enumValue_0_1, TestEnumeration.literal1));
 
         const deltaAsCommand = deltaToCommandTranslator();
         const command = deltaAsCommand(deltas[0], "cmd-1");
         expect(command).to.deep.equal({
             messageKind: "AddProperty",
             node: "mg",
-            property: { language: shapeLanguageBase.language.key, version: shapeLanguageBase.language.version, key: shapeLanguageBase.MaterialGroup_matterState.key },
-            newValue: "key-solid",
+            property: { language: testLanguageBase.language.key, version: testLanguageBase.language.version, key: testLanguageBase.DataTypeTestConcept_enumValue_0_1.key },
+            newValue: testLanguageBase.TestEnumeration_literal1.key,
             commandId: "cmd-1",
             protocolMessages: []
         } as AddPropertyCommand);
