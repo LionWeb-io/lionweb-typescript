@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.7.2
+
+* Extend the `generate{PlantUml|Mermaid}ForLanguage` diagram generation functions with an optional second argument that determines which entities to focus on.
+  * (Expose a `DiagramRenderer` type to unify these two diagram generation functions type-wise.)
+
+
 ## 0.7.1
 
 (The 0.7.0 release was deprecated because its `validation` package was faulty.)

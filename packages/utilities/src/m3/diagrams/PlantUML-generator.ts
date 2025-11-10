@@ -20,35 +20,39 @@ import {
 } from "@lionweb/core"
 import { asString, indentWith } from "littoral-templates"
 
+import { DiagramRenderer } from "./type.js"
+
+
 const indented = indentWith(`  `)(1)
 
 /**
  * Generates a string with a PlantUML class diagram
  * representing the given {@link Language LionCore instance}.
+ * The optional second `focusEntities` argument determines which entities to focus on.
  */
-export const generatePlantUmlForLanguage = ({ name, entities }: Language) =>
+export const generatePlantUmlForLanguage: DiagramRenderer = ({ name, entities }: Language, focusEntities: LanguageEntity[] = nameSorted(entities)) =>
     asString([
-        `@startuml
-hide empty members
-
-' qualified name: "${name}"
-
-`,
-        nameSorted(entities).map(generateForEntity),
-        `
-
-' relations:
-`,
-        nameSorted(entities).map(generateForRelationsOf),
-        `
-@enduml`
+        `@startuml`,
+        `hide empty members`,
+        ``,
+        `' qualified name: "${name}"`,
+        ``,
+        ``,
+        focusEntities.map(generateForEntity),
+        ``,
+        ``,
+        `' relations:`,
+        ``,
+        focusEntities.map(generateForRelationsOf),
+        ``,
+        `@enduml`
     ])
 
 const generateForEnumeration = ({ name, literals }: Enumeration) => [
     `enum ${name} {`,
-    indented(literals.map(({name}) => name)),
-    `}
-`
+    indented(literals.map(({ name }) => name)),
+    `}`,
+    ``
 ]
 
 const generateForAnnotation = ({ name, features, extends: extends_, implements: implements_, annotates }: Annotation) => {
@@ -123,8 +127,10 @@ const generateForEntity = (entity: LanguageEntity) => {
     if (entity instanceof PrimitiveType) {
         return generateForPrimitiveType(entity)
     }
-    return `' unhandled language entity: <${entity.constructor.name}>${entity.name}
-`
+    return [
+        `' unhandled language entity: <${entity.constructor.name}>${entity.name}`,
+        ``
+    ]
 }
 
 const generateForRelationsOf = (entity: LanguageEntity) => {
