@@ -20,7 +20,7 @@ import { LionWebClient } from "@lionweb/delta-protocol-client"
 import { ansi, ClientReceivedMessage, ISemanticLogItem } from "@lionweb/delta-protocol-common"
 import { LionWebId } from "@lionweb/json"
 import { lastOfArray } from "@lionweb/ts-utils"
-import { DataTypeTestConcept, LinkTestConcept, TestAnnotation, TestLanguageBase } from "./gen/TestLanguage.g.js"
+import { DataTypeTestConcept, LinkTestConcept, TestAnnotation, TestLanguageBase } from "@lionweb/class-core-test-language"
 
 import { waitUntil } from "./async.js"
 const { clientInfo, genericWarning } = ansi

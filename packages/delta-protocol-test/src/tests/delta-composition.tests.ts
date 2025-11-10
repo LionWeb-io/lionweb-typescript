@@ -26,7 +26,7 @@ import {
 } from "@lionweb/class-core"
 import { LionWebClient } from "@lionweb/delta-protocol-client"
 import { Message, semanticConsoleLogger, SignOnResponse } from "@lionweb/delta-protocol-common"
-import { TestLanguageBase } from "@lionweb/class-core-test/dist/gen/TestLanguage.g.js"
+import { TestLanguageBase } from "@lionweb/class-core-test-language"
 
 
 describe("combining delta protocol and an “adjacent” delta receiver", () => {

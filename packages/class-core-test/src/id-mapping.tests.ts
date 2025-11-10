@@ -16,10 +16,11 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { IdMapping } from "@lionweb/class-core"
+import { unresolved } from "@lionweb/core"
+
+import { LinkTestConcept } from "@lionweb/class-core-test-language"
 import { equal, throws } from "./assertions.js"
 
-import { LinkTestConcept } from "./gen/TestLanguage.g.js"
-import { unresolved } from "@lionweb/core"
 
 describe("updating ID mapping", () => {
     it("registers children as well", () => {

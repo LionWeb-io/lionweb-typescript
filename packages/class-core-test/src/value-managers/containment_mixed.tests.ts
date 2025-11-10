@@ -23,11 +23,10 @@ import {
 } from "@lionweb/class-core"
 import { LionWebId } from "@lionweb/json"
 
+import { LinkTestConcept, TestLanguageBase } from "@lionweb/class-core-test-language"
 import { equal, latestDeltaAsserter } from "../assertions.js"
-import { LinkTestConcept, TestLanguageBase } from "../gen/TestLanguage.g.js"
 
 const testLanguageBase = TestLanguageBase.INSTANCE
-
 
 describe("containment (mixed)", () => {
 

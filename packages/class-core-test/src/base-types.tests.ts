@@ -15,9 +15,8 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import { LinkTestConcept } from "@lionweb/class-core-test-language"
 import { sameMembers } from "./assertions.js"
-
-import { LinkTestConcept } from "./gen/TestLanguage.g.js"
 
 describe("internals of base types", () => {
     it("children", () => {

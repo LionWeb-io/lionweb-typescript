@@ -16,6 +16,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { DeltaReceiver, latchingDeltaReceiverFrom, NoOpDelta } from "@lionweb/class-core"
+
 import { equal } from "../assertions.js"
 
 describe("receivers", () => {

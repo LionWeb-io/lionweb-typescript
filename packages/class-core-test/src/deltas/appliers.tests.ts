@@ -24,9 +24,9 @@ import {
     ChildMovedFromOtherContainmentDelta,
     ChildReplacedDelta
 } from "@lionweb/class-core"
-import { deepEqual, equal, isUndefined } from "../assertions.js"
 
-import { LinkTestConcept, TestAnnotation, TestLanguageBase } from "../gen/TestLanguage.g.js"
+import { LinkTestConcept, TestAnnotation, TestLanguageBase } from "@lionweb/class-core-test-language"
+import { deepEqual, equal, isUndefined } from "../assertions.js"
 
 const testLanguage = TestLanguageBase.INSTANCE
 

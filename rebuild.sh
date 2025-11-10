@@ -71,6 +71,10 @@ cd class-core
 npm run build
 cd ..
 
+cd class-core-test-language
+npm run build
+cd ..
+
 cd class-core-test
 npm test
 cd ..

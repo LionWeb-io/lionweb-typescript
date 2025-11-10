@@ -28,7 +28,7 @@ import {
     SignOnResponse,
     simpleConsoleLogger
 } from "@lionweb/delta-protocol-common"
-import { TestLanguageBase } from "@lionweb/class-core-test/dist/gen/TestLanguage.g.js"
+import { TestLanguageBase } from "@lionweb/class-core-test-language"
 import { mockLowLevelClientInstantiator } from "../test-utils/mock-low-level-client.js"
 import { asLowLevelClientLogger } from "../test-utils/logging.js"
 
