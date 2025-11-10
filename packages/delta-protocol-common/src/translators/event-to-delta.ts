@@ -128,6 +128,12 @@ export const eventToDeltaTranslator = (
             ref === unresolved ? unresolved : idMapping.fromId(ref)
 
         switch (event.messageKind) {
+            /*
+             * Note: `messageKind` is a property of the `Message` type,
+             * which is an interface and not a sum type,
+             * so the switching on it is *not* type-safe,
+             * and you don't get any assist (completion, exhaustive-check) on the message kind.
+             */
 
             // in order of the specification (§ 6.6):
 
@@ -378,7 +384,7 @@ export const eventToDeltaTranslator = (
             case "NoOp": { // § 6.6.7.2
                 return new NoOpDelta()
             }
-            case "Error": { // § 6.6.7.3
+            case "ErrorEvent": { // § 6.6.7.3
                 return undefined
             }
 
