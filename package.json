@@ -52,6 +52,7 @@
         "./packages/class-core-generator",
         "./packages/class-core",
         "./packages/build",
+        "./packages/class-core-test-language",
         "./packages/class-core-test",
         "./packages/test",
         "./packages/artifacts",

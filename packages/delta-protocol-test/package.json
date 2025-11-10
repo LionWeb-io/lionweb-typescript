@@ -22,6 +22,7 @@
         "test": "mocha --recursive dist/tests/"
     },
     "dependencies": {
+        "@lionweb/class-core-test-language": "0.7.2-beta.2",
         "@lionweb/delta-protocol-client": "0.7.2-beta.2",
         "@lionweb/delta-protocol-common": "0.7.2-beta.2",
         "@lionweb/delta-protocol-low-level-client-ws": "0.7.2-beta.2",

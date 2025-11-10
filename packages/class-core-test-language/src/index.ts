@@ -15,15 +15,5 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { TestEnumeration, TestLanguageBase } from "@lionweb/class-core-test-language"
-import { equal } from "./assertions.js"
-
-describe("support for enumerations", () => {
-    const testLanguageBase = TestLanguageBase.INSTANCE
-
-    it("runtime representation of enums", () => {
-        equal(TestEnumeration.literal1, testLanguageBase.TestEnumeration_literal1.key)
-        equal(testLanguageBase.enumLiteralFrom(testLanguageBase.TestEnumeration_literal2), TestEnumeration.literal2)
-    })
-})
+export * from "./gen/TestLanguage.g.js";
 

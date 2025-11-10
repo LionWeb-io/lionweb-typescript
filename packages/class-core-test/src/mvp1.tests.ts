@@ -28,9 +28,9 @@ import { readFileAsJson, writeJsonAsFile } from "@lionweb/utilities"
 import { observe } from "mobx"
 import { join } from "path"
 
+import { DataTypeTestConcept, TestEnumeration, TestLanguageBase } from "@lionweb/class-core-test-language"
 import { deepEqual, equal, fail, isTrue, throws } from "./assertions.js"
 
-import { DataTypeTestConcept, TestEnumeration, TestLanguageBase } from "./gen/TestLanguage.g.js"
 
 describe("TestConcept", () => {
 

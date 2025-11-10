@@ -21,6 +21,7 @@
     },
     "dependencies": {
         "@lionweb/class-core": "0.7.2-beta.2",
+        "@lionweb/class-core-test-language": "0.7.2-beta.2",
         "@lionweb/core": "0.7.2-beta.2",
         "@lionweb/json": "0.7.2-beta.2",
         "@lionweb/utilities": "0.7.2-beta.2",

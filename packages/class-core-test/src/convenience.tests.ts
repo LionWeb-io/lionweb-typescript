@@ -16,9 +16,10 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { deepDuplicatorFor } from "@lionweb/class-core"
+
+import { LinkTestConcept, TestLanguageBase } from "@lionweb/class-core-test-language"
 import { equal, isTrue, notEqual } from "./assertions.js"
 
-import { LinkTestConcept, TestLanguageBase } from "./gen/TestLanguage.g.js"
 
 describe("deep-duplication", () => {
     it("works", () => {

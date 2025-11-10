@@ -17,6 +17,7 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import { TestLanguageBase } from "@lionweb/class-core-test-language"
 import { Concept } from "@lionweb/core"
 import { LionWebClient, LowLevelClientLogItem } from "@lionweb/delta-protocol-client"
 import { ansi, combine, semanticConsoleLogger, semanticLogItemStorer } from "@lionweb/delta-protocol-common"
@@ -27,7 +28,6 @@ import { argv, exit } from "process"
 
 import { runAsApp, tryParseInteger } from "./common.js"
 import { recognizedTasks, taskExecutor } from "./tasks.js"
-import { TestLanguageBase } from "./gen/TestLanguage.g.js"
 
 const { clientInfo, genericError } = ansi
 
