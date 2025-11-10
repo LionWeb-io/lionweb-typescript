@@ -24,6 +24,14 @@ language TestLanguage
                 reference_1 -> LinkTestConcept
                 reference_1_n -> LinkTestConcept[1..*]
 
+        concept NonPartitionTestConcept implements INamed
+            features (↓name):
+                nestedChild: NonPartitionTestConcept?
+
+        <<partition>> concept PartitionTestConcept
+            features (↓name):
+                child: NonPartitionTestConcept
+
         enumeration SecondTestEnumeration
             literals:
                 literal1
