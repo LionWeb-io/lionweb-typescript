@@ -22,11 +22,10 @@ import {
     serializeDelta
 } from "@lionweb/class-core"
 
+import { DataTypeTestConcept, TestEnumeration, TestLanguageBase } from "@lionweb/class-core-test-language"
 import { deepEqual, equal } from "./assertions.js"
-import { DataTypeTestConcept, TestEnumeration, TestLanguageBase } from "./gen/TestLanguage.g.js"
 
 const testLanguageBase = TestLanguageBase.INSTANCE
-
 
 describe("serializing a delta", () => {
 

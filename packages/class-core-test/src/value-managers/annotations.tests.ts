@@ -24,8 +24,8 @@ import {
     collectingDeltaReceiver
 } from "@lionweb/class-core"
 
+import { LinkTestConcept, TestAnnotation } from "@lionweb/class-core-test-language"
 import { deepEqual, equal, isUndefined, throws } from "../assertions.js"
-import { LinkTestConcept, TestAnnotation } from "../gen/TestLanguage.g.js"
 
 describe("annotations", () => {
     it("getting annotations", () => {

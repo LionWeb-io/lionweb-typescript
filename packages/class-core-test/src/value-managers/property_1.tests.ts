@@ -25,11 +25,10 @@ import {
 import { AccumulatingSimplisticHandler } from "@lionweb/core"
 import { LionWebJsonMetaPointer } from "@lionweb/json"
 
+import { DataTypeTestConcept, TestLanguageBase } from "@lionweb/class-core-test-language"
 import { deepEqual, equal, isTrue, throws } from "../assertions.js"
-import { DataTypeTestConcept, TestLanguageBase } from "../gen/TestLanguage.g.js"
 
 const testLanguageBase = TestLanguageBase.INSTANCE
-
 
 describe("[1] string property", () => {
 

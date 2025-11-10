@@ -15,10 +15,9 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { deepEqual,throws } from "../assertions.js"
-
 import { CompositeDelta, DeltaCompositor, IDelta, NoOpDelta } from "@lionweb/class-core"
 
+import { deepEqual,throws } from "../assertions.js"
 
 describe("delta compositor", () => {
 

@@ -32,7 +32,7 @@ import {
     SignOnResponse
 } from "@lionweb/delta-protocol-common"
 import { LionWebRepository, wsLocalhostUrl } from "@lionweb/delta-protocol-repository-ws"
-import { TestLanguageBase } from "@lionweb/class-core-test/dist/gen/TestLanguage.g.js"
+import { TestLanguageBase } from "@lionweb/class-core-test-language"
 import { delayed } from "../test-utils/async.js"
 import { nextPort } from "../test-utils/port.js"
 import { createWSLowLevelClient } from "@lionweb/delta-protocol-low-level-client-ws"

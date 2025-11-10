@@ -23,11 +23,10 @@ import {
     collectingDeltaReceiver
 } from "@lionweb/class-core"
 
+import { LinkTestConcept, TestLanguageBase } from "@lionweb/class-core-test-language"
 import { deepEqual, equal, throws } from "../assertions.js"
-import { LinkTestConcept, TestLanguageBase } from "../gen/TestLanguage.g.js"
 
 const testLanguageBase = TestLanguageBase.INSTANCE
-
 
 describe("[1..n] containment", () => {
 
