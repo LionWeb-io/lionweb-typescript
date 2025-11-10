@@ -1,6 +1,6 @@
 {
     "name": "@lionweb/textgen-utils",
-    "version": "0.7.2-beta.1",
+    "version": "0.7.2-beta.2",
     "description": "Utilities for text generation",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -27,7 +27,7 @@
         "release": "npm publish"
     },
     "dependencies": {
-        "@lionweb/ts-utils": "0.7.2-beta.1",
+        "@lionweb/ts-utils": "0.7.2-beta.2",
         "littoral-templates": "0.5.1"
     }
 }
