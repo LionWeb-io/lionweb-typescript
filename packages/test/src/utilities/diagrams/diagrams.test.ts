@@ -57,7 +57,7 @@ describe("rendering languages as diagrams", () => {
 })
 
 
-describe.only("focusing on specific entities", () => {
+describe("focusing on specific entities", () => {
 
     it("0 entities", () => {
         rendersEqualToFileOrOverwrite(generatePlantUmlForLanguage, "empty-diagram-expected.puml", [])
