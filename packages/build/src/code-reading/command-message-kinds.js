@@ -21,7 +21,7 @@
 
 import { readFileSync } from "fs"
 
-const messageKinds = readFileSync("../delta-protocol-impl/src/payload/command-types.ts", { encoding: "utf8" })
+const messageKinds = readFileSync("../delta-protocol-common/src/payload/command-types.ts", { encoding: "utf8" })
     .split(/\r*\n/)
     .map((line) => line.match(/^ {4}messageKind: "(\w+)"$/))
     .filter((matchOrUndefined) => !!matchOrUndefined)
