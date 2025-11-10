@@ -19,6 +19,9 @@ import {
 } from "@lionweb/core"
 import { asString, indentWith, Template } from "littoral-templates"
 
+import { DiagramRenderer } from "./type.js"
+
+
 // define some layouting basics/building algebra:
 
 const indented = indentWith(`  `)(1)
@@ -31,15 +34,16 @@ const withNewLine = (content: Template): Template => [content, ``]
 /**
  * Generates a string with a Mermaid class diagram
  * representing the given {@link Language LionCore instance}.
+ * The optional second `focusEntities` argument determines which entities to focus on.
  */
-export const generateMermaidForLanguage = ({ entities }: Language) =>
+export const generateMermaidForLanguage: DiagramRenderer = ({ entities }: Language, focusEntities: LanguageEntity[] = nameSorted(entities)) =>
     asString([
         "```mermaid",
-        `classDiagram
-`,
-        indented(nameSorted(entities).map(generateForEntity)),
+        `classDiagram`,
         ``,
-        indented(nameSorted(entities).map(generateForRelationsOf)),
+        indented(focusEntities.map(generateForEntity)),
+        ``,
+        indented(focusEntities.map(generateForRelationsOf)),
         ``,
         "```"
     ])
@@ -85,10 +89,11 @@ const generateForNonRelationalFeature = (feature: Feature) => {
     return `+${typeText} ${name}`
 }
 
-const generateForPrimitiveType = ({ name }: PrimitiveType) =>
-    `class ${name}
-<<PrimitiveType>> ${name}
-`
+const generateForPrimitiveType = ({ name }: PrimitiveType) => [
+    `class ${name}`,
+    `<<PrimitiveType>> ${name}`,
+    ``
+]
 
 const generateForEntity = (entity: LanguageEntity) => {
     if (entity instanceof Annotation) {
