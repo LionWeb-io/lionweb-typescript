@@ -1,6 +1,6 @@
 {
     "lionweb": {
-        "publish-version" : "0.7.2-beta.0",
+        "publish-version" : "0.7.2-beta.1",
         "internal-version": "0.7.2-dev.0",
         "internal-packages": [
             "artifacts",
