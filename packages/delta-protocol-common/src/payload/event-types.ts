@@ -433,7 +433,7 @@ export interface NoOpEvent extends Event {
 
 /** § 6.6.7.3 */
 export interface ErrorEvent extends Event {
-    messageKind: "Error"
+    messageKind: "ErrorEvent"
     errorCode: string
     message: string
 }
@@ -488,7 +488,7 @@ const eventMessageKinds = mapFrom(
         "ReferenceTargetChanged",
         "CompositeEvent",
         "NoOp",
-        "Error"
+        "ErrorEvent"
     ],
     (messageKind) => messageKind,
     (_) => true
