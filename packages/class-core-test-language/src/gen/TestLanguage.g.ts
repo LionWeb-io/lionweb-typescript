@@ -217,12 +217,34 @@ export class TestLanguageBase implements ILanguageBase {
         return this._TestAnnotation;
     }
 
+    public readonly _PartitionTestConcept = new Concept(this._language, "PartitionTestConcept", "PartitionTestConcept", "PartitionTestConcept", false).isPartition();
+    get PartitionTestConcept(): Concept {
+        this.ensureWiredUp();
+        return this._PartitionTestConcept;
+    }
+    private readonly _PartitionTestConcept_child = new Containment(this._PartitionTestConcept, "child", "PartitionTestConcept-child", "PartitionTestConcept-child");
+    get PartitionTestConcept_child(): Containment {
+        this.ensureWiredUp();
+        return this._PartitionTestConcept_child;
+    }
+
+    public readonly _NonPartitionTestConcept = new Concept(this._language, "NonPartitionTestConcept", "NonPartitionTestConcept", "NonPartitionTestConcept", false);
+    get NonPartitionTestConcept(): Concept {
+        this.ensureWiredUp();
+        return this._NonPartitionTestConcept;
+    }
+    private readonly _NonPartitionTestConcept_nestedChild = new Containment(this._NonPartitionTestConcept, "nestedChild", "NonPartitionTestConcept-nestedChild", "NonPartitionTestConcept-nestedChild").isOptional();
+    get NonPartitionTestConcept_nestedChild(): Containment {
+        this.ensureWiredUp();
+        return this._NonPartitionTestConcept_nestedChild;
+    }
+
     private _wiredUp: boolean = false;
     private ensureWiredUp() {
         if (this._wiredUp) {
             return;
         }
-        this._language.havingEntities(this._TestEnumeration, this._SecondTestEnumeration, this._DataTypeTestConcept, this._LinkTestConcept, this._TestAnnotation);
+        this._language.havingEntities(this._TestEnumeration, this._SecondTestEnumeration, this._DataTypeTestConcept, this._LinkTestConcept, this._TestAnnotation, this._PartitionTestConcept, this._NonPartitionTestConcept);
         this._TestEnumeration.havingLiterals(this._TestEnumeration_literal1, this._TestEnumeration_literal2, this._TestEnumeration_literal3);
         this._SecondTestEnumeration.havingLiterals(this._SecondTestEnumeration_literal1, this._SecondTestEnumeration_literal2, this._SecondTestEnumeration_literal3);
         this._DataTypeTestConcept.havingFeatures(this._DataTypeTestConcept_booleanValue_1, this._DataTypeTestConcept_integerValue_1, this._DataTypeTestConcept_stringValue_1, this._DataTypeTestConcept_enumValue_1, this._DataTypeTestConcept_booleanValue_0_1, this._DataTypeTestConcept_integerValue_0_1, this._DataTypeTestConcept_stringValue_0_1, this._DataTypeTestConcept_enumValue_0_1);
@@ -244,6 +266,11 @@ export class TestLanguageBase implements ILanguageBase {
         this._LinkTestConcept_reference_1.ofType(this._LinkTestConcept);
         this._LinkTestConcept_reference_0_n.ofType(this._LinkTestConcept);
         this._LinkTestConcept_reference_1_n.ofType(this._LinkTestConcept);
+        this._PartitionTestConcept.havingFeatures(this._PartitionTestConcept_child);
+        this._PartitionTestConcept_child.ofType(this._NonPartitionTestConcept);
+        this._NonPartitionTestConcept.implementing(LionCore_builtinsBase.INSTANCE._INamed);
+        this._NonPartitionTestConcept.havingFeatures(this._NonPartitionTestConcept_nestedChild);
+        this._NonPartitionTestConcept_nestedChild.ofType(this._NonPartitionTestConcept);
         this._wiredUp = true;
     }
 
@@ -253,6 +280,8 @@ export class TestLanguageBase implements ILanguageBase {
                 case this._DataTypeTestConcept.key: return DataTypeTestConcept.create(id, receiveDelta);
                 case this._LinkTestConcept.key: return LinkTestConcept.create(id, receiveDelta);
                 case this._TestAnnotation.key: return TestAnnotation.create(id, receiveDelta);
+                case this._PartitionTestConcept.key: return PartitionTestConcept.create(id, receiveDelta);
+                case this._NonPartitionTestConcept.key: return NonPartitionTestConcept.create(id, receiveDelta);
                 default: {
                     const {language} = classifier;
                     throw new Error(`can't instantiate ${classifier.name} (key=${classifier.key}): classifier is not known in language ${language.name} (key=${language.key}, version=${language.version})`);
@@ -554,6 +583,80 @@ export class LinkTestConcept extends NodeBase implements INamed {
 export class TestAnnotation extends NodeBase {
     static create(id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage): TestAnnotation {
         return new TestAnnotation(TestLanguageBase.INSTANCE.TestAnnotation, id, receiveDelta, parentInfo);
+    }
+}
+
+export class PartitionTestConcept extends NodeBase {
+    static create(id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage): PartitionTestConcept {
+        return new PartitionTestConcept(TestLanguageBase.INSTANCE.PartitionTestConcept, id, receiveDelta, parentInfo);
+    }
+
+    private readonly _child: RequiredSingleContainmentValueManager<NonPartitionTestConcept>;
+    get child(): NonPartitionTestConcept {
+        return this._child.get();
+    }
+    set child(newValue: NonPartitionTestConcept) {
+        this._child.set(newValue);
+    }
+    replaceChildWith(newValue: NonPartitionTestConcept) {
+        this._child.replaceWith(newValue);
+    }
+
+    public constructor(classifier: Classifier, id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage) {
+        super(classifier, id, receiveDelta, parentInfo);
+        this._child = new RequiredSingleContainmentValueManager<NonPartitionTestConcept>(TestLanguageBase.INSTANCE.PartitionTestConcept_child, this);
+    }
+
+    getContainmentValueManager(containment: Containment): ContainmentValueManager<INodeBase> {
+        if (containment.key === TestLanguageBase.INSTANCE.PartitionTestConcept_child.key) {
+            return this._child;
+        }
+        return super.getContainmentValueManager(containment);
+    }
+}
+
+export class NonPartitionTestConcept extends NodeBase implements INamed {
+    static create(id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage): NonPartitionTestConcept {
+        return new NonPartitionTestConcept(TestLanguageBase.INSTANCE.NonPartitionTestConcept, id, receiveDelta, parentInfo);
+    }
+
+    private readonly _nestedChild: OptionalSingleContainmentValueManager<NonPartitionTestConcept>;
+    get nestedChild(): NonPartitionTestConcept | undefined {
+        return this._nestedChild.get();
+    }
+    set nestedChild(newValue: NonPartitionTestConcept | undefined) {
+        this._nestedChild.set(newValue);
+    }
+    replaceNestedChildWith(newValue: NonPartitionTestConcept) {
+        this._nestedChild.replaceWith(newValue);
+    }
+
+    private readonly _name: RequiredPropertyValueManager<string>;
+    get name(): string {
+        return this._name.get();
+    }
+    set name(newValue: string) {
+        this._name.set(newValue);
+    }
+
+    public constructor(classifier: Classifier, id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage) {
+        super(classifier, id, receiveDelta, parentInfo);
+        this._nestedChild = new OptionalSingleContainmentValueManager<NonPartitionTestConcept>(TestLanguageBase.INSTANCE.NonPartitionTestConcept_nestedChild, this);
+        this._name = new RequiredPropertyValueManager<string>(LionCore_builtinsBase.INSTANCE.INamed_name, this);
+    }
+
+    getPropertyValueManager(property: Property): PropertyValueManager<unknown> {
+        if (property.key === LionCore_builtinsBase.INSTANCE.INamed_name.key) {
+            return this._name;
+        }
+        return super.getPropertyValueManager(property);
+    }
+
+    getContainmentValueManager(containment: Containment): ContainmentValueManager<INodeBase> {
+        if (containment.key === TestLanguageBase.INSTANCE.NonPartitionTestConcept_nestedChild.key) {
+            return this._nestedChild;
+        }
+        return super.getContainmentValueManager(containment);
     }
 }
 

@@ -113,7 +113,7 @@ npm run build
 cd ..
 
 cd delta-protocol-test
-npm run build
+npm test
 cd ..
 
 cd .. # (/<root>)

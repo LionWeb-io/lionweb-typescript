@@ -20,6 +20,9 @@ import { IDelta, serializeDelta } from "@lionweb/class-core"
 
 export const { deepEqual, equal, fail, notEqual, sameMembers, throws } = assert
 
+export const isFalse = (value: unknown, message?: string): void =>
+    assert.isFalse(value, message);
+
 export const isTrue = (value: unknown, message?: string): void =>
     assert.isTrue(value, message);
 

@@ -18,6 +18,7 @@
 import { Feature, featureMetaType, Link } from "@lionweb/core"
 import { INodeBase } from "../base-types.js"
 import { IDelta } from "../deltas/index.js"
+import { isContainedByAPartition } from "../functions.js"
 
 
 /**
@@ -33,7 +34,7 @@ export abstract class ValueManager {
      * @param deltaThunk a thunk that generates the delta, and is only called when a delta receiver is registered with the container.
      */
     emitDelta(deltaThunk: () => IDelta) {
-        if (this.container.receiveDelta) {
+        if (this.container.receiveDelta && isContainedByAPartition(this.container)) {
             this.container.receiveDelta(deltaThunk());
         }
     }

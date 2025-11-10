@@ -3,6 +3,7 @@
 ## 0.7.2
 
 * Implement a `propertyValueSerializerWith` function that produces a `PropertyValueSerializer` instance to serialize properties’ values with, properly dealing with enumerations as well.
+* Ensure that deltas w.r.t. features of a node are only emitted when that node is not “free-floating”, i.e. is not a partition itself, or (in-/)directly contained by a partition.
 
 
 ## 0.7.1
