@@ -1,0 +1,19 @@
+@startuml
+hide empty members
+
+' qualified name: "test"
+
+
+annotation Annotation2 extends Annotation1 implements Interface1
+
+annotation Annotation1
+Annotation1 ..> Node
+
+
+
+' relations:
+
+
+
+
+@enduml

@@ -20,13 +20,17 @@ import {
 } from "@lionweb/core"
 import { asString, indentWith } from "littoral-templates"
 
+import { DiagramRenderer } from "./type.js"
+
+
 const indented = indentWith(`  `)(1)
 
 /**
  * Generates a string with a PlantUML class diagram
  * representing the given {@link Language LionCore instance}.
+ * The optional second `focusEntities` argument determines which entities to focus on.
  */
-export const generatePlantUmlForLanguage = ({ name, entities }: Language) =>
+export const generatePlantUmlForLanguage: DiagramRenderer = ({ name, entities }: Language, focusEntities: LanguageEntity[] = nameSorted(entities)) =>
     asString([
         `@startuml`,
         `hide empty members`,
@@ -34,12 +38,12 @@ export const generatePlantUmlForLanguage = ({ name, entities }: Language) =>
         `' qualified name: "${name}"`,
         ``,
         ``,
-        nameSorted(entities).map(generateForEntity),
+        focusEntities.map(generateForEntity),
         ``,
         ``,
         `' relations:`,
         ``,
-        nameSorted(entities).map(generateForRelationsOf),
+        focusEntities.map(generateForRelationsOf),
         ``,
         `@enduml`
     ])
