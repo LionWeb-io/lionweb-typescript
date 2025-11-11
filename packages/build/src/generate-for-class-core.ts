@@ -67,4 +67,5 @@ TestLanguage.entities.push(PartitionTestConcept, NonPartitionTestConcept);
 
 writeFileSync(inArtifactsPath("TestLanguage.txt"), languageAsText(TestLanguage))
 generateLanguage(TestLanguage, "../class-core-test-language/src/gen", { header: defaultTrumpfOriginatingApache2_0LicensedHeader })
+writeFileSync(inArtifactsPath("TestLanguage.puml"), generatePlantUmlForLanguage(TestLanguage))
 
