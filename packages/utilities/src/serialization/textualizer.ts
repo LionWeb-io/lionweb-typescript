@@ -16,7 +16,14 @@ const indent = indentWith("    ")(1)
 
 const prependWith = (template: Template, prefix: string): Template => prefix + asString(template)
 
+const hasFeatureValuesToDisplay = (node: LionWebJsonNode) =>
+       node.properties.length > 0
+    || node.containments.some(({ children }) => children.length > 0)
+    || node.references.some(({ targets }) => targets.length > 0)
+    || node.annotations.length > 0
+
 export const genericAsTreeText = ({ nodes }: LionWebJsonChunk, languages: Language[] = []) => {
+
     const nodesById: { [id: LionWebId]: LionWebJsonNode } = byIdMap(nodes)
     const symbolTable = new MemoisingSymbolTable(languages)
 
@@ -67,27 +74,26 @@ export const genericAsTreeText = ({ nodes }: LionWebJsonChunk, languages: Langua
         (t2: T2) =>
             func(t1, t2)
 
-    const asText = ({
-        id,
-        classifier: classifierMetaPointer,
-        properties,
-        containments,
-        references,
-        annotations
-    }: LionWebJsonNode): Template => [
-        `${symbolTable.entityMatching(classifierMetaPointer)?.name ?? `[${classifierMetaPointer.key}]`} (id: ${id}) {`,
-        indent([
-            properties.map(curry1(propertyAsText, classifierMetaPointer)),
-            references.map(curry1(referenceAsText, classifierMetaPointer)),
-            containments.map(curry1(containmentAsText, classifierMetaPointer)),
-            annotations.map(annotationAsText)
-        ]),
-        `}`
-    ]
+    const asText = (node: LionWebJsonNode): Template => {
+        const { id, classifier: classifierMetaPointer, properties, containments, references, annotations } = node
+        const isBlockNonEmpty = hasFeatureValuesToDisplay(node)
+        return [
+            `${symbolTable.entityMatching(classifierMetaPointer)?.name ?? `[${classifierMetaPointer.key}]`} (id: ${id})${isBlockNonEmpty ? " {" : ""}`,
+            indent([
+                properties.map(curry1(propertyAsText, classifierMetaPointer)),
+                references.flatMap(curry1(referenceAsText, classifierMetaPointer)),
+                containments.flatMap(curry1(containmentAsText, classifierMetaPointer)),
+                annotations.map(annotationAsText)
+            ]),
+            isBlockNonEmpty ? `}` : []
+        ]
+    }
 
     return asString(
         nodes
             .filter(node => node.parent === null) // root nodes
             .map(asText)
     )
+
 }
+

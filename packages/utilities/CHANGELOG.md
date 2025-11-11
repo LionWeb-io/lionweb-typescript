@@ -7,6 +7,7 @@
   * Add an optional second argument to both functions, that determines which entities to focus on.
   * Fix the `generationMermaidForLanguage` function to correctly deal with concepts that are partitions, and classifiers that are annotations.
   * Modify both functions to make the relation between annotations and annotated classifier clearer.
+* The `genericAsTreeText` function now renders nodes without any feature values without curly braces — i.e., without empty `{&hellip;}` block.
 
 
 ## 0.7.1
