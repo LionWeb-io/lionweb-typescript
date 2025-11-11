@@ -22,7 +22,7 @@ import { deepEqual, equal, isFalse, isTrue } from "../assertions.js"
 
 const testLanguage = TestLanguageBase.INSTANCE
 
-describe.only(`"free-floating" nodes`, () => {
+describe(`"free-floating" nodes`, () => {
 
     it(`only 1 "child added" event should be sent`, () => {
         isTrue(testLanguage.PartitionTestConcept.partition);
@@ -38,7 +38,7 @@ describe.only(`"free-floating" nodes`, () => {
         const child2 = NonPartitionTestConcept.create("child_2", receiveDelta);
         child2.name = "child 2";
         child1.nestedChild = child2;
-        equal(deltas.length, 0);
+        deepEqual(deltas.map((delta) => delta.constructor.name), []);
 
         parent.child = child1;
         equal(deltas.length, 1);
