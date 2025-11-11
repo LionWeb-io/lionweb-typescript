@@ -24,7 +24,7 @@ annotation ShortDescription {
 }
 
 annotation VirtualPackage implements INamed
-VirtualPackage ..> Node
+VirtualPackage ..# Node : <i>annotates</i>
 
 
 
