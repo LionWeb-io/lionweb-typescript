@@ -11,7 +11,7 @@ export type ResultMapper<T, R> = (t: T) => R[]
  * 
  * @param mapper The function that calculates the result values
  * @param nextVertices  The function that calculates the next edges to visit.
- * @returns A function that takes a starting vertex and recursively calculates the result values for each vertex visited.
+ * @return A function that takes a starting vertex and recursively calculates the result values for each vertex visited.
  */
 export const visitAndMap =
     <T, R>(mapper: ResultMapper<T, R>, nextVertices: (t: T) => T[]): ResultMapper<T, R> =>
