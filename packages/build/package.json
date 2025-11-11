@@ -27,6 +27,7 @@
         "@lionweb/json": "0.7.2-beta.2",
         "@lionweb/textgen-utils": "0.7.2-beta.2",
         "@lionweb/ts-utils": "0.7.2-beta.2",
+        "@lionweb/utilities": "0.7.2-beta.2",
         "littoral-templates": "0.5.1"
     },
     "devDependencies": {

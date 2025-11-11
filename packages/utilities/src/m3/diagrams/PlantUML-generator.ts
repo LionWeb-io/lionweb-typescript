@@ -66,7 +66,7 @@ const generateForAnnotation = ({ name, features, extends: extends_, implements: 
     }
     const nonRelationalFeatures_ = nonRelationalFeatures(features)
     return nonRelationalFeatures_.length === 0
-        ? [`${fragments.join(" ")}`, isRef(annotates) ? `${name} ..> ${annotates.name}` : [], ``]
+        ? [`${fragments.join(" ")}`, isRef(annotates) ? `${name} ..# ${annotates.name} : <i>annotates</i>` : [], ``]
         : [`${fragments.join(" ")} {`, indented(nonRelationalFeatures_.map(generateForNonRelationalFeature)), `}`, ``]
 }
 

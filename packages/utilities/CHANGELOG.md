@@ -2,8 +2,11 @@
 
 ## 0.7.2
 
-* Extend the `generate{PlantUml|Mermaid}ForLanguage` diagram generation functions with an optional second argument that determines which entities to focus on.
+* W.r.t. the `generate{PlantUml|Mermaid}ForLanguage` diagram generation functions:
   * (Expose a `DiagramRenderer` type to unify these two diagram generation functions type-wise.)
+  * Add an optional second argument to both functions, that determines which entities to focus on.
+  * Fix the `generationMermaidForLanguage` function to correctly deal with concepts that are partitions, and classifiers that are annotations.
+  * Modify both functions to make the relation between annotations and annotated classifier clearer.
 
 
 ## 0.7.1

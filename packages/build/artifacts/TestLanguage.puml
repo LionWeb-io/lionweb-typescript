@@ -28,7 +28,7 @@ enum SecondTestEnumeration {
 }
 
 annotation TestAnnotation
-TestAnnotation ..> Node
+TestAnnotation ..# Node : <i>annotates</i>
 
 enum TestEnumeration {
   literal1

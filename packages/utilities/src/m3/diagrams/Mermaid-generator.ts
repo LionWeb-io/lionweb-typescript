@@ -53,9 +53,11 @@ const generateForEnumeration = ({ name, literals }: Enumeration) =>
 
 const generateForAnnotation = ({ name, features, extends: extends_, implements: implements_, annotates }: Annotation) => [
     block(
-        [`class ${name}`, `<<Annotation>> ${name}`, isRef(annotates) ? `${name} ..> ${annotates.name}` : []],
+        [`class ${name}`],
         nonRelationalFeatures(features).map(generateForNonRelationalFeature)
     ),
+    `<<Annotation>> ${name}`,
+    isRef(annotates) ? `${name} ..> ${annotates.name} : <i>annotates</i>` : [],
     isRef(extends_) && !isBuiltinNodeConcept(extends_) ? `${extends_.name} <|-- ${name}` : [],
     implements_.filter(isRef).map(interface_ => `${interface_.name} <|.. ${name}`),
     ``
@@ -68,8 +70,9 @@ const generateForConcept = ({
     extends: extends_ /*, implements: implements_*/,
     partition
 }: Concept) => [
-    block(`class ${partition ? `<<partition>> ` : ``}${name}`, nonRelationalFeatures(features).map(generateForNonRelationalFeature)),
+    block(`class ${name}`, nonRelationalFeatures(features).map(generateForNonRelationalFeature)),
     abstract_ ? `<<Abstract>> ${name}` : [],
+    partition ? `<<Partition>> ${name}` : [],
     isRef(extends_) && !isBuiltinNodeConcept(extends_) ? `${extends_.name} <|-- ${name}` : [],
     ``
 ]

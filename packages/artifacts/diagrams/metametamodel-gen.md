@@ -40,9 +40,10 @@ classDiagram
   class Interface
   Classifier <|-- Interface
 
-  class <<partition>> Language {
+  class Language {
     +String version
   }
+  <<Partition>> Language
 
   class LanguageEntity
   <<Abstract>> LanguageEntity
