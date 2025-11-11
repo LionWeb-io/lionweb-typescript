@@ -3,7 +3,7 @@ classDiagram
 
   class Annotation1
   <<Annotation>> Annotation1
-  Annotation1 ..> Node
+  Annotation1 ..> Node : <i>annotates</i>
 
   class Annotation2
   <<Annotation>> Annotation2
