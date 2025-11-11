@@ -77,6 +77,7 @@ import {
     ChildMovedFromOtherContainmentInSameParentEvent,
     ChildMovedInSameContainmentEvent,
     ChildReplacedEvent,
+    CommandSource,
     CompositeEvent,
     EntryMovedAndReplacedFromOtherReferenceEvent,
     EntryMovedAndReplacedFromOtherReferenceInSameParentEvent,
@@ -91,6 +92,7 @@ import {
     PropertyAddedEvent,
     PropertyChangedEvent,
     PropertyDeletedEvent,
+    ProtocolMessage,
     ReferenceAddedEvent,
     ReferenceChangedEvent,
     ReferenceDeletedEvent
@@ -114,17 +116,49 @@ const allIdsOfDescendantsFrom = (node: INodeBase) =>
 export type DeltaToEventTranslator = (
     delta: IDelta,
     lastUsedSequenceNumber: number
-) => [event: Event, lastUsedSequenceNumber: number];
+) => [event: Event, lastUsedSequenceNumber: number]
 
 
 /**
- * @return a {@link DeltaToEventTranslator} instance using the given {@link PropertyValueSerializer},
- * that's solely used to serialize primitive values, and defaults to the {@link builtinPropertyValueSerializer}.
+ * A type def. for functions that compute the `originCommands` part of the event corresponding to the given {@link IDelta delta}.
+ */
+export type OriginCommandsGenerator = (delta: IDelta) => CommandSource[]
+
+/**
+ * A type def. for functions that compute the `protocolMessages` part of the event corresponding to the given {@link IDelta delta},
+ * with the given sequence number.
+ */
+export type ProtocolMessagesGenerator = (delta: IDelta, sequenceNumber: number) => ProtocolMessage[]
+
+/**
+ * A type def. for the configuration of a {@link DeltaToEventTranslator}.
+ */
+export type DeltaToEventTranslatorConfiguration = Partial<{
+    /**
+     * A {@link PropertyValueSerializer} that's *only* used to serialize *primitive* values.
+     * Defaults to the {@link builtinPropertyValueSerializer}.
+     */
+    primitiveValueSerializer: PropertyValueSerializer,
+    /**
+     * A {@link OriginCommandsGenerator} — defaults to producing `[]`.
+     */
+    originCommandsGenerator: OriginCommandsGenerator,
+    /**
+     * A {@link ProtocolMessagesGenerator} — defaults to producing `[]`.
+     */
+    protocolMessagesGenerator: ProtocolMessagesGenerator
+}>
+
+
+/**
+ * @return a {@link DeltaToEventTranslator} instance using the given {@link DeltaToEventTranslatorConfiguration}.
  */
 export const deltaToEventTranslator = (
-    primitiveValueSerializer: PropertyValueSerializer = builtinPropertyValueSerializer
+    { primitiveValueSerializer, originCommandsGenerator, protocolMessagesGenerator }: DeltaToEventTranslatorConfiguration
 ): DeltaToEventTranslator => {
-    const propertyValueSerializer = propertyValueSerializerWith({ primitiveValueSerializer })
+    const propertyValueSerializer = primitiveValueSerializer === undefined
+        ? builtinPropertyValueSerializer
+        : propertyValueSerializerWith({ primitiveValueSerializer })
     return (delta, lastUsedSequenceNumber) => {
 
         let sequenceNumber = lastUsedSequenceNumber
@@ -135,8 +169,9 @@ export const deltaToEventTranslator = (
             messageKind: technicalName,
             ...partialEvent,
             sequenceNumber: ++sequenceNumber,
-            originCommands: [],
-            protocolMessages: []
+                // (translated -> completed can be called recursively ==> need to do increment as late as possible)
+            originCommands: originCommandsGenerator === undefined ? [] : originCommandsGenerator(delta),
+            protocolMessages: protocolMessagesGenerator === undefined ? [] : protocolMessagesGenerator(delta, sequenceNumber)
         })
 
         // in order of the specification (§ 6.6):

@@ -17,6 +17,7 @@
 
 export { deltaToCommandTranslator } from "./delta-to-command.js"
 export { deltaToEventTranslator } from "./delta-to-event.js"
+export type { DeltaToEventTranslator, DeltaToEventTranslatorConfiguration, OriginCommandsGenerator, ProtocolMessagesGenerator } from "./delta-to-event.js"
 export { eventToDeltaTranslator } from "./event-to-delta.js"
 export type { EventToDeltaTranslator } from "./event-to-delta.js"
 
