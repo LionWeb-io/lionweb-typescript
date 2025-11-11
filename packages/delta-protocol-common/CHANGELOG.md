@@ -3,6 +3,10 @@
 ## 0.7.2
 
 * Use the `propertyValueSerializerWith` function from the `class-core` package for the `deltaToCommandTranslator` and `deltaToEventTranslator` functions.
+* Rename `CommandOrigin` &rarr; `CommandSource` to align with the official JSON Schema, and other implementations.
+* Parametrize the `deltaToEventTranslator` function with generator functions for the `originCommands` and `protocolMessages` part of an event.
+  * Use a configuration object (with defaults) instead of separate arguments.
+  * Expose appropriate types for that configuration object.
 
 
 ## 0.7.1
