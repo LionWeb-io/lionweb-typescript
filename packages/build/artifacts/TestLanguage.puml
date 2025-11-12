@@ -4,7 +4,7 @@ hide empty members
 ' qualified name: "TestLanguage"
 
 
-class DataTypeTestConcept <<partition>> {
+class DataTypeTestConcept {
   booleanValue_1: Boolean
   integerValue_1: Integer
   stringValue_1: String
@@ -15,11 +15,7 @@ class DataTypeTestConcept <<partition>> {
   enumValue_0_1: TestEnumeration?
 }
 
-class LinkTestConcept <<partition>> implements INamed
-
-class NonPartitionTestConcept implements INamed
-
-class PartitionTestConcept <<partition>>
+class LinkTestConcept implements INamed
 
 enum SecondTestEnumeration {
   literal1
@@ -27,7 +23,7 @@ enum SecondTestEnumeration {
   literal3
 }
 
-annotation TestAnnotation
+annotation TestAnnotation implements INamed
 TestAnnotation ..# Node : <i>annotates</i>
 
 enum TestEnumeration {
@@ -35,6 +31,8 @@ enum TestEnumeration {
   literal2
   literal3
 }
+
+class TestPartition <<partition>> implements INamed
 
 
 
@@ -49,10 +47,10 @@ LinkTestConcept "*" --> "0..1" LinkTestConcept: reference_0_1
 LinkTestConcept "*" --> "1" LinkTestConcept: reference_1
 LinkTestConcept "*" --> "*" LinkTestConcept: reference_0_n
 LinkTestConcept "*" --> "*" LinkTestConcept: reference_1_n
-NonPartitionTestConcept "1" o--> "0..1" NonPartitionTestConcept: nestedChild
-PartitionTestConcept "1" o--> "1" NonPartitionTestConcept: child
 
 
 
+TestPartition "1" o--> "*" LinkTestConcept: links
+TestPartition "1" o--> "0..1" DataTypeTestConcept: data
 
 @enduml

@@ -17,14 +17,7 @@
 
 import { serializeNodeBases } from "@lionweb/class-core" // Note: this is a circular dependency!
 import { defaultTrumpfOriginatingApache2_0LicensedHeader, generateLanguage } from "@lionweb/class-core-generator"
-import {
-    builtinClassifiers,
-    Concept,
-    Containment,
-    deserializeLanguages,
-    lioncoreBuiltins,
-    serializeLanguages
-} from "@lionweb/core"
+import { deserializeLanguages, lioncoreBuiltins, serializeLanguages } from "@lionweb/core"
 import { LionWebJsonChunk } from "@lionweb/json"
 import {
     generatePlantUmlForLanguage,
@@ -33,12 +26,14 @@ import {
     readFileAsJson,
     writeJsonAsFile
 } from "@lionweb/utilities"
-import { writeFileSync } from "fs"
+import { copyFileSync, lstatSync, writeFileSync } from "fs"
 import { join } from "path"
 import { deltas } from "./deltas/definition/definition-base.js"
 import { defineDeltas } from "./deltas/definition/definitions.js"
 import { generateDeltaCode } from "./deltas/generator/generator.js"
 import { deltasLanguage } from "./deltas/meta-definition.js"
+import { getFromHttps } from "./curl.js"
+
 
 const inArtifactsPath = (subPath: string) => join("artifacts", subPath)
 
@@ -56,16 +51,34 @@ defineDeltas()
 writeFileSync(inArtifactsPath("deltas.txt"), genericAsTreeText(serializeNodeBases([deltas]), [deltasLanguage]))
 generateDeltaCode("../class-core/src/deltas", defaultTrumpfOriginatingApache2_0LicensedHeader)
 
+// copy language JSON file from external repo:
+const externalRepoName = "lionweb-integration-testing"
+const pathWithinExternalRepo = "src/languages"
+const languageJsonFileName = "testLanguage.2023.1.json"
+const url = `https://raw.githubusercontent.com/LionWeb-io/${externalRepoName}/refs/heads/main/${pathWithinExternalRepo}/${languageJsonFileName}`
+const languageJsonPath = inArtifactsPath(languageJsonFileName)
+
+await getFromHttps(url)
+    .then((fileAsBuffer) => {
+        writeFileSync(languageJsonPath, fileAsBuffer)
+        console.log(`Retrieved serialization chunk JSON for test language from ${externalRepoName} repository from GitHub.`)
+    })
+    .catch((error) => {
+        console.error(`Couldn’t retrieve serialization chunk JSON for test language from ${externalRepoName} repository from GitHub, due to: ${error}.`)
+        const integrationTestingFilePath = join("../../..", externalRepoName, pathWithinExternalRepo, languageJsonFileName)
+        if (lstatSync(integrationTestingFilePath).isFile()) {
+            copyFileSync(integrationTestingFilePath, languageJsonPath)
+            console.log(`Copied serialization chunk JSON for test language from ${externalRepoName} repository.`)
+        } else {
+            console.log(`${externalRepoName} repository not found: using serialization chunk JSON for test language as provided here.`)
+        }
+    })
+console.log()
+
 // TestLanguage language:
-const TestLanguage = deserializeLanguages(readFileAsJson(inArtifactsPath("TestLanguage.json")) as LionWebJsonChunk)[0]
-
-const PartitionTestConcept = new Concept(TestLanguage, "PartitionTestConcept", "PartitionTestConcept", "PartitionTestConcept", false).isPartition();
-const NonPartitionTestConcept = new Concept(TestLanguage, "NonPartitionTestConcept", "NonPartitionTestConcept", "NonPartitionTestConcept", false).implementing(builtinClassifiers.inamed);
-NonPartitionTestConcept.havingFeatures(new Containment(NonPartitionTestConcept, "nestedChild", "NonPartitionTestConcept-nestedChild", "NonPartitionTestConcept-nestedChild").ofType(NonPartitionTestConcept).isOptional());
-PartitionTestConcept.havingFeatures(new Containment(PartitionTestConcept,  "child","PartitionTestConcept-child", "PartitionTestConcept-child").ofType(NonPartitionTestConcept));
-TestLanguage.entities.push(PartitionTestConcept, NonPartitionTestConcept);
-
-writeFileSync(inArtifactsPath("TestLanguage.txt"), languageAsText(TestLanguage))
+const TestLanguage = deserializeLanguages(readFileAsJson(languageJsonPath) as LionWebJsonChunk)[0]
 generateLanguage(TestLanguage, "../class-core-test-language/src/gen", { header: defaultTrumpfOriginatingApache2_0LicensedHeader })
+// (the same content as in the lionweb-integration-testing repository:)
+writeFileSync(inArtifactsPath("TestLanguage.txt"), languageAsText(TestLanguage))
 writeFileSync(inArtifactsPath("TestLanguage.puml"), generatePlantUmlForLanguage(TestLanguage))
 
