@@ -67,7 +67,8 @@ export const recognizedTasks: Record<string, boolean> = {
     "MoveChildFromOtherContainment_Multiple": true,
     "MoveChildFromOtherContainmentInSameParent_Single": true,
     "AddPartition": true,
-    "MoveChildFromOtherContainmentInSameParent_Multiple": true
+    "MoveChildFromOtherContainmentInSameParent_Multiple": true,
+    "SubscribeToChangingPartitions": true
 }
 
 
@@ -100,6 +101,12 @@ export const taskExecutor = (lionWebClient: LionWebClient, partition: INodeBase,
         switch (task) {
             case "SignOn":
                 return await lionWebClient.signOn(queryId, "myRepo")
+            case "SubscribeToChangingPartitions":
+                return await lionWebClient.subscribeToChangingPartitions(queryId, {
+                    creation: true,
+                    deletion: true,
+                    partitions: true
+                })
             case "SignOff":
                 return await lionWebClient.signOff(queryId)
             case "Wait": {
