@@ -28,7 +28,7 @@ export type StructuredType = {
 export type TypeGroup = {
     name: string;
     primitiveTypes: PrimitiveType[];
-    objectTypes:  StructuredType[];
+    structuredTypes:  StructuredType[];
 
 }
 export type PrimitiveType = {
@@ -39,7 +39,7 @@ export type PrimitiveType = {
 export class SyntaxDefinition {
     // Maps to make searching easier and faster
     allPrimitiveTypes: Map<string, PrimitiveType> = new Map<string, PrimitiveType>()
-    allObjectTypes: Map<string, StructuredType> = new Map<string, StructuredType>()
+    allStructuredTypes: Map<string, StructuredType> = new Map<string, StructuredType>()
     allMessageGroups: Map<string, MessageGroup> = new Map<string, MessageGroup>()
 
     validateFunctions: Map<string, PrimitiveValidatorFunction> = new Map<string, PrimitiveValidatorFunction>()
@@ -49,12 +49,15 @@ export class SyntaxDefinition {
             type.primitiveTypes.forEach(primitiveType => {
                 this.allPrimitiveTypes.set(primitiveType.name, primitiveType)
             })
-            type.objectTypes.forEach(objectType => {
-                this.allObjectTypes.set(objectType.name, objectType)
+            type.structuredTypes.forEach(objectType => {
+                this.allStructuredTypes.set(objectType.name, objectType)
             })
         })
         messageGroups.forEach(msgGroup => {
             this.allMessageGroups.set(msgGroup.name, msgGroup)
+            msgGroup.messages.forEach(msg => {
+                this.allStructuredTypes.set(msg.name, msg) 
+            })
         })
     }
 
@@ -71,7 +74,7 @@ export class SyntaxDefinition {
     }
 
     getStructuredType(name: string): StructuredType | undefined {
-        return this.allObjectTypes.get(name)
+        return this.allStructuredTypes.get(name)
     }
 
     getMessageGroup(name: string): MessageGroup | undefined {
