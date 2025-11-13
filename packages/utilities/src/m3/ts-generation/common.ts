@@ -6,6 +6,7 @@ import {
     Datatype,
     Enumeration,
     Interface,
+    isRef,
     LanguageEntity,
     PrimitiveType,
     SingleRef
@@ -35,13 +36,13 @@ export const isINamed = (entity: LanguageEntity): boolean =>
 
 export const usesINamedDirectly = (entity: LanguageEntity): boolean => {
     if (entity instanceof Annotation) {
-        return entity.implements.some(isINamed)
+        return entity.implements.filter(isRef).some(isINamed)
     }
     if (entity instanceof Concept) {
-        return entity.implements.some(isINamed)
+        return entity.implements.filter(isRef).some(isINamed)
     }
     if (entity instanceof Interface) {
-        return entity.extends.some(isINamed)
+        return entity.extends.filter(isRef).some(isINamed)
     }
     return false
 }

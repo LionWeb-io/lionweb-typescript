@@ -62,7 +62,7 @@ const generateForAnnotation = ({ name, features, extends: extends_, implements: 
         fragments.push(`extends`, extends_.name)
     }
     if (implements_.length > 0) {
-        fragments.push(`implements`, implements_.map(nameOf).sort().join(", "))
+        fragments.push(`implements`, implements_.filter(isRef).map(nameOf).sort().join(", "))
     }
     const nonRelationalFeatures_ = nonRelationalFeatures(features)
     return nonRelationalFeatures_.length === 0
@@ -83,7 +83,7 @@ const generateForConcept = ({ name, features, abstract: abstract_, extends: exte
         fragments.push(`extends`, extends_.name)
     }
     if (implements_.length > 0) {
-        fragments.push(`implements`, implements_.map(nameOf).sort().join(", "))
+        fragments.push(`implements`, implements_.filter(isRef).map(nameOf).sort().join(", "))
     }
     const nonRelationalFeatures_ = nonRelationalFeatures(features)
     return nonRelationalFeatures_.length === 0
@@ -94,7 +94,7 @@ const generateForConcept = ({ name, features, abstract: abstract_, extends: exte
 const generateForInterface = ({ name, extends: extends_, features }: Interface) => {
     const fragments: string[] = [`interface`, name]
     if (extends_.length > 0) {
-        fragments.push(`extends`, extends_.map(superInterface => superInterface.name).join(", "))
+        fragments.push(`extends`, extends_.filter(isRef).map(superInterface => superInterface.name).join(", "))
     }
     const nonRelationalFeatures_ = nonRelationalFeatures(features)
     return nonRelationalFeatures_.length === 0

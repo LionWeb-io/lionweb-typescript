@@ -7,6 +7,7 @@ import {
     EnumerationLiteral,
     INamed,
     Interface,
+    isRef,
     Language,
     Link,
     M3Node,
@@ -31,7 +32,7 @@ const featuresOf = (classifier: Classifier): Template => recurse(nameSorted(clas
 const asText = (node: M3Node): Template => {
     if (node instanceof Annotation) {
         return [
-            `annotation ${node.name}${node.extends === undefined ? `` : ` extends ${refAsText(node.extends)}`}${node.implements.length === 0 ? `` : ` implements ${nameSorted(node.implements).map(nameOf).join(", ")}`}`,
+            `annotation ${node.name}${node.extends === undefined ? `` : ` extends ${refAsText(node.extends)}`}${node.implements.length === 0 ? `` : ` implements ${nameSorted(node.implements.filter(isRef)).map(nameOf).join(", ")}`}`,
             indented([`annotates: ${refAsText(node.annotates)}`]),
             featuresOf(node)
         ]
@@ -39,14 +40,14 @@ const asText = (node: M3Node): Template => {
 
     if (node instanceof Concept) {
         return [
-            `${node.partition ? `<<partition>> ` : ``}${node.abstract ? `abstract ` : ``}concept ${node.name}${node.extends === undefined ? `` : ` extends ${refAsText(node.extends)}`}${node.implements.length === 0 ? `` : ` implements ${nameSorted(node.implements).map(nameOf).join(", ")}`}`,
+            `${node.partition ? `<<partition>> ` : ``}${node.abstract ? `abstract ` : ``}concept ${node.name}${node.extends === undefined ? `` : ` extends ${refAsText(node.extends)}`}${node.implements.length === 0 ? `` : ` implements ${nameSorted(node.implements.filter(isRef)).map(nameOf).join(", ")}`}`,
             featuresOf(node)
         ]
     }
 
     if (node instanceof Interface) {
         return [
-            `interface ${node.name}${node.extends.length === 0 ? `` : ` extends ${nameSorted(node.extends).map(nameOf).join(", ")}`}`,
+            `interface ${node.name}${node.extends.length === 0 ? `` : ` extends ${nameSorted(node.extends.filter(isRef)).map(nameOf).join(", ")}`}`,
             featuresOf(node)
         ]
     }
@@ -70,7 +71,7 @@ const asText = (node: M3Node): Template => {
                 `version: ${node.version}`,
                 node.dependsOn.length === 0
                     ? []
-                    : [`dependsOn:`, indented(node.dependsOn.map(language => `${language.name} (${language.version})`))],
+                    : [`dependsOn:`, indented(node.dependsOn.filter(isRef).map(language => `${language.name} (${language.version})`))],
                 `entities (↓name):`,
                 ``,
                 indented(nameSorted(node.entities).map(entity => [asText(entity), ``]))
