@@ -10,7 +10,7 @@ schema.addValidator("LionWebKey", validateKey ),
 schema.addValidator("LionWebVersion",validateVersion),
 schema.addValidator("LionWebSerializationFormatVersion", validateSerializationFormatVersion)
 /*
-*  * LionWebSyntaxValidator can check whether objects are structurally LionWeb objects.
+ * LionWebSyntaxValidator can check whether objects are structurally LionWeb objects.
  */
 export class LionWebSyntaxValidator extends SyntaxValidator {
 
