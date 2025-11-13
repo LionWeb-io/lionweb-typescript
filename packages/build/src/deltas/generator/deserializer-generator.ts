@@ -30,11 +30,12 @@ import {
     Type
 } from "../definition/Deltas.g.js"
 import { tsTypeForFeatureKind } from "./helpers.js"
+import { isUnresolvedReference } from "@lionweb/core"
 
 const deserializationExpressionForField = (name: string, type: Type) => {
     if (type instanceof FeatureType) {
         const tsMetaType = tsTypeForFeatureKind(type.kind)
-        return `resolved${tsMetaType}From(delta.${name}, ${type.container?.name ?? "<?container?>"}.classifier)`
+        return `resolved${tsMetaType}From(delta.${name}, ${(isUnresolvedReference(type.container) ? undefined : type.container?.name) ?? "<?container?>"}.classifier)`
     }
     if (type instanceof NodeType) {
         return type.serialization instanceof RefOnly ? `idMapping.fromRefId(delta.${name})` : `idMapping.fromId(delta.${name})`

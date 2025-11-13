@@ -65,7 +65,7 @@ export class IdMapping {
      */
     fromRefId = (idOrNull: IdOrNull): SingleRef<INodeBase> =>
         idOrNull === null
-            ? null
+            ? referenceToSet()
             : (this.nodesById[idOrNull] ?? referenceToSet());
 
     /**

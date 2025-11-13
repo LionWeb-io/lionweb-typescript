@@ -29,6 +29,7 @@ import {
     Link,
     PrimitiveType,
     Property,
+    referenceToSet,
     SingleRef
 } from "@lionweb/core"
 import { Imports, tsTypeForPrimitiveType } from "./index.js"
@@ -40,13 +41,13 @@ export const typeOf = (feature: Feature): SingleRef<LanguageEntity> => {
     if (feature instanceof Link) {
         return feature.type
     }
-    return null
+    return referenceToSet()
 }
 
 
 export const tsTypeForDataType = (dataType: SingleRef<DataType>, imports: Imports) => {
-    if (dataType === null) {
-        return `unknown /* [ERROR] can't compute a TS type for a null data type */`
+    if (isUnresolvedReference(dataType)) {
+        return `unknown /* [ERROR] can't compute a TS type for an unresolved data type */`
     }
     if (dataType instanceof PrimitiveType) {
         return tsTypeForPrimitiveType(dataType)
@@ -70,8 +71,8 @@ export const optionalityPostfix = (feature: Feature) => feature.optional ? " | u
 
 export const tsFieldTypeForFeature = (feature: Feature, imports: Imports): string => {
     const type = typeOf(feature)
-    if (type === null) {
-        return `unknown /* [ERROR] can't compute a TS type for feature ${feature.name} on classifier ${feature.classifier.name} with null type */`
+    if (isUnresolvedReference(type)) {
+        return `unknown /* [ERROR] can't compute a TS type for feature ${feature.name} on classifier ${feature.classifier.name} with unresolved type (${type}) */`
     }
     if (isProperty(feature)) {
         const typeId = (() => {
@@ -98,8 +99,8 @@ export const tsFieldTypeForFeature = (feature: Feature, imports: Imports): strin
 
 export const tsTypeForValueManager = (feature: Feature, imports: Imports): string => {
     const type = typeOf(feature)
-    if (type === null) {
-        return `unknown /* [ERROR] can't compute a TS type for feature ${feature.name} on classifier ${feature.classifier.name} with null type */`
+    if (isUnresolvedReference(type)) {
+        return `unknown /* [ERROR] can't compute a TS type for feature ${feature.name} on classifier ${feature.classifier.name} with unresolved type (${type}) */`
     }
     if (isProperty(feature)) {
         const typeId = (() => {

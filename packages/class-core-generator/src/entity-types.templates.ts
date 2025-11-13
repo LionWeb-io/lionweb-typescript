@@ -16,7 +16,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import {
-    builtinClassifiers,
     Classifier,
     Containment,
     Enumeration,
@@ -27,6 +26,7 @@ import {
     isProperty,
     isRef,
     isReference,
+    isUnresolvedReference,
     LanguageEntity,
     Link,
     M3Concept,
@@ -34,8 +34,7 @@ import {
     Node,
     PrimitiveType,
     Property,
-    Reference,
-    SingleRef
+    Reference
 } from "@lionweb/core"
 import {
     ConceptDescription,
@@ -76,12 +75,6 @@ const valueManagerFor = (feature: Feature) =>
     `${cardinalityPrefix(feature)}${featureMetaType(feature)}ValueManager`
 
 export const typeForLanguageEntity = (imports: Imports) => {
-
-    const sortedSuperTypesCond = <T extends Classifier>(ts: T[], prefix: string): string =>
-        ts.length === 0 ? `` : `${prefix}${nameSorted(ts).map((t) => imports.entity(t)).join(", ")}`
-
-    const extendsCond = (ref: SingleRef<Classifier>): string =>
-        ` extends ${ref === builtinClassifiers.node ? imports.generic("NodeBase") : imports.entity(ref!)}`
 
     const classMembersForProperty = (property: Property) => {
         const {name, type} = property
@@ -176,9 +169,22 @@ export const typeForLanguageEntity = (imports: Imports) => {
             ]
         }
 
+        const extendsFragment = "extends " + ((superConcept) => {
+            if (isUnresolvedReference(superConcept)) {
+                return `/* unresolved reference to super concept */`
+            }
+            if (superConcept === undefined) {
+                return imports.generic("NodeBase")
+            }
+            return imports.entity(superConcept)
+        })(extendsFrom(classifier)) + " "
+        const implementsFragment = ((superInterfaces) =>
+                superInterfaces.length === 0
+                    ? ""
+                    : ("implements " + nameSorted(superInterfaces).map((t) => imports.entity(t)).join(", ") + " ")
+        )(implementsFrom(classifier))
         return [
-            //                                                                                        |    index (or generic for LionCore-builtins)    |                         | index (or generic for LionCore-builtins) |
-            `export ${isAbstract(classifier) ? "abstract " : ""}class ${classifier.name}${extendsCond(extendsFrom(classifier) ?? builtinClassifiers.node)}${sortedSuperTypesCond(implementsFrom(classifier), " implements ")} {`,
+            `export ${isAbstract(classifier) ? "abstract " : ""}class ${classifier.name} ${extendsFragment}${implementsFragment}{`,
             indent([
                 when(!isAbstract(classifier))(
                     () =>
