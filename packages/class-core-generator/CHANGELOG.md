@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.7.2
+
+* Generate `MultiRef<T>` instead of `SingleRef<T>[]`.
+
+
 ## 0.7.1
 
 (The 0.7.0 release was deprecated because its `validation` package was faulty.)

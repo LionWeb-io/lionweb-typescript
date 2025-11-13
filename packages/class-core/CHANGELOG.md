@@ -4,6 +4,7 @@
 
 * Implement a `propertyValueSerializerWith` function that produces a `PropertyValueSerializer` instance to serialize properties’ values with, properly dealing with enumerations as well.
 * Ensure that deltas w.r.t. features of a node are only emitted when that node is not “free-floating”, i.e. is not a partition itself, or (in-/)directly contained by a partition.
+* (Use the modified `MultiRef<T>` type instead of `SingleRef<T>[]` — this is an idempotent change.)
 
 
 ## 0.7.1

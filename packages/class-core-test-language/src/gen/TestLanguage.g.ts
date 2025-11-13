@@ -35,6 +35,7 @@ import {
     Enumeration,
     EnumerationLiteral,
     Language,
+    MultiRef,
     Property,
     Reference,
     SingleRef
@@ -498,7 +499,7 @@ export class LinkTestConcept extends NodeBase implements INamed {
     }
 
     private readonly _reference_0_n: OptionalMultiReferenceValueManager<LinkTestConcept>;
-    get reference_0_n(): SingleRef<LinkTestConcept>[] {
+    get reference_0_n(): MultiRef<LinkTestConcept> {
         return this._reference_0_n.get();
     }
     addReference_0_n(newValue: LinkTestConcept) {
@@ -515,7 +516,7 @@ export class LinkTestConcept extends NodeBase implements INamed {
     }
 
     private readonly _reference_1_n: RequiredMultiReferenceValueManager<LinkTestConcept>;
-    get reference_1_n(): SingleRef<LinkTestConcept>[] {
+    get reference_1_n(): MultiRef<LinkTestConcept> {
         return this._reference_1_n.get();
     }
     addReference_1_n(newValue: LinkTestConcept) {
