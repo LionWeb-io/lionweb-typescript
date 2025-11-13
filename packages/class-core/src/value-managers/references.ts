@@ -15,7 +15,7 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { Reference, SingleRef } from "@lionweb/core"
+import { MultiRef, Reference, SingleRef } from "@lionweb/core"
 import { action, observable } from "mobx"
 
 import { INodeBase } from "../base-types.js"
@@ -37,7 +37,7 @@ export abstract class ReferenceValueManager<T extends INodeBase> extends Feature
         return this.feature;
     }
 
-    abstract getDirectly(): (SingleRef<T> | undefined) | (SingleRef<T> | undefined)[];
+    abstract getDirectly(): (SingleRef<T> | undefined) | (MultiRef<T> | undefined);
 
     /**
      * Adds the given target to the reference.
@@ -159,11 +159,11 @@ export abstract class MultiReferenceValueManager<T extends INodeBase> extends Re
 
     private readonly targets = observable.array<SingleRef<T>>([], {deep: false});
 
-    getDirectly(): SingleRef<T>[] {
+    getDirectly(): MultiRef<T> {
         return this.targets;
     }
 
-    get(): SingleRef<T>[] {
+    get(): MultiRef<T> {
         return this.getDirectly().slice();  // make defensive copy
     }
 
@@ -259,7 +259,7 @@ export class RequiredMultiReferenceValueManager<T extends INodeBase> extends Mul
         this.checkRequired(true);
     }
 
-    get(): SingleRef<T>[] {
+    get(): MultiRef<T> {
         const targets = this.getDirectly();
         if (targets.length === 0) {
             this.throwOnReadOfUnset();

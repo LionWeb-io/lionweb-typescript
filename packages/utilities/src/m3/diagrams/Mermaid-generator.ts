@@ -80,7 +80,7 @@ const generateForConcept = ({
 const generateForInterface = ({ name, features, extends: extends_ }: Interface) => [
     block(`class ${name}`, nonRelationalFeatures(features).map(generateForNonRelationalFeature)),
     `<<Interface>> ${name}`,
-    extends_.map(({ name: extendsName }) => `${extendsName} <|-- ${name}`),
+    extends_.filter(isRef).map(({ name: extendsName }) => `${extendsName} <|-- ${name}`),
     ``
 ]
 

@@ -36,6 +36,7 @@ import {
     EnumerationLiteral,
     Interface,
     Language,
+    MultiRef,
     PrimitiveType,
     Property,
     Reference,
@@ -843,7 +844,7 @@ export class ReferenceGeometry extends NodeBase {
     }
 
     private readonly _shapes: OptionalMultiReferenceValueManager<IShape>;
-    get shapes(): SingleRef<IShape>[] {
+    get shapes(): MultiRef<IShape> {
         return this._shapes.get();
     }
     addShapes(newValue: IShape) {
@@ -914,7 +915,7 @@ export class BillOfMaterials extends NodeBase {
     }
 
     private readonly _materials: OptionalMultiReferenceValueManager<IShape>;
-    get materials(): SingleRef<IShape>[] {
+    get materials(): MultiRef<IShape> {
         return this._materials.get();
     }
     addMaterials(newValue: IShape) {
@@ -1020,7 +1021,7 @@ export class MaterialGroup extends NodeBase {
     }
 
     private readonly _materials: RequiredMultiReferenceValueManager<IShape>;
-    get materials(): SingleRef<IShape>[] {
+    get materials(): MultiRef<IShape> {
         return this._materials.get();
     }
     addMaterials(newValue: IShape) {

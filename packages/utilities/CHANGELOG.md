@@ -8,6 +8,7 @@
   * Fix the `generationMermaidForLanguage` function to correctly deal with concepts that are partitions, and classifiers that are annotations.
   * Modify both functions to make the relation between annotations and annotated classifier clearer.
 * The `genericAsTreeText` function now renders nodes without any feature values without curly braces — i.e., without empty `{&hellip;}` block.
+* (Because of the modification of the `MultRef<T>` type (from `@lionweb/core`) unresolved references are now filtered out actively.)
 
 
 ## 0.7.1

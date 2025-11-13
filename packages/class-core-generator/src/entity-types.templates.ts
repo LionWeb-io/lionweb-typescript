@@ -25,6 +25,7 @@ import {
     Interface,
     isContainment,
     isProperty,
+    isRef,
     isReference,
     LanguageEntity,
     Link,
@@ -44,7 +45,7 @@ import {
     ShortDescription,
     VirtualPackage
 } from "@lionweb/io-lionweb-mps-specific"
-import { indent, switchOrIf, withFirstUpper, wrapInIf } from "@lionweb/textgen-utils"
+import { indent, switchOrIf, withFirstUpper } from "@lionweb/textgen-utils"
 import { commaSeparated, when, withNewlineAppended } from "littoral-templates"
 
 import {
@@ -100,11 +101,9 @@ export const typeForLanguageEntity = (imports: Imports) => {
         const {name, type, multiple} = link
         const nameWithFirstUpper = withFirstUpper(name)
         const tsTypeForClassifier_ = tsTypeForClassifier(type, imports)
-        const tsTypeForLink_ = wrapInIf(
-            link instanceof Reference,
-            () => `${imports.core("SingleRef")}<`, ">")(tsTypeForClassifier_)
-                + (link.multiple ? "[]" : optionalityPostfix(link)
-        )
+        const tsTypeForLink_ = link instanceof Reference
+            ? `${imports.core(multiple ? "MultiRef" : "SingleRef")}<${tsTypeForClassifier_}>${multiple ? "" : optionalityPostfix(link)}`
+            : `${tsTypeForClassifier_}${multiple ? "[]" : optionalityPostfix(link)}`
         return [
             `private readonly _${name}: ${imports.generic(valueManagerFor(link))}<${tsTypeForClassifier_}>;`,
             jsDocFor(link),
@@ -226,7 +225,7 @@ export const typeForLanguageEntity = (imports: Imports) => {
 
     const interfaceFor = (interface_: Interface) =>
         [
-            `export interface ${interface_.name} extends ${interface_.extends.length > 0 ? interface_.extends.map((superInterface) => imports.entity(superInterface)).join(", ") : imports.generic("INodeBase")} {`,
+            `export interface ${interface_.name} extends ${interface_.extends.length > 0 ? interface_.extends.filter(isRef).map((superInterface) => imports.entity(superInterface)).join(", ") : imports.generic("INodeBase")} {`,
             indent(
                 interface_.features.map((feature) => `${feature.name}: ${tsFieldTypeForFeature(feature, imports)};`)
             ),
