@@ -44,7 +44,7 @@ export const withFirstUpper = withFirstCased((ch) => ch.toUpperCase())
 
 
 /**
- * @return a function that takes one string argument, and returns that argument wrapped between `left` and `right`, provided `condition` is true.
+ * @return a function that takes one string argument, and returns that argument wrapped between `left()` and `right`, provided `condition` is true.
  * @param condition boolean
  * @param left thunk returning a string
  * @param right string

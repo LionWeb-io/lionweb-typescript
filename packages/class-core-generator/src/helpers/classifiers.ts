@@ -15,7 +15,17 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { allFeaturesOf, allSuperTypesOf, Annotation, Classifier, Concept, Feature, Interface, MultiRef, SingleRef } from "@lionweb/core"
+import {
+    allFeaturesOf,
+    allSuperTypesOf,
+    Annotation,
+    Classifier,
+    Concept,
+    Feature,
+    Interface,
+    isRef,
+    SingleRef
+} from "@lionweb/core"
 import { uniquesAmong } from "@lionweb/ts-utils"
 
 export const isAbstract = (classifier: Classifier): boolean => classifier instanceof Concept && classifier.abstract
@@ -34,12 +44,12 @@ export const extendsFrom = (classifier: Classifier): SingleRef<Classifier> | und
     return undefined
 }
 
-export const implementsFrom = (classifier: Classifier): MultiRef<Classifier> => {
+export const implementsFrom = (classifier: Classifier): Classifier[] => {
     if (classifier instanceof Annotation) {
-        return classifier.implements
+        return classifier.implements.filter(isRef)
     }
     if (classifier instanceof Concept) {
-        return classifier.implements
+        return classifier.implements.filter(isRef)
     }
     return []
 }

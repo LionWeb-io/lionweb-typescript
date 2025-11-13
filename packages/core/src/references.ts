@@ -1,4 +1,5 @@
 import { LionWebId } from "@lionweb/json"
+
 import { Node } from "./types.js"
 
 
@@ -10,6 +11,8 @@ export const unresolved = null
 
 /**
  * A type definition for a reference value that can be unresolved.
+ * Note: this type is primarily meant to be used to type nodes’ properties,
+ * but should be avoided as a return type for “auxiliary” functions.
  */
 export type SingleRef<T> = typeof unresolved | T
 
@@ -21,8 +24,10 @@ export const isRef = <T>(ref?: SingleRef<T>): ref is T =>
 
 /**
  * A type alias for a multi-valued reference, to make it look consistent with {@link SingleRef}.
+ * Note: this type is primarily meant to be used to type nodes’ properties,
+ * but should be avoided as a return type for “auxiliary” functions.
  */
-export type MultiRef<T> = T[]
+export type MultiRef<T> = SingleRef<T>[]
 
 
 /**

@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.7.2
+
+* Modify the `MultiRef<T>` type to also be able to explicitly contain unresolved references, represented through the `unresolved` type.
+    ***Note***: this means that values that have this type need to actively deal with `unresolved` values!
+    The easiest way to do this, is to just filter the multi-value using `.filter(isRef)`.
+    (Previously, a deserialized multi-value could already contain `unresolved` values, but wasn't typed accordingly.)
+
+
 ## 0.7.1
 
 (The 0.7.0 release was deprecated because its `validation` package was faulty.)
@@ -32,7 +40,7 @@
 * Improve performance of `deserializeSerializationChunk` function ever so slightly.
 * Remove the unused (and non-performant) `NaiveSymbolTable` class.
 * Improve performance of `nodeSerializer` function a tiny bit.
-    * Fix a bug where some features’ values are serialized multiple times.
+    * Fix a bug where some features' values are serialized multiple times.
 * Expose feature resolution, through the `featureResolversFor` function (and associated types), which performs proper checking.
   This avoids undebuggable `undefined` dereferencing at runtime in `deltaDeserializer` and `eventToDeltaTranslator` functions.
 * Package `src/` again (— i.e., don't ignore for NPM packaging.)

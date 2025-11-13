@@ -219,11 +219,11 @@ const inheritsDirectlyFrom = (classifier: Classifier): Classifier[] => {
                     ? [classifier.extends as Classifier]
                     : []
             ),
-            ...classifier.implements
+            ...classifier.implements.filter(isRef)
         ]
     }
     if (classifier instanceof Interface) {
-        return classifier.extends
+        return classifier.extends.filter(isRef)
     }
     throw new Error(`classifier type ${typeof classifier} not handled`)
 }

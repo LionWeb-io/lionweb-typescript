@@ -11,6 +11,7 @@ import {
     inheritsDirectlyFrom,
     Interface,
     isConcrete,
+    isRef,
     Language,
     LanguageEntity,
     Link,
@@ -140,7 +141,7 @@ export const tsTypeDefsForLanguage = (language: Language, ...generationOptions: 
         tsFromTypeDef({
             modifier: TypeDefModifier.interface,
             name: intface.name,
-            mixinNames: intface.extends.length === 0 ? [`DynamicNode`] : intface.extends.map(nameOf),
+            mixinNames: intface.extends.length === 0 ? [`DynamicNode`] : intface.extends.filter(isRef).map(nameOf),
             fields: fieldsForClassifier(intface)
         })
 
