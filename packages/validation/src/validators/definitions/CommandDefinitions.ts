@@ -1168,7 +1168,7 @@ export const CommandDefinitions: MessageGroup = {
                     mayBeNull: false,
                 },
                 {
-                    name: "deleteResolveInfo",
+                    name: "deletedResolveInfo",
                     type: "String",
                     isList: false,
                     isOptional: false,

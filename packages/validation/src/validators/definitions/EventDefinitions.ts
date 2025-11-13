@@ -356,7 +356,7 @@ export const EventDefinitions: MessageGroup = {
                 },
                 {
                     name: "containment",
-                    type: "LionWebJsonPointer",
+                    type: "LionWebJsonMetaPointer",
                     isList: false,
                     isOptional: false,
                     mayBeNull: false,
@@ -1106,7 +1106,7 @@ export const EventDefinitions: MessageGroup = {
                 },
                 {
                     name: "deletedAnnotation",
-                    type: "LionWebDeltaJsonChunk",
+                    type: "LionWebId",
                     isList: false,
                     isOptional: false,
                     mayBeNull: false,
