@@ -194,17 +194,17 @@ export class RequiredSingleContainmentValueManager<T extends INodeBase> extends 
     }
 
     @action set(newChild: T | undefined) {
-        const oldChild = this.getDirectly();
+        const oldChild = this.getDirectly();    // (oldChild is contained by this.container through this.containment)
         if (oldChild === undefined) {
             if (newChild === undefined) {
                 // do nothing: nothing's changed
             } else {
-                if (newChild.parent && newChild.containment) {
-                    const oldParent = newChild.parent;
-                    removeFromContainment(newChild);
-                    this.emitDelta(() => new ChildMovedFromOtherContainmentDelta(oldParent, newChild.containment!, 0, this.container, this.feature, 0, newChild));
-                } else {
+                if (newChild.parent === undefined) {
                     this.emitDelta(() => new ChildAddedDelta(this.container, this.feature, 0, newChild));
+                } else {
+                    const oldParent = newChild.parent;
+                    const oldIndex = removeFromContainment(newChild);
+                    this.emitDelta(() => new ChildMovedFromOtherContainmentDelta(oldParent, newChild.containment!, oldIndex, this.container, this.feature, 0, newChild));
                 }
                 this.setDirectly(newChild);
                 newChild.attachTo(this.container, this.feature);
@@ -216,17 +216,26 @@ export class RequiredSingleContainmentValueManager<T extends INodeBase> extends 
                 if (oldChild === newChild) {
                     // do nothing: nothing's changed
                 } else {
-                    if (oldChild.parent && oldChild.containment && oldChild.parent === this.container && oldChild.containment === this.feature) {
-                        // FIXME  oldChild.parent COULD be this.container
-                        this.emitDelta(() => new ChildDeletedDelta(this.container, this.feature, 0, oldChild));
-                    }
                     oldChild.detach();
-                    if (newChild.parent && newChild.containment) {
-                        removeFromContainment(newChild);
-                    }
                     this.setDirectly(newChild);
-                    newChild.attachTo(this.container, this.feature);
-                    this.emitDelta(() => new ChildReplacedDelta(this.container, this.feature, 0, oldChild, newChild));
+                    if (newChild.parent === undefined) {
+                        // newChild is unattached:
+                        newChild.attachTo(this.container, this.feature);
+                        this.emitDelta(() => new ChildReplacedDelta(this.container, this.feature, 0, oldChild, newChild));
+                    } else {
+                        const oldContainment = newChild.containment!;
+                        const oldIndex = removeFromContainment(newChild);
+                        if (newChild.parent === this.container) {
+                            if (newChild.containment === this.containment) {
+                                this.emitDelta(() => new ChildMovedAndReplacedInSameContainmentDelta(this.container, this.containment, 0, 0, newChild, oldChild));
+                            } else {
+                                this.emitDelta(() => new ChildMovedAndReplacedFromOtherContainmentInSameParentDelta(this.container, oldContainment, oldIndex, this.containment, 0, newChild, oldChild));
+                            }
+                        } else {
+                            this.emitDelta(() => new ChildMovedAndReplacedFromOtherContainmentDelta(this.container, this.containment, 0, newChild, newChild.parent!, oldContainment, oldIndex, oldChild));
+                        }
+                        newChild.attachTo(this.container, this.feature);
+                    }
                 }
             }
         }
