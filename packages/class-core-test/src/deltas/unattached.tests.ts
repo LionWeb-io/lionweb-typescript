@@ -22,7 +22,7 @@ import { deepEqual, equal, isFalse, isTrue } from "../assertions.js"
 
 const testLanguage = TestLanguageBase.INSTANCE
 
-describe(`"free-floating" nodes`, () => {
+describe(`unattached nodes`, () => {
 
     it(`only 1 "child added" event should be sent`, () => {
         isTrue(testLanguage.PartitionTestConcept.partition);
