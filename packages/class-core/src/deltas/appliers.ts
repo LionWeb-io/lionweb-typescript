@@ -482,7 +482,7 @@ export const applyDeltasWithLookup = (idMapping: IdMapping, deltas: IDelta[], up
 /**
  * Applies the given {@link Delta delta} to {@link nodes INodeBase} given as the values of a {@link IdMapping ID mapping id &rarr; node}.
  * Note that the delta is *not* applied to the original nodes (object-)referenced by the deltas, but to the nodes present in the ID mapping.
- * These can be distinct from the original nodes, e.g. after a roundtrip to an external model processor. *
+ * These can be distinct from the original nodes, e.g. after a roundtrip to an external model processor.
  * @usage should look as follows.
  *
  * ```typescript
