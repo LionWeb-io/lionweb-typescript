@@ -22,6 +22,12 @@ export class LionWebReferenceValidator {
         this.validationResult = validationResult
     }
 
+    /**
+     * Vhecks for dup;licate node id's.
+     * As a side-effect creates a map from `id` to `node` to make further validation faster.
+     * @param obj
+     * @param ctx
+     */
     validateNodeIds(obj: LionWebJsonChunk, ctx: JsonContext): void {
         // put all nodes in a map, validate that there are no two nodes with the same id.
         obj.nodes.forEach((node, index) => {
@@ -172,6 +178,13 @@ export class LionWebReferenceValidator {
         }
     }
 
+    /**
+     * Checks whether `child` appears in a `containment` of `parent`.
+     * Only applicable when both `parent` and `child` are in the same LionWebJsonChunk being validated.
+     * @param context
+     * @param parent
+     * @param child
+     */
     validateExistsAsChild(context: JsonContext, parent: LionWebJsonNode | undefined, child: LionWebJsonNode) {
         if (parent === undefined || parent === null) {
             return
@@ -187,6 +200,12 @@ export class LionWebReferenceValidator {
         this.validationResult.issue(new Reference_ChildMissingInParent_Issue(context, child, parent))
     }
 
+    /**
+     * Checks whether the `children` in the `containments` of `parent` have `parent` as their parent node.
+     * Only applicable when both `parent` and `child` are in the same LionWebJsonChunk being validated.
+     * @param node
+     * @param context
+     */
     validateChildrenHaveCorrectParent(node: LionWebJsonNode, context: JsonContext) {
         node.containments.forEach((child: LionWebJsonContainment) => {
             child.children.forEach((childId: LionWebId, index: number) => {
