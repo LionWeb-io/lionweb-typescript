@@ -1,6 +1,6 @@
 {
     "name": "@lionweb/class-core-test-language",
-    "version": "0.7.2-beta.5",
+    "version": "0.7.2-beta.7",
     "description": "Test language for the LionWeb class-core package",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -27,8 +27,8 @@
         "release": "npm publish"
     },
     "dependencies": {
-        "@lionweb/class-core": "0.7.2-beta.5",
-        "@lionweb/core": "0.7.2-beta.5",
-        "@lionweb/json": "0.7.2-beta.5"
+        "@lionweb/class-core": "0.7.2-beta.7",
+        "@lionweb/core": "0.7.2-beta.7",
+        "@lionweb/json": "0.7.2-beta.7"
     }
 }
