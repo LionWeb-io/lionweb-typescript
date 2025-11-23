@@ -23,14 +23,13 @@ export class LionWebReferenceValidator {
     }
 
     /**
-     * Vhecks for dup;licate node id's.
-     * As a side-effect creates a map from `id` to `node` to make further validation faster.
-     * @param obj
+     * Checks for duplicate node id's.
+     * As a side-effect creates a map from `id` to `node` for all nodes in `chunk` to make further validation faster.
      * @param ctx
      */
-    validateNodeIds(obj: LionWebJsonChunk, ctx: JsonContext): void {
+    validateNodeIds(chunk: LionWebJsonChunk, ctx: JsonContext): void {
         // put all nodes in a map, validate that there are no two nodes with the same id.
-        obj.nodes.forEach((node, index) => {
+        chunk.nodes.forEach((node, index) => {
             // this.validationResult.check(this.nodesIdMap.get(node.id) === undefined, `Node number ${index} has duplicate id "${node.id}"`);
             if (!(this.nodesIdMap.get(node.id) === undefined)) {
                 this.validationResult.issue(new Reference_DuplicateNodeId_Issue(ctx.concat("nodes", index), node.id))

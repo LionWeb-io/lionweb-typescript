@@ -14,7 +14,6 @@ export function validateFileResult(file: string, validateAgainstLanguage: boolea
         const jsonString1 = fs.readFileSync(file, "utf-8")
         const json1 = JSON.parse(jsonString1)
         const validator = new LionWebValidator(json1, registry)
-        // const validator = new NewLionWebValidator(json1, registry)
 
         validator.validateSyntax()
         validator.validateReferences()

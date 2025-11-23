@@ -44,18 +44,18 @@ export class SyntaxDefinition {
 
     validateFunctions: Map<string, PrimitiveValidatorFunction> = new Map<string, PrimitiveValidatorFunction>()
     
-    constructor(messageGroups: MessageGroup[], types: TypeGroup[]) {
-        types.forEach(type => {
-            type.primitiveTypes.forEach(primitiveType => {
+    constructor(messageGroups: MessageGroup[], typeGroups: TypeGroup[]) {
+        typeGroups.forEach(typeGroup => {
+            typeGroup.primitiveTypes.forEach(primitiveType => {
                 this.allPrimitiveTypes.set(primitiveType.name, primitiveType)
             })
-            type.structuredTypes.forEach(objectType => {
+            typeGroup.structuredTypes.forEach(objectType => {
                 this.allStructuredTypes.set(objectType.name, objectType)
             })
         })
-        messageGroups.forEach(msgGroup => {
-            this.allMessageGroups.set(msgGroup.name, msgGroup)
-            msgGroup.messages.forEach(msg => {
+        messageGroups.forEach(messageGroup => {
+            this.allMessageGroups.set(messageGroup.name, messageGroup)
+            messageGroup.messages.forEach(msg => {
                 this.allStructuredTypes.set(msg.name, msg) 
             })
         })
