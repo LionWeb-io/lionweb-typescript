@@ -6,4 +6,3 @@ export * from "./LionWebLanguageReferenceValidator.js"
 export * from "./LionWebValidator.js"
 export * from "./definitions/index.js"
 export * from "./ValidationFunctions.js"
-
