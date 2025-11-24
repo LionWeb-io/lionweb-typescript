@@ -11,6 +11,7 @@ import {
     Language,
     Link,
     M3Node,
+    Node,
     nameOf,
     nameSorted,
     PrimitiveType,
@@ -22,9 +23,9 @@ import { asString, indentWith, Template } from "littoral-templates"
 
 const indented = indentWith("    ")(1)
 
-const refAsText = <T extends INamed>(ref: SingleRef<T>): string => (ref === unresolved ? `???` : ref.name)
+const refAsText = <NT extends INamed & Node>(ref: SingleRef<NT>): string => (ref === unresolved ? `???` : ref.name)
 
-const recurse = <T extends M3Node>(ts: T[], header: string, func: (t: T) => Template = asText): Template =>
+const recurse = <NT extends M3Node>(ts: NT[], header: string, func: (t: NT) => Template = asText): Template =>
     ts.length === 0 ? [] : indented([header, indented(ts.map(func))])
 
 const featuresOf = (classifier: Classifier): Template => recurse(nameSorted(classifier.features), `features (↓name):`)
