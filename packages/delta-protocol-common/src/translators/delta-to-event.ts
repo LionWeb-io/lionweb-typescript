@@ -41,6 +41,7 @@ import {
     EntryMovedFromOtherReferenceInSameParentDelta,
     EntryMovedInSameReferenceDelta,
     IDelta,
+    idFrom,
     INodeBase,
     NoOpDelta,
     PartitionAddedDelta,
@@ -53,13 +54,7 @@ import {
     ReferenceDeletedDelta,
     serializeNodeBases
 } from "@lionweb/class-core"
-import {
-    builtinPropertyValueSerializer,
-    idOf,
-    metaPointerFor,
-    PropertyValueSerializer,
-    serializedRef
-} from "@lionweb/core"
+import { builtinPropertyValueSerializer, idOf, metaPointerFor, PropertyValueSerializer } from "@lionweb/core"
 import {
     AnnotationAddedEvent,
     AnnotationDeletedEvent,
@@ -369,7 +364,7 @@ export const deltaToEventTranslator = (
                     parent: delta.parent.id,
                     reference: metaPointerFor(delta.reference),
                     index: delta.index,
-                    newTarget: serializedRef(delta.newTarget),
+                    newTarget: idFrom(delta.newTarget),
                     newResolveInfo: nodeBaseReader.resolveInfoFor!(delta.newTarget!)!
                 })
             }
@@ -378,7 +373,7 @@ export const deltaToEventTranslator = (
                     parent: delta.parent.id,
                     reference: metaPointerFor(delta.reference),
                     index: delta.index,
-                    deletedTarget: serializedRef(delta.deletedTarget),
+                    deletedTarget: idFrom(delta.deletedTarget),
                     deletedResolveInfo: nodeBaseReader.resolveInfoFor!(delta.deletedTarget!)!
                 })
             }
@@ -387,9 +382,9 @@ export const deltaToEventTranslator = (
                     parent: delta.parent.id,
                     reference: metaPointerFor(delta.reference),
                     index: delta.index,
-                    oldTarget: serializedRef(delta.oldTarget),
+                    oldTarget: idFrom(delta.oldTarget),
                     oldResolveInfo: nodeBaseReader.resolveInfoFor!(delta.oldTarget!)!,
-                    newTarget: serializedRef(delta.newTarget),
+                    newTarget: idFrom(delta.newTarget),
                     newResolveInfo: nodeBaseReader.resolveInfoFor!(delta.newTarget!)!
                 })
             }
@@ -401,7 +396,7 @@ export const deltaToEventTranslator = (
                     oldParent: delta.oldParent.id,
                     oldReference: metaPointerFor(delta.oldReference),
                     oldIndex: delta.oldIndex,
-                    movedTarget: serializedRef(delta.movedTarget),
+                    movedTarget: idFrom(delta.movedTarget),
                     movedResolveInfo: nodeBaseReader.resolveInfoFor!(delta.movedTarget!)!
                 })
             }
@@ -412,7 +407,7 @@ export const deltaToEventTranslator = (
                     newIndex: delta.newIndex,
                     oldReference: metaPointerFor(delta.oldReference),
                     oldIndex: delta.oldIndex,
-                    movedTarget: serializedRef(delta.movedTarget),
+                    movedTarget: idFrom(delta.movedTarget),
                     movedResolveInfo: nodeBaseReader.resolveInfoFor!(delta.movedTarget!)!
                 })
             }
@@ -422,7 +417,7 @@ export const deltaToEventTranslator = (
                     reference: metaPointerFor(delta.reference),
                     oldIndex: delta.oldIndex,
                     newIndex: delta.newIndex,
-                    movedTarget: serializedRef(delta.movedTarget),
+                    movedTarget: idFrom(delta.movedTarget),
                     movedResolveInfo: nodeBaseReader.resolveInfoFor!(delta.movedTarget!)!
                 })
             }
@@ -431,12 +426,12 @@ export const deltaToEventTranslator = (
                     newParent: delta.newParent.id,
                     newReference: metaPointerFor(delta.newReference),
                     newIndex: delta.newIndex,
-                    replacedTarget: serializedRef(delta.replacedTarget),
+                    replacedTarget: idFrom(delta.replacedTarget),
                     replacedResolveInfo: nodeBaseReader.resolveInfoFor!(delta.replacedTarget!)!,
                     oldParent: delta.oldParent.id,
                     oldReference: metaPointerFor(delta.oldReference),
                     oldIndex: delta.oldIndex,
-                    movedTarget: serializedRef(delta.movedTarget),
+                    movedTarget: idFrom(delta.movedTarget),
                     movedResolveInfo: nodeBaseReader.resolveInfoFor!(delta.movedTarget!)!
                 })
             }
@@ -445,11 +440,11 @@ export const deltaToEventTranslator = (
                     parent: delta.parent.id,
                     newReference: metaPointerFor(delta.newReference),
                     newIndex: delta.newIndex,
-                    replacedTarget: serializedRef(delta.replacedTarget),
+                    replacedTarget: idFrom(delta.replacedTarget),
                     replacedResolveInfo: nodeBaseReader.resolveInfoFor!(delta.replacedTarget!)!,
                     oldReference: metaPointerFor(delta.oldReference),
                     oldIndex: delta.oldIndex,
-                    movedTarget: serializedRef(delta.movedTarget),
+                    movedTarget: idFrom(delta.movedTarget),
                     movedResolveInfo: nodeBaseReader.resolveInfoFor!(delta.movedTarget!)!
                 })
             }
@@ -458,10 +453,10 @@ export const deltaToEventTranslator = (
                     parent: delta.parent.id,
                     reference: metaPointerFor(delta.reference),
                     oldIndex: delta.oldIndex,
-                    movedTarget: serializedRef(delta.movedTarget),
+                    movedTarget: idFrom(delta.movedTarget),
                     movedResolveInfo: nodeBaseReader.resolveInfoFor!(delta.movedTarget!)!,
                     newIndex: delta.newIndex,
-                    replacedTarget: serializedRef(delta.replacedTarget),
+                    replacedTarget: idFrom(delta.replacedTarget),
                     replacedResolveInfo: nodeBaseReader.resolveInfoFor!(delta.replacedTarget!)!
                 })
             }

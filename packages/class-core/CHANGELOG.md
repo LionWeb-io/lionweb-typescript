@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.8.0 — not yet released
+
+* Receive the `IdOrUnresolved` type from the `core` package, and export that and the `idFrom` function.
+
+
 ## 0.7.2
 
 * Implement a `propertyValueSerializerWith` function that produces a `PropertyValueSerializer` instance to serialize properties’ values with, properly dealing with enumerations as well.

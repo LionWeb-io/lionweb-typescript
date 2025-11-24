@@ -93,7 +93,8 @@ export const serializerForDeltas = (deltas: Delta[], header?: string) =>
             commaSeparated(sortedStrings([...(deltas.map(({name}) => `${name}SerializedDelta`)), `SerializedDelta`]))
         ),
         `} from "./types.g.js";`,
-        `import { idFrom, defaultPropertyValueSerializer } from "./serializer-helpers.js";`,
+        `import { defaultPropertyValueSerializer } from "./base.js";`,
+        `import { idFrom } from "../../references.js";`,
         `import { serializeNodeBases } from "../../serializer.js";`,
         ``,
         ``,

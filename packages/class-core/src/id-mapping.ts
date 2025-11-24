@@ -15,10 +15,11 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { IdOrUnresolved, SingleRef, unresolved } from "@lionweb/core"
+import { SingleRef, unresolved } from "@lionweb/core"
 import { LionWebId } from "@lionweb/json"
 
-import { INodeBase } from "./index.js"
+import { INodeBase } from "./base-types.js"
+import { IdOrUnresolved } from "./references.js"
 
 
 /**

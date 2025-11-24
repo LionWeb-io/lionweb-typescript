@@ -40,6 +40,7 @@ import {
     EntryMovedFromOtherReferenceInSameParentDelta,
     EntryMovedInSameReferenceDelta,
     IDelta,
+    idFrom,
     NoOpDelta,
     PartitionAddedDelta,
     PartitionDeletedDelta,
@@ -52,7 +53,7 @@ import {
     serializeNodeBases
 } from "@lionweb/class-core"
 import { nodeBaseReader, propertyValueSerializerWith } from "@lionweb/class-core/dist/serializer.js"
-import { builtinPropertyValueSerializer, metaPointerFor, PropertyValueSerializer, serializedRef } from "@lionweb/core"
+import { builtinPropertyValueSerializer, metaPointerFor, PropertyValueSerializer } from "@lionweb/core"
 import { LionWebId } from "@lionweb/json"
 import {
     AddAnnotationCommand,
@@ -278,7 +279,7 @@ export const deltaToCommandTranslator = (
                 parent: delta.parent.id,
                 reference: metaPointerFor(delta.reference),
                 index: delta.index,
-                newTarget: serializedRef(delta.newTarget),
+                newTarget: idFrom(delta.newTarget),
                 newResolveInfo: nodeBaseReader.resolveInfoFor!(delta.newTarget!)!
             })
         }
@@ -287,7 +288,7 @@ export const deltaToCommandTranslator = (
                 parent: delta.parent.id,
                 reference: metaPointerFor(delta.reference),
                 index: delta.index,
-                deletedTarget: serializedRef(delta.deletedTarget),
+                deletedTarget: idFrom(delta.deletedTarget),
                 deletedResolveInfo: nodeBaseReader.resolveInfoFor!(delta.deletedTarget!)!
             })
         }
@@ -296,9 +297,9 @@ export const deltaToCommandTranslator = (
                 parent: delta.parent.id,
                 reference: metaPointerFor(delta.reference),
                 index: delta.index,
-                oldTarget: serializedRef(delta.oldTarget),
+                oldTarget: idFrom(delta.oldTarget),
                 oldResolveInfo: nodeBaseReader.resolveInfoFor!(delta.oldTarget!)!,
-                newTarget: serializedRef(delta.newTarget),
+                newTarget: idFrom(delta.newTarget),
                 newResolveInfo: nodeBaseReader.resolveInfoFor!(delta.oldTarget!)!
             })
         }
@@ -310,7 +311,7 @@ export const deltaToCommandTranslator = (
                 oldParent: delta.oldParent.id,
                 oldReference: metaPointerFor(delta.oldReference),
                 oldIndex: delta.oldIndex,
-                movedTarget: serializedRef(delta.movedTarget),
+                movedTarget: idFrom(delta.movedTarget),
                 movedResolveInfo: nodeBaseReader.resolveInfoFor!(delta.movedTarget!)!
             })
         }
@@ -320,7 +321,7 @@ export const deltaToCommandTranslator = (
                 newReference: metaPointerFor(delta.newReference),
                 newIndex: delta.newIndex,
                 oldIndex: delta.oldIndex,
-                movedTarget: serializedRef(delta.movedTarget),
+                movedTarget: idFrom(delta.movedTarget),
                 movedResolveInfo: nodeBaseReader.resolveInfoFor!(delta.movedTarget!)!
             })
         }
@@ -330,7 +331,7 @@ export const deltaToCommandTranslator = (
                 reference: metaPointerFor(delta.reference),
                 oldIndex: delta.oldIndex,
                 newIndex: delta.newIndex,
-                movedTarget: serializedRef(delta.movedTarget),
+                movedTarget: idFrom(delta.movedTarget),
                 movedResolveInfo: nodeBaseReader.resolveInfoFor!(delta.movedTarget!)!
             })
         }
@@ -339,12 +340,12 @@ export const deltaToCommandTranslator = (
                 newParent: delta.newParent.id,
                 newReference: metaPointerFor(delta.newReference),
                 newIndex: delta.newIndex,
-                replacedTarget: serializedRef(delta.replacedTarget),
+                replacedTarget: idFrom(delta.replacedTarget),
                 replacedResolveInfo: nodeBaseReader.resolveInfoFor!(delta.replacedTarget!)!,
                 oldParent: delta.oldParent.id,
                 oldReference: metaPointerFor(delta.oldReference),
                 oldIndex: delta.oldIndex,
-                movedTarget: serializedRef(delta.movedTarget),
+                movedTarget: idFrom(delta.movedTarget),
                 movedResolveInfo: nodeBaseReader.resolveInfoFor!(delta.movedTarget!)!
             })
         }
@@ -353,11 +354,11 @@ export const deltaToCommandTranslator = (
                 parent: delta.parent.id,
                 newReference: metaPointerFor(delta.newReference),
                 newIndex: delta.newIndex,
-                replacedTarget: serializedRef(delta.replacedTarget),
+                replacedTarget: idFrom(delta.replacedTarget),
                 replacedResolveInfo: nodeBaseReader.resolveInfoFor!(delta.replacedTarget!)!,
                 oldReference: metaPointerFor(delta.oldReference),
                 oldIndex: delta.oldIndex,
-                movedTarget: serializedRef(delta.movedTarget),
+                movedTarget: idFrom(delta.movedTarget),
                 movedResolveInfo: nodeBaseReader.resolveInfoFor!(delta.movedTarget!)!
             })
         }
@@ -366,10 +367,10 @@ export const deltaToCommandTranslator = (
                 parent: delta.parent.id,
                 reference: metaPointerFor(delta.reference),
                 oldIndex: delta.oldIndex,
-                movedTarget: serializedRef(delta.movedTarget),
+                movedTarget: idFrom(delta.movedTarget),
                 movedResolveInfo: nodeBaseReader.resolveInfoFor!(delta.movedTarget!)!,
                 newIndex: delta.newIndex,
-                replacedTarget: serializedRef(delta.replacedTarget),
+                replacedTarget: idFrom(delta.replacedTarget),
                 replacedResolveInfo: nodeBaseReader.resolveInfoFor!(delta.replacedTarget!)!
             })
         }

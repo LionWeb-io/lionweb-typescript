@@ -1,5 +1,3 @@
-import { LionWebId } from "@lionweb/json"
-
 import { Node } from "./types.js"
 
 
@@ -28,17 +26,4 @@ export const isRef = <NT extends Node>(ref?: SingleRef<NT>): ref is NT =>
  * but should be avoided as a return type for “auxiliary” functions.
  */
 export type MultiRef<NT extends Node> = SingleRef<NT>[]
-
-
-/**
- * A type that expresses a value is either an {@link LionWebId} or a value to indicate that resolution to a node previously failed.
- */
-export type IdOrUnresolved = LionWebId | typeof unresolved;
-
-
-/**
- * @return the serialization of the given {@link SingleRef single reference target}, as a {@link LionWebId LionWeb ID}.
- */
-export const serializedRef = <NT extends Node>(ref: SingleRef<NT>): LionWebId | typeof unresolved =>
-    ref === unresolved ? unresolved : ref.id
 
