@@ -9,11 +9,10 @@
 * Remove the `CompositeCommand` and `CompositeEvent` types entirely.
   *Note* that this is a **breaking change**, due to a [change to the protocol specification](https://github.com/LionWeb-io/specification/issues/420), without providing backward compatibility e.g. by only deprecating those classes.
 
-
 ## 0.7.2
 
-(No changes)
-
+* New way to define the structure of the LionWeb JSON format.
+* Added delta format definitions
 
 ## 0.7.1
 
