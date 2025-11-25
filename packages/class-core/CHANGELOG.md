@@ -9,6 +9,8 @@
       The original signature is also still valid, but deprecated.
     * Move the `propertyValueDeserializer` and `problem[s]Handler` parameters of the `Deserializer` type to the `DeserializerConfiguration` type.
       *Note* that this is a **breaking change**, but these parameters weren’t used outside of tests anyway.
+* Simplify `Deserializer` type, by removing the `dependentNodes` parameter: (only) pass an appropriate instance of `IdMapping` instead.
+  *Note* that this is a **breaking change**, but either parameter is optional and carries the same information, so this should avoid confusion and misuse.
 
 
 ## 0.7.2

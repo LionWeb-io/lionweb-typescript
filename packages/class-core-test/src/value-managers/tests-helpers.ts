@@ -26,7 +26,7 @@ import { equal } from "../assertions.js"
 export const deserializeNodesAssertingNoProblems = (serializationChunk: LionWebJsonChunk, receiveDelta?: DeltaReceiver) => {
     const problemsHandler = new AccumulatingSimplisticHandler()
     const deserialize = nodeBaseDeserializer({ languageBases: [TestLanguageBase.INSTANCE], receiveDelta, problemsHandler })
-    const deserializedNodes = deserialize(serializationChunk, undefined, undefined)
+    const deserializedNodes = deserialize(serializationChunk)
     equal(problemsHandler.allProblems.length, 0)
     return deserializedNodes
 }

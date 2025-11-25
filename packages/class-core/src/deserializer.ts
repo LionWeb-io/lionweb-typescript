@@ -43,9 +43,7 @@ import { NodesToInstall } from "./linking.js"
 export type Deserializer<T> = (
     /** The {@link LionWebJsonChunk serialization chunk} to deserialize. */
     serializationChunk: LionWebJsonChunk,
-    /** Existing nodes that the given `serializationChunk` may link to. */
-    dependentNodes?: INodeBase[],
-    /** The {@link IdMapping ID mapping} of those dependent nodes. */
+    /** The {@link IdMapping ID mapping} of existing nodes that the given `serializationChunk` may link to. */
     idMapping?: IdMapping
 ) => T;
 
@@ -94,7 +92,6 @@ function nodeBaseDeserializerWithIdMapping(languageBasesOrConfiguration: ILangua
 
     return (
         serializationChunk,
-        dependentNodes = [],
         idMapping
     ): RootsWithIdMapping => {
 
@@ -169,10 +166,8 @@ function nodeBaseDeserializerWithIdMapping(languageBasesOrConfiguration: ILangua
             )
         );
 
-        const dependentNodesById = byIdMap(dependentNodes);
-
         const lookupNodeById = (id: LionWebId): (INodeBase | undefined) =>
-            nodesById[id] ?? dependentNodesById[id] ?? idMapping?.tryFromId(id);
+            nodesById[id] ?? idMapping?.tryFromId(id);
 
         nodesToInstall.forEach(([node, feature, ids]) => {
             if (feature instanceof Containment) {
@@ -219,7 +214,7 @@ function nodeBaseDeserializerWithIdMapping(languageBasesOrConfiguration: ILangua
         return {
             roots: Object.values(nodesById)
                 .filter(({parent}) => parent === undefined),
-            idMapping: new IdMapping({ ...nodesById, ...dependentNodesById })
+            idMapping: new IdMapping(nodesById)
         };
 
     };
@@ -240,12 +235,11 @@ function nodeBaseDeserializer(configuration: DeserializerConfiguration): Deseria
 function nodeBaseDeserializer(languageBasesOrConfiguration: ILanguageBase[] | DeserializerConfiguration, receiveDelta?: DeltaReceiver): Deserializer<INodeBase[]> {
     return (
         serializationChunk,
-        dependentNodes,
         idMapping
     ): INodeBase[] =>
         Array.isArray(languageBasesOrConfiguration)
-            ? nodeBaseDeserializerWithIdMapping(languageBasesOrConfiguration, receiveDelta)(serializationChunk, dependentNodes, idMapping).roots
-            : nodeBaseDeserializerWithIdMapping(languageBasesOrConfiguration)(serializationChunk, dependentNodes, idMapping).roots
+            ? nodeBaseDeserializerWithIdMapping(languageBasesOrConfiguration, receiveDelta)(serializationChunk, idMapping).roots
+            : nodeBaseDeserializerWithIdMapping(languageBasesOrConfiguration)(serializationChunk, idMapping).roots
 }
 
 
