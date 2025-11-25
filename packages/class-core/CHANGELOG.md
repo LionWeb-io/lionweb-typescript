@@ -3,6 +3,12 @@
 ## 0.8.0 — not yet released
 
 * Receive the `IdOrUnresolved` type from the `core` package, and export that and the `idFrom` function.
+* Improve the API surface of the `nodeBaseDeserializer[WithIdMapping]` functions:
+    * Expose a `DeserializerConfiguration` type, which encompasses the (partially optional) parameters that are likely unchanging per invocation of the deserializer.
+    * Use that type to as the single parameter to the `nodeBaseDeserializer[WithIdMapping]` functions.
+      The original signature is also still valid, but deprecated.
+    * Move the `propertyValueDeserializer` and `problem[s]Handler` parameters of the `Deserializer` type to the `DeserializerConfiguration` type.
+      *Note* that this is a **breaking change**, but these parameters weren’t used outside of tests anyway.
 
 
 ## 0.7.2

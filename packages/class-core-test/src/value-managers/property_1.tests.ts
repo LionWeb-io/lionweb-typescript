@@ -17,18 +17,18 @@
 
 import {
     collectingDeltaReceiver,
-    nodeBaseDeserializer,
     PropertyAddedDelta,
     PropertyChangedDelta,
     serializeNodeBases
 } from "@lionweb/class-core"
-import { AccumulatingSimplisticHandler } from "@lionweb/core"
 import { LionWebJsonMetaPointer } from "@lionweb/json"
 
 import { DataTypeTestConcept, TestLanguageBase } from "@lionweb/class-core-test-language"
 import { deepEqual, equal, isTrue, throws } from "../assertions.js"
+import { deserializeNodesAssertingNoProblems } from "./tests-helpers.js"
 
 const testLanguageBase = TestLanguageBase.INSTANCE
+
 
 describe("[1] string property", () => {
 
@@ -63,10 +63,7 @@ describe("[1] string property", () => {
         equal(nodes[0].properties.length, 0);
 
         const [receiveDelta, deltas] = collectingDeltaReceiver();
-        const deserialize = nodeBaseDeserializer([testLanguageBase], receiveDelta);
-        const problemHandler = new AccumulatingSimplisticHandler();
-        const deserializedNodes = deserialize(serializationChunk, undefined, undefined, undefined, problemHandler);
-        equal(problemHandler.allProblems.length, 0);
+        const deserializedNodes = deserializeNodesAssertingNoProblems(serializationChunk, receiveDelta);
         equal(deserializedNodes.length, 1);
         const root = deserializedNodes[0];
         isTrue(root instanceof DataTypeTestConcept);
@@ -116,10 +113,7 @@ describe("[1] string property", () => {
         );
 
         const [receiveDelta, deltas] = collectingDeltaReceiver();
-        const deserialize = nodeBaseDeserializer([testLanguageBase], receiveDelta);
-        const problemHandler = new AccumulatingSimplisticHandler();
-        const deserializedNodes = deserialize(serializationChunk, undefined, undefined, undefined, problemHandler);
-        equal(problemHandler.allProblems.length, 0);
+        const deserializedNodes = deserializeNodesAssertingNoProblems(serializationChunk, receiveDelta);
         equal(deserializedNodes.length, 1);
         const root = deserializedNodes[0];
         isTrue(root instanceof DataTypeTestConcept);

@@ -17,19 +17,19 @@
 
 import {
     collectingDeltaReceiver,
-    nodeBaseDeserializer,
     ReferenceAddedDelta,
     ReferenceChangedDelta,
     ReferenceDeletedDelta,
     serializeNodeBases
 } from "@lionweb/class-core"
-import { AccumulatingSimplisticHandler } from "@lionweb/core"
 import { LionWebJsonMetaPointer } from "@lionweb/json"
 
 import { LinkTestConcept, TestLanguageBase } from "@lionweb/class-core-test-language"
 import { deepEqual, equal, isTrue, isUndefined } from "../assertions.js"
+import { deserializeNodesAssertingNoProblems } from "./tests-helpers.js"
 
 const testLanguageBase = TestLanguageBase.INSTANCE
+
 
 describe("[0..1] reference", () => {
 
@@ -129,10 +129,7 @@ describe("serialization and deserialization w.r.t. a [0..1] reference", () => {
         const serReference = nodes[0].references.find(({reference}) => reference.key === metaPointer.key);
         isUndefined(serReference);
 
-        const deserialize = nodeBaseDeserializer([testLanguageBase]);
-        const problemHandler = new AccumulatingSimplisticHandler();
-        const deserializedNodes = deserialize(serializationChunk, undefined, undefined, undefined, problemHandler);
-        equal(problemHandler.allProblems.length, 0);
+        const deserializedNodes = deserializeNodesAssertingNoProblems(serializationChunk);
         equal(deserializedNodes.length, 1);
         const root = deserializedNodes[0];
         isTrue(root instanceof LinkTestConcept);
@@ -159,10 +156,7 @@ describe("serialization and deserialization w.r.t. a [0..1] reference", () => {
             }]
         });
 
-        const deserialize = nodeBaseDeserializer([testLanguageBase]);
-        const problemHandler = new AccumulatingSimplisticHandler();
-        const deserializedNodes = deserialize(serializationChunk, undefined, undefined, undefined, problemHandler);
-        equal(problemHandler.allProblems.length, 0);
+        const deserializedNodes = deserializeNodesAssertingNoProblems(serializationChunk);
         equal(deserializedNodes.length, 2);
         const node1 = deserializedNodes[0];
         isTrue(node1 instanceof LinkTestConcept);
