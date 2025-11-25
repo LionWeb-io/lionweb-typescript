@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.7.2
+
+* New way to define the structure of the LionWeb JSON format.
+* Added delta format definitions
+
 ## 0.7.1
 
 (The 0.7.0 release was deprecated because its `validation` package was faulty.)
