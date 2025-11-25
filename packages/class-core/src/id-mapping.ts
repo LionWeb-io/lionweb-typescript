@@ -71,7 +71,7 @@ export class IdMapping {
     /**
      * Updates this {@link IdMapping} with the given `node` *and all its descendants* (recursively).
      */
-    updateWith= (node: INodeBase) => {
+    updateWith = (node: INodeBase) => {
         this.nodesById[node.id] = node;
         node.children   // recurse into all children
             .forEach((child) => this.updateWith(child));
