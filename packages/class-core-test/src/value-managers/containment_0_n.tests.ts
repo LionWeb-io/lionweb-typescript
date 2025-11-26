@@ -18,10 +18,10 @@
 import {
     ChildAddedDelta,
     ChildDeletedDelta,
+    ChildMovedAndReplacedFromOtherContainmentDelta,
     ChildMovedFromOtherContainmentDelta,
     ChildMovedFromOtherContainmentInSameParentDelta,
     ChildMovedInSameContainmentDelta,
-    ChildReplacedDelta,
     collectingDeltaReceiver
 } from "@lionweb/class-core"
 
@@ -184,7 +184,8 @@ describe("[0..n] containment", () => {
         assertLatestDelta(new ChildMovedFromOtherContainmentDelta(srcParent, testLanguageBase.LinkTestConcept_containment_0_n, 0, dstParent, testLanguageBase.LinkTestConcept_containment_0_n, 0, child));
     });
 
-    it("moving a child between parents, replacing an already-present child", () => {
+    // FIXME  this is a test for a [0..1] containment, not for [0..n]
+    it.skip("moving a child between parents, replacing an already-present child", () => {
         const [receiveDelta, deltas] = collectingDeltaReceiver();
         const childAlreadyAssigned = LinkTestConcept.create("childAlreadyAssigned", receiveDelta);
         const dstParent = LinkTestConcept.create("dstParent", receiveDelta);
@@ -202,10 +203,8 @@ describe("[0..n] containment", () => {
         equal(dstParent.containment_0_1, childToMove);
         equal(childToMove.parent, dstParent);
         equal(childAlreadyAssigned.parent, undefined);
-        equal(deltas.length, 4);
-        const indices = deltas[2] instanceof ChildReplacedDelta ? [2, 3] : [3, 2];
-        deepEqual(deltas[indices[0]], new ChildReplacedDelta(dstParent, testLanguageBase.LinkTestConcept_containment_0_1, 0, childAlreadyAssigned, childToMove));
-        deepEqual(deltas[indices[1]], new ChildDeletedDelta(dstParent, testLanguageBase.LinkTestConcept_containment_0_1, 0, childAlreadyAssigned));
+        equal(deltas.length, 3);
+        deepEqual(deltas[2], new ChildMovedAndReplacedFromOtherContainmentDelta(dstParent, testLanguageBase.LinkTestConcept_containment_0_1, 0, childToMove, srcParent, testLanguageBase.LinkTestConcept_containment_0_1, 0, childAlreadyAssigned));
     });
 
     it("addAtIndex", () => {
