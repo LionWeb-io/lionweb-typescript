@@ -6,12 +6,9 @@ import {
     Syntax_PropertyTypeIssue,
     Syntax_PropertyUnknownIssue
 } from "../../issues/index.js"
+import { SyntaxDefinition, StructuredType, PrimitiveType } from "./schema/SyntaxDefinition.js"
 import { ValidationResult } from "./ValidationResult.js"
-import {
-    isObjectDefinition,
-    isPrimitiveDefinition, ObjectDefinition, PrimitiveDefinition, DefinitionSchema,
-    UnknownObjectType
-} from "./schema/index.js"
+import { UnknownObjectType } from "./schema/index.js"
 
 /**
  * Syntax Validator checks whether objects are structurally conforming to the
@@ -19,9 +16,9 @@ import {
  */
 export class SyntaxValidator {
     validationResult: ValidationResult
-    schema: DefinitionSchema
+    schema: SyntaxDefinition
 
-    constructor(validationResult: ValidationResult, schema: DefinitionSchema) {
+    constructor(validationResult: ValidationResult, schema: SyntaxDefinition) {
         this.validationResult = validationResult
         this.schema = schema
     }
@@ -34,14 +31,19 @@ export class SyntaxValidator {
      */
     validate(obj: unknown, expectedType: string) {
         const object = obj as UnknownObjectType
-        const typeDef = this.schema.getDefinition(expectedType)
+        const primitiveTypeDef: PrimitiveType | undefined = this.schema.getPrimitiveType(expectedType)
 
-        if (typeDef === undefined) {
-            throw new Error(`SyntaxValidator.validate: cannot find definition for ${expectedType}`)
-        } else if (isObjectDefinition(typeDef)) {
-            this.validateObjectProperties(expectedType, typeDef, object, new JsonContext(null, ["$"]))
-        } else if (isPrimitiveDefinition(typeDef)) {
-            this.validatePrimitiveValue("$", typeDef, object, new JsonContext(null, ["$"]))
+        if (primitiveTypeDef === undefined) {
+            const objectTypeDef: StructuredType | undefined = this.schema.getStructuredType(expectedType)
+            if( objectTypeDef === undefined) {
+                throw new Error(`SyntaxValidator.validate: cannot find definition for '${expectedType}'`)
+            } else {
+                // ObjectType found
+                this.validateObjectProperties(expectedType, objectTypeDef, object, new JsonContext(null, ["$"]))
+            }
+        } else {
+            // PrimitiveType found
+            this.validatePrimitiveValue("$", primitiveTypeDef, object, new JsonContext(null, ["$"]))
         }
     }
 
@@ -53,7 +55,7 @@ export class SyntaxValidator {
      * @param jsonContext       The location in the JSON
      * @private
      */
-    validateObjectProperties(originalProperty: string, typeDef: ObjectDefinition, object: UnknownObjectType, jsonContext: JsonContext) {
+    validateObjectProperties(originalProperty: string, typeDef: StructuredType, object: UnknownObjectType, jsonContext: JsonContext) {
         if (typeDef === null || typeDef === undefined) {
             return
         }
@@ -62,8 +64,13 @@ export class SyntaxValidator {
             return
         }
         for (const propertyDef of typeDef.properties) {
-            const expectedTypeDef = this.schema.getDefinition(propertyDef.type)
-            const validator = propertyDef.validate!
+            const expectedTypeDefPrimitive = this.schema.getPrimitiveType(propertyDef.type)
+            const expectedTypeDefStructured = this.schema.getStructuredType(propertyDef.type)
+            const expectedMessageGroup = this.schema.getMessageGroup(propertyDef.type)
+            const expectedTypeDef = expectedTypeDefPrimitive ?? expectedTypeDefStructured
+
+            const validator = this.schema.getValidator(propertyDef.name)
+
             const propertyValue = object[propertyDef.name]
             if (propertyValue === undefined) {
                 if (!propertyDef.isOptional) {
@@ -93,15 +100,25 @@ export class SyntaxValidator {
                         this.validationResult.issue(new Syntax_ArrayContainsNull_Issue(newContext, propertyDef.name, index))
                     } else {
                         if (expectedTypeDef !== undefined) {
-                            if (isPrimitiveDefinition(expectedTypeDef)) {
+                            if (expectedTypeDef === expectedTypeDefPrimitive) {
                                 if (this.validatePrimitiveValue(propertyDef.name, expectedTypeDef, item, jsonContext)) {
-                                    validator.apply(null, [item, this.validationResult, newContext, propertyDef])
+                                    if (validator !== undefined) {
+                                        validator(item, this.validationResult, newContext)
+                                    }
                                 }
-                            } else {
+                            } else if (expectedTypeDef === expectedTypeDefStructured) {
                                 // propertyValue should be an object, validate its properties
                                 this.validateObjectProperties(propertyDef.name, expectedTypeDef, item as UnknownObjectType, newContext)
-                                validator.apply(null, [item, this.validationResult, newContext, propertyDef])
+                                if (validator !== undefined) {
+                                    validator(item, this.validationResult, newContext)
+                                }
                             }
+                        } else if (expectedMessageGroup !== undefined) {
+                                console.log(`+++++++++++++++++++ ${expectedMessageGroup.name}`)
+                                const messageKind = item[expectedMessageGroup.taggedUnionProperty] as string
+                                    const groupTypeDef = this.schema.getStructuredType(messageKind)!
+                                    this.validateObjectProperties(originalProperty, groupTypeDef, item as UnknownObjectType, newContext)
+                                
                         } else {
                             throw new Error(`Expected type '${propertyDef.type} has neither property defs, nor a validator.`)
                         }
@@ -115,21 +132,32 @@ export class SyntaxValidator {
                 }
                 // Single valued property, validate it
                 if (expectedTypeDef !== undefined) {
-                    if (isPrimitiveDefinition(expectedTypeDef)) {
+                    // const primitiveType = this.schema.getPrimitiveType(expectedTypeDef.name)
+                    if (expectedTypeDef === expectedTypeDefPrimitive) {
                         // propertyValue should be a primitive as it has no property definitions
                         if (this.validatePrimitiveValue(propertyDef.name, expectedTypeDef, propertyValue, jsonContext)) {
-                            validator.apply(null, [propertyValue, this.validationResult, newContext, propertyDef])
+                            if (validator !== undefined) {
+                                validator(propertyValue, this.validationResult, newContext)
+                            }
                         }
-                    } else if (isObjectDefinition(expectedTypeDef)) {
+                    } else if (expectedTypeDef === expectedTypeDefStructured) {
                         // propertyValue should be an object, validate its properties
                         this.validateObjectProperties(propertyDef.name, expectedTypeDef, propertyValue as UnknownObjectType, newContext)
-                        validator.apply(null, [propertyValue, this.validationResult, newContext, propertyDef])
+                        if (validator !== undefined) {
+                            validator(propertyValue, this.validationResult, newContext)
+                        }
+                    } else if (expectedMessageGroup !== undefined) {
+                        console.log(`+++++++++++++++++++ LIST ${expectedMessageGroup.name}`)
+                        const messageKind = object[expectedMessageGroup.taggedUnionProperty] as string
+                        const groupTypeDef = this.schema.getStructuredType(messageKind)!
+                        this.validateObjectProperties(originalProperty, groupTypeDef, propertyValue as UnknownObjectType, newContext)
                     } else {
                         throw new Error("EXPECTING ObjectDefinition or PrimitiveDefinition, but got something else")
                     }
                 } else {
                     throw new Error(
-                        `Expected single type '${propertyDef.type}' for '${propertyDef.name}'  at ${newContext.toString()} has neither property defs, nor a validator.`
+                        `Op ${originalProperty}: Expected single type '${propertyDef.type}' for '${propertyDef.name}'  at ${newContext.toString()} has neither property defs, nor a validator.
+                        Typedef is ${JSON.stringify(typeDef)}`
                     )
                 }
             }
@@ -137,12 +165,15 @@ export class SyntaxValidator {
         this.checkStrayProperties(object, typeDef, jsonContext)
     }
 
-    validatePrimitiveValue(propertyName: string, propDef: PrimitiveDefinition, object: unknown, jsonContext: JsonContext): boolean {
+    validatePrimitiveValue(propertyName: string, propDef: PrimitiveType, object: unknown, jsonContext: JsonContext): boolean {
         if (typeof object !== propDef.primitiveType) {
             this.validationResult.issue(new Syntax_PropertyTypeIssue(jsonContext, propertyName, propDef.primitiveType, typeof object))
             return false
         }
-        propDef.validate!(object, this.validationResult, jsonContext)
+        const validator = this.schema.getValidator(propDef.name)
+        if (validator !== undefined) {
+            validator(object, this.validationResult, jsonContext)
+        }
         return true
     }
 
@@ -152,7 +183,7 @@ export class SyntaxValidator {
      * @param properties    The names of the expected properties
      * @param context       Location in JSON
      */
-    checkStrayProperties(obj: UnknownObjectType, def: ObjectDefinition, context: JsonContext) {
+    checkStrayProperties(obj: UnknownObjectType, def: StructuredType, context: JsonContext) {
         const own = Object.getOwnPropertyNames(obj)
         const defined = def.properties.map(pdef => pdef.name)
         own.forEach(ownProp => {
