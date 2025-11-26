@@ -64,7 +64,7 @@ export type LionWebJsonReference = {
 }
 
 export type LionWebJsonReferenceTarget = {
-    reference: LionWebId
+    reference: LionWebId | null
     resolveInfo: string | null
 }
 

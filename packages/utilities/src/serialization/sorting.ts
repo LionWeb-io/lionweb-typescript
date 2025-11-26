@@ -24,7 +24,7 @@ export const sortedSerializationChunk = ({serializationFormatVersion, languages,
                 references: sortByStringKey(node.references, ({reference}) => reference.key)
                         .map(({reference, targets}) => ({
                             reference: orderedMetaPointer(reference),
-                            targets: sortByStringKey(targets, ({reference}) => reference).map(orderedSerializedReferenceTarget)
+                            targets: sortByStringKey(targets, ({reference, resolveInfo}) => (reference ?? resolveInfo)!).map(orderedSerializedReferenceTarget)
                         })),
                 annotations: node.annotations.sort(),
                 parent: node.parent

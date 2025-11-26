@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.8.0 — not yet released
+
+* Propagate `reference` field of `LionWebJsonReferenceTarget` type now being `null`able.
+
+
 ## 0.7.2
 
 * W.r.t. the `generate{PlantUml|Mermaid}ForLanguage` diagram generation functions:

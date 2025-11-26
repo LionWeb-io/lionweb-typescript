@@ -107,7 +107,9 @@ export const inferLanguagesFromSerializationChunk = (chunk: LionWebJsonChunk): L
             concept.havingFeatures(feature)
 
             const value = reference.targets[0].reference
-            links.push({ link: feature, conceptId: value })
+            if (value !== null) {
+                links.push({ link: feature, conceptId: value })
+            }
         }
     }
 
