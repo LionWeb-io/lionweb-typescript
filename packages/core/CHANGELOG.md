@@ -1,8 +1,15 @@
 # Changelog
 
+## 0.8.0 — not yet released
+
+* The `NT` type parameter of `SingleRef<NT>` now extends the `Node` base type.
+* Move `IdOrUnresolved` type to the `class-core` package, as it was used only there and in `delta-protocol-common`.
+    * Remove the `serializedRef` function as it was a duplicate of `idFrom` in `class-core`.
+
+
 ## 0.7.2
 
-* Modify the `MultiRef<T>` type to also be able to explicitly contain unresolved references, represented through the `unresolved` type.
+* Modify the `MultiRef<NT>` type to also be able to explicitly contain unresolved references, represented through the `unresolved` type.
     ***Note***: this means that values that have this type need to actively deal with `unresolved` values!
     The easiest way to do this, is to just filter the multi-value using `.filter(isRef)`.
     (Previously, a deserialized multi-value could already contain `unresolved` values, but wasn't typed accordingly.)

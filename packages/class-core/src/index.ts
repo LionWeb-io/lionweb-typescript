@@ -24,6 +24,8 @@ export * from "./id-mapping.js";
 export { combinedFactoryFor } from "./factory.js";
 // skip linking.js: see comment there
 export * from "./LionCore_builtins.g.js";
+export type { IdOrUnresolved } from "./references.js";
+export { idFrom } from "./references.js";
 export { propertyValueSerializerWith, serializeNodeBases } from "./serializer.js";
 export { asTreeTextWith } from "./textualizer.js";
 export * from "./value-managers/index.js";

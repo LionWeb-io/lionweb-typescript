@@ -15,12 +15,22 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import { builtinPropertyValueSerializer } from "@lionweb/core"
 import { IDelta } from "../base.js"
 import { SerializedDelta } from "./types.g.js"
+import { propertyValueSerializerWith } from "../../serializer.js"
 
 
 /**
  * A type for functions that deserialize {@link SerializedDelta serialized deltas} into “proper” {@link IDelta deltas}.
  */
 export type DeltaDeserializer = (delta: SerializedDelta) => IDelta;
+
+
+/**
+ * A function that serializes the given value of the given {@link Property property},
+ * using the same {@link builtinPropertyValueSerializer} instance as the {@link serializeNodeBases} function,
+ * and the same treatment of enumeration values.
+ */
+export const defaultPropertyValueSerializer = propertyValueSerializerWith({ primitiveValueSerializer: builtinPropertyValueSerializer })
 

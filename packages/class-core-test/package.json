@@ -20,12 +20,12 @@
         "lint": "eslint src"
     },
     "dependencies": {
-        "@lionweb/class-core": "0.8.0-beta.0",
-        "@lionweb/class-core-test-language": "0.8.0-beta.0",
-        "@lionweb/core": "0.8.0-beta.0",
-        "@lionweb/json": "0.8.0-beta.0",
-        "@lionweb/utilities": "0.8.0-beta.0",
-        "@lionweb/validation": "0.8.0-beta.0",
+        "@lionweb/class-core": "0.8.0-beta.1",
+        "@lionweb/class-core-test-language": "0.8.0-beta.1",
+        "@lionweb/core": "0.8.0-beta.1",
+        "@lionweb/json": "0.8.0-beta.1",
+        "@lionweb/utilities": "0.8.0-beta.1",
+        "@lionweb/validation": "0.8.0-beta.1",
         "chai": "5.3.1",
         "mocha": "11.7.1"
     },

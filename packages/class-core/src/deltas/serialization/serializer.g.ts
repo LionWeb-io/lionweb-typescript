@@ -89,7 +89,8 @@ import {
     ReferenceDeletedSerializedDelta,
     SerializedDelta
 } from "./types.g.js";
-import { idFrom, defaultPropertyValueSerializer } from "./serializer-helpers.js";
+import { defaultPropertyValueSerializer } from "./base.js";
+import { idFrom } from "../../references.js";
 import { serializeNodeBases } from "../../serializer.js";
 
 

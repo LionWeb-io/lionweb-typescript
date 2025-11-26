@@ -15,21 +15,21 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { builtinPropertyValueSerializer, IdOrUnresolved, SingleRef, unresolved } from "@lionweb/core"
-import { INodeBase } from "../../base-types.js"
-import { propertyValueSerializerWith } from "../../serializer.js"
+import { SingleRef, unresolved } from "@lionweb/core"
+import { LionWebId } from "@lionweb/json"
+
+import { INodeBase } from "./base-types.js"
+
 
 /**
- * A function that serializes the given value of the given {@link Property property},
- * using the same {@link builtinPropertyValueSerializer} instance as the {@link serializeNodeBases} function,
- * and the same treatment of enumeration values.
+ * A type that expresses a value is either an {@link LionWebId} or a value to indicate that resolution to a node previously failed.
  */
-export const defaultPropertyValueSerializer = propertyValueSerializerWith({ primitiveValueSerializer: builtinPropertyValueSerializer })
+export type IdOrUnresolved = LionWebId | typeof unresolved;
 
 
 /**
  * @return the ID of a given reference to a {@link INodeBase}, or {@link unresolved} if that reference was previously unresolved.
  */
 export const idFrom = (ref: SingleRef<INodeBase>): IdOrUnresolved =>
-    ref === unresolved ? null : ref.id
+    ref === unresolved ? unresolved : ref.id
 

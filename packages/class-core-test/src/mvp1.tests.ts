@@ -152,8 +152,8 @@ describe("TestConcept", () => {
             join(artifactsPath, "DataTypeTestConcept-value=bar-enumValue_1=literal3.expected.json")
         ) as LionWebJsonChunk
         const [deltaReceiver, deltas] = collectingDeltaReceiver()
-        const deserialized = nodeBaseDeserializer([testLanguageBase], deltaReceiver)
-        const nodes = deserialized(serializationChunk, [])
+        const deserialize = nodeBaseDeserializer([testLanguageBase], deltaReceiver)
+        const nodes = deserialize(serializationChunk)
         equal(deltas.length, 0)
         equal(nodes.length, 1)
         const node1 = nodes[0]

@@ -24,7 +24,7 @@ export const lastOf: StringsMapper =
 
 /**
  * @return a {@link StringsMapper function} that chains the given {@link StringsMapper functions} (at least 1),
- * in thar order.
+ * in that order.
  * (This is straightforward functional composition.)
  */
 export const chain = (stringsMapper: StringsMapper, ...stringMappers: StringMapper[]): StringsMapper =>
