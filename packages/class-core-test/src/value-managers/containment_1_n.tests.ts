@@ -18,7 +18,6 @@
 import {
     ChildAddedDelta,
     ChildDeletedDelta,
-    ChildMovedAndReplacedFromOtherContainmentDelta,
     ChildMovedFromOtherContainmentDelta,
     collectingDeltaReceiver
 } from "@lionweb/class-core"
@@ -252,29 +251,6 @@ describe("[1..n] containment", () => {
         );
         equal(deltas.length, 2);
         deepEqual(deltas[1], new ChildMovedFromOtherContainmentDelta(srcParent, testLanguageBase.LinkTestConcept_containment_1_n, 0, dstParent, testLanguageBase.LinkTestConcept_containment_1_n, 0, child));
-    });
-
-    // FIXME  this is a test for [0..1] containment, not test for [1..n]
-    it.skip("moving a child between parents, replacing an already-present child", () => {
-        const [receiveDelta, deltas] = collectingDeltaReceiver();
-        const childAlreadyAssigned = LinkTestConcept.create("childAlreadyAssigned", receiveDelta);
-        const dstParent = LinkTestConcept.create("dstParent", receiveDelta);
-        dstParent.containment_0_1 = childAlreadyAssigned;
-        const srcParent = LinkTestConcept.create("srcParent", receiveDelta);
-        const childToMove = LinkTestConcept.create("childToMove", receiveDelta);
-        srcParent.containment_0_1 = childToMove;
-
-        // pre-check:
-        equal(deltas.length, 2);
-
-        // action+check:
-        dstParent.containment_0_1 = childToMove;
-        equal(srcParent.containment_0_1, undefined);
-        equal(dstParent.containment_0_1, childToMove);
-        equal(childToMove.parent, dstParent);
-        equal(childAlreadyAssigned.parent, undefined);
-        equal(deltas.length, 3);
-        deepEqual(deltas[2], new ChildMovedAndReplacedFromOtherContainmentDelta(dstParent, testLanguageBase.LinkTestConcept_containment_0_1, 0, childToMove, srcParent, testLanguageBase.LinkTestConcept_containment_0_1, 0, childAlreadyAssigned));
     });
 
 });

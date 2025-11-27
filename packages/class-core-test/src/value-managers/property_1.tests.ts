@@ -122,7 +122,7 @@ describe("[1] string property", () => {
         equal(deserializedNode.classifier, testLanguageBase.DataTypeTestConcept);
         equal(deserializedNode.parent, undefined);
         equal(deserializedNode.stringValue_1, "foo");
-        equal(deltas.length, 0);    // FIXME
+        equal(deltas.length, 0);
     });
 
     it("unsetting a [1] string property", () => {

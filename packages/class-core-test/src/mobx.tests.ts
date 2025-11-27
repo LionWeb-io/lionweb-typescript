@@ -19,7 +19,9 @@ import { makeObservable, observable, observe } from "mobx"
 
 import { fail } from "./assertions.js"
 
+
 describe("MobX", () => {
+
     class SomeClass {
         _value = observable.box<string | undefined>(undefined, { deep: false })
         get value() {
@@ -29,22 +31,25 @@ describe("MobX", () => {
             this._value.set(newValue)
         }
         constructor() {
-            makeObservable(this) // Note: is required for the unit test below to succeed!
+            makeObservable(this) // Note: is required for the unit test below to succeed.
         }
     }
 
-    it("can't observe an instance as a whole", done => {
+    /**
+     * This test just checks behavior of MobX — it bears no actual relevance to the rest of the code.
+     *
+     * Note: this doesn’t imply that observer(<stateless React component instance />) doesn't work!
+     * SomeClass is of the right type — IObservableValue
+     */
+    it("can't observe an instance as a whole", (done) => {
         const instance = new SomeClass()
-        observe(instance, change => {
+        observe(instance, (change) => {
             console.dir(change)
             fail("saw object changing")
-        })
+        }/*, true: causes an error right away: "[MobX] `observe` doesn't support the fire immediately property for observable objects." */)
         instance.value = "bar"
         done()
     })
-    /*
-     * Note: this should not imply that observer(<stateless React component instance />) doesn't work!
-     * SomeClass is of the right type — IObservableValue
-     */
+
 })
 
