@@ -85,13 +85,13 @@ describe(`scenarios (${ansi.colorSchemeExplanationString})`, async function() {
 
         expect(lionWebClient.participationId!).to.equal("participation-a")
 
-        const newPartition = lionWebClient.createNode(testLanguageBase.LinkTestConcept, "partition-A")
+        const newPartition = lionWebClient.forest.createNode(testLanguageBase.LinkTestConcept, "partition-A")
         lionWebClient.addPartition(newPartition)
-        expect(lionWebClient.model).to.deep.equal([newPartition])
+        expect(lionWebClient.forest.partitions).to.deep.equal([newPartition])
 
         // assert idempotency of adding a new partition:
         lionWebClient.addPartition(newPartition)
-        expect(lionWebClient.model).to.deep.equal([newPartition])
+        expect(lionWebClient.forest.partitions).to.deep.equal([newPartition])
 
         await delayed(20, null)
         await lionWebClient.disconnect()

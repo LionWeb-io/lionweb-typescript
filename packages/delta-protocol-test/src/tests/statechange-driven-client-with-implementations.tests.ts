@@ -47,7 +47,7 @@ describe("WebSocket-driven implementations of client and repository", async func
         await clientB.signOn("query-B", repositoryId)
 
         // Action:
-        ;(clientA.model[0] as Geometry).documentation!.text = "bye bye"
+        ;(clientA.forest.partitions[0] as Geometry).documentation!.text = "bye bye"
 
         await delayed(20, null)
         await clientA.disconnect()
@@ -55,7 +55,7 @@ describe("WebSocket-driven implementations of client and repository", async func
         await lionWebRepository.shutdown()
 
         // Assert:
-        expect((clientB.model[0] as Geometry).documentation!.text).to.equal("bye bye")
+        expect((clientB.forest.partitions[0] as Geometry).documentation!.text).to.equal("bye bye")
     })
 
 })
