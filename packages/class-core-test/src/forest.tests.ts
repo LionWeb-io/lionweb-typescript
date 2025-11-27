@@ -19,6 +19,7 @@ import {
     collectingDeltaReceiver,
     Forest,
     IDelta,
+    ObservableForest,
     PartitionAddedDelta,
     PartitionDeletedDelta,
     serializeNodeBases
@@ -26,7 +27,8 @@ import {
 
 import { TestLanguageBase } from "@lionweb/class-core-test-language"
 import { idOf } from "@lionweb/core"
-import { deepEqual, equal, throws } from "./assertions.js"
+import { when } from "mobx"
+import { deepEqual, equal, isTrue, throws } from "./assertions.js"
 
 
 describe("Forest", () => {
@@ -171,6 +173,26 @@ describe("Forest", () => {
         deepEqual(forest.partitions, [])
         equal(forest.idMapping.tryFromId("ptc"), partition) // partition is still in ID mapping
         deepEqual(deltas, [new PartitionAddedDelta(partition)]) // no partition deleted delta re-emitted
+    })
+
+})
+
+
+describe("ObservableForest", () => {
+
+    const testLanguageBase = TestLanguageBase.INSTANCE
+
+    it("emits observable changes", (done) => {
+        const forest = new ObservableForest({ languageBases: [testLanguageBase] })
+        const linkTestConcept = forest.createNode(testLanguageBase.LinkTestConcept, "ltt")
+        let sawChange = false
+        when(() => forest.partitions.length > 0, () => {
+            sawChange = true
+        })
+        forest.addPartition(linkTestConcept)
+        equal(forest.partitions[0], linkTestConcept)
+        isTrue(sawChange)
+        done()
     })
 
 })

@@ -15,9 +15,9 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { makeObservable, observable, observe } from "mobx"
+import { action, makeObservable, observable, observe, when } from "mobx"
 
-import { fail } from "./assertions.js"
+import { fail, isTrue } from "./assertions.js"
 
 
 describe("MobX", () => {
@@ -48,6 +48,17 @@ describe("MobX", () => {
             fail("saw object changing")
         }/*, true: causes an error right away: "[MobX] `observe` doesn't support the fire immediately property for observable objects." */)
         instance.value = "bar"
+        done()
+    })
+
+    it("sees a property change", (done) => {
+        const instance = new SomeClass()
+        let sawChange = false
+        when(() => instance.value === "bar", () => { sawChange = true })
+        action(() => {
+            instance.value = "bar"
+        })()
+        isTrue(sawChange)
         done()
     })
 

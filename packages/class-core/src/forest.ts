@@ -17,6 +17,7 @@
 
 import { isPartition } from "@lionweb/core"
 import { LionWebJsonChunk } from "@lionweb/json"
+import { action, makeObservable, observable } from "mobx"
 
 import { FactoryConfiguration, ILanguageBase, INodeBase, NodeBaseFactory } from "./base-types.js"
 import {
@@ -146,4 +147,27 @@ export class Forest {
     }
 
 }
+
+
+/**
+ * “Mobx-ified” version of the {@link Forest} class.
+ */
+export class ObservableForest extends Forest {
+
+    constructor(configuration: FactoryConfiguration & DeserializerConfiguration) {
+        super(configuration)
+        makeObservable(
+            this,
+            {
+                partitions: observable,
+                addPartition: action,
+                deserializeInto: action,
+                applyDelta: action,
+                applyDeltas: action
+            }
+        )
+    }
+
+}
+// (but also see: https://mobx.js.org/subclassing.html)
 
