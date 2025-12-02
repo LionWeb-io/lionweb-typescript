@@ -30,11 +30,11 @@ import { INodeBase } from "./index.js"
  * 2. `feature` — the {@link Link link} feature to install on, or `null` to indicate that it's an annotation.
  * 3. `nodesIds` — are the IDs of the nodes to install.
  * 4. *optional* `originalReferenceTargets` — are the original reference targets of a {@link Reference reference} feature.
- *  This element is only present when the feature is a {@link Reference reference} feature.
+ *  This element is only present when the feature is a {@link Reference reference}.
  *  The `nodesIds` and `originalReferenceTargets` match up per index.
  *
  * Note: **DON'T** export this types from the package,
- * as these are only used to align the deserializer and deep-cloner.
+ * as these are only used to align the deserializer and deep-duplicator.
  */
 export type NodesToInstall = [ container: INodeBase, feature: Link | null, nodesIds: LionWebId[], originalReferenceTargets?: INodeBase[] ];
 
