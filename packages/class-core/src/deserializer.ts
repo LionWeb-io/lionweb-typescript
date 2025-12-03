@@ -32,7 +32,7 @@ import {
 import { LionWebId, LionWebJsonChunk, LionWebJsonNode } from "@lionweb/json"
 import { byIdMap, keepDefineds } from "@lionweb/ts-utils"
 
-import { DeltaReceiver, IdMapping, ILanguageBase, INodeBase } from "./index.js"
+import { DeltaReceiver, IdMapping, ILanguageBase, INodeBase, FactoryConfiguration } from "./index.js"
 import { combinedLanguageBaseLookupFor } from "./factory.js"
 import { NodesToInstall } from "./linking.js"
 
@@ -60,10 +60,6 @@ export type RootsWithIdMapping = { roots: INodeBase[], idMapping: IdMapping };
  * (and partially optional).
  */
 export type DeserializerConfiguration = {
-    /** The {@link ILanguageBase}s for (at least) all the languages used in the {@link LionWebJsonChunk} to deserialize, minus LionCore M3 and built-ins. */
-    languageBases: ILanguageBase[],
-    /** An optional {@link DeltaReceiver} that will be injected in all {@link INodeBase nodes} created. */
-    receiveDelta?: DeltaReceiver,
     /** Default: {@link builtinPropertyValueDeserializer}. */
     propertyValueDeserializer?: PropertyValueDeserializer,
     /** Default: {@link defaultSimplisticHandler}. */
@@ -81,8 +77,8 @@ function nodeBaseDeserializerWithIdMapping(languageBases: ILanguageBase[], recei
 /**
  * @param configuration a {@link DeserializerConfiguration configuration object} for the deserializer.
  */
-function nodeBaseDeserializerWithIdMapping(configuration: DeserializerConfiguration): Deserializer<RootsWithIdMapping>;
-function nodeBaseDeserializerWithIdMapping(languageBasesOrConfiguration: ILanguageBase[] | DeserializerConfiguration, mayBeReceiveDelta?: DeltaReceiver): Deserializer<RootsWithIdMapping> {
+function nodeBaseDeserializerWithIdMapping(configuration: FactoryConfiguration & DeserializerConfiguration): Deserializer<RootsWithIdMapping>;
+function nodeBaseDeserializerWithIdMapping(languageBasesOrConfiguration: ILanguageBase[] | (FactoryConfiguration & DeserializerConfiguration), mayBeReceiveDelta?: DeltaReceiver): Deserializer<RootsWithIdMapping> {
     const [languageBases, receiveDelta, propertyValueDeserializer, problemsHandler] = Array.isArray(languageBasesOrConfiguration)
         ? [languageBasesOrConfiguration, mayBeReceiveDelta, builtinPropertyValueDeserializer, defaultSimplisticHandler]
         : [languageBasesOrConfiguration.languageBases, languageBasesOrConfiguration.receiveDelta, languageBasesOrConfiguration.propertyValueDeserializer ?? builtinPropertyValueDeserializer, languageBasesOrConfiguration.problemsHandler ?? defaultSimplisticHandler];
@@ -231,8 +227,8 @@ function nodeBaseDeserializer(languageBases: ILanguageBase[], receiveDelta?: Del
 /**
  * @param configuration a {@link DeserializerConfiguration configuration object} for the deserializer.
  */
-function nodeBaseDeserializer(configuration: DeserializerConfiguration): Deserializer<INodeBase[]>;
-function nodeBaseDeserializer(languageBasesOrConfiguration: ILanguageBase[] | DeserializerConfiguration, receiveDelta?: DeltaReceiver): Deserializer<INodeBase[]> {
+function nodeBaseDeserializer(configuration: FactoryConfiguration & DeserializerConfiguration): Deserializer<INodeBase[]>;
+function nodeBaseDeserializer(languageBasesOrConfiguration: ILanguageBase[] | (FactoryConfiguration & DeserializerConfiguration), receiveDelta?: DeltaReceiver): Deserializer<INodeBase[]> {
     return (
         serializationChunk,
         idMapping

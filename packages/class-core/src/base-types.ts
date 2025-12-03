@@ -335,7 +335,7 @@ export abstract class NodeBase implements INodeBase {
 
 /**
  * A type for functions that acts as factories, creating an instance of {@link INodeBase}
- * matching the given {@link Classifier classifier} and the given ID (of type {@link Id}).
+ * matching the given {@link Classifier classifier} and the given ID (of type {@link LionWebId}).
  */
 export type NodeBaseFactory = (classifier: Classifier, id: LionWebId) => INodeBase;
 
@@ -350,4 +350,15 @@ export interface ILanguageBase {
     factory(receiveDelta?: DeltaReceiver): NodeBaseFactory;
     enumLiteralFrom<T>(enumerationLiteral: EnumerationLiteral): T;
 }
+
+
+/**
+ * The configuration required to be able to instantiate a {@link NodeBaseFactory factory} for a set of languages.
+ */
+export type FactoryConfiguration = {
+    /** The {@link ILanguageBase}s for (at least) all the languages used, minus LionCore M3 and built-ins. */
+    languageBases: ILanguageBase[],
+    /** An optional {@link DeltaReceiver} that will be injected in all {@link INodeBase nodes} created. */
+    receiveDelta?: DeltaReceiver
+};
 

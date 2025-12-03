@@ -88,7 +88,8 @@ export class IdMapping {
     }
 
     /**
-     * Merges the given `that` {@link IdMapping} **in**to `this`.
+     * Merges the given `that` {@link IdMapping} **in**to `this`,
+     * overwriting any previous mappings in `this`.
      */
     mergeIn = (that: IdMapping) => {
         for (const id in that.nodesById) {

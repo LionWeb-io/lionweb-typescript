@@ -25,11 +25,10 @@ import {
 } from "@lionweb/class-core"
 import { LionWebJsonChunk } from "@lionweb/json"
 import { readFileAsJson, writeJsonAsFile } from "@lionweb/utilities"
-import { observe } from "mobx"
 import { join } from "path"
 
 import { DataTypeTestConcept, TestEnumeration, TestLanguageBase } from "@lionweb/class-core-test-language"
-import { deepEqual, equal, fail, isTrue, throws } from "./assertions.js"
+import { deepEqual, equal, isTrue, throws } from "./assertions.js"
 
 
 describe("TestConcept", () => {
@@ -116,19 +115,6 @@ describe("TestConcept", () => {
 
         done()
     })
-
-    it("MobX doesn't see a DataTypeTestConcept instance changing as a whole", done => {
-        const instance = DataTypeTestConcept.create("foo")
-        observe(instance, change => {
-            console.dir(change)
-            fail("saw a change while observing the instance")
-        })
-        done()
-    })
-    /*
-     * Note: this should not imply that observer(<stateless React component instance />) doesn't work!
-     * SomeClass is of the right type — IObservableValue
-     */
 
     const artifactsPath = "artifacts"
 

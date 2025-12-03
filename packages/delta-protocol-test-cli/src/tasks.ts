@@ -89,12 +89,12 @@ export const taskExecutor = (lionWebClient: LionWebClient, partition: INodeBase,
     }
 
     const annotation = (id: LionWebId) =>
-        lionWebClient.createNode(testLanguageBase.TestAnnotation, id) as TestAnnotation
+        lionWebClient.forest.createNode(testLanguageBase.TestAnnotation, id) as TestAnnotation
 
     const linkTestConcept = (id?: LionWebId) =>
         id === undefined
             ? partition as LinkTestConcept
-            : lionWebClient.createNode(testLanguageBase.LinkTestConcept, id) as LinkTestConcept
+            : lionWebClient.forest.createNode(testLanguageBase.LinkTestConcept, id) as LinkTestConcept
 
     return async (task: keyof typeof recognizedTasks, queryId: string) => {
         console.log(clientInfo(`client "${lionWebClient.clientId}" is executing task "${task}"`))

@@ -11,6 +11,8 @@
       *Note* that this is a **breaking change**, but these parameters weren’t used outside of tests anyway.
 * Simplify `Deserializer` type, by removing the `dependentNodes` parameter: (only) pass an appropriate instance of `IdMapping` instead.
   *Note* that this is a **breaking change**, but either parameter is optional and carries the same information, so this should avoid confusion and misuse.
+* Add a `Forest` class that encapsulates a “forest” of partitions, together with their ID mapping, a factory, a deserializer – also deserializing into the forest –, and methods to apply deltas.
+    * Add a `ObservableForest` class that is Mobx-observable.
 
 
 ## 0.7.2
