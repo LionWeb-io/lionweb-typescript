@@ -15,6 +15,7 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import { Concept } from "@lionweb/core"
 import { LionWebClient } from "@lionweb/delta-protocol-client"
 import { ansi, ClientReceivedMessage, ISemanticLogItem } from "@lionweb/delta-protocol-common"
 import { LionWebId } from "@lionweb/json"
@@ -74,7 +75,7 @@ export const recognizedTasks: Record<string, boolean> = {
 const testLanguageBase = TestLanguageBase.INSTANCE
 
 
-export const taskExecutor = (lionWebClient: LionWebClient, semanticLogItems: ISemanticLogItem[]) => {
+export const taskExecutor = (lionWebClient: LionWebClient, partitionConcept: Concept, semanticLogItems: ISemanticLogItem[]) => {
 
     const numberOfReceivedMessages = () =>
         semanticLogItems.filter((item) => item instanceof ClientReceivedMessage).length
@@ -217,7 +218,7 @@ export const taskExecutor = (lionWebClient: LionWebClient, semanticLogItems: ISe
                 linkTestConcept().addContainment_1_nAtIndex(lastOfArray(linkTestConcept().containment_0_n), 1)
                 return waitForReceivedMessages(1)
             case "AddPartition":
-                lionWebClient.addPartition(lionWebClient.forest.createNode(testLanguageBase.DataTypeTestConcept, "partition"))
+                lionWebClient.addPartition(lionWebClient.forest.createNode(partitionConcept, "partition"))
                 return waitForReceivedMessages(1)
 
             default: {

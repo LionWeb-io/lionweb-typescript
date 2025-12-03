@@ -108,7 +108,7 @@ await runAsApp(async () => {
 
     console.log(clientInfo(`LionWeb delta protocol client (with ID=${clientId}) connecting to repository on ${url} - press Ctrl+C to terminate`))
 
-    const executeTask = taskExecutor(lionWebClient, semanticLogItems)
+    const executeTask = taskExecutor(lionWebClient, partitionConcepts[partitionConcept], semanticLogItems)
 
     let querySequenceNumber = 0
     const queryId = () => `query-${++querySequenceNumber}`
