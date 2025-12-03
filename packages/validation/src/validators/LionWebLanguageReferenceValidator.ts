@@ -162,7 +162,7 @@ export class LionWebLanguageReferenceValidator {
                             // console.log("validateProperty: 1")
                             break
                         }
-                        const propType =  this.registry.findNode(propTypeReference.targets[0].reference)
+                        const propType = propTypeReference.targets[0].reference === null ? undefined : this.registry.findNode(propTypeReference.targets[0].reference)
                         if (propType === undefined) {
                             // console.log("validateProperty: 1.4 for " + prop.value + " ==> " + propTypeReference.targets[0].reference)
                             break

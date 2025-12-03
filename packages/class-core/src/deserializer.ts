@@ -141,7 +141,16 @@ function nodeBaseDeserializerWithIdMapping(languageBasesOrConfiguration: ILangua
                 if (feature === undefined) {
                     problemsHandler.reportProblem(`can't deserialize value for feature with key ${referenceMetaPointer.key} in ${languageMessage}: feature not found on classifier ${classifierMetaPointer.key} in language (${classifierMetaPointer.language}, ${classifierMetaPointer.version}) - skipping`);
                 } else if (feature instanceof Reference) {
-                    nodesToInstall.push([node, feature, targets.map(({reference}) => reference)]);
+                    nodesToInstall.push(
+                        [
+                            node,
+                            feature,
+                            targets
+                                .map(({reference}) => reference)
+                                .filter((reference) => reference !== null)
+                                    // TODO  for LionWeb version 2024.1 and beyond, if reference === null, and resolveInfo has the built-in prefix, resolve to built-ins
+                        ]
+                    );
                 } else {
                     problemsHandler.reportProblem(`can't deserialize value for feature with key ${referenceMetaPointer.key} in ${languageMessage}: feature is not a reference - skipping`);
                 }

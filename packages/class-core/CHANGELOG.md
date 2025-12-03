@@ -13,6 +13,7 @@
   *Note* that this is a **breaking change**, but either parameter is optional and carries the same information, so this should avoid confusion and misuse.
 * Add a `Forest` class that encapsulates a “forest” of partitions, together with their ID mapping, a factory, a deserializer – also deserializing into the forest –, and methods to apply deltas.
     * Add a `ObservableForest` class that is Mobx-observable.
+* Propagate `reference` field of `LionWebJsonReferenceTarget` type now being `null`able.
 
 
 ## 0.7.2

@@ -1,9 +1,10 @@
 # Changelog
 
-## 0.8.0
+## 0.8.0 — not yet released
 
 * New way to define the structure of the LionWeb JSON format.
-* Added delta format definitions.
+* Add delta format definitions.
+* Propagate `reference` field of `LionWebJsonReferenceTarget` type now being `null`able.
 
 
 ## 0.7.2
