@@ -1,6 +1,6 @@
 {
     "name": "@lionweb/delta-protocol-low-level-client-browser",
-    "version": "0.8.0-beta.1",
+    "version": "0.8.0-beta.2",
     "description": "Implementation of a low-level client for a delta protocol client using the WebSocket protocol, relying on the WebSocket browser API",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -27,8 +27,8 @@
         "release": "npm publish"
     },
     "dependencies": {
-        "@lionweb/delta-protocol-common": "0.8.0-beta.1",
-        "@lionweb/delta-protocol-client": "0.8.0-beta.1",
-        "@lionweb/ts-utils": "0.8.0-beta.1"
+        "@lionweb/delta-protocol-common": "0.8.0-beta.2",
+        "@lionweb/delta-protocol-client": "0.8.0-beta.2",
+        "@lionweb/ts-utils": "0.8.0-beta.2"
     }
 }
