@@ -42,6 +42,7 @@ const boldRedIf = (apply: boolean, text: string) =>
 const protocolLogOptionPrefix = "--protocol-log="
 const protocolLogPathIndex = argv.findIndex((argument) => argument.startsWith(protocolLogOptionPrefix))
 // arguments without "node" (index=0), "dist/cli-client.js" (index=1), and `${protocolLogOptionPrefix}=<path>` (optional)
+const protocolLogPath = protocolLogPathIndex > -1 ? argv[protocolLogPathIndex].substring(protocolLogOptionPrefix.length) : undefined
 const trueArguments = argv.filter((_, index) => !(index === 0 || index === 1 || index === protocolLogPathIndex))
 
 if (trueArguments.length < 3) {
@@ -80,6 +81,15 @@ await runAsApp(async () => {
     const [storingLogger, semanticLogItems] = semanticLogItemStorer()
     const logItems: LowLevelClientLogItem<unknown, unknown>[] = []
 
+    const tryToWriteProtocolLog = () => {
+        if (protocolLogPath) {
+            writeJsonAsFileSync(protocolLogPath, logItems)
+            console.log(clientInfo(`wrote protocol log to: ${protocolLogPath}`))
+        } else {
+            console.log(genericError(`can't write protocol log: no path configured`))
+        }
+    }
+
     const lionWebClient = await LionWebClient.create({
         repositoryId: "myRepo",
         clientId,
@@ -95,10 +105,14 @@ await runAsApp(async () => {
             )
     })
 
-    console.log(clientInfo(`LionWeb delta protocol client connected to repository on ${url} - press Ctrl+C to terminate`))
+    console.log(clientInfo(`LionWeb delta protocol client (with ID=${clientId}) connecting to repository on ${url} - press Ctrl+C to terminate`))
     console.log(clientInfo(`\tCLI call: <magic incantation> ${port} ${clientId} ${tasks.join(",")}`))
 
-    const executeTask = taskExecutor(lionWebClient, semanticLogItems)
+    if (protocolLogPath) {
+        console.log(clientInfo(`\tprotocol messages to be logged to: ${protocolLogPath}`))
+    }
+
+    const executeTask = taskExecutor(lionWebClient, semanticLogItems, tryToWriteProtocolLog)
 
     let querySequenceNumber = 0
     const queryId = () => `query-${++querySequenceNumber}`
@@ -107,11 +121,10 @@ await runAsApp(async () => {
         await executeTask(task, queryId())
     }
 
-    if (protocolLogPathIndex > -1) {
-        writeJsonAsFileSync(argv[protocolLogPathIndex].substring(protocolLogOptionPrefix.length), logItems)
-    }
+    tryToWriteProtocolLog()
 
     return () => {
+        tryToWriteProtocolLog()
         return lionWebClient.disconnect()
     }
 })
