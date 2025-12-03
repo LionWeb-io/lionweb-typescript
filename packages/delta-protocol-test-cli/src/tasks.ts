@@ -15,7 +15,6 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { INodeBase } from "@lionweb/class-core"
 import { LionWebClient } from "@lionweb/delta-protocol-client"
 import { ansi, ClientReceivedMessage, ISemanticLogItem } from "@lionweb/delta-protocol-common"
 import { LionWebId } from "@lionweb/json"
@@ -75,7 +74,7 @@ export const recognizedTasks: Record<string, boolean> = {
 const testLanguageBase = TestLanguageBase.INSTANCE
 
 
-export const taskExecutor = (lionWebClient: LionWebClient, partition: INodeBase, semanticLogItems: ISemanticLogItem[]) => {
+export const taskExecutor = (lionWebClient: LionWebClient, semanticLogItems: ISemanticLogItem[]) => {
 
     const numberOfReceivedMessages = () =>
         semanticLogItems.filter((item) => item instanceof ClientReceivedMessage).length
@@ -91,9 +90,11 @@ export const taskExecutor = (lionWebClient: LionWebClient, partition: INodeBase,
     const annotation = (id: LionWebId) =>
         lionWebClient.forest.createNode(testLanguageBase.TestAnnotation, id) as TestAnnotation
 
+    const thePartition = () => lionWebClient.forest.partitions[0]
+
     const linkTestConcept = (id?: LionWebId) =>
         id === undefined
-            ? partition as LinkTestConcept
+            ? thePartition() as LinkTestConcept
             : lionWebClient.forest.createNode(testLanguageBase.LinkTestConcept, id) as LinkTestConcept
 
     return async (task: keyof typeof recognizedTasks, queryId: string) => {
@@ -113,13 +114,13 @@ export const taskExecutor = (lionWebClient: LionWebClient, partition: INodeBase,
                 return waitForReceivedMessages(1)
             }
             case "AddStringValue_0_1":
-                (partition as DataTypeTestConcept).stringValue_0_1 = "new property"
+                (thePartition() as DataTypeTestConcept).stringValue_0_1 = "new property"
                 return waitForReceivedMessages(1)
             case "SetStringValue_0_1":
-                (partition as DataTypeTestConcept).stringValue_0_1 = "changed property"
+                (thePartition() as DataTypeTestConcept).stringValue_0_1 = "changed property"
                 return waitForReceivedMessages(1)
             case "DeleteStringValue_0_1":
-                (partition as DataTypeTestConcept).stringValue_0_1 = undefined
+                (thePartition() as DataTypeTestConcept).stringValue_0_1 = undefined
                 return waitForReceivedMessages(1)
             case "AddName_Containment_0_1":
                 linkTestConcept().containment_0_1!.name = "my name"
@@ -216,7 +217,7 @@ export const taskExecutor = (lionWebClient: LionWebClient, partition: INodeBase,
                 linkTestConcept().addContainment_1_nAtIndex(lastOfArray(linkTestConcept().containment_0_n), 1)
                 return waitForReceivedMessages(1)
             case "AddPartition":
-                lionWebClient.addPartition(linkTestConcept("partition"))
+                lionWebClient.addPartition(lionWebClient.forest.createNode(testLanguageBase.DataTypeTestConcept, "partition"))
                 return waitForReceivedMessages(1)
 
             default: {
