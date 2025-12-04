@@ -94,7 +94,8 @@ await runAsApp(async () => {
             )
     })
 
-    console.log(clientInfo(`LionWeb delta protocol client (with ID=${clientId}) connecting to repository on ${url} - press Ctrl+C to terminate`))
+    console.log(clientInfo(`LionWeb delta protocol client connected to repository on ${url} - press Ctrl+C to terminate`))
+    console.log(clientInfo(`\tCLI call: <magic incantation> ${port} ${clientId} ${tasks.join(",")}`))
 
     const executeTask = taskExecutor(lionWebClient, semanticLogItems)
 
