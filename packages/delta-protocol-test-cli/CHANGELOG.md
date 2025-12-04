@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.8.0 - not yet released
+
+* Remove the `<partition concept>` argument.
+
+
 ## 0.7.2
 
 * Add the "`SubscribeToChangingPartitions`" task.

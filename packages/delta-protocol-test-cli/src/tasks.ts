@@ -15,12 +15,17 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { Concept } from "@lionweb/core"
 import { LionWebClient } from "@lionweb/delta-protocol-client"
 import { ansi, ClientReceivedMessage, ISemanticLogItem } from "@lionweb/delta-protocol-common"
 import { LionWebId } from "@lionweb/json"
 import { lastOfArray } from "@lionweb/ts-utils"
-import { DataTypeTestConcept, LinkTestConcept, TestAnnotation, TestLanguageBase } from "@lionweb/class-core-test-language"
+import {
+    DataTypeTestConcept,
+    LinkTestConcept,
+    TestAnnotation,
+    TestLanguageBase,
+    TestPartition
+} from "@lionweb/class-core-test-language"
 
 import { waitUntil } from "./async.js"
 const { clientInfo, genericWarning } = ansi
@@ -75,7 +80,7 @@ export const recognizedTasks: Record<string, boolean> = {
 const testLanguageBase = TestLanguageBase.INSTANCE
 
 
-export const taskExecutor = (lionWebClient: LionWebClient, partitionConcept: Concept, semanticLogItems: ISemanticLogItem[]) => {
+export const taskExecutor = (lionWebClient: LionWebClient, semanticLogItems: ISemanticLogItem[]) => {
 
     const numberOfReceivedMessages = () =>
         semanticLogItems.filter((item) => item instanceof ClientReceivedMessage).length
@@ -91,12 +96,23 @@ export const taskExecutor = (lionWebClient: LionWebClient, partitionConcept: Con
     const annotation = (id: LionWebId) =>
         lionWebClient.forest.createNode(testLanguageBase.TestAnnotation, id) as TestAnnotation
 
-    const thePartition = () => lionWebClient.forest.partitions[0]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const as = <T>(obj: object, classConstructor: new (...args: any[]) => T, customErrorMessage?: string) => {
+        if (obj instanceof classConstructor) {
+            return obj as T
+        }
+        throw new Error(customErrorMessage ?? `object is not of class ${classConstructor.name}`)
+    }
+
+    const thePartition = () =>
+        as(lionWebClient.forest.partitions[0], TestPartition, `partition at index 0 in forest is not a ${testLanguageBase.TestPartition.name}`)
 
     const linkTestConcept = (id?: LionWebId) =>
         id === undefined
-            ? thePartition() as LinkTestConcept
+            ? thePartition().links[0]
             : lionWebClient.forest.createNode(testLanguageBase.LinkTestConcept, id) as LinkTestConcept
+
+    const dataTypeTestConcept = () => thePartition().data!
 
     return async (task: keyof typeof recognizedTasks, queryId: string) => {
         console.log(clientInfo(`client "${lionWebClient.clientId}" is executing task "${task}"`))
@@ -115,13 +131,13 @@ export const taskExecutor = (lionWebClient: LionWebClient, partitionConcept: Con
                 return waitForReceivedMessages(1)
             }
             case "AddStringValue_0_1":
-                (thePartition() as DataTypeTestConcept).stringValue_0_1 = "new property"
+                dataTypeTestConcept().stringValue_0_1 = "new property"
                 return waitForReceivedMessages(1)
             case "SetStringValue_0_1":
-                (thePartition() as DataTypeTestConcept).stringValue_0_1 = "changed property"
+                dataTypeTestConcept().stringValue_0_1 = "changed property"
                 return waitForReceivedMessages(1)
             case "DeleteStringValue_0_1":
-                (thePartition() as DataTypeTestConcept).stringValue_0_1 = undefined
+                dataTypeTestConcept().stringValue_0_1 = undefined
                 return waitForReceivedMessages(1)
             case "AddName_Containment_0_1":
                 linkTestConcept().containment_0_1!.name = "my name"
@@ -217,9 +233,13 @@ export const taskExecutor = (lionWebClient: LionWebClient, partitionConcept: Con
             case "MoveChildFromOtherContainmentInSameParent_Multiple":
                 linkTestConcept().addContainment_1_nAtIndex(lastOfArray(linkTestConcept().containment_0_n), 1)
                 return waitForReceivedMessages(1)
-            case "AddPartition":
-                lionWebClient.addPartition(lionWebClient.forest.createNode(partitionConcept, "partition"))
+            case "AddPartition": {
+                const partition = lionWebClient.forest.createNode(testLanguageBase.TestPartition, "partition") as TestPartition
+                partition.data = lionWebClient.forest.createNode(testLanguageBase.DataTypeTestConcept, "data") as DataTypeTestConcept
+                partition.addLinks(lionWebClient.forest.createNode(testLanguageBase.LinkTestConcept, "link") as LinkTestConcept)
+                lionWebClient.addPartition(partition)
                 return waitForReceivedMessages(1)
+            }
 
             default: {
                 // (shouldn't happen because of upfront validation of tasks)
