@@ -31,8 +31,8 @@ const testLanguageBase = TestLanguageBase.INSTANCE
 describe("[1..n] containment", () => {
 
     it("getting an unset [1..n] containment", () => {
-        const [receiveDeltas, deltas] = collectingDeltaReceiver();
-        const node = LinkTestConcept.create("node", receiveDeltas);
+        const [receiveDelta, deltas] = collectingDeltaReceiver();
+        const node = LinkTestConcept.create("node", receiveDelta);
 
         // pre-check:
         equal(deltas.length, 0);
@@ -47,9 +47,9 @@ describe("[1..n] containment", () => {
     });
 
     it("adding to a [1..n] containment", () => {
-        const [receiveDeltas, deltas] = collectingDeltaReceiver();
-        const child1 = LinkTestConcept.create("child1", receiveDeltas);
-        const parent = attachedLinkTestConcept("parent", receiveDeltas);
+        const [receiveDelta, deltas] = collectingDeltaReceiver();
+        const child1 = LinkTestConcept.create("child1", receiveDelta);
+        const parent = attachedLinkTestConcept("parent", receiveDelta);
 
         // pre-check:
         equal(deltas.length, 1);
@@ -66,7 +66,7 @@ describe("[1..n] containment", () => {
         );
 
         // action+check:
-        const child2 = LinkTestConcept.create("child2", receiveDeltas);
+        const child2 = LinkTestConcept.create("child2", receiveDelta);
         parent.addContainment_1_n(child2);
         deepEqual(parent.containment_1_n, [child1, child2]);
         equal(child2.parent, parent);
@@ -79,9 +79,9 @@ describe("[1..n] containment", () => {
     });
 
     it("unsetting a [1..n] containment", () => {
-        const [receiveDeltas, deltas] = collectingDeltaReceiver();
-        const child = LinkTestConcept.create("child", receiveDeltas);
-        const parent = attachedLinkTestConcept("parent", receiveDeltas);
+        const [receiveDelta, deltas] = collectingDeltaReceiver();
+        const child = LinkTestConcept.create("child", receiveDelta);
+        const parent = attachedLinkTestConcept("parent", receiveDelta);
 
         // pre-check:
         parent.addContainment_1_n(child);
@@ -100,11 +100,11 @@ describe("[1..n] containment", () => {
     });
 
     it("remove a target", () => {
-        const [receiveDeltas, deltas] = collectingDeltaReceiver();
-        const child1 = LinkTestConcept.create("child1", receiveDeltas);
-        const child2 = LinkTestConcept.create("child2", receiveDeltas);
-        const child3 = LinkTestConcept.create("child3", receiveDeltas);
-        const parent = attachedLinkTestConcept("parent", receiveDeltas);
+        const [receiveDelta, deltas] = collectingDeltaReceiver();
+        const child1 = LinkTestConcept.create("child1", receiveDelta);
+        const child2 = LinkTestConcept.create("child2", receiveDelta);
+        const child3 = LinkTestConcept.create("child3", receiveDelta);
+        const parent = attachedLinkTestConcept("parent", receiveDelta);
 
         // pre-check:
         parent.addContainment_1_n(child1);
@@ -139,9 +139,9 @@ describe("[1..n] containment", () => {
 
 
     it("trying to remove a target that wasn't in there", () => {
-        const [receiveDeltas, deltas] = collectingDeltaReceiver();
-        const child1 = LinkTestConcept.create("child1", receiveDeltas);
-        const parent = attachedLinkTestConcept("parent", receiveDeltas);
+        const [receiveDelta, deltas] = collectingDeltaReceiver();
+        const child1 = LinkTestConcept.create("child1", receiveDelta);
+        const parent = attachedLinkTestConcept("parent", receiveDelta);
 
         // pre-check:
         parent.addContainment_1_n(child1);
@@ -149,7 +149,7 @@ describe("[1..n] containment", () => {
         equal(child1.containment, testLanguageBase.LinkTestConcept_containment_1_n);
         equal(deltas.length, 2);
 
-        const child2 = LinkTestConcept.create("child2", receiveDeltas);
+        const child2 = LinkTestConcept.create("child2", receiveDelta);
 
         // action+check:
         parent.removeContainment_1_n(child2);

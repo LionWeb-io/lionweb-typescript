@@ -26,8 +26,8 @@ const testLanguageBase = TestLanguageBase.INSTANCE
 describe("[1..n] reference", () => {
 
     it("getting an unset [1..n] reference", () => {
-        const [receiveDeltas, deltas] = collectingDeltaReceiver();
-        const node = LinkTestConcept.create("node", receiveDeltas);
+        const [receiveDelta, deltas] = collectingDeltaReceiver();
+        const node = LinkTestConcept.create("node", receiveDelta);
 
         // pre-check:
         equal(deltas.length, 0);
@@ -43,9 +43,9 @@ describe("[1..n] reference", () => {
     });
 
     it("adding to a [1..n] reference", () => {
-        const [receiveDeltas, deltas] = collectingDeltaReceiver();
-        const dst1 = LinkTestConcept.create("dst1", receiveDeltas);
-        const src = attachedLinkTestConcept("src", receiveDeltas);
+        const [receiveDelta, deltas] = collectingDeltaReceiver();
+        const dst1 = LinkTestConcept.create("dst1", receiveDelta);
+        const src = attachedLinkTestConcept("src", receiveDelta);
 
         // pre-check:
         equal(deltas.length, 1);
@@ -61,7 +61,7 @@ describe("[1..n] reference", () => {
         );
 
         // action+check:
-        const dst2 = LinkTestConcept.create("dst2", receiveDeltas);
+        const dst2 = LinkTestConcept.create("dst2", receiveDelta);
         src.addReference_1_n(dst2);
         deepEqual(src.reference_1_n, [dst1, dst2]);
         equal(dst2.parent, undefined);
@@ -73,9 +73,9 @@ describe("[1..n] reference", () => {
     });
 
     it("unsetting a [1..n] reference", () => {
-        const [receiveDeltas, deltas] = collectingDeltaReceiver();
-        const dst = LinkTestConcept.create("dst", receiveDeltas);
-        const src = attachedLinkTestConcept("src", receiveDeltas);
+        const [receiveDelta, deltas] = collectingDeltaReceiver();
+        const dst = LinkTestConcept.create("dst", receiveDelta);
+        const src = attachedLinkTestConcept("src", receiveDelta);
 
         // pre-check:
         src.addReference_1_n(dst);
@@ -93,11 +93,11 @@ describe("[1..n] reference", () => {
     });
 
     it("remove a target", () => {
-        const [receiveDeltas, deltas] = collectingDeltaReceiver();
-        const dst1 = LinkTestConcept.create("dst1", receiveDeltas);
-        const dst2 = LinkTestConcept.create("dst2", receiveDeltas);
-        const dst3 = LinkTestConcept.create("dst3", receiveDeltas);
-        const src = attachedLinkTestConcept("src", receiveDeltas);
+        const [receiveDelta, deltas] = collectingDeltaReceiver();
+        const dst1 = LinkTestConcept.create("dst1", receiveDelta);
+        const dst2 = LinkTestConcept.create("dst2", receiveDelta);
+        const dst3 = LinkTestConcept.create("dst3", receiveDelta);
+        const src = attachedLinkTestConcept("src", receiveDelta);
 
         // pre-check:
         src.addReference_1_n(dst1);
@@ -119,16 +119,16 @@ describe("[1..n] reference", () => {
     });
 
     it("trying to remove a target that wasn't in there", () => {
-        const [receiveDeltas, deltas] = collectingDeltaReceiver();
-        const dst1 = LinkTestConcept.create("dst1", receiveDeltas);
-        const src = attachedLinkTestConcept("src", receiveDeltas);
+        const [receiveDelta, deltas] = collectingDeltaReceiver();
+        const dst1 = LinkTestConcept.create("dst1", receiveDelta);
+        const src = attachedLinkTestConcept("src", receiveDelta);
 
         // pre-check:
         src.addReference_1_n(dst1);
         equal(dst1.parent, undefined);
         equal(deltas.length, 2);
 
-        const dst2 = LinkTestConcept.create("dst2", receiveDeltas);
+        const dst2 = LinkTestConcept.create("dst2", receiveDelta);
 
         // action+check:
         src.removeReference_1_n(dst2);

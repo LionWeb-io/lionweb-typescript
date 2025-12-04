@@ -15,10 +15,11 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { assert } from "chai"
-import { IDelta, serializeDelta } from "@lionweb/class-core"
+import { IDelta } from "@lionweb/class-core"
 
+import { assert } from "chai"
 export const { deepEqual, equal, fail, notEqual, sameMembers, throws } = assert
+
 
 export const isFalse = (value: unknown, message?: string): void =>
     assert.isFalse(value, message);
@@ -29,11 +30,16 @@ export const isTrue = (value: unknown, message?: string): void =>
 export const isUndefined = (value: unknown, message?: string): void =>
     assert.isUndefined(value, message);
 
-export const latestDeltaAsserter = (deltas: IDelta[]) => {
+
+/**
+ * @return a `assertDeltaEmitted` function that asserts that one delta has been emitted since the previous call to `assertDeltaEmitted`,
+ * or since the call to `emittedDeltaAsserter` if there’s no previous call, and that it deep-equals the given `expectedDelta`.
+ */
+export const emittedDeltaAsserter = (deltas: IDelta[]) => {
     let numberOfExpectedDeltas = deltas.length;
     return (expectedDelta: IDelta) => {
         equal(deltas.length, ++numberOfExpectedDeltas, `number of expected deltas`);
-        deepEqual(serializeDelta(deltas[numberOfExpectedDeltas - 1]), serializeDelta(expectedDelta));
+        deepEqual(deltas[numberOfExpectedDeltas - 1], expectedDelta);
     }
 }
 

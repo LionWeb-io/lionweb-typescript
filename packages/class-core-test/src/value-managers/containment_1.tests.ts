@@ -37,8 +37,8 @@ const testLanguageBase = TestLanguageBase.INSTANCE
 describe("read access to a [1] containment", () => {
 
     it("getting an unset required containment throws", () => {
-        const [receiveDeltas, deltas] = collectingDeltaReceiver();
-        const node = LinkTestConcept.create("node", receiveDeltas);
+        const [receiveDelta, deltas] = collectingDeltaReceiver();
+        const node = LinkTestConcept.create("node", receiveDelta);
 
         // pre-check:
         equal(deltas.length, 0);
@@ -58,9 +58,9 @@ describe("read access to a [1] containment", () => {
 describe("write access to a [1] containment through .set", () => {
 
     it("add an unattached child (ChildAddedDelta)", () => {
-        const [receiveDeltas, deltas] = collectingDeltaReceiver();
-        const parent = attachedLinkTestConcept("parent", receiveDeltas);
-        const child = LinkTestConcept.create("child", receiveDeltas);
+        const [receiveDelta, deltas] = collectingDeltaReceiver();
+        const parent = attachedLinkTestConcept("parent", receiveDelta);
+        const child = LinkTestConcept.create("child", receiveDelta);
 
         // pre-check:
         equal(deltas.length, 1);

@@ -32,9 +32,9 @@ import { attachedLinkTestConcept } from "./tests-helpers.js"
 describe("annotations", () => {
 
     it("getting annotations", () => {
-        const [receiveDeltas, deltas] = collectingDeltaReceiver()
-        const ltc = LinkTestConcept.create("ltc", receiveDeltas)
-        TestAnnotation.create("anno", receiveDeltas)
+        const [receiveDelta, deltas] = collectingDeltaReceiver()
+        const ltc = LinkTestConcept.create("ltc", receiveDelta)
+        TestAnnotation.create("anno", receiveDelta)
         equal(deltas.length, 0)
         deepEqual(ltc.annotations, [])
     })
@@ -82,10 +82,10 @@ describe("annotations", () => {
 
     it("inserting an annotation at a specific index", () => {
         // arrange:
-        const [receiveDeltas, deltas] = collectingDeltaReceiver()
-        const ltc = attachedLinkTestConcept("ltc", receiveDeltas)
-        const annotation0 = TestAnnotation.create("annotation0", receiveDeltas)
-        const annotation1 = TestAnnotation.create("annotation1", receiveDeltas)
+        const [receiveDelta, deltas] = collectingDeltaReceiver()
+        const ltc = attachedLinkTestConcept("ltc", receiveDelta)
+        const annotation0 = TestAnnotation.create("annotation0", receiveDelta)
+        const annotation1 = TestAnnotation.create("annotation1", receiveDelta)
         ltc.addAnnotation(annotation0)
         ltc.addAnnotation(annotation1)
 
@@ -94,7 +94,7 @@ describe("annotations", () => {
         equal(deltas.length, 3)
 
         // action:
-        const annotation2 = TestAnnotation.create("annotation2", receiveDeltas)
+        const annotation2 = TestAnnotation.create("annotation2", receiveDelta)
         ltc.insertAnnotationAtIndex(annotation2, 1)
 
         // assert:
@@ -107,9 +107,9 @@ describe("annotations", () => {
 
     it("inserting an annotation at a wrong index", () => {
         // arrange:
-        const [receiveDeltas, deltas] = collectingDeltaReceiver()
-        const ltc = attachedLinkTestConcept("ltc", receiveDeltas)
-        const annotation = TestAnnotation.create("annotation", receiveDeltas)
+        const [receiveDelta, deltas] = collectingDeltaReceiver()
+        const ltc = attachedLinkTestConcept("ltc", receiveDelta)
+        const annotation = TestAnnotation.create("annotation", receiveDelta)
 
         // pre-check:
         deepEqual(ltc.annotations, [])
@@ -128,11 +128,11 @@ describe("annotations", () => {
 
     it("moving an annotation between parents", () => {
         // arrange:
-        const [receiveDeltas, deltas] = collectingDeltaReceiver()
-        const srcLtc = attachedLinkTestConcept("srcLtc", receiveDeltas)
-        const annotation = TestAnnotation.create("annotation", receiveDeltas)
+        const [receiveDelta, deltas] = collectingDeltaReceiver()
+        const srcLtc = attachedLinkTestConcept("srcLtc", receiveDelta)
+        const annotation = TestAnnotation.create("annotation", receiveDelta)
         srcLtc.addAnnotation(annotation)
-        const dstLtc = attachedLinkTestConcept("dstLtc", receiveDeltas)
+        const dstLtc = attachedLinkTestConcept("dstLtc", receiveDelta)
 
         // pre-check:
         deepEqual(srcLtc.annotations, [annotation])
@@ -155,11 +155,11 @@ describe("annotations", () => {
 
     it("replacing an annotation", () => {
         // arrange:
-        const [receiveDeltas, deltas] = collectingDeltaReceiver()
-        const ltc = attachedLinkTestConcept("ltc", receiveDeltas)
-        const annotation1 = TestAnnotation.create("annotation1", receiveDeltas)
+        const [receiveDelta, deltas] = collectingDeltaReceiver()
+        const ltc = attachedLinkTestConcept("ltc", receiveDelta)
+        const annotation1 = TestAnnotation.create("annotation1", receiveDelta)
         ltc.addAnnotation(annotation1)
-        const annotation2 = TestAnnotation.create("annotation2", receiveDeltas)
+        const annotation2 = TestAnnotation.create("annotation2", receiveDelta)
 
         // pre-check:
         equal(deltas.length, 2)
@@ -177,10 +177,10 @@ describe("annotations", () => {
 
     it("moving an annotation", () => {
         // arrange:
-        const [receiveDeltas, deltas] = collectingDeltaReceiver()
-        const ltc = attachedLinkTestConcept("ltc", receiveDeltas)
+        const [receiveDelta, deltas] = collectingDeltaReceiver()
+        const ltc = attachedLinkTestConcept("ltc", receiveDelta)
         const nAnnotations = 7
-        const annotations = [...new Array(nAnnotations).keys()].map(n => TestAnnotation.create(`annotation-${n}`, receiveDeltas))
+        const annotations = [...new Array(nAnnotations).keys()].map(n => TestAnnotation.create(`annotation-${n}`, receiveDelta))
         annotations.forEach(annotation => {
             ltc.addAnnotation(annotation)
         })

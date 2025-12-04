@@ -34,8 +34,8 @@ const testLanguageBase = TestLanguageBase.INSTANCE
 describe("[0..1] reference", () => {
 
     it("getting an unset [0..1] reference", () => {
-        const [receiveDeltas, deltas] = collectingDeltaReceiver();
-        const node = LinkTestConcept.create("node", receiveDeltas);
+        const [receiveDelta, deltas] = collectingDeltaReceiver();
+        const node = LinkTestConcept.create("node", receiveDelta);
 
         // pre-check:
         equal(deltas.length, 0);
@@ -45,9 +45,9 @@ describe("[0..1] reference", () => {
     });
 
     it("setting a [0..1] reference", () => {
-        const [receiveDeltas, deltas] = collectingDeltaReceiver();
-        const dst = LinkTestConcept.create("dst", receiveDeltas);
-        const src = attachedLinkTestConcept("src", receiveDeltas);
+        const [receiveDelta, deltas] = collectingDeltaReceiver();
+        const dst = LinkTestConcept.create("dst", receiveDelta);
+        const src = attachedLinkTestConcept("src", receiveDelta);
 
         // pre-check:
         equal(deltas.length, 1);
@@ -70,9 +70,9 @@ describe("[0..1] reference", () => {
     });
 
     it("unsetting a [0..1] reference", () => {
-        const [receiveDeltas, deltas] = collectingDeltaReceiver();
-        const dst = LinkTestConcept.create("dst", receiveDeltas);
-        const src = attachedLinkTestConcept("src", receiveDeltas);
+        const [receiveDelta, deltas] = collectingDeltaReceiver();
+        const dst = LinkTestConcept.create("dst", receiveDelta);
+        const src = attachedLinkTestConcept("src", receiveDelta);
 
         // pre-check:
         src.reference_0_1 = dst;
@@ -89,10 +89,10 @@ describe("[0..1] reference", () => {
     });
 
     it("setting a [0..1] reference, replacing an already set target", () => {
-        const [receiveDeltas, deltas] = collectingDeltaReceiver();
-        const dst1 = LinkTestConcept.create("dst1", receiveDeltas);
-        const dst2 = LinkTestConcept.create("dst2", receiveDeltas);
-        const src = attachedLinkTestConcept("src", receiveDeltas);
+        const [receiveDelta, deltas] = collectingDeltaReceiver();
+        const dst1 = LinkTestConcept.create("dst1", receiveDelta);
+        const dst2 = LinkTestConcept.create("dst2", receiveDelta);
+        const src = attachedLinkTestConcept("src", receiveDelta);
 
         // pre-check:
         src.reference_0_1 = dst1;

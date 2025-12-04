@@ -24,38 +24,38 @@ import {
 import { LionWebId } from "@lionweb/json"
 
 import { LinkTestConcept, TestLanguageBase, TestPartition } from "@lionweb/class-core-test-language"
-import { latestDeltaAsserter } from "../assertions.js"
+import { emittedDeltaAsserter } from "../assertions.js"
 
 const testLanguageBase = TestLanguageBase.INSTANCE
 
 describe("reference (mixed)", () => {
 
     it(`integration test: "ChangeReference"`, () => {
-        const [receiveDeltas, deltas] = collectingDeltaReceiver();
+        const [receiveDelta, deltas] = collectingDeltaReceiver();
         const newLTC = (id: LionWebId)=>
-            LinkTestConcept.create(id, receiveDeltas);
+            LinkTestConcept.create(id, receiveDelta);
         const topLTC = newLTC("a");
-        const partition = TestPartition.create("partition", receiveDeltas)
+        const partition = TestPartition.create("partition", receiveDelta)
         partition.addLinks(topLTC)
-        const assertLatestDelta = latestDeltaAsserter(deltas);
+        const assertDeltaEmitted = emittedDeltaAsserter(deltas);
 
         // 1] ~AddContainment_0_1: topLTC.containment_0_1 <- new LTC("containment_0_1")
         const containment_0_1 = newLTC("containment_0_1");
         topLTC.containment_0_1 = containment_0_1;
-        assertLatestDelta(new ChildAddedDelta(topLTC, testLanguageBase.LinkTestConcept_containment_0_1, 0, containment_0_1));
+        assertDeltaEmitted(new ChildAddedDelta(topLTC, testLanguageBase.LinkTestConcept_containment_0_1, 0, containment_0_1));
 
         // 2] ~AddContainment_1: topLTC.containment_1 <- new LTC("containment_1")
         const containment_1 = newLTC("containment_1");
         topLTC.containment_1 = containment_1;
-        assertLatestDelta(new ChildAddedDelta(topLTC, testLanguageBase.LinkTestConcept_containment_1, 0, containment_1));
+        assertDeltaEmitted(new ChildAddedDelta(topLTC, testLanguageBase.LinkTestConcept_containment_1, 0, containment_1));
 
         // 3] ~AddReference_0_1_to_Containment_0_1: topLTC.reference_0_1 = topLTC.containment_0_1
         topLTC.reference_0_1 = topLTC.containment_0_1;
-        assertLatestDelta(new ReferenceAddedDelta(topLTC, testLanguageBase.LinkTestConcept_reference_0_1, 0, containment_0_1));
+        assertDeltaEmitted(new ReferenceAddedDelta(topLTC, testLanguageBase.LinkTestConcept_reference_0_1, 0, containment_0_1));
 
         // 4] ~AddReference_0_1_to_Containment_1: topLTC.reference_0_1 = topLTC.containment_1
         topLTC.reference_0_1 = topLTC.containment_1;
-        assertLatestDelta(new ReferenceChangedDelta(topLTC, testLanguageBase.LinkTestConcept_reference_0_1, 0, containment_1, containment_0_1));
+        assertDeltaEmitted(new ReferenceChangedDelta(topLTC, testLanguageBase.LinkTestConcept_reference_0_1, 0, containment_1, containment_0_1));
     });
 
 });
