@@ -67,7 +67,7 @@ describe(`scenarios where TypeScript client is the only system under test (using
                         "nodes": [
                             {
                                 "id": "partition-A",
-                                "classifier": { "language": "TestLanguage", "version": "0", "key": "LinkTestConcept" },
+                                "classifier": { "language": "TestLanguage", "version": "0", "key": "TestPartition" },
                                 "properties": [],
                                 "containments": [],
                                 "references": [],
@@ -99,7 +99,7 @@ describe(`scenarios where TypeScript client is the only system under test (using
 
         expect(lionWebClient.participationId!).to.equal("participation-a")
 
-        const newPartition = lionWebClient.forest.createNode(testLanguageBase.LinkTestConcept, "partition-A")
+        const newPartition = lionWebClient.forest.createNode(testLanguageBase.TestPartition, "partition-A")
         lionWebClient.addPartition(newPartition)
         expect(lionWebClient.forest.partitions).to.deep.equal([newPartition])
 

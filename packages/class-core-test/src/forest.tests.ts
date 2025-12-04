@@ -55,7 +55,7 @@ describe("Forest", () => {
 
     it("adding a partition", () => {
         const [forest, deltas] = fixture()
-        const partition = forest.createNode(testLanguage.PartitionTestConcept, "ptc")
+        const partition = forest.createNode(testLanguage.TestPartition, "ptc")
         deepEqual(forest.partitions, [])
 
         forest.addPartition(partition)
@@ -67,13 +67,13 @@ describe("Forest", () => {
 
     it("adding a non-partition as a partition throws", () => {
         const [forest, deltas] = fixture()
-        const nonPartition = forest.createNode(testLanguage.NonPartitionTestConcept, "nptc")
+        const nonPartition = forest.createNode(testLanguage.LinkTestConcept, "nptc")
 
         throws(
             () => {
                 forest.addPartition(nonPartition)
             },
-            "node with ID nptc is a NonPartitionTestConcept which is not a <<partition>> concept"
+            "node with ID nptc is a LinkTestConcept which is not a <<partition>> concept"
         )
         equal(forest.idMapping.tryFromId("nptc"), undefined)
         deepEqual(deltas, [])
@@ -81,7 +81,7 @@ describe("Forest", () => {
 
     it("adding a partition again is idempotent", () => {
         const [forest, deltas] = fixture()
-        const partition = forest.createNode(testLanguage.PartitionTestConcept, "ptc")
+        const partition = forest.createNode(testLanguage.TestPartition, "ptc")
         forest.addPartition(partition)
         deepEqual(forest.partitions, [partition])
         deepEqual(deltas, [new PartitionAddedDelta(partition)])
@@ -95,7 +95,7 @@ describe("Forest", () => {
 
     it("deleting a partition", () => {
         const [forest, deltas] = fixture()
-        const partition = forest.createNode(testLanguage.PartitionTestConcept, "ptc")
+        const partition = forest.createNode(testLanguage.TestPartition, "ptc")
         forest.addPartition(partition)
         deepEqual(deltas, [new PartitionAddedDelta(partition)])
 
@@ -108,7 +108,7 @@ describe("Forest", () => {
 
     it("deleting a partition that wasn’t added throws", () => {
         const [forest, deltas] = fixture()
-        const partition = forest.createNode(testLanguage.PartitionTestConcept, "ptc")
+        const partition = forest.createNode(testLanguage.TestPartition, "ptc")
 
         throws(
             () => {
@@ -124,8 +124,8 @@ describe("Forest", () => {
 
     it("deserializing into forest", () => {
         const [forest, deltas] = fixture()
-        const partition = forest.createNode(testLanguage.PartitionTestConcept, "ptc")
-        const nonPartition = forest.createNode(testLanguage.NonPartitionTestConcept, "nptc")
+        const partition = forest.createNode(testLanguage.TestPartition, "ptc")
+        const nonPartition = forest.createNode(testLanguage.LinkTestConcept, "nptc")
         const serializationChunk = serializeNodeBases([partition, nonPartition])
 
         forest.deserializeInto(serializationChunk)
@@ -137,8 +137,8 @@ describe("Forest", () => {
 
     it("using deserializeWithIdMapping doesn’t change the forest’s state, and doesn’t emit deltas", () => {
         const [forest, deltas] = fixture()
-        const partition = forest.createNode(testLanguage.PartitionTestConcept, "ptc")
-        const nonPartition = forest.createNode(testLanguage.NonPartitionTestConcept, "nptc")
+        const partition = forest.createNode(testLanguage.TestPartition, "ptc")
+        const nonPartition = forest.createNode(testLanguage.LinkTestConcept, "nptc")
         const serializationChunk = serializeNodeBases([partition, nonPartition])
 
         const { roots } = forest.deserializeWithIdMapping(serializationChunk)
@@ -152,7 +152,7 @@ describe("Forest", () => {
     it("applying a partition added delta", () => {
         const [forest, deltas] = fixture()
         deepEqual(forest.partitions, [])
-        const partition = forest.createNode(testLanguage.PartitionTestConcept, "ptc")
+        const partition = forest.createNode(testLanguage.TestPartition, "ptc")
 
         forest.applyDelta(new PartitionAddedDelta(partition))
 
@@ -163,7 +163,7 @@ describe("Forest", () => {
 
     it("applying a partition deleted delta", () => {
         const [forest, deltas] = fixture()
-        const partition = forest.createNode(testLanguage.PartitionTestConcept, "ptc")
+        const partition = forest.createNode(testLanguage.TestPartition, "ptc")
         forest.addPartition(partition)
         deepEqual(forest.partitions, [partition])
         deepEqual(deltas, [new PartitionAddedDelta(partition)])
@@ -184,13 +184,13 @@ describe("ObservableForest", () => {
 
     it("emits observable changes", (done) => {
         const forest = new ObservableForest({ languageBases: [testLanguageBase] })
-        const linkTestConcept = forest.createNode(testLanguageBase.LinkTestConcept, "ltt")
+        const partition = forest.createNode(testLanguageBase.TestPartition, "partition")
         let sawChange = false
         when(() => forest.partitions.length > 0, () => {
             sawChange = true
         })
-        forest.addPartition(linkTestConcept)
-        equal(forest.partitions[0], linkTestConcept)
+        forest.addPartition(partition)
+        equal(forest.partitions[0], partition)
         isTrue(sawChange)
         done()
     })

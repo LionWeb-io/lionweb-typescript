@@ -22,26 +22,28 @@ import {
     serializeDelta
 } from "@lionweb/class-core"
 
-import { DataTypeTestConcept, TestEnumeration, TestLanguageBase } from "@lionweb/class-core-test-language"
+import { TestEnumeration, TestLanguageBase } from "@lionweb/class-core-test-language"
 import { deepEqual, equal } from "./assertions.js"
+import { attachedDataTypeTestConcept } from "./value-managers/tests-helpers.js"
 
 const testLanguageBase = TestLanguageBase.INSTANCE
+
 
 describe("serializing a delta", () => {
 
     it("works for changing an enumeration-typed property", () => {
         const [receiveDelta, deltas] = collectingDeltaReceiver();
-        const dttc = DataTypeTestConcept.create("dttc", receiveDelta);
+        const dttc = attachedDataTypeTestConcept("dttc", receiveDelta);
 
         // pre-check:
         equal(dttc.enumValue_0_1, undefined);
-        equal(deltas.length, 0);
+        equal(deltas.length, 1);
 
         // action+check:
         dttc.enumValue_0_1 = TestEnumeration.literal1;
-        equal(deltas.length, 1);
-        deepEqual(deltas[0], new PropertyAddedDelta(dttc, testLanguageBase.DataTypeTestConcept_enumValue_0_1, TestEnumeration.literal1));
-        const serializedDelta = serializeDelta(deltas[0]);
+        equal(deltas.length, 2);
+        deepEqual(deltas[1], new PropertyAddedDelta(dttc, testLanguageBase.DataTypeTestConcept_enumValue_0_1, TestEnumeration.literal1));
+        const serializedDelta = serializeDelta(deltas[1]);
         deepEqual(serializedDelta, {
             kind: "PropertyAdded",
             node: "dttc",

@@ -26,8 +26,11 @@ import {
 
 import { LinkTestConcept, TestAnnotation } from "@lionweb/class-core-test-language"
 import { deepEqual, equal, isUndefined, throws } from "../assertions.js"
+import { attachedLinkTestConcept } from "./tests-helpers.js"
+
 
 describe("annotations", () => {
+
     it("getting annotations", () => {
         const [receiveDeltas, deltas] = collectingDeltaReceiver()
         const ltc = LinkTestConcept.create("ltc", receiveDeltas)
@@ -38,12 +41,12 @@ describe("annotations", () => {
 
     it("adding an annotation", () => {
         // arrange:
-        const [receiveDeltas, deltas] = collectingDeltaReceiver()
-        const ltc = LinkTestConcept.create("ltc", receiveDeltas)
-        const annotation = TestAnnotation.create("anno", receiveDeltas)
+        const [receiveDelta, deltas] = collectingDeltaReceiver()
+        const ltc = attachedLinkTestConcept("ltc", receiveDelta)
+        const annotation = TestAnnotation.create("anno", receiveDelta)
 
         // pre-check:
-        equal(deltas.length, 0)
+        equal(deltas.length, 1)
 
         // action:
         ltc.addAnnotation(annotation)
@@ -52,20 +55,20 @@ describe("annotations", () => {
         deepEqual(ltc.annotations, [annotation])
         equal(annotation.parent, ltc)
         equal(annotation.containment, null)
-        equal(deltas.length, 1)
-        deepEqual(deltas[0], new AnnotationAddedDelta(ltc, 0, annotation))
+        equal(deltas.length, 2)
+        deepEqual(deltas[1], new AnnotationAddedDelta(ltc, 0, annotation))
     })
 
     it("removing an annotation", () => {
         // arrange:
-        const [receiveDeltas, deltas] = collectingDeltaReceiver()
-        const ltc = LinkTestConcept.create("ltc", receiveDeltas)
-        const annotation = TestAnnotation.create("annotation", receiveDeltas)
+        const [receiveDelta, deltas] = collectingDeltaReceiver()
+        const ltc = attachedLinkTestConcept("ltc", receiveDelta)
+        const annotation = TestAnnotation.create("annotation", receiveDelta)
         ltc.addAnnotation(annotation)
 
         // pre-check:
         deepEqual(ltc.annotations, [annotation])
-        equal(deltas.length, 1)
+        equal(deltas.length, 2)
 
         // action:
         ltc.removeAnnotation(annotation)
@@ -73,14 +76,14 @@ describe("annotations", () => {
         // assert:
         equal(ltc.annotations.length, 0)
         equal(annotation.parent, null)
-        equal(deltas.length, 2)
-        deepEqual(deltas[1], new AnnotationDeletedDelta(ltc, 0, annotation))
+        equal(deltas.length, 3)
+        deepEqual(deltas[2], new AnnotationDeletedDelta(ltc, 0, annotation))
     })
 
     it("inserting an annotation at a specific index", () => {
         // arrange:
         const [receiveDeltas, deltas] = collectingDeltaReceiver()
-        const ltc = LinkTestConcept.create("ltc", receiveDeltas)
+        const ltc = attachedLinkTestConcept("ltc", receiveDeltas)
         const annotation0 = TestAnnotation.create("annotation0", receiveDeltas)
         const annotation1 = TestAnnotation.create("annotation1", receiveDeltas)
         ltc.addAnnotation(annotation0)
@@ -88,7 +91,7 @@ describe("annotations", () => {
 
         // pre-check:
         deepEqual(ltc.annotations, [annotation0, annotation1])
-        equal(deltas.length, 2)
+        equal(deltas.length, 3)
 
         // action:
         const annotation2 = TestAnnotation.create("annotation2", receiveDeltas)
@@ -98,19 +101,19 @@ describe("annotations", () => {
         deepEqual(ltc.annotations, [annotation0, annotation2, annotation1])
         equal(annotation2.parent, ltc)
         equal(annotation2.containment, null)
-        equal(deltas.length, 3)
-        deepEqual(deltas[2], new AnnotationAddedDelta(ltc, 1, annotation2))
+        equal(deltas.length, 4)
+        deepEqual(deltas[3], new AnnotationAddedDelta(ltc, 1, annotation2))
     })
 
     it("inserting an annotation at a wrong index", () => {
         // arrange:
         const [receiveDeltas, deltas] = collectingDeltaReceiver()
-        const ltc = LinkTestConcept.create("ltc", receiveDeltas)
+        const ltc = attachedLinkTestConcept("ltc", receiveDeltas)
         const annotation = TestAnnotation.create("annotation", receiveDeltas)
 
         // pre-check:
         deepEqual(ltc.annotations, [])
-        equal(deltas.length, 0)
+        equal(deltas.length, 1)
 
         // assert:
         throws(() => {
@@ -126,17 +129,17 @@ describe("annotations", () => {
     it("moving an annotation between parents", () => {
         // arrange:
         const [receiveDeltas, deltas] = collectingDeltaReceiver()
-        const srcLtc = LinkTestConcept.create("srcLtc", receiveDeltas)
+        const srcLtc = attachedLinkTestConcept("srcLtc", receiveDeltas)
         const annotation = TestAnnotation.create("annotation", receiveDeltas)
         srcLtc.addAnnotation(annotation)
-        const dstLtc = LinkTestConcept.create("dstLtc", receiveDeltas)
+        const dstLtc = attachedLinkTestConcept("dstLtc", receiveDeltas)
 
         // pre-check:
         deepEqual(srcLtc.annotations, [annotation])
         equal(annotation.parent, srcLtc)
         equal(annotation.containment, null)
         deepEqual(dstLtc.annotations, [])
-        equal(deltas.length, 1)
+        equal(deltas.length, 3)
 
         // action:
         dstLtc.addAnnotation(annotation)
@@ -146,20 +149,20 @@ describe("annotations", () => {
         deepEqual(dstLtc.annotations, [annotation])
         equal(annotation.parent, dstLtc)
         equal(annotation.containment, null)
-        equal(deltas.length, 2)
-        deepEqual(deltas[1], new AnnotationMovedFromOtherParentDelta(srcLtc, 0, dstLtc, 0, annotation))
+        equal(deltas.length, 4)
+        deepEqual(deltas[3], new AnnotationMovedFromOtherParentDelta(srcLtc, 0, dstLtc, 0, annotation))
     })
 
     it("replacing an annotation", () => {
         // arrange:
         const [receiveDeltas, deltas] = collectingDeltaReceiver()
-        const ltc = LinkTestConcept.create("ltc", receiveDeltas)
+        const ltc = attachedLinkTestConcept("ltc", receiveDeltas)
         const annotation1 = TestAnnotation.create("annotation1", receiveDeltas)
         ltc.addAnnotation(annotation1)
         const annotation2 = TestAnnotation.create("annotation2", receiveDeltas)
 
         // pre-check:
-        equal(deltas.length, 1)
+        equal(deltas.length, 2)
 
         // action:
         ltc.replaceAnnotationAtIndex(annotation2, 0)
@@ -168,14 +171,14 @@ describe("annotations", () => {
         deepEqual(ltc.annotations, [annotation2])
         isUndefined(annotation1.parent)
         equal(annotation1.containment, null)
-        equal(deltas.length, 2)
-        deepEqual(deltas[1], new AnnotationReplacedDelta(ltc, 0, annotation1, annotation2))
+        equal(deltas.length, 3)
+        deepEqual(deltas[2], new AnnotationReplacedDelta(ltc, 0, annotation1, annotation2))
     })
 
     it("moving an annotation", () => {
         // arrange:
         const [receiveDeltas, deltas] = collectingDeltaReceiver()
-        const ltc = LinkTestConcept.create("ltc", receiveDeltas)
+        const ltc = attachedLinkTestConcept("ltc", receiveDeltas)
         const nAnnotations = 7
         const annotations = [...new Array(nAnnotations).keys()].map(n => TestAnnotation.create(`annotation-${n}`, receiveDeltas))
         annotations.forEach(annotation => {
@@ -183,7 +186,7 @@ describe("annotations", () => {
         })
 
         // pre-check:
-        equal(deltas.length, nAnnotations)
+        equal(deltas.length, nAnnotations + 1)
 
         // action:
         ltc.moveAnnotation(3, 5)
@@ -197,8 +200,9 @@ describe("annotations", () => {
             annotations[3],
             annotations[6]
         ])
-        equal(deltas.length, nAnnotations + 1)
+        equal(deltas.length, nAnnotations + 2)
         deepEqual(deltas[deltas.length - 1], new AnnotationMovedInSameParentDelta(ltc, 3, 5, annotations[3]))
     })
+
 })
 

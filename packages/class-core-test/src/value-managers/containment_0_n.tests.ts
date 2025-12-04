@@ -26,6 +26,7 @@ import {
 
 import { LinkTestConcept, TestLanguageBase } from "@lionweb/class-core-test-language"
 import { deepEqual, equal, latestDeltaAsserter, throws } from "../assertions.js"
+import { attachedLinkTestConcept } from "./tests-helpers.js"
 
 const testLanguageBase = TestLanguageBase.INSTANCE
 
@@ -44,12 +45,9 @@ describe("[0..n] containment", () => {
 
     it("adding to a [0..n] containment", () => {
         const [receiveDeltas, deltas] = collectingDeltaReceiver();
-        const assertLatestDelta = latestDeltaAsserter(deltas);
         const child1 = LinkTestConcept.create("child1", receiveDeltas);
-        const parent = LinkTestConcept.create("parent", receiveDeltas);
-
-        // pre-check:
-        equal(deltas.length, 0);
+        const parent = attachedLinkTestConcept("parent", receiveDeltas);
+        const assertLatestDelta = latestDeltaAsserter(deltas);
 
         // action+check:
         parent.addContainment_0_n(child1);
@@ -69,9 +67,9 @@ describe("[0..n] containment", () => {
 
     it("unsetting a [0..n] containment", () => {
         const [receiveDeltas, deltas] = collectingDeltaReceiver();
-        const assertLatestDelta = latestDeltaAsserter(deltas);
+        const parent = attachedLinkTestConcept("parent", receiveDeltas);
         const child = LinkTestConcept.create("child", receiveDeltas);
-        const parent = LinkTestConcept.create("parent", receiveDeltas);
+        const assertLatestDelta = latestDeltaAsserter(deltas);
 
         // pre-check:
         parent.addContainment_0_n(child);
@@ -87,11 +85,11 @@ describe("[0..n] containment", () => {
 
     it("remove a target", () => {
         const [receiveDeltas, deltas] = collectingDeltaReceiver();
-        const assertLatestDelta = latestDeltaAsserter(deltas);
         const child1 = LinkTestConcept.create("child1", receiveDeltas);
         const child2 = LinkTestConcept.create("child2", receiveDeltas);
         const child3 = LinkTestConcept.create("child3", receiveDeltas);
-        const parent = LinkTestConcept.create("parent", receiveDeltas);
+        const parent = attachedLinkTestConcept("parent", receiveDeltas);
+        const assertLatestDelta = latestDeltaAsserter(deltas);
 
         // pre-check:
         parent.addContainment_0_n(child1);
@@ -117,34 +115,33 @@ describe("[0..n] containment", () => {
 
     it("trying to remove a target that wasn't in there", () => {
         const [receiveDeltas, deltas] = collectingDeltaReceiver();
+        const parent = attachedLinkTestConcept("parent", receiveDeltas);
         const child1 = LinkTestConcept.create("child1", receiveDeltas);
-        const parent = LinkTestConcept.create("parent", receiveDeltas);
 
         // pre-check:
         parent.addContainment_0_n(child1);
         equal(child1.parent, parent);
         equal(child1.containment, testLanguageBase.LinkTestConcept_containment_0_n);
-        equal(deltas.length, 1);
+        equal(deltas.length, 2);
 
         const child2 = LinkTestConcept.create("child2", receiveDeltas);
 
         // action+check:
         parent.removeContainment_0_n(child2);
         equal(child2.parent, undefined);
-        equal(deltas.length, 1);
+        equal(deltas.length, 2);
         deepEqual(parent.containment_0_n, [child1]);
     });
 
     it("moving a child between parents ([0..1] -> [0..n])", () => {
         const [receiveDelta, deltas] = collectingDeltaReceiver();
-        const assertLatestDelta = latestDeltaAsserter(deltas);
         const child = LinkTestConcept.create("child", receiveDelta);
-        const srcParent = LinkTestConcept.create("srcParent", receiveDelta);
-        const dstParent = LinkTestConcept.create("dstParent", receiveDelta);
+        const srcParent = attachedLinkTestConcept("srcParent", receiveDelta);
+        const dstParent = attachedLinkTestConcept("dstParent", receiveDelta);
+        const assertLatestDelta = latestDeltaAsserter(deltas);
 
+        // setup+pre-check:
         srcParent.containment_0_1 = child;
-
-        // pre-check:
         equal(srcParent.containment_0_1, child);
         equal(child.parent, srcParent);
         equal(child.containment, testLanguageBase.LinkTestConcept_containment_0_1);
@@ -161,14 +158,13 @@ describe("[0..n] containment", () => {
 
     it("moving a child between parents ([0..n] -> [0..n])", () => {
         const [receiveDelta, deltas] = collectingDeltaReceiver();
-        const assertLatestDelta = latestDeltaAsserter(deltas);
         const child = LinkTestConcept.create("child", receiveDelta);
-        const srcParent = LinkTestConcept.create("srcParent", receiveDelta);
-        const dstParent = LinkTestConcept.create("dstParent", receiveDelta);
+        const srcParent = attachedLinkTestConcept("srcParent", receiveDelta);
+        const dstParent = attachedLinkTestConcept("dstParent", receiveDelta);
+        const assertLatestDelta = latestDeltaAsserter(deltas);
 
+        // setup+pre-check:
         srcParent.addContainment_0_n(child);
-
-        // pre-check:
         deepEqual(srcParent.containment_0_n, [child]);
         equal(child.parent, srcParent);
         equal(child.containment, testLanguageBase.LinkTestConcept_containment_0_n);
@@ -185,15 +181,13 @@ describe("[0..n] containment", () => {
 
     it("addAtIndex", () => {
         const [receiveDelta, deltas] = collectingDeltaReceiver();
-        const assertLatestDelta = latestDeltaAsserter(deltas);
-
-        const parent1 = LinkTestConcept.create("parent1", receiveDelta);
-        const parent2 = LinkTestConcept.create("parent2", receiveDelta);
+        const parent1 = attachedLinkTestConcept("parent1", receiveDelta);
+        const parent2 = attachedLinkTestConcept("parent2", receiveDelta);
         const child1 = LinkTestConcept.create("child1", receiveDelta);
         const child2 = LinkTestConcept.create("child2", receiveDelta);
 
         // pre-check:
-        equal(deltas.length, 0);
+        const assertLatestDelta = latestDeltaAsserter(deltas);
         equal(child1.parent, undefined);
         equal(child2.parent, undefined);
 

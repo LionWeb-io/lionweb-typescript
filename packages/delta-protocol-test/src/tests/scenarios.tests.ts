@@ -85,7 +85,7 @@ describe(`scenarios (${ansi.colorSchemeExplanationString})`, async function() {
 
         expect(lionWebClient.participationId!).to.equal("participation-a")
 
-        const newPartition = lionWebClient.forest.createNode(testLanguageBase.LinkTestConcept, "partition-A")
+        const newPartition = lionWebClient.forest.createNode(testLanguageBase.TestPartition, "partition-A")
         lionWebClient.addPartition(newPartition)
         expect(lionWebClient.forest.partitions).to.deep.equal([newPartition])
 
@@ -107,7 +107,7 @@ describe(`scenarios (${ansi.colorSchemeExplanationString})`, async function() {
             ],
             nodes: [{
                 id: "partition-A",
-                classifier: { language: "TestLanguage", version: "0", key: "LinkTestConcept" },
+                classifier: { language: "TestLanguage", version: "0", key: "TestPartition" },
                 properties: [],
                 containments: [],
                 references: [],

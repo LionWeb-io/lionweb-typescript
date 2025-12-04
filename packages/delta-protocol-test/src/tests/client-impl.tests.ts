@@ -87,7 +87,7 @@ describe("implementation of LionWeb client", async function() {
             )
         })
 
-        const partitionA = lionWebClient.forest.createNode(testLanguageBase.LinkTestConcept, "partition-A")
+        const partitionA = lionWebClient.forest.createNode(testLanguageBase.TestPartition, "partition-A")
         throws(
             () => {
                 lionWebClient.addPartition(partitionA)
@@ -108,7 +108,7 @@ describe("implementation of LionWeb client", async function() {
         await lionWebClient.signOff("query-2")
         expect(lionWebClient.participationId).to.equal(undefined)
 
-        const partitionB = lionWebClient.forest.createNode(testLanguageBase.LinkTestConcept, "partition-B")
+        const partitionB = lionWebClient.forest.createNode(testLanguageBase.TestPartition, "partition-B")
         throws(
             () => {
                 lionWebClient.addPartition(partitionB)
@@ -137,7 +137,7 @@ describe("implementation of LionWeb client", async function() {
                             "nodes": [
                                 {
                                     "id": "partition-A",
-                                    "classifier": { "language": "TestLanguage", "version": "0", "key": "LinkTestConcept" },
+                                    "classifier": { "language": "TestLanguage", "version": "0", "key": "TestPartition" },
                                     "properties": [],
                                     "containments": [],
                                     "references": [],
@@ -186,10 +186,10 @@ describe("implementation of LionWeb client", async function() {
             semanticLogger: semanticConsoleLogger
         })
         await lionWebClient.signOn("query-1", "myRepo")
-        const partitionA = lionWebClient.forest.createNode(testLanguageBase.LinkTestConcept, "partition-A")
+        const partitionA = lionWebClient.forest.createNode(testLanguageBase.TestPartition, "partition-A")
         lionWebClient.addPartition(partitionA)
 
-        const partitionB = lionWebClient.forest.createNode(testLanguageBase.LinkTestConcept, "partition-B")
+        const partitionB = lionWebClient.forest.createNode(testLanguageBase.TestPartition, "partition-B")
         throws(
             () => {
                 lionWebClient.deletePartition(partitionB)

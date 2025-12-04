@@ -30,7 +30,7 @@ export const isUndefined = (value: unknown, message?: string): void =>
     assert.isUndefined(value, message);
 
 export const latestDeltaAsserter = (deltas: IDelta[]) => {
-    let numberOfExpectedDeltas = 0;
+    let numberOfExpectedDeltas = deltas.length;
     return (expectedDelta: IDelta) => {
         equal(deltas.length, ++numberOfExpectedDeltas, `number of expected deltas`);
         deepEqual(serializeDelta(deltas[numberOfExpectedDeltas - 1]), serializeDelta(expectedDelta));

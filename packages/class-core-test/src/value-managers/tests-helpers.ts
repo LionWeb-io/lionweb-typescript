@@ -16,9 +16,14 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { DeltaReceiver, nodeBaseDeserializer } from "@lionweb/class-core"
-import { TestLanguageBase } from "@lionweb/class-core-test-language"
+import {
+    DataTypeTestConcept,
+    LinkTestConcept,
+    TestLanguageBase,
+    TestPartition
+} from "@lionweb/class-core-test-language"
 import { AccumulatingSimplisticHandler } from "@lionweb/core"
-import { LionWebJsonChunk } from "@lionweb/json"
+import { LionWebId, LionWebJsonChunk } from "@lionweb/json"
 
 import { equal } from "../assertions.js"
 
@@ -29,5 +34,30 @@ export const deserializeNodesAssertingNoProblems = (serializationChunk: LionWebJ
     const deserializedNodes = deserialize(serializationChunk)
     equal(problemsHandler.allProblems.length, 0)
     return deserializedNodes
+}
+
+
+let sequenceNumber = 0
+
+/**
+ * @return a {@link LinkTestConcept} instance that’s attached through containment by a {@link TestPartition} instances
+ *  — the latter has a unique ID.
+ */
+export const attachedLinkTestConcept = (id: LionWebId, receiveDelta?: DeltaReceiver) => {
+    const partition = TestPartition.create(`partition-${++sequenceNumber}`, receiveDelta)
+    const linkTestConcept = LinkTestConcept.create(id, receiveDelta)
+    partition.addLinks(linkTestConcept)
+    return linkTestConcept
+}
+
+/**
+ * @return a {@link DataTypeTestConcept} instance that’s attached through containment by a {@link TestPartition} instances
+ *  — the latter has a unique ID.
+ */
+export const attachedDataTypeTestConcept = (id: LionWebId, receiveDelta?: DeltaReceiver) => {
+    const partition = TestPartition.create(`partition-${++sequenceNumber}`, receiveDelta)
+    const dataTypeTestConcept = DataTypeTestConcept.create(id, receiveDelta)
+    partition.data = dataTypeTestConcept
+    return dataTypeTestConcept
 }
 
