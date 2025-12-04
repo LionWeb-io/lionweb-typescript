@@ -23,9 +23,9 @@ import {
 } from "@lionweb/class-core"
 import { LionWebJsonMetaPointer } from "@lionweb/json"
 
-import { DataTypeTestConcept, TestLanguageBase } from "@lionweb/class-core-test-language"
+import { attachedDataTypeTestConcept, DataTypeTestConcept, TestLanguageBase } from "@lionweb/class-core-test-language"
 import { deepEqual, equal, isTrue, throws } from "../assertions.js"
-import { attachedDataTypeTestConcept, deserializeNodesAssertingNoProblems } from "./tests-helpers.js"
+import { deserializeNodesAssertingNoProblems } from "./tests-helpers.js"
 
 const testLanguageBase = TestLanguageBase.INSTANCE
 

@@ -20,10 +20,9 @@ import { AddPropertyCommand, deltaToCommandTranslator } from "@lionweb/delta-pro
 
 import { expect } from "chai"
 import {
-    DataTypeTestConcept,
+    attachedDataTypeTestConcept,
     TestEnumeration,
-    TestLanguageBase,
-    TestPartition
+    TestLanguageBase
 } from "@lionweb/class-core-test-language"
 
 const testLanguageBase = TestLanguageBase.INSTANCE
@@ -33,9 +32,7 @@ describe("delta-to-command translator", () => {
 
     it("works for changing an enumeration-typed property", () => {
         const [receiveDelta, deltas] = collectingDeltaReceiver();
-        const partition = TestPartition.create("partition", receiveDelta);
-        const dttc = DataTypeTestConcept.create("mg", receiveDelta);
-        partition.data = dttc;
+        const dttc = attachedDataTypeTestConcept("mg", receiveDelta);
 
         // pre-check:
         expect(dttc.enumValue_0_1).to.equal(undefined);

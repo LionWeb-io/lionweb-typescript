@@ -29,13 +29,13 @@ import { readFileAsJson, writeJsonAsFile } from "@lionweb/utilities"
 import { join } from "path"
 
 import {
+    attachedDataTypeTestConcept,
     DataTypeTestConcept,
     TestEnumeration,
     TestLanguageBase,
     TestPartition
 } from "@lionweb/class-core-test-language"
 import { deepEqual, equal, isTrue, throws } from "./assertions.js"
-import { attachedDataTypeTestConcept } from "./value-managers/tests-helpers.js"
 
 
 describe("TestConcept", () => {

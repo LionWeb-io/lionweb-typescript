@@ -22,9 +22,8 @@ import {
     serializeDelta
 } from "@lionweb/class-core"
 
-import { TestEnumeration, TestLanguageBase } from "@lionweb/class-core-test-language"
+import { attachedDataTypeTestConcept, TestEnumeration, TestLanguageBase } from "@lionweb/class-core-test-language"
 import { deepEqual, equal } from "./assertions.js"
-import { attachedDataTypeTestConcept } from "./value-managers/tests-helpers.js"
 
 const testLanguageBase = TestLanguageBase.INSTANCE
 
