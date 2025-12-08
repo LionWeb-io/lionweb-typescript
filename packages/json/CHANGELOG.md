@@ -2,7 +2,7 @@
 
 ## 0.8.0 — not yet released
 
-* Make `reference` field of `LionWebJsonReferenceTarget` type `null`able.
+* Make `reference` field of `LionWebJsonReferenceTarget` type `null`able, and ensure that not both fields are `null`.
 
 
 ## 0.7.2

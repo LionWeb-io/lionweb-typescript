@@ -23,7 +23,7 @@ const orderedSerializedLanguageReference = ({ key, version }: LionWebJsonUsedLan
 const orderedSerializedReferenceTarget = ({ reference, resolveInfo }: LionWebJsonReferenceTarget): LionWebJsonReferenceTarget => ({
     resolveInfo,
     reference
-})
+} as LionWebJsonReferenceTarget)
 
 const orderedSerializedProperty = ({ property, value }: LionWebJsonProperty): LionWebJsonProperty => ({
     property: orderedMetaPointer(property),
