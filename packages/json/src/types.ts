@@ -63,8 +63,18 @@ export type LionWebJsonReference = {
     targets: LionWebJsonReferenceTarget[]
 }
 
-export type LionWebJsonReferenceTarget = {
-    reference: LionWebId | null
-    resolveInfo: string | null
-}
+/**
+ * Type definition for a reference target, expressing that
+ * either the `reference` (which is an {@link LionwebId}) or the (string-typed) `resolveInfo` is `null`,
+ * but not both.
+ */
+export type LionWebJsonReferenceTarget =
+    | {
+        reference: LionWebId
+        resolveInfo: string | null
+    }
+    | {
+        reference: LionWebId | null
+        resolveInfo: string
+    }
 
