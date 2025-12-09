@@ -16,6 +16,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import {
+    ChildAddedDelta,
     collectingDeltaReceiver,
     Forest,
     IDelta,
@@ -25,7 +26,13 @@ import {
     serializeNodeBases
 } from "@lionweb/class-core"
 
-import { TestLanguageBase } from "@lionweb/class-core-test-language"
+import {
+    DataTypeTestConcept,
+    LinkTestConcept,
+    TestAnnotation,
+    TestLanguageBase,
+    TestPartition
+} from "@lionweb/class-core-test-language"
 import { idOf } from "@lionweb/core"
 import { when } from "mobx"
 import { deepEqual, equal, isTrue, throws } from "./assertions.js"
@@ -34,7 +41,6 @@ const testLanguageBase = TestLanguageBase.INSTANCE
 
 
 describe("Forest", () => {
-
 
     type Fixture = [forest: Forest, deltas: IDelta[]]
 
@@ -174,6 +180,33 @@ describe("Forest", () => {
         deepEqual(forest.partitions, [])
         equal(forest.idMapping.tryFromId("ptc"), partition) // partition is still in ID mapping
         deepEqual(deltas, [new PartitionAddedDelta(partition)]) // no partition deleted delta re-emitted
+    })
+
+    it("adding a populated partition forest only fires 1 delta", () => {
+        const [forest, deltas] = fixture()
+
+        const partition = forest.createNode(testLanguageBase.TestPartition, "ptc") as TestPartition
+        const ltc = forest.createNode(testLanguageBase.LinkTestConcept, "ltc") as LinkTestConcept
+        partition.addLinks(ltc)
+        const annotation = forest.createNode(testLanguageBase.TestAnnotation, "annotation") as TestAnnotation
+        partition.addAnnotation(annotation)
+
+        // pre-check:
+        deepEqual(deltas, [])
+
+        // action:
+        forest.addPartition(partition)
+
+        // assert:
+        deepEqual(forest.partitions, [partition])
+        deepEqual(deltas, [new PartitionAddedDelta(partition)])
+
+        // more action:
+        const dttc = forest.createNode(testLanguageBase.DataTypeTestConcept, "dttc") as DataTypeTestConcept
+        partition.data = dttc
+
+        // more assert:
+        deepEqual(deltas, [new PartitionAddedDelta(partition), new ChildAddedDelta(partition, testLanguageBase.TestPartition_data, 0, dttc)])
     })
 
 })
