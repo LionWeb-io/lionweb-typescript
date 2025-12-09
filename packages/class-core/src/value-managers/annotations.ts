@@ -149,8 +149,8 @@ export class AnnotationsValueManager extends ValueManager {
         const index = this.annotations.indexOf(annotationToRemove);
         if (index > -1) {
             this.annotations.splice(index, 1);
+            annotationToRemove.detach();
         }
-        annotationToRemove.detach();
         return index;
     }
 

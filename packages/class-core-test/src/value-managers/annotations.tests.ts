@@ -24,7 +24,12 @@ import {
     collectingDeltaReceiver
 } from "@lionweb/class-core"
 
-import { attachedLinkTestConcept, LinkTestConcept, TestAnnotation } from "@lionweb/class-core-test-language"
+import {
+    attachedLinkTestConcept,
+    LinkTestConcept,
+    TestAnnotation,
+    TestPartition
+} from "@lionweb/class-core-test-language"
 import { deepEqual, equal, isUndefined, throws } from "../assertions.js"
 
 
@@ -78,6 +83,22 @@ describe("annotations", () => {
         equal(deltas.length, 3)
         deepEqual(deltas[2], new AnnotationDeletedDelta(ltc, 0, annotation))
     })
+
+    it("deleting an annotation that’s not contained through the value manager does nothing", () => {
+        const [receiveDelta, deltas] = collectingDeltaReceiver()
+        const partition = TestPartition.create("partition", receiveDelta)
+        const annotation = TestAnnotation.create("annotation", receiveDelta)
+
+        // pre-check:
+        deepEqual(deltas, [])
+
+        // action:
+        partition.removeAnnotation(annotation)
+
+        // assert:
+        deepEqual(deltas, [])
+    })
+
 
     it("inserting an annotation at a specific index", () => {
         // arrange:

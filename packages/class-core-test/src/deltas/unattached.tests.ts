@@ -20,13 +20,14 @@ import { ChildAddedDelta, collectingDeltaReceiver } from "@lionweb/class-core"
 import { LinkTestConcept, TestLanguageBase, TestPartition } from "@lionweb/class-core-test-language"
 import { deepEqual, equal, isFalse, isTrue } from "../assertions.js"
 
-const testLanguage = TestLanguageBase.INSTANCE
+const testLanguageBase = TestLanguageBase.INSTANCE
+
 
 describe(`unattached nodes`, () => {
 
     it(`only 1 "child added" event should be sent`, () => {
-        isTrue(testLanguage.TestPartition.partition);
-        isFalse(testLanguage.DataTypeTestConcept.partition);
+        isTrue(testLanguageBase.TestPartition.partition);
+        isFalse(testLanguageBase.DataTypeTestConcept.partition);
 
         const [receiveDelta, deltas] = collectingDeltaReceiver();
         const parent = TestPartition.create("parent", receiveDelta);
@@ -42,7 +43,7 @@ describe(`unattached nodes`, () => {
 
         parent.addLinks(child1);
         equal(deltas.length, 1);
-        deepEqual(deltas[0], new ChildAddedDelta(parent, testLanguage.TestPartition_links, 0, child1));
+        deepEqual(deltas[0], new ChildAddedDelta(parent, testLanguageBase.TestPartition_links, 0, child1));
     });
 
 });
