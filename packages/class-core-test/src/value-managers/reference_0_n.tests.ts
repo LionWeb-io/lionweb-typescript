@@ -17,16 +17,17 @@
 
 import { collectingDeltaReceiver, ReferenceAddedDelta, ReferenceDeletedDelta } from "@lionweb/class-core"
 
-import { LinkTestConcept, TestLanguageBase } from "@lionweb/class-core-test-language"
+import { attachedLinkTestConcept, LinkTestConcept, TestLanguageBase } from "@lionweb/class-core-test-language"
 import { deepEqual, equal } from "../assertions.js"
 
 const testLanguageBase = TestLanguageBase.INSTANCE
 
+
 describe("[0..n] reference", () => {
 
     it("getting an unset [0..n] reference", () => {
-        const [receiveDeltas, deltas] = collectingDeltaReceiver();
-        const node = LinkTestConcept.create("node", receiveDeltas);
+        const [receiveDelta, deltas] = collectingDeltaReceiver();
+        const node = LinkTestConcept.create("node", receiveDelta);
 
         // pre-check:
         equal(deltas.length, 0);
@@ -36,60 +37,60 @@ describe("[0..n] reference", () => {
     });
 
     it("adding to a [0..n] reference", () => {
-        const [receiveDeltas, deltas] = collectingDeltaReceiver();
-        const dst1 = LinkTestConcept.create("dst1", receiveDeltas);
-        const src = LinkTestConcept.create("src", receiveDeltas);
+        const [receiveDelta, deltas] = collectingDeltaReceiver();
+        const dst1 = LinkTestConcept.create("dst1", receiveDelta);
+        const src = attachedLinkTestConcept("src", receiveDelta);
 
         // pre-check:
-        equal(deltas.length, 0);
+        equal(deltas.length, 1);
 
         // action+check:
         src.addReference_0_n(dst1);
         deepEqual(src.reference_0_n, [dst1]);
         equal(dst1.parent, undefined);
-        equal(deltas.length, 1);
+        equal(deltas.length, 2);
         deepEqual(
-            deltas[0],
+            deltas[1],
             new ReferenceAddedDelta(src, testLanguageBase.LinkTestConcept_reference_0_n, 0, dst1)
         );
 
         // action+check:
-        const dst2 = LinkTestConcept.create("dst2", receiveDeltas);
+        const dst2 = LinkTestConcept.create("dst2", receiveDelta);
         src.addReference_0_n(dst2);
         deepEqual(src.reference_0_n, [dst1, dst2]);
         equal(dst2.parent, undefined);
-        equal(deltas.length, 2);
+        equal(deltas.length, 3);
         deepEqual(
-            deltas[1],
+            deltas[2],
             new ReferenceAddedDelta(src, testLanguageBase.LinkTestConcept_reference_0_n, 1, dst2)
         );
     });
 
     it("unsetting a [0..n] reference", () => {
-        const [receiveDeltas, deltas] = collectingDeltaReceiver();
-        const dst = LinkTestConcept.create("dst", receiveDeltas);
-        const src = LinkTestConcept.create("src", receiveDeltas);
+        const [receiveDelta, deltas] = collectingDeltaReceiver();
+        const dst = LinkTestConcept.create("dst", receiveDelta);
+        const src = attachedLinkTestConcept("src", receiveDelta);
 
         // pre-check:
         src.addReference_0_n(dst);
         equal(dst.parent, undefined);
-        equal(deltas.length, 1);
+        equal(deltas.length, 2);
 
         // action+check:
         src.removeReference_0_n(dst);
-        equal(deltas.length, 2);
+        equal(deltas.length, 3);
         deepEqual(
-            deltas[1],
+            deltas[2],
             new ReferenceDeletedDelta(src, testLanguageBase.LinkTestConcept_reference_0_n, 0, dst)
         )
     });
 
     it("remove a target", () => {
-        const [receiveDeltas, deltas] = collectingDeltaReceiver();
-        const dst1 = LinkTestConcept.create("dst1", receiveDeltas);
-        const dst2 = LinkTestConcept.create("dst2", receiveDeltas);
-        const dst3 = LinkTestConcept.create("dst3", receiveDeltas);
-        const src = LinkTestConcept.create("src", receiveDeltas);
+        const [receiveDelta, deltas] = collectingDeltaReceiver();
+        const dst1 = LinkTestConcept.create("dst1", receiveDelta);
+        const dst2 = LinkTestConcept.create("dst2", receiveDelta);
+        const dst3 = LinkTestConcept.create("dst3", receiveDelta);
+        const src = attachedLinkTestConcept("src", receiveDelta);
 
         // pre-check:
         src.addReference_0_n(dst1);
@@ -98,34 +99,34 @@ describe("[0..n] reference", () => {
         equal(dst2.parent, undefined);
         src.addReference_0_n(dst3);
         equal(dst3.parent, undefined);
-        equal(deltas.length, 3);
+        equal(deltas.length, 4);
 
         // action+check:
         src.removeReference_0_n(dst2);
         deepEqual(src.reference_0_n, [dst1, dst3]);
-        equal(deltas.length, 4);
+        equal(deltas.length, 5);
         deepEqual(
-            deltas[3],
+            deltas[4],
             new ReferenceDeletedDelta(src, testLanguageBase.LinkTestConcept_reference_0_n, 1, dst2)
         );
     });
 
 
     it("trying to remove a target that wasn't in there", () => {
-        const [receiveDeltas, deltas] = collectingDeltaReceiver();
-        const dst1 = LinkTestConcept.create("dst1", receiveDeltas);
-        const src = LinkTestConcept.create("src", receiveDeltas);
+        const [receiveDelta, deltas] = collectingDeltaReceiver();
+        const dst1 = LinkTestConcept.create("dst1", receiveDelta);
+        const src = attachedLinkTestConcept("src", receiveDelta);
 
         // pre-check:
         src.addReference_0_n(dst1);
         equal(dst1.parent, undefined);
-        equal(deltas.length, 1);
+        equal(deltas.length, 2);
 
-        const dst2 = LinkTestConcept.create("dst2", receiveDeltas);
+        const dst2 = LinkTestConcept.create("dst2", receiveDelta);
 
         // action+check:
         src.removeReference_0_n(dst2);
-        equal(deltas.length, 1);
+        equal(deltas.length, 2);
         deepEqual(src.reference_0_n, [dst1]);
     });
 

@@ -73,7 +73,7 @@ describe("combining delta protocol and an “adjacent” delta receiver", () => 
 
         const compositor = compositorToCreate!
 
-        const partitionA = lionWebClient.forest.createNode(testLanguageBase.LinkTestConcept, "partition-A")
+        const partitionA = lionWebClient.forest.createNode(testLanguageBase.TestPartition, "partition-A")
         compositor.openComposite()
         lionWebClient.addPartition(partitionA)
         expect(deltas).to.deep.equal([])
@@ -107,7 +107,7 @@ describe("combining delta protocol and an “adjacent” delta receiver", () => 
                                         classifier: {
                                             language: "TestLanguage",
                                             version: "0",
-                                            key: "LinkTestConcept"
+                                            key: "TestPartition"
                                         },
                                         properties: [],
                                         containments: [],

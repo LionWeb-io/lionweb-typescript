@@ -14,6 +14,7 @@
 * Add a `Forest` class that encapsulates a “forest” of partitions, together with their ID mapping, a factory, a deserializer – also deserializing into the forest –, and methods to apply deltas.
     * Add a `ObservableForest` class that is Mobx-observable.
 * Propagate `reference` field of `LionWebJsonReferenceTarget` type now being `null`able.
+* Fix that the annotations value manager always tries to detach an annotation to remove, even if it isn’t contained through the value manager’s container.
 
 
 ## 0.7.2

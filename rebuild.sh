@@ -59,7 +59,7 @@ npm run build
 cd ..
 
 cd build
-ClassCoreTestGenPath="../class-core-test/src/gen"   # relative!
+ClassCoreTestGenPath="../class-core-test-language/src/gen"   # relative!
 rm -rf $ClassCoreTestGenPath
 mkdir -p $ClassCoreTestGenPath
 npm run generate

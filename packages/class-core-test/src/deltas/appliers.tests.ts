@@ -28,16 +28,17 @@ import {
 import { LinkTestConcept, TestAnnotation, TestLanguageBase } from "@lionweb/class-core-test-language"
 import { deepEqual, equal, isUndefined } from "../assertions.js"
 
-const testLanguage = TestLanguageBase.INSTANCE
+const testLanguageBase = TestLanguageBase.INSTANCE
+
 
 describe("delta application sets parentage correctly", () => {
 
     it("child added", () => {
         [
-            testLanguage.LinkTestConcept_containment_0_1,
-            testLanguage.LinkTestConcept_containment_1,
-            testLanguage.LinkTestConcept_containment_0_n,
-            testLanguage.LinkTestConcept_containment_1_n
+            testLanguageBase.LinkTestConcept_containment_0_1,
+            testLanguageBase.LinkTestConcept_containment_1,
+            testLanguageBase.LinkTestConcept_containment_0_n,
+            testLanguageBase.LinkTestConcept_containment_1_n
         ].forEach((containment) => {
             const parent = LinkTestConcept.create("parent");
             const child = LinkTestConcept.create("child");
@@ -54,7 +55,7 @@ describe("delta application sets parentage correctly", () => {
         const child = LinkTestConcept.create("child");
         parent.containment_0_1 = child;
         const dstLtc = LinkTestConcept.create("dstLtc");
-        const delta = new ChildMovedFromOtherContainmentDelta(parent, testLanguage.LinkTestConcept_containment_0_1, 0, dstLtc, testLanguage.LinkTestConcept_containment_0_1, 0, child);
+        const delta = new ChildMovedFromOtherContainmentDelta(parent, testLanguageBase.LinkTestConcept_containment_0_1, 0, dstLtc, testLanguageBase.LinkTestConcept_containment_0_1, 0, child);
 
         applyDelta(delta);
 
@@ -69,7 +70,7 @@ describe("delta application sets parentage correctly", () => {
         const dstParent = LinkTestConcept.create("dstParent");
         const child2 = LinkTestConcept.create("child2");
         dstParent.containment_0_1 = child2;
-        const delta = new ChildReplacedDelta(dstParent, testLanguage.LinkTestConcept_containment_0_1, 0, child2, child1);
+        const delta = new ChildReplacedDelta(dstParent, testLanguageBase.LinkTestConcept_containment_0_1, 0, child2, child1);
 
         applyDelta(delta);
 
@@ -81,7 +82,7 @@ describe("delta application sets parentage correctly", () => {
         const parent = LinkTestConcept.create("parent");
         const child = LinkTestConcept.create("child");
         parent.containment_0_1 = child;
-        const delta = new ChildDeletedDelta(parent, testLanguage.LinkTestConcept_containment_0_1, 0, child);
+        const delta = new ChildDeletedDelta(parent, testLanguageBase.LinkTestConcept_containment_0_1, 0, child);
 
         applyDelta(delta);
 

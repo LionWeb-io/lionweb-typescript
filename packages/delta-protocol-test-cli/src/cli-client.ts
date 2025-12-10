@@ -18,7 +18,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { TestLanguageBase } from "@lionweb/class-core-test-language"
-import { Concept } from "@lionweb/core"
 import { LionWebClient, LowLevelClientLogItem } from "@lionweb/delta-protocol-client"
 import { ansi, combine, semanticConsoleLogger, semanticLogItemStorer } from "@lionweb/delta-protocol-common"
 import { createWSLowLevelClient } from "@lionweb/delta-protocol-low-level-client-ws"
@@ -38,12 +37,7 @@ const languageBases = [testLanguageBase]
 const boldRedIf = (apply: boolean, text: string) =>
     apply ? genericError(text) : text
 
-const partitionConcepts: Record<string, Concept> = Object.fromEntries(
-    [testLanguageBase.DataTypeTestConcept, testLanguageBase.LinkTestConcept]
-        .map((concept) => [concept.name, concept])
-)
-
-// $ node dist/cli-client.js <port> <clientID> <partitionConcept> [tasks] [--${protocolLogOptionPrefix}=<path>]
+// $ node dist/cli-client.js <port> <clientID> [tasks] [--${protocolLogOptionPrefix}=<path>]
 
 const protocolLogOptionPrefix = "--protocol-log="
 const protocolLogPathIndex = argv.findIndex((argument) => argument.startsWith(protocolLogOptionPrefix))
@@ -57,8 +51,7 @@ if (trueArguments.length < 3) {
 Parameters (${genericError("bold red")} are missing):
   - ${boldRedIf(trueArguments.length < 1, `<port>: the port of the WebSocket where the LionWeb delta protocol repository is running on localhost`)}
   - ${boldRedIf(trueArguments.length < 2, `<clientID>: the ID that the client identifies itself with at the repository`)}
-  - ${boldRedIf(trueArguments.length < 3, `<partitionConcept>: the name of a partition concept that gets instantiated as the model's primary partition — one of: ${Object.keys(partitionConcepts).join(", ")}`)}
-  - ${boldRedIf(trueArguments.length < 4, `[tasks]: a comma-separated list of tasks — one of ${Object.keys(recognizedTasks).sort().join(", ")}`)}
+  - ${boldRedIf(trueArguments.length < 3, `[tasks]: a comma-separated list of tasks — one of ${Object.keys(recognizedTasks).sort().join(", ")}`)}
   - ${boldRedIf(protocolLogPathIndex === -1, `${protocolLogOptionPrefix}=<path>: option to configure that the client logs all messages exchanged with the repository to a file with the given path`)}
 
     ASSUMPTION: the initial (states of the models) on client(s) and repository are identical!
@@ -68,12 +61,7 @@ Parameters (${genericError("bold red")} are missing):
 
 const port = tryParseInteger(argv[2])
 const clientId = argv[3]
-const partitionConcept = argv[4]
-if (!(partitionConcept in partitionConcepts)) {
-    console.error(genericError(`unknown partition concept specified: ${partitionConcept} — must be one of: ${Object.keys(partitionConcepts).join(", ")}`))
-    exit(2)
-}
-const tasks = argv[5]?.split(",") ?? []
+const tasks = argv[4]?.split(",") ?? []
 console.log(clientInfo(`tasks provided: ${tasks.length === 0 ? "none" : tasks.join(", ")}`))
 const infoUnrecognizedTasks = tasks
     .map((task, index) => task in recognizedTasks ? undefined : [task, index] as [string, number])
@@ -106,9 +94,10 @@ await runAsApp(async () => {
             )
     })
 
-    console.log(clientInfo(`LionWeb delta protocol client (with ID=${clientId}) connecting to repository on ${url} - press Ctrl+C to terminate`))
+    console.log(clientInfo(`LionWeb delta protocol client connected to repository on ${url} - press Ctrl+C to terminate`))
+    console.log(clientInfo(`\tCLI call: <magic incantation> ${port} ${clientId} ${tasks.join(",")}`))
 
-    const executeTask = taskExecutor(lionWebClient, partitionConcepts[partitionConcept], semanticLogItems)
+    const executeTask = taskExecutor(lionWebClient, semanticLogItems)
 
     let querySequenceNumber = 0
     const queryId = () => `query-${++querySequenceNumber}`
