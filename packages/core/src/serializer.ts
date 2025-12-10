@@ -1,12 +1,6 @@
-import {
-    currentSerializationFormatVersion,
-    LionWebId,
-    LionWebJsonChunk,
-    LionWebJsonMetaPointer,
-    LionWebJsonNode
-} from "@lionweb/json"
+import { currentSerializationFormatVersion, LionWebId, LionWebJsonChunk, LionWebJsonNode } from "@lionweb/json"
 import { asArray, keepDefineds, lazyMapGet, Nested3Map, uniquesAmong } from "@lionweb/ts-utils"
-import { asIds } from "./functions.js"
+import { asIds, metaPointerFor } from "./functions.js"
 import { Reader } from "./reading.js"
 import { Node } from "./types.js"
 import { builtinPropertyValueSerializer } from "./m3/builtins.js"
@@ -67,17 +61,6 @@ export type SerializationOptions = Partial<{
 
 }>
 
-/**
- * @return the {@link LionWebJsonMetaPointer} for the given {@link Feature}.
- */
-export const metaPointerFor = (feature: Feature): LionWebJsonMetaPointer => {
-    const { language } = feature.classifier
-    return {
-        language: language.key,
-        version: language.version,
-        key: feature.key
-    }
-}
 
 
 /**
