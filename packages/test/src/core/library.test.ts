@@ -1,6 +1,6 @@
 import {
     deserializeLanguages,
-    deserializeSerializationChunk,
+    deserializerWith,
     DynamicNode,
     dynamicWriter,
     lioncoreBuiltins,
@@ -18,13 +18,13 @@ describe("Library test model", () => {
     it("[de-]serialize example library", () => {
         const serializationChunk = serializerWith({ reader: libraryReader })(libraryModel)
         // FIXME  ensure that serialization does not produce key-value pairs with value === undefined
-        const deserialization = deserializeSerializationChunk(serializationChunk, libraryWriter, [libraryLanguage], [])
+        const deserialization = deserializerWith({ writer: libraryWriter, languages: [libraryLanguage] })(serializationChunk)
         deepEqual(deserialization, libraryModel)
     })
 
     it(`"dynamify" example library through serialization and deserialization using the DynamicNode facades`, () => {
         const serializationChunk = serializerWith({ reader: libraryReader })(libraryModel)
-        const dynamification = deserializeSerializationChunk(serializationChunk, dynamicWriter, [libraryLanguage], [])
+        const dynamification = deserializerWith({ writer: dynamicWriter, languages: [libraryLanguage] })(serializationChunk)
         deepEqual(dynamification.length, 2)
         const lookup = nameBasedClassifierDeducerFor(libraryLanguage)
         deepEqual(dynamification[0].classifier, lookup("Library"))

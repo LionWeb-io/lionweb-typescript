@@ -17,9 +17,8 @@
 
 import { LionWebJsonChunk } from "@lionweb/json"
 import {
-    builtinPropertyValueDeserializer,
     defaultSimplisticHandler,
-    deserializeChunk,
+    deserializerWith,
     Language,
     lioncore,
     lioncoreBuiltins,
@@ -36,12 +35,12 @@ import { combinedWriter } from "./facade.js"
  * Problems are reported through the given {@link SimplisticHandler} which defaults to {@link defaultSimplisticHandler}.
  */
 export const deserializeLanguagesWithIoLionWebMpsSpecific = (serializationChunk: LionWebJsonChunk, problemHandler: SimplisticHandler = defaultSimplisticHandler) =>
-    deserializeChunk(
-        serializationChunk,
-        combinedWriter,
-        [lioncore, ioLionWebMpsSpecificLanguage],
-        [lioncore, lioncoreBuiltins].flatMap(nodesExtractorUsing(lioncoreExtractionFacade)),
-        builtinPropertyValueDeserializer,
+    deserializerWith({
+        writer: combinedWriter,
+        languages: [lioncore, ioLionWebMpsSpecificLanguage],
         problemHandler
+    })(
+        serializationChunk,
+        [lioncore, lioncoreBuiltins].flatMap(nodesExtractorUsing(lioncoreExtractionFacade))
     ).filter((node) => node instanceof Language) as Language[]
 
