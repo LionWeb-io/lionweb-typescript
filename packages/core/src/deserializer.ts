@@ -168,7 +168,7 @@ export const deserializerWith = <NT extends Node>(configuration: DeserializerCon
                                 }
                                 return
                             }
-                            // (property is not handled, because neither a primitive type nor of enumeration type)
+                            problemReporter.reportProblem(`property ${property.name} on classifier ${classifier.name} is not handled, because its type is neither a primitive type nor an enumeration`)
                         }
                     })
             }
