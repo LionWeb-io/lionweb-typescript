@@ -4,7 +4,7 @@ import { PropertyValueSerializer } from "../serializer.js"
 import { currentReleaseVersion } from "../version.js"
 import { LanguageFactory } from "./factory.js"
 import { Classifier, Concept, DataType, lioncoreBuiltinsKey, Property } from "./types.js"
-import { unresolved } from "../references.js"
+import { isUnresolvedReference } from "../references.js"
 
 const lioncoreBuiltinsIdAndKeyGenerator: StringsMapper = (...names) => [lioncoreBuiltinsKey, ...names.slice(1)].join("-")
 
@@ -129,7 +129,7 @@ export class BuiltinPropertyValueDeserializer
             throw new Error(`can't deserialize undefined as the value of required property "${property.name}" (on classifier "${property.classifier.name}" in language "${property.classifier.language.name}")`)
         }
         const { type } = property
-        if (type === unresolved) {
+        if (isUnresolvedReference(type)) {
             throw new Error(`can't deserialize property "${property.name}" (on classifier "${property.classifier.name}" in language "${property.classifier.language.name}") with unspecified type`)
         }
         const specificDeserializer = this.byType(type)
@@ -172,7 +172,7 @@ export class BuiltinPropertyValueSerializer extends DataTypeRegister<(value: unk
             throw new Error(`can't serialize undefined as the value of required property "${property.name}" (on classifier "${property.classifier.name}" in language "${property.classifier.language.name}")`)
         }
         const { type } = property
-        if (type === unresolved) {
+        if (isUnresolvedReference(type)) {
             throw new Error(`can't serialize property "${property.name}" (on classifier "${property.classifier.name}" in language "${property.classifier.language.name}") with unspecified type`)
         }
         const specificSerializer = this.byType(type)

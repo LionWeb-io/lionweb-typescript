@@ -15,7 +15,15 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { allFeaturesOf, Containment, Feature, Property, Reference, unresolved } from "@lionweb/core"
+import {
+    allFeaturesOf,
+    Containment,
+    Feature,
+    isUnresolvedReference,
+    Property,
+    Reference,
+    UnresolvedReference
+} from "@lionweb/core"
 import { asString, indentWith, Template } from "littoral-templates"
 
 import { INodeBase } from "./base-types.js"
@@ -27,18 +35,21 @@ const prependWith = (template: Template, prefix: string): Template =>
     prefix + asString(template)
 
 
-type INodeBaseOrNotThere = INodeBase | typeof unresolved | undefined
+type INodeBaseOrNotThere = INodeBase | UnresolvedReference | undefined
 
 const asINodeBases = (value: INodeBaseOrNotThere | INodeBaseOrNotThere[]): INodeBase[] => {
     const isINodeBase = (value: INodeBaseOrNotThere): value is INodeBase =>
-        !(value === unresolved || value === undefined)
+        !(isUnresolvedReference(value) || value === undefined)
 
     if (Array.isArray(value)) {
         return value
             .filter((subValue) => isINodeBase(subValue))
             .map((subValue) => subValue as INodeBase)
     }
-    return isINodeBase(value) ? [value] : []
+    if (isINodeBase(value)) {
+        return [value]
+    }
+    return []
 }
 
 

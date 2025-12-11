@@ -1,4 +1,4 @@
-import { SingleRef, unresolved } from "../references.js"
+import { isUnresolvedReference, SingleRef } from "../references.js"
 import { flatMap, qualifiedNameOf } from "./functions.js"
 import { Concept, Containment, Language, Property, Reference } from "./types.js"
 import { Node } from "../types.js"
@@ -14,7 +14,7 @@ export const checkReferences = (language: Language): string[] =>
 
             const locations: string[] = []
             const check = (location: string, ref?: SingleRef<Node>) => {
-                if (ref === unresolved) {
+                if (isUnresolvedReference(ref)) {
                     locations.push(location)
                 }
             }

@@ -23,13 +23,13 @@ import {
     Containment,
     Enumeration,
     Feature,
+    isUnresolvedReference,
     PrimitiveType,
     Property,
     PropertyValueSerializer,
     Reader,
     Reference,
-    serializerWith,
-    unresolved
+    serializerWith
 } from "@lionweb/core"
 
 import { INodeBase, LionCore_builtinsBase } from "./index.js"
@@ -99,7 +99,7 @@ type PropertyValueSerializerConfiguration = Partial<{
 
 /**
  * @return a {@link PropertyValueSerializer} that uses the given {@link PropertyValueSerializer `primitiveValueSerializer`} *solely* for serializing values of primitively-typed properties,
- * and serializes {@link unresolved} and enumeration-typed properties the same way as {@link serializeNodeBases}.
+ * and serializes properties whose types are enumerations or unresolved the same way as {@link serializeNodeBases}.
  * Unrecoverable issues are passed to the optional `reportIssue` argument, and
  */
 export const propertyValueSerializerWith = (configuration?: PropertyValueSerializerConfiguration) => {
@@ -108,7 +108,7 @@ export const propertyValueSerializerWith = (configuration?: PropertyValueSeriali
     return {
         serializeValue: (value: unknown, property: Property) => {
             const { type } = property
-            if (type === unresolved) {
+            if (isUnresolvedReference(type)) {
                 reportIssue(`can't serialize value of property "${property.name}" (on classifier "${property.classifier.name}" in language "${property.classifier.language.name}") having unresolved type: ${value}`)
                 return null
             }

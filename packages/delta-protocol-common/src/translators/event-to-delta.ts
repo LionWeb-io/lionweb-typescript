@@ -42,6 +42,7 @@ import {
     EntryMovedInSameReferenceDelta,
     IDelta,
     IdMapping,
+    IdOrNull,
     ILanguageBase,
     INodeBase,
     NoOpDelta,
@@ -59,9 +60,9 @@ import {
     builtinPropertyValueDeserializer,
     featureResolversFor,
     PropertyValueDeserializer,
-    unresolved
+    referenceToSet
 } from "@lionweb/core"
-import { LionWebId, LionWebJsonChunk } from "@lionweb/json"
+import { LionWebJsonChunk } from "@lionweb/json"
 import {
     AnnotationAddedEvent,
     AnnotationDeletedEvent,
@@ -124,8 +125,8 @@ export const eventToDeltaTranslator = (
             return roots[0]
         }
         const { resolvedPropertyFrom, resolvedContainmentFrom, resolvedReferenceFrom } = featureResolversFor(languageBases.map(({language}) => language));
-        const resolvedRefTo = (ref: LionWebId | typeof unresolved) =>
-            ref === unresolved ? unresolved : idMapping.fromId(ref)
+        const resolvedRefTo = (ref: IdOrNull) =>
+            ref === null ? referenceToSet() : idMapping.fromId(ref)
 
         switch (event.messageKind) {
             /*

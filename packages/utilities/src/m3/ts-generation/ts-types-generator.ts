@@ -12,6 +12,7 @@ import {
     Interface,
     isConcrete,
     isRef,
+    isUnresolvedReference,
     Language,
     LanguageEntity,
     Link,
@@ -19,8 +20,7 @@ import {
     nameOf,
     nameSorted,
     PrimitiveType,
-    Property,
-    unresolved
+    Property
 } from "@lionweb/core"
 import { indent } from "@lionweb/textgen-utils"
 import { groupBy, mapValues, uniquesAmong } from "@lionweb/ts-utils"
@@ -48,7 +48,7 @@ const fieldForLink = ({name, type, optional, multiple}: Link): Field =>
     ({
         name,
         optional: optional && !multiple,
-        type: `${type === unresolved ? `unknown` : type.name}${multiple ? `[]` : ``}`
+        type: `${isUnresolvedReference(type) ? `unknown` : type.name}${multiple ? `[]` : ``}`
     })
 
 

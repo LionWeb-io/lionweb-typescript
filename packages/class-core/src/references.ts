@@ -15,7 +15,7 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { SingleRef, unresolved } from "@lionweb/core"
+import { isUnresolvedReference, SingleRef } from "@lionweb/core"
 import { LionWebId } from "@lionweb/json"
 
 import { INodeBase } from "./base-types.js"
@@ -24,12 +24,12 @@ import { INodeBase } from "./base-types.js"
 /**
  * A type that expresses a value is either an {@link LionWebId} or a value to indicate that resolution to a node previously failed.
  */
-export type IdOrUnresolved = LionWebId | typeof unresolved;
+export type IdOrNull = LionWebId | null
 
 
 /**
- * @return the ID of a given reference to a {@link INodeBase}, or {@link unresolved} if that reference was previously unresolved.
+ * @return the ID of a given reference to a {@link INodeBase}, or `null` if that reference was previously unresolved.
  */
-export const idFrom = (ref: SingleRef<INodeBase>): IdOrUnresolved =>
-    ref === unresolved ? unresolved : ref.id
+export const idFrom = (ref: SingleRef<INodeBase>): IdOrNull =>
+    isUnresolvedReference(ref) ? null : ref.id
 

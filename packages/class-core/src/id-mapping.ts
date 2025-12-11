@@ -15,11 +15,11 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { SingleRef, unresolved } from "@lionweb/core"
+import { referenceToSet, SingleRef } from "@lionweb/core"
 import { LionWebId } from "@lionweb/json"
 
 import { INodeBase } from "./base-types.js"
-import { IdOrUnresolved } from "./references.js"
+import { IdOrNull } from "./references.js"
 
 
 /**
@@ -63,10 +63,10 @@ export class IdMapping {
      * @return the {@link INodeBase node} referenced from the given {@link LionWebId ID},
      * or `unresolved` if `unresolved` was passed in or no node with the given ID was registered.
      */
-    fromRefId = (idOrUnresolved: IdOrUnresolved): SingleRef<INodeBase> =>
-        idOrUnresolved === unresolved
-            ? unresolved
-            : (this.nodesById[idOrUnresolved] ?? unresolved);
+    fromRefId = (idOrNull: IdOrNull): SingleRef<INodeBase> =>
+        idOrNull === null
+            ? null
+            : (this.nodesById[idOrNull] ?? referenceToSet());
 
     /**
      * Updates this {@link IdMapping} with the given `node` *and all its descendants* (recursively).

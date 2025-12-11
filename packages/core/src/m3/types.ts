@@ -5,7 +5,7 @@
 
 import { LionWebId, LionWebJsonMetaPointer, LionWebKey } from "@lionweb/json"
 import { ResolveInfoDeducer } from "../reading.js"
-import { MultiRef, SingleRef, unresolved } from "../references.js"
+import { MultiRef, SingleRef, referenceToSet } from "../references.js"
 import { Node } from "../types.js"
 
 
@@ -94,7 +94,7 @@ class Property extends Feature {
     metaType(): string {
         return "Property"
     }
-    type: SingleRef<DataType> = unresolved   // (reference)
+    type: SingleRef<DataType> = referenceToSet()   // (reference)
     ofType(type: DataType): Property {
         this.type = type
         return this
@@ -103,7 +103,7 @@ class Property extends Feature {
 
 abstract class Link extends Feature {
     multiple /*: boolean */ = false
-    type: SingleRef<Classifier> = unresolved   // (reference)
+    type: SingleRef<Classifier> = referenceToSet()   // (reference)
     isMultiple() {
         this.multiple = true
         return this
@@ -182,7 +182,7 @@ class Annotation extends Classifier {
     }
     extends?: SingleRef<Annotation> // (reference)
     implements: MultiRef<Interface> = [] // (reference)
-    annotates: SingleRef<Classifier> = unresolved   // (reference)
+    annotates: SingleRef<Classifier> = referenceToSet()   // (reference)
     constructor(language: Language, name: string, key: LionWebKey, id: LionWebId, extends_?: SingleRef<Annotation>) {
         super(language, name, key, id)
         this.extends = extends_
