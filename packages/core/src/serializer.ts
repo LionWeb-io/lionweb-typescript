@@ -1,12 +1,6 @@
-import {
-    currentSerializationFormatVersion,
-    LionWebId,
-    LionWebJsonChunk,
-    LionWebJsonMetaPointer,
-    LionWebJsonNode
-} from "@lionweb/json"
+import { currentSerializationFormatVersion, LionWebId, LionWebJsonChunk, LionWebJsonNode } from "@lionweb/json"
 import { asArray, keepDefineds, lazyMapGet, Nested3Map, uniquesAmong } from "@lionweb/ts-utils"
-import { asIds } from "./functions.js"
+import { asIds, metaPointerFor } from "./functions.js"
 import { Reader } from "./reading.js"
 import { Node } from "./types.js"
 import { builtinPropertyValueSerializer } from "./m3/builtins.js"
@@ -22,6 +16,12 @@ import {
     Reference,
     simpleNameDeducer
 } from "./m3/types.js"
+
+
+/**
+ * Type definition for functions that serializes nodes as a {@link LionWebJsonChunk serialization chunk}.
+ */
+export type Serializer<NT extends Node> = (nodes: NT[]) => LionWebJsonChunk
 
 
 /**
@@ -56,7 +56,7 @@ export type SerializationOptions = Partial<{
 
     /**
      * A {@link PropertyValueSerializer} implementation.
-     * Default = DefaultPropertyValueSerializer.
+     * Default = {@link builtinPropertyValueSerializer}.
      */
     propertyValueSerializer: PropertyValueSerializer
 
@@ -67,26 +67,42 @@ export type SerializationOptions = Partial<{
 
 }>
 
+
 /**
- * @return the {@link LionWebJsonMetaPointer} for the given {@link Feature}.
+ * Type for objects to configure {@link Serializer node serializers} with.
+ * The `reader` property is mandatory,
+ * and the `serializeEmptyFeatures`, `propertyValueSerializer`,
+ * and `primitiveTypeSerializer` (which is a legacy alias for `propertyValueSerializer`)
+ * properties are optional, with defined defaults.
  */
-export const metaPointerFor = (feature: Feature): LionWebJsonMetaPointer => {
-    const { language } = feature.classifier
-    return {
-        language: language.key,
-        version: language.version,
-        key: feature.key
-    }
-}
+export type SerializerConfiguration<NT extends Node> = {
+    /**
+     * An interface with functions to “read” – i.e., introspect – nodes.
+     */
+    reader: Reader<NT>
+} & SerializationOptions
 
 
 /**
- * @return a function that serializes the {@link Node nodes} passed to it.
+ * @return a {@link Serializer} function that serializes the {@link Node nodes} passed to it,
+ * configured through a `reader` {@link Reader} instance,
+ * and (optionally) a `serializationOptions` {@link SerializationOptions} object.
+ *
+ * This is a legacy version of {@link serializerWith}, kept for backward compatibility, and to be deprecated and removed later.
  */
-export const nodeSerializer = <NT extends Node>(reader: Reader<NT>, serializationOptions?: SerializationOptions) => {
+export const nodeSerializer = <NT extends Node>(reader: Reader<NT>, serializationOptions?: SerializationOptions): Serializer<NT> =>
+    serializerWith({ reader, ...serializationOptions })
+
+
+/**
+ * @return a {@link Serializer} function that serializes the {@link Node nodes} passed to it,
+ * configured through a `configuration` {@link SerializerConfiguration} object.
+ */
+export const serializerWith = <NT extends Node>(configuration: SerializerConfiguration<NT>): Serializer<NT> => {
+    const { reader } = configuration
     const propertyValueSerializer =
-        serializationOptions?.propertyValueSerializer ?? serializationOptions?.primitiveTypeSerializer ?? builtinPropertyValueSerializer
-    const serializeEmptyFeatures = serializationOptions?.serializeEmptyFeatures ?? true
+        configuration.propertyValueSerializer ?? configuration.primitiveTypeSerializer ?? builtinPropertyValueSerializer
+    const serializeEmptyFeatures = configuration.serializeEmptyFeatures ?? true
 
     const languageKey2version2classifierKey2allFeatures: Nested3Map<Feature[]> = {}
     const memoisedAllFeaturesOf = (classifier: Classifier): Feature[] =>

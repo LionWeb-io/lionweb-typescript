@@ -23,12 +23,12 @@ import {
     Containment,
     Enumeration,
     Feature,
-    nodeSerializer,
     PrimitiveType,
     Property,
     PropertyValueSerializer,
     Reader,
     Reference,
+    serializerWith,
     unresolved
 } from "@lionweb/core"
 
@@ -86,7 +86,7 @@ export const nodeBaseReader: Reader<INodeBase> = {
 /**
  * @return a serialization of the given nodes (of type {@link INodeBase}) as a {@link LionWebJsonChunk}.
  */
-export const serializeNodeBases = nodeSerializer(nodeBaseReader, { serializeEmptyFeatures: false });
+export const serializeNodeBases = serializerWith({ reader: nodeBaseReader, serializeEmptyFeatures: false });
 
 
 /**

@@ -1,4 +1,4 @@
-import { Language, lioncore, lioncoreBuiltins, nodeSerializer, serializeLanguages } from "@lionweb/core"
+import { Language, lioncore, lioncoreBuiltins, serializeLanguages, serializerWith } from "@lionweb/core"
 import { ioLionWebMpsSpecificLanguage } from "@lionweb/io-lionweb-mps-specific"
 import { LionWebJsonChunk } from "@lionweb/json"
 import {
@@ -48,14 +48,14 @@ writeFileSync(diagramPath("library-gen.puml"), generatePlantUmlForLanguage(libra
 writeFileSync(diagramPath("library-gen.md"), generateMermaidForLanguage(libraryLanguage))
 console.log(`generated diagrams for Library M2`)
 
-writeJsonAsFile(instancePath("library.json"), nodeSerializer(libraryReader)(libraryModel))
+writeJsonAsFile(instancePath("library.json"), serializerWith({ reader: libraryReader })(libraryModel))
 console.log(`serialized library M1`)
 
 saveLanguageFiles(languageWithEnum, "with-enum")
 
 saveLanguageFiles(multiLanguage, "multi")
 
-writeJsonAsFile(instancePath("multi.json"), nodeSerializer(multiReader)(multiModel))
+writeJsonAsFile(instancePath("multi.json"), serializerWith({ reader: multiReader} )(multiModel))
 console.log(`serialized multi-language M1`)
 
 const serializationChunk = readFileAsJson(`../${ioLionWebMpsSpecificLanguage.key}/meta/${ioLionWebMpsSpecificLanguage.name}.json`) as LionWebJsonChunk

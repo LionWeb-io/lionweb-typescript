@@ -15,6 +15,7 @@
     * Add a `ObservableForest` class that is Mobx-observable.
 * Propagate `reference` field of `LionWebJsonReferenceTarget` type now being `null`able.
 * Fix that the annotations value manager always tries to detach an annotation to remove, even if it isn’t contained through the value manager’s container.
+* Rename the `problemsHandler` property of the `DeserializerConfiguration` to `problemReporter` (also using the renamed type), keeping an alias for backward compatibility.
 
 
 ## 0.7.2

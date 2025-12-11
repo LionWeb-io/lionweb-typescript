@@ -1,9 +1,8 @@
 import {
-    AggregatingSimplisticHandler,
+    AggregatingProblemReporter,
     BuiltinPropertyValueDeserializer,
     Concept,
-    deserializeChunk,
-    deserializeSerializationChunk,
+    deserializerWith,
     dynamicWriter,
     Feature,
     Language,
@@ -19,6 +18,7 @@ import { libraryWriter } from "../instances/library.js"
 import { libraryLanguage } from "../languages/library.js"
 import { dateDataType, libraryWithDatesLanguage } from "../languages/libraryWithDates.js"
 import { deepEqual, equal } from "../test-utils/assertions.js"
+
 
 type NodeWithProperties = BaseNode & { properties: Record<string, unknown> }
 
@@ -36,6 +36,7 @@ export const libraryWithDatesWriter: Writer<BaseNode> = {
         throw new Error("(should not be called)")
     }
 }
+
 
 describe("deserialization", () => {
     it("deserializes all nodes, also when there are effectively no root nodes", () => {
@@ -63,7 +64,7 @@ describe("deserialization", () => {
                 }
             ]
         }
-        const deserialization = deserializeSerializationChunk(serializationChunk, libraryWriter, [libraryLanguage], [])
+        const deserialization = deserializerWith({ writer: libraryWriter, languages: [libraryLanguage] })(serializationChunk)
         deepEqual(deserialization, [
             {
                 id: "1",
@@ -108,7 +109,7 @@ describe("deserialization", () => {
             ]
         }
         deepEqual(
-            deserializeSerializationChunk(serializationChunk, libraryWithDatesWriter, [libraryWithDatesLanguage], []),
+            deserializerWith({ writer: libraryWithDatesWriter, languages: [libraryWithDatesLanguage] })(serializationChunk),
             [] // because instantiation fails, but instantiation is effectively a flatmap
         )
     })
@@ -153,13 +154,11 @@ describe("deserialization", () => {
             return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]))
         })
 
-        const deserialization = deserializeSerializationChunk(
-            serializationChunk,
-            libraryWithDatesWriter,
-            [libraryWithDatesLanguage],
-            [],
+        const deserialization = deserializerWith({
+            writer: libraryWithDatesWriter,
+            languages: [libraryWithDatesLanguage],
             propertyValueDeserializer
-        )
+        })(serializationChunk)
 
         const node = deserialization[0] as NodeWithProperties
         expect(node.properties["creationDate"]).to.eql(new Date(2024, 4, 28))
@@ -185,7 +184,7 @@ describe("deserialization", () => {
                 }
             ]
         }
-        deepEqual(deserializeSerializationChunk(serializationChunk, dynamicWriter, [], []), [])
+        deepEqual(deserializerWith({ writer: dynamicWriter, languages: [] })(serializationChunk), [])
     })
 
     it("doesn't throw for unresolvable references", () => {
@@ -239,27 +238,26 @@ describe("deserialization", () => {
             ]
         }
 
-        const model = deserializeSerializationChunk(serializationChunk, dynamicWriter, [someLanguage], [])
+        const model = deserializerWith({ writer: dynamicWriter, languages: [someLanguage] })(serializationChunk)
         equal(model.length, 1)
         deepEqual(model[0].settings, { [someConcept_aReference.key]: unresolved })
     })
 
     it("aggregates problems", () => {
-        const aggregator = new AggregatingSimplisticHandler()
-        deserializeChunk(
+        const problemReporter = new AggregatingProblemReporter()
+        deserializerWith({
+            writer: dynamicWriter,
+            languages: [],
+            problemReporter
+        })(
             {
                 // misses "serializationFormatVersion"
                 languages: [],
                 nodes: []
             } as unknown as LionWebJsonChunk,
-            dynamicWriter,
-            [],
-            [],
-            undefined,
-            aggregator
         )
-        aggregator.reportAllProblemsOnConsole(true)
-        deepEqual(Object.entries(aggregator.allProblems()), [
+        problemReporter.reportAllProblemsOnConsole(true)
+        deepEqual(Object.entries(problemReporter.allProblems()), [
             [
                 `can't deserialize from serialization format other than version "${currentSerializationFormatVersion}" - assuming that version`,
                 1
@@ -267,3 +265,4 @@ describe("deserialization", () => {
         ])
     })
 })
+

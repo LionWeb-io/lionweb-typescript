@@ -1,7 +1,7 @@
 import { extname, join } from "path"
 import { existsSync, mkdirSync, statSync, writeFileSync } from "fs"
 
-import { AggregatingSimplisticHandler, deserializeLanguagesWithHandler } from "@lionweb/core"
+import { AggregatingProblemReporter, deserializeLanguagesWithReporter } from "@lionweb/core"
 import { GenerationOptions, readSerializationChunk, tsTypeDefsForLanguage } from "@lionweb/utilities"
 
 const generateTsTypesFromSerialization = async (path: string, generationOptions: GenerationOptions[]) => {
@@ -11,9 +11,9 @@ const generateTsTypesFromSerialization = async (path: string, generationOptions:
             mkdirSync(genPath)
         }
 
-        const handler = new AggregatingSimplisticHandler()
-        const languages = deserializeLanguagesWithHandler(await readSerializationChunk(path), handler)
-        handler.reportAllProblemsOnConsole()
+        const problemReporter = new AggregatingProblemReporter()
+        const languages = deserializeLanguagesWithReporter(await readSerializationChunk(path), problemReporter)
+        problemReporter.reportAllProblemsOnConsole()
 
         languages.forEach((language) => {
             const fileName = `${language.name}.g.ts`

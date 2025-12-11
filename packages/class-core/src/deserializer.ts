@@ -18,21 +18,21 @@
 import {
     builtinPropertyValueDeserializer,
     Classifier,
+    consoleProblemReporter,
     Containment,
-    defaultSimplisticHandler,
     Enumeration,
     MemoisingSymbolTable,
     PrimitiveType,
+    ProblemReporter,
     Property,
     PropertyValueDeserializer,
     Reference,
-    SimplisticHandler,
     unresolved
 } from "@lionweb/core"
 import { LionWebId, LionWebJsonChunk, LionWebJsonNode } from "@lionweb/json"
 import { byIdMap, keepDefineds } from "@lionweb/ts-utils"
 
-import { DeltaReceiver, IdMapping, ILanguageBase, INodeBase, FactoryConfiguration } from "./index.js"
+import { DeltaReceiver, FactoryConfiguration, IdMapping, ILanguageBase, INodeBase } from "./index.js"
 import { combinedLanguageBaseLookupFor } from "./factory.js"
 import { NodesToInstall } from "./linking.js"
 
@@ -62,8 +62,10 @@ export type RootsWithIdMapping = { roots: INodeBase[], idMapping: IdMapping };
 export type DeserializerConfiguration = {
     /** Default: {@link builtinPropertyValueDeserializer}. */
     propertyValueDeserializer?: PropertyValueDeserializer,
-    /** Default: {@link defaultSimplisticHandler}. */
-    problemsHandler?: SimplisticHandler
+    /** Default: {@link consoleProblemReporter}. */
+    problemReporter?: ProblemReporter
+    /** Legacy alias for {@link problemReporter}, kept for backward compatibility, and to be deprecated and removed later. */
+    problemsHandler?: ProblemReporter
 };
 
 
@@ -79,9 +81,9 @@ function nodeBaseDeserializerWithIdMapping(languageBases: ILanguageBase[], recei
  */
 function nodeBaseDeserializerWithIdMapping(configuration: FactoryConfiguration & DeserializerConfiguration): Deserializer<RootsWithIdMapping>;
 function nodeBaseDeserializerWithIdMapping(languageBasesOrConfiguration: ILanguageBase[] | (FactoryConfiguration & DeserializerConfiguration), mayBeReceiveDelta?: DeltaReceiver): Deserializer<RootsWithIdMapping> {
-    const [languageBases, receiveDelta, propertyValueDeserializer, problemsHandler] = Array.isArray(languageBasesOrConfiguration)
-        ? [languageBasesOrConfiguration, mayBeReceiveDelta, builtinPropertyValueDeserializer, defaultSimplisticHandler]
-        : [languageBasesOrConfiguration.languageBases, languageBasesOrConfiguration.receiveDelta, languageBasesOrConfiguration.propertyValueDeserializer ?? builtinPropertyValueDeserializer, languageBasesOrConfiguration.problemsHandler ?? defaultSimplisticHandler];
+    const [languageBases, receiveDelta, propertyValueDeserializer, problemReporter] = Array.isArray(languageBasesOrConfiguration)
+        ? [languageBasesOrConfiguration, mayBeReceiveDelta, builtinPropertyValueDeserializer, consoleProblemReporter]
+        : [languageBasesOrConfiguration.languageBases, languageBasesOrConfiguration.receiveDelta, languageBasesOrConfiguration.propertyValueDeserializer ?? builtinPropertyValueDeserializer, languageBasesOrConfiguration.problemReporter ?? languageBasesOrConfiguration.problemsHandler ?? consoleProblemReporter];
 
     const symbolTable = new MemoisingSymbolTable(languageBases.map(({language}) => language));
     const languageBaseFor = combinedLanguageBaseLookupFor(languageBases);
@@ -97,7 +99,7 @@ function nodeBaseDeserializerWithIdMapping(languageBasesOrConfiguration: ILangua
             const languageMessage = `language ${classifierMetaPointer.language} (${classifierMetaPointer.version})`;
             const classifier = symbolTable.entityMatching(classifierMetaPointer);
             if (classifier === undefined || !(classifier instanceof Classifier)) {
-                problemsHandler.reportProblem(`can't deserialize node with id=${id}: can't find the classifier with key ${classifierMetaPointer.key} in ${languageMessage} - skipping`);
+                problemReporter.reportProblem(`can't deserialize node with id=${id}: can't find the classifier with key ${classifierMetaPointer.key} in ${languageMessage} - skipping`);
                 return undefined;
             }
 
@@ -106,7 +108,7 @@ function nodeBaseDeserializerWithIdMapping(languageBasesOrConfiguration: ILangua
             properties.forEach(({property: propertyMetaPointer, value}) => {
                 const feature = symbolTable.featureMatching(classifierMetaPointer, propertyMetaPointer);
                 if (feature === undefined) {
-                    problemsHandler.reportProblem(`can't deserialize value for feature with key ${propertyMetaPointer.key} in ${languageMessage}: feature not found on classifier ${classifierMetaPointer.key} in language (${classifierMetaPointer.language}, ${classifierMetaPointer.version}) - skipping`);
+                    problemReporter.reportProblem(`can't deserialize value for feature with key ${propertyMetaPointer.key} in ${languageMessage}: feature not found on classifier ${classifierMetaPointer.key} in language (${classifierMetaPointer.language}, ${classifierMetaPointer.version}) - skipping`);
                 } else if (feature instanceof Property) {
                     if (feature.type instanceof PrimitiveType) {
                         node.getPropertyValueManager(feature).setDirectly(value === null ? undefined : propertyValueDeserializer.deserializeValue(value, feature));
@@ -114,32 +116,32 @@ function nodeBaseDeserializerWithIdMapping(languageBasesOrConfiguration: ILangua
                         if (value !== undefined) {
                             const literal = feature.type.literals.find((literal) => literal.key === value);
                             if (literal === undefined) {
-                                problemsHandler.reportProblem(`can't deserialize literal encoded as: ${value}`);
+                                problemReporter.reportProblem(`can't deserialize literal encoded as: ${value}`);
                             } else {
                                 node.getPropertyValueManager(feature).setDirectly(languageBaseFor(feature.type.language).enumLiteralFrom(literal));
                             }
                         }
                     }
                 } else {
-                    problemsHandler.reportProblem(`can't deserialize value for feature with key ${propertyMetaPointer.key} in ${languageMessage}: feature is not a property - skipping`);
+                    problemReporter.reportProblem(`can't deserialize value for feature with key ${propertyMetaPointer.key} in ${languageMessage}: feature is not a property - skipping`);
                 }
             });
 
             containments.forEach(({containment: containmentMetaPointer, children}) => {
                 const feature = symbolTable.featureMatching(classifierMetaPointer, containmentMetaPointer);
                 if (feature === undefined) {
-                    problemsHandler.reportProblem(`can't deserialize value for feature with key ${containmentMetaPointer.key} in ${languageMessage}: feature not found on classifier ${classifierMetaPointer.key} in language (${classifierMetaPointer.language}, ${classifierMetaPointer.version}) - skipping`);
+                    problemReporter.reportProblem(`can't deserialize value for feature with key ${containmentMetaPointer.key} in ${languageMessage}: feature not found on classifier ${classifierMetaPointer.key} in language (${classifierMetaPointer.language}, ${classifierMetaPointer.version}) - skipping`);
                 } else if (feature instanceof Containment) {
                     nodesToInstall.push([node, feature, children]);
                 } else {
-                    problemsHandler.reportProblem(`can't deserialize value for feature with key ${containmentMetaPointer.key} in ${languageMessage}: feature is not a containment - skipping`);
+                    problemReporter.reportProblem(`can't deserialize value for feature with key ${containmentMetaPointer.key} in ${languageMessage}: feature is not a containment - skipping`);
                 }
             });
 
             references.forEach(({reference: referenceMetaPointer, targets}) => {
                 const feature = symbolTable.featureMatching(classifierMetaPointer, referenceMetaPointer);
                 if (feature === undefined) {
-                    problemsHandler.reportProblem(`can't deserialize value for feature with key ${referenceMetaPointer.key} in ${languageMessage}: feature not found on classifier ${classifierMetaPointer.key} in language (${classifierMetaPointer.language}, ${classifierMetaPointer.version}) - skipping`);
+                    problemReporter.reportProblem(`can't deserialize value for feature with key ${referenceMetaPointer.key} in ${languageMessage}: feature not found on classifier ${classifierMetaPointer.key} in language (${classifierMetaPointer.language}, ${classifierMetaPointer.version}) - skipping`);
                 } else if (feature instanceof Reference) {
                     nodesToInstall.push(
                         [
@@ -152,7 +154,7 @@ function nodeBaseDeserializerWithIdMapping(languageBasesOrConfiguration: ILangua
                         ]
                     );
                 } else {
-                    problemsHandler.reportProblem(`can't deserialize value for feature with key ${referenceMetaPointer.key} in ${languageMessage}: feature is not a reference - skipping`);
+                    problemReporter.reportProblem(`can't deserialize value for feature with key ${referenceMetaPointer.key} in ${languageMessage}: feature is not a reference - skipping`);
                 }
             });
 
@@ -180,7 +182,7 @@ function nodeBaseDeserializerWithIdMapping(languageBasesOrConfiguration: ILangua
                 ids.forEach((id) => {
                     const nodeToInstall = lookupNodeById(id);
                     if (nodeToInstall === undefined) {
-                        problemsHandler.reportProblem(`couldn't resolve the child with id=${id} of the "${feature.name}" containment feature on the node with id=${node.id}`);
+                        problemReporter.reportProblem(`couldn't resolve the child with id=${id} of the "${feature.name}" containment feature on the node with id=${node.id}`);
                     } else {
                         valueManager.addDirectly(nodeToInstall);
                         nodeToInstall.attachTo(node, feature);
@@ -193,7 +195,7 @@ function nodeBaseDeserializerWithIdMapping(languageBasesOrConfiguration: ILangua
                 ids.forEach((id) => {
                     const nodeToInstall = lookupNodeById(id);
                     if (nodeToInstall === undefined) {
-                        problemsHandler.reportProblem(`couldn't resolve the target with id=${id} of the "${feature.name}" reference feature on the node with id=${node.id}`);
+                        problemReporter.reportProblem(`couldn't resolve the target with id=${id} of the "${feature.name}" reference feature on the node with id=${node.id}`);
                         valueManager.addDirectly(unresolved);
                     } else {
                         valueManager.addDirectly(nodeToInstall);
@@ -206,7 +208,7 @@ function nodeBaseDeserializerWithIdMapping(languageBasesOrConfiguration: ILangua
                 ids.forEach((id) => {
                     const nodeToInstall = lookupNodeById(id);
                     if (nodeToInstall === undefined) {
-                        problemsHandler.reportProblem(`couldn't resolve the annotation with id=${id} on the node with id=${node.id}`);
+                        problemReporter.reportProblem(`couldn't resolve the annotation with id=${id} on the node with id=${node.id}`);
                     } else {
                         valueManager.addDirectly(nodeToInstall);
                         nodeToInstall.attachTo(node, feature);

@@ -1,4 +1,4 @@
-import { nodeSerializer } from "@lionweb/core"
+import { serializerWith } from "@lionweb/core"
 import { asMinimalJsonString } from "@lionweb/ts-utils"
 import { measure, readFileAsJson, writeJsonAsFile } from "@lionweb/utilities"
 import { join } from "path"
@@ -8,6 +8,7 @@ import { multiModel, multiReader } from "../instances/multi.js"
 import { libraryLanguage } from "../languages/library.js"
 import { multiLanguage } from "../languages/multi.js"
 import { deepEqual } from "../test-utils/assertions.js"
+
 
 describe("metrics computation", () => {
     const removeUndefineds = (json: unknown) => JSON.parse(asMinimalJsonString(json))
@@ -23,13 +24,13 @@ describe("metrics computation", () => {
     }
 
     it("works on library", () => {
-        const serializationChunk = nodeSerializer(libraryReader)(libraryModel)
+        const serializationChunk = serializerWith({ reader: libraryReader })(libraryModel)
         compareWithFile(measure(serializationChunk, []), "library-no-languages.metrics.json")
         compareWithFile(measure(serializationChunk, [libraryLanguage]), "library-with-languages.metrics.json")
     })
 
     it("works on multi-language model", () => {
-        const serializationChunk = nodeSerializer(multiReader)(multiModel)
+        const serializationChunk = serializerWith({ reader: multiReader })(multiModel)
         compareWithFile(measure(serializationChunk, []), "multi-no-languages.metrics.json")
         compareWithFile(measure(serializationChunk, [multiLanguage]), "multi-with-languages.metrics.json")
     })
