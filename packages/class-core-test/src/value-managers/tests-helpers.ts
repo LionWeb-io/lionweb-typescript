@@ -17,17 +17,17 @@
 
 import { DeltaReceiver, nodeBaseDeserializer } from "@lionweb/class-core"
 import { TestLanguageBase } from "@lionweb/class-core-test-language"
-import { AccumulatingSimplisticHandler } from "@lionweb/core"
+import { AccumulatingProblemReporter } from "@lionweb/core"
 import { LionWebJsonChunk } from "@lionweb/json"
 
 import { equal } from "../assertions.js"
 
 
 export const deserializeNodesAssertingNoProblems = (serializationChunk: LionWebJsonChunk, receiveDelta?: DeltaReceiver) => {
-    const problemsHandler = new AccumulatingSimplisticHandler()
-    const deserialize = nodeBaseDeserializer({ languageBases: [TestLanguageBase.INSTANCE], receiveDelta, problemsHandler })
+    const problemReporter = new AccumulatingProblemReporter()
+    const deserialize = nodeBaseDeserializer({ languageBases: [TestLanguageBase.INSTANCE], receiveDelta, problemReporter })
     const deserializedNodes = deserialize(serializationChunk)
-    equal(problemsHandler.allProblems.length, 0)
+    equal(problemReporter.allProblems.length, 0)
     return deserializedNodes
 }
 

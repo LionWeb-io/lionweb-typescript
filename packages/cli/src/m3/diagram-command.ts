@@ -1,4 +1,4 @@
-import { AggregatingSimplisticHandler, deserializeLanguagesWithHandler } from "@lionweb/core"
+import { AggregatingProblemReporter, deserializeLanguagesWithReporter } from "@lionweb/core"
 import { generateMermaidForLanguage, generatePlantUmlForLanguage, readSerializationChunk } from "@lionweb/utilities"
 import { writeFileSync } from "fs"
 import { dirname } from "path"
@@ -7,9 +7,9 @@ export const diagramFromSerializationChunkAt = async (path: string) => {
     try {
         const json = await readSerializationChunk(path)
         const dir = dirname(path)
-        const handler = new AggregatingSimplisticHandler()
-        const languages = deserializeLanguagesWithHandler(json, handler)
-        handler.reportAllProblemsOnConsole()
+        const problemReporter = new AggregatingProblemReporter()
+        const languages = deserializeLanguagesWithReporter(json, problemReporter)
+        problemReporter.reportAllProblemsOnConsole()
         languages.forEach(language => {
             writeFileSync(`${dir}/${language.name}.puml`, generatePlantUmlForLanguage(language))
             writeFileSync(`${dir}/${language.name}.md`, generateMermaidForLanguage(language))

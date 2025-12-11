@@ -1,5 +1,5 @@
 import {
-    AggregatingSimplisticHandler,
+    AggregatingProblemReporter,
     BuiltinPropertyValueDeserializer,
     Concept,
     deserializerWith,
@@ -244,11 +244,11 @@ describe("deserialization", () => {
     })
 
     it("aggregates problems", () => {
-        const aggregator = new AggregatingSimplisticHandler()
+        const problemReporter = new AggregatingProblemReporter()
         deserializerWith({
             writer: dynamicWriter,
             languages: [],
-            problemHandler: aggregator
+            problemReporter
         })(
             {
                 // misses "serializationFormatVersion"
@@ -256,8 +256,8 @@ describe("deserialization", () => {
                 nodes: []
             } as unknown as LionWebJsonChunk,
         )
-        aggregator.reportAllProblemsOnConsole(true)
-        deepEqual(Object.entries(aggregator.allProblems()), [
+        problemReporter.reportAllProblemsOnConsole(true)
+        deepEqual(Object.entries(problemReporter.allProblems()), [
             [
                 `can't deserialize from serialization format other than version "${currentSerializationFormatVersion}" - assuming that version`,
                 1

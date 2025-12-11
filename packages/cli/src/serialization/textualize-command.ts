@@ -1,4 +1,4 @@
-import { AggregatingSimplisticHandler, deserializeLanguagesWithHandler, Language } from "@lionweb/core"
+import { AggregatingProblemReporter, deserializeLanguagesWithReporter, Language } from "@lionweb/core"
 import {
     genericAsTreeText,
     languagesAsText,
@@ -25,13 +25,13 @@ export const executeTextualizeCommand = async (args: string[]) => {
 const textualizeSerializationChunk = async (path: string, languagesAsRegular: boolean, languages: Language[] = []) => {
     const chunk = await readSerializationChunk(path)
     const extLessPath = path.substring(0, path.length - extname(path).length)
-    const handler = new AggregatingSimplisticHandler()
+    const problemReporter = new AggregatingProblemReporter()
     await writeFile(
         extLessPath + ".txt",
         looksLikeSerializedLanguages(chunk) && !languagesAsRegular
-            ? languagesAsText(deserializeLanguagesWithHandler(chunk, handler))
+            ? languagesAsText(deserializeLanguagesWithReporter(chunk, problemReporter))
             : genericAsTreeText(chunk, languages)
     )
-    handler.reportAllProblemsOnConsole()
+    problemReporter.reportAllProblemsOnConsole()
     console.log(`textualized: ${path}`)
 }

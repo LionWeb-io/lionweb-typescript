@@ -7,7 +7,7 @@ import {
 } from "@lionweb/json"
 import { byIdMap, groupBy, keepDefineds } from "@lionweb/ts-utils"
 import { Writer } from "./writing.js"
-import { defaultSimplisticHandler, SimplisticHandler } from "./handler.js"
+import { consoleProblemReporter, ProblemReporter } from "./reporter.js"
 import { builtinPropertyValueDeserializer } from "./m3/builtins.js"
 import { MemoisingSymbolTable } from "./m3/symbol-table.js"
 import { Classifier, Containment, Enumeration, Language, PrimitiveType, Property, Reference } from "./m3/types.js"
@@ -53,10 +53,10 @@ export type DeserializerConfiguration<NT extends Node> = {
      */
     propertyValueDeserializer?: PropertyValueDeserializer,
     /**
-     * A handler for reporting problems.
-     * Default: {@link defaultSimplisticHandler}.
+     * An object for reporting problems to.
+     * Default: {@link consoleProblemReporter}.
      */
-    problemHandler?: SimplisticHandler
+    problemReporter?: ProblemReporter
 }
 
 
@@ -71,12 +71,12 @@ export const deserializerWith = <NT extends Node>(configuration: DeserializerCon
     const { writer } = configuration
 
     const propertyValueDeserializer = configuration.propertyValueDeserializer ?? builtinPropertyValueDeserializer
-    const problemHandler = configuration.problemHandler ?? defaultSimplisticHandler
+    const problemReporter = configuration.problemReporter ?? consoleProblemReporter
 
     return (serializationChunk, dependentNodes = []) => {
 
         if (serializationChunk.serializationFormatVersion !== currentSerializationFormatVersion) {
-            problemHandler.reportProblem(
+            problemReporter.reportProblem(
                 `can't deserialize from serialization format other than version "${currentSerializationFormatVersion}" - assuming that version`
             )
         }
@@ -113,10 +113,10 @@ export const deserializerWith = <NT extends Node>(configuration: DeserializerCon
             try {
                 return writer.nodeFor(parent, classifier, id, propertySettings)
             } catch (e: unknown) {
-                problemHandler.reportProblem(
+                problemReporter.reportProblem(
                     `error occurred during instantiation of a node for classifier ${classifier.name} with meta-pointer (${classifier.language.key}, ${classifier.language.version}, ${classifier.key}); reason:`
                 )
-                problemHandler.reportProblem((e as Error).toString())
+                problemReporter.reportProblem((e as Error).toString())
                 return null
             }
         }
@@ -138,7 +138,7 @@ export const deserializerWith = <NT extends Node>(configuration: DeserializerCon
             const classifier = symbolTable.entityMatching(classifierMetaPointer)
 
             if (classifier === undefined || !(classifier instanceof Classifier)) {
-                problemHandler.reportProblem(
+                problemReporter.reportProblem(
                     `can't deserialize node with id=${id}: can't find the classifier with key ${classifierMetaPointer.key} in language (${classifierMetaPointer.language}, ${classifierMetaPointer.version})`
                 )
                 return null
@@ -237,7 +237,7 @@ export const deserializerWith = <NT extends Node>(configuration: DeserializerCon
             const value = (() => {
                 if (target === undefined) {
                     const metaTypeMessage = "concept" in node ? ` and (meta-)type ${node.concept}` : ""
-                    problemHandler.reportProblem(
+                    problemReporter.reportProblem(
                         `couldn't resolve the target with id=${refId} of a "${reference.name}" reference on the node with id=${node.id}${metaTypeMessage}`
                     )
                     return unresolved
@@ -261,7 +261,7 @@ export const deserializerWith = <NT extends Node>(configuration: DeserializerCon
  * @param languages - {@link Language languages} that the serialized model is expected to conform to
  * @param dependentNodes - a collection of nodes from dependent models against which all references in the serialized model are supposed to resolve against
  * @param propertyValueDeserializer - a deserializer for values of properties (by default a {@link BuiltinPropertyValueDeserializer})
- * @param problemHandler - a handler for reporting problems (by default a {@link defaultSimplisticHandler})
+ * @param problemReporter - an object for reporting problems (by default a {@link consoleProblemReporter})
  *
  * This is a legacy variant of {@link deserializerWith}, kept for backward compatibility, and to be deprecated and removed later.
  */
@@ -273,8 +273,8 @@ export const deserializeSerializationChunk = <NT extends Node>(
     dependentNodes: Node[],
     // TODO (#13)  see if you can turn this into [nodes: Node[], writer: Writer<Node>][] after all
     propertyValueDeserializer: PropertyValueDeserializer = builtinPropertyValueDeserializer,
-    problemHandler: SimplisticHandler = defaultSimplisticHandler
-): NT[] => deserializerWith({ writer, languages, propertyValueDeserializer, problemHandler })(serializationChunk, dependentNodes)
+    problemReporter: ProblemReporter = consoleProblemReporter
+): NT[] => deserializerWith({ writer, languages, propertyValueDeserializer, problemReporter: problemReporter })(serializationChunk, dependentNodes)
 
 /**
  * Alias for {@link deserializeSerializationChunk}.
