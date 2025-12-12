@@ -54,7 +54,7 @@ describe("combining delta protocol and an “adjacent” delta receiver", () => 
             lowLevelClientInstantiator: ({ receiveMessageOnClient }) =>
                 Promise.resolve({
                     sendMessage: (message) => {
-                        if (message.messageKind === "SignOnRequest") {
+                        if (message.messageKind === "SignOn") {
                             receiveMessageOnClient({
                                 messageKind: "SignOnResponse",
                                 queryId: "q1",

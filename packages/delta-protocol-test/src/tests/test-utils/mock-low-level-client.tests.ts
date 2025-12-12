@@ -33,7 +33,7 @@ describe("mock low-level client", async function() {
     }
 
     const signOnQueryRequest: SignOnRequest = {
-        messageKind: "SignOnRequest",
+        messageKind: "SignOn",
         deltaProtocolVersion: "2025.1",
         clientId: "A",
         queryId: "query-1",

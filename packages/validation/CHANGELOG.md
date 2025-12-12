@@ -5,11 +5,12 @@
 * New way to define the structure of the LionWeb JSON format.
 * Add delta format definitions.
 * Propagate `reference` field of `LionWebJsonReferenceTarget` type now being `null`able.
+* Fix `messageKind` field for request messages of queries to *not* have the "`Request`" suffix.
 
 
 ## 0.7.2
 
-(No changes.)
+(No changes)
 
 
 ## 0.7.1

@@ -36,7 +36,7 @@ export interface SubscribeToPartitionChangesParameters {
 }
 
 export interface SubscribeToChangingPartitionsRequest extends QueryMessage, SubscribeToPartitionChangesParameters {
-    messageKind: "SubscribeToChangingPartitionsRequest"
+    messageKind: "SubscribeToChangingPartitions"
 }
 
 export interface SubscribeToChangingPartitionsResponse extends QueryMessage {
@@ -45,7 +45,7 @@ export interface SubscribeToChangingPartitionsResponse extends QueryMessage {
 
 
 export interface SubscribeToPartitionContentsRequest extends QueryMessage {
-    messageKind: "SubscribeToPartitionContentsRequest"
+    messageKind: "SubscribeToPartitionContents"
     partition: LionWebId
 }
 
@@ -56,7 +56,7 @@ export interface SubscribeToPartitionContentsResponse extends QueryMessage {
 
 
 export interface UnsubscribeFromPartitionContentsRequest extends QueryMessage {
-    messageKind: "UnsubscribeFromPartitionContentsRequest"
+    messageKind: "UnsubscribeFromPartitionContents"
     partition: LionWebId
 }
 
@@ -66,7 +66,7 @@ export interface UnsubscribeFromPartitionContentsResponse extends QueryMessage {
 
 
 export interface SignOnRequest extends QueryMessage {
-    messageKind: "SignOnRequest"
+    messageKind: "SignOn"
     deltaProtocolVersion: "2025.1"
     clientId: LionWebId
     repositoryId: LionWebId
@@ -79,7 +79,7 @@ export interface SignOnResponse extends QueryMessage {
 
 
 export interface SignOffRequest extends QueryMessage {
-    messageKind: "SignOffRequest"
+    messageKind: "SignOff"
 }
 
 export interface SignOffResponse extends QueryMessage {
@@ -88,7 +88,7 @@ export interface SignOffResponse extends QueryMessage {
 
 
 export interface ReconnectRequest extends QueryMessage {
-    messageKind: "ReconnectRequest"
+    messageKind: "Reconnect"
     participationId: LionWebId
     lastReceivedSequenceNumber: number
 }
@@ -100,7 +100,7 @@ export interface ReconnectResponse extends QueryMessage {
 
 
 export interface GetAvailableIdsRequest extends QueryMessage {
-    messageKind: "GetAvailableIdsRequest"
+    messageKind: "GetAvailableIds"
     count: number
 }
 
@@ -111,7 +111,7 @@ export interface GetAvailableIdsResponse extends QueryMessage {
 
 
 export interface GetAvailableIdsRequest extends QueryMessage {
-    messageKind: "GetAvailableIdsRequest"
+    messageKind: "GetAvailableIds"
     count: number
 }
 
@@ -122,7 +122,7 @@ export interface GetAvailableIdsResponse extends QueryMessage {
 
 
 export interface ListPartitionsRequest extends QueryMessage {
-    messageKind: "ListPartitionsRequest"
+    messageKind: "ListPartitions"
 }
 
 export interface ListPartitionsResponse extends QueryMessage {

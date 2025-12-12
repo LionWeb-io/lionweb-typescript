@@ -61,7 +61,7 @@ export class LionWebRepository {
                 return clientMetadata as ClientMetadata
             }
             switch (message.messageKind) {
-                case "SignOnRequest": {
+                case "SignOn": {
                     const { clientId, queryId } = message as SignOnRequest
                     clientMetadata.participationId = `participation-${String.fromCharCode(97 + (nextParticipationIdSequenceNumber++))}`
                     clientMetadata.clientId = clientId
@@ -72,7 +72,7 @@ export class LionWebRepository {
                         protocolMessages: []
                     } as SignOnResponse
                 }
-                case "SignOffRequest": {
+                case "SignOff": {
                     const { queryId } = message as SignOffRequest
                     clientMetadata.participationId = undefined
                     return {

@@ -3,6 +3,7 @@
 ## 0.8.0 — not yet released
 
 * Rework the `LionWebClient` class to use the new `Forest` class from the `class-core` package.
+* Fix `messageKind` field for request messages of queries to *not* have the "`Request`" suffix.
 
 
 ## 0.7.1

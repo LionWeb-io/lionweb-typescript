@@ -205,7 +205,7 @@ export class LionWebClient {
 
     async subscribeToChangingPartitions(queryId: LionWebId, parameters: SubscribeToPartitionChangesParameters): Promise<void> {
         await this.makeQuery({
-            messageKind: "SubscribeToChangingPartitionsRequest",
+            messageKind: "SubscribeToChangingPartitions",
             queryId,
             ...parameters,
             protocolMessages: []
@@ -214,7 +214,7 @@ export class LionWebClient {
 
     async subscribeToPartitionContents(queryId: LionWebId, partition: LionWebId): Promise<LionWebJsonChunk> {   // TODO  already deserialize, because we've got everything we need
         const response = await this.makeQuery({
-            messageKind: "SubscribeToPartitionContentsRequest",
+            messageKind: "SubscribeToPartitionContents",
             queryId,
             partition,
             protocolMessages: []
@@ -224,7 +224,7 @@ export class LionWebClient {
 
     async unsubscribeFromPartitionContents(queryId: LionWebId, partition: LionWebId): Promise<void> {
         await this.makeQuery({
-            messageKind: "UnsubscribeFromPartitionContentsRequest",
+            messageKind: "UnsubscribeFromPartitionContents",
             queryId,
             partition,
             protocolMessages: []
@@ -236,7 +236,7 @@ export class LionWebClient {
             return Promise.reject(new Error(`can't sign on after having signed off`))
         }
         const response = await this.makeQuery({
-            messageKind: "SignOnRequest",
+            messageKind: "SignOn",
             queryId,
             repositoryId,
             deltaProtocolVersion: "2025.1",
@@ -248,7 +248,7 @@ export class LionWebClient {
 
     async signOff(queryId: LionWebId): Promise<void> {
         await this.makeQuery({
-            messageKind: "SignOffRequest",
+            messageKind: "SignOff",
             queryId,
             protocolMessages: []
         } as SignOffRequest)
@@ -258,7 +258,7 @@ export class LionWebClient {
 
     async reconnect(queryId: LionWebId, participationId: LionWebId, lastReceivedSequenceNumber: number): Promise<void> {
         const response = await this.makeQuery({
-            messageKind: "ReconnectRequest",
+            messageKind: "Reconnect",
             queryId,
             participationId,
             lastReceivedSequenceNumber,
@@ -270,7 +270,7 @@ export class LionWebClient {
 
     async getAvailableIds(queryId: LionWebId, count: number): Promise<LionWebId[]> {
         const response = await this.makeQuery({
-            messageKind: "GetAvailableIdsRequest",
+            messageKind: "GetAvailableIds",
             queryId,
             count,
             protocolMessages: []
@@ -280,7 +280,7 @@ export class LionWebClient {
 
     async listPartitions(queryId: LionWebId): Promise<LionWebJsonChunk> {
         const response = await this.makeQuery({
-            messageKind: "ListPartitionsRequest",
+            messageKind: "ListPartitions",
             queryId,
             protocolMessages: []
         } as ListPartitionsRequest) as ListPartitionsResponse

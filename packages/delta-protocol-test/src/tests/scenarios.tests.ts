@@ -116,7 +116,7 @@ describe(`scenarios (${ansi.colorSchemeExplanationString})`, async function() {
             }]
         }
         const expectedLogItems = [
-            new RepositoryReceivedMessage({}, { messageKind: "SignOnRequest", queryId, repositoryId, deltaProtocolVersion: "2025.1", clientId, protocolMessages: [] } as SignOnRequest),
+            new RepositoryReceivedMessage({}, { messageKind: "SignOn", queryId, repositoryId, deltaProtocolVersion: "2025.1", clientId, protocolMessages: [] } as SignOnRequest),
             new ClientReceivedMessage(clientId, { messageKind: "SignOnResponse", queryId, participationId: "participation-a", protocolMessages: [] } as SignOnResponse),
             new DeltaOccurredOnClient(
                 clientId,

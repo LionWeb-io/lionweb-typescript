@@ -28,7 +28,7 @@ export const QueryDefinitions: MessageGroup = {
     ],
     messages: [
         {
-            name: "SubscribeToChangingPartitionsRequest",
+            name: "SubscribeToChangingPartitions",
             properties: [
                 {
                     name: "creation",
@@ -54,7 +54,7 @@ export const QueryDefinitions: MessageGroup = {
             ],
         },
         {
-            name: "SubscribeToPartitionContentsRequest",
+            name: "SubscribeToPartitionContents",
             properties: [
                 {
                     name: "partition",
@@ -66,7 +66,7 @@ export const QueryDefinitions: MessageGroup = {
             ],
         },
         {
-            name: "UnsubscribeFromPartitionContentsRequest",
+            name: "UnsubscribeFromPartitionContents",
             properties: [
                 {
                     name: "partition",
@@ -78,7 +78,7 @@ export const QueryDefinitions: MessageGroup = {
             ],
         },
         {
-            name: "SignOnRequest",
+            name: "SignOn",
             properties: [
                 {
                     name: "deltaProtocolVersion",
@@ -104,11 +104,11 @@ export const QueryDefinitions: MessageGroup = {
             ],
         },
         {
-            name: "signOffRequest",
+            name: "signOff",
             properties: [],
         },
         {
-            name: "ReconnectRequest",
+            name: "Reconnect",
             properties: [
                 {
                     name: "participationId",
@@ -127,7 +127,7 @@ export const QueryDefinitions: MessageGroup = {
             ],
         },
         {
-            name: "GetAvailableIdsRequest",
+            name: "GetAvailableIds",
             properties: [
                 {
                     name: "count",
@@ -139,7 +139,7 @@ export const QueryDefinitions: MessageGroup = {
             ],
         },
         {
-            name: "ListPartitionsRequest",
+            name: "ListPartitions",
             properties: [],
         },
     ],

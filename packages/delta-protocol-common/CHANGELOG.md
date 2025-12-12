@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.8.0 — not yet released
+
+* Fix `messageKind` field for request messages of queries to *not* have the "`Request`" suffix.
+
+
 ## 0.7.2
 
 * Use the `propertyValueSerializerWith` function from the `class-core` package for the `deltaToCommandTranslator` and `deltaToEventTranslator` functions.
