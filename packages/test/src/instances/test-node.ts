@@ -9,7 +9,7 @@ import {
     Property,
     Reader,
     Reference,
-    unresolved
+    UnresolvedReference
 } from "@lionweb/core"
 import { LionWebId } from "@lionweb/json"
 import { BaseNode } from "./base.js"
@@ -20,8 +20,8 @@ import { BaseNode } from "./base.js"
  */
 export class TestNode implements BaseNode {
     public readonly properties: Record<string, unknown> = {}
-    public readonly containments: Record<string, (BaseNode | typeof unresolved)[]> = {}
-    public readonly references: Record<string, (BaseNode | typeof unresolved)[]> = {}
+    public readonly containments: Record<string, (BaseNode | UnresolvedReference)[]> = {}
+    public readonly references: Record<string, (BaseNode | UnresolvedReference)[]> = {}
     public readonly annotations: BaseNode[] = []
 
     constructor(public readonly id: LionWebId, public readonly classifier: string) {

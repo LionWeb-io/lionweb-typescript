@@ -9,6 +9,7 @@
     * Introduce `Serializer` and `SerializerConfiguration` types, and `serializerWith` function as a replacement (keeping an alias for backward compatibility) for the `nodeSerializer` function with a better API (using the Parameter Object pattern).
     * Introduce `Deserializer` and `DeserializerConfiguration` types, and a `deserializerWith` function as a replacement (keeping an alias for backward compatibility) for the `deserializeSerializationChunk` function with a better API (using the Parameter Object pattern).
     * Rename `SimplisticHandler` interface to `ProblemReporter`, and propagate that renaming, keeping alias for backward compatibility.
+* Introduce an explicit `UnresolvedReference` type, a corresponding `isUnresolvedReference` type function, and a `referenceToSet` function to produce reference (target) placeholders, and propagate their use throughout the codebase.
 
 
 ## 0.7.2

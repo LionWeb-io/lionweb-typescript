@@ -15,7 +15,17 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { Containment, Feature, idOf, Link, MultiRef, Property, Reference, SingleRef, unresolved } from "@lionweb/core"
+import {
+    Containment,
+    Feature,
+    idOf,
+    isUnresolvedReference,
+    Link,
+    MultiRef,
+    Property,
+    Reference,
+    SingleRef
+} from "@lionweb/core"
 import { LionWebId } from "@lionweb/json"
 import { asArray } from "@lionweb/ts-utils"
 
@@ -55,7 +65,7 @@ export const deepDuplicateWith = (duplicateNode: NodeDuplicator): Duplicator =>
                     duplicatedNode.getPropertyValueManager(feature).setDirectly(value);
                 } else if (feature instanceof Link) {
                     const values = asArray(value as (MultiRef<INodeBase> | SingleRef<INodeBase>));
-                    const resolvedValues = values.filter((value) => value !== unresolved) as INodeBase[];
+                    const resolvedValues = values.filter((value) => !isUnresolvedReference(value)) as INodeBase[];
                     if (resolvedValues.length > 0) {
                         nodesToInstall.push([
                             duplicatedNode,

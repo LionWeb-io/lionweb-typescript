@@ -25,7 +25,7 @@ export { Forest, ObservableForest } from "./forest.js";
 export * from "./id-mapping.js";
 // skip linking.js: see comment there
 export * from "./LionCore_builtins.g.js";
-export type { IdOrUnresolved } from "./references.js";
+export type { IdOrNull } from "./references.js";
 export { idFrom } from "./references.js";
 export { propertyValueSerializerWith, serializeNodeBases } from "./serializer.js";
 export { asTreeTextWith } from "./textualizer.js";

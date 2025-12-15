@@ -57,7 +57,7 @@ import {
 } from "../value-managers/index.js"
 import { INodeBase } from "../base-types.js"
 import { IdMapping } from "../id-mapping.js"
-import { SingleRef, unresolved } from "@lionweb/core"
+import { isUnresolvedReference, referenceToSet, SingleRef } from "@lionweb/core"
 import { IDelta } from "./base.js"
 
 
@@ -90,9 +90,10 @@ const deltaApplier = (idMapping?: IdMapping, updatablePartitions?: () => INodeBa
             if (idMapping === undefined) {
                 return nodeRef
             }
-            return nodeRef === unresolved
-                ? unresolved
-                : lookupNodeFrom(nodeRef) as SingleRef<T>
+            if (isUnresolvedReference(nodeRef)) {
+                return referenceToSet()
+            }
+            return lookupNodeFrom(nodeRef) as SingleRef<T>
         }
 
         const applyDelta = (delta: IDelta): void => {

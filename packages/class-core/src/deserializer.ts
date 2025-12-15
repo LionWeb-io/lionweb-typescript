@@ -27,7 +27,7 @@ import {
     Property,
     PropertyValueDeserializer,
     Reference,
-    unresolved
+    referenceToSet
 } from "@lionweb/core"
 import { LionWebId, LionWebJsonChunk, LionWebJsonNode } from "@lionweb/json"
 import { byIdMap, keepDefineds } from "@lionweb/ts-utils"
@@ -196,7 +196,7 @@ function nodeBaseDeserializerWithIdMapping(languageBasesOrConfiguration: ILangua
                     const nodeToInstall = lookupNodeById(id);
                     if (nodeToInstall === undefined) {
                         problemReporter.reportProblem(`couldn't resolve the target with id=${id} of the "${feature.name}" reference feature on the node with id=${node.id}`);
-                        valueManager.addDirectly(unresolved);
+                        valueManager.addDirectly(referenceToSet());
                     } else {
                         valueManager.addDirectly(nodeToInstall);
                     }
