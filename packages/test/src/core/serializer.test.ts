@@ -11,8 +11,10 @@ import {
     newPropertyValueSerializerRegistry,
     propertyValueSerializerFrom,
     Reference,
+    referenceToSet,
     serializeLanguages,
-    serializerWith
+    serializerWith,
+    UnresolvedReference
 } from "@lionweb/core"
 import { LionWebJsonChunk } from "@lionweb/json"
 import { concatenator, lastOf } from "@lionweb/ts-utils"
@@ -21,6 +23,7 @@ import { TestNode, TestNodeReader } from "../instances/test-node.js"
 import { dateDataType, libraryWithDatesLanguage } from "../languages/libraryWithDates.js"
 
 describe("serialization", () => {
+
     it("serializes node with custom primitive type, without registering custom deserializer", () => {
         const myNode = new TestNode("1", "LibraryWithDates")
         myNode.properties["name"] = "myLibrary"
@@ -229,12 +232,14 @@ describe("serialization", () => {
         expect(serSelfRef).to.not.be.undefined
         expect(serSelfRef!.targets).to.deep.eq([{ reference: "instance", resolveInfo: null }])
     })
+
 })
 
 
 const { primitiveTypes } = LionWebVersions.v2023_1.builtinsFacade
 
 describe("serialization of empty (unset) values", () => {
+
     const factory = new LanguageFactory("serialization-language", "0", concatenator("-"), lastOf)
     const enumeration = factory.enumeration("enumeration")
     const concept = factory.concept("concept", false)
@@ -247,12 +252,12 @@ describe("serialization of empty (unset) values", () => {
     factory.reference(concept, "reference").ofType(concept).isOptional()
     factory.reference(concept, "references").ofType(concept).isOptional().isMultiple()
 
-    const node: DynamicNode = {
+    const emptyNode = (): DynamicNode => ({
         id: "foo",
         classifier: concept,
         settings: {},
         annotations: []
-    }
+    })
 
     it("with skipEmptyValues = false (=default), empty values are serialized", () => {
         const expectedSerializationChunk: LionWebJsonChunk = {
@@ -346,9 +351,9 @@ describe("serialization of empty (unset) values", () => {
                 }
             ]
         }
-        const actualSerializationChunk = serializerWith({ reader: dynamicReader })([node]) // (serializeEmptyFeatures has true as default)
+        const actualSerializationChunk = serializerWith({ reader: dynamicReader })([emptyNode()]) // (serializeEmptyFeatures has true as default)
         expect(actualSerializationChunk).to.eql(expectedSerializationChunk)
-        const usingExplicitOption = serializerWith({ reader: dynamicReader, serializeEmptyFeatures: true })([node])
+        const usingExplicitOption = serializerWith({ reader: dynamicReader, serializeEmptyFeatures: true })([emptyNode()])
         expect(usingExplicitOption).to.eql(expectedSerializationChunk)
     })
 
@@ -377,12 +382,48 @@ describe("serialization of empty (unset) values", () => {
                 }
             ]
         }
+        const actualSerializationChunk = serializerWith({ reader: dynamicReader, serializeEmptyFeatures: false })([emptyNode()])
+        expect(actualSerializationChunk).to.eql(expectedSerializationChunk)
+    })
+
+    it("unresolved references for which no resolveInfo can be derived are skipped", () => {
+        const node = emptyNode()
+        node.settings["reference"] = referenceToSet
+        node.settings["references"] = [new UnresolvedReference(undefined, undefined)]
+
+        const expectedSerializationChunk: LionWebJsonChunk = {
+            serializationFormatVersion: "2023.1",
+            languages: [
+                {
+                    key: "serialization-language",
+                    version: "0"
+                }
+            ],
+            nodes: [
+                {
+                    id: "foo",
+                    classifier: {
+                        language: "serialization-language",
+                        version: "0",
+                        key: "concept"
+                    },
+                    properties: [],
+                    containments: [],
+                    references: [],
+                    annotations: [],
+                    parent: null
+                }
+            ]
+        }
         const actualSerializationChunk = serializerWith({ reader: dynamicReader, serializeEmptyFeatures: false })([node])
         expect(actualSerializationChunk).to.eql(expectedSerializationChunk)
     })
+
 })
 
+
 describe("serialization of a language", () => {
+
     it("doesn't fail when an annotation doesn't specify what it annotates", () => {
         const factory = new LanguageFactory("annotation-language", "0", concatenator("-"), lastOf)
         factory.annotation("annotation")
@@ -393,5 +434,6 @@ describe("serialization of a language", () => {
         expect(serializedReference).to.not.be.undefined
         expect(serializedReference!.targets).to.eql([])
     })
+
 })
 

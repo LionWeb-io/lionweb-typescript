@@ -5,6 +5,17 @@
 * Introduce `metaPointerFor{Classifier|Feature|Language}` functions, and deprecate the `metaPointerFor` function taking a `Feature`.
   (This change has been propagated throughout the entire codebase.)
 * Expose `isValidIdentifier` function.
+* Change the `UnresolvedReference` type to be a class.
+    * Deserialization uses `UnresolvedReference` instances – including original `resolveInfo` – to represent unresolved references.
+    * Deprecate the `unresolved` constant/“symbol”.
+    * Change the `referenceToSet` function into a proper symbol constant.
+      *Note* that this is technically a breaking change, but this function should essentially only be used internally.
+    * Add a `isReferenceToSet` function which satisfies `isReferenceToSet(referenceToSet)`.
+    * Add a `tryToRenderAsText` convenience function to nicely render a reference as text.
+* Deserialization now reports on serialized nodes that can’t be deserialized, and doesn’t add/set `null` anymore.
+* Serialization skips references that are unresolved and for which no `resolveInfo` can be obtained.
+* *Narrow* the type of the argument of the `asIds` function to `Node[]`.
+  *Note* that this is technically a breaking change, but this function is essentially only used internally.
 
 
 ## 0.9.0

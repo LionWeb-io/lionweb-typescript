@@ -51,7 +51,7 @@ import {
 } from "../value-managers/index.js"
 import { INodeBase } from "../base-types.js"
 import { IdMapping } from "../id-mapping.js"
-import { isUnresolvedReference, Node, referenceToSet, SingleRef } from "@lionweb/core"
+import { isReferenceToSet, isUnresolvedReference, Node, referenceToSet, SingleRef } from "@lionweb/core"
 import { IDelta } from "./base.js"
 
 
@@ -78,11 +78,13 @@ const deltaApplier = (idMapping?: IdMapping, updatablePartitions?: () => INodeBa
         };
 
         const lookupNodeRefFrom = <T extends Node>(nodeRef: SingleRef<T>): SingleRef<T> => {
-            if (idMapping === undefined) {
+            if (idMapping === undefined || isReferenceToSet(nodeRef)) {
                 return nodeRef
             }
             if (isUnresolvedReference(nodeRef)) {
-                return referenceToSet()
+                return nodeRef.targetId === undefined
+                    ? referenceToSet
+                    : idMapping.fromRefId(nodeRef.targetId) as SingleRef<T>;
             }
             return idMapping.fromRefId(nodeRef.id) as SingleRef<T>;
         }

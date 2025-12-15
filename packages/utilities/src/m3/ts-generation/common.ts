@@ -28,7 +28,7 @@ export const tsTypeFor = (datatype: SingleRef<Datatype>): string => {
     if (datatype instanceof Enumeration) {
         return datatype.name
     }
-    return `unknown /* [ERROR] can't compute a TS type for this datatype: ${datatype} */`
+    return `unknown /* [ERROR] can't compute a TS type for this datatype: ${datatype.toString()} */`
 }
 
 export const isINamed = (entity: LanguageEntity): boolean =>
