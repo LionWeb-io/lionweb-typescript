@@ -14,11 +14,10 @@ export const containmentChain = (node: Node): Node[] => {
 
 
 /**
- * Maps an array of {@link Node AST nodes} or `null`s to their IDs.
- * These `null`s might be the result of unresolved children.
+ * Maps an array of {@link Node AST nodes} to their IDs.
  */
-export const asIds = (nodeOrNulls: (Node | null)[]): (LionWebId | null)[] =>
-    nodeOrNulls.map((nodeOrNull) => nodeOrNull === null ? null : nodeOrNull.id)
+export const asIds = (nodes: Node[]): LionWebId[] =>
+    nodes.map(idOf)
 
 
 /**

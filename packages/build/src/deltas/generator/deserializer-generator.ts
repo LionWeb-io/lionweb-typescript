@@ -15,6 +15,7 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import { tryToRenderAsText } from "@lionweb/core"
 import { indent } from "@lionweb/textgen-utils"
 import { sortedStrings } from "@lionweb/ts-utils"
 import { asString, commaSeparated } from "littoral-templates"
@@ -30,12 +31,11 @@ import {
     Type
 } from "../definition/Deltas.g.js"
 import { tsTypeForFeatureKind } from "./helpers.js"
-import { isUnresolvedReference } from "@lionweb/core"
 
 const deserializationExpressionForField = (name: string, type: Type) => {
     if (type instanceof FeatureType) {
         const tsMetaType = tsTypeForFeatureKind(type.kind)
-        return `resolved${tsMetaType}From(delta.${name}, ${(isUnresolvedReference(type.container) ? undefined : type.container?.name) ?? "<?container?>"}.classifier)`
+        return `resolved${tsMetaType}From(delta.${name}, ${tryToRenderAsText(type.container) ?? "<?container?>"}.classifier)`
     }
     if (type instanceof NodeType) {
         return type.serialization instanceof RefOnly ? `idMapping.fromRefId(delta.${name})` : `idMapping.nodeBaseFromId(delta.${name})`

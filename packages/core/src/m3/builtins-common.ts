@@ -1,7 +1,7 @@
 import { StringsMapper } from "@lionweb/ts-utils"
 import { PropertyValueDeserializer } from "../deserializer.js"
 import { Concept, DataType, Interface, Language, PrimitiveType, Property } from "./types.js"
-import { isUnresolvedReference } from "../references.js"
+import { isRef } from "../references.js"
 import { PropertyValueSerializer } from "../serializer.js"
 
 
@@ -49,7 +49,7 @@ export const propertyValueDeserializerFrom = (registry: Map<DataType, PropertyVa
                 throw new Error(`can't deserialize undefined as the value of required property "${property.name}" (on classifier "${property.classifier.name}" in language "${property.classifier.language.name}")`)
             }
             const { type } = property
-            if (isUnresolvedReference(type)) {
+            if (!isRef(type)) {
                 throw new Error(`can't deserialize property "${property.name}" (on classifier "${property.classifier.name}" in language "${property.classifier.language.name}") with unspecified type`)
             }
             const specificDeserializer = byType(type)
@@ -89,7 +89,7 @@ export const propertyValueSerializerFrom = (registry: Map<DataType, PropertyValu
                 throw new Error(`can't serialize undefined as the value of required property "${property.name}" (on classifier "${property.classifier.name}" in language "${property.classifier.language.name}")`)
             }
             const { type } = property
-            if (isUnresolvedReference(type)) {
+            if (!isRef(type)) {
                 throw new Error(`can't serialize property "${property.name}" (on classifier "${property.classifier.name}" in language "${property.classifier.language.name}") with unspecified type`)
             }
             const specificSerializer = byType(type)
