@@ -35,7 +35,6 @@ import {
     CompositeDelta,
     IDelta,
     idFrom,
-    nodeBaseReader,
     NoOpDelta,
     PartitionAddedDelta,
     PartitionDeletedDelta,
@@ -78,6 +77,7 @@ import {
     ReplaceAnnotationCommand,
     ReplaceChildCommand
 } from "../payload/index.js"
+import { resolveInfoFrom } from "./ref-util.js"
 
 
 /**
@@ -293,7 +293,7 @@ export const deltaToCommandTranslator = (
                 reference: metaPointerForFeature(delta.reference),
                 index: delta.index,
                 newReference: idFrom(delta.newReference),
-                newResolveInfo: nodeBaseReader.resolveInfoFor!(delta.newReference!, delta.reference)!
+                newResolveInfo: resolveInfoFrom(delta.newReference, delta.reference)
             })
         }
         if (delta instanceof ReferenceDeletedDelta) {
@@ -302,7 +302,7 @@ export const deltaToCommandTranslator = (
                 reference: metaPointerForFeature(delta.reference),
                 index: delta.index,
                 deletedReference: idFrom(delta.deletedReference),
-                deletedResolveInfo: nodeBaseReader.resolveInfoFor!(delta.deletedReference!, delta.reference)!
+                deletedResolveInfo: resolveInfoFrom(delta.deletedReference, delta.reference)
             })
         }
         if (delta instanceof ReferenceChangedDelta) {
@@ -311,9 +311,9 @@ export const deltaToCommandTranslator = (
                 reference: metaPointerForFeature(delta.reference),
                 index: delta.index,
                 oldReference: idFrom(delta.oldReference),
-                oldResolveInfo: nodeBaseReader.resolveInfoFor!(delta.oldReference!, delta.reference)!,
+                oldResolveInfo: resolveInfoFrom(delta.oldReference, delta.reference),
                 newReference: idFrom(delta.newReference),
-                newResolveInfo: nodeBaseReader.resolveInfoFor!(delta.newReference!, delta.reference)!
+                newResolveInfo: resolveInfoFrom(delta.newReference, delta.reference)
             })
         }
         if (delta instanceof CompositeDelta) {

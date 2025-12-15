@@ -88,7 +88,7 @@ class Property extends Feature {
     metaType(): string {
         return "Property"
     }
-    type: SingleRef<DataType> = referenceToSet()   // (reference)
+    type: SingleRef<DataType> = referenceToSet   // (reference)
     ofType(type: DataType): Property {
         this.type = type
         return this
@@ -97,7 +97,7 @@ class Property extends Feature {
 
 abstract class Link extends Feature {
     multiple /*: boolean */ = false
-    type: SingleRef<Classifier> = referenceToSet()   // (reference)
+    type: SingleRef<Classifier> = referenceToSet   // (reference)
     isMultiple() {
         this.multiple = true
         return this
@@ -176,7 +176,7 @@ class Annotation extends Classifier {
     }
     extends?: SingleRef<Annotation> // (reference)
     readonly implements: MultiRef<Interface> = [] // (reference)
-    annotates: SingleRef<Classifier> = referenceToSet()   // (reference)
+    annotates: SingleRef<Classifier> = referenceToSet   // (reference)
     constructor(language: Language, name: string, key: LionWebKey, id: LionWebId, extends_?: SingleRef<Annotation>) {
         super(language, name, key, id)
         this.extends = extends_

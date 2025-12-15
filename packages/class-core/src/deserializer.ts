@@ -197,7 +197,7 @@ function nodeBaseDeserializerWithIdMapping(languageBasesOrConfiguration: ILangua
                     const nodeToInstall = lookupNodeById(id);
                     if (nodeToInstall === undefined) {
                         problemReporter.reportProblem(`couldn't resolve the target with id=${id} of the "${feature.name}" reference feature on the node with id=${node.id}`);
-                        valueManager.addDirectly(referenceToSet());
+                        valueManager.addDirectly(referenceToSet);
                     } else {
                         valueManager.addDirectly(nodeToInstall);
                     }

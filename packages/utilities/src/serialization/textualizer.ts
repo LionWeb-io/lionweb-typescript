@@ -1,4 +1,11 @@
-import { Enumeration, isUnresolvedReference, Language, MemoisingSymbolTable, Property } from "@lionweb/core"
+import {
+    Enumeration,
+    isReferenceToSet,
+    isUnresolvedReference,
+    Language,
+    MemoisingSymbolTable,
+    Property
+} from "@lionweb/core"
 import {
     LionWebId,
     LionWebJsonChunk,
@@ -30,25 +37,28 @@ export const genericAsTreeText = ({ nodes }: LionWebJsonChunk, languages: Langua
     const nameOrKey = (classifier: LionWebJsonMetaPointer, feature: LionWebJsonMetaPointer): string =>
         symbolTable.featureMatching(classifier, feature)?.name ?? `[${feature.key}]`
 
+    const realPropertyAsText = ({type}: Property, value: string | null): string | null | undefined => {
+        if (type instanceof Enumeration) {
+            return type.literals.find(literal => literal.key === value)?.name ?? value
+        }
+        if (type === undefined || isReferenceToSet(type)) {
+            return undefined
+        }
+        if (isUnresolvedReference(type)) {
+            return type.resolveInfo
+        }
+        switch (type.name) {
+            case "String": return `'${value}'`
+            default: return value
+        }
+    }
+
     const propertyAsText = (classifier: LionWebJsonMetaPointer, { property: propertyMetaPointer, value }: LionWebJsonProperty) => {
         const property = symbolTable.featureMatching(classifier, propertyMetaPointer)
         const identification = nameOrKey(classifier, propertyMetaPointer)
-        const displayValue =
-            property instanceof Property
-                ? property.type instanceof Enumeration
-                    ? (property.type.literals.find(literal => literal.key === value)?.name ?? value)
-                    : (() => {
-                        if (property.type === undefined || isUnresolvedReference(property.type)) {
-                            return `???`
-                        }
-                        switch (property.type.name) {
-                          case "String":
-                              return `'${value}'`
-                          default:
-                              return value
-                        }
-                      })()
-                : value
+        const displayValue = property instanceof Property
+            ? realPropertyAsText(property, value) ?? `???`
+            : value
         return `${identification} = ${displayValue}`
     }
 

@@ -8,7 +8,6 @@ import {
     INamed,
     Interface,
     isRef,
-    isUnresolvedReference,
     Language,
     Link,
     M3Node,
@@ -17,14 +16,15 @@ import {
     Node,
     PrimitiveType,
     Property,
-    SingleRef
+    SingleRef,
+    tryToRenderAsText
 } from "@lionweb/core"
 import { asString, indentWith, Template } from "littoral-templates"
 
 const indented = indentWith("    ")(1)
 
 const refAsText = <NT extends INamed & Node>(ref: SingleRef<NT>): string =>
-    (ref === undefined || isUnresolvedReference(ref)) ? `???` : ref.name
+    tryToRenderAsText(ref) ?? `???`
 
 const recurse = <NT extends M3Node>(ts: NT[], header: string, func: (t: NT) => Template = asText): Template =>
     (ts === undefined || ts.length === 0) ? [] : indented([header, indented(ts.map(func))])

@@ -27,6 +27,7 @@ import {
     isProperty,
     isRef,
     isReference,
+    isReferenceToSet,
     isUnresolvedReference,
     LanguageEntity,
     Link,
@@ -181,7 +182,7 @@ export const typeForLanguageEntity = (imports: Imports) => {
             if (isUnresolvedReference(superConcept)) {
                 return `/* unresolved reference to super concept */`
             }
-            if (superConcept === undefined || isBuiltinNodeConcept(superConcept)) {
+            if (superConcept === undefined || isReferenceToSet(superConcept) || isBuiltinNodeConcept(superConcept)) {
                 return imports.generic("NodeBase")
             }
             return imports.entity(superConcept)
