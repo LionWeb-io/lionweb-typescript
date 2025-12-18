@@ -35,18 +35,19 @@ import {
     CompositeDelta,
     IDelta,
     idFrom,
+    nodeBaseReader,
     NoOpDelta,
     PartitionAddedDelta,
     PartitionDeletedDelta,
     PropertyAddedDelta,
     PropertyChangedDelta,
     PropertyDeletedDelta,
+    propertyValueSerializerWith,
     ReferenceAddedDelta,
     ReferenceChangedDelta,
     ReferenceDeletedDelta,
     serializeNodeBases
 } from "@lionweb/class-core"
-import { nodeBaseReader, propertyValueSerializerWith } from "@lionweb/class-core/dist/serializer.js"
 import { builtinPropertyValueSerializer, metaPointerFor, PropertyValueSerializer } from "@lionweb/core"
 import { LionWebId } from "@lionweb/json"
 import {
@@ -268,7 +269,7 @@ export const deltaToCommandTranslator = (
                 reference: metaPointerFor(delta.reference),
                 index: delta.index,
                 newTarget: idFrom(delta.newTarget),
-                newResolveInfo: nodeBaseReader.resolveInfoFor!(delta.newTarget!)!
+                newResolveInfo: nodeBaseReader.resolveInfoFor!(delta.newTarget!, delta.reference)!
             })
         }
         if (delta instanceof ReferenceDeletedDelta) {
@@ -277,7 +278,7 @@ export const deltaToCommandTranslator = (
                 reference: metaPointerFor(delta.reference),
                 index: delta.index,
                 deletedTarget: idFrom(delta.deletedTarget),
-                deletedResolveInfo: nodeBaseReader.resolveInfoFor!(delta.deletedTarget!)!
+                deletedResolveInfo: nodeBaseReader.resolveInfoFor!(delta.deletedTarget!, delta.reference)!
             })
         }
         if (delta instanceof ReferenceChangedDelta) {
@@ -286,9 +287,9 @@ export const deltaToCommandTranslator = (
                 reference: metaPointerFor(delta.reference),
                 index: delta.index,
                 oldTarget: idFrom(delta.oldTarget),
-                oldResolveInfo: nodeBaseReader.resolveInfoFor!(delta.oldTarget!)!,
+                oldResolveInfo: nodeBaseReader.resolveInfoFor!(delta.oldTarget!, delta.reference)!,
                 newTarget: idFrom(delta.newTarget),
-                newResolveInfo: nodeBaseReader.resolveInfoFor!(delta.oldTarget!)!
+                newResolveInfo: nodeBaseReader.resolveInfoFor!(delta.oldTarget!, delta.reference)!
             })
         }
         if (delta instanceof CompositeDelta) {
