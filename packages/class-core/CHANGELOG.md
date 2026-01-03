@@ -17,6 +17,7 @@
 * Fix that the annotations value manager always tries to detach an annotation to remove, even if it isn’t contained through the value manager’s container.
 * Rename the `problemsHandler` property of the `DeserializerConfiguration` to `problemReporter` (also using the renamed type), keeping an alias for backward compatibility.
 * Rename the `IdOrUnresolved` type to `IdOrNull`, without keeping an alias because this type is essentially for internal use only.
+* Improve textualization: “none” for empty multi-valued links, and “not set” for unset single-valued links, instead of “nothing” in both cases.
 
 
 ## 0.7.2

@@ -20,6 +20,7 @@ import {
     Containment,
     Feature,
     isUnresolvedReference,
+    Link,
     Property,
     Reference,
     UnresolvedReference
@@ -75,11 +76,12 @@ export const asTreeTextWith = (identificationFor: (node: INodeBase) => string): 
                 })()
                 return `${feature.name} = ${displayValue}`
             }
+            const nothing = `<${(feature as Link).multiple ? "none" : "not set"}>`
             if (feature instanceof Containment) {
                 const valueManager = node.getContainmentValueManager(feature)
                 const children = asINodeBases(valueManager.getDirectly())
                 return [
-                    `${feature.name}:${children.length === 0 ? " <nothing>" : ""}`,
+                    `${feature.name}:${children.length === 0 ? ` ${nothing}` : ""}`,
                     indent(children.map(asText))
                 ]
             }
@@ -87,7 +89,7 @@ export const asTreeTextWith = (identificationFor: (node: INodeBase) => string): 
                 const valueManager= node.getReferenceValueManager(feature)
                 const references = asINodeBases(valueManager.getDirectly())
                 return [
-                    `${feature.name} -> ${references.length === 0 ? "<none>" : references.map(identificationFor).join(", ")}`
+                    `${feature.name} -> ${references.length === 0 ? nothing : references.map(identificationFor).join(", ")}`
                 ]
             }
             return `!!! can't handle feature ${feature.name} (of meta type ${feature.metaType()})`
