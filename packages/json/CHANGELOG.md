@@ -7,7 +7,7 @@
 
 ## 0.7.2
 
-(No changes.)
+(No changes)
 
 
 ## 0.7.1

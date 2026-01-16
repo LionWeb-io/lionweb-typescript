@@ -110,17 +110,6 @@ export interface GetAvailableIdsResponse extends QueryMessage {
 }
 
 
-export interface GetAvailableIdsRequest extends QueryMessage {
-    messageKind: "GetAvailableIdsRequest"
-    count: number
-}
-
-export interface GetAvailableIdsResponse extends QueryMessage {
-    messageKind: "GetAvailableIdsResponse"
-    ids: LionWebId[]
-}
-
-
 export interface ListPartitionsRequest extends QueryMessage {
     messageKind: "ListPartitionsRequest"
 }
