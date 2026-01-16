@@ -31,9 +31,8 @@ This repository contains a TypeScript implementation for (parts of) the [LionWeb
 _Note_ that this repo doesn't implement the specification completely.
 In particular:
 
-* No support for release version 2024.1 (yet).
+* No support for release versions 2024.1 and 2025.1 (yet).
 * Not all constraints on the LionCore M3 have been implemented.
-* The functionality in the `utilities` and `validation` packages is provided “as-is”.
 
 The implementation of the JSON serialization format, serialization from in-memory representations to that format, and vice versa, are all pretty solid.
 
@@ -53,6 +52,9 @@ The implementation is divided up in a number of NPM packages in the directory [`
 
 - `core`
   The "core stuff" such as: base types, the LionCore M3 (including the `builtins` language), and (de-)serialization.
+
+- `node-utils`
+  General TypeScript utilities that rely on Node.js.
 
 - `utilities`
   Utilities on top of the `core` packages that might be broadly useful, but should not go into the `core` package.
@@ -103,7 +105,7 @@ The implementation is divided up in a number of NPM packages in the directory [`
     A package that contains tests for the delta protocol implementation.
 
 Each of these packages have their own `README.md`.
-The following packages are published in the scope of [the `lionweb` organization](https://www.npmjs.com/org/lionweb), meaning that they're all prefixed with `@lionweb/`: `json`, `json-utils`, `js-diff`, `core`, `ts-utils`, `utilities`, `cli`, and `validation`, `class-core`, `class-core-generator`
+The following packages are published in the scope of [the `lionweb` organization](https://www.npmjs.com/org/lionweb), meaning that they're all prefixed with `@lionweb/`: `json`, `json-utils`, `js-diff`, `core`, `ts-utils`, `node-utils`, `utilities`, `cli`, and `validation`, `class-core`, `class-core-generator`
 The other packages are for internal use only.
 All these packages declare their own NPM semver identification, which isn't directly related to the release version of the LionWeb specification.
 

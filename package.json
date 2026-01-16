@@ -45,6 +45,7 @@
         "./packages/json-utils",
         "./packages/json-diff",
         "./packages/core",
+        "./packages/node-utils",
         "./packages/utilities",
         "./packages/validation",
         "./packages/cli",
