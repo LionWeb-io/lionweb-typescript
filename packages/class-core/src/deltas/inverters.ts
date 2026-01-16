@@ -33,12 +33,6 @@ import {
     ChildMovedInSameContainmentDelta,
     ChildReplacedDelta,
     CompositeDelta,
-    EntryMovedAndReplacedFromOtherReferenceDelta,
-    EntryMovedAndReplacedFromOtherReferenceInSameParentDelta,
-    EntryMovedAndReplacedInSameReferenceDelta,
-    EntryMovedFromOtherReferenceDelta,
-    EntryMovedFromOtherReferenceInSameParentDelta,
-    EntryMovedInSameReferenceDelta,
     NoOpDelta,
     PartitionAddedDelta,
     PartitionDeletedDelta,
@@ -143,33 +137,6 @@ export const invertDelta = (delta: IDelta): IDelta => {
     }
     if (delta instanceof ReferenceChangedDelta) {
         return new ReferenceChangedDelta(delta.parent, delta.reference, delta.index, delta.oldTarget, delta.newTarget);
-    }
-    if (delta instanceof EntryMovedFromOtherReferenceDelta) {
-        return new EntryMovedFromOtherReferenceDelta(delta.newParent, delta.newReference, delta.newIndex, delta.oldParent, delta.oldReference, delta.oldIndex, delta.movedTarget);
-    }
-    if (delta instanceof EntryMovedFromOtherReferenceInSameParentDelta) {
-        return new EntryMovedFromOtherReferenceInSameParentDelta(delta.parent, delta.newReference, delta.newIndex, delta.oldReference, delta.oldIndex, delta.movedTarget);
-    }
-    if (delta instanceof EntryMovedInSameReferenceDelta) {
-        return new EntryMovedInSameReferenceDelta(delta.parent, delta.reference, delta.newIndex, delta.oldIndex, delta.movedTarget);
-    }
-    if (delta instanceof EntryMovedAndReplacedFromOtherReferenceDelta) {
-        return new CompositeDelta([
-            new EntryMovedFromOtherReferenceDelta(delta.newParent, delta.newReference, delta.newIndex, delta.oldParent, delta.oldReference, delta.oldIndex, delta.movedTarget),
-            new ReferenceAddedDelta(delta.newParent, delta.newReference, delta.newIndex, delta.replacedTarget)
-        ]);
-    }
-    if (delta instanceof EntryMovedAndReplacedFromOtherReferenceInSameParentDelta) {
-        return new CompositeDelta([
-            new EntryMovedFromOtherReferenceInSameParentDelta(delta.parent, delta.newReference, delta.newIndex, delta.oldReference, delta.oldIndex, delta.movedTarget),
-            new ReferenceAddedDelta(delta.parent, delta.newReference, delta.newIndex, delta.replacedTarget)
-        ]);
-    }
-    if (delta instanceof EntryMovedAndReplacedInSameReferenceDelta) {
-        return new CompositeDelta([
-            new EntryMovedInSameReferenceDelta(delta.parent, delta.reference, delta.newIndex, delta.oldIndex, delta.movedTarget),
-            new ReferenceAddedDelta(delta.parent, delta.reference, delta.newIndex, delta.replacedTarget)
-        ]);
     }
     if (delta instanceof CompositeDelta) {
         return new CompositeDelta(delta.parts.map(invertDelta));

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.8.0 — not yet released
+
+* Remove all reference-related event and command types, except for the ones associated with adding, changing, and deleting a reference.
+  * Also remove all cross-translation code relating to those.
+
+
 ## 0.7.2
 
 * Use the `propertyValueSerializerWith` function from the `class-core` package for the `deltaToCommandTranslator` and `deltaToEventTranslator` functions.
