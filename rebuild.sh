@@ -33,6 +33,10 @@ cd core
 npm run build
 cd ..
 
+cd node-utils
+npm run build
+cd ..
+
 cd utilities
 npm run build
 cd ..

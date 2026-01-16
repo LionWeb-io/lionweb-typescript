@@ -22,12 +22,15 @@ It contains utilities on top of the `core` package, such as:
 * Infer a (partial) M2 from a serialization chunk.
 * Generation of TypeScript type definitions from an M2.
 
+Note that this package implicitly relies on Node.js, so effectively on the `@types/node` package, without stating that explicitly as a (production) dependency in `package.json`.
+This enables using this package in browsers, as long as you don’t use the `readFileAsJson` and `writeJsonAsFile` functions.
+
 
 ## Development
 
 Build it from source as follows:
 
-```
+```shell
 npm run build
 ```
 
