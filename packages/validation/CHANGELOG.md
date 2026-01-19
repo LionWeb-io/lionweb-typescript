@@ -5,6 +5,7 @@
 * New way to define the structure of the LionWeb JSON format.
 * Add delta format definitions.
 * Propagate `reference` field of `LionWebJsonReferenceTarget` type now being `null`able.
+* Remove all definitions for reference-related events and commands, except for the ones associated with adding, changing, and deleting a reference.
 
 
 ## 0.7.2

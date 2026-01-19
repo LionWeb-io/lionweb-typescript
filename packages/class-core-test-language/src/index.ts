@@ -16,5 +16,5 @@
 // SPDX-License-Identifier: Apache-2.0
 
 export * from "./gen/TestLanguage.g.js"
-export { attachedDataTypeTestConcept, attachedLinkTestConcept } from "./test-helpers.js"
+export { attachedDataTypeTestConcept, attachedLinkTestConcept, integerRange } from "./test-helpers.js"
 

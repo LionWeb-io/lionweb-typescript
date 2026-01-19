@@ -38,12 +38,6 @@ import {
     ChildMovedInSameContainmentDelta,
     ChildReplacedDelta,
     CompositeDelta,
-    EntryMovedAndReplacedFromOtherReferenceDelta,
-    EntryMovedAndReplacedFromOtherReferenceInSameParentDelta,
-    EntryMovedAndReplacedInSameReferenceDelta,
-    EntryMovedFromOtherReferenceDelta,
-    EntryMovedFromOtherReferenceInSameParentDelta,
-    EntryMovedInSameReferenceDelta,
     NoOpDelta,
     PartitionAddedDelta,
     PartitionDeletedDelta,
@@ -72,12 +66,6 @@ import {
     ChildMovedInSameContainmentSerializedDelta,
     ChildReplacedSerializedDelta,
     CompositeSerializedDelta,
-    EntryMovedAndReplacedFromOtherReferenceInSameParentSerializedDelta,
-    EntryMovedAndReplacedFromOtherReferenceSerializedDelta,
-    EntryMovedAndReplacedInSameReferenceSerializedDelta,
-    EntryMovedFromOtherReferenceInSameParentSerializedDelta,
-    EntryMovedFromOtherReferenceSerializedDelta,
-    EntryMovedInSameReferenceSerializedDelta,
     NoOpSerializedDelta,
     PartitionAddedSerializedDelta,
     PartitionDeletedSerializedDelta,
@@ -358,81 +346,6 @@ export const serializeDelta = (delta: IDelta): SerializedDelta => {
             newTarget: idFrom(delta.newTarget),
             oldTarget: idFrom(delta.oldTarget)
         } as ReferenceChangedSerializedDelta;
-    }
-
-    if (delta instanceof EntryMovedFromOtherReferenceDelta) {
-        return {
-            kind: "EntryMovedFromOtherReference",
-            oldParent: delta.oldParent.id,
-            oldReference: metaPointerFor(delta.oldReference),
-            oldIndex: delta.oldIndex,
-            newParent: delta.newParent.id,
-            newReference: metaPointerFor(delta.newReference),
-            newIndex: delta.newIndex,
-            movedTarget: idFrom(delta.movedTarget)
-        } as EntryMovedFromOtherReferenceSerializedDelta;
-    }
-
-    if (delta instanceof EntryMovedFromOtherReferenceInSameParentDelta) {
-        return {
-            kind: "EntryMovedFromOtherReferenceInSameParent",
-            parent: delta.parent.id,
-            oldReference: metaPointerFor(delta.oldReference),
-            oldIndex: delta.oldIndex,
-            newReference: metaPointerFor(delta.newReference),
-            newIndex: delta.newIndex,
-            movedTarget: idFrom(delta.movedTarget)
-        } as EntryMovedFromOtherReferenceInSameParentSerializedDelta;
-    }
-
-    if (delta instanceof EntryMovedInSameReferenceDelta) {
-        return {
-            kind: "EntryMovedInSameReference",
-            parent: delta.parent.id,
-            reference: metaPointerFor(delta.reference),
-            oldIndex: delta.oldIndex,
-            newIndex: delta.newIndex,
-            movedTarget: idFrom(delta.movedTarget)
-        } as EntryMovedInSameReferenceSerializedDelta;
-    }
-
-    if (delta instanceof EntryMovedAndReplacedFromOtherReferenceDelta) {
-        return {
-            kind: "EntryMovedAndReplacedFromOtherReference",
-            newParent: delta.newParent.id,
-            newReference: metaPointerFor(delta.newReference),
-            newIndex: delta.newIndex,
-            movedTarget: idFrom(delta.movedTarget),
-            oldParent: delta.oldParent.id,
-            oldReference: metaPointerFor(delta.oldReference),
-            oldIndex: delta.oldIndex,
-            replacedTarget: idFrom(delta.replacedTarget)
-        } as EntryMovedAndReplacedFromOtherReferenceSerializedDelta;
-    }
-
-    if (delta instanceof EntryMovedAndReplacedFromOtherReferenceInSameParentDelta) {
-        return {
-            kind: "EntryMovedAndReplacedFromOtherReferenceInSameParent",
-            parent: delta.parent.id,
-            oldReference: metaPointerFor(delta.oldReference),
-            oldIndex: delta.oldIndex,
-            newReference: metaPointerFor(delta.newReference),
-            newIndex: delta.newIndex,
-            movedTarget: idFrom(delta.movedTarget),
-            replacedTarget: idFrom(delta.replacedTarget)
-        } as EntryMovedAndReplacedFromOtherReferenceInSameParentSerializedDelta;
-    }
-
-    if (delta instanceof EntryMovedAndReplacedInSameReferenceDelta) {
-        return {
-            kind: "EntryMovedAndReplacedInSameReference",
-            parent: delta.parent.id,
-            reference: metaPointerFor(delta.reference),
-            oldIndex: delta.oldIndex,
-            newIndex: delta.newIndex,
-            movedTarget: idFrom(delta.movedTarget),
-            replacedTarget: idFrom(delta.replacedTarget)
-        } as EntryMovedAndReplacedInSameReferenceSerializedDelta;
     }
 
     if (delta instanceof CompositeDelta) {

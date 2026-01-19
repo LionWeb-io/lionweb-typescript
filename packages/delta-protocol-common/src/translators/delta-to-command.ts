@@ -33,12 +33,6 @@ import {
     ChildMovedInSameContainmentDelta,
     ChildReplacedDelta,
     CompositeDelta,
-    EntryMovedAndReplacedFromOtherReferenceDelta,
-    EntryMovedAndReplacedFromOtherReferenceInSameParentDelta,
-    EntryMovedAndReplacedInSameReferenceDelta,
-    EntryMovedFromOtherReferenceDelta,
-    EntryMovedFromOtherReferenceInSameParentDelta,
-    EntryMovedInSameReferenceDelta,
     IDelta,
     idFrom,
     NoOpDelta,
@@ -75,17 +69,11 @@ import {
     MoveAndReplaceChildFromOtherContainmentCommand,
     MoveAndReplaceChildFromOtherContainmentInSameParentCommand,
     MoveAndReplaceChildInSameContainmentCommand,
-    MoveAndReplaceEntryFromOtherReferenceCommand,
-    MoveAndReplaceEntryFromOtherReferenceInSameParentCommand,
-    MoveAndReplaceEntryInSameReferenceCommand,
     MoveAnnotationFromOtherParentCommand,
     MoveAnnotationInSameParentCommand,
     MoveChildFromOtherContainmentCommand,
     MoveChildFromOtherContainmentInSameParentCommand,
     MoveChildInSameContainmentCommand,
-    MoveEntryFromOtherReferenceCommand,
-    MoveEntryFromOtherReferenceInSameParentCommand,
-    MoveEntryInSameReferenceCommand,
     ReplaceAnnotationCommand,
     ReplaceChildCommand
 } from "../payload/index.js"
@@ -301,77 +289,6 @@ export const deltaToCommandTranslator = (
                 oldResolveInfo: nodeBaseReader.resolveInfoFor!(delta.oldTarget!)!,
                 newTarget: idFrom(delta.newTarget),
                 newResolveInfo: nodeBaseReader.resolveInfoFor!(delta.oldTarget!)!
-            })
-        }
-        if (delta instanceof EntryMovedFromOtherReferenceDelta) {
-            return completed<MoveEntryFromOtherReferenceCommand>("MoveEntryFromOtherReference", { // § 6.5.7.4
-                newParent: delta.newParent.id,
-                newReference: metaPointerFor(delta.newReference),
-                newIndex: delta.newIndex,
-                oldParent: delta.oldParent.id,
-                oldReference: metaPointerFor(delta.oldReference),
-                oldIndex: delta.oldIndex,
-                movedTarget: idFrom(delta.movedTarget),
-                movedResolveInfo: nodeBaseReader.resolveInfoFor!(delta.movedTarget!)!
-            })
-        }
-        if (delta instanceof EntryMovedFromOtherReferenceInSameParentDelta) {
-            return completed<MoveEntryFromOtherReferenceInSameParentCommand>("MoveEntryFromOtherReferenceInSameParent", { // § 6.5.7.5
-                parent: delta.parent.id,
-                newReference: metaPointerFor(delta.newReference),
-                newIndex: delta.newIndex,
-                oldIndex: delta.oldIndex,
-                movedTarget: idFrom(delta.movedTarget),
-                movedResolveInfo: nodeBaseReader.resolveInfoFor!(delta.movedTarget!)!
-            })
-        }
-        if (delta instanceof EntryMovedInSameReferenceDelta) {
-            return completed<MoveEntryInSameReferenceCommand>("MoveEntryInSameReference", { // § 6.5.7.6
-                parent: delta.parent.id,
-                reference: metaPointerFor(delta.reference),
-                oldIndex: delta.oldIndex,
-                newIndex: delta.newIndex,
-                movedTarget: idFrom(delta.movedTarget),
-                movedResolveInfo: nodeBaseReader.resolveInfoFor!(delta.movedTarget!)!
-            })
-        }
-        if (delta instanceof EntryMovedAndReplacedFromOtherReferenceDelta) {
-            return completed<MoveAndReplaceEntryFromOtherReferenceCommand>("MoveAndReplaceEntryFromOtherReference", { // § 6.5.7.7
-                newParent: delta.newParent.id,
-                newReference: metaPointerFor(delta.newReference),
-                newIndex: delta.newIndex,
-                replacedTarget: idFrom(delta.replacedTarget),
-                replacedResolveInfo: nodeBaseReader.resolveInfoFor!(delta.replacedTarget!)!,
-                oldParent: delta.oldParent.id,
-                oldReference: metaPointerFor(delta.oldReference),
-                oldIndex: delta.oldIndex,
-                movedTarget: idFrom(delta.movedTarget),
-                movedResolveInfo: nodeBaseReader.resolveInfoFor!(delta.movedTarget!)!
-            })
-        }
-        if (delta instanceof EntryMovedAndReplacedFromOtherReferenceInSameParentDelta) {
-            return completed<MoveAndReplaceEntryFromOtherReferenceInSameParentCommand>("MoveAndReplaceEntryFromOtherReferenceInSameParent", { // § 6.5.7.8
-                parent: delta.parent.id,
-                newReference: metaPointerFor(delta.newReference),
-                newIndex: delta.newIndex,
-                replacedTarget: idFrom(delta.replacedTarget),
-                replacedResolveInfo: nodeBaseReader.resolveInfoFor!(delta.replacedTarget!)!,
-                oldReference: metaPointerFor(delta.oldReference),
-                oldIndex: delta.oldIndex,
-                movedTarget: idFrom(delta.movedTarget),
-                movedResolveInfo: nodeBaseReader.resolveInfoFor!(delta.movedTarget!)!
-            })
-        }
-        if (delta instanceof EntryMovedAndReplacedInSameReferenceDelta) {
-            return completed<MoveAndReplaceEntryInSameReferenceCommand>("MoveAndReplaceEntryInSameReference", { // § 6.5.7.9
-                parent: delta.parent.id,
-                reference: metaPointerFor(delta.reference),
-                oldIndex: delta.oldIndex,
-                movedTarget: idFrom(delta.movedTarget),
-                movedResolveInfo: nodeBaseReader.resolveInfoFor!(delta.movedTarget!)!,
-                newIndex: delta.newIndex,
-                replacedTarget: idFrom(delta.replacedTarget),
-                replacedResolveInfo: nodeBaseReader.resolveInfoFor!(delta.replacedTarget!)!
             })
         }
         if (delta instanceof CompositeDelta) {

@@ -33,12 +33,6 @@ import {
     ChildMovedInSameContainmentDelta,
     ChildReplacedDelta,
     CompositeDelta,
-    EntryMovedAndReplacedFromOtherReferenceDelta,
-    EntryMovedAndReplacedFromOtherReferenceInSameParentDelta,
-    EntryMovedAndReplacedInSameReferenceDelta,
-    EntryMovedFromOtherReferenceDelta,
-    EntryMovedFromOtherReferenceInSameParentDelta,
-    EntryMovedInSameReferenceDelta,
     NoOpDelta,
     PartitionAddedDelta,
     PartitionDeletedDelta,
@@ -345,93 +339,6 @@ const deltaApplier = (idMapping?: IdMapping, updatablePartitions?: () => INodeBa
                     multiValueManager.insertAtIndexDirectly(newTarget, delta.index);
                 } else {
                     (valueManager as SingleReferenceValueManager<INodeBase>).setDirectly(newTarget);
-                }
-                return;
-            }
-            if (delta instanceof EntryMovedFromOtherReferenceDelta) {
-                const oldValueManager = lookupNodeFrom(delta.oldParent).getReferenceValueManager(delta.oldReference);
-                const movedTarget = lookupNodeRefFrom(delta.movedTarget);
-                if (delta.oldReference.multiple) {
-                    (oldValueManager as MultiReferenceValueManager<INodeBase>).removeAtIndexDirectly(delta.oldIndex);  // should be delta.movedTarget
-                } else {
-                    (oldValueManager as SingleReferenceValueManager<INodeBase>).setDirectly(undefined);
-                }
-                const newValueManager = lookupNodeFrom(delta.newParent).getReferenceValueManager(delta.newReference);
-                if (delta.newReference.multiple) {
-                    (newValueManager as MultiReferenceValueManager<INodeBase>).insertAtIndexDirectly(movedTarget, delta.newIndex);
-                } else {
-                    (newValueManager as SingleReferenceValueManager<INodeBase>).setDirectly(movedTarget);
-                }
-                return;
-            }
-            if (delta instanceof EntryMovedFromOtherReferenceInSameParentDelta) {
-                const parent = lookupNodeFrom(delta.parent);
-                const oldValueManager = parent.getReferenceValueManager(delta.oldReference);
-                const movedTarget = lookupNodeRefFrom(delta.movedTarget);
-                if (delta.oldReference.multiple) {
-                    (oldValueManager as MultiReferenceValueManager<INodeBase>).removeAtIndexDirectly(delta.oldIndex);  // should be delta.movedTarget
-                } else {
-                    (oldValueManager as SingleReferenceValueManager<INodeBase>).setDirectly(undefined);
-                }
-                const newValueManager = parent.getReferenceValueManager(delta.newReference);
-                if (delta.newReference.multiple) {
-                    (newValueManager as MultiReferenceValueManager<INodeBase>).insertAtIndexDirectly(movedTarget, delta.newIndex);
-                } else {
-                    (newValueManager as SingleReferenceValueManager<INodeBase>).setDirectly(movedTarget);
-                }
-                return;
-            }
-            if (delta instanceof EntryMovedInSameReferenceDelta) {
-                const valueManager = lookupNodeFrom(delta.parent).getReferenceValueManager(delta.reference) as MultiReferenceValueManager<INodeBase>;
-                valueManager.moveDirectly(delta.oldIndex, delta.newIndex);
-                return;
-            }
-            if (delta instanceof EntryMovedAndReplacedFromOtherReferenceDelta) {
-                const oldParent = lookupNodeFrom(delta.oldParent);
-                const oldValueManager = oldParent.getReferenceValueManager(delta.oldReference);
-                const movedTarget = lookupNodeRefFrom(delta.movedTarget);
-                if (delta.oldReference.multiple) {
-                    (oldValueManager as MultiReferenceValueManager<INodeBase>).removeAtIndexDirectly(delta.oldIndex);  // should be delta.movedTarget
-                } else {
-                    (oldValueManager as SingleReferenceValueManager<INodeBase>).setDirectly(undefined);
-                }
-                const newParent = lookupNodeFrom(delta.newParent);
-                const newValueManager = newParent.getReferenceValueManager(delta.newReference);
-                if (delta.newReference.multiple) {
-                    const valueManager = newValueManager as MultiReferenceValueManager<INodeBase>;
-                    valueManager.removeAtIndexDirectly(delta.oldIndex); // should be delta.replacedTarget
-                    valueManager.insertAtIndexDirectly(movedTarget, delta.newIndex);
-                } else {
-                    (newValueManager as SingleReferenceValueManager<INodeBase>).setDirectly(movedTarget);
-                }
-                return;
-            }
-            if (delta instanceof EntryMovedAndReplacedFromOtherReferenceInSameParentDelta) {
-                const parent = lookupNodeFrom(delta.parent);
-                const oldValueManager = parent.getReferenceValueManager(delta.oldReference);
-                const movedTarget = lookupNodeRefFrom(delta.movedTarget);
-                if (delta.oldReference.multiple) {
-                    (oldValueManager as MultiReferenceValueManager<INodeBase>).removeAtIndexDirectly(delta.oldIndex);  // should be delta.movedTarget
-                } else {
-                    (oldValueManager as SingleReferenceValueManager<INodeBase>).setDirectly(undefined);
-                }
-                const newValueManager = parent.getReferenceValueManager(delta.newReference);
-                if (delta.newReference.multiple) {
-                    const valueManager = newValueManager as MultiReferenceValueManager<INodeBase>;
-                    valueManager.removeAtIndexDirectly(delta.newIndex); // should be delta.replacedTarget
-                    valueManager.insertAtIndexDirectly(movedTarget, delta.newIndex);
-                } else {
-                    (newValueManager as SingleReferenceValueManager<INodeBase>).setDirectly(movedTarget);
-                }
-                return;
-            }
-            if (delta instanceof EntryMovedAndReplacedInSameReferenceDelta) {
-                const parent = lookupNodeFrom(delta.parent);
-                const valueManager = parent.getReferenceValueManager(delta.reference);
-                if (delta.reference.multiple) {
-                    (valueManager as MultiReferenceValueManager<INodeBase>).moveAndReplaceDirectly(delta.oldIndex, delta.newIndex);
-                } else {
-                    // (do nothing)
                 }
                 return;
             }

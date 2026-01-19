@@ -18,6 +18,7 @@
 * Rename the `problemsHandler` property of the `DeserializerConfiguration` to `problemReporter` (also using the renamed type), keeping an alias for backward compatibility.
 * Rename the `IdOrUnresolved` type to `IdOrNull`, without keeping an alias because this type is essentially for internal use only.
 * Improve textualization: “none” for empty multi-valued links, and “not set” for unset single-valued links, instead of “nothing” in both cases.
+* Remove all reference-related deltas, except for `Reference{Added|Changed|Deleted}Delta`.
 
 
 ## 0.7.2

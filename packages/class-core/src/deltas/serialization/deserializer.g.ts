@@ -42,12 +42,6 @@ import {
     ChildMovedInSameContainmentDelta,
     ChildReplacedDelta,
     CompositeDelta,
-    EntryMovedAndReplacedFromOtherReferenceDelta,
-    EntryMovedAndReplacedFromOtherReferenceInSameParentDelta,
-    EntryMovedAndReplacedInSameReferenceDelta,
-    EntryMovedFromOtherReferenceDelta,
-    EntryMovedFromOtherReferenceInSameParentDelta,
-    EntryMovedInSameReferenceDelta,
     NoOpDelta,
     PartitionAddedDelta,
     PartitionDeletedDelta,
@@ -242,63 +236,6 @@ export const deltaDeserializer = (languageBases: ILanguageBase[], idMapping: IdM
                 const newTarget = idMapping.fromRefId(delta.newTarget);
                 const oldTarget = idMapping.fromRefId(delta.oldTarget);
                 return new ReferenceChangedDelta(parent, reference, index, newTarget, oldTarget);
-            }
-            case "EntryMovedFromOtherReference": {
-                const oldParent = idMapping.fromId(delta.oldParent);
-                const oldReference = resolvedReferenceFrom(delta.oldReference, oldParent.classifier);
-                const oldIndex = delta.oldIndex;
-                const newParent = idMapping.fromId(delta.newParent);
-                const newReference = resolvedReferenceFrom(delta.newReference, newParent.classifier);
-                const newIndex = delta.newIndex;
-                const movedTarget = idMapping.fromRefId(delta.movedTarget);
-                return new EntryMovedFromOtherReferenceDelta(oldParent, oldReference, oldIndex, newParent, newReference, newIndex, movedTarget);
-            }
-            case "EntryMovedFromOtherReferenceInSameParent": {
-                const parent = idMapping.fromId(delta.parent);
-                const oldReference = resolvedReferenceFrom(delta.oldReference, parent.classifier);
-                const oldIndex = delta.oldIndex;
-                const newReference = resolvedReferenceFrom(delta.newReference, parent.classifier);
-                const newIndex = delta.newIndex;
-                const movedTarget = idMapping.fromRefId(delta.movedTarget);
-                return new EntryMovedFromOtherReferenceInSameParentDelta(parent, oldReference, oldIndex, newReference, newIndex, movedTarget);
-            }
-            case "EntryMovedInSameReference": {
-                const parent = idMapping.fromId(delta.parent);
-                const reference = resolvedReferenceFrom(delta.reference, parent.classifier);
-                const oldIndex = delta.oldIndex;
-                const newIndex = delta.newIndex;
-                const movedTarget = idMapping.fromRefId(delta.movedTarget);
-                return new EntryMovedInSameReferenceDelta(parent, reference, oldIndex, newIndex, movedTarget);
-            }
-            case "EntryMovedAndReplacedFromOtherReference": {
-                const newParent = idMapping.fromId(delta.newParent);
-                const newReference = resolvedReferenceFrom(delta.newReference, newParent.classifier);
-                const newIndex = delta.newIndex;
-                const movedTarget = idMapping.fromRefId(delta.movedTarget);
-                const oldParent = idMapping.fromId(delta.oldParent);
-                const oldReference = resolvedReferenceFrom(delta.oldReference, oldParent.classifier);
-                const oldIndex = delta.oldIndex;
-                const replacedTarget = idMapping.fromRefId(delta.replacedTarget);
-                return new EntryMovedAndReplacedFromOtherReferenceDelta(newParent, newReference, newIndex, movedTarget, oldParent, oldReference, oldIndex, replacedTarget);
-            }
-            case "EntryMovedAndReplacedFromOtherReferenceInSameParent": {
-                const parent = idMapping.fromId(delta.parent);
-                const oldReference = resolvedReferenceFrom(delta.oldReference, parent.classifier);
-                const oldIndex = delta.oldIndex;
-                const newReference = resolvedReferenceFrom(delta.newReference, parent.classifier);
-                const newIndex = delta.newIndex;
-                const movedTarget = idMapping.fromRefId(delta.movedTarget);
-                const replacedTarget = idMapping.fromRefId(delta.replacedTarget);
-                return new EntryMovedAndReplacedFromOtherReferenceInSameParentDelta(parent, oldReference, oldIndex, newReference, newIndex, movedTarget, replacedTarget);
-            }
-            case "EntryMovedAndReplacedInSameReference": {
-                const parent = idMapping.fromId(delta.parent);
-                const reference = resolvedReferenceFrom(delta.reference, parent.classifier);
-                const oldIndex = delta.oldIndex;
-                const newIndex = delta.newIndex;
-                const movedTarget = idMapping.fromRefId(delta.movedTarget);
-                const replacedTarget = idMapping.fromRefId(delta.replacedTarget);
-                return new EntryMovedAndReplacedInSameReferenceDelta(parent, reference, oldIndex, newIndex, movedTarget, replacedTarget);
             }
             case "Composite": {
                 const parts = delta.parts.map(deserializedDelta);

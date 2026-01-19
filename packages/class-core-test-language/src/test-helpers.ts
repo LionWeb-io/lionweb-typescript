@@ -44,3 +44,10 @@ export const attachedLinkTestConcept = (id: LionWebId, receiveDelta?: DeltaRecei
     return linkTestConcept
 }
 
+
+/**
+ * @return an array of integers 0, ..., `n` - 1.
+ */
+export const integerRange = (n: number): number[] =>
+    [...Array(n).keys()]
+

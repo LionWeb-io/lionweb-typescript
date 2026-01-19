@@ -21,8 +21,6 @@ import {
     AddPartitionCommand,
     AddPropertyCommand,
     AddReferenceCommand,
-    AddReferenceResolveInfoCommand,
-    AddReferenceTargetCommand,
     AnnotationAddedEvent,
     AnnotationDeletedEvent,
     AnnotationMovedAndReplacedFromOtherParentEvent,
@@ -33,8 +31,6 @@ import {
     ChangeClassifierCommand,
     ChangePropertyCommand,
     ChangeReferenceCommand,
-    ChangeReferenceResolveInfoCommand,
-    ChangeReferenceTargetCommand,
     ChildAddedEvent,
     ChildDeletedEvent,
     ChildMovedAndReplacedFromOtherContainmentEvent,
@@ -53,31 +49,17 @@ import {
     DeletePartitionCommand,
     DeletePropertyCommand,
     DeleteReferenceCommand,
-    DeleteReferenceResolveInfoCommand,
-    DeleteReferenceTargetCommand,
-    EntryMovedAndReplacedFromOtherReferenceEvent,
-    EntryMovedAndReplacedFromOtherReferenceInSameParentEvent,
-    EntryMovedAndReplacedInSameReferenceEvent,
-    EntryMovedFromOtherReferenceEvent,
-    EntryMovedFromOtherReferenceInSameParentEvent,
-    EntryMovedInSameReferenceEvent,
     Event,
     MoveAndReplaceAnnotationFromOtherParentCommand,
     MoveAndReplaceAnnotationInSameParentCommand,
     MoveAndReplaceChildFromOtherContainmentCommand,
     MoveAndReplaceChildFromOtherContainmentInSameParentCommand,
     MoveAndReplaceChildInSameContainmentCommand,
-    MoveAndReplaceEntryFromOtherReferenceCommand,
-    MoveAndReplaceEntryFromOtherReferenceInSameParentCommand,
-    MoveAndReplaceEntryInSameReferenceCommand,
     MoveAnnotationFromOtherParentCommand,
     MoveAnnotationInSameParentCommand,
     MoveChildFromOtherContainmentCommand,
     MoveChildFromOtherContainmentInSameParentCommand,
     MoveChildInSameContainmentCommand,
-    MoveEntryFromOtherReferenceCommand,
-    MoveEntryFromOtherReferenceInSameParentCommand,
-    MoveEntryInSameReferenceCommand,
     PartitionAddedEvent,
     PartitionDeletedEvent,
     PropertyAddedEvent,
@@ -86,12 +68,6 @@ import {
     ReferenceAddedEvent,
     ReferenceChangedEvent,
     ReferenceDeletedEvent,
-    ReferenceResolveInfoAddedEvent,
-    ReferenceResolveInfoChangedEvent,
-    ReferenceResolveInfoDeletedEvent,
-    ReferenceTargetAddedEvent,
-    ReferenceTargetChangedEvent,
-    ReferenceTargetDeletedEvent,
     ReplaceAnnotationCommand,
     ReplaceChildCommand
 } from "@lionweb/delta-protocol-common"
@@ -377,146 +353,6 @@ export const commandAsEvent = (command: Command, participationId: string): Event
                     newResolveInfo,
                     oldTarget,
                     oldResolveInfo
-                })
-            }
-            case "MoveEntryFromOtherReference": {
-                const {newParent, newReference, newIndex, movedTarget} = command as MoveEntryFromOtherReferenceCommand // § 6.5.7.4
-                return completed<EntryMovedFromOtherReferenceEvent>("EntryMovedFromOtherReference", { // 6.6.6.4
-                    newParent,
-                    newReference,
-                    newIndex,
-                    oldParent: "???",   // TODO  get from own model
-                    oldReference: { language: "???", version: "???", key: "???" }, // TODO  get from own model
-                    oldIndex: -1,   // TODO  get from own model
-                    movedTarget,
-                    movedResolveInfo: null   // TODO  get from own model
-                })
-            }
-            case "MoveEntryFromOtherReferenceInSameParent": {
-                const {parent, newReference, newIndex, movedTarget} = command as MoveEntryFromOtherReferenceInSameParentCommand // § 6.5.7.5
-                return completed<EntryMovedFromOtherReferenceInSameParentEvent>("EntryMovedFromOtherReferenceInSameParent", { // § 6.6.6.5
-                    parent,
-                    newReference,
-                    newIndex,
-                    oldReference: { language: "???", version: "???", key: "???" }, // TODO  get from own model
-                    oldIndex: -1,   // TODO  get from own model
-                    movedTarget,
-                    movedResolveInfo: null
-                })
-            }
-            case "MoveEntryInSameReference": {
-                const {parent, reference, newIndex, movedTarget} = command as MoveEntryInSameReferenceCommand // § 6.5.7.6
-                return completed<EntryMovedInSameReferenceEvent>("EntryMovedInSameReference", { // § 6.6.6.6
-                    parent,
-                    reference,
-                    oldIndex: -1,
-                    newIndex,
-                    movedTarget,
-                    movedResolveInfo: null
-                })
-            }
-            case "MoveAndReplaceEntryFromOtherReference": {
-                const {newParent, newReference, newIndex, movedTarget, replacedTarget} = command as MoveAndReplaceEntryFromOtherReferenceCommand // § 6.5.7.7
-                return completed<EntryMovedAndReplacedFromOtherReferenceEvent>("EntryMovedAndReplacedFromOtherReference", { // § 6.6.6.7
-                    newParent,
-                    newReference,
-                    newIndex,
-                    movedTarget,
-                    movedResolveInfo: null,
-                    oldParent: "???",   // TODO  get from own model
-                    oldReference: { language: "???", version: "???", key: "???" }, // TODO  get from own model
-                    oldIndex: -1,   // TODO  get from own model
-                    replacedTarget,
-                    replacedResolveInfo: null
-                })
-            }
-            case "MoveAndReplaceEntryFromOtherReferenceInSameParent": {
-                const {parent, newReference, newIndex, movedTarget} = command as MoveAndReplaceEntryFromOtherReferenceInSameParentCommand // § 6.5.7.8
-                return completed<EntryMovedAndReplacedFromOtherReferenceInSameParentEvent>("EntryMovedAndReplacedFromOtherReferenceInSameParent", { // § 6.6.6.8
-                    parent,
-                    newReference,
-                    newIndex,
-                    movedTarget,
-                    movedResolveInfo: null,
-                    oldReference: { language: "???", version: "???", key: "???" }, // TODO  get from own model
-                    oldIndex: -1,   // TODO  get from own model
-                    replacedTarget: "???",   // TODO  get from own model
-                    replacedResolveInfo: null
-                })
-            }
-            case "MoveAndReplaceEntryInSameReference": {
-                const {parent, reference, newIndex, movedTarget, oldIndex, replacedTarget} = command as MoveAndReplaceEntryInSameReferenceCommand // § 6.5.7.9
-                return completed<EntryMovedAndReplacedInSameReferenceEvent>("EntryMovedAndReplacedInSameReference", { // § 6.6.6.9
-                    parent,
-                    reference,
-                    newIndex,
-                    movedTarget,
-                    movedResolveInfo: null,
-                    oldIndex,
-                    replacedTarget,
-                    replacedResolveInfo: null
-                })
-            }
-            case "AddReferenceResolveInfo": {
-                const {parent, reference, index, newResolveInfo} = command as AddReferenceResolveInfoCommand // § 6.5.7.10
-                return completed<ReferenceResolveInfoAddedEvent>("ReferenceResolveInfoAdded", { // § 6.6.6.10
-                    parent,
-                    reference,
-                    index,
-                    newResolveInfo,
-                    target: "???"   // TODO  get from own model
-                })
-            }
-            case "DeleteReferenceResolveInfo": {
-                const {parent, reference, index, deletedResolveInfo} = command as DeleteReferenceResolveInfoCommand // § 6.5.7.11
-                return completed<ReferenceResolveInfoDeletedEvent>("ReferenceResolveInfoDeleted", { // § 6.6.6.11
-                    parent,
-                    reference,
-                    index,
-                    deletedResolveInfo,
-                    target: "???"   // TODO  get from own model
-                })
-            }
-            case "ChangeReferenceResolveInfo": {
-                const {parent, reference, index, oldResolveInfo, newResolveInfo} = command as ChangeReferenceResolveInfoCommand // § 6.5.7.12
-                return completed<ReferenceResolveInfoChangedEvent>("ReferenceResolveInfoChanged", { // § 6.6.6.12
-                    parent,
-                    reference,
-                    index,
-                    newResolveInfo,
-                    oldResolveInfo,
-                    target: "???"   // TODO  get from own model
-                })
-            }
-            case "AddReferenceTarget": {
-                const {parent, reference, index, newTarget} = command as AddReferenceTargetCommand // § 6.5.7.13
-                return completed<ReferenceTargetAddedEvent>("ReferenceTargetAdded", { // § 6.6.6.13
-                    parent,
-                    reference,
-                    index,
-                    newTarget,
-                    resolveInfo: "???"   // TODO  get from own model
-                })
-            }
-            case "DeleteReferenceTarget": {
-                const {parent, reference, index, deletedTarget} = command as DeleteReferenceTargetCommand // § 6.5.7.14
-                return completed<ReferenceTargetDeletedEvent>("ReferenceTargetDeleted", { // § 6.6.6.14
-                    parent,
-                    reference,
-                    index,
-                    resolveInfo: "???",   // TODO  get from own model
-                    deletedTarget
-                })
-            }
-            case "ChangeReferenceTarget": {
-                const {parent, reference, index, newTarget} = command as ChangeReferenceTargetCommand // § 6.5.7.15
-                return completed<ReferenceTargetChangedEvent>("ReferenceTargetChanged", { // § 6.6.6.15
-                    parent,
-                    reference,
-                    index,
-                    newTarget,
-                    resolveInfo: "???",   // TODO  get from own model
-                    replacedTarget: "???"   // TODO  get from own model
                 })
             }
             case "CompositeCommand": {

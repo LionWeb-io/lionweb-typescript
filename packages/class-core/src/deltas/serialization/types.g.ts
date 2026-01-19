@@ -47,12 +47,6 @@ export type SerializedDelta =
     | ReferenceAddedSerializedDelta
     | ReferenceDeletedSerializedDelta
     | ReferenceChangedSerializedDelta
-    | EntryMovedFromOtherReferenceSerializedDelta
-    | EntryMovedFromOtherReferenceInSameParentSerializedDelta
-    | EntryMovedInSameReferenceSerializedDelta
-    | EntryMovedAndReplacedFromOtherReferenceSerializedDelta
-    | EntryMovedAndReplacedFromOtherReferenceInSameParentSerializedDelta
-    | EntryMovedAndReplacedInSameReferenceSerializedDelta
     | CompositeSerializedDelta
     | NoOpSerializedDelta
     ;
@@ -273,69 +267,6 @@ export type ReferenceChangedSerializedDelta = {
     index: number
     newTarget: IdOrNull
     oldTarget: IdOrNull
-}
-
-export type EntryMovedFromOtherReferenceSerializedDelta = {
-    kind: "EntryMovedFromOtherReference"
-    oldParent: LionWebId
-    oldReference: LionWebJsonMetaPointer
-    oldIndex: number
-    newParent: LionWebId
-    newReference: LionWebJsonMetaPointer
-    newIndex: number
-    movedTarget: IdOrNull
-}
-
-export type EntryMovedFromOtherReferenceInSameParentSerializedDelta = {
-    kind: "EntryMovedFromOtherReferenceInSameParent"
-    parent: LionWebId
-    oldReference: LionWebJsonMetaPointer
-    oldIndex: number
-    newReference: LionWebJsonMetaPointer
-    newIndex: number
-    movedTarget: IdOrNull
-}
-
-export type EntryMovedInSameReferenceSerializedDelta = {
-    kind: "EntryMovedInSameReference"
-    parent: LionWebId
-    reference: LionWebJsonMetaPointer
-    oldIndex: number
-    newIndex: number
-    movedTarget: IdOrNull
-}
-
-export type EntryMovedAndReplacedFromOtherReferenceSerializedDelta = {
-    kind: "EntryMovedAndReplacedFromOtherReference"
-    newParent: LionWebId
-    newReference: LionWebJsonMetaPointer
-    newIndex: number
-    movedTarget: IdOrNull
-    oldParent: LionWebId
-    oldReference: LionWebJsonMetaPointer
-    oldIndex: number
-    replacedTarget: IdOrNull
-}
-
-export type EntryMovedAndReplacedFromOtherReferenceInSameParentSerializedDelta = {
-    kind: "EntryMovedAndReplacedFromOtherReferenceInSameParent"
-    parent: LionWebId
-    oldReference: LionWebJsonMetaPointer
-    oldIndex: number
-    newReference: LionWebJsonMetaPointer
-    newIndex: number
-    movedTarget: IdOrNull
-    replacedTarget: IdOrNull
-}
-
-export type EntryMovedAndReplacedInSameReferenceSerializedDelta = {
-    kind: "EntryMovedAndReplacedInSameReference"
-    parent: LionWebId
-    reference: LionWebJsonMetaPointer
-    oldIndex: number
-    newIndex: number
-    movedTarget: IdOrNull
-    replacedTarget: IdOrNull
 }
 
 export type CompositeSerializedDelta = {
