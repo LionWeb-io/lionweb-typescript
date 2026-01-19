@@ -1,4 +1,4 @@
-import { Enumeration, Language, MemoisingSymbolTable, Property } from "@lionweb/core"
+import { Enumeration, isUnresolvedReference, Language, MemoisingSymbolTable, Property } from "@lionweb/core"
 import {
     LionWebId,
     LionWebJsonChunk,
@@ -38,12 +38,15 @@ export const genericAsTreeText = ({ nodes }: LionWebJsonChunk, languages: Langua
                 ? property.type instanceof Enumeration
                     ? (property.type.literals.find(literal => literal.key === value)?.name ?? value)
                     : (() => {
-                          switch (property?.type?.name) {
-                              case "String":
-                                  return `'${value}'`
-                              default:
-                                  return value
-                          }
+                        if (property.type === undefined || isUnresolvedReference(property.type)) {
+                            return `???`
+                        }
+                        switch (property.type.name) {
+                          case "String":
+                              return `'${value}'`
+                          default:
+                              return value
+                        }
                       })()
                 : value
         return `${identification} = ${displayValue}`
