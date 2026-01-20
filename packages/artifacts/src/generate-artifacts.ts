@@ -4,11 +4,9 @@ import { LionWebJsonChunk } from "@lionweb/json"
 import {
     generateMermaidForLanguage,
     generatePlantUmlForLanguage,
-    GenerationOptions,
     genericAsTreeText,
     languageAsText,
     readFileAsJson,
-    tsTypeDefsForLanguage,
     writeJsonAsFile
 } from "@lionweb/utilities"
 import { writeFileSync } from "fs"
@@ -29,10 +27,9 @@ writeFileSync(diagramPath("builtins.puml"), generatePlantUmlForLanguage(lioncore
 writeFileSync(diagramPath("builtins.md"), generateMermaidForLanguage(lioncoreBuiltins))
 console.log(`generated diagrams for LionCore Built-ins`)
 
-const saveLanguageFiles = (language: Language, name: string, ...generationOptions: GenerationOptions[]) => {
+const saveLanguageFiles = (language: Language, name: string) => {
     writeJsonAsFile(languagePath(`${name}.json`), serializeLanguages(language))
     writeFileSync(languagePath(`${name}.txt`), languageAsText(language))
-    writeFileSync(languagePath(`${name}.ts.txt`), tsTypeDefsForLanguage(language, ...generationOptions))
     // (Generate with a '.txt' file extension to avoid it getting picked up by the compiler.)
     console.log(`saved files for ${language.name} M2`)
 }
@@ -40,7 +37,7 @@ const saveLanguageFiles = (language: Language, name: string, ...generationOption
 saveLanguageFiles(lioncore, "lioncore")
 saveLanguageFiles(lioncoreBuiltins, "builtins")
 
-saveLanguageFiles(shapesLanguage, "shapes", GenerationOptions.assumeSealed)
+saveLanguageFiles(shapesLanguage, "shapes")
 
 saveLanguageFiles(libraryLanguage, "library")
 
