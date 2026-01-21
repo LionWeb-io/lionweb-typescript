@@ -1,20 +1,19 @@
 import { asMinimalJsonString, StringsMapper } from "@lionweb/ts-utils"
-import { currentReleaseVersion } from "../version.js"
-import { LanguageFactory } from "./factory.js"
-import { Classifier, Concept, lioncoreBuiltinsKey } from "./types.js"
 import {
     newPropertyValueDeserializerRegistry,
     newPropertyValueSerializerRegistry,
     propertyValueDeserializerFrom,
     propertyValueSerializerFrom
 } from "./builtins-common.js"
+import { LanguageFactory } from "./factory.js"
+import { Classifier, Concept, lioncoreBuiltinsKey } from "./types.js"
 
 
 const lioncoreBuiltinsIdAndKeyGenerator: StringsMapper = (...names) => [lioncoreBuiltinsKey, ...names.slice(1)].join("-")
 
 const factory = new LanguageFactory(
     "LionCore_builtins",
-    currentReleaseVersion,
+    "2023.1",
     lioncoreBuiltinsIdAndKeyGenerator,
     lioncoreBuiltinsIdAndKeyGenerator
 )
@@ -37,7 +36,7 @@ const node = factory.concept("Node", true)
 const isBuiltinNodeConcept = (classifier: Classifier) =>
     classifier instanceof Concept &&
     classifier.language.key === lioncoreBuiltinsKey &&
-    classifier.language.version === currentReleaseVersion &&
+    classifier.language.version === "2023.1" &&
     classifier.key === builtinClassifiers.node.key &&
     (classifier as Concept).abstract
 

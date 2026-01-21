@@ -1,4 +1,3 @@
-import { currentReleaseVersion } from "../version.js"
 import { builtinClassifiers, builtinPrimitives } from "./builtins.js"
 import { LanguageFactory } from "./factory.js"
 
@@ -6,7 +5,7 @@ const lioncoreKey = "LionCore-M3"
 
 const factory = new LanguageFactory(
     "LionCore_M3",
-    currentReleaseVersion,
+    "2023.1",
     (...names) => "-id-" + (names.length === 1 ? lioncoreKey : names.slice(1).join("-")),
     (...names) => names.slice(1).join("-")
 )
