@@ -19,6 +19,8 @@
 * Rename the `IdOrUnresolved` type to `IdOrNull`, without keeping an alias because this type is essentially for internal use only.
 * Improve textualization: “none” for empty multi-valued links, and “not set” for unset single-valued links, instead of “nothing” in both cases.
 * Remove all reference-related deltas, except for `Reference{Added|Changed|Deleted}Delta`.
+* Propagate the change to the `ResolveInfoDeducer` type from the `core` package.
+* Expose the `nodeBaseReader` function that’s already used by packages downstream.
 
 
 ## 0.7.2

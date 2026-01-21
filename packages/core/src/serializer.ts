@@ -215,7 +215,7 @@ export const serializerWith = <NT extends Node>(configuration: SerializerConfigu
                             .map(t => t as NT)
                             .map(t => ({
                                 resolveInfo:
-                                    (reader.resolveInfoFor ? reader.resolveInfoFor(t) : simpleNameDeducer(t)) ?? null,
+                                    (reader.resolveInfoFor ? reader.resolveInfoFor(t, feature) : simpleNameDeducer(t, feature)) ?? null,
                                 reference: t.id
                             }))
                     })

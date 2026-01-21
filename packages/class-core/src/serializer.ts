@@ -29,6 +29,7 @@ import {
     PropertyValueSerializer,
     Reader,
     Reference,
+    ResolveInfoDeducer,
     serializerWith
 } from "@lionweb/core"
 
@@ -53,6 +54,31 @@ export const getFeatureValue = (node: INodeBase, feature: Feature) => {
 };
 
 /**
+ * A {@link ResolveInfoDeducer} that works on {@link INodeBase}s.
+ * *Note*: the {@link Reference} passed is not taken into account (yet).
+ */
+const nodeBaseResolveInfoDeducer: ResolveInfoDeducer<INodeBase> = (node, _reference) => {
+    // TODO  put innards in separate function
+    if ("name" in node) {
+        // evaluating `node.name` might cause an error through FeatureValueManager.throwOnReadOfUnset:
+        try {
+            const value = node.name;
+            return typeof value === "string" ? value : undefined;
+        } catch (_) {
+            return undefined;
+        }
+    }
+    const allSupertypes = allSuperTypesOf(node.classifier);
+    if (allSupertypes.indexOf(builtinClassifiers.inamed) > -1) {
+        return node.getPropertyValueManager(builtinFeatures.inamed_name).getDirectly() as (string | undefined);
+    }
+    if (allSupertypes.indexOf(LionCore_builtinsBase.INSTANCE.INamed) > -1) {
+        return node.getPropertyValueManager(LionCore_builtinsBase.INSTANCE.INamed_name).getDirectly() as (string | undefined);
+    }
+    return undefined;
+};
+
+/**
  * A {@link Reader} that works on/for {@link INodeBase}s specifically.
  * **Note** that this function is for internal use only!
  */
@@ -62,25 +88,7 @@ export const nodeBaseReader: Reader<INodeBase> = {
     enumerationLiteralFrom: (encoding, enumeration) => {
         return enumeration.literals.find((literal) => literal.key === encoding)!;
     },
-    resolveInfoFor: (node: INodeBase) => {
-        if ("name" in node) {
-            // evaluating `node.name` might cause an error through FeatureValueManager.throwOnReadOfUnset:
-            try {
-                const value = node.name;
-                return typeof value === "string" ? value : undefined;
-            } catch (_) {
-                return undefined;
-            }
-        }
-        const allSupertypes = allSuperTypesOf(node.classifier);
-        if (allSupertypes.indexOf(builtinClassifiers.inamed) > -1) {
-            return node.getPropertyValueManager(builtinFeatures.inamed_name).getDirectly() as (string | undefined);
-        }
-        if (allSupertypes.indexOf(LionCore_builtinsBase.INSTANCE.INamed) > -1) {
-            return node.getPropertyValueManager(LionCore_builtinsBase.INSTANCE.INamed_name).getDirectly() as (string | undefined);
-        }
-        return undefined;
-    }
+    resolveInfoFor: nodeBaseResolveInfoDeducer
 };
 
 /**

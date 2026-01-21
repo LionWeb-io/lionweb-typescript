@@ -1,4 +1,4 @@
-import { Classifier, Enumeration, EnumerationLiteral, Feature } from "./m3/index.js"
+import { Classifier, Enumeration, EnumerationLiteral, Feature, Reference } from "./m3/index.js"
 import { Node } from "./types.js"
 
 
@@ -9,10 +9,11 @@ export type ClassifierDeducer<NT extends Node> = (node: NT) => Classifier
 
 /**
  * Type def. for functions that deduce the string value of the `resolveInfo` field of a
- * {@link LionWebJsonReferenceTarget serialized reference target}, or  {@code undefined}
- * to indicate that no `resolveInfo` could be derived.
+ * {@link LionWebJsonReferenceTarget serialized reference target},
+ * or {@code undefined} to indicate that no `resolveInfo` could be derived.
+ * The function’s arguments are the target {@link Node} and its containing {@link Reference}.
  */
-export type ResolveInfoDeducer<NT extends Node> = (node: NT) => string | undefined
+export type ResolveInfoDeducer<NT extends Node> = (node: NT, reference: Reference) => string | undefined
 
 /**
  * An interface that's used to parametrize generic serialization of

@@ -27,7 +27,7 @@ export * from "./id-mapping.js";
 export * from "./LionCore_builtins.g.js";
 export type { IdOrNull } from "./references.js";
 export { idFrom } from "./references.js";
-export { propertyValueSerializerWith, serializeNodeBases } from "./serializer.js";
+export { nodeBaseReader, propertyValueSerializerWith, serializeNodeBases } from "./serializer.js";
 export { asTreeTextWith } from "./textualizer.js";
 export * from "./value-managers/index.js";
 

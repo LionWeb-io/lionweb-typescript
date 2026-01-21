@@ -40,7 +40,7 @@ type INodeBaseOrNotThere = INodeBase | UnresolvedReference | undefined
 
 const asINodeBases = (value: INodeBaseOrNotThere | INodeBaseOrNotThere[]): INodeBase[] => {
     const isINodeBase = (value: INodeBaseOrNotThere): value is INodeBase =>
-        !(isUnresolvedReference(value) || value === undefined)
+        !(value === undefined || isUnresolvedReference(value))
 
     if (Array.isArray(value)) {
         return value

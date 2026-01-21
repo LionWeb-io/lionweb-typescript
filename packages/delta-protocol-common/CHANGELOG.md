@@ -4,6 +4,7 @@
 
 * Remove all reference-related event and command types, except for the ones associated with adding, changing, and deleting a reference.
   * Also remove all cross-translation code relating to those.
+* Propagate the change to the `ResolveInfoDeducer` type from the `core` package.
 
 
 ## 0.7.2
