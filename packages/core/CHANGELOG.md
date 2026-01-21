@@ -14,6 +14,7 @@
     *Note* that this is technically a breaking change, but the `ResolveInfoDeducer` type is essentially part of the internal API.
 * Introduce `propertyValue{Des|S}erializerFrom` functions to build `PropertyValue{Des|S}erializer` instances with in a more convenient and code-compact way.
   * Deprecate the `BuiltinPropertyValue{Des|S}erializer` classes as legacy.
+* Array-typed fields in the LionCore classes are now read-only.
 
 
 ## 0.7.2
