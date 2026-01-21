@@ -1,11 +1,13 @@
 import {
     AggregatingProblemReporter,
-    BuiltinPropertyValueDeserializer,
+    builtinPrimitives,
     Concept,
     deserializerWith,
     dynamicWriter,
     Feature,
     Language,
+    newPropertyValueDeserializerRegistry,
+    propertyValueDeserializerFrom,
     Reference,
     unresolved,
     Writer
@@ -148,12 +150,14 @@ describe("deserialization", () => {
                 }
             ]
         }
-        const propertyValueDeserializer = new BuiltinPropertyValueDeserializer()
-        propertyValueDeserializer.register(dateDataType, value => {
-            const parts = value.split("-")
-            return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]))
-        })
-
+        const propertyValueDeserializer = propertyValueDeserializerFrom(
+            newPropertyValueDeserializerRegistry()
+                .set(builtinPrimitives.stringDataType, (value) => value)
+                .set(dateDataType, (value) => {
+                    const parts = value.split("-")
+                    return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]))
+                })
+        )
         const deserialization = deserializerWith({
             writer: libraryWithDatesWriter,
             languages: [libraryWithDatesLanguage],

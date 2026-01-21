@@ -2,7 +2,6 @@ import {
     Annotation,
     builtinClassifiers,
     builtinPrimitives,
-    BuiltinPropertyValueSerializer,
     Concept,
     DynamicNode,
     dynamicReader,
@@ -10,6 +9,8 @@ import {
     EnumerationLiteral,
     Language,
     LanguageFactory,
+    newPropertyValueSerializerRegistry,
+    propertyValueSerializerFrom,
     Reference,
     serializeLanguages,
     serializerWith
@@ -31,14 +32,15 @@ describe("serialization", () => {
     })
 
     it("serializes node with custom primitive type, works when registering custom deserializer", () => {
-        const builtinsPropertyValueSerializer = new BuiltinPropertyValueSerializer()    // (can't use the sealed builtinPropertyValueSerializer singleton instance!)
-        builtinsPropertyValueSerializer.register(dateDataType, (value: unknown) => {
-            const d = value as Date
-            return `${Number(d.getFullYear()).toString().padStart(4, "0")}-${Number(d.getMonth() + 1)
-                .toString()
-                .padStart(2, "0")}-${Number(d.getDate()).toString().padStart(2, "0")}`
-        })
-
+        const builtinsPropertyValueSerializer = propertyValueSerializerFrom(
+            newPropertyValueSerializerRegistry()
+                .set(builtinPrimitives.stringDataType, (value) => value as string)
+                .set(dateDataType, (value) => {
+                    const d = value as Date
+                    return `${Number(d.getFullYear()).toString().padStart(4, "0")}-${Number(d.getMonth() + 1)
+                        .toString()
+                        .padStart(2, "0")}-${Number(d.getDate()).toString().padStart(2, "0")}`
+                }))
         const myNode = new TestNode("1", "LibraryWithDates")
         myNode.properties["name"] = "myLibrary"
         myNode.properties["creationDate"] = new Date(2024, 4, 28)

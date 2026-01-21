@@ -12,6 +12,8 @@
 * Introduce an explicit `UnresolvedReference` type, a corresponding `isUnresolvedReference` type function, and a `referenceToSet` function to produce reference (target) placeholders, and propagate their use throughout the codebase.
 * Add a 2nd argument to the `ResolveInfoDeducer` function type, to also pass the containing reference.
     *Note* that this is technically a breaking change, but the `ResolveInfoDeducer` type is essentially part of the internal API.
+* Introduce `propertyValue{Des|S}erializerFrom` functions to build `PropertyValue{Des|S}erializer` instances with in a more convenient and code-compact way.
+  * Deprecate the `BuiltinPropertyValue{Des|S}erializer` classes as legacy.
 
 
 ## 0.7.2
