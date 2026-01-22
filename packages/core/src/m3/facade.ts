@@ -1,6 +1,6 @@
 import { lioncoreBuiltinsFacade } from "./builtins.js"
 import { metaTypedBasedClassifierDeducerFor, qualifiedNameOf } from "./functions.js"
-import { lioncore, metaConcepts, metaFeatures } from "./lioncore.js"
+import { lioncoreFacade } from "./lioncore.js"
 import { Reader } from "../reading.js"
 import {
     Annotation,
@@ -18,11 +18,12 @@ import {
 } from "./types.js"
 import { updateSettingsNameBased, Writer } from "../writing.js"
 
-const { ikeyed_key } = metaFeatures
+const { ikeyed_key } = lioncoreFacade.metaFeatures
 const { inamed_name } = lioncoreBuiltinsFacade.features
+const { metaConcepts, metaFeatures } = lioncoreFacade
 
 export const lioncoreReader: Reader<M3Concept> = {
-    classifierOf: metaTypedBasedClassifierDeducerFor(lioncore),
+    classifierOf: metaTypedBasedClassifierDeducerFor(lioncoreFacade.language),
     getFeatureValue: (node, feature) =>
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (node as any)[feature.name], // (mirrors name-based update of settings)

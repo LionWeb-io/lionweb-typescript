@@ -20,6 +20,9 @@
 * Introduce a `LionCoreBuiltinsFacade` type and `lioncoreBuiltinsFacade` instance that façades the details LionCore built-ins.
   * The `builtin{Classifiers|Features|Primitives}` and `lioncoreBuiltins` constants, and `isBuiltinConcept` function, are kept for backward compatibility, but are now deprecated.
   * (This change has been propagated throughout the entire code base.)
+* Introduce a `LionCoreFacade` type and `lioncoreFacade` instance that façades the details LionCore meta-meta-model language.
+    * The `meta{Concepts|Features}` and `lioncore` constants are kept for backward compatibility, but are now deprecated.
+    * (This change has been propagated throughout the entire code base.)
 
 
 ## 0.7.2

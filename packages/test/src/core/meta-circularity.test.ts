@@ -1,8 +1,16 @@
-import { checkReferences, deserializeLanguages, issuesLanguage, lioncore, serializeLanguages } from "@lionweb/core"
+import {
+    checkReferences,
+    deserializeLanguages,
+    issuesLanguage,
+    lioncoreFacade,
+    serializeLanguages
+} from "@lionweb/core"
 import { languageAsText } from "@lionweb/utilities"
 
 import { deepEqual } from "../test-utils/assertions.js"
 import { logIssues, logUnresolvedReferences } from "../test-utils/test-helpers.js"
+
+const lioncore = lioncoreFacade.language
 
 describe("meta-circularity (LionCore)", () => {
     it("check for unresolved references", () => {

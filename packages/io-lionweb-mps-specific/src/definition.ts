@@ -15,7 +15,7 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { Annotation, Classifier, LanguageFactory, lioncoreBuiltinsFacade, metaConcepts } from "@lionweb/core"
+import { Annotation, Classifier, LanguageFactory, lioncoreBuiltinsFacade, lioncoreFacade } from "@lionweb/core"
 import { StringsMapper } from "@lionweb/ts-utils"
 
 const languageName = "io.lionweb.mps.specific"
@@ -39,6 +39,8 @@ const defineAnnotation = (nameOfAnnotation: string, annotates: Classifier, ...na
     return annotation
 }
 
+
+const { metaConcepts } = lioncoreFacade
 
 const ConceptDescription = defineAnnotation("ConceptDescription", metaConcepts.classifier, "conceptAlias", "conceptShortDescription", "helpUrl")
 

@@ -17,7 +17,7 @@
 
 import { writeFileSync } from "fs"
 import { join } from "path"
-import { deserializeLanguages, lioncore } from "@lionweb/core"
+import { deserializeLanguages, lioncoreFacade } from "@lionweb/core"
 import { LionWebJsonChunk } from "@lionweb/json"
 import {
     generateMermaidForLanguage,
@@ -30,7 +30,7 @@ const languageName = "io.lionweb.mps.specific"
 const packagePath = join("..", languageName.replaceAll(".", "-"), "meta")
 
 const chunk = readFileAsJson(join(packagePath, `${languageName}.json`)) as LionWebJsonChunk
-const language = deserializeLanguages(chunk, lioncore)[0]
+const language = deserializeLanguages(chunk, lioncoreFacade.language)[0]
 
 writeFileSync(join(packagePath, `${languageName}.txt`), languageAsText(language))
 writeFileSync(join(packagePath, `${languageName}.puml`), generatePlantUmlForLanguage(language))

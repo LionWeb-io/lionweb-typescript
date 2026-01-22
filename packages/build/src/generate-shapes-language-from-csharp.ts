@@ -1,4 +1,4 @@
-import { deserializeLanguages, lioncoreBuiltinsFacade, metaFeatures, serializeLanguages } from "@lionweb/core"
+import { deserializeLanguages, lioncoreBuiltinsFacade, lioncoreFacade, serializeLanguages } from "@lionweb/core"
 import { defaultTrumpfOriginatingApache2_0LicensedHeader, generateLanguage } from "@lionweb/class-core-generator"
 import { LionWebId, LionWebJsonChunk, LionWebJsonNode, LionWebJsonProperty, LionWebKey } from "@lionweb/json"
 import { languageAsText, readFileAsJson, writeJsonAsFile } from "@lionweb/utilities"
@@ -51,7 +51,7 @@ const checkNode = (node: LionWebJsonNode) => {
         console.error(`ID ${id} not unique!`)
     }
     ids.push(id)
-    const key = lookUpPropertyValueByKey(node, metaFeatures.ikeyed_key.key)
+    const key = lookUpPropertyValueByKey(node, lioncoreFacade.metaFeatures.ikeyed_key.key)
     if (key === null) {
         console.error(`Node with ID ${id} has no key!`)
     } else {

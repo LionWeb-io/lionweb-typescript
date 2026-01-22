@@ -20,7 +20,7 @@ import {
     areSameLanguages,
     Classifier,
     InstantiationFacade,
-    lioncore,
+    lioncoreFacade,
     lioncoreWriter,
     M3Concept,
     M3Node,
@@ -88,7 +88,7 @@ export const combinedWriter: InstantiationFacade<M3Node | IoLionWebMpsSpecificAn
         if (areSameLanguages(classifier.language, ioLionWebMpsSpecificLanguage)) {
             return ioLionWebMpsSpecificFactory(parent, classifier, id, propertySettings)
         }
-        if (areSameLanguages(classifier.language, lioncore)) {
+        if (areSameLanguages(classifier.language, lioncoreFacade.language)) {
             return lioncoreWriter.nodeFor(parent as M3Concept, classifier, id, propertySettings)
         }
         throw new Error(`don't know how to instantiate a ${classifier.name} from language ${classifier.language.name} (${classifier.language.key}, ${classifier.language.version})`)

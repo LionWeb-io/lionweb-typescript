@@ -1,4 +1,4 @@
-import { Language, lioncore, lioncoreBuiltinsFacade, serializeLanguages, serializerWith } from "@lionweb/core"
+import { Language, lioncoreBuiltinsFacade, lioncoreFacade, serializeLanguages, serializerWith } from "@lionweb/core"
 import { ioLionWebMpsSpecificLanguage } from "@lionweb/io-lionweb-mps-specific"
 import { LionWebJsonChunk } from "@lionweb/json"
 import {
@@ -18,6 +18,9 @@ import { multiLanguage } from "@lionweb/test/dist/languages/multi.js"
 import { shapesLanguage } from "@lionweb/test/dist/languages/shapes.js"
 import { languageWithEnum } from "@lionweb/test/dist/languages/with-enum.js"
 import { diagramPath, instancePath, languagePath } from "./paths.js"
+
+
+const lioncore = lioncoreFacade.language
 
 writeFileSync(diagramPath("metametamodel-gen.puml"), generatePlantUmlForLanguage(lioncore))
 writeFileSync(diagramPath("metametamodel-gen.md"), generateMermaidForLanguage(lioncore))
