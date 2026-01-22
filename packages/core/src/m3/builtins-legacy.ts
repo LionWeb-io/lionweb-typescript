@@ -1,5 +1,5 @@
 import { asMinimalJsonString } from "@lionweb/ts-utils"
-import { builtinPrimitives } from "./builtins.js"
+import { lioncoreBuiltinsFacade } from "./builtins.js"
 import { shouldBeIdentical } from "./builtins-common.js"
 import { PropertyValueDeserializer } from "../deserializer.js"
 import { DataType, Property } from "./types.js"
@@ -35,7 +35,7 @@ abstract class DataTypeRegistry<T> {
 }
 
 
-const { booleanDataType, integerDataType, jsonDataType, stringDataType } = builtinPrimitives
+const { booleanDataType, integerDataType, jsonDataType, stringDataType } = lioncoreBuiltinsFacade.primitiveTypes
 
 
 /**

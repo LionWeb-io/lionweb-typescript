@@ -1,7 +1,10 @@
-import { checkReferences, issuesLanguage, lioncoreBuiltins } from "@lionweb/core"
+import { checkReferences, issuesLanguage, lioncoreBuiltinsFacade } from "@lionweb/core"
 
 import { deepEqual } from "../test-utils/assertions.js"
 import { logIssues, logUnresolvedReferences } from "../test-utils/test-helpers.js"
+
+
+const lioncoreBuiltins = lioncoreBuiltinsFacade.language
 
 describe("primitive types built-in to LionCore", () => {
     it("check for unresolved references", () => {
@@ -16,3 +19,4 @@ describe("primitive types built-in to LionCore", () => {
         deepEqual(issues, [], "number of expected constraint violations -- see above for the issues")
     })
 })
+

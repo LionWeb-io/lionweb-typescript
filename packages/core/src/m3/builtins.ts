@@ -1,5 +1,6 @@
 import { asMinimalJsonString } from "@lionweb/ts-utils"
 import {
+    LionCoreBuiltinsFacade,
     lioncoreBuiltinsIdAndKeyGenerator,
     newPropertyValueDeserializerRegistry,
     newPropertyValueSerializerRegistry,
@@ -20,10 +21,6 @@ const factory = new LanguageFactory(
  * ID == key: `LionCore-builtins-${qualified name _without_ "LionCore-builtins", dash-separated}`
  */
 
-/**
- * Definition of a LionCore language that serves as a standard library of built-in primitive types.
- */
-const lioncoreBuiltins = factory.language
 
 const stringDataType = factory.primitiveType("String")
 const booleanDataType = factory.primitiveType("Boolean")
@@ -32,72 +29,80 @@ const jsonDataType = factory.primitiveType("JSON")
 
 const node = factory.concept("Node", true)
 
-const isBuiltinNodeConcept = (classifier: Classifier) =>
-    classifier instanceof Concept &&
-    classifier.language.key === lioncoreBuiltinsKey &&
-    classifier.language.version === "2023.1" &&
-    classifier.key === builtinClassifiers.node.key &&
-    (classifier as Concept).abstract
-
 const inamed = factory.interface("INamed")
 
 const inamed_name = factory.property(inamed, "name").ofType(stringDataType)
 
-const builtinPrimitives = {
-    stringDataType,
-    booleanDataType,
-    integerDataType,
-    jsonDataType,
-    /**
-     * Misspelled alias of {@link stringDataType}, kept for backward compatibility, and to be deprecated and removed later.
-     */
-    stringDatatype: stringDataType,
-    /**
-     * Misspelled alias of {@link booleanDataType}, kept for backward compatibility, and to be deprecated and removed later.
-     */
-    booleanDatatype: booleanDataType,
-    /**
-     * Misspelled alias of {@link integerDataType}, kept for backward compatibility, and to be deprecated and removed later.
-     */
-    integerDatatype: integerDataType,
-    /**
-     * Misspelled alias of {@link jsonDataType}, kept for backward compatibility, and to be deprecated and removed later.
-     */
-    jsonDatatype: jsonDataType
+
+export const lioncoreBuiltinsFacade: LionCoreBuiltinsFacade = {
+    language: factory.language,
+    propertyValueDeserializer: propertyValueDeserializerFrom(
+        newPropertyValueDeserializerRegistry()
+            .set(stringDataType, (value) => value)
+            .set(booleanDataType, (value) => JSON.parse(value))
+            .set(integerDataType, (value) => Number(value))
+            .set(jsonDataType, (value) => JSON.parse(value as string))
+    ),
+    propertyValueSerializer: propertyValueSerializerFrom(
+        newPropertyValueSerializerRegistry()
+            .set(stringDataType, (value) => value as string)
+            .set(booleanDataType, (value) => `${value as boolean}`)
+            .set(integerDataType, (value) => `${value as number}`)
+            .set(jsonDataType, (value) => asMinimalJsonString(value))
+    ),
+    classifiers: { node, inamed },
+    features: { inamed_name },
+    primitiveTypes: {
+        stringDataType,
+        booleanDataType,
+        integerDataType,
+        jsonDataType,
+        /**
+         * Misspelled alias of {@link stringDataType}, kept for backward compatibility, and to be deprecated and removed later.
+         */
+        stringDatatype: stringDataType,
+        /**
+         * Misspelled alias of {@link booleanDataType}, kept for backward compatibility, and to be deprecated and removed later.
+         */
+        booleanDatatype: booleanDataType,
+        /**
+         * Misspelled alias of {@link integerDataType}, kept for backward compatibility, and to be deprecated and removed later.
+         */
+        integerDatatype: integerDataType,
+        /**
+         * Misspelled alias of {@link jsonDataType}, kept for backward compatibility, and to be deprecated and removed later.
+         */
+        jsonDatatype: jsonDataType
+    },
+    isBuiltinNodeConcept: (classifier: Classifier) =>
+        classifier instanceof Concept &&
+        classifier.language.key === lioncoreBuiltinsKey &&
+        classifier.language.version === "2023.1" &&
+        classifier.key === node.key &&
+        (classifier as Concept).abstract
 }
 
-const builtinClassifiers = {
-    node,
-    inamed
-}
-
-const builtinFeatures = {
-    inamed_name
-}
 
 /**
- * Singleton instance of {@link BuiltinPropertyValueDeserializer}.
+ * Definition of a LionCore language that serves as a standard library of built-in primitive types.
+ *
+ * @deprecated Use {@code lioncoreBuiltinsFacade.isBuiltinNodeConcept} instead.
  */
-export const builtinPropertyValueDeserializer = propertyValueDeserializerFrom(
-    newPropertyValueDeserializerRegistry()
-        .set(stringDataType, (value) => value)
-        .set(booleanDataType, (value) => JSON.parse(value))
-        .set(integerDataType, (value) => Number(value))
-        .set(jsonDataType, (value) => JSON.parse(value as string))
-
-)
-
-
+export const lioncoreBuiltins = factory.language
 /**
- * Singleton instance of {@link BuiltinPropertyValueSerializer}.
+ * @deprecated Use {@code lioncoreBuiltinsFacade.primitiveTypes} instead.
  */
-export const builtinPropertyValueSerializer = propertyValueSerializerFrom(
-    newPropertyValueSerializerRegistry()
-        .set(stringDataType, (value) => value as string)
-        .set(booleanDataType, (value) => `${value as boolean}`)
-        .set(integerDataType, (value) => `${value as number}`)
-        .set(jsonDataType, (value) => asMinimalJsonString(value))
-)
-
-export { builtinPrimitives, builtinClassifiers, builtinFeatures, isBuiltinNodeConcept, lioncoreBuiltins }
+export const builtinPrimitives = lioncoreBuiltinsFacade.primitiveTypes
+/**
+ * @deprecated Use {@code lioncoreBuiltinsFacade.classifiers} instead.
+ */
+export const builtinClassifiers = lioncoreBuiltinsFacade.classifiers
+/**
+ * @deprecated Use {@code lioncoreBuiltinsFacade.features} instead.
+ */
+export const builtinFeatures = lioncoreBuiltinsFacade.features
+/**
+ * @deprecated Use {@code lioncoreBuiltinsFacade.isBuiltinNodeConcept} instead.
+ */
+export const isBuiltinConcept = lioncoreBuiltinsFacade.isBuiltinNodeConcept
 

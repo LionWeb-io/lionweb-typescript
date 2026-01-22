@@ -1,5 +1,5 @@
 import { PropertyValueDeserializer } from "../deserializer.js"
-import { DataType, Property } from "./types.js"
+import { Classifier, Concept, DataType, Interface, Language, PrimitiveType, Property } from "./types.js"
 import { isUnresolvedReference } from "../references.js"
 import { PropertyValueSerializer } from "../serializer.js"
 import { StringsMapper } from "@lionweb/ts-utils"
@@ -113,4 +113,35 @@ export const lioncoreBuiltinsKey = "LionCore-builtins"
  */
 export const lioncoreBuiltinsIdAndKeyGenerator: StringsMapper = (...names) =>
     [lioncoreBuiltinsKey, ...names.slice(1)].join("-")
+
+
+/**
+ * Type def. for objects that façade (a version of) the LionCore built-ins.
+ */
+export type LionCoreBuiltinsFacade = {
+    language: Language
+    /** The default {@link PropertyValueDeserializer}. */
+    propertyValueDeserializer: PropertyValueDeserializer
+    /** The default {@link PropertyValueSerializer}. */
+    propertyValueSerializer: PropertyValueSerializer
+    classifiers: {
+        node: Concept
+        inamed: Interface
+    }
+    features: {
+        inamed_name: Property
+    }
+    /**
+     * The built-in primitive types: boolean, integer, string + legacy (in the `Record<...>` part).
+     */
+    primitiveTypes: {
+        booleanDataType: PrimitiveType
+        integerDataType: PrimitiveType
+        stringDataType: PrimitiveType
+    } & Record<string, PrimitiveType>
+    /**
+     * @return whether the given {@link Classifier} is the built-in `Node` {@link Concept}.
+     */
+    isBuiltinNodeConcept: (classifier: Classifier) => boolean
+}
 

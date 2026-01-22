@@ -16,7 +16,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import {
-    builtinClassifiers,
     Classifier,
     Containment,
     Enumeration,
@@ -30,6 +29,7 @@ import {
     isUnresolvedReference,
     LanguageEntity,
     Link,
+    lioncoreBuiltinsFacade,
     M3Concept,
     nameSorted,
     Node,
@@ -174,7 +174,7 @@ export const typeForLanguageEntity = (imports: Imports) => {
             if (isUnresolvedReference(superConcept)) {
                 return `/* unresolved reference to super concept */`
             }
-            if (superConcept === undefined || superConcept === builtinClassifiers.node) {
+            if (superConcept === undefined || superConcept === lioncoreBuiltinsFacade.classifiers.node) {
                 return imports.generic("NodeBase")
             }
             return imports.entity(superConcept)

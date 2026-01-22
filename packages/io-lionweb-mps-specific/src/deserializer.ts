@@ -21,7 +21,7 @@ import {
     deserializerWith,
     Language,
     lioncore,
-    lioncoreBuiltins,
+    lioncoreBuiltinsFacade,
     nodesExtractorUsing,
     ProblemReporter
 } from "@lionweb/core"
@@ -41,6 +41,6 @@ export const deserializeLanguagesWithIoLionWebMpsSpecific = (serializationChunk:
         problemReporter: problemHandler
     })(
         serializationChunk,
-        [lioncore, lioncoreBuiltins].flatMap(nodesExtractorUsing(lioncoreExtractionFacade))
+        [lioncore, lioncoreBuiltinsFacade.language].flatMap(nodesExtractorUsing(lioncoreExtractionFacade))
     ).filter((node) => node instanceof Language) as Language[]
 

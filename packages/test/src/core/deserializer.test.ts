@@ -1,11 +1,11 @@
 import {
     AggregatingProblemReporter,
-    builtinPrimitives,
     Concept,
     deserializerWith,
     dynamicWriter,
     Feature,
     Language,
+    lioncoreBuiltinsFacade,
     newPropertyValueDeserializerRegistry,
     propertyValueDeserializerFrom,
     Reference,
@@ -152,7 +152,7 @@ describe("deserialization", () => {
         }
         const propertyValueDeserializer = propertyValueDeserializerFrom(
             newPropertyValueDeserializerRegistry()
-                .set(builtinPrimitives.stringDataType, (value) => value)
+                .set(lioncoreBuiltinsFacade.primitiveTypes.stringDataType, (value) => value)
                 .set(dateDataType, (value) => {
                     const parts = value.split("-")
                     return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]))

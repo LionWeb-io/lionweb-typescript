@@ -17,6 +17,9 @@
 * Array-typed fields in the LionCore classes are now read-only.
 * Introduce a `LionWebVersion` class that encapsulates a LionWeb version.
     * Add a `LionWebVersions` enumeration, the latter having a single `v2023_1` literal.
+* Introduce a `LionCoreBuiltinsFacade` type and `lioncoreBuiltinsFacade` instance that façades the details LionCore built-ins.
+  * The `builtin{Classifiers|Features|Primitives}` and `lioncoreBuiltins` constants, and `isBuiltinConcept` function, are kept for backward compatibility, but are now deprecated.
+  * (This change has been propagated throughout the entire code base.)
 
 
 ## 0.7.2

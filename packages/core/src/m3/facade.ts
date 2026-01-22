@@ -1,4 +1,4 @@
-import { builtinFeatures } from "./builtins.js"
+import { lioncoreBuiltinsFacade } from "./builtins.js"
 import { metaTypedBasedClassifierDeducerFor, qualifiedNameOf } from "./functions.js"
 import { lioncore, metaConcepts, metaFeatures } from "./lioncore.js"
 import { Reader } from "../reading.js"
@@ -18,8 +18,8 @@ import {
 } from "./types.js"
 import { updateSettingsNameBased, Writer } from "../writing.js"
 
-const { inamed_name } = builtinFeatures
 const { ikeyed_key } = metaFeatures
+const { inamed_name } = lioncoreBuiltinsFacade.features
 
 export const lioncoreReader: Reader<M3Concept> = {
     classifierOf: metaTypedBasedClassifierDeducerFor(lioncore),

@@ -1,5 +1,5 @@
 import { StringsMapper } from "@lionweb/ts-utils"
-import { builtinClassifiers, builtinPrimitives } from "./builtins.js"
+import { lioncoreBuiltinsFacade } from "./builtins.js"
 import { LanguageFactory } from "./factory.js"
 
 const lioncoreKey = "LionCore-M3"
@@ -23,8 +23,8 @@ const factory = new LanguageFactory(
  */
 export const lioncore = factory.language.havingKey("LionCore-M3")
 
-const { inamed } = builtinClassifiers
-const { booleanDataType, stringDataType } = builtinPrimitives
+const { inamed } = lioncoreBuiltinsFacade.classifiers
+const { booleanDataType, stringDataType } = lioncoreBuiltinsFacade.primitiveTypes
 
 const ikeyed = factory.interface("IKeyed").extending(inamed)
 

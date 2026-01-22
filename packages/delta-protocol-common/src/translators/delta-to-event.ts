@@ -50,7 +50,7 @@ import {
     ReferenceDeletedDelta,
     serializeNodeBases
 } from "@lionweb/class-core"
-import { builtinPropertyValueSerializer, idOf, metaPointerFor, PropertyValueSerializer } from "@lionweb/core"
+import { idOf, lioncoreBuiltinsFacade, metaPointerFor, PropertyValueSerializer } from "@lionweb/core"
 import {
     AnnotationAddedEvent,
     AnnotationDeletedEvent,
@@ -120,7 +120,7 @@ export type ProtocolMessagesGenerator = (delta: IDelta, sequenceNumber: number) 
 export type DeltaToEventTranslatorConfiguration = Partial<{
     /**
      * A {@link PropertyValueSerializer} that's *only* used to serialize *primitive* values.
-     * Defaults to the {@link builtinPropertyValueSerializer}.
+     * Defaults to the {@code lioncoreBuiltinsFacade.propertyValueSerializer}.
      */
     primitiveValueSerializer: PropertyValueSerializer,
     /**
@@ -141,7 +141,7 @@ export const deltaToEventTranslator = (
     { primitiveValueSerializer, originCommandsGenerator, protocolMessagesGenerator }: DeltaToEventTranslatorConfiguration
 ): DeltaToEventTranslator => {
     const propertyValueSerializer = primitiveValueSerializer === undefined
-        ? builtinPropertyValueSerializer
+        ? lioncoreBuiltinsFacade.propertyValueSerializer
         : propertyValueSerializerWith({ primitiveValueSerializer })
     return (delta, lastUsedSequenceNumber) => {
 

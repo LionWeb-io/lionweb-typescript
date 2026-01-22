@@ -2,7 +2,7 @@ import { LionWebJsonChunk } from "@lionweb/json"
 import { deserializerWith } from "../deserializer.js"
 import { nodesExtractorUsing } from "../extraction.js"
 import { consoleProblemReporter, ProblemReporter } from "../reporter.js"
-import { lioncoreBuiltins } from "./builtins.js"
+import { lioncoreBuiltinsFacade } from "./builtins.js"
 import { lioncoreReader, lioncoreWriter } from "./facade.js"
 import { lioncore } from "./lioncore.js"
 import { Language } from "./types.js"
@@ -31,7 +31,7 @@ export const deserializeLanguagesWithReporter = (
         problemReporter: problemReporter
     })(
         serializationChunk,
-        [lioncoreBuiltins, ...dependentLanguages].flatMap(nodesExtractorUsing(lioncoreReader)),
+        [lioncoreBuiltinsFacade.language, ...dependentLanguages].flatMap(nodesExtractorUsing(lioncoreReader)),
     )
         .filter((rootNode) => rootNode instanceof Language)
         .map((language) => (language as Language).dependingOn(...dependentLanguages))
