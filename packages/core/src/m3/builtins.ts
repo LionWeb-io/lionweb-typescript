@@ -1,5 +1,6 @@
-import { asMinimalJsonString, StringsMapper } from "@lionweb/ts-utils"
+import { asMinimalJsonString } from "@lionweb/ts-utils"
 import {
+    lioncoreBuiltinsIdAndKeyGenerator,
     newPropertyValueDeserializerRegistry,
     newPropertyValueSerializerRegistry,
     propertyValueDeserializerFrom,
@@ -8,8 +9,6 @@ import {
 import { LanguageFactory } from "./factory.js"
 import { Classifier, Concept, lioncoreBuiltinsKey } from "./types.js"
 
-
-const lioncoreBuiltinsIdAndKeyGenerator: StringsMapper = (...names) => [lioncoreBuiltinsKey, ...names.slice(1)].join("-")
 
 const factory = new LanguageFactory(
     "LionCore_builtins",

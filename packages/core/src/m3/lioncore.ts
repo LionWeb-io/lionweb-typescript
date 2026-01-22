@@ -1,13 +1,17 @@
+import { StringsMapper } from "@lionweb/ts-utils"
 import { builtinClassifiers, builtinPrimitives } from "./builtins.js"
 import { LanguageFactory } from "./factory.js"
 
 const lioncoreKey = "LionCore-M3"
 
+const generatedKeyFrom: StringsMapper = (...names) =>
+    names.length === 1 ? lioncoreKey : names.slice(1).join("-")
+
 const factory = new LanguageFactory(
     "LionCore_M3",
     "2023.1",
-    (...names) => "-id-" + (names.length === 1 ? lioncoreKey : names.slice(1).join("-")),
-    (...names) => names.slice(1).join("-")
+    (...names) => "-id-" + generatedKeyFrom(...names),
+    generatedKeyFrom
 )
 /*
  * ID: `-id-${key}`

@@ -2,6 +2,7 @@ import { PropertyValueDeserializer } from "../deserializer.js"
 import { DataType, Property } from "./types.js"
 import { isUnresolvedReference } from "../references.js"
 import { PropertyValueSerializer } from "../serializer.js"
+import { StringsMapper } from "@lionweb/ts-utils"
 
 
 /**
@@ -100,4 +101,16 @@ export const propertyValueSerializerFrom = (registry: Map<DataType, PropertyValu
         }
     }
 }
+
+
+/**
+ * The key of the LionCore language containing the built-ins.
+ */
+export const lioncoreBuiltinsKey = "LionCore-builtins"
+
+/**
+ * A function that generates IDs and keys for entities in the LionCore built-ins language.
+ */
+export const lioncoreBuiltinsIdAndKeyGenerator: StringsMapper = (...names) =>
+    [lioncoreBuiltinsKey, ...names.slice(1)].join("-")
 

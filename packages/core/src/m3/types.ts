@@ -5,15 +5,9 @@
 
 import { LionWebId, LionWebJsonMetaPointer, LionWebKey } from "@lionweb/json"
 import { ResolveInfoDeducer } from "../reading.js"
-import { MultiRef, SingleRef, referenceToSet } from "../references.js"
+import { MultiRef, referenceToSet, SingleRef } from "../references.js"
 import { Node } from "../types.js"
-
-
-/**
- * The key of the LionCore language containing the built-ins.
- * (It's defined here because of instantiation order.)
- */
-const lioncoreBuiltinsKey = "LionCore-builtins"
+import { lioncoreBuiltinsKey } from "./builtins-common.js"
 
 
 // Types appear roughly in the order of top-to-down+left-to-right in the diagram at:

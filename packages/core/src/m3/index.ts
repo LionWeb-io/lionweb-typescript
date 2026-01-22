@@ -1,5 +1,5 @@
 export * from "./builtins.js"
-export * from "./builtins-common.js"
+export { newPropertyValueDeserializerRegistry, newPropertyValueSerializerRegistry, propertyValueDeserializerFrom, propertyValueSerializerFrom } from "./builtins-common.js"
 export type * from "./builtins-common.js"
 export * from "./builtins-legacy.js"
 export * from "./constraints.js"
