@@ -3,8 +3,8 @@ import { deserializerWith } from "../deserializer.js"
 import { nodesExtractorUsing } from "../extraction.js"
 import { consoleProblemReporter, ProblemReporter } from "../reporter.js"
 import { lioncoreBuiltinsFacade } from "./builtins.js"
-import { lioncoreReader, lioncoreWriter } from "./facade.js"
-import { lioncore } from "./lioncore.js"
+import { lioncoreFacade } from "./lioncore.js"
+import { lioncoreReader, lioncoreWriter } from "./reading-writing.js"
 import { Language } from "./types.js"
 
 
@@ -27,7 +27,7 @@ export const deserializeLanguagesWithReporter = (
 ): Language[] =>
     deserializerWith({
         writer: lioncoreWriter,
-        languages: [lioncore, ...dependentLanguages],
+        languages: [lioncoreFacade.language, ...dependentLanguages],
         problemReporter: problemReporter
     })(
         serializationChunk,

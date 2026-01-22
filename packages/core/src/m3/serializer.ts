@@ -1,6 +1,6 @@
 import { LionWebJsonChunk } from "@lionweb/json"
 import { serializerWith } from "../serializer.js"
-import { lioncoreReader } from "./facade.js"
+import { lioncoreReader } from "./reading-writing.js"
 import { Language } from "./types.js"
 
 
