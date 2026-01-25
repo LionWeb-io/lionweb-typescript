@@ -211,8 +211,8 @@ export interface AddReferenceCommand extends Command {
     parent: LionWebId
     reference: LionWebJsonMetaPointer
     index: number
-    newTarget: LionWebId | null
-    newResolveInfo: string | null
+    newTarget: LionWebId | null | undefined
+    newResolveInfo: string | null | undefined
 }
 
 /** § 6.5.7.2 */
@@ -221,8 +221,8 @@ export interface DeleteReferenceCommand extends Command {
     parent: LionWebId
     reference: LionWebJsonMetaPointer
     index: number
-    deletedTarget: LionWebId | null
-    deletedResolveInfo: string | null
+    deletedTarget: LionWebId | null | undefined
+    deletedResolveInfo: string | null | undefined
 }
 
 /** § 6.5.7.3 */
@@ -231,10 +231,10 @@ export interface ChangeReferenceCommand extends Command {
     parent: LionWebId
     reference: LionWebJsonMetaPointer
     index: number
-    oldTarget: LionWebId | null
-    oldResolveInfo: string | null
-    newTarget: LionWebId | null
-    newResolveInfo: string | null
+    oldTarget: LionWebId | null | undefined
+    oldResolveInfo: string | null | undefined
+    newTarget: LionWebId | null | undefined
+    newResolveInfo: string | null | undefined
 }
 
 /** § 6.5.8.1 */

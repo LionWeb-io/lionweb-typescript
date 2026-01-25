@@ -108,8 +108,8 @@ export const eventToDeltaTranslator = (
             return roots[0]
         }
         const { resolvedPropertyFrom, resolvedContainmentFrom, resolvedReferenceFrom } = featureResolversFor(languageBases.map(({language}) => language));
-        const resolvedRefTo = (ref: IdOrNull) =>
-            ref === null ? referenceToSet() : idMapping.fromId(ref)
+        const resolvedRefTo = (ref: IdOrNull | undefined) =>
+            (ref === undefined || ref === null) ? referenceToSet() : idMapping.fromId(ref)
 
         switch (event.messageKind) {
             /*
