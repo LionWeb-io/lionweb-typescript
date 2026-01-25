@@ -31,9 +31,9 @@
         "testInvalid": "node dist/runners/RunCheckFolder.js ../test/testset/invalid",
         "testInvalidWithLanguage": "node dist/runners/RunCheckFolderWithLanguage.js ../test/testset/withLanguage/invalid/ ../test/testset/withLanguage/myLang.language.json",
         "testValidWithLanguage": "node dist/runners/RunCheckFolderWithLanguage.js ../test/testset/withLanguage/valid/ ../test/testset/withLanguage/myLang.language.json",
-        "publish-local": "npm publish --registry http://localhost:4873",
+        "publish-local": "npm publish --registry http://localhost:4873 --tag local",
         "unpublish-local": "npm unpublish --force --registry http://localhost:4873",
-        "republish-local": "yarn unpublish-local && yarn publish-local"
+        "republish-local": "npm unpublish-local && npm publish-local"
     },
     "dependencies": {
         "@lionweb/json": "0.8.0-beta.8",
