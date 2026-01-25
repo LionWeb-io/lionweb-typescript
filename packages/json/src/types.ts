@@ -14,13 +14,22 @@ export type LionWebId = string
  */
 export type LionWebKey = string
 
+/**
+ * Serialization version of a chunk
+ */
+export type LionWebSerializationFormatVersion = string;
+
+/**
+ * The version of LionWeb
+ */
+export type LionWebVersion = string;
 
 /**
  * Pointer to a classifier or feature in a version of a language.
  */
 export type LionWebJsonMetaPointer = {
     language: LionWebKey
-    version: string
+    version: LionWebVersion
     /**
      * The key of the classifier or feature pointed to.
      */
@@ -28,14 +37,14 @@ export type LionWebJsonMetaPointer = {
 }
 
 export type LionWebJsonChunk = {
-    serializationFormatVersion: string
+    serializationFormatVersion: LionWebSerializationFormatVersion
     languages: LionWebJsonUsedLanguage[]
     nodes: LionWebJsonNode[]
 }
 
 export type LionWebJsonUsedLanguage = {
     key: LionWebKey
-    version: string
+    version: LionWebVersion
 }
 
 export type LionWebJsonNode = {
