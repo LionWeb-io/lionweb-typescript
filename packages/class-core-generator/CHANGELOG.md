@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.8.0 — not yet released
+
+* Improve dealing with unresolved references.
+  * Clear up an unnecessarily difficult piece of generator code while doing so.
+  * Fix that concepts extending the built-in `Node` concept generates classes that extend `NodeBase` (rather than `Node`).
+
+
 ## 0.7.2
 
 * Generate `MultiRef<T>` instead of `SingleRef<T>[]`.

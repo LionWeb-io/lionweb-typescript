@@ -16,6 +16,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import {
+    builtinClassifiers,
     Classifier,
     Containment,
     Enumeration,
@@ -173,7 +174,7 @@ export const typeForLanguageEntity = (imports: Imports) => {
             if (isUnresolvedReference(superConcept)) {
                 return `/* unresolved reference to super concept */`
             }
-            if (superConcept === undefined) {
+            if (superConcept === undefined || superConcept === builtinClassifiers.node) {
                 return imports.generic("NodeBase")
             }
             return imports.entity(superConcept)
