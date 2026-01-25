@@ -270,5 +270,45 @@ export const ResponseDefinitions: MessageGroup = {
                 },
             ],
         },
+        {
+            name: "ErrorResponse",
+            properties: [
+                {
+                    name: "errorCode",
+                    type: "String",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "message",
+                    type: "String",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "messageKind",
+                    type: "String",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "protocolMessages",
+                    type: "ProtocolMessage",
+                    isList: true,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "queryId",
+                    type: "QueryId",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+            ],
+        },
     ],
 };

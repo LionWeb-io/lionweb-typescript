@@ -1,5 +1,6 @@
 import { LionWebId, LionWebJsonChunk, LionWebJsonContainment, LionWebJsonMetaPointer, LionWebJsonNode, LionWebJsonUsedLanguage } from "@lionweb/json"
 import { ChunkUtils, JsonContext, LionWebJsonChunkWrapper } from "@lionweb/json-utils"
+import { GenericIssue } from "../issues/index.js"
 import {
     Duplicates_Issue,
     Reference_ChildMissingInParent_Issue,
@@ -15,6 +16,7 @@ import { ValidationResult } from "./generic/ValidationResult.js"
  * as far as they do not need the used language definition.
  */
 export class LionWebReferenceValidator {
+    mustBeProperTree: boolean = false
     validationResult: ValidationResult
     nodesIdMap: Map<string, LionWebJsonNode> = new Map<string, LionWebJsonNode>()
 
@@ -38,25 +40,28 @@ export class LionWebReferenceValidator {
         })
     }
 
-    validate(obj: LionWebJsonChunkWrapper): void {
+    validate(chunkWrapper: LionWebJsonChunkWrapper): void {
         const rootCtx = new JsonContext(null, ["$"])
-        this.checkDuplicateUsedLanguage(obj.jsonChunk.languages, rootCtx)
-        this.validateNodeIds(obj.jsonChunk, rootCtx)
-        obj.jsonChunk.nodes.forEach((node, nodeIndex) => {
+        this.checkDuplicateUsedLanguage(chunkWrapper.jsonChunk.languages, rootCtx)
+        this.validateNodeIds(chunkWrapper.jsonChunk, rootCtx)
+        chunkWrapper.jsonChunk.nodes.forEach((node, nodeIndex) => {
             const context = rootCtx.concat(`node`, nodeIndex)
             const parentNode = node.parent
             if (parentNode !== null) {
                 this.validateExistsAsChild(context, this.nodesIdMap.get(parentNode), node)
             }
-            this.validateLanguageReference(obj, node.classifier, context)
+            this.validateLanguageReference(chunkWrapper, node.classifier, context)
             this.checkParentCircular(node, context)
             this.checkDuplicate(node.annotations, rootCtx.concat("node", nodeIndex, "annotations"))
             this.validateChildrenHaveCorrectParent(node, rootCtx.concat("node", nodeIndex))
+            if (this.mustBeProperTree) {
+                this.validateProperTree(context, chunkWrapper)
+            }
             node.properties.forEach((prop, propertyIndex) => {
-                this.validateLanguageReference(obj, prop.property, rootCtx.concat("node", nodeIndex, "property", propertyIndex))
+                this.validateLanguageReference(chunkWrapper, prop.property, rootCtx.concat("node", nodeIndex, "property", propertyIndex))
             })
             node.containments.forEach((containment, childIndex) => {
-                this.validateLanguageReference(obj, containment.containment, rootCtx.concat("node", nodeIndex, "containments", childIndex))
+                this.validateLanguageReference(chunkWrapper, containment.containment, rootCtx.concat("node", nodeIndex, "containments", childIndex))
                 this.checkDuplicate(containment.children, rootCtx.concat("node", nodeIndex, "containments", childIndex))
                 containment.children.forEach(childId => {
                     const childNode = this.nodesIdMap.get(childId)
@@ -68,6 +73,8 @@ export class LionWebReferenceValidator {
                         if (childNode.parent === null || childNode.parent === undefined) {
                             // TODO this.validationResult.error(`Child "${childId}" of node "${node.id}" has different parent "${childNode.parent}"`);
                         }
+                    } else if (this.mustBeProperTree) {
+                        this.validationResult.issue(new GenericIssue(context, `child '${childId}' of ${node.id} is missing.`))
                     }
                 })
             })
@@ -84,13 +91,25 @@ export class LionWebReferenceValidator {
                 }
             })
             node.references.forEach((ref, refIndex) => {
-                this.validateLanguageReference(obj, ref.reference, rootCtx.concat("node", nodeIndex, "references", refIndex))
+                this.validateLanguageReference(chunkWrapper, ref.reference, rootCtx.concat("node", nodeIndex, "references", refIndex))
                 // TODO Check for duplicate targets?
                 // If so, what to check because there can be either or both a `resolveInfo` and a `reference`
             })
         })
     }
 
+    validateProperTree(context: JsonContext, chunk: LionWebJsonChunkWrapper): void {
+        const nodesWithoutParentInChunk: LionWebJsonNode[] = []
+        chunk.jsonChunk.nodes.forEach(node => {
+            if (node.parent === null || chunk.getNode(node.parent) === undefined) {
+                nodesWithoutParentInChunk.push(node)
+            }
+        })
+        if (nodesWithoutParentInChunk.length > 1) {
+            this.validationResult.issue(new GenericIssue(context, 
+                `Chunk not a proper subtree, there are multiple nodes (${nodesWithoutParentInChunk.map(n => n.id)} without parent in the chunk`))
+        }
+    }
     /**
      * Check whether the metapointer refers to a language defined in the usedLanguages of chunk.
      * @param chunk

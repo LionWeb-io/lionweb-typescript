@@ -28,7 +28,7 @@ export const RequestDefinitions: MessageGroup = {
     ],
     messages: [
         {
-            name: "SubscribeToChangingPartitions",
+            name: "SubscribeToChangingPartitionsRequest",
             properties: [
                 {
                     name: "creation",
@@ -75,7 +75,7 @@ export const RequestDefinitions: MessageGroup = {
             ],
         },
         {
-            name: "SubscribeToPartitionContents",
+            name: "SubscribeToPartitionContentsRequest",
             properties: [
                 {
                     name: "partition",
@@ -108,7 +108,7 @@ export const RequestDefinitions: MessageGroup = {
             ],
         },
         {
-            name: "UnsubscribeFromPartitionContents",
+            name: "UnsubscribeFromPartitionContentsRequest",
             properties: [
                 {
                     name: "partition",
@@ -141,7 +141,7 @@ export const RequestDefinitions: MessageGroup = {
             ],
         },
         {
-            name: "SignOn",
+            name: "SignOnRequest",
             properties: [
                 {
                     name: "deltaProtocolVersion",
@@ -188,7 +188,7 @@ export const RequestDefinitions: MessageGroup = {
             ],
         },
         {
-            name: "SignOff",
+            name: "SignOffRequest",
             properties: [
                 {
                     name: "messageKind",
@@ -214,7 +214,7 @@ export const RequestDefinitions: MessageGroup = {
             ],
         },
         {
-            name: "Reconnect",
+            name: "ReconnectRequest",
             properties: [
                 {
                     name: "participationId",
@@ -254,7 +254,7 @@ export const RequestDefinitions: MessageGroup = {
             ],
         },
         {
-            name: "GetAvailableIds",
+            name: "GetAvailableIdsRequest",
             properties: [
                 {
                     name: "count",
@@ -287,7 +287,7 @@ export const RequestDefinitions: MessageGroup = {
             ],
         },
         {
-            name: "ListPartitions",
+            name: "ListPartitionsRequest",
             properties: [
                 {
                     name: "messageKind",
