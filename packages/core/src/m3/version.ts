@@ -1,5 +1,7 @@
-import { lioncoreBuiltinsFacade, LionCoreBuiltinsFacade, lioncoreFacade } from "./m3/index.js"
-import { LionCoreFacade } from "./m3/lioncore-common.js"
+import { LionCoreBuiltinsFacade } from "./builtins-common.js"
+import { lioncoreBuiltinsFacade } from "./builtins.js"
+import { LionCoreFacade } from "./lioncore-common.js"
+import { lioncoreFacade } from "./lioncore.js"
 
 
 /**
