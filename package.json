@@ -11,16 +11,16 @@
         "url": "https://github.com/LionWeb-io/lionweb-typescript/issues"
     },
     "devDependencies": {
-        "@eslint/eslintrc": "3.3.1",
-        "@eslint/js": "9.33.0",
-        "@types/node": "24.3.0",
-        "@typescript-eslint/eslint-plugin": "8.40.0",
-        "@typescript-eslint/parser": "8.40.0",
-        "dpdm": "3.14.0",
-        "globals": "16.3.0",
-        "prettier": "3.6.2",
-        "rimraf": "6.0.1",
-        "typescript": "5.9.2"
+        "@eslint/eslintrc": "3.3.3",
+        "@eslint/js": "9.39.2",
+        "@types/node": "25.2.2",
+        "@typescript-eslint/eslint-plugin": "8.54.0",
+        "@typescript-eslint/parser": "8.54.0",
+        "dpdm": "4.0.1",
+        "globals": "17.3.0",
+        "prettier": "3.8.1",
+        "rimraf": "6.1.2",
+        "typescript": "5.9.3"
     },
     "scripts": {
         "clean": "npm run clean -w packages --if-present && npx rimraf node_modules",

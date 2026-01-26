@@ -27,12 +27,12 @@
         "@lionweb/json": "0.8.0-beta.7",
         "@lionweb/utilities": "0.8.0-beta.7",
         "@lionweb/validation": "0.8.0-beta.7",
-        "chai": "5.3.1",
-        "mocha": "11.7.1"
+        "chai": "6.2.2",
+        "mocha": "11.7.5"
     },
     "devDependencies": {
-        "@types/chai": "5.2.2",
+        "@types/chai": "5.2.3",
         "@types/mocha": "10.0.10",
-        "mobx": "6.13.7"
+        "mobx": "6.15.0"
     }
 }
