@@ -23,6 +23,7 @@
 * Introduce a `LionCoreFacade` type and `lioncoreFacade` instance that façades the details LionCore meta-meta-model language.
     * The `meta{Concepts|Features}` and `lioncore` constants are kept for backward compatibility, but are now deprecated.
     * (This change has been propagated throughout the entire code base.)
+* Introduce a `deserializeLanguagesFrom` function, deprecate the `deserializeLanguagesWithReporter` function, and replace use of the latter with the former throughout the codebase.
 
 
 ## 0.7.2

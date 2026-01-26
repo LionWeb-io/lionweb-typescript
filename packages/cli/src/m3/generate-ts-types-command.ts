@@ -1,7 +1,7 @@
 import { extname, join } from "path"
 import { existsSync, mkdirSync, statSync, writeFileSync } from "fs"
 
-import { AggregatingProblemReporter, deserializeLanguagesWithReporter } from "@lionweb/core"
+import { AggregatingProblemReporter, deserializeLanguagesFrom } from "@lionweb/core"
 import { GenerationOptions, readSerializationChunk, tsTypeDefsForLanguage } from "@lionweb/utilities"
 
 const generateTsTypesFromSerialization = async (path: string, generationOptions: GenerationOptions[]) => {
@@ -12,7 +12,7 @@ const generateTsTypesFromSerialization = async (path: string, generationOptions:
         }
 
         const problemReporter = new AggregatingProblemReporter()
-        const languages = deserializeLanguagesWithReporter(await readSerializationChunk(path), problemReporter)
+        const languages = deserializeLanguagesFrom({ serializationChunk: await readSerializationChunk(path), problemReporter })
         problemReporter.reportAllProblemsOnConsole()
 
         languages.forEach((language) => {
