@@ -1,6 +1,7 @@
 import {
     Annotation,
     Concept,
+    defaultLionWebVersion,
     DynamicNode,
     dynamicReader,
     Enumeration,
@@ -14,7 +15,7 @@ import {
     serializeLanguages,
     serializerWith
 } from "@lionweb/core"
-import { currentSerializationFormatVersion, LionWebJsonChunk } from "@lionweb/json"
+import { LionWebJsonChunk } from "@lionweb/json"
 import { concatenator, lastOf } from "@lionweb/ts-utils"
 import { expect } from "chai"
 import { TestNode, TestNodeReader } from "../instances/test-node.js"
@@ -46,7 +47,7 @@ describe("serialization", () => {
         myNode.containments["books"] = []
 
         const expectedSerializationChunk: LionWebJsonChunk = {
-            serializationFormatVersion: currentSerializationFormatVersion,
+            serializationFormatVersion: defaultLionWebVersion.serializationFormatVersion,
             languages: [
                 {
                     key: "libraryWithDates",

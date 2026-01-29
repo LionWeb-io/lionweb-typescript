@@ -6,6 +6,8 @@ import { lioncoreFacade } from "./lioncore.js"
 
 /**
  * The *current* release(d) version.
+ *
+ * @deprecated Use {@code defaultLionWebVersion.serializationFormatVersion} instead.
  */
 export const currentReleaseVersion = "2023.1"
 
@@ -15,6 +17,9 @@ export const currentReleaseVersion = "2023.1"
  */
 export class LionWebVersion {
     constructor(
+        /**
+         * The value of the root-level `serializationFormatVersion` field for {@link LionWebJsonChunk serialization chunks} *emitted* by this version.
+         */
         public readonly serializationFormatVersion: string,
         public readonly lioncoreFacade: LionCoreFacade,
         public readonly builtinsFacade: LionCoreBuiltinsFacade
@@ -28,5 +33,11 @@ export const LionWebVersions = {
     // LionWeb standard version 2023.1 — defined at https://lionweb.io/specification/2023.1
     v2023_1: new LionWebVersion("2023.1", lioncoreFacade, lioncoreBuiltinsFacade),
 
-} as const;
+} as const
+
+
+/**
+ * The current default LionWeb version.
+ */
+export const defaultLionWebVersion = LionWebVersions.v2023_1
 

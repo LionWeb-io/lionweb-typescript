@@ -1,4 +1,4 @@
-import { currentSerializationFormatVersion, LionWebId, LionWebJsonChunk, LionWebJsonNode } from "@lionweb/json"
+import { LionWebId, LionWebJsonChunk, LionWebJsonNode } from "@lionweb/json"
 import { asArray, keepDefineds, lazyMapGet, Nested3Map, uniquesAmong } from "@lionweb/ts-utils"
 import { asIds, metaPointerFor } from "./functions.js"
 import { Reader } from "./reading.js"
@@ -16,6 +16,7 @@ import {
     Reference,
     simpleNameDeducer
 } from "./m3/types.js"
+import { defaultLionWebVersion } from "./m3/version.js"
 
 
 /**
@@ -233,7 +234,7 @@ export const serializerWith = <NT extends Node>(configuration: SerializerConfigu
         nodes.forEach(node => visit(node, undefined))
 
         return {
-            serializationFormatVersion: currentSerializationFormatVersion,
+            serializationFormatVersion: defaultLionWebVersion.serializationFormatVersion,
             languages: languagesUsed.map(({ key, version }) => ({ key, version })),
             nodes: serializedNodes
         }

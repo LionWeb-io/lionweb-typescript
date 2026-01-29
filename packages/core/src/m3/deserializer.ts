@@ -4,8 +4,9 @@ import { nodesExtractorUsing } from "../extraction.js"
 import { consoleProblemReporter, ProblemReporter } from "../reporter.js"
 import { lioncoreBuiltinsFacade } from "./builtins.js"
 import { lioncoreFacade } from "./lioncore.js"
-import { lioncoreReader, lioncoreWriter } from "./reading-writing.js"
+import { lioncoreReaderFor, lioncoreWriterFor } from "./reading-writing.js"
 import { Language } from "./types.js"
+import { defaultLionWebVersion } from "./version.js"
 
 
 /**
@@ -25,12 +26,12 @@ export type LanguageDeserializationData = {
  */
 export const deserializeLanguagesFrom = ({serializationChunk, dependentLanguages, problemReporter}: LanguageDeserializationData): Language[] =>
     deserializerWith({
-        writer: lioncoreWriter,
+        writer: lioncoreWriterFor(defaultLionWebVersion),
         languages: [lioncoreFacade.language, ...(dependentLanguages ?? [])],
         problemReporter: problemReporter ?? consoleProblemReporter
     })(
         serializationChunk,
-        [lioncoreBuiltinsFacade.language, ...(dependentLanguages ?? [])].flatMap(nodesExtractorUsing(lioncoreReader)),
+        [lioncoreBuiltinsFacade.language, ...(dependentLanguages ?? [])].flatMap(nodesExtractorUsing(lioncoreReaderFor(defaultLionWebVersion))),
     )
         .filter((rootNode) => rootNode instanceof Language)
         .map((language) => (language as Language).dependingOn(...(dependentLanguages ?? [])))

@@ -24,6 +24,9 @@
     * The `meta{Concepts|Features}` and `lioncore` constants are kept for backward compatibility, but are now deprecated.
     * (This change has been propagated throughout the entire code base.)
 * Introduce a `deserializeLanguagesFrom` function, deprecate the `deserializeLanguagesWithReporter` function, and replace use of the latter with the former throughout the codebase.
+* Introduce `lioncoreReaderFor` and `lioncoreWriterFor` functions that are parametrized with a LionWeb version, deprecate the `lioncoreReader` and `lioncoreWriter` constants, and replace use of the latter with the former throughout the codebase.
+* Introduce a `serializeLanguagesFor` function, and a `LanguageSerializationData` type for the single argument of that function.
+* Introduce a `defaultLionWebVersion` constant that equals the `LionWebVersions.2023.1`, deprecate the `currentReleaseVersion` constant, and replace use of the latter with `defaultLionWebVersion.serializationFormatVersion` throughout the codebase.
 
 
 ## 0.7.2

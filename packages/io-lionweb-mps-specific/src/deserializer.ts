@@ -18,11 +18,12 @@
 import { LionWebJsonChunk } from "@lionweb/json"
 import {
     consoleProblemReporter,
+    defaultLionWebVersion,
     deserializerWith,
     Language,
     lioncoreBuiltinsFacade,
     lioncoreFacade,
-    lioncoreReader,
+    lioncoreReaderFor,
     nodesExtractorUsing,
     ProblemReporter
 } from "@lionweb/core"
@@ -43,6 +44,6 @@ export const deserializeLanguagesWithIoLionWebMpsSpecific = (serializationChunk:
         problemReporter: problemHandler
     })(
         serializationChunk,
-        [lioncore, lioncoreBuiltinsFacade.language].flatMap(nodesExtractorUsing(lioncoreReader))
+        [lioncore, lioncoreBuiltinsFacade.language].flatMap(nodesExtractorUsing(lioncoreReaderFor(defaultLionWebVersion)))
     ).filter((node) => node instanceof Language) as Language[]
 

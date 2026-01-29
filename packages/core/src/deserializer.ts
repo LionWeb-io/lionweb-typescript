@@ -1,16 +1,11 @@
-import {
-    currentSerializationFormatVersion,
-    LionWebId,
-    LionWebJsonChunk,
-    LionWebJsonNode,
-    LionWebKey
-} from "@lionweb/json"
+import { LionWebId, LionWebJsonChunk, LionWebJsonNode, LionWebKey } from "@lionweb/json"
 import { byIdMap, groupBy, keepDefineds } from "@lionweb/ts-utils"
 import { Writer } from "./writing.js"
 import { consoleProblemReporter, ProblemReporter } from "./reporter.js"
 import { lioncoreBuiltinsFacade } from "./m3/builtins.js"
 import { MemoisingSymbolTable } from "./m3/symbol-table.js"
 import { Classifier, Containment, Enumeration, Language, PrimitiveType, Property, Reference } from "./m3/types.js"
+import { defaultLionWebVersion } from "./m3/version.js"
 import { unresolved } from "./references.js"
 import { Node } from "./types.js"
 
@@ -75,6 +70,7 @@ export const deserializerWith = <NT extends Node>(configuration: DeserializerCon
 
     return (serializationChunk, dependentNodes = []) => {
 
+        const currentSerializationFormatVersion = defaultLionWebVersion.serializationFormatVersion
         if (serializationChunk.serializationFormatVersion !== currentSerializationFormatVersion) {
             problemReporter.reportProblem(
                 `can't deserialize from serialization format other than version "${currentSerializationFormatVersion}" - assuming that version`
