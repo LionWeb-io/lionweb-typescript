@@ -1,14 +1,13 @@
-import { currentReleaseVersion } from "../version.js"
-import { builtinClassifiers, builtinPrimitives } from "./builtins.js"
+import { lioncoreBuiltinsFacade } from "./builtins.js"
 import { LanguageFactory } from "./factory.js"
+import { generatedLionCoreKeyFrom, LionCoreFacade } from "./lioncore-common.js"
 
-const lioncoreKey = "LionCore-M3"
 
 const factory = new LanguageFactory(
     "LionCore_M3",
-    currentReleaseVersion,
-    (...names) => "-id-" + (names.length === 1 ? lioncoreKey : names.slice(1).join("-")),
-    (...names) => names.slice(1).join("-")
+    "2023.1",
+    (...names) => "-id-" + generatedLionCoreKeyFrom(...names),
+    generatedLionCoreKeyFrom
 )
 /*
  * ID: `-id-${key}`
@@ -17,28 +16,25 @@ const factory = new LanguageFactory(
 
 /**
  * Definition of LionCore in terms of itself.
+ *
+ * @deprecated Use {@code lioncoreFacade.language} instead.
  */
 export const lioncore = factory.language.havingKey("LionCore-M3")
 
-const { inamed } = builtinClassifiers
-const { booleanDataType, stringDataType } = builtinPrimitives
+const { inamed } = lioncoreBuiltinsFacade.classifiers
+const { booleanDataType, stringDataType } = lioncoreBuiltinsFacade.primitiveTypes
 
 const ikeyed = factory.interface("IKeyed").extending(inamed)
-
 const ikeyed_key = factory.property(ikeyed, "key").ofType(stringDataType)
 
 const feature = factory.concept("Feature", true).implementing(ikeyed)
-
-const feature_optional = factory.property(feature, "optional").ofType(booleanDataType)
+factory.property(feature, "optional").ofType(booleanDataType)
 
 const property = factory.concept("Property", false, feature)
-
 const property_type = factory.reference(property, "type")
 
 const link = factory.concept("Link", true, feature)
-
-const link_multiple = factory.property(link, "multiple").ofType(booleanDataType)
-
+factory.property(link, "multiple").ofType(booleanDataType)
 const link_type = factory.reference(link, "type")
 
 const containment = factory.concept("Containment", false, link)
@@ -48,92 +44,73 @@ const reference = factory.concept("Reference", false, link)
 const languageEntity = factory.concept("LanguageEntity", true).implementing(ikeyed)
 
 const classifier = factory.concept("Classifier", true, languageEntity)
-
-const classifier_features = factory.containment(classifier, "features").isOptional().isMultiple().ofType(feature)
-
+factory.containment(classifier, "features").isOptional().isMultiple().ofType(feature)
 link_type.ofType(classifier)
 
 const annotation = factory.concept("Annotation", false, classifier)
-
-const annotation_annotates = factory.reference(annotation, "annotates").isOptional().ofType(classifier)
-
-const annotation_extends = factory.reference(annotation, "extends").isOptional().ofType(annotation)
-
+factory.reference(annotation, "annotates").isOptional().ofType(classifier)
+factory.reference(annotation, "extends").isOptional().ofType(annotation)
 const annotation_implements = factory.reference(annotation, "implements").isMultiple().isOptional()
 
 const concept = factory.concept("Concept", false, classifier)
-
 const concept_abstract = factory.property(concept, "abstract").ofType(booleanDataType)
-
-const concept_partition = factory.property(concept, "partition").ofType(booleanDataType)
-
-const concept_extends = factory.reference(concept, "extends").isOptional().ofType(concept)
-
+factory.property(concept, "partition").ofType(booleanDataType)
+factory.reference(concept, "extends").isOptional().ofType(concept)
 const concept_implements = factory.reference(concept, "implements").isOptional().isMultiple()
 
 const interface_ = factory.concept("Interface", false, classifier)
-
-const interface_extends = factory.reference(interface_, "extends").isOptional().isMultiple().ofType(interface_)
+factory.reference(interface_, "extends").isOptional().isMultiple().ofType(interface_)
 
 annotation_implements.ofType(interface_)
 concept_implements.ofType(interface_)
 
 const dataType = factory.concept("DataType", true, languageEntity)
-
 property_type.ofType(dataType)
 
 const primitiveType = factory.concept("PrimitiveType", false, dataType)
 
 const enumeration = factory.concept("Enumeration", false, dataType)
-
 const enumeration_literals = factory.containment(enumeration, "literals").isMultiple().isOptional()
-
 const enumerationLiteral = factory.concept("EnumerationLiteral", false).implementing(ikeyed)
-
 enumeration_literals.ofType(enumerationLiteral)
 
 const language = factory.concept("Language", false).implementing(ikeyed).isPartition()
-
 const language_version = factory.property(language, "version").ofType(stringDataType)
+factory.containment(language, "entities").isOptional().isMultiple().ofType(languageEntity)
+factory.reference(language, "dependsOn").isOptional().isMultiple().ofType(language)
 
-const language_entities = factory.containment(language, "entities").isOptional().isMultiple().ofType(languageEntity)
 
-const language_dependsOn = factory.reference(language, "dependsOn").isOptional().isMultiple().ofType(language)
-
-export const metaConcepts = {
-    annotation,
-    classifier,
-    concept,
-    interface: interface_,
-    containment,
-    enumeration,
-    enumerationLiteral,
-    ikeyed,
-    language,
-    primitiveType,
-    property,
-    reference
+export const lioncoreFacade: LionCoreFacade = {
+    language: factory.language,
+    metaConcepts: {
+        annotation,
+        classifier,
+        concept,
+        interface: interface_,
+        containment,
+        enumeration,
+        enumerationLiteral,
+        ikeyed,
+        language,
+        primitiveType,
+        property,
+        reference
+    },
+    metaFeatures: {
+        concept_abstract,
+        ikeyed_key,
+        language_version
+    }
 }
 
-export const metaFeatures = {
-    annotation_annotates,
-    annotation_extends,
-    annotation_implements,
-    classifier_features,
-    concept_abstract,
-    concept_partition,
-    concept_extends,
-    concept_implements,
-    interface_extends,
-    enumeration_literals,
-    feature_optional,
-    ikeyed_key,
-    language_dependsOn,
-    language_entities,
-    language_version,
-    link_multiple,
-    link_type,
-    property_type
-}
 
-export { lioncoreKey }
+/**
+ * @deprecated Use {@code lioncoreFacade.metaConcepts} instead.
+ */
+export const metaConcepts = lioncoreFacade.metaConcepts
+
+/**
+ * @deprecated Use {@code lioncoreFacade.metaFeatures} instead.
+ */
+export const metaFeatures = lioncoreFacade.metaFeatures
+

@@ -1,7 +1,8 @@
-import { builtinPrimitives, LanguageFactory } from "@lionweb/core"
+import { LanguageFactory, lioncoreBuiltinsFacade } from "@lionweb/core"
 import { concatenator } from "@lionweb/ts-utils"
 
 import { equal } from "../test-utils/assertions.js"
+
 
 describe("key generation", () => {
     it("based on qualified name", () => {
@@ -11,8 +12,9 @@ describe("key generation", () => {
 
         equal(form.key, "FormLanguage-Form")
 
-        const size = factory.property(form, "size").ofType(builtinPrimitives.integerDataType)
+        const size = factory.property(form, "size").ofType(lioncoreBuiltinsFacade.primitiveTypes.integerDataType)
 
         equal(size.key, "FormLanguage-Form-size")
     })
 })
+

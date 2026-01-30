@@ -3,7 +3,7 @@ import {
     deserializerWith,
     DynamicNode,
     dynamicWriter,
-    lioncoreBuiltins,
+    lioncoreBuiltinsFacade,
     nameBasedClassifierDeducerFor,
     serializeLanguages,
     serializerWith
@@ -40,7 +40,7 @@ describe("Library test model", () => {
 
 describe("Library test metamodel", () => {
     it("LionCore built-in primitive types are implicit", () => {
-        libraryLanguage.dependingOn(lioncoreBuiltins)
+        libraryLanguage.dependingOn(lioncoreBuiltinsFacade.language)
         deepEqual(libraryLanguage.dependsOn, [])
     })
 

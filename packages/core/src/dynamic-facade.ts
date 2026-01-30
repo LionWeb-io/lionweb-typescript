@@ -1,6 +1,5 @@
 import { LionWebKey } from "@lionweb/json"
-import { builtinFeatures } from "./m3/builtins.js"
-import { Classifier } from "./m3/types.js"
+import { lioncoreBuiltinsFacade, Classifier } from "./m3/index.js"
 import { Reader, ResolveInfoDeducer } from "./reading.js"
 import { Node } from "./types.js"
 import { updateSettingsKeyBased, Writer } from "./writing.js"
@@ -33,7 +32,7 @@ export const dynamicReader: Reader<DynamicNode> = ({
     enumerationLiteralFrom: (value, enumeration) =>
         enumeration.literals.find(({key}) => key === value)
         ?? null,    // (undefined -> null)
-    resolveInfoFor: propertyGetterFor(builtinFeatures.inamed_name.key)
+    resolveInfoFor: propertyGetterFor(lioncoreBuiltinsFacade.features.inamed_name.key)
 })
 
 /**

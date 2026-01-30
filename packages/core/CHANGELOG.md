@@ -12,6 +12,21 @@
 * Introduce an explicit `UnresolvedReference` type, a corresponding `isUnresolvedReference` type function, and a `referenceToSet` function to produce reference (target) placeholders, and propagate their use throughout the codebase.
 * Add a 2nd argument to the `ResolveInfoDeducer` function type, to also pass the containing reference.
     *Note* that this is technically a breaking change, but the `ResolveInfoDeducer` type is essentially part of the internal API.
+* Introduce `propertyValue{Des|S}erializerFrom` functions to build `PropertyValue{Des|S}erializer` instances with in a more convenient and code-compact way.
+  * Deprecate the `BuiltinPropertyValue{Des|S}erializer` classes as legacy.
+* Array-typed fields in the LionCore classes are now read-only.
+* Introduce a `LionWebVersion` class that encapsulates a LionWeb version.
+    * Add a `LionWebVersions` enumeration, the latter having a single `v2023_1` literal.
+* Introduce a `LionCoreBuiltinsFacade` type and `lioncoreBuiltinsFacade` instance that façades the details LionCore built-ins.
+  * The `builtin{Classifiers|Features|Primitives}` and `lioncoreBuiltins` constants, and `isBuiltinConcept` function, are kept for backward compatibility, but are now deprecated.
+  * (This change has been propagated throughout the entire code base.)
+* Introduce a `LionCoreFacade` type and `lioncoreFacade` instance that façades the details LionCore meta-meta-model language.
+    * The `meta{Concepts|Features}` and `lioncore` constants are kept for backward compatibility, but are now deprecated.
+    * (This change has been propagated throughout the entire code base.)
+* Introduce a `deserializeLanguagesFrom` function, deprecate the `deserializeLanguagesWithReporter` function, and replace use of the latter with the former throughout the codebase.
+* Introduce `lioncoreReaderFor` and `lioncoreWriterFor` functions that are parametrized with a LionWeb version, deprecate the `lioncoreReader` and `lioncoreWriter` constants, and replace use of the latter with the former throughout the codebase.
+* Introduce a `serializeLanguagesFor` function, and a `LanguageSerializationData` type for the single argument of that function.
+* Introduce a `defaultLionWebVersion` constant that equals the `LionWebVersions.2023.1`, deprecate the `currentReleaseVersion` constant, and replace use of the latter with `defaultLionWebVersion.serializationFormatVersion` throughout the codebase.
 
 
 ## 0.7.2

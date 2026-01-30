@@ -5,15 +5,9 @@
 
 import { LionWebId, LionWebJsonMetaPointer, LionWebKey } from "@lionweb/json"
 import { ResolveInfoDeducer } from "../reading.js"
-import { MultiRef, SingleRef, referenceToSet } from "../references.js"
+import { MultiRef, referenceToSet, SingleRef } from "../references.js"
 import { Node } from "../types.js"
-
-
-/**
- * The key of the LionCore language containing the built-ins.
- * (It's defined here because of instantiation order.)
- */
-const lioncoreBuiltinsKey = "LionCore-builtins"
+import { lioncoreBuiltinsKey } from "./builtins-common.js"
 
 
 // Types appear roughly in the order of top-to-down+left-to-right in the diagram at:
@@ -72,7 +66,7 @@ abstract class M3Node implements IKeyed, IMetaTyped {
         this.key = key
         return this
     }
-    annotations: Node[] = [] // (containment)
+    readonly annotations: Node[] = [] // (containment)
 }
 
 abstract class Feature extends M3Node {
@@ -136,7 +130,7 @@ abstract class LanguageEntity extends M3Node {
 }
 
 abstract class Classifier extends LanguageEntity {
-    features: Feature[] = [] // (containment)
+    readonly features: Feature[] = [] // (containment)
     havingFeatures(...features: Feature[]) {
         this.features.push(...features.filter((feature) => this.features.indexOf(feature) < 0))
         return this
@@ -158,7 +152,7 @@ class Concept extends Classifier {
     abstract: boolean
     partition: boolean
     extends?: SingleRef<Concept>    // (reference)
-    implements: MultiRef<Interface> = []  // (reference)
+    readonly implements: MultiRef<Interface> = []  // (reference)
     constructor(language: Language, name: string, key: LionWebKey, id: LionWebId, abstract: boolean, extends_?: SingleRef<Concept>) {
         super(language, name, key, id)
         this.abstract = abstract
@@ -181,7 +175,7 @@ class Annotation extends Classifier {
         return "Annotation"
     }
     extends?: SingleRef<Annotation> // (reference)
-    implements: MultiRef<Interface> = [] // (reference)
+    readonly implements: MultiRef<Interface> = [] // (reference)
     annotates: SingleRef<Classifier> = referenceToSet()   // (reference)
     constructor(language: Language, name: string, key: LionWebKey, id: LionWebId, extends_?: SingleRef<Annotation>) {
         super(language, name, key, id)
@@ -202,7 +196,7 @@ class Interface extends Classifier {
     metaType(): string {
         return "Interface"
     }
-    extends: MultiRef<Interface> = []    // (reference)
+    readonly extends: MultiRef<Interface> = []    // (reference)
     extending(...interfaces: Interface[]): Interface {
         // TODO  check actual types of interfaces, or use type shapes/interfaces
         this.extends.push(...interfaces)
@@ -227,7 +221,7 @@ class Enumeration extends DataType {
     metaType(): string {
         return "Enumeration"
     }
-    literals: EnumerationLiteral[] = [] // (containment)
+    readonly literals: EnumerationLiteral[] = [] // (containment)
     havingLiterals(...literals: EnumerationLiteral[]) {
         this.literals.push(...literals.filter((literal) => this.literals.indexOf(literal) < 0))
         return this
@@ -251,8 +245,8 @@ class Language extends M3Node {
         return "Language"
     }
     version: string
-    entities: LanguageEntity[] = []   // (containment)
-    dependsOn: MultiRef<Language> = []  // special (!) reference
+    readonly entities: LanguageEntity[] = []   // (containment)
+    readonly dependsOn: MultiRef<Language> = []  // special (!) reference
         // (!) special because deserializer needs to be aware of where to get the instance from
     constructor(name: string, version: string, id: LionWebId, key: LionWebKey) {
         super(id, name, key)

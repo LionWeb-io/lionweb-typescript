@@ -1,12 +1,4 @@
-import {
-    builtinPrimitives,
-    Concept,
-    Containment,
-    Language,
-    Link,
-    Property,
-    Reference
-} from "@lionweb/core"
+import { Concept, Containment, Language, Link, lioncoreBuiltinsFacade, Property, Reference } from "@lionweb/core"
 import { LionWebId, LionWebJsonChunk, LionWebKey } from "@lionweb/json"
 import { asArray, chain, concatenator, lastOf } from "@lionweb/ts-utils"
 import { hasher } from "../hashing.js"
@@ -16,7 +8,7 @@ const possibleKeySeparators = ["-", "_"]
 const id = chain(concatenator("-"), hasher())
 const key = lastOf
 
-const { stringDataType, booleanDataType, integerDataType } = builtinPrimitives
+const { stringDataType, booleanDataType, integerDataType } = lioncoreBuiltinsFacade.primitiveTypes
 
 export const inferLanguagesFromSerializationChunk = (chunk: LionWebJsonChunk): Language[] => {
     const languages = new Map<string, Language>()

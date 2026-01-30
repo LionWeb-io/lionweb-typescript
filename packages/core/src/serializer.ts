@@ -1,9 +1,9 @@
-import { currentSerializationFormatVersion, LionWebId, LionWebJsonChunk, LionWebJsonNode } from "@lionweb/json"
+import { LionWebId, LionWebJsonChunk, LionWebJsonNode } from "@lionweb/json"
 import { asArray, keepDefineds, lazyMapGet, Nested3Map, uniquesAmong } from "@lionweb/ts-utils"
 import { asIds, metaPointerFor } from "./functions.js"
 import { Reader } from "./reading.js"
 import { Node } from "./types.js"
-import { builtinPropertyValueSerializer } from "./m3/builtins.js"
+import { lioncoreBuiltinsFacade } from "./m3/builtins.js"
 import { inheritsDirectlyFrom } from "./m3/functions.js"
 import {
     Classifier,
@@ -16,6 +16,7 @@ import {
     Reference,
     simpleNameDeducer
 } from "./m3/types.js"
+import { defaultLionWebVersion } from "./m3/version.js"
 
 
 /**
@@ -101,7 +102,7 @@ export const nodeSerializer = <NT extends Node>(reader: Reader<NT>, serializatio
 export const serializerWith = <NT extends Node>(configuration: SerializerConfiguration<NT>): Serializer<NT> => {
     const { reader } = configuration
     const propertyValueSerializer =
-        configuration.propertyValueSerializer ?? configuration.primitiveTypeSerializer ?? builtinPropertyValueSerializer
+        configuration.propertyValueSerializer ?? configuration.primitiveTypeSerializer ?? lioncoreBuiltinsFacade.propertyValueSerializer
     const serializeEmptyFeatures = configuration.serializeEmptyFeatures ?? true
 
     const languageKey2version2classifierKey2allFeatures: Nested3Map<Feature[]> = {}
@@ -233,7 +234,7 @@ export const serializerWith = <NT extends Node>(configuration: SerializerConfigu
         nodes.forEach(node => visit(node, undefined))
 
         return {
-            serializationFormatVersion: currentSerializationFormatVersion,
+            serializationFormatVersion: defaultLionWebVersion.serializationFormatVersion,
             languages: languagesUsed.map(({ key, version }) => ({ key, version })),
             nodes: serializedNodes
         }

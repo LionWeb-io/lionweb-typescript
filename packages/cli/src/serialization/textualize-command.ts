@@ -1,4 +1,4 @@
-import { AggregatingProblemReporter, deserializeLanguagesWithReporter, Language } from "@lionweb/core"
+import { AggregatingProblemReporter, deserializeLanguagesFrom, Language } from "@lionweb/core"
 import {
     genericAsTreeText,
     languagesAsText,
@@ -29,7 +29,7 @@ const textualizeSerializationChunk = async (path: string, languagesAsRegular: bo
     await writeFile(
         extLessPath + ".txt",
         looksLikeSerializedLanguages(chunk) && !languagesAsRegular
-            ? languagesAsText(deserializeLanguagesWithReporter(chunk, problemReporter))
+            ? languagesAsText(deserializeLanguagesFrom({ serializationChunk: chunk, problemReporter }))
             : genericAsTreeText(chunk, languages)
     )
     problemReporter.reportAllProblemsOnConsole()

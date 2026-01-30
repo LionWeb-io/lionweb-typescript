@@ -15,14 +15,7 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {
-    Annotation,
-    builtinClassifiers,
-    builtinPrimitives,
-    Classifier,
-    LanguageFactory,
-    metaConcepts
-} from "@lionweb/core"
+import { Annotation, Classifier, LanguageFactory, lioncoreBuiltinsFacade, lioncoreFacade } from "@lionweb/core"
 import { StringsMapper } from "@lionweb/ts-utils"
 
 const languageName = "io.lionweb.mps.specific"
@@ -36,25 +29,29 @@ const idKeyGen: StringsMapper = (...names) =>
 const factory = new LanguageFactory(dashedLanguageName, "2024-01", idKeyGen, idKeyGen)
 
 
+const { inamed, node } = lioncoreBuiltinsFacade.classifiers
+
 const defineAnnotation = (nameOfAnnotation: string, annotates: Classifier, ...namesOfOptionalStringProperties: string[]): Annotation => {
     const annotation = factory.annotation(nameOfAnnotation).annotating(annotates)
     namesOfOptionalStringProperties.forEach((name) => {
-        factory.property(annotation, name).ofType(builtinPrimitives.stringDatatype).isOptional()
+        factory.property(annotation, name).ofType(lioncoreBuiltinsFacade.primitiveTypes.stringDataType).isOptional()
     })
     return annotation
 }
 
+
+const { metaConcepts } = lioncoreFacade
 
 const ConceptDescription = defineAnnotation("ConceptDescription", metaConcepts.classifier, "conceptAlias", "conceptShortDescription", "helpUrl")
 
 const Deprecated = defineAnnotation("Deprecated", metaConcepts.ikeyed, "comment", "build")
 
 const KeyedDescription = defineAnnotation("KeyedDescription", metaConcepts.ikeyed, "documentation")
-factory.reference(KeyedDescription, "seeAlso").ofType(builtinClassifiers.node).isMultiple().isOptional()
+factory.reference(KeyedDescription, "seeAlso").ofType(node).isMultiple().isOptional()
 
-const ShortDescription = defineAnnotation("ShortDescription", builtinClassifiers.node, "description")
+const ShortDescription = defineAnnotation("ShortDescription", node, "description")
 
-const VirtualPackage = defineAnnotation("VirtualPackage", builtinClassifiers.node).implementing(builtinClassifiers.inamed)
+const VirtualPackage = defineAnnotation("VirtualPackage", node).implementing(inamed)
 
 
 export const ioLionWebMpsSpecificLanguage = factory.language

@@ -1,5 +1,5 @@
-import { deserializeLanguages, Language, lioncoreKey } from "@lionweb/core"
-import { currentSerializationFormatVersion, LionWebJsonChunk, LionWebJsonUsedLanguage } from "@lionweb/json"
+import { defaultLionWebVersion, deserializeLanguages, Language, lioncoreKey } from "@lionweb/core"
+import { LionWebJsonChunk, LionWebJsonUsedLanguage } from "@lionweb/json"
 import { readFileAsJson } from "../utils/json.js"
 
 
@@ -27,7 +27,7 @@ const isRecord = (json: unknown): json is Record<string, unknown> =>
  */
 export const looksLikeSerializedLanguages = (json: unknown): boolean =>
     isRecord(json)
-    && json["serializationFormatVersion"] === currentSerializationFormatVersion
+    && json["serializationFormatVersion"] === defaultLionWebVersion.serializationFormatVersion
     && "languages" in json
     && Array.isArray(json["languages"])
     && json["languages"].some((language) => isRecord(language) && language["key"] === lioncoreKey)
@@ -73,7 +73,7 @@ const areEqual = (left: LionWebJsonUsedLanguage, right: LionWebJsonUsedLanguage)
  */
 export const combinationOf = (serializationChunks: LionWebJsonChunk[]): LionWebJsonChunk =>
     ({
-        serializationFormatVersion: currentSerializationFormatVersion,
+        serializationFormatVersion: defaultLionWebVersion.serializationFormatVersion,
         languages: flatMapDistinct(serializationChunks.map(({languages}) => languages), areEqual),
         nodes: serializationChunks.flatMap(({nodes}) => nodes)
     })

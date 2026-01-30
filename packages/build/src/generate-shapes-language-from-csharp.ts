@@ -1,10 +1,4 @@
-import {
-    builtinFeatures,
-    deserializeLanguages,
-    lioncoreBuiltins,
-    metaFeatures,
-    serializeLanguages
-} from "@lionweb/core"
+import { deserializeLanguages, lioncoreBuiltinsFacade, lioncoreFacade, serializeLanguages } from "@lionweb/core"
 import { defaultTrumpfOriginatingApache2_0LicensedHeader, generateLanguage } from "@lionweb/class-core-generator"
 import { LionWebId, LionWebJsonChunk, LionWebJsonNode, LionWebJsonProperty, LionWebKey } from "@lionweb/json"
 import { languageAsText, readFileAsJson, writeJsonAsFile } from "@lionweb/utilities"
@@ -57,7 +51,7 @@ const checkNode = (node: LionWebJsonNode) => {
         console.error(`ID ${id} not unique!`)
     }
     ids.push(id)
-    const key = lookUpPropertyValueByKey(node, metaFeatures.ikeyed_key.key)
+    const key = lookUpPropertyValueByKey(node, lioncoreFacade.metaFeatures.ikeyed_key.key)
     if (key === null) {
         console.error(`Node with ID ${id} has no key!`)
     } else {
@@ -66,7 +60,7 @@ const checkNode = (node: LionWebJsonNode) => {
         }
         keys.push(key)
     }
-    const name = lookUpPropertyValueByKey(node, builtinFeatures.inamed_name.key)
+    const name = lookUpPropertyValueByKey(node, lioncoreBuiltinsFacade.features.inamed_name.key)
     if (name === null) {
         console.error(`Node with ID ${id} has no name`)
     }
@@ -113,7 +107,7 @@ if (!misalignedKeysOrIds && !fixedReferences) {
     console.log(`\nDidn’t need to fix anything — might fixing the JSON not be necessary anymore?`)
 }
 
-const shapesLanguage = deserializeLanguages(shapesJson, lioncoreBuiltins)[0]
+const shapesLanguage = deserializeLanguages(shapesJson, lioncoreBuiltinsFacade.language)[0]
 writeJsonAsFile(join(csharpPath, "shapes_2023_1-fixed.json"), serializeLanguages(shapesLanguage))
 writeFileSync(join(csharpPath, "shapes_2023_1.txt"), languageAsText(shapesLanguage))
 generateLanguage(shapesLanguage, "../delta-protocol-test/src/gen", { header: defaultTrumpfOriginatingApache2_0LicensedHeader })

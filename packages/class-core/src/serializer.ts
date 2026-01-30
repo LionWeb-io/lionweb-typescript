@@ -17,13 +17,11 @@
 
 import {
     allSuperTypesOf,
-    builtinClassifiers,
-    builtinFeatures,
-    builtinPropertyValueSerializer,
     Containment,
     Enumeration,
     Feature,
     isUnresolvedReference,
+    lioncoreBuiltinsFacade,
     PrimitiveType,
     Property,
     PropertyValueSerializer,
@@ -69,8 +67,8 @@ const nodeBaseResolveInfoDeducer: ResolveInfoDeducer<INodeBase> = (node, _refere
         }
     }
     const allSupertypes = allSuperTypesOf(node.classifier);
-    if (allSupertypes.indexOf(builtinClassifiers.inamed) > -1) {
-        return node.getPropertyValueManager(builtinFeatures.inamed_name).getDirectly() as (string | undefined);
+    if (allSupertypes.indexOf(lioncoreBuiltinsFacade.classifiers.inamed) > -1) {
+        return node.getPropertyValueManager(lioncoreBuiltinsFacade.features.inamed_name).getDirectly() as (string | undefined);
     }
     if (allSupertypes.indexOf(LionCore_builtinsBase.INSTANCE.INamed) > -1) {
         return node.getPropertyValueManager(LionCore_builtinsBase.INSTANCE.INamed_name).getDirectly() as (string | undefined);
@@ -111,7 +109,7 @@ type PropertyValueSerializerConfiguration = Partial<{
  * Unrecoverable issues are passed to the optional `reportIssue` argument, and
  */
 export const propertyValueSerializerWith = (configuration?: PropertyValueSerializerConfiguration) => {
-    const primitiveValueSerializer = configuration?.primitiveValueSerializer ?? builtinPropertyValueSerializer
+    const primitiveValueSerializer = configuration?.primitiveValueSerializer ?? lioncoreBuiltinsFacade.propertyValueSerializer
     const reportIssue = configuration?.reportIssue ?? ((message) => { throw new Error(message) })
     return {
         serializeValue: (value: unknown, property: Property) => {

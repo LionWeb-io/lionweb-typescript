@@ -16,7 +16,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import {
-    builtinClassifiers,
+    lioncoreBuiltinsFacade,
     Classifier,
     DataType,
     Enumeration,
@@ -33,6 +33,9 @@ import {
     SingleRef
 } from "@lionweb/core"
 import { Imports, tsTypeForPrimitiveType } from "./index.js"
+
+
+const { node } = lioncoreBuiltinsFacade.classifiers
 
 export const typeOf = (feature: Feature): SingleRef<LanguageEntity> => {
     if (feature instanceof Property) {
@@ -63,7 +66,7 @@ export const tsTypeForClassifier = (classifier: SingleRef<Classifier>, imports: 
     if (isUnresolvedReference(classifier)) {
         return `unknown /* [ERROR] can't compute a TS type for an unresolved classifier */`
     }
-    return classifier === builtinClassifiers.node ? imports.generic("INodeBase") : imports.entity(classifier)
+    return classifier === node ? imports.generic("INodeBase") : imports.entity(classifier)
 }
 
 
@@ -87,11 +90,11 @@ export const tsFieldTypeForFeature = (feature: Feature, imports: Imports): strin
         return `${typeId}${(optionalityPostfix(feature))}`
     }
     if (isContainment(feature)) {
-        const typeId = type === builtinClassifiers.node ? imports.generic("INodeBase") : imports.entity(type)
+        const typeId = type === node ? imports.generic("INodeBase") : imports.entity(type)
         return `${typeId}${feature.multiple ? "[]" : optionalityPostfix(feature)}`
     }
     if (isReference(feature)) {
-        const typeId = type === builtinClassifiers.node ? imports.generic("INodeBase") : imports.entity(type)
+        const typeId = type === node ? imports.generic("INodeBase") : imports.entity(type)
         return `${imports.core("SingleRef")}<${typeId}>${feature.multiple ? "[]" : optionalityPostfix(feature)}`
     }
     return `unknown /* [ERROR] can't compute a TS type for feature ${feature.name} on classifier ${feature.classifier.name} whose type has an unhandled/-known meta-type ${type.constructor.name} */`
@@ -103,7 +106,7 @@ export const tsTypeForValueManager = (feature: Feature, imports: Imports): strin
         return `unknown /* [ERROR] can't compute a TS type for feature ${feature.name} on classifier ${feature.classifier.name} with unresolved type (${type}) */`
     }
     if (isProperty(feature)) {
-        const typeId = (() => {
+        return (() => {
             if (type instanceof PrimitiveType) {
                 return tsTypeForPrimitiveType(type)
             }
@@ -112,10 +115,9 @@ export const tsTypeForValueManager = (feature: Feature, imports: Imports): strin
             }
             return `unknown /* [ERROR] can't compute a TS type for feature ${feature.name} on classifier ${feature.classifier.name} whose type has an unhandled/-known meta-type ${type.constructor.name} */`
         })()
-        return typeId
     }
     if (isContainment(feature) || isReference(feature)) {
-        return type === builtinClassifiers.node ? imports.generic("INodeBase") : imports.entity(type)
+        return type === node ? imports.generic("INodeBase") : imports.entity(type)
     }
     return `unknown /* [ERROR] can't compute a TS type for feature ${feature.name} on classifier ${feature.classifier.name} whose type has an unhandled/-known meta-type ${type.constructor.name} */`
 }

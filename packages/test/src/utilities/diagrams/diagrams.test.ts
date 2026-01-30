@@ -1,4 +1,4 @@
-import { builtinClassifiers, LanguageEntity, LanguageFactory } from "@lionweb/core"
+import { LanguageEntity, LanguageFactory, lioncoreBuiltinsFacade } from "@lionweb/core"
 import { chain, concatenator, lastOf } from "@lionweb/ts-utils"
 import { DiagramRenderer, generateMermaidForLanguage, generatePlantUmlForLanguage, hasher } from "@lionweb/utilities"
 import { readFileSync, writeFileSync } from "fs"
@@ -31,13 +31,15 @@ const testLanguage = (() => {
 
     const primitive1 = factory.primitiveType("CustomPrimitive")
 
-    const concept1 = factory.concept("Concept1", false, builtinClassifiers.node)
+    const { node } = lioncoreBuiltinsFacade.classifiers
+
+    const concept1 = factory.concept("Concept1", false, node)
     factory.property(concept1, "prop1").isOptional().ofType(primitive1)
     factory.reference(concept1, "selfRefs").isMultiple().isOptional().ofType(concept1)
-    factory.reference(concept1, "nodeTargets").ofType(builtinClassifiers.node)
+    factory.reference(concept1, "nodeTargets").ofType(node)
 
     const interface1 = factory.interface("Interface1")
-    const annotation1 = factory.annotation("Annotation1").annotating(builtinClassifiers.node)
+    const annotation1 = factory.annotation("Annotation1").annotating(node)
     factory.annotation("Annotation2", annotation1).implementing(interface1)
 
     return factory.language

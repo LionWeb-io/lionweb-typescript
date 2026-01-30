@@ -1,14 +1,12 @@
-import { Language, lioncore, lioncoreBuiltins, serializeLanguages, serializerWith } from "@lionweb/core"
+import { Language, lioncoreBuiltinsFacade, lioncoreFacade, serializeLanguages, serializerWith } from "@lionweb/core"
 import { ioLionWebMpsSpecificLanguage } from "@lionweb/io-lionweb-mps-specific"
 import { LionWebJsonChunk } from "@lionweb/json"
 import {
     generateMermaidForLanguage,
     generatePlantUmlForLanguage,
-    GenerationOptions,
     genericAsTreeText,
     languageAsText,
     readFileAsJson,
-    tsTypeDefsForLanguage,
     writeJsonAsFile
 } from "@lionweb/utilities"
 import { writeFileSync } from "fs"
@@ -21,18 +19,22 @@ import { shapesLanguage } from "@lionweb/test/dist/languages/shapes.js"
 import { languageWithEnum } from "@lionweb/test/dist/languages/with-enum.js"
 import { diagramPath, instancePath, languagePath } from "./paths.js"
 
+
+const lioncore = lioncoreFacade.language
+
 writeFileSync(diagramPath("metametamodel-gen.puml"), generatePlantUmlForLanguage(lioncore))
 writeFileSync(diagramPath("metametamodel-gen.md"), generateMermaidForLanguage(lioncore))
 console.log(`generated diagrams for LionCore M3`)
+
+const lioncoreBuiltins = lioncoreBuiltinsFacade.language
 
 writeFileSync(diagramPath("builtins.puml"), generatePlantUmlForLanguage(lioncoreBuiltins))
 writeFileSync(diagramPath("builtins.md"), generateMermaidForLanguage(lioncoreBuiltins))
 console.log(`generated diagrams for LionCore Built-ins`)
 
-const saveLanguageFiles = (language: Language, name: string, ...generationOptions: GenerationOptions[]) => {
+const saveLanguageFiles = (language: Language, name: string) => {
     writeJsonAsFile(languagePath(`${name}.json`), serializeLanguages(language))
     writeFileSync(languagePath(`${name}.txt`), languageAsText(language))
-    writeFileSync(languagePath(`${name}.ts.txt`), tsTypeDefsForLanguage(language, ...generationOptions))
     // (Generate with a '.txt' file extension to avoid it getting picked up by the compiler.)
     console.log(`saved files for ${language.name} M2`)
 }
@@ -40,7 +42,7 @@ const saveLanguageFiles = (language: Language, name: string, ...generationOption
 saveLanguageFiles(lioncore, "lioncore")
 saveLanguageFiles(lioncoreBuiltins, "builtins")
 
-saveLanguageFiles(shapesLanguage, "shapes", GenerationOptions.assumeSealed)
+saveLanguageFiles(shapesLanguage, "shapes")
 
 saveLanguageFiles(libraryLanguage, "library")
 
