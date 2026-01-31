@@ -35,6 +35,10 @@ export const LionWebVersions = {
 
 } as const
 
+/**
+ * All LionWeb versions.
+ */
+export const allLionWebVersions = Object.values(LionWebVersions)
 
 /**
  * The current default LionWeb version.

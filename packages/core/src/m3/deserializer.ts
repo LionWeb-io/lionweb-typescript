@@ -6,7 +6,7 @@ import { lioncoreBuiltinsFacade } from "./builtins.js"
 import { lioncoreFacade } from "./lioncore.js"
 import { lioncoreReaderFor, lioncoreWriterFor } from "./reading-writing.js"
 import { Language } from "./types.js"
-import { defaultLionWebVersion } from "./version.js"
+import { defaultLionWebVersion, LionWebVersion } from "./version.js"
 
 
 /**
@@ -14,6 +14,11 @@ import { defaultLionWebVersion } from "./version.js"
  */
 export type LanguageDeserializationData = {
     serializationChunk: LionWebJsonChunk
+    /**
+     * The version of the LionWeb serialization format to deserialize from.
+     * Default = {@link defaultLionWebVersion}.
+     */
+    lionWebVersion?: LionWebVersion
     dependentLanguages?: Language[]
     /**
      * Default = {@link consoleProblemReporter}.
@@ -24,9 +29,9 @@ export type LanguageDeserializationData = {
 /**
  * @return languages serialized to the {@link LionWebJsonChunk serialization chunk} passed in the {@link LanguageDeserializationData data object}.
  */
-export const deserializeLanguagesFrom = ({serializationChunk, dependentLanguages, problemReporter}: LanguageDeserializationData): Language[] =>
+export const deserializeLanguagesFrom = ({serializationChunk, dependentLanguages, problemReporter, lionWebVersion = defaultLionWebVersion}: LanguageDeserializationData): Language[] =>
     deserializerWith({
-        writer: lioncoreWriterFor(defaultLionWebVersion),
+        writer: lioncoreWriterFor(lionWebVersion),
         languages: [lioncoreFacade.language, ...(dependentLanguages ?? [])],
         problemReporter: problemReporter ?? consoleProblemReporter
     })(

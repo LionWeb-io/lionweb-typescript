@@ -5,7 +5,7 @@ import { consoleProblemReporter, ProblemReporter } from "./reporter.js"
 import { lioncoreBuiltinsFacade } from "./m3/builtins.js"
 import { MemoisingSymbolTable } from "./m3/symbol-table.js"
 import { Classifier, Containment, Enumeration, Language, PrimitiveType, Property, Reference } from "./m3/types.js"
-import { defaultLionWebVersion } from "./m3/version.js"
+import { defaultLionWebVersion, LionWebVersion } from "./m3/version.js"
 import { unresolved } from "./references.js"
 import { Node } from "./types.js"
 
@@ -18,6 +18,8 @@ export interface PropertyValueDeserializer {
 
 /**
  * Misspelled alias of {@link PropertyValueDeserializer}, kept for backward compatibility, and to be deprecated and removed later.
+ *
+ * @deprecated Use {@link PropertyValueDeserializer} instead.
  */
 export interface PrimitiveTypeDeserializer extends PropertyValueDeserializer {}
 
@@ -38,6 +40,11 @@ export type DeserializerConfiguration<NT extends Node> = {
      * A {@link Writer} that is used to instantiate nodes (with classifiers coming from the `languages` property) and set values on them.
      */
     writer: Writer<NT>,
+    /**
+     * The version of the LionWeb serialization format to deserialize from.
+     * Default = {@link defaultLionWebVersion}.
+     */
+    lionWebVersion?: LionWebVersion
     /**
      * An array of {@link Language languages} that the serialization chunk is expected to conform to.
      */
@@ -65,15 +72,16 @@ export const deserializerWith = <NT extends Node>(configuration: DeserializerCon
     const symbolTable = new MemoisingSymbolTable(configuration.languages)
     const { writer } = configuration
 
-    const propertyValueDeserializer = configuration.propertyValueDeserializer ?? lioncoreBuiltinsFacade.propertyValueDeserializer
+    const lionWebVersion = configuration?.lionWebVersion ?? defaultLionWebVersion
+    const propertyValueDeserializer = configuration.propertyValueDeserializer ?? lionWebVersion.builtinsFacade.propertyValueDeserializer
     const problemReporter = configuration.problemReporter ?? consoleProblemReporter
 
     return (serializationChunk, dependentNodes = []) => {
 
-        const currentSerializationFormatVersion = defaultLionWebVersion.serializationFormatVersion
-        if (serializationChunk.serializationFormatVersion !== currentSerializationFormatVersion) {
+        const serializationFormatVersion = lionWebVersion.serializationFormatVersion
+        if (serializationChunk.serializationFormatVersion !== serializationFormatVersion) {
             problemReporter.reportProblem(
-                `can't deserialize from serialization format other than version "${currentSerializationFormatVersion}" - assuming that version`
+                `can't deserialize from serialization format other than version "${serializationFormatVersion}" - assuming that version`
             )
         }
 

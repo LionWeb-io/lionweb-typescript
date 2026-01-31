@@ -9,14 +9,17 @@ import { defaultLionWebVersion, LionWebVersion, LionWebVersions } from "./versio
  * Type def. for objects that contain all necessary data to deserialize one or more languages from a {@link LionWebJsonChunk serialization chunk}.
  */
 export type LanguageSerializationData = {
-    /** Default = {@link defaultLionWebVersion}. */
+    /**
+     * The version of the LionWeb serialization format to serialize in.
+     * Default = {@link defaultLionWebVersion}.
+     */
     lionWebVersion?: LionWebVersion
     languages: Language[]
 }
 
 /**
  * @return the {@link LionWebJsonChunk serialization chunk} serializing the given languages (M2s, as instances of the LionCore M3),
- * according to the configured {@link LionWebVersion} (which defaults to `2023.1`).
+ * according to the configured {@link LionWebVersion} (which itself defaults to {@link defaultLionWebVersion}).
  */
 export const serializeLanguagesFor = (data: LanguageSerializationData) => {
     const lionwebVersion = data.lionWebVersion ?? defaultLionWebVersion
