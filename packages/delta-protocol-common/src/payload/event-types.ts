@@ -254,8 +254,8 @@ export interface ReferenceAddedEvent extends Event {
     parent: LionWebId
     reference: LionWebJsonMetaPointer
     index: number
-    newTarget: LionWebId | null | undefined
-    newResolveInfo: string | null | undefined
+    newTarget?: LionWebId | null
+    newResolveInfo?: string | null
 }
 
 /** § 6.6.6.2 */
@@ -264,8 +264,8 @@ export interface ReferenceDeletedEvent extends Event {
     parent: LionWebId
     reference: LionWebJsonMetaPointer
     index: number
-    deletedTarget: LionWebId | null | undefined
-    deletedResolveInfo: string | null | undefined
+    deletedTarget?: LionWebId | null
+    deletedResolveInfo?: string | null
 }
 
 /** § 6.6.6.3 */
@@ -274,10 +274,10 @@ export interface ReferenceChangedEvent extends Event {
     parent: LionWebId
     reference: LionWebJsonMetaPointer
     index: number
-    newTarget: LionWebId | null | undefined
-    newResolveInfo: string | null | undefined
-    oldTarget: LionWebId | null | undefined
-    oldResolveInfo: string | null | undefined
+    newTarget?: LionWebId | null
+    newResolveInfo?: string | null
+    oldTarget?: LionWebId | null
+    oldResolveInfo?: string | null
 }
 
 /** § 6.6.7.1 */
