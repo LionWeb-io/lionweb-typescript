@@ -30,6 +30,7 @@
   * Introduce a `defaultLionWebVersion` constant that equals the `LionWebVersions.2023.1`, deprecate the `currentReleaseVersion` constant, and replace use of the latter with `defaultLionWebVersion.serializationFormatVersion` throughout the codebase.
   * Add a LionWeb version to the parameters of (de-)serialization functions, which defaults to the `defaultLionWebVersion`.
   * Introduce an `allLionWebVersions` constant with all the `LionWebVersion`s.
+  * Add a `v2023_1` constant representing the 2023.1 LionWeb version.
 * Deprecate aliases/legacy versions: `PrimitiveType{Des|S}erializer` &rarr; `PropertyValue{Des|S}erializer`, `ExtractionFacade` &rarr; `Reader`, `InstantiationFacade` &rarr; `Writer`.
 
 

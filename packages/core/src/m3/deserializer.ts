@@ -6,7 +6,8 @@ import { lioncoreBuiltinsFacade } from "./builtins.js"
 import { lioncoreFacade } from "./lioncore.js"
 import { lioncoreReaderFor, lioncoreWriterFor } from "./reading-writing.js"
 import { Language } from "./types.js"
-import { defaultLionWebVersion, LionWebVersion } from "./version.js"
+import { LionWebVersion } from "./version.js"
+import { defaultLionWebVersion } from "./versions.js"
 
 
 /**

@@ -15,7 +15,8 @@ import {
     Reference,
     simpleNameDeducer
 } from "./m3/types.js"
-import { defaultLionWebVersion, LionWebVersion } from "./m3/version.js"
+import { LionWebVersion } from "./m3/version.js"
+import { defaultLionWebVersion } from "./m3/versions.js"
 
 
 /**

@@ -2,7 +2,8 @@ import { LionWebJsonChunk } from "@lionweb/json"
 import { serializerWith } from "../serializer.js"
 import { lioncoreReaderFor } from "./reading-writing.js"
 import { Language } from "./types.js"
-import { defaultLionWebVersion, LionWebVersion, LionWebVersions } from "./version.js"
+import { LionWebVersion } from "./version.js"
+import { defaultLionWebVersion, LionWebVersions } from "./versions.js"
 
 
 /**

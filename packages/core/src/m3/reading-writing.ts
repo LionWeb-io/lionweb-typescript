@@ -1,5 +1,6 @@
 import { metaTypedBasedClassifierDeducerFor, qualifiedNameOf } from "./functions.js"
-import { defaultLionWebVersion, LionWebVersion } from "./version.js"
+import { LionWebVersion } from "./version.js"
+import { defaultLionWebVersion } from "./versions.js"
 import { Reader } from "../reading.js"
 import {
     Annotation,
