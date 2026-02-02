@@ -105,12 +105,12 @@ export const lioncoreFacade: LionCoreFacade = {
 
 
 /**
- * @deprecated Use {@code lioncoreFacade.metaConcepts} instead.
+ * @deprecated Use {@code <LionWeb version>.lioncoreFacade.metaConcepts} instead.
  */
 export const metaConcepts = lioncoreFacade.metaConcepts
 
 /**
- * @deprecated Use {@code lioncoreFacade.metaFeatures} instead.
+ * @deprecated Use {@code <LionWeb version>.lioncoreFacade.metaFeatures} instead.
  */
 export const metaFeatures = lioncoreFacade.metaFeatures
 

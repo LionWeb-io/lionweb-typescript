@@ -2,7 +2,6 @@ import { LionWebId, LionWebJsonChunk, LionWebJsonNode, LionWebKey } from "@lionw
 import { byIdMap, groupBy, keepDefineds } from "@lionweb/ts-utils"
 import { Writer } from "./writing.js"
 import { consoleProblemReporter, ProblemReporter } from "./reporter.js"
-import { lioncoreBuiltinsFacade } from "./m3/builtins.js"
 import { MemoisingSymbolTable } from "./m3/symbol-table.js"
 import { Classifier, Containment, Enumeration, Language, PrimitiveType, Property, Reference } from "./m3/types.js"
 import { LionWebVersion } from "./m3/version.js"
@@ -52,7 +51,7 @@ export type DeserializerConfiguration<NT extends Node> = {
     languages: Language[],
     /**
      * A deserializer for values of properties.
-     * Default: {@code lioncoreBuiltinsFacade.propertyValueDeserializer}.
+     * Default: `(lionWebVersion ?? defaultLionWebVersion).builtinsFacade.propertyValueDeserializer`.
      */
     propertyValueDeserializer?: PropertyValueDeserializer,
     /**
@@ -265,7 +264,7 @@ export const deserializerWith = <NT extends Node>(configuration: DeserializerCon
  * @param writer - a {@link Writer} that is used to instantiate nodes and set values on them
  * @param languages - {@link Language languages} that the serialized model is expected to conform to
  * @param dependentNodes - a collection of nodes from dependent models against which all references in the serialized model are supposed to resolve against
- * @param propertyValueDeserializer - a deserializer for values of properties (by default {@code lioncoreBuiltinsFacade.propertyValueDeserializer})
+ * @param propertyValueDeserializer - a deserializer for values of properties (by default `defaultLionWebVersion.builtinsFacade.propertyValueDeserializer`)
  * @param problemReporter - an object for reporting problems (by default a {@link consoleProblemReporter})
  *
  * This is a legacy variant of {@link deserializerWith}, kept for backward compatibility, and to be deprecated and removed later.
@@ -277,7 +276,7 @@ export const deserializeSerializationChunk = <NT extends Node>(
     // TODO  facades <--> languages, so it's weird that it looks split up like this
     dependentNodes: Node[],
     // TODO (#13)  see if you can turn this into [nodes: Node[], writer: Writer<Node>][] after all
-    propertyValueDeserializer: PropertyValueDeserializer = lioncoreBuiltinsFacade.propertyValueDeserializer,
+    propertyValueDeserializer: PropertyValueDeserializer = defaultLionWebVersion.builtinsFacade.propertyValueDeserializer,
     problemReporter: ProblemReporter = consoleProblemReporter
 ): NT[] => deserializerWith({ writer, languages, propertyValueDeserializer, problemReporter: problemReporter })(serializationChunk, dependentNodes)
 

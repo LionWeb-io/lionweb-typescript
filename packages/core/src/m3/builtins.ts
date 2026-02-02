@@ -80,19 +80,19 @@ export const lioncoreBuiltinsFacade: LionCoreBuiltinsFacade = {
 /**
  * Definition of a LionCore language that serves as a standard library of built-in primitive types.
  *
- * @deprecated Use {@code lioncoreBuiltinsFacade.isBuiltinNodeConcept} instead.
+ * @deprecated Use `<LionWebVersion>.builtinsFacade.isBuiltinNodeConcept` instead.
  */
 export const lioncoreBuiltins = factory.language
 /**
- * @deprecated Use {@code lioncoreBuiltinsFacade.primitiveTypes} instead.
+ * @deprecated Use `<LionWebVersion>.builtinsFacade.primitiveTypes` instead.
  */
 export const builtinPrimitives = lioncoreBuiltinsFacade.primitiveTypes
 /**
- * @deprecated Use {@code lioncoreBuiltinsFacade.classifiers} instead.
+ * @deprecated Use `<LionWebVersion>.builtinsFacade.classifiers` instead.
  */
 export const builtinClassifiers = lioncoreBuiltinsFacade.classifiers
 /**
- * @deprecated Use {@code lioncoreBuiltinsFacade.features} instead.
+ * @deprecated Use `<LionWebVersion>.builtinsFacade.features` instead.
  */
 export const builtinFeatures = lioncoreBuiltinsFacade.features
 /**

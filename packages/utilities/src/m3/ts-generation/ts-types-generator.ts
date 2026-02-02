@@ -4,6 +4,7 @@ import {
     Classifier,
     Concept,
     conceptsOf,
+    defaultLionWebVersion,
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
     DynamicNode,
     Enumeration,
@@ -16,7 +17,6 @@ import {
     Language,
     LanguageEntity,
     Link,
-    lioncoreBuiltinsFacade,
     nameOf,
     nameSorted,
     PrimitiveType,
@@ -188,7 +188,7 @@ export const tsTypeDefsForLanguage = (language: Language, ...generationOptions: 
             .filter((entity) => entity instanceof Classifier)
             .flatMap((entity) => dependenciesOfClassifier(entity as Classifier))
     )
-        .filter((classifier) => classifier.language !== language && classifier.language !== lioncoreBuiltinsFacade.language)
+        .filter((classifier) => classifier.language !== language && classifier.language.key !== defaultLionWebVersion.builtinsFacade.language.key)
     const importsPerPackage = groupBy(
         generatedDependencies,
         ({language}) => language.name

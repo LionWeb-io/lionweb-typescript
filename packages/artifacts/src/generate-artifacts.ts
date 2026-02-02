@@ -1,4 +1,4 @@
-import { Language, lioncoreBuiltinsFacade, lioncoreFacade, serializeLanguages, serializerWith } from "@lionweb/core"
+import { Language, LionWebVersions, serializeLanguages, serializerWith } from "@lionweb/core"
 import { ioLionWebMpsSpecificLanguage } from "@lionweb/io-lionweb-mps-specific"
 import { LionWebJsonChunk } from "@lionweb/json"
 import {
@@ -20,13 +20,13 @@ import { languageWithEnum } from "@lionweb/test/dist/languages/with-enum.js"
 import { diagramPath, instancePath, languagePath } from "./paths.js"
 
 
-const lioncore = lioncoreFacade.language
+const lioncore = LionWebVersions.v2023_1.lioncoreFacade.language
 
 writeFileSync(diagramPath("metametamodel-gen.puml"), generatePlantUmlForLanguage(lioncore))
 writeFileSync(diagramPath("metametamodel-gen.md"), generateMermaidForLanguage(lioncore))
 console.log(`generated diagrams for LionCore M3`)
 
-const lioncoreBuiltins = lioncoreBuiltinsFacade.language
+const lioncoreBuiltins = LionWebVersions.v2023_1.builtinsFacade.language
 
 writeFileSync(diagramPath("builtins.puml"), generatePlantUmlForLanguage(lioncoreBuiltins))
 writeFileSync(diagramPath("builtins.md"), generateMermaidForLanguage(lioncoreBuiltins))

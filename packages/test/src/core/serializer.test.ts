@@ -8,7 +8,7 @@ import {
     EnumerationLiteral,
     Language,
     LanguageFactory,
-    lioncoreBuiltinsFacade,
+    LionWebVersions,
     newPropertyValueSerializerRegistry,
     propertyValueSerializerFrom,
     Reference,
@@ -34,7 +34,7 @@ describe("serialization", () => {
     it("serializes node with custom primitive type, works when registering custom deserializer", () => {
         const builtinsPropertyValueSerializer = propertyValueSerializerFrom(
             newPropertyValueSerializerRegistry()
-                .set(lioncoreBuiltinsFacade.primitiveTypes.stringDataType, (value) => value as string)
+                .set(LionWebVersions.v2023_1.builtinsFacade.primitiveTypes.stringDataType, (value) => value as string)
                 .set(dateDataType, (value) => {
                     const d = value as Date
                     return `${Number(d.getFullYear()).toString().padStart(4, "0")}-${Number(d.getMonth() + 1)
@@ -102,7 +102,7 @@ describe("serialization", () => {
             .to.eql(expectedSerializationChunk)
     })
 
-    const { inamed } = lioncoreBuiltinsFacade.classifiers
+    const { inamed } = LionWebVersions.v2023_1.builtinsFacade.classifiers
 
     it("serializes annotations", () => {
         const language = new Language("test language", "0", "test-language", "test-language")
@@ -233,7 +233,7 @@ describe("serialization", () => {
 })
 
 
-const { primitiveTypes } = lioncoreBuiltinsFacade
+const { primitiveTypes } = LionWebVersions.v2023_1.builtinsFacade
 
 describe("serialization of empty (unset) values", () => {
     const factory = new LanguageFactory("serialization-language", "0", concatenator("-"), lastOf)

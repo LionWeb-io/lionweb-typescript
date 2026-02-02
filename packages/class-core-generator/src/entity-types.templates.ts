@@ -22,6 +22,7 @@ import {
     Feature,
     featureMetaType,
     Interface,
+    isBuiltinNodeConcept,
     isContainment,
     isProperty,
     isRef,
@@ -29,7 +30,6 @@ import {
     isUnresolvedReference,
     LanguageEntity,
     Link,
-    lioncoreBuiltinsFacade,
     M3Concept,
     nameSorted,
     Node,
@@ -174,7 +174,7 @@ export const typeForLanguageEntity = (imports: Imports) => {
             if (isUnresolvedReference(superConcept)) {
                 return `/* unresolved reference to super concept */`
             }
-            if (superConcept === undefined || superConcept === lioncoreBuiltinsFacade.classifiers.node) {
+            if (superConcept === undefined || isBuiltinNodeConcept(superConcept)) {
                 return imports.generic("NodeBase")
             }
             return imports.entity(superConcept)

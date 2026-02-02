@@ -6,7 +6,7 @@ import {
     dynamicWriter,
     Feature,
     Language,
-    lioncoreBuiltinsFacade,
+    LionWebVersions,
     newPropertyValueDeserializerRegistry,
     propertyValueDeserializerFrom,
     Reference,
@@ -153,7 +153,7 @@ describe("deserialization", () => {
         }
         const propertyValueDeserializer = propertyValueDeserializerFrom(
             newPropertyValueDeserializerRegistry()
-                .set(lioncoreBuiltinsFacade.primitiveTypes.stringDataType, (value) => value)
+                .set(LionWebVersions.v2023_1.builtinsFacade.primitiveTypes.stringDataType, (value) => value)
                 .set(dateDataType, (value) => {
                     const parts = value.split("-")
                     return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]))

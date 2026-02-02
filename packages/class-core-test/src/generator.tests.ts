@@ -16,7 +16,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { languageFileFor } from "@lionweb/class-core-generator/dist/language-file.templates.js"
-import { LanguageFactory, lioncoreBuiltinsFacade } from "@lionweb/core"
+import { LanguageFactory, LionWebVersions } from "@lionweb/core"
 import { concatenator } from "@lionweb/ts-utils"
 import { isTrue } from "./assertions.js"
 
@@ -24,7 +24,7 @@ describe(`class-core generator`, () => {
 
     it(`concept extends from Node or from nothing => class extends from NodeBase`, () => {
         const factory = new LanguageFactory("test", "0", concatenator("-"), concatenator("-"))
-        factory.concept("ConceptExtendingNode", false, lioncoreBuiltinsFacade.classifiers.node)
+        factory.concept("ConceptExtendingNode", false, LionWebVersions.v2023_1.builtinsFacade.classifiers.node)
         factory.concept("ConceptExtendingNothing", false)
         const languageFile = languageFileFor(factory.language, { verbose: false, genericImportLocation: "@lionweb/class-core" })
         const matchExtendsNode = languageFile.match(/export class ConceptExtendingNode extends (\w+) \{/)

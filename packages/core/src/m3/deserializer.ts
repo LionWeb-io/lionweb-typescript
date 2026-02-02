@@ -2,8 +2,6 @@ import { LionWebJsonChunk } from "@lionweb/json"
 import { deserializerWith } from "../deserializer.js"
 import { nodesExtractorUsing } from "../extraction.js"
 import { consoleProblemReporter, ProblemReporter } from "../reporter.js"
-import { lioncoreBuiltinsFacade } from "./builtins.js"
-import { lioncoreFacade } from "./lioncore.js"
 import { lioncoreReaderFor, lioncoreWriterFor } from "./reading-writing.js"
 import { Language } from "./types.js"
 import { LionWebVersion } from "./version.js"
@@ -33,11 +31,11 @@ export type LanguageDeserializationData = {
 export const deserializeLanguagesFrom = ({serializationChunk, dependentLanguages, problemReporter, lionWebVersion = defaultLionWebVersion}: LanguageDeserializationData): Language[] =>
     deserializerWith({
         writer: lioncoreWriterFor(lionWebVersion),
-        languages: [lioncoreFacade.language, ...(dependentLanguages ?? [])],
+        languages: [lionWebVersion.lioncoreFacade.language, ...(dependentLanguages ?? [])],
         problemReporter: problemReporter ?? consoleProblemReporter
     })(
         serializationChunk,
-        [lioncoreBuiltinsFacade.language, ...(dependentLanguages ?? [])].flatMap(nodesExtractorUsing(lioncoreReaderFor(defaultLionWebVersion))),
+        [lionWebVersion.builtinsFacade.language, ...(dependentLanguages ?? [])].flatMap(nodesExtractorUsing(lioncoreReaderFor(lionWebVersion))),
     )
         .filter((rootNode) => rootNode instanceof Language)
         .map((language) => (language as Language).dependingOn(...(dependentLanguages ?? [])))

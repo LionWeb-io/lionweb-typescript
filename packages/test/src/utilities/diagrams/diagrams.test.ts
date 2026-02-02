@@ -1,4 +1,4 @@
-import { LanguageEntity, LanguageFactory, lioncoreBuiltinsFacade } from "@lionweb/core"
+import { LanguageEntity, LanguageFactory, LionWebVersions } from "@lionweb/core"
 import { chain, concatenator, lastOf } from "@lionweb/ts-utils"
 import { DiagramRenderer, generateMermaidForLanguage, generatePlantUmlForLanguage, hasher } from "@lionweb/utilities"
 import { readFileSync, writeFileSync } from "fs"
@@ -31,7 +31,7 @@ const testLanguage = (() => {
 
     const primitive1 = factory.primitiveType("CustomPrimitive")
 
-    const { node } = lioncoreBuiltinsFacade.classifiers
+    const { node } = LionWebVersions.v2023_1.builtinsFacade.classifiers
 
     const concept1 = factory.concept("Concept1", false, node)
     factory.property(concept1, "prop1").isOptional().ofType(primitive1)

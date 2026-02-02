@@ -17,7 +17,7 @@
 
 import { serializeNodeBases } from "@lionweb/class-core" // Note: this is a circular dependency!
 import { defaultTrumpfOriginatingApache2_0LicensedHeader, generateLanguage } from "@lionweb/class-core-generator"
-import { deserializeLanguages, lioncoreBuiltinsFacade, serializeLanguages } from "@lionweb/core"
+import { deserializeLanguages, LionWebVersions, serializeLanguages } from "@lionweb/core"
 import { LionWebJsonChunk } from "@lionweb/json"
 import {
     generatePlantUmlForLanguage,
@@ -38,7 +38,7 @@ import { getFromHttps } from "./curl.js"
 const inArtifactsPath = (subPath: string) => join("artifacts", subPath)
 
 // generate LionCore-builtins:
-generateLanguage(lioncoreBuiltinsFacade.language, "../class-core/src", { genericImportLocation: "./index.js", header: defaultTrumpfOriginatingApache2_0LicensedHeader })
+generateLanguage(LionWebVersions.v2023_1.builtinsFacade.language, "../class-core/src", { genericImportLocation: "./index.js", header: defaultTrumpfOriginatingApache2_0LicensedHeader })
 
 // generate artifacts for deltas definition language:
 writeJsonAsFile(inArtifactsPath("delta-language.json"), serializeLanguages(deltasLanguage))
