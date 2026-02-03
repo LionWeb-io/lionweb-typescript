@@ -1,4 +1,5 @@
 import { v2023_1 } from "./version-2023_1.js"
+import { LionWebVersion } from "./version.js"
 
 
 /**
@@ -26,4 +27,11 @@ export const allLionWebVersions = Object.values(LionWebVersions)
  * The current default LionWeb version.
  */
 export const defaultLionWebVersion = LionWebVersions.v2023_1
+
+/**
+ * @return the {@link LionWebVersion} matching the given `serializationFormatVersion` string,
+ * or {@link undefined} if there’s none.
+ */
+export const lionWebVersionFrom = (serializationFormatVersion: string): LionWebVersion | undefined =>
+    allLionWebVersions.find((version) => version.serializationFormatVersion === serializationFormatVersion)
 
