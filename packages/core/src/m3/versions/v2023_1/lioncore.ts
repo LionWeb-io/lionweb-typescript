@@ -1,6 +1,6 @@
 import { lioncoreBuiltinsFacade } from "./builtins.js"
-import { LanguageFactory } from "./factory.js"
-import { generatedLionCoreKeyFrom, LionCoreFacade } from "./lioncore-common.js"
+import { LanguageFactory } from "../../factory.js"
+import { generatedLionCoreKeyFrom, LionCoreFacade } from "../../lioncore-common.js"
 
 
 const factory = new LanguageFactory(

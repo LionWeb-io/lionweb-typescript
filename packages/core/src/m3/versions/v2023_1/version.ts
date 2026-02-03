@@ -1,6 +1,6 @@
 import { lioncoreBuiltinsFacade } from "./builtins.js"
 import { lioncoreFacade } from "./lioncore.js"
-import { LionWebVersion } from "./version.js"
+import { LionWebVersion } from "../../version.js"
 
 /**
  * A representation of the 2023.1 LionWeb version.

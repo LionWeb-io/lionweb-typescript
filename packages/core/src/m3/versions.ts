@@ -1,4 +1,4 @@
-import { v2023_1 } from "./version-2023_1.js"
+import { v2023_1 } from "./versions/v2023_1/version.js"
 import { LionWebVersion } from "./version.js"
 
 

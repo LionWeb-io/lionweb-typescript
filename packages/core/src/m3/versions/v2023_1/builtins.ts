@@ -6,9 +6,9 @@ import {
     newPropertyValueSerializerRegistry,
     propertyValueDeserializerFrom,
     propertyValueSerializerFrom
-} from "./builtins-common.js"
-import { isBuiltinNodeConcept } from "./builtins-function.js"
-import { LanguageFactory } from "./factory.js"
+} from "../../builtins-common.js"
+import { isBuiltinNodeConcept } from "../../builtins-function.js"
+import { LanguageFactory } from "../../factory.js"
 
 
 const factory = new LanguageFactory(
