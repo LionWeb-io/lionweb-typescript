@@ -18,20 +18,17 @@
 import { LionWebJsonChunk } from "@lionweb/json"
 import {
     consoleProblemReporter,
-    defaultLionWebVersion,
     deserializerWith,
     Language,
-    lioncoreBuiltinsFacade,
-    lioncoreFacade,
     lioncoreReaderFor,
+    LionWebVersions,
     nodesExtractorUsing,
     ProblemReporter
 } from "@lionweb/core"
 import { ioLionWebMpsSpecificLanguage } from "./definition.js"
 import { combinedWriter } from "./facade.js"
 
-const lioncore = lioncoreFacade.language
-
+const { v2023_1 } = LionWebVersions
 /**
  * @return the deserialization of the given {@link LionWebJsonChunk serialization chunk} as an array of {@link Language languages}.
  * Any LionCore/M3 node can be annotated using annotations from the `io.lionweb.mps.specific` language.
@@ -40,10 +37,10 @@ const lioncore = lioncoreFacade.language
 export const deserializeLanguagesWithIoLionWebMpsSpecific = (serializationChunk: LionWebJsonChunk, problemHandler: ProblemReporter = consoleProblemReporter) =>
     deserializerWith({
         writer: combinedWriter,
-        languages: [lioncore, ioLionWebMpsSpecificLanguage],
+        languages: [v2023_1.lioncoreFacade.language, ioLionWebMpsSpecificLanguage],
         problemReporter: problemHandler
     })(
         serializationChunk,
-        [lioncore, lioncoreBuiltinsFacade.language].flatMap(nodesExtractorUsing(lioncoreReaderFor(defaultLionWebVersion)))
+        [v2023_1.lioncoreFacade.language, v2023_1.builtinsFacade.language].flatMap(nodesExtractorUsing(lioncoreReaderFor(v2023_1)))
     ).filter((node) => node instanceof Language) as Language[]
 

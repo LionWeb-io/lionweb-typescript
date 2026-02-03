@@ -15,8 +15,10 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { Annotation, Classifier, LanguageFactory, lioncoreBuiltinsFacade, lioncoreFacade } from "@lionweb/core"
+import { Annotation, Classifier, LanguageFactory, LionWebVersions } from "@lionweb/core"
 import { StringsMapper } from "@lionweb/ts-utils"
+
+const { v2023_1 } = LionWebVersions
 
 const languageName = "io.lionweb.mps.specific"
 const dashedLanguageName = languageName.replaceAll(".", "-")
@@ -29,18 +31,18 @@ const idKeyGen: StringsMapper = (...names) =>
 const factory = new LanguageFactory(dashedLanguageName, "2024-01", idKeyGen, idKeyGen)
 
 
-const { inamed, node } = lioncoreBuiltinsFacade.classifiers
+const { inamed, node } = v2023_1.builtinsFacade.classifiers
 
 const defineAnnotation = (nameOfAnnotation: string, annotates: Classifier, ...namesOfOptionalStringProperties: string[]): Annotation => {
     const annotation = factory.annotation(nameOfAnnotation).annotating(annotates)
     namesOfOptionalStringProperties.forEach((name) => {
-        factory.property(annotation, name).ofType(lioncoreBuiltinsFacade.primitiveTypes.stringDataType).isOptional()
+        factory.property(annotation, name).ofType(v2023_1.builtinsFacade.primitiveTypes.stringDataType).isOptional()
     })
     return annotation
 }
 
 
-const { metaConcepts } = lioncoreFacade
+const { metaConcepts } = v2023_1.lioncoreFacade
 
 const ConceptDescription = defineAnnotation("ConceptDescription", metaConcepts.classifier, "conceptAlias", "conceptShortDescription", "helpUrl")
 

@@ -32,3 +32,9 @@ The API consists of the following things exported from this package:
     **Note**: only language elements having annotations (at any nesting depth) are rendered.
     This is useful to get a quick overview of the annotations.
 
+
+## LionWeb version
+
+The implementation is explicitly tied to LionWeb version 2023.1, meaning that its definition refers to the LionCore and LionCore builtins languages in that version.
+No parametrization in the LionWeb version is provided at the moment.
+
