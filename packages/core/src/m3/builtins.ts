@@ -7,8 +7,8 @@ import {
     propertyValueDeserializerFrom,
     propertyValueSerializerFrom
 } from "./builtins-common.js"
+import { isBuiltinNodeConcept } from "./builtins-function.js"
 import { LanguageFactory } from "./factory.js"
-import { Classifier, Concept, lioncoreBuiltinsKey } from "./types.js"
 
 
 const factory = new LanguageFactory(
@@ -73,13 +73,7 @@ export const lioncoreBuiltinsFacade: LionCoreBuiltinsFacade = {
          * Misspelled alias of {@link jsonDataType}, kept for backward compatibility, and to be deprecated and removed later.
          */
         jsonDatatype: jsonDataType
-    },
-    isBuiltinNodeConcept: (classifier: Classifier) =>
-        classifier instanceof Concept &&
-        classifier.language.key === lioncoreBuiltinsKey &&
-        classifier.language.version === "2023.1" &&
-        classifier.key === node.key &&
-        (classifier as Concept).abstract
+    }
 }
 
 
@@ -102,7 +96,7 @@ export const builtinClassifiers = lioncoreBuiltinsFacade.classifiers
  */
 export const builtinFeatures = lioncoreBuiltinsFacade.features
 /**
- * @deprecated Use {@code lioncoreBuiltinsFacade.isBuiltinNodeConcept} instead.
+ * @deprecated Use {@link isBuiltinNodeConcept} instead.
  */
-export const isBuiltinConcept = lioncoreBuiltinsFacade.isBuiltinNodeConcept
+export const isBuiltinConcept = isBuiltinNodeConcept
 

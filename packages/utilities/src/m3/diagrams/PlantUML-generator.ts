@@ -5,12 +5,12 @@ import {
     Enumeration,
     Feature,
     Interface,
+    isBuiltinNodeConcept,
     isRef,
     isUnresolvedReference,
     Language,
     LanguageEntity,
     Link,
-    lioncoreBuiltinsFacade,
     nameOf,
     nameSorted,
     nonRelationalFeatures,
@@ -58,7 +58,7 @@ const generateForEnumeration = ({ name, literals }: Enumeration) => [
 const generateForAnnotation = ({ name, features, extends: extends_, implements: implements_, annotates }: Annotation) => {
     const fragments: string[] = []
     fragments.push(`annotation`, name)
-    if (isRef(extends_) && !lioncoreBuiltinsFacade.isBuiltinNodeConcept(extends_)) {
+    if (isRef(extends_) && !isBuiltinNodeConcept(extends_)) {
         fragments.push(`extends`, extends_.name)
     }
     if (implements_.length > 0) {
@@ -79,7 +79,7 @@ const generateForConcept = ({ name, features, abstract: abstract_, extends: exte
     if (partition) {
         fragments.push(`<<partition>>`)
     }
-    if (isRef(extends_) && !lioncoreBuiltinsFacade.isBuiltinNodeConcept(extends_)) {
+    if (isRef(extends_) && !isBuiltinNodeConcept(extends_)) {
         fragments.push(`extends`, extends_.name)
     }
     if (implements_.length > 0) {
