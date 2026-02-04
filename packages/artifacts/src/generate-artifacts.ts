@@ -11,7 +11,6 @@ import { libraryModel, libraryReader } from "@lionweb/test/dist/instances/librar
 import { multiModel, multiReader } from "@lionweb/test/dist/instances/multi.js"
 import { libraryLanguage } from "@lionweb/test/dist/languages/library.js"
 import { multiLanguage } from "@lionweb/test/dist/languages/multi.js"
-import { shapesLanguage } from "@lionweb/test/dist/languages/shapes.js"
 import { languageWithEnum } from "@lionweb/test/dist/languages/with-enum.js"
 import { diagramPath, instancePath, languagePath } from "./paths.js"
 
@@ -37,8 +36,6 @@ const saveLanguageFiles = (language: Language, name: string) => {
 
 saveLanguageFiles(lioncore, "lioncore")
 saveLanguageFiles(lioncoreBuiltins, "builtins")
-
-saveLanguageFiles(shapesLanguage, "shapes")
 
 saveLanguageFiles(libraryLanguage, "library")
 

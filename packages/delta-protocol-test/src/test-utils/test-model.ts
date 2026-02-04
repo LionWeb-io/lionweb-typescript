@@ -15,15 +15,22 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { serializeNodeBases } from "@lionweb/class-core"
-import { Documentation, Geometry, ShapesBase } from "../gen/Shapes.g.js"
+import { INodeBase, serializeNodeBases } from "@lionweb/class-core"
+import { DataTypeTestConcept, TestLanguageBase, TestPartition } from "@lionweb/class-core-test-language"
 
-const language = ShapesBase.INSTANCE
-const factory = language.factory()
-const geometry = factory(language.Geometry, "a") as Geometry
-const documentation = factory(language.Documentation, "documentation") as Documentation
-geometry.documentation = documentation
-documentation.text = "hello there"
+const base = TestLanguageBase.INSTANCE
+const factory = base.factory()
+const partition = factory(base.TestPartition, "a") as TestPartition
+const data = factory(base.DataTypeTestConcept, "data") as DataTypeTestConcept
+partition.data = data
+data.stringValue_1 = "hello there"  // (a wild Ewan McGregor spawns ;))
 
-export const testModelChunk = serializeNodeBases([geometry])
+export const testModelChunk = serializeNodeBases([partition])
+
+export const getTextFrom = (model: INodeBase[]) =>
+    (model[0] as TestPartition).data!.stringValue_1
+
+export const setTextOn = (model: INodeBase[], newValue: string) => {
+    (model[0] as TestPartition).data!.stringValue_1 = newValue
+}
 

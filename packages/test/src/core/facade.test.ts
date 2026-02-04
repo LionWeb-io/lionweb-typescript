@@ -1,45 +1,40 @@
-import { childrenExtractorUsing, DynamicNode, dynamicReader, Node, nodesExtractorUsing } from "@lionweb/core"
-
-import { Annotated, Circle, Coord } from "../languages/shapes.js"
+import { childrenExtractorUsing, DynamicNode, dynamicReader, idOf, nodesExtractorUsing } from "@lionweb/core"
+import { AnotherConcept, SomeAnnotation, SomeConcept } from "../languages/generic.js"
 import { deepEqual } from "../test-utils/assertions.js"
 
-const center = {
-    id: "center",
-    classifier: Coord,
-    settings: {
-        x: 1,
-        y: 2,
-        z: 3
-    },
+const subnode = {
+    id: "subnode",
+    classifier: AnotherConcept,
+    settings: {},
     annotations: [
         {
-            id: "annotated",
-            classifier: Annotated,
+            id: "annotation",
+            classifier: SomeAnnotation,
             settings: {},
             annotations: []
         }
     ]
 }
 
-const circle: DynamicNode = {
-    id: "circle",
-    classifier: Circle,
+const node: DynamicNode = {
+    id: "node",
+    classifier: SomeConcept,
     settings: {
-        center,
-        radius: 5
+        children: subnode
     },
     annotations: []
 }
 
 describe("annotations are extracted", () => {
-    const idOf = ({ id }: Node) => id
 
     it("by childrenExtractorUsing", () => {
-        deepEqual(childrenExtractorUsing(dynamicReader)(circle).map(idOf), ["center"])
-        deepEqual(childrenExtractorUsing(dynamicReader)(center).map(idOf), ["annotated"])
+        deepEqual(childrenExtractorUsing(dynamicReader)(node).map(idOf), ["subnode"])
+        deepEqual(childrenExtractorUsing(dynamicReader)(subnode).map(idOf), ["annotation"])
     })
 
     it("by nodesExtractorUsing", () => {
-        deepEqual(nodesExtractorUsing(dynamicReader)(circle).map(idOf), ["circle", "center", "annotated"])
+        deepEqual(nodesExtractorUsing(dynamicReader)(node).map(idOf), ["node", "subnode", "annotation"])
     })
+
 })
+
