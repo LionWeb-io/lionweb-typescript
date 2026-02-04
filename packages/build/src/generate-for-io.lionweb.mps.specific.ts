@@ -15,8 +15,6 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { writeFileSync } from "fs"
-import { join } from "path"
 import { deserializeLanguages, LionWebVersions } from "@lionweb/core"
 import { LionWebJsonChunk } from "@lionweb/json"
 import {
@@ -25,6 +23,8 @@ import {
     languageAsText,
     readFileAsJson
 } from "@lionweb/utilities"
+import { writeFileSync } from "fs"
+import { join } from "path"
 
 const languageName = "io.lionweb.mps.specific"
 const packagePath = join("..", languageName.replaceAll(".", "-"))   // (-> package)
