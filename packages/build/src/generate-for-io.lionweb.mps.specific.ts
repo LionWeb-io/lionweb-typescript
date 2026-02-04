@@ -27,12 +27,14 @@ import {
 } from "@lionweb/utilities"
 
 const languageName = "io.lionweb.mps.specific"
-const packagePath = join("..", languageName.replaceAll(".", "-"), "meta")
+const packagePath = join("..", languageName.replaceAll(".", "-"))   // (-> package)
+const metaPath = join(packagePath, "meta")
 
-const chunk = readFileAsJson(join(packagePath, `${languageName}.json`)) as LionWebJsonChunk
+// read language definition from package:
+const chunk = readFileAsJson(join(metaPath, `${languageName}.json`)) as LionWebJsonChunk
 const language = deserializeLanguages(chunk, LionWebVersions.v2023_1.lioncoreFacade.language)[0]
 
-writeFileSync(join(packagePath, `${languageName}.txt`), languageAsText(language))
-writeFileSync(join(packagePath, `${languageName}.puml`), generatePlantUmlForLanguage(language))
-writeFileSync(join(packagePath, `${languageName}.md`), generateMermaidForLanguage(language))
+writeFileSync(join(metaPath, `${languageName}.txt`), languageAsText(language))
+writeFileSync(join(metaPath, `${languageName}.puml`), generatePlantUmlForLanguage(language))
+writeFileSync(join(metaPath, `${languageName}.md`), generateMermaidForLanguage(language))
 

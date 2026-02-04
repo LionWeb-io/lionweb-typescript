@@ -298,6 +298,7 @@ export {
     EnumerationLiteral,
     Feature,
     Interface,
+    M3Node,
     Language,
     LanguageEntity,
     Link,
@@ -313,7 +314,6 @@ export type {
     IKeyed,
     IMetaTyped,
     INamed,
-    M3Concept,
-    M3Node
+    M3Concept
 }
 
