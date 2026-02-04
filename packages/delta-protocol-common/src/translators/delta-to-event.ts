@@ -120,7 +120,7 @@ export type ProtocolMessagesGenerator = (delta: IDelta, sequenceNumber: number) 
 export type DeltaToEventTranslatorConfiguration = Partial<{
     /**
      * A {@link PropertyValueSerializer} that's *only* used to serialize *primitive* values.
-     * Defaults to the {@code lioncoreBuiltinsFacade.propertyValueSerializer}.
+     * Defaults to the `lioncoreBuiltinsFacade.propertyValueSerializer`.
      */
     primitiveValueSerializer: PropertyValueSerializer,
     /**

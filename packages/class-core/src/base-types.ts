@@ -48,7 +48,7 @@ import {
 
 /**
  * Encodes how a {@link INodeBase} is contained by a parent.
- * If the {@code containingFeature} is {@code null}, the {@link INodeBase} is an annotation
+ * If the `containingFeature` is `null`, the {@link INodeBase} is an annotation
  * and effectively contained by the {@link INodeBase.annotations} property.
  */
 export type Parentage = [ parent: INodeBase, containingFeature: Containment | null ];
@@ -66,7 +66,7 @@ export interface INodeBase extends Node {
 
     /**
      * The parent of this node object,
-     * or {@code undefined} if it's either a root (in which case it {@code this.classifier} should be a {@link Concept} which is a partition)
+     * or `undefined` if it's either a root (in which case it `this.classifier` should be a {@link Concept} which is a partition)
      *  or (currently/temporarily) an orphan.
      */
     parent: INodeBase | undefined;

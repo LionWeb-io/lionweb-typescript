@@ -83,7 +83,7 @@ import {
 
 /**
  * Type def. for a function that translates {@link Event events} to their corresponding {@link IDelta deltas},
- * or {@code undefined} in case no equivalent delta exists for a given event.
+ * or `undefined` in case no equivalent delta exists for a given event.
  */
 export type EventToDeltaTranslator = (event: Event, idMapping: IdMapping) => IDelta | undefined
 

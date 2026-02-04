@@ -71,7 +71,7 @@ export const checkUniqueData = (hasher: StringHasher): StringHasher => {
 
 /**
  * Augments the given {@link StringHasher hasher} by checking
- * whether it's been given defined ({@code !== undefined}) data,
+ * whether it's been given defined (`!== undefined`) data,
  * throwing an error when not.
  */
 export const checkDefinedData = (hasher: StringHasher): StringHasher =>

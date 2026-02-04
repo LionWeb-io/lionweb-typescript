@@ -10,7 +10,7 @@ export type ClassifierDeducer<NT extends Node> = (node: NT) => Classifier
 /**
  * Type def. for functions that deduce the string value of the `resolveInfo` field of a
  * {@link LionWebJsonReferenceTarget serialized reference target},
- * or {@code undefined} to indicate that no `resolveInfo` could be derived.
+ * or `undefined` to indicate that no `resolveInfo` could be derived.
  * The function’s arguments are the target {@link Node} and its containing {@link Reference}.
  */
 export type ResolveInfoDeducer<NT extends Node> = (node: NT, reference: Reference) => string | undefined
@@ -43,7 +43,7 @@ export interface Reader<NT extends Node> {
 
     /**
      * @return The string value of the `resolveInfo` field of a {@link LionWebJsonReferenceTarget serialized reference target},
-     * or {@code undefined} to indicate that no `resolveInfo` could be derived.
+     * or `undefined` to indicate that no `resolveInfo` could be derived.
      */
     resolveInfoFor?: ResolveInfoDeducer<NT>
 
