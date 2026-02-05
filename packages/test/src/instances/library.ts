@@ -65,7 +65,7 @@ export const libraryWriter: CoreWriter<BaseNode> = {
         annotations: []
     }),
     setFeatureValue: updateSettingsNameBased,
-    encodingOf: literal => {
+    encodingOf: (literal) => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const rtEnum = rtEnums[literal.enumeration.key] as any
         return rtEnum[literal.key as unknown as number]
