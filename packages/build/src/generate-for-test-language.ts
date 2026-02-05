@@ -21,33 +21,41 @@ import { LionWebJsonChunk } from "@lionweb/json"
 import { generatePlantUmlForLanguage, languageAsText, readFileAsJson } from "@lionweb/utilities"
 import { copyFileSync, lstatSync, writeFileSync } from "fs"
 import { join } from "path"
+import { argv } from "process"
 import { getFromHttps } from "./curl.js"
 
 const packagePath = "../class-core-test-language"
 const metaPath = join(packagePath, "meta")
 const languageJsonPath = join(metaPath, "testLanguage.json")
 
-// try to copy language JSON file from external repo:
 const externalRepoName = "lionweb-integration-testing"
 const pathWithinExternalRepo = "src/languages"
 const originalLanguageJsonFileName = "testLanguage.2023.1.json"
-const url = `https://raw.githubusercontent.com/LionWeb-io/${externalRepoName}/refs/heads/main/${pathWithinExternalRepo}/${originalLanguageJsonFileName}`
 
-await getFromHttps(url)
-    .then((fileAsBuffer) => {
-        writeFileSync(languageJsonPath, fileAsBuffer)
-        console.log(`Retrieved serialization chunk JSON for test language from ${externalRepoName} repository from GitHub.`)
-    })
-    .catch((error) => {
-        console.error(`Couldn’t retrieve serialization chunk JSON for test language from ${externalRepoName} repository from GitHub, due to: ${error}.`)
-        const integrationTestingFilePath = join("../../..", externalRepoName, pathWithinExternalRepo, originalLanguageJsonFileName)
-        if (lstatSync(integrationTestingFilePath).isFile()) {
-            copyFileSync(integrationTestingFilePath, languageJsonPath)
-            console.log(`Copied serialization chunk JSON for test language from ${externalRepoName} repository.`)
-        } else {
-            console.log(`${externalRepoName} repository not found: using serialization chunk JSON for test language as provided here.`)
-        }
-    })
+const tryCopyFromLocalRepoClonse = () => {
+    const integrationTestingFilePath = join("../../..", externalRepoName, pathWithinExternalRepo, originalLanguageJsonFileName)
+    if (lstatSync(integrationTestingFilePath).isFile()) {
+        copyFileSync(integrationTestingFilePath, languageJsonPath)
+        console.log(`Copied serialization chunk JSON for test language from ${externalRepoName} repository.`)
+    } else {
+        console.log(`Didn’t find local clone of ${externalRepoName} repository: using already-present serialization chunk JSON for test language.`)
+    }
+}
+
+if (argv.length > 2 && argv[2] === "--force-local") {
+    tryCopyFromLocalRepoClonse()
+} else {
+    const url = `https://raw.githubusercontent.com/LionWeb-io/${externalRepoName}/refs/heads/main/${pathWithinExternalRepo}/${originalLanguageJsonFileName}`
+    await getFromHttps(url)
+        .then((fileAsBuffer) => {
+            writeFileSync(languageJsonPath, fileAsBuffer)
+            console.log(`Retrieved serialization chunk JSON for test language from ${externalRepoName} repository from GitHub.`)
+        })
+        .catch((error) => {
+            console.error(`Couldn’t retrieve serialization chunk JSON for test language from ${externalRepoName} repository from GitHub, due to: ${error}.`)
+            tryCopyFromLocalRepoClonse()
+        })
+}
 console.log()
 
 const TestLanguage = deserializeLanguages(readFileAsJson(languageJsonPath) as LionWebJsonChunk)[0]
