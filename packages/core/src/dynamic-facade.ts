@@ -32,7 +32,8 @@ export const dynamicReader: Reader<DynamicNode> = ({
     enumerationLiteralFrom: (value, enumeration) =>
         enumeration.literals.find(({key}) => key === value)
         ?? null,    // (undefined -> null)
-    resolveInfoFor: propertyGetterFor(defaultLionWebVersion.builtinsFacade.features.inamed_name.key)    // using default LionWeb version is OK, since keys don’t change
+    resolveInfoFor: propertyGetterFor(defaultLionWebVersion.builtinsFacade.features.inamed_name.key)
+        // TODO  have this parametrized in the LionWeb version, instead of relying on keys not changing between versions
 })
 
 /**

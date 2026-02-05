@@ -20,6 +20,13 @@ import { Deprecated, ioLionWebMpsSpecificAnnotationsFrom } from "@lionweb/io-lio
 import { asJSIdentifier, indent } from "@lionweb/textgen-utils"
 import { asString, commaSeparated } from "littoral-templates"
 
+/**
+ * @return The contents of a file implementing a “mega-factory” class for a collection of {@link Language LionWeb languages}.
+ * A mega-factory exposes factory methods for all concrete concepts of all the languages.
+ * @param megaFactoryName The name for the mega-factory class.
+ * @param languages A collection of {@link Language LionWeb languages}.
+ * @param header An optional file header for the file (contents).
+ */
 export const megaFactoryFor = (megaFactoryName: string, languages: Language[], header?: string) => {
     const isNotDeprecated = (entity: LanguageEntity) =>
         !ioLionWebMpsSpecificAnnotationsFrom(entity).some((annotation) => annotation instanceof Deprecated)
