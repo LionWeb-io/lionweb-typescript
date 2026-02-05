@@ -1,4 +1,4 @@
-import { Language, LionWebVersions, serializeLanguages, serializerWith } from "@lionweb/core"
+import { Language, serializeLanguages, serializerWith } from "@lionweb/core"
 import {
     generateMermaidForLanguage,
     generatePlantUmlForLanguage,
@@ -15,27 +15,12 @@ import { languageWithEnum } from "@lionweb/test/dist/languages/with-enum.js"
 import { diagramPath, instancePath, languagePath } from "./paths.js"
 
 
-const lioncore = LionWebVersions.v2023_1.lioncoreFacade.language
-
-writeFileSync(diagramPath("metametamodel-gen.puml"), generatePlantUmlForLanguage(lioncore))
-writeFileSync(diagramPath("metametamodel-gen.md"), generateMermaidForLanguage(lioncore))
-console.log(`generated diagrams for LionCore M3`)
-
-const lioncoreBuiltins = LionWebVersions.v2023_1.builtinsFacade.language
-
-writeFileSync(diagramPath("builtins.puml"), generatePlantUmlForLanguage(lioncoreBuiltins))
-writeFileSync(diagramPath("builtins.md"), generateMermaidForLanguage(lioncoreBuiltins))
-console.log(`generated diagrams for LionCore Built-ins`)
-
 const saveLanguageFiles = (language: Language, name: string) => {
     writeJsonAsFile(languagePath(`${name}.json`), serializeLanguages(language))
     writeFileSync(languagePath(`${name}.txt`), languageAsText(language))
     // (Generate with a '.txt' file extension to avoid it getting picked up by the compiler.)
     console.log(`saved files for ${language.name} M2`)
 }
-
-saveLanguageFiles(lioncore, "lioncore")
-saveLanguageFiles(lioncoreBuiltins, "builtins")
 
 saveLanguageFiles(libraryLanguage, "library")
 
