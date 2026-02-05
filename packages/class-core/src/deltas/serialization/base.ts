@@ -15,7 +15,7 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { defaultLionWebVersion } from "@lionweb/core"
+import { LionWebVersions } from "@lionweb/core"
 import { IDelta } from "../base.js"
 import { SerializedDelta } from "./types.g.js"
 import { propertyValueSerializerWith } from "../../serializer.js"
@@ -32,5 +32,5 @@ export type DeltaDeserializer = (delta: SerializedDelta) => IDelta;
  * using the same {@link PropertyValueSerializer} instance as the {@link serializeNodeBases} function,
  * and the same treatment of enumeration values.
  */
-export const defaultPropertyValueSerializer = propertyValueSerializerWith({ primitiveValueSerializer: defaultLionWebVersion.builtinsFacade.propertyValueSerializer })
+export const defaultPropertyValueSerializer = propertyValueSerializerWith({ primitiveValueSerializer: LionWebVersions.v2023_1.builtinsFacade.propertyValueSerializer })
 

@@ -4,7 +4,7 @@
 
 * Make `reference` field of `LionWebJsonReferenceTarget` type `null`able, and ensure that not both fields are `null`.
 * Deprecate usage of the `currentSerializationFormatVersion` constant, and propagate throughout the entire codebase.
-    Use `defaultLionWebVersion.serializationFormatVersion` with `defaultLionWebVersion` coming from the `core` package.
+    Use `LionWebVersions.v2023_1.serializationFormatVersion` with `LionWebVersions` coming from the `core` package.
 
 
 ## 0.7.2

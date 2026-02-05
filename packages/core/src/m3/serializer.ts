@@ -3,7 +3,7 @@ import { serializerWith } from "../serializer.js"
 import { lioncoreReaderFor } from "./reading-writing.js"
 import { Language } from "./types.js"
 import { LionWebVersion } from "./version.js"
-import { defaultLionWebVersion, LionWebVersions } from "./versions.js"
+import { LionWebVersions } from "./versions.js"
 
 
 /**
@@ -12,7 +12,7 @@ import { defaultLionWebVersion, LionWebVersions } from "./versions.js"
 export type LanguageSerializationData = {
     /**
      * The version of the LionWeb serialization format to serialize in.
-     * Default = {@link defaultLionWebVersion}.
+     * Default = {@link LionWebVersions.v2023_1}.
      */
     lionWebVersion?: LionWebVersion
     languages: Language[]
@@ -20,10 +20,10 @@ export type LanguageSerializationData = {
 
 /**
  * @return the {@link LionWebJsonChunk serialization chunk} serializing the given languages (M2s, as instances of the LionCore M3),
- * according to the configured {@link LionWebVersion} (which itself defaults to {@link defaultLionWebVersion}).
+ * according to the configured {@link LionWebVersion} (which itself defaults to {@link LionWebVersions.v2023_1}).
  */
 export const serializeLanguagesFor = (data: LanguageSerializationData) => {
-    const lionwebVersion = data.lionWebVersion ?? defaultLionWebVersion
+    const lionwebVersion = data.lionWebVersion ?? LionWebVersions.v2023_1
     return serializerWith({ reader: lioncoreReaderFor(lionwebVersion) })(data.languages)
 }
 

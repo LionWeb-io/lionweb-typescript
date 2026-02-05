@@ -19,8 +19,8 @@ import {
     Classifier,
     consoleProblemReporter,
     Containment,
-    defaultLionWebVersion,
     Enumeration,
+    LionWebVersions,
     MemoisingSymbolTable,
     PrimitiveType,
     ProblemReporter,
@@ -83,8 +83,8 @@ function nodeBaseDeserializerWithIdMapping(languageBases: ILanguageBase[], recei
 function nodeBaseDeserializerWithIdMapping(configuration: FactoryConfiguration & DeserializerConfiguration): Deserializer<RootsWithIdMapping>;
 function nodeBaseDeserializerWithIdMapping(languageBasesOrConfiguration: ILanguageBase[] | (FactoryConfiguration & DeserializerConfiguration), mayBeReceiveDelta?: DeltaReceiver): Deserializer<RootsWithIdMapping> {
     const [languageBases, receiveDelta, propertyValueDeserializer, problemReporter] = Array.isArray(languageBasesOrConfiguration)
-        ? [languageBasesOrConfiguration, mayBeReceiveDelta, defaultLionWebVersion.builtinsFacade.propertyValueDeserializer, consoleProblemReporter]
-        : [languageBasesOrConfiguration.languageBases, languageBasesOrConfiguration.receiveDelta, languageBasesOrConfiguration.propertyValueDeserializer ?? defaultLionWebVersion.builtinsFacade.propertyValueDeserializer, languageBasesOrConfiguration.problemReporter ?? languageBasesOrConfiguration.problemsHandler ?? consoleProblemReporter];
+        ? [languageBasesOrConfiguration, mayBeReceiveDelta, LionWebVersions.v2023_1.builtinsFacade.propertyValueDeserializer, consoleProblemReporter]
+        : [languageBasesOrConfiguration.languageBases, languageBasesOrConfiguration.receiveDelta, languageBasesOrConfiguration.propertyValueDeserializer ?? LionWebVersions.v2023_1.builtinsFacade.propertyValueDeserializer, languageBasesOrConfiguration.problemReporter ?? languageBasesOrConfiguration.problemsHandler ?? consoleProblemReporter];
 
     const symbolTable = new MemoisingSymbolTable(languageBases.map(({language}) => language));
     const languageBaseFor = combinedLanguageBaseLookupFor(languageBases);

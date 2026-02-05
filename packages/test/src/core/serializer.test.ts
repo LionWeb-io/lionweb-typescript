@@ -1,7 +1,6 @@
 import {
     Annotation,
     Concept,
-    defaultLionWebVersion,
     DynamicNode,
     dynamicReader,
     Enumeration,
@@ -47,7 +46,7 @@ describe("serialization", () => {
         myNode.containments["books"] = []
 
         const expectedSerializationChunk: LionWebJsonChunk = {
-            serializationFormatVersion: defaultLionWebVersion.serializationFormatVersion,
+            serializationFormatVersion: LionWebVersions.v2023_1.serializationFormatVersion,
             languages: [
                 {
                     key: "libraryWithDates",

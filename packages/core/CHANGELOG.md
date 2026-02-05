@@ -27,8 +27,8 @@
   * Introduce a `deserializeLanguagesFrom` function, deprecate the `deserializeLanguagesWithReporter` function, and replace use of the latter with the former throughout the codebase.
   * Introduce `lioncoreReaderFor` and `lioncoreWriterFor` functions that are parametrized with a LionWeb version, deprecate the `lioncoreReader` and `lioncoreWriter` constants, and replace use of the latter with the former throughout the codebase.
   * Introduce a `serializeLanguagesFor` function, and a `LanguageSerializationData` type for the single argument of that function.
-  * Introduce a `defaultLionWebVersion` constant that equals the `LionWebVersions.2023.1`, deprecate the `currentReleaseVersion` constant, and replace use of the latter with `defaultLionWebVersion.serializationFormatVersion` throughout the codebase.
-  * Add a LionWeb version to the parameters of (de-)serialization functions, which defaults to the `defaultLionWebVersion`.
+  * Deprecate the `currentReleaseVersion` constant, and replace use of the latter with `LionWebVersions.v2023_1.serializationFormatVersion` throughout the codebase.
+  * Add a LionWeb version to the parameters of (de-)serialization functions, which defaults to the `LionWebVersions.v2023_1`.
   * Introduce an `allLionWebVersions` constant with all the `LionWebVersion`s.
   * Add a `v2023_1` constant representing the 2023.1 LionWeb version, and replace the use of the `lioncore[Builtins]Facade` constants with `v2023_1.{lioncore|builtins}Facade` as much as possible throughout the codebase.
 * Deprecate aliases/legacy versions: `PrimitiveType{Des|S}erializer` &rarr; `PropertyValue{Des|S}erializer`, `ExtractionFacade` &rarr; `Reader`, `InstantiationFacade` &rarr; `Writer`.

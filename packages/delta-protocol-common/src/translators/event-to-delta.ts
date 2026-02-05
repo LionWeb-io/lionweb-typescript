@@ -50,7 +50,7 @@ import {
     ReferenceDeletedDelta,
     RootsWithIdMapping
 } from "@lionweb/class-core"
-import { defaultLionWebVersion, featureResolversFor, PropertyValueDeserializer, referenceToSet } from "@lionweb/core"
+import { featureResolversFor, LionWebVersions, PropertyValueDeserializer, referenceToSet } from "@lionweb/core"
 import { LionWebJsonChunk } from "@lionweb/json"
 import {
     AnnotationAddedEvent,
@@ -94,7 +94,7 @@ export type EventToDeltaTranslator = (event: Event, idMapping: IdMapping) => IDe
 export const eventToDeltaTranslator = (
     languageBases: ILanguageBase[],
     deserializeWithIdMapping: Deserializer<RootsWithIdMapping>,
-    propertyValueDeserializer: PropertyValueDeserializer = defaultLionWebVersion.builtinsFacade.propertyValueDeserializer
+    propertyValueDeserializer: PropertyValueDeserializer = LionWebVersions.v2023_1.builtinsFacade.propertyValueDeserializer
 ): EventToDeltaTranslator => {
 
     const eventAsDelta = (event: Event, idMapping: IdMapping): IDelta | undefined => {

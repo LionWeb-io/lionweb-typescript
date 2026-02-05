@@ -2,17 +2,17 @@ import {
     Annotation,
     Concept,
     Datatype,
-    defaultLionWebVersion,
     Enumeration,
     Interface,
     isRef,
     LanguageEntity,
+    LionWebVersions,
     PrimitiveType,
     SingleRef
 } from "@lionweb/core"
 
 
-const { builtinsFacade } = defaultLionWebVersion
+const { builtinsFacade } = LionWebVersions.v2023_1
 
 export const tsTypeFor = (datatype: SingleRef<Datatype>): string => {
     if (datatype instanceof PrimitiveType) {

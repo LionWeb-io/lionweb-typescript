@@ -1,10 +1,10 @@
 import {
     allLionWebVersions,
-    defaultLionWebVersion,
     deserializeLanguages,
     Language,
     lioncoreKey,
-    LionWebVersion
+    LionWebVersion,
+    LionWebVersions
 } from "@lionweb/core"
 import { LionWebJsonChunk, LionWebJsonUsedLanguage } from "@lionweb/json"
 import { readFileAsJson } from "../utils/json.js"
@@ -86,13 +86,13 @@ const areEqual = (left: LionWebJsonUsedLanguage, right: LionWebJsonUsedLanguage)
  * @return the combination of the given {@link LionWebJsonChunk serialization chunks} into one.
  * @param lionWebVersion The {@link LionWebVersion} to emit the combined serialization chunk with.
  * If none is given, the version of the *first* serialization chunk is used.
- * If no chunks are given, the {@link defaultLionWebVersion} is used.
+ * If no chunks are given, the {@link LionWebVersions.v2023_1} is used.
  */
 export const combinationOf = (serializationChunks: LionWebJsonChunk[], lionWebVersion?: LionWebVersion): LionWebJsonChunk =>
     ({
         serializationFormatVersion:
             lionWebVersion?.serializationFormatVersion
-                ?? (serializationChunks.length > 0 ? serializationChunks[0] : defaultLionWebVersion).serializationFormatVersion,
+                ?? (serializationChunks.length > 0 ? serializationChunks[0] : LionWebVersions.v2023_1).serializationFormatVersion,
         languages: flatMapDistinct(serializationChunks.map(({languages}) => languages), areEqual),
         nodes: serializationChunks.flatMap(({nodes}) => nodes)
     })

@@ -16,7 +16,7 @@ import {
     simpleNameDeducer
 } from "./m3/types.js"
 import { LionWebVersion } from "./m3/version.js"
-import { defaultLionWebVersion } from "./m3/versions.js"
+import { LionWebVersions } from "./m3/versions.js"
 
 
 /**
@@ -60,7 +60,7 @@ export type SerializationOptions = Partial<{
     /**
      * A {@link PropertyValueSerializer} implementation.
      * Default = the value of the `propertyValueSerializer` property of the {@link LionWebVersion version} of the LionWeb serialization format,
-     * configured through {@code SerializerConfiguration.lionWebVersion} (which itself defaults to {@link defaultLionWebVersion}).
+     * configured through {@code SerializerConfiguration.lionWebVersion} (which itself defaults to {@link LionWebVersions.v2023_1}).
      */
     propertyValueSerializer: PropertyValueSerializer
 
@@ -89,7 +89,7 @@ export type SerializerConfiguration<NT extends Node> = {
 
     /**
      * The version of the LionWeb serialization format to serialize in.
-     * Default = {@link defaultLionWebVersion}.
+     * Default = {@link LionWebVersions.v2023_1}.
      */
     lionWebVersion?: LionWebVersion
 } & SerializationOptions
@@ -112,7 +112,7 @@ export const nodeSerializer = <NT extends Node>(reader: Reader<NT>, serializatio
  */
 export const serializerWith = <NT extends Node>(configuration: SerializerConfiguration<NT>): Serializer<NT> => {
     const { reader } = configuration
-    const lionWebVersion = configuration?.lionWebVersion ?? defaultLionWebVersion
+    const lionWebVersion = configuration?.lionWebVersion ?? LionWebVersions.v2023_1
     const propertyValueSerializer =
         configuration.propertyValueSerializer ?? configuration.primitiveTypeSerializer ?? lionWebVersion.builtinsFacade.propertyValueSerializer
     const serializeEmptyFeatures = configuration.serializeEmptyFeatures ?? true

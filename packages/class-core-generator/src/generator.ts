@@ -15,7 +15,7 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { defaultLionWebVersion, deserializeLanguages, Language, lionWebVersionFrom } from "@lionweb/core"
+import { deserializeLanguages, Language, LionWebVersions } from "@lionweb/core"
 import { LionWebJsonChunk } from "@lionweb/json"
 import { readFileAsJson } from "@lionweb/utilities"
 import { writeFileSync } from "fs"
@@ -88,7 +88,7 @@ export const generateApiFromLanguagesJson = (languagesJsonPath: string, generati
     log(`   Generation path:   ${generationPath}`)
 
     const languagesJson = readFileAsJson(languagesJsonPath) as LionWebJsonChunk
-    const languages = deserializeLanguages(languagesJson, (lionWebVersionFrom(languagesJson.serializationFormatVersion) ?? defaultLionWebVersion).lioncoreFacade.language)
+    const languages = deserializeLanguages(languagesJson, LionWebVersions.v2023_1.lioncoreFacade.language)
     generateApiFromLanguages(languages, generationPath, mayBeOptions)
 }
 

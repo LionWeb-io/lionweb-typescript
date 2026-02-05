@@ -1,10 +1,10 @@
 import {
     Concept,
     Containment,
-    defaultLionWebVersion,
     Language,
     Link,
     lionWebVersionFrom,
+    LionWebVersions,
     Property,
     Reference
 } from "@lionweb/core"
@@ -19,7 +19,7 @@ const key = lastOf
 
 
 export const inferLanguagesFromSerializationChunk = (chunk: LionWebJsonChunk): Language[] => {
-    const lionWebVersion = lionWebVersionFrom(chunk.serializationFormatVersion) ?? defaultLionWebVersion
+    const lionWebVersion = lionWebVersionFrom(chunk.serializationFormatVersion) ?? LionWebVersions.v2023_1
     const { stringDataType, booleanDataType, integerDataType } = lionWebVersion.builtinsFacade.primitiveTypes
 
     const languages = new Map<string, Language>()

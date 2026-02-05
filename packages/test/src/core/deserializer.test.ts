@@ -1,7 +1,6 @@
 import {
     AggregatingProblemReporter,
     Concept,
-    defaultLionWebVersion,
     deserializerWith,
     dynamicWriter,
     Feature,
@@ -44,7 +43,7 @@ export const libraryWithDatesWriter: Writer<BaseNode> = {
 describe("deserialization", () => {
     it("deserializes all nodes, also when there are effectively no root nodes", () => {
         const serializationChunk: LionWebJsonChunk = {
-            serializationFormatVersion: defaultLionWebVersion.serializationFormatVersion,
+            serializationFormatVersion: LionWebVersions.v2023_1.serializationFormatVersion,
             languages: [
                 {
                     key: "library",
@@ -79,7 +78,7 @@ describe("deserialization", () => {
 
     it("deserializes node with custom primitive type, without registering custom deserializer, leading to empty model (and console messages)", () => {
         const serializationChunk: LionWebJsonChunk = {
-            serializationFormatVersion: defaultLionWebVersion.serializationFormatVersion,
+            serializationFormatVersion: LionWebVersions.v2023_1.serializationFormatVersion,
             languages: [
                 {
                     key: "library-with-dates",
@@ -119,7 +118,7 @@ describe("deserialization", () => {
 
     it("deserializes node with custom primitive type, works when registering custom deserializer", () => {
         const serializationChunk: LionWebJsonChunk = {
-            serializationFormatVersion: defaultLionWebVersion.serializationFormatVersion,
+            serializationFormatVersion: LionWebVersions.v2023_1.serializationFormatVersion,
             languages: [
                 {
                     key: "libraryWithDates",
@@ -171,7 +170,7 @@ describe("deserialization", () => {
 
     it("skips nodes with unknown classifier, leading to an empty model (and console messages)", () => {
         const serializationChunk: LionWebJsonChunk = {
-            serializationFormatVersion: defaultLionWebVersion.serializationFormatVersion,
+            serializationFormatVersion: LionWebVersions.v2023_1.serializationFormatVersion,
             languages: [],
             nodes: [
                 {
@@ -205,7 +204,7 @@ describe("deserialization", () => {
         someConcept.havingFeatures(someConcept_aReference)
 
         const serializationChunk: LionWebJsonChunk = {
-            serializationFormatVersion: defaultLionWebVersion.serializationFormatVersion,
+            serializationFormatVersion: LionWebVersions.v2023_1.serializationFormatVersion,
             languages: [
                 {
                     key: "someLanguage",
@@ -264,7 +263,7 @@ describe("deserialization", () => {
         problemReporter.reportAllProblemsOnConsole(true)
         deepEqual(Object.entries(problemReporter.allProblems()), [
             [
-                `can't deserialize from serialization format other than version "${defaultLionWebVersion.serializationFormatVersion}" - assuming that version`,
+                `can't deserialize from serialization format other than version "${LionWebVersions.v2023_1.serializationFormatVersion}" - assuming that version`,
                 1
             ]
         ])

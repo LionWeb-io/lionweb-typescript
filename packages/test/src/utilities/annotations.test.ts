@@ -1,4 +1,4 @@
-import { defaultLionWebVersion } from "@lionweb/core"
+import { LionWebVersions } from "@lionweb/core"
 import { LionWebJsonChunk } from "@lionweb/json"
 import { withoutAnnotations } from "@lionweb/utilities"
 
@@ -26,7 +26,7 @@ describe("annotation remover", () => {
         }
 
         const serializationChunk: LionWebJsonChunk = {
-            serializationFormatVersion: defaultLionWebVersion.serializationFormatVersion,
+            serializationFormatVersion: LionWebVersions.v2023_1.serializationFormatVersion,
             languages: [
                 {
                     key: "annoLanguage",
@@ -93,7 +93,7 @@ describe("annotation remover", () => {
         }
 
         deepEqual(withoutAnnotations(serializationChunk), {
-            serializationFormatVersion: defaultLionWebVersion.serializationFormatVersion,
+            serializationFormatVersion: LionWebVersions.v2023_1.serializationFormatVersion,
             languages: [
                 {
                     key: "annoLanguage",
