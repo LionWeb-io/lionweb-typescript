@@ -3,7 +3,6 @@ import { asArray, keepDefineds, lazyMapGet, Nested3Map, uniquesAmong } from "@li
 import { asIds, metaPointerFor } from "./functions.js"
 import { Reader } from "./reading.js"
 import { Node } from "./types.js"
-import { lioncoreBuiltinsFacade } from "./m3/builtins.js"
 import { inheritsDirectlyFrom } from "./m3/functions.js"
 import {
     Classifier,
@@ -16,7 +15,8 @@ import {
     Reference,
     simpleNameDeducer
 } from "./m3/types.js"
-import { defaultLionWebVersion } from "./m3/version.js"
+import { LionWebVersion } from "./m3/version.js"
+import { LionWebVersions } from "./m3/versions.js"
 
 
 /**
@@ -34,6 +34,8 @@ export interface PropertyValueSerializer {
 
 /**
  * Misspelled alias of {@link PropertyValueSerializer}, kept for backward compatibility, and to be deprecated and removed later.
+ *
+ * @deprecated Use {@link PropertyValueSerializer} instead.
  */
 export interface PrimitiveTypeSerializer extends PropertyValueSerializer {}
 
@@ -57,12 +59,15 @@ export type SerializationOptions = Partial<{
 
     /**
      * A {@link PropertyValueSerializer} implementation.
-     * Default = {@link builtinPropertyValueSerializer}.
+     * Default = the value of the `propertyValueSerializer` property of the {@link LionWebVersion version} of the LionWeb serialization format,
+     * configured through {@code SerializerConfiguration.lionWebVersion} (which itself defaults to {@link LionWebVersions.v2023_1}).
      */
     propertyValueSerializer: PropertyValueSerializer
 
     /**
      * Misspelled alias of {@link #propertyValueSerializer}, kept for backward compatibility, and to be deprecated and removed later.
+     *
+     * @deprecated Use {@link propertyValueSerializer} instead.
      */
     primitiveTypeSerializer: PropertyValueSerializer
 
@@ -81,6 +86,12 @@ export type SerializerConfiguration<NT extends Node> = {
      * An interface with functions to “read” – i.e., introspect – nodes.
      */
     reader: Reader<NT>
+
+    /**
+     * The version of the LionWeb serialization format to serialize in.
+     * Default = {@link LionWebVersions.v2023_1}.
+     */
+    lionWebVersion?: LionWebVersion
 } & SerializationOptions
 
 
@@ -101,8 +112,9 @@ export const nodeSerializer = <NT extends Node>(reader: Reader<NT>, serializatio
  */
 export const serializerWith = <NT extends Node>(configuration: SerializerConfiguration<NT>): Serializer<NT> => {
     const { reader } = configuration
+    const lionWebVersion = configuration?.lionWebVersion ?? LionWebVersions.v2023_1
     const propertyValueSerializer =
-        configuration.propertyValueSerializer ?? configuration.primitiveTypeSerializer ?? lioncoreBuiltinsFacade.propertyValueSerializer
+        configuration.propertyValueSerializer ?? configuration.primitiveTypeSerializer ?? lionWebVersion.builtinsFacade.propertyValueSerializer
     const serializeEmptyFeatures = configuration.serializeEmptyFeatures ?? true
 
     const languageKey2version2classifierKey2allFeatures: Nested3Map<Feature[]> = {}
@@ -234,7 +246,7 @@ export const serializerWith = <NT extends Node>(configuration: SerializerConfigu
         nodes.forEach(node => visit(node, undefined))
 
         return {
-            serializationFormatVersion: defaultLionWebVersion.serializationFormatVersion,
+            serializationFormatVersion: lionWebVersion.serializationFormatVersion,
             languages: languagesUsed.map(({ key, version }) => ({ key, version })),
             nodes: serializedNodes
         }

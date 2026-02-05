@@ -1,8 +1,8 @@
+import { StringsMapper } from "@lionweb/ts-utils"
 import { PropertyValueDeserializer } from "../deserializer.js"
-import { Classifier, Concept, DataType, Interface, Language, PrimitiveType, Property } from "./types.js"
+import { Concept, DataType, Interface, Language, PrimitiveType, Property } from "./types.js"
 import { isUnresolvedReference } from "../references.js"
 import { PropertyValueSerializer } from "../serializer.js"
-import { StringsMapper } from "@lionweb/ts-utils"
 
 
 /**
@@ -139,9 +139,5 @@ export type LionCoreBuiltinsFacade = {
         integerDataType: PrimitiveType
         stringDataType: PrimitiveType
     } & Record<string, PrimitiveType>
-    /**
-     * @return whether the given {@link Classifier} is the built-in `Node` {@link Concept}.
-     */
-    isBuiltinNodeConcept: (classifier: Classifier) => boolean
 }
 

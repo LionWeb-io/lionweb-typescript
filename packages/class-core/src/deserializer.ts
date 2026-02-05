@@ -20,7 +20,7 @@ import {
     consoleProblemReporter,
     Containment,
     Enumeration,
-    lioncoreBuiltinsFacade,
+    LionWebVersions,
     MemoisingSymbolTable,
     PrimitiveType,
     ProblemReporter,
@@ -60,6 +60,7 @@ export type RootsWithIdMapping = { roots: INodeBase[], idMapping: IdMapping };
  * (and partially optional).
  */
 export type DeserializerConfiguration = {
+    // FIXME  parametrize (optionally) in LionWebVersion
     /** Default: {@code lioncoreBuiltinsFacade.propertyValueDeserializer}. */
     propertyValueDeserializer?: PropertyValueDeserializer,
     /** Default: {@link consoleProblemReporter}. */
@@ -82,8 +83,8 @@ function nodeBaseDeserializerWithIdMapping(languageBases: ILanguageBase[], recei
 function nodeBaseDeserializerWithIdMapping(configuration: FactoryConfiguration & DeserializerConfiguration): Deserializer<RootsWithIdMapping>;
 function nodeBaseDeserializerWithIdMapping(languageBasesOrConfiguration: ILanguageBase[] | (FactoryConfiguration & DeserializerConfiguration), mayBeReceiveDelta?: DeltaReceiver): Deserializer<RootsWithIdMapping> {
     const [languageBases, receiveDelta, propertyValueDeserializer, problemReporter] = Array.isArray(languageBasesOrConfiguration)
-        ? [languageBasesOrConfiguration, mayBeReceiveDelta, lioncoreBuiltinsFacade.propertyValueDeserializer, consoleProblemReporter]
-        : [languageBasesOrConfiguration.languageBases, languageBasesOrConfiguration.receiveDelta, languageBasesOrConfiguration.propertyValueDeserializer ?? lioncoreBuiltinsFacade.propertyValueDeserializer, languageBasesOrConfiguration.problemReporter ?? languageBasesOrConfiguration.problemsHandler ?? consoleProblemReporter];
+        ? [languageBasesOrConfiguration, mayBeReceiveDelta, LionWebVersions.v2023_1.builtinsFacade.propertyValueDeserializer, consoleProblemReporter]
+        : [languageBasesOrConfiguration.languageBases, languageBasesOrConfiguration.receiveDelta, languageBasesOrConfiguration.propertyValueDeserializer ?? LionWebVersions.v2023_1.builtinsFacade.propertyValueDeserializer, languageBasesOrConfiguration.problemReporter ?? languageBasesOrConfiguration.problemsHandler ?? consoleProblemReporter];
 
     const symbolTable = new MemoisingSymbolTable(languageBases.map(({language}) => language));
     const languageBaseFor = combinedLanguageBaseLookupFor(languageBases);

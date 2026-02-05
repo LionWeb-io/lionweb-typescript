@@ -15,7 +15,7 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { deserializeLanguages, Language, lioncoreFacade } from "@lionweb/core"
+import { deserializeLanguages, Language, LionWebVersions } from "@lionweb/core"
 import { LionWebJsonChunk } from "@lionweb/json"
 import { readFileAsJson } from "@lionweb/utilities"
 import { writeFileSync } from "fs"
@@ -28,9 +28,22 @@ import { languageFileFor } from "./language-file.templates.js"
 const properGenericImportLocation = "@lionweb/class-core"
 
 
+/**
+ * A type def. for options objects configuring code generation.
+ */
 export type GeneratorOptions = {
+    /**
+     * The `from`-part of the `import`-statement that imports the `class-core` package.
+     * Default (which you should always use!): `@lionweb/class-core`.
+     */
     genericImportLocation: string
+    /**
+     * The optional header for generated files.
+     */
     header?: string
+    /**
+     * Whether to output logging on the `stdout`. Default: `true`.
+     */
     verbose: boolean
 }
 
@@ -42,6 +55,12 @@ const withDefaults = (options?: Partial<GeneratorOptions>): GeneratorOptions => 
 })
 
 
+/**
+ * Generates a file containing the API code for the given {@link Language LionWeb language}.
+ * @param language A {@link Language LionWeb language}.
+ * @param generationPath The path (relative to the current execution) to generate to/in.
+ * @param mayBeOptions Optionally-given {@link GeneratorOptions options}.
+ */
 export const generateLanguage = (language: Language, generationPath: string, mayBeOptions?: Partial<GeneratorOptions>): string => {
     const {name} = language
     const fileName = `${name}.g.ts`
@@ -56,6 +75,12 @@ const logger = (verbose?: boolean): ((text?: string) => void) =>
         : (_) => {}
 
 
+/**
+ * Generates an API (as files) for the {@link Language LionWeb languages} given as a serialization chunk at the given path.
+ * @param languagesJsonPath The path (relative to the current execution) to a LionWeb serialization chunk containing {@link Language LionWeb languages}.
+ * @param generationPath The path (relative to the current execution) to generate to/in.
+ * @param mayBeOptions Optionally-given {@link GeneratorOptions options}.
+ */
 export const generateApiFromLanguagesJson = (languagesJsonPath: string, generationPath: string, mayBeOptions?: Partial<GeneratorOptions>) => {
     const log = logger(mayBeOptions?.verbose)
     log(`Running API generator with cwd: ${cwd()}`)
@@ -63,11 +88,17 @@ export const generateApiFromLanguagesJson = (languagesJsonPath: string, generati
     log(`   Generation path:   ${generationPath}`)
 
     const languagesJson = readFileAsJson(languagesJsonPath) as LionWebJsonChunk
-    const languages = deserializeLanguages(languagesJson, lioncoreFacade.language)
+    const languages = deserializeLanguages(languagesJson, LionWebVersions.v2023_1.lioncoreFacade.language)
     generateApiFromLanguages(languages, generationPath, mayBeOptions)
 }
 
 
+/**
+ * Generates an API (as files) for the {@link Language LionWeb languages} given as a serialization chunk at the given path.
+ * @param languages A collection of {@link Language LionWeb languages}.
+ * @param generationPath The path (relative to the current execution) to generate to/in.
+ * @param mayBeOptions Optionally-given {@link GeneratorOptions options}.
+ */
 export const generateApiFromLanguages = (languages: Language[], generationPath: string, maybeOptions?: Partial<GeneratorOptions>) => {
     const log = logger(maybeOptions?.verbose)
     log(`   Generated:`)

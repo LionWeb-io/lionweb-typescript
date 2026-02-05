@@ -1,5 +1,12 @@
 # README
 
+[![license](https://img.shields.io/badge/License-Apache%202.0-green.svg?style=flat)
+](./LICENSE)
+[![CI](https://github.com/LionWeb-io/lionweb-typescript/actions/workflows/test.yaml/badge.svg)
+](https://github.com/LionWeb-io/lionweb-typescript/actions/workflows/test.yaml)
+[![npm](https://img.shields.io/npm/v/%40lionweb%2Fclass-core?label=%40lionweb%2Fclass-core)
+](https://www.npmjs.com/package/@lionweb/class-core)
+
 This NPM package holds the generic, language-**a**specific base layer for generated TypeScript APIs.
 This base layer includes reflectivity, support for the **delta protocol** and observability through [the MobX framework](https://mobx.js.org/README.html).
 In addition, it contains functions that provide (de-)serialization and some convenience.

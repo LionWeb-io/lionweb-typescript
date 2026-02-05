@@ -4,6 +4,7 @@
 
 * Propagate `reference` field of `LionWebJsonReferenceTarget` type now being `null`able.
 * Harden `asText` textualizer function against unset and unresolved references.
+* Extend the `looksLikeSerializedLanguages`, `tryRead[All]AsLanguages`, and `combinationOf` functions with an optional `LionWebVersion` argument — see the TSDoc of these functions for the precise semantics.
 
 
 ## 0.7.2

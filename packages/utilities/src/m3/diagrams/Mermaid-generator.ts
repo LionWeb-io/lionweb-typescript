@@ -5,12 +5,12 @@ import {
     Enumeration,
     Feature,
     Interface,
+    isBuiltinNodeConcept,
     isRef,
     isUnresolvedReference,
     Language,
     LanguageEntity,
     Link,
-    lioncoreBuiltinsFacade,
     nameSorted,
     nonRelationalFeatures,
     PrimitiveType,
@@ -58,7 +58,7 @@ const generateForAnnotation = ({ name, features, extends: extends_, implements: 
     ),
     `<<Annotation>> ${name}`,
     isRef(annotates) ? `${name} ..> ${annotates.name} : <i>annotates</i>` : [],
-    isRef(extends_) && !lioncoreBuiltinsFacade.isBuiltinNodeConcept(extends_) ? `${extends_.name} <|-- ${name}` : [],
+    isRef(extends_) && !isBuiltinNodeConcept(extends_) ? `${extends_.name} <|-- ${name}` : [],
     implements_.filter(isRef).map(interface_ => `${interface_.name} <|.. ${name}`),
     ``
 ]
@@ -73,7 +73,7 @@ const generateForConcept = ({
     block(`class ${name}`, nonRelationalFeatures(features).map(generateForNonRelationalFeature)),
     abstract_ ? `<<Abstract>> ${name}` : [],
     partition ? `<<Partition>> ${name}` : [],
-    isRef(extends_) && !lioncoreBuiltinsFacade.isBuiltinNodeConcept(extends_) ? `${extends_.name} <|-- ${name}` : [],
+    isRef(extends_) && !isBuiltinNodeConcept(extends_) ? `${extends_.name} <|-- ${name}` : [],
     ``
 ]
 

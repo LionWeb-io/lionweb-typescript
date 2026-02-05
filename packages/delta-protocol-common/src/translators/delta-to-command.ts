@@ -48,7 +48,7 @@ import {
     ReferenceDeletedDelta,
     serializeNodeBases
 } from "@lionweb/class-core"
-import { lioncoreBuiltinsFacade, metaPointerFor, PropertyValueSerializer } from "@lionweb/core"
+import { LionWebVersions, metaPointerFor, PropertyValueSerializer } from "@lionweb/core"
 import { LionWebId } from "@lionweb/json"
 import {
     AddAnnotationCommand,
@@ -94,7 +94,7 @@ export type DeltaToCommandTranslator = (delta: IDelta, commandId: LionWebId) => 
  * which defaults to the {@link builtinPropertyValueSerializer}.
  */
 export const deltaToCommandTranslator = (
-    primitiveValueSerializer: PropertyValueSerializer = lioncoreBuiltinsFacade.propertyValueSerializer
+    primitiveValueSerializer: PropertyValueSerializer = LionWebVersions.v2023_1.builtinsFacade.propertyValueSerializer
 ) => {
     const propertyValueSerializer = propertyValueSerializerWith({ primitiveValueSerializer })
 

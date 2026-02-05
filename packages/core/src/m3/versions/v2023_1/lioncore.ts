@@ -1,6 +1,6 @@
 import { lioncoreBuiltinsFacade } from "./builtins.js"
-import { LanguageFactory } from "./factory.js"
-import { generatedLionCoreKeyFrom, LionCoreFacade } from "./lioncore-common.js"
+import { LanguageFactory } from "../../factory.js"
+import { generatedLionCoreKeyFrom, LionCoreFacade } from "../../lioncore-common.js"
 
 
 const factory = new LanguageFactory(
@@ -105,12 +105,12 @@ export const lioncoreFacade: LionCoreFacade = {
 
 
 /**
- * @deprecated Use {@code lioncoreFacade.metaConcepts} instead.
+ * @deprecated Use {@code <LionWeb version>.lioncoreFacade.metaConcepts} instead.
  */
 export const metaConcepts = lioncoreFacade.metaConcepts
 
 /**
- * @deprecated Use {@code lioncoreFacade.metaFeatures} instead.
+ * @deprecated Use {@code <LionWeb version>.lioncoreFacade.metaFeatures} instead.
  */
 export const metaFeatures = lioncoreFacade.metaFeatures
 

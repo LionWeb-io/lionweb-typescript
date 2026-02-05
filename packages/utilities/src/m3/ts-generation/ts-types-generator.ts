@@ -16,7 +16,7 @@ import {
     Language,
     LanguageEntity,
     Link,
-    lioncoreBuiltinsFacade,
+    LionWebVersions,
     nameOf,
     nameSorted,
     PrimitiveType,
@@ -188,7 +188,7 @@ export const tsTypeDefsForLanguage = (language: Language, ...generationOptions: 
             .filter((entity) => entity instanceof Classifier)
             .flatMap((entity) => dependenciesOfClassifier(entity as Classifier))
     )
-        .filter((classifier) => classifier.language !== language && classifier.language !== lioncoreBuiltinsFacade.language)
+        .filter((classifier) => classifier.language !== language && classifier.language.key !== LionWebVersions.v2023_1.builtinsFacade.language.key)
     const importsPerPackage = groupBy(
         generatedDependencies,
         ({language}) => language.name

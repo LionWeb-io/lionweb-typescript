@@ -2,10 +2,10 @@ import { LionWebId, LionWebJsonChunk, LionWebJsonNode, LionWebKey } from "@lionw
 import { byIdMap, groupBy, keepDefineds } from "@lionweb/ts-utils"
 import { Writer } from "./writing.js"
 import { consoleProblemReporter, ProblemReporter } from "./reporter.js"
-import { lioncoreBuiltinsFacade } from "./m3/builtins.js"
 import { MemoisingSymbolTable } from "./m3/symbol-table.js"
 import { Classifier, Containment, Enumeration, Language, PrimitiveType, Property, Reference } from "./m3/types.js"
-import { defaultLionWebVersion } from "./m3/version.js"
+import { LionWebVersion } from "./m3/version.js"
+import { LionWebVersions } from "./m3/versions.js"
 import { unresolved } from "./references.js"
 import { Node } from "./types.js"
 
@@ -18,6 +18,8 @@ export interface PropertyValueDeserializer {
 
 /**
  * Misspelled alias of {@link PropertyValueDeserializer}, kept for backward compatibility, and to be deprecated and removed later.
+ *
+ * @deprecated Use {@link PropertyValueDeserializer} instead.
  */
 export interface PrimitiveTypeDeserializer extends PropertyValueDeserializer {}
 
@@ -39,12 +41,17 @@ export type DeserializerConfiguration<NT extends Node> = {
      */
     writer: Writer<NT>,
     /**
+     * The version of the LionWeb serialization format to deserialize from.
+     * Default = {@link LionWebVersions.v2023_1}.
+     */
+    lionWebVersion?: LionWebVersion
+    /**
      * An array of {@link Language languages} that the serialization chunk is expected to conform to.
      */
     languages: Language[],
     /**
      * A deserializer for values of properties.
-     * Default: {@code lioncoreBuiltinsFacade.propertyValueDeserializer}.
+     * Default: `(lionWebVersion ?? LionWebVersions.v2023_1).builtinsFacade.propertyValueDeserializer`.
      */
     propertyValueDeserializer?: PropertyValueDeserializer,
     /**
@@ -65,15 +72,16 @@ export const deserializerWith = <NT extends Node>(configuration: DeserializerCon
     const symbolTable = new MemoisingSymbolTable(configuration.languages)
     const { writer } = configuration
 
-    const propertyValueDeserializer = configuration.propertyValueDeserializer ?? lioncoreBuiltinsFacade.propertyValueDeserializer
+    const lionWebVersion = configuration?.lionWebVersion ?? LionWebVersions.v2023_1
+    const propertyValueDeserializer = configuration.propertyValueDeserializer ?? lionWebVersion.builtinsFacade.propertyValueDeserializer
     const problemReporter = configuration.problemReporter ?? consoleProblemReporter
 
     return (serializationChunk, dependentNodes = []) => {
 
-        const currentSerializationFormatVersion = defaultLionWebVersion.serializationFormatVersion
-        if (serializationChunk.serializationFormatVersion !== currentSerializationFormatVersion) {
+        const serializationFormatVersion = lionWebVersion.serializationFormatVersion
+        if (serializationChunk.serializationFormatVersion !== serializationFormatVersion) {
             problemReporter.reportProblem(
-                `can't deserialize from serialization format other than version "${currentSerializationFormatVersion}" - assuming that version`
+                `can't deserialize from serialization format other than version "${serializationFormatVersion}" - assuming that version`
             )
         }
 
@@ -256,7 +264,7 @@ export const deserializerWith = <NT extends Node>(configuration: DeserializerCon
  * @param writer - a {@link Writer} that is used to instantiate nodes and set values on them
  * @param languages - {@link Language languages} that the serialized model is expected to conform to
  * @param dependentNodes - a collection of nodes from dependent models against which all references in the serialized model are supposed to resolve against
- * @param propertyValueDeserializer - a deserializer for values of properties (by default {@code lioncoreBuiltinsFacade.propertyValueDeserializer})
+ * @param propertyValueDeserializer - a deserializer for values of properties (by default `LionWebVersions.v2023_1.builtinsFacade.propertyValueDeserializer`)
  * @param problemReporter - an object for reporting problems (by default a {@link consoleProblemReporter})
  *
  * This is a legacy variant of {@link deserializerWith}, kept for backward compatibility, and to be deprecated and removed later.
@@ -268,7 +276,7 @@ export const deserializeSerializationChunk = <NT extends Node>(
     // TODO  facades <--> languages, so it's weird that it looks split up like this
     dependentNodes: Node[],
     // TODO (#13)  see if you can turn this into [nodes: Node[], writer: Writer<Node>][] after all
-    propertyValueDeserializer: PropertyValueDeserializer = lioncoreBuiltinsFacade.propertyValueDeserializer,
+    propertyValueDeserializer: PropertyValueDeserializer = LionWebVersions.v2023_1.builtinsFacade.propertyValueDeserializer,
     problemReporter: ProblemReporter = consoleProblemReporter
 ): NT[] => deserializerWith({ writer, languages, propertyValueDeserializer, problemReporter: problemReporter })(serializationChunk, dependentNodes)
 

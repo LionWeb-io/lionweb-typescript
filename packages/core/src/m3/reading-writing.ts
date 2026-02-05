@@ -1,5 +1,6 @@
 import { metaTypedBasedClassifierDeducerFor, qualifiedNameOf } from "./functions.js"
-import { defaultLionWebVersion, LionWebVersion } from "./version.js"
+import { LionWebVersion } from "./version.js"
+import { LionWebVersions } from "./versions.js"
 import { Reader } from "../reading.js"
 import {
     Annotation,
@@ -36,7 +37,7 @@ export const lioncoreReaderFor = (version: LionWebVersion): Reader<M3Concept> =>
  *
  * @deprecated Use {@link lioncoreReaderFor} instead.
  */
-export const lioncoreReader: Reader<M3Concept> = lioncoreReaderFor(defaultLionWebVersion)
+export const lioncoreReader: Reader<M3Concept> = lioncoreReaderFor(LionWebVersions.v2023_1)
 
 /**
  * Alias for {@link lioncoreReader}, kept for backward compatibility, and to be removed later.
@@ -148,7 +149,7 @@ export const lioncoreWriterFor = (version: LionWebVersion): Writer<M3Concept> =>
  *
  * @deprecated Use {@link lioncoreWriterFor} instead.
  */
-export const lioncoreWriter: Writer<M3Concept> = lioncoreWriterFor(defaultLionWebVersion)
+export const lioncoreWriter: Writer<M3Concept> = lioncoreWriterFor(LionWebVersions.v2023_1)
 
 /**
  * Alias for {@link lioncoreWriter}, kept for backward compatibility, and to be deprecated and removed later.

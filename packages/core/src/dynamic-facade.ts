@@ -1,5 +1,5 @@
 import { LionWebKey } from "@lionweb/json"
-import { lioncoreBuiltinsFacade, Classifier } from "./m3/index.js"
+import { Classifier, LionWebVersions } from "./m3/index.js"
 import { Reader, ResolveInfoDeducer } from "./reading.js"
 import { Node } from "./types.js"
 import { updateSettingsKeyBased, Writer } from "./writing.js"
@@ -18,7 +18,7 @@ export type DynamicNode = Node & {
 const propertyGetterFor = (key: LionWebKey): ResolveInfoDeducer<DynamicNode> =>
     (node) =>
         (key in node.settings && typeof node.settings[key] === "string")
-            ? node.settings[key] as string  // FIXME  type cast shouldn't be necessary
+            ? node.settings[key] as string
             : undefined
 
 /**
@@ -32,7 +32,8 @@ export const dynamicReader: Reader<DynamicNode> = ({
     enumerationLiteralFrom: (value, enumeration) =>
         enumeration.literals.find(({key}) => key === value)
         ?? null,    // (undefined -> null)
-    resolveInfoFor: propertyGetterFor(lioncoreBuiltinsFacade.features.inamed_name.key)
+    resolveInfoFor: propertyGetterFor(LionWebVersions.v2023_1.builtinsFacade.features.inamed_name.key)
+        // TODO  have this parametrized in the LionWeb version, instead of relying on keys not changing between versions
 })
 
 /**

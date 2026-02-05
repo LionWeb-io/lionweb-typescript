@@ -1,4 +1,4 @@
-import { LanguageFactory, lioncoreBuiltinsFacade } from "@lionweb/core"
+import { LanguageFactory, LionWebVersions } from "@lionweb/core"
 import { concatenator, lastOf } from "@lionweb/ts-utils"
 
 const factory = new LanguageFactory("meta", "1", concatenator("-"), lastOf)
@@ -12,7 +12,7 @@ export const metaLanguage = factory.language
 factory.annotation("AnAnnotation")
 
 export const aConcept = factory.concept("AConcept", false)
-export const aConcept_aProperty = factory.property(aConcept, "aProperty").ofType(lioncoreBuiltinsFacade.primitiveTypes.jsonDataType)
+export const aConcept_aProperty = factory.property(aConcept, "aProperty").ofType(LionWebVersions.v2023_1.builtinsFacade.primitiveTypes.jsonDataType)
 export const aConcept_aContainment = factory.containment(aConcept, "aContainment").ofType(aConcept)
 export const aConcept_aReference = factory.reference(aConcept, "aReference").ofType(aConcept)
 

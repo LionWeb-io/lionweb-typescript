@@ -1,11 +1,11 @@
-import { LanguageFactory, lioncoreBuiltinsFacade } from "@lionweb/core"
+import { LanguageFactory, LionWebVersions } from "@lionweb/core"
 import { chain, concatenator, lastOf } from "@lionweb/ts-utils"
 import { hasher } from "@lionweb/utilities"
 
 const factory = new LanguageFactory("libraryWithDates", "1", chain(concatenator("-"), hasher()), lastOf)
 export const libraryWithDatesLanguage = factory.language
 
-const { integerDataType, stringDataType } = lioncoreBuiltinsFacade.primitiveTypes
+const { integerDataType, stringDataType } = LionWebVersions.v2023_1.builtinsFacade.primitiveTypes
 
 export const libraryWithDates = factory.concept("LibraryWithDates", false)
 const book = factory.concept("Book", false)

@@ -51,6 +51,8 @@ export interface Reader<NT extends Node> {
 
 /**
  * Alias for {@link Reader}, kept for backward compatibility, and to be deprecated and removed later.
+ *
+ * @deprecated Use {@link Reader} instead.
  */
 export interface ExtractionFacade<NT extends Node> extends Reader<NT> {}
 
