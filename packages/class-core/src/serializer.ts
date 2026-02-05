@@ -22,6 +22,7 @@ import {
     Feature,
     isUnresolvedReference,
     LionWebVersions,
+    Node,
     PrimitiveType,
     Property,
     PropertyValueSerializer,
@@ -31,7 +32,7 @@ import {
     serializerWith
 } from "@lionweb/core"
 
-import { INodeBase, LionCore_builtinsBase } from "./index.js"
+import { INodeBase, LionCore_builtinsBase, NodeBase } from "./index.js"
 
 
 /**
@@ -55,7 +56,7 @@ export const getFeatureValue = (node: INodeBase, feature: Feature) => {
  * A {@link ResolveInfoDeducer} that works on {@link INodeBase}s.
  * *Note*: the {@link Reference} passed is not taken into account (yet).
  */
-const nodeBaseResolveInfoDeducer: ResolveInfoDeducer<INodeBase> = (node, _reference) => {
+const nodeBaseResolveInfoDeducer: ResolveInfoDeducer<Node> = (node, _reference) => {
     // TODO  put innards in separate function
     if ("name" in node) {
         // evaluating `node.name` might cause an error through FeatureValueManager.throwOnReadOfUnset:
@@ -66,12 +67,14 @@ const nodeBaseResolveInfoDeducer: ResolveInfoDeducer<INodeBase> = (node, _refere
             return undefined;
         }
     }
-    const allSupertypes = allSuperTypesOf(node.classifier);
-    if (allSupertypes.indexOf(LionWebVersions.v2023_1.builtinsFacade.classifiers.inamed) > -1) {
-        return node.getPropertyValueManager(LionWebVersions.v2023_1.builtinsFacade.features.inamed_name).getDirectly() as (string | undefined);
-    }
-    if (allSupertypes.indexOf(LionCore_builtinsBase.INSTANCE.INamed) > -1) {
-        return node.getPropertyValueManager(LionCore_builtinsBase.INSTANCE.INamed_name).getDirectly() as (string | undefined);
+    if (node instanceof NodeBase) {
+        const allSupertypes = allSuperTypesOf(node.classifier);
+        if (allSupertypes.indexOf(LionWebVersions.v2023_1.builtinsFacade.classifiers.inamed) > -1) {
+            return node.getPropertyValueManager(LionWebVersions.v2023_1.builtinsFacade.features.inamed_name).getDirectly() as (string | undefined);
+        }
+        if (allSupertypes.indexOf(LionCore_builtinsBase.INSTANCE.INamed) > -1) {
+            return node.getPropertyValueManager(LionCore_builtinsBase.INSTANCE.INamed_name).getDirectly() as (string | undefined);
+        }
     }
     return undefined;
 };
@@ -80,7 +83,7 @@ const nodeBaseResolveInfoDeducer: ResolveInfoDeducer<INodeBase> = (node, _refere
  * A {@link Reader} that works on/for {@link INodeBase}s specifically.
  * **Note** that this function is for internal use only!
  */
-export const nodeBaseReader: Reader<INodeBase> = {
+export const nodeBaseReader: Reader<INodeBase, Node> = {
     classifierOf: (node) => node.classifier,
     getFeatureValue,
     enumerationLiteralFrom: (encoding, enumeration) => {

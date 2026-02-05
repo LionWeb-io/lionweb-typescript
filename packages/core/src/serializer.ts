@@ -81,11 +81,11 @@ export type SerializationOptions = Partial<{
  * and `primitiveTypeSerializer` (which is a legacy alias for `propertyValueSerializer`)
  * properties are optional, with defined defaults.
  */
-export type SerializerConfiguration<NT extends Node> = {
+export type SerializerConfiguration<NT extends Node, RT extends Node = NT> = {
     /**
      * An interface with functions to “read” – i.e., introspect – nodes.
      */
-    reader: Reader<NT>
+    reader: Reader<NT, RT>
 
     /**
      * The version of the LionWeb serialization format to serialize in.
@@ -102,7 +102,7 @@ export type SerializerConfiguration<NT extends Node> = {
  *
  * This is a legacy version of {@link serializerWith}, kept for backward compatibility, and to be deprecated and removed later.
  */
-export const nodeSerializer = <NT extends Node>(reader: Reader<NT>, serializationOptions?: SerializationOptions): Serializer<NT> =>
+export const nodeSerializer = <NT extends Node, RT extends Node = NT>(reader: Reader<NT, RT>, serializationOptions?: SerializationOptions): Serializer<NT> =>
     serializerWith({ reader, ...serializationOptions })
 
 
@@ -110,7 +110,7 @@ export const nodeSerializer = <NT extends Node>(reader: Reader<NT>, serializatio
  * @return a {@link Serializer} function that serializes the {@link Node nodes} passed to it,
  * configured through a `configuration` {@link SerializerConfiguration} object.
  */
-export const serializerWith = <NT extends Node>(configuration: SerializerConfiguration<NT>): Serializer<NT> => {
+export const serializerWith = <NT extends Node, RT extends Node = NT>(configuration: SerializerConfiguration<NT, RT>): Serializer<NT> => {
     const { reader } = configuration
     const lionWebVersion = configuration?.lionWebVersion ?? LionWebVersions.v2023_1
     const propertyValueSerializer =
@@ -218,14 +218,13 @@ export const serializerWith = <NT extends Node>(configuration: SerializerConfigu
                 }
                 if (feature instanceof Reference) {
                     // Note: value can be null === typeof unresolved, e.g. on an unset (or previously unresolved) single-valued reference
-                    const targets = asArray(value) as (NT | null)[]
+                    const targets = asArray(value) as (RT | null)[]
                     if (targets.length === 0 && !serializeEmptyFeatures) {
                         return
                     }
                     serializedNode.references.push({
                         reference: featureMetaPointer,
                         targets: keepDefineds(targets) // (skip "non-connected" targets)
-                            .map(t => t as NT)
                             .map(t => ({
                                 resolveInfo:
                                     (reader.resolveInfoFor ? reader.resolveInfoFor(t, feature) : simpleNameDeducer(t, feature)) ?? null,
@@ -257,12 +256,12 @@ export const serializerWith = <NT extends Node>(configuration: SerializerConfigu
  * @return a {@link LionWebJsonChunk} of the given model (i.e., an array of {@link Node nodes} - the first argument) to the LionWeb serialization JSON format.
  *  *Note:* this function will be deprecated and removed later — use {@link nodeSerializer} instead.
  */
-export const serializeNodes = <NT extends Node>(
+export const serializeNodes = <NT extends Node, RT extends Node = NT>(
     nodes: NT[],
-    reader: Reader<NT>,
+    reader: Reader<NT, RT>,
     propertyValueSerializerOrOptions?: PropertyValueSerializer | SerializationOptions
 ): LionWebJsonChunk =>
-    nodeSerializer<NT>(
+    nodeSerializer<NT, RT>(
         reader,
         isPropertyValueSerializer(propertyValueSerializerOrOptions)
             ? {

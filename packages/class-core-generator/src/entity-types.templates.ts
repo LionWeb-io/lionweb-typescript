@@ -94,7 +94,7 @@ export const typeForLanguageEntity = (imports: Imports) => {
     const classMembersForLink = (link: Link) => {
         const {name, type, multiple} = link
         const nameWithFirstUpper = withFirstUpper(name)
-        const tsTypeForClassifier_ = tsTypeForClassifier(type, imports)
+        const tsTypeForClassifier_ = tsTypeForClassifier(type, imports, link instanceof Reference)
         const tsTypeForLink_ = link instanceof Reference
             ? `${imports.core(multiple ? "MultiRef" : "SingleRef")}<${tsTypeForClassifier_}>${multiple ? "" : optionalityPostfix(link)}`
             : `${tsTypeForClassifier_}${multiple ? "[]" : optionalityPostfix(link)}`
@@ -158,7 +158,7 @@ export const typeForLanguageEntity = (imports: Imports) => {
             const argumentName = featureMetaType_.toLowerCase()
             return [
                 ``,
-                `get${featureMetaType_}ValueManager(${argumentName}: ${imports.core(featureMetaType_)}): ${imports.generic(featureMetaType_ + "ValueManager")}<${featureMetaType_ === "Property" ? "unknown" : imports.generic("INodeBase")}> {`,
+                `get${featureMetaType_}ValueManager(${argumentName}: ${imports.core(featureMetaType_)}): ${imports.generic(featureMetaType_ + "ValueManager")}<${featureMetaType_ === "Property" ? "unknown" : (featureMetaType_ === "Containment" ? imports.generic("INodeBase") : imports.core("Node"))}> {`,
                 indent(
                     switchOrIf(
                         `${argumentName}.key`,

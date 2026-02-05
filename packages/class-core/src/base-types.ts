@@ -107,7 +107,7 @@ export interface INodeBase extends Node {
      * @return the value manager for the given {@link Reference reference} feature.
      * @throws if this node('s {@link Classifier classifier}) doesn't have that reference.
      */
-    getReferenceValueManager(reference: Reference): ReferenceValueManager<INodeBase>;
+    getReferenceValueManager(reference: Reference): ReferenceValueManager<Node>;
 
     /**
      * @return the value manager for the given {@link Feature feature}.
@@ -247,7 +247,7 @@ export abstract class NodeBase implements INodeBase {
         throw new Error(`containment (feature) "${containment.name}" (with key=${containment.key}) doesn't exist on ${this.locationMessage}`);
     }
 
-    getReferenceValueManager(reference: Reference): ReferenceValueManager<INodeBase> {
+    getReferenceValueManager(reference: Reference): ReferenceValueManager<Node> {
         throw new Error(`reference (feature) "${reference.name}" (with key=${reference.key}) doesn't exist on ${this.locationMessage}`);
     }
 

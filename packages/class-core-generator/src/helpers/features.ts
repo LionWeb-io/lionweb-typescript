@@ -67,11 +67,16 @@ const isBuiltinNode = (type: SingleRef<LanguageEntity>): boolean => {
     return type instanceof Classifier && isBuiltinNodeConcept(type)
 }
 
-export const tsTypeForClassifier = (classifier: SingleRef<Classifier>, imports: Imports) => {
+export const tsTypeForClassifier = (classifier: SingleRef<Classifier>, imports: Imports, isReference = false) => {
     if (isUnresolvedReference(classifier)) {
         return `unknown /* [ERROR] can't compute a TS type for an unresolved classifier */`
     }
-    return isBuiltinNode(classifier) ? imports.generic("INodeBase") : imports.entity(classifier)
+    if (isBuiltinNode(classifier)) {
+        return isReference
+            ? imports.core("Node")
+            : imports.generic("INodeBase")
+    }
+    return imports.entity(classifier)
 }
 
 
@@ -122,7 +127,9 @@ export const tsTypeForValueManager = (feature: Feature, imports: Imports): strin
         })()
     }
     if (isContainment(feature) || isReference(feature)) {
-        return isBuiltinNode(type) ? imports.generic("INodeBase") : imports.entity(type)
+        return isBuiltinNode(type)
+            ? (isContainment(feature) ? imports.generic("INodeBase") : imports.core("Node"))
+            : imports.entity(type)
     }
     return `unknown /* [ERROR] can't compute a TS type for feature ${feature.name} on classifier ${feature.classifier.name} whose type has an unhandled/-known meta-type ${type.constructor.name} */`
 }
