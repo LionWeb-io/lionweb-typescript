@@ -56,7 +56,6 @@
         "./packages/class-core-test-language",
         "./packages/class-core-test",
         "./packages/test",
-        "./packages/artifacts",
         "./packages/delta-protocol-common",
         "./packages/delta-protocol-client",
         "./packages/delta-protocol-low-level-client-ws",
