@@ -18,36 +18,31 @@
 import { featureResolversFor, metaPointerFor } from "@lionweb/core"
 
 import { equal, throws } from "../test-utils/assertions.js"
-import {
-    aConcept,
-    aConcept_aContainment,
-    aConcept_aProperty,
-    aConcept_aReference, anInterface,
-    metaLanguage
-} from "../languages/meta.js"
+import { TestLanguageBase } from "@lionweb/class-core-test-language"
 
+const base = TestLanguageBase.INSTANCE
 
 describe("feature resolvers", () => {
 
     const featureResolvers = () =>
-        featureResolversFor([metaLanguage])
+        featureResolversFor([base.language])
 
     it("find features that are there", () => {
         const { resolvedPropertyFrom, resolvedContainmentFrom, resolvedReferenceFrom } = featureResolvers()
 
         equal(
-            resolvedPropertyFrom(metaPointerFor(aConcept_aProperty), aConcept),
-            aConcept_aProperty
+            resolvedPropertyFrom(metaPointerFor(base.DataTypeTestConcept_stringValue_1), base.DataTypeTestConcept),
+            base.DataTypeTestConcept_stringValue_1
         )
 
         equal(
-            resolvedContainmentFrom(metaPointerFor(aConcept_aContainment), aConcept),
-            aConcept_aContainment
+            resolvedContainmentFrom(metaPointerFor(base.LinkTestConcept_containment_1), base.LinkTestConcept),
+            base.LinkTestConcept_containment_1
         )
 
         equal(
-            resolvedReferenceFrom(metaPointerFor(aConcept_aReference), aConcept),
-            aConcept_aReference
+            resolvedReferenceFrom(metaPointerFor(base.LinkTestConcept_reference_1), base.LinkTestConcept),
+            base.LinkTestConcept_reference_1
         )
     })
 
@@ -56,23 +51,23 @@ describe("feature resolvers", () => {
 
         throws(
             () => {
-                resolvedPropertyFrom(metaPointerFor(aConcept_aContainment), aConcept)
+                resolvedPropertyFrom(metaPointerFor(base.LinkTestConcept_containment_1), base.LinkTestConcept)
             },
-            `feature with meta-pointer {"language":"meta","version":"1","key":"aContainment"} on classifier with meta-pointer {"language":"meta","version":"1","key":"AConcept"} is not a Property but a Containment`
+            `feature with meta-pointer {"language":"TestLanguage","version":"0","key":"LinkTestConcept-containment_1"} on classifier with meta-pointer {"language":"TestLanguage","version":"0","key":"LinkTestConcept"} is not a Property but a Containment`
         )
 
         throws(
             () => {
-                resolvedContainmentFrom(metaPointerFor(aConcept_aReference), aConcept)
+                resolvedContainmentFrom(metaPointerFor(base.LinkTestConcept_reference_1), base.LinkTestConcept)
             },
-            `feature with meta-pointer {"language":"meta","version":"1","key":"aReference"} on classifier with meta-pointer {"language":"meta","version":"1","key":"AConcept"} is not a Containment but a Reference`
+            `feature with meta-pointer {"language":"TestLanguage","version":"0","key":"LinkTestConcept-reference_1"} on classifier with meta-pointer {"language":"TestLanguage","version":"0","key":"LinkTestConcept"} is not a Containment but a Reference`
         )
 
         throws(
             () => {
-                resolvedReferenceFrom(metaPointerFor(aConcept_aProperty), aConcept)
+                resolvedReferenceFrom(metaPointerFor(base.DataTypeTestConcept_stringValue_1), base.DataTypeTestConcept)
             },
-            `feature with meta-pointer {"language":"meta","version":"1","key":"aProperty"} on classifier with meta-pointer {"language":"meta","version":"1","key":"AConcept"} is not a Reference but a Property`
+            `feature with meta-pointer {"language":"TestLanguage","version":"0","key":"DataTypeTestConcept-stringValue_1"} on classifier with meta-pointer {"language":"TestLanguage","version":"0","key":"DataTypeTestConcept"} is not a Reference but a Property`
         )
     })
 
@@ -81,23 +76,23 @@ describe("feature resolvers", () => {
 
         throws(
             () => {
-                resolvedPropertyFrom(metaPointerFor(aConcept_aProperty), anInterface)
+                resolvedPropertyFrom(metaPointerFor(base.DataTypeTestConcept_stringValue_1), base.TestAnnotation)
             },
-            `couldn't resolve feature with meta-pointer {"language":"meta","version":"1","key":"aProperty"} on classifier with meta-pointer {"language":"meta","version":"1","key":"AnInterface"}`
+            `couldn't resolve feature with meta-pointer {"language":"TestLanguage","version":"0","key":"DataTypeTestConcept-stringValue_1"} on classifier with meta-pointer {"language":"TestLanguage","version":"0","key":"TestAnnotation"}`
         )
 
         throws(
             () => {
-                resolvedContainmentFrom(metaPointerFor(aConcept_aContainment), anInterface)
+                resolvedContainmentFrom(metaPointerFor(base.LinkTestConcept_containment_1), base.TestAnnotation)
             },
-            `couldn't resolve feature with meta-pointer {"language":"meta","version":"1","key":"aContainment"} on classifier with meta-pointer {"language":"meta","version":"1","key":"AnInterface"}`
+            `couldn't resolve feature with meta-pointer {"language":"TestLanguage","version":"0","key":"LinkTestConcept-containment_1"} on classifier with meta-pointer {"language":"TestLanguage","version":"0","key":"TestAnnotation"}`
         )
 
         throws(
             () => {
-                resolvedReferenceFrom(metaPointerFor(aConcept_aReference), anInterface)
+                resolvedReferenceFrom(metaPointerFor(base.LinkTestConcept_reference_1), base.TestAnnotation)
             },
-            `couldn't resolve feature with meta-pointer {"language":"meta","version":"1","key":"aReference"} on classifier with meta-pointer {"language":"meta","version":"1","key":"AnInterface"}`
+            `couldn't resolve feature with meta-pointer {"language":"TestLanguage","version":"0","key":"LinkTestConcept-reference_1"} on classifier with meta-pointer {"language":"TestLanguage","version":"0","key":"TestAnnotation"}`
         )
     })
 
