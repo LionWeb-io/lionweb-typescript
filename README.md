@@ -267,6 +267,28 @@ We use prettier with parameters defined in `.prettierrc`.
 *Note* that currently we don't automatically run `prettier` over the source code.
 
 
+## Miscellaneous
+
+### Generate code metrics
+
+Run the following on the command line, in the repo’s root, to get some idea of the size of the code base:
+
+```shell
+$ find packages -name "*.ts*" \! -name "*.d.ts*" -print | grep -v -e "test" | xargs wc | sort > metrics.txt
+```
+
+
+### Lint TypeScript for mismatched dependencies
+
+The NPM `lint` task doesn’t check whether `import` statements refer to dependencies that are actually mentioned in the package’s `package.json`.
+
+Run the following on the command line, in the repo’s root, to see where there’s mismatches between `import` statements and the `dependencies` section in a package’s `package.json`.
+
+```shell
+$ node packages/build/src/code-reading/check-imports.js
+```
+
+
 ### Containerized development environment
 
 If you prefer not to install the development dependencies on your machine, you can use our containerized development environment for the LionCore TypeScript project. This environment provides a consistent and isolated development environment that is easy to set up and use. To get started, follow the instructions in our [containerized development environment guide](./documentation/dev-environment.md). However, you can streamline the process by running the following command:
