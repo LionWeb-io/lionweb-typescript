@@ -267,25 +267,25 @@ export const eventToDeltaTranslator = (
                 return new AnnotationMovedAndReplacedInSameParentDelta(resolvedParent, oldIndex, newIndex, resolvedReplacedAnnotation, resolvedMovedAnnotation)
             }
             case "ReferenceAdded": { // § 6.6.6.1
-                const { parent, reference, index, newTarget } = event as ReferenceAddedEvent
+                const { parent, reference, index, newReference } = event as ReferenceAddedEvent
                 const resolvedParent = idMapping.fromId(parent)
                 const resolvedReference = resolvedReferenceFrom(reference, resolvedParent.classifier)
-                const resolvedNewTarget = resolvedRefTo(newTarget)
+                const resolvedNewTarget = resolvedRefTo(newReference)
                 return new ReferenceAddedDelta(resolvedParent, resolvedReference, index, resolvedNewTarget)
             }
             case "ReferenceDeleted": { // § 6.6.6.2
-                const { parent, reference, index, deletedTarget } = event as ReferenceDeletedEvent
+                const { parent, reference, index, deletedReference } = event as ReferenceDeletedEvent
                 const resolvedParent = idMapping.fromId(parent)
                 const resolvedReference = resolvedReferenceFrom(reference, resolvedParent.classifier)
-                const resolvedDeletedTarget = resolvedRefTo(deletedTarget)
+                const resolvedDeletedTarget = resolvedRefTo(deletedReference)
                 return new ReferenceDeletedDelta(resolvedParent, resolvedReference, index, resolvedDeletedTarget)
             }
             case "ReferenceChanged": { // § 6.6.6.3
-                const { parent, reference, index, oldTarget, newTarget } = event as ReferenceChangedEvent
+                const { parent, reference, index, oldReference, newReference } = event as ReferenceChangedEvent
                 const resolvedParent = idMapping.fromId(parent)
                 const resolvedReference = resolvedReferenceFrom(reference, resolvedParent.classifier)
-                const resolvedOldTarget = resolvedRefTo(oldTarget)
-                const resolvedNewTarget = resolvedRefTo(newTarget)
+                const resolvedOldTarget = resolvedRefTo(oldReference)
+                const resolvedNewTarget = resolvedRefTo(newReference)
                 return new ReferenceChangedDelta(resolvedParent, resolvedReference, index, resolvedNewTarget, resolvedOldTarget)
             }
             case "CompositeEvent": { // § 6.6.7.1

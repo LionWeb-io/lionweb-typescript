@@ -694,7 +694,7 @@ Deltas (id: Deltas) {
                         IndexType (id: 228)
                 }
                 Field (id: 232) {
-                    name = 'newTarget'
+                    name = 'newReference'
                     type:
                         NodeType (id: 231) {
                             serialization:
@@ -724,7 +724,7 @@ Deltas (id: Deltas) {
                         IndexType (id: 238)
                 }
                 Field (id: 242) {
-                    name = 'deletedTarget'
+                    name = 'deletedReference'
                     type:
                         NodeType (id: 241) {
                             serialization:
@@ -754,7 +754,7 @@ Deltas (id: Deltas) {
                         IndexType (id: 248)
                 }
                 Field (id: 252) {
-                    name = 'newTarget'
+                    name = 'newReference'
                     type:
                         NodeType (id: 251) {
                             serialization:
@@ -762,7 +762,7 @@ Deltas (id: Deltas) {
                         }
                 }
                 Field (id: 255) {
-                    name = 'oldTarget'
+                    name = 'oldReference'
                     type:
                         NodeType (id: 254) {
                             serialization:

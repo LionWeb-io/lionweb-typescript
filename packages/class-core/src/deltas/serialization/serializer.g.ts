@@ -323,7 +323,7 @@ export const serializeDelta = (delta: IDelta): SerializedDelta => {
             parent: delta.parent.id,
             reference: metaPointerFor(delta.reference),
             index: delta.index,
-            newTarget: idFrom(delta.newTarget)
+            newReference: idFrom(delta.newReference)
         } as ReferenceAddedSerializedDelta;
     }
 
@@ -333,7 +333,7 @@ export const serializeDelta = (delta: IDelta): SerializedDelta => {
             parent: delta.parent.id,
             reference: metaPointerFor(delta.reference),
             index: delta.index,
-            deletedTarget: idFrom(delta.deletedTarget)
+            deletedReference: idFrom(delta.deletedReference)
         } as ReferenceDeletedSerializedDelta;
     }
 
@@ -343,8 +343,8 @@ export const serializeDelta = (delta: IDelta): SerializedDelta => {
             parent: delta.parent.id,
             reference: metaPointerFor(delta.reference),
             index: delta.index,
-            newTarget: idFrom(delta.newTarget),
-            oldTarget: idFrom(delta.oldTarget)
+            newReference: idFrom(delta.newReference),
+            oldReference: idFrom(delta.oldReference)
         } as ReferenceChangedSerializedDelta;
     }
 

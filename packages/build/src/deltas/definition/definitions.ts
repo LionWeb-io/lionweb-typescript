@@ -278,7 +278,7 @@ export const defineDeltas = () => {
         [
             ...parentage("parent", "reference", FeatureKinds.reference),
             index("index"),
-            node("newTarget", refOnly())
+            node("newReference", refOnly())
         ]
     )
 
@@ -288,7 +288,7 @@ export const defineDeltas = () => {
         [
             ...parentage("parent", "reference", FeatureKinds.reference),
             index("index"),
-            node("deletedTarget", refOnly())
+            node("deletedReference", refOnly())
         ]
     )
 
@@ -298,8 +298,8 @@ export const defineDeltas = () => {
         [
             ...parentage("parent", "reference", FeatureKinds.reference),
             index("index"),
-            node("newTarget", refOnly()),
-            node("oldTarget", refOnly())
+            node("newReference", refOnly()),
+            node("oldReference", refOnly())
         ]
     )
 

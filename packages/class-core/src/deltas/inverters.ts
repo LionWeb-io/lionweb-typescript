@@ -130,13 +130,13 @@ export const invertDelta = (delta: IDelta): IDelta => {
         ]);
     }
     if (delta instanceof ReferenceAddedDelta) {
-        return new ReferenceDeletedDelta(delta.parent, delta.reference, delta.index, delta.newTarget);
+        return new ReferenceDeletedDelta(delta.parent, delta.reference, delta.index, delta.newReference);
     }
     if (delta instanceof ReferenceDeletedDelta) {
-        return new ReferenceAddedDelta(delta.parent, delta.reference, delta.index, delta.deletedTarget);
+        return new ReferenceAddedDelta(delta.parent, delta.reference, delta.index, delta.deletedReference);
     }
     if (delta instanceof ReferenceChangedDelta) {
-        return new ReferenceChangedDelta(delta.parent, delta.reference, delta.index, delta.oldTarget, delta.newTarget);
+        return new ReferenceChangedDelta(delta.parent, delta.reference, delta.index, delta.oldReference, delta.newReference);
     }
     if (delta instanceof CompositeDelta) {
         return new CompositeDelta(delta.parts.map(invertDelta));

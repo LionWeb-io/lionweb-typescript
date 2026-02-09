@@ -324,34 +324,34 @@ export const commandAsEvent = (command: Command, participationId: string): Event
                 })
             }
             case "AddReference": {
-                const {parent, reference, index, newTarget, newResolveInfo} = command as AddReferenceCommand // § 6.5.7.1
+                const {parent, reference, index, newReference, newResolveInfo} = command as AddReferenceCommand // § 6.5.7.1
                 return completed<ReferenceAddedEvent>("ReferenceAdded", { // § 6.6.6.1
                     parent,
                     reference,
                     index,
-                    newTarget,
+                    newReference,
                     newResolveInfo
                 })
             }
             case "DeleteReference": {
-                const {parent, reference, index, deletedTarget, deletedResolveInfo} = command as DeleteReferenceCommand // § 6.5.7.2
+                const {parent, reference, index, deletedReference, deletedResolveInfo} = command as DeleteReferenceCommand // § 6.5.7.2
                 return completed<ReferenceDeletedEvent>("ReferenceDeleted", { // § 6.6.6.2
                     parent,
                     reference,
                     index,
-                    deletedTarget,
+                    deletedReference,
                     deletedResolveInfo
                 })
             }
             case "ChangeReference": {
-                const {parent, reference, index, newTarget, newResolveInfo, oldTarget, oldResolveInfo} = command as ChangeReferenceCommand // § 6.5.7.3
+                const {parent, reference, index, newReference, newResolveInfo, oldReference, oldResolveInfo} = command as ChangeReferenceCommand // § 6.5.7.3
                 return completed<ReferenceChangedEvent>("ReferenceChanged", { // § 6.6.6.3
                     parent,
                     reference,
                     index,
-                    newTarget,
+                    newReference,
                     newResolveInfo,
-                    oldTarget,
+                    oldReference,
                     oldResolveInfo
                 })
             }

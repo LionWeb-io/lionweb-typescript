@@ -268,8 +268,8 @@ export const deltaToCommandTranslator = (
                 parent: delta.parent.id,
                 reference: metaPointerFor(delta.reference),
                 index: delta.index,
-                newTarget: idFrom(delta.newTarget),
-                newResolveInfo: nodeBaseReader.resolveInfoFor!(delta.newTarget!, delta.reference)!
+                newReference: idFrom(delta.newReference),
+                newResolveInfo: nodeBaseReader.resolveInfoFor!(delta.newReference!, delta.reference)!
             })
         }
         if (delta instanceof ReferenceDeletedDelta) {
@@ -277,8 +277,8 @@ export const deltaToCommandTranslator = (
                 parent: delta.parent.id,
                 reference: metaPointerFor(delta.reference),
                 index: delta.index,
-                deletedTarget: idFrom(delta.deletedTarget),
-                deletedResolveInfo: nodeBaseReader.resolveInfoFor!(delta.deletedTarget!, delta.reference)!
+                deletedReference: idFrom(delta.deletedReference),
+                deletedResolveInfo: nodeBaseReader.resolveInfoFor!(delta.deletedReference!, delta.reference)!
             })
         }
         if (delta instanceof ReferenceChangedDelta) {
@@ -286,10 +286,10 @@ export const deltaToCommandTranslator = (
                 parent: delta.parent.id,
                 reference: metaPointerFor(delta.reference),
                 index: delta.index,
-                oldTarget: idFrom(delta.oldTarget),
-                oldResolveInfo: nodeBaseReader.resolveInfoFor!(delta.oldTarget!, delta.reference)!,
-                newTarget: idFrom(delta.newTarget),
-                newResolveInfo: nodeBaseReader.resolveInfoFor!(delta.oldTarget!, delta.reference)!
+                oldReference: idFrom(delta.oldReference),
+                oldResolveInfo: nodeBaseReader.resolveInfoFor!(delta.oldReference!, delta.reference)!,
+                newReference: idFrom(delta.newReference),
+                newResolveInfo: nodeBaseReader.resolveInfoFor!(delta.newReference!, delta.reference)!
             })
         }
         if (delta instanceof CompositeDelta) {

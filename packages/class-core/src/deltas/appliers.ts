@@ -313,7 +313,7 @@ const deltaApplier = (idMapping?: IdMapping, updatablePartitions?: () => INodeBa
             }
             if (delta instanceof ReferenceAddedDelta) {
                 const valueManager = lookupNodeFrom(delta.parent).getReferenceValueManager(delta.reference);
-                const newTarget = lookupNodeRefFrom(delta.newTarget);
+                const newTarget = lookupNodeRefFrom(delta.newReference);
                 if (delta.reference.multiple) {
                     (valueManager as MultiReferenceValueManager<INodeBase>).insertAtIndexDirectly(newTarget, delta.index);
                 } else {
@@ -332,7 +332,7 @@ const deltaApplier = (idMapping?: IdMapping, updatablePartitions?: () => INodeBa
             }
             if (delta instanceof ReferenceChangedDelta) {
                 const valueManager = lookupNodeFrom(delta.parent).getReferenceValueManager(delta.reference);
-                const newTarget = lookupNodeRefFrom(delta.newTarget);
+                const newTarget = lookupNodeRefFrom(delta.newReference);
                 if (delta.reference.multiple) {
                     const multiValueManager = valueManager as MultiReferenceValueManager<INodeBase>;
                     multiValueManager.removeAtIndexDirectly(delta.index); // should be delta.oldTarget

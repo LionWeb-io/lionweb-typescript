@@ -21,6 +21,8 @@
 * Remove all reference-related deltas, except for `Reference{Added|Changed|Deleted}Delta`.
 * Propagate the change to the `ResolveInfoDeducer` type from the `core` package.
 * Expose the `nodeBaseReader` function that’s already used by packages downstream.
+* Adjust the `Reference{Added|Changed|Deleted}Delta` delta types, replacing “target” with “reference”, and propagate that change to the entire codebase.
+  *Note* that this is a **breaking change**, due to a [change to the protocol specification](https://github.com/LionWeb-io/specification/issues/414), without providing backward compatibility e.g. by only deprecating those classes.
 
 
 ## 0.7.2
