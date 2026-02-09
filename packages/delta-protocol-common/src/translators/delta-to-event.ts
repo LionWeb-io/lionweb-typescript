@@ -33,7 +33,6 @@ import {
     ChildMovedFromOtherContainmentInSameParentDelta,
     ChildMovedInSameContainmentDelta,
     ChildReplacedDelta,
-    CompositeDelta,
     IDelta,
     idFrom,
     INodeBase,
@@ -69,7 +68,6 @@ import {
     ChildMovedInSameContainmentEvent,
     ChildReplacedEvent,
     CommandSource,
-    CompositeEvent,
     Event,
     NoOpEvent,
     PartitionAddedEvent,
@@ -95,7 +93,6 @@ const allIdsOfDescendantsFrom = (node: INodeBase) =>
  * More precisely, such a function returns a pair consisting of an {@link Event event}
  * and the last-used sequence number, where the event is the translation of the given {@link IDelta delta}.
  * Sequence numbers start from the given `lastUsedSequenceNumber`.
- * More than one sequence number might be allocated because of composite deltas.
  */
 export type DeltaToEventTranslator = (
     delta: IDelta,
@@ -375,13 +372,6 @@ export const deltaToEventTranslator = (
                     oldResolveInfo: nodeBaseReader.resolveInfoFor!(delta.oldReference!, delta.reference)!,
                     newReference: idFrom(delta.newReference),
                     newResolveInfo: nodeBaseReader.resolveInfoFor!(delta.newReference!, delta.reference)!
-                })
-            }
-            if (delta instanceof CompositeDelta) {
-                return completed<CompositeEvent>("CompositeEvent", { // § 6.6.7.1
-                    parts: delta.parts
-                        .map((part) => translated(part))
-                        .filter((event) => event !== undefined) as Event[]
                 })
             }
             if (delta instanceof NoOpDelta) {

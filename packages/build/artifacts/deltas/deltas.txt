@@ -770,21 +770,7 @@ Deltas (id: Deltas) {
                         }
                 }
         }
-        Delta (id: 259) {
-            name = 'Composite'
-            fields:
-                Field (id: 258) {
-                    name = 'parts'
-                    type:
-                        CustomType (id: 257) {
-                            type = 'IDelta[]'
-                            serializationType = 'SerializedDelta[]'
-                            serializationExpr = 'delta.parts.map(serializeDelta)'
-                            deserializationExpr = 'delta.parts.map(deserializedDelta)'
-                        }
-                }
-        }
-        Delta (id: 260) {
+        Delta (id: 257) {
             documentation = 'Delta that does nothing.'
             name = 'NoOp'
         }

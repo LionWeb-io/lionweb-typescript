@@ -280,12 +280,6 @@ export interface ReferenceChangedEvent extends Event {
     oldResolveInfo?: string | null
 }
 
-/** § 6.6.7.1 */
-export interface CompositeEvent extends Event {
-    messageKind: "CompositeEvent"
-    parts: Event[]
-}
-
 /** § 6.6.7.2 */
 export interface NoOpEvent extends Event {
     messageKind: "NoOp"
@@ -334,7 +328,6 @@ const eventMessageKinds = mapFrom(
         "ReferenceAdded",
         "ReferenceDeleted",
         "ReferenceChanged",
-        "CompositeEvent",
         "NoOp",
         "ErrorEvent"
     ],

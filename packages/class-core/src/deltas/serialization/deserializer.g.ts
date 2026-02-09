@@ -41,7 +41,6 @@ import {
     ChildMovedFromOtherContainmentInSameParentDelta,
     ChildMovedInSameContainmentDelta,
     ChildReplacedDelta,
-    CompositeDelta,
     NoOpDelta,
     PartitionAddedDelta,
     PartitionDeletedDelta,
@@ -236,10 +235,6 @@ export const deltaDeserializer = (languageBases: ILanguageBase[], idMapping: IdM
                 const newReference = idMapping.fromRefId(delta.newReference);
                 const oldReference = idMapping.fromRefId(delta.oldReference);
                 return new ReferenceChangedDelta(parent, reference, index, newReference, oldReference);
-            }
-            case "Composite": {
-                const parts = delta.parts.map(deserializedDelta);
-                return new CompositeDelta(parts);
             }
             case "NoOp": {
                 return new NoOpDelta();

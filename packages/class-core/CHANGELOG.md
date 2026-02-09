@@ -19,10 +19,13 @@
 * Rename the `IdOrUnresolved` type to `IdOrNull`, without keeping an alias because this type is essentially for internal use only.
 * Improve textualization: “none” for empty multi-valued links, and “not set” for unset single-valued links, instead of “nothing” in both cases.
 * Remove all reference-related deltas, except for `Reference{Added|Changed|Deleted}Delta`.
+  *Note* that this is a **breaking change**, due to a [change to the protocol specification](https://github.com/LionWeb-io/specification/issues/431), without providing backward compatibility e.g. by only deprecating those classes.
 * Propagate the change to the `ResolveInfoDeducer` type from the `core` package.
 * Expose the `nodeBaseReader` function that’s already used by packages downstream.
 * Adjust the `Reference{Added|Changed|Deleted}Delta` delta types, replacing “target” with “reference”, and propagate that change to the entire codebase.
   *Note* that this is a **breaking change**, due to a [change to the protocol specification](https://github.com/LionWeb-io/specification/issues/414), without providing backward compatibility e.g. by only deprecating those classes.
+* Remove the `CompositeDelta` and `Compositor` classes entirely.
+  *Note* that this is a **breaking change**, due to a [change to the protocol specification](https://github.com/LionWeb-io/specification/issues/420), without providing backward compatibility e.g. by only deprecating those classes.
 
 
 ## 0.7.2

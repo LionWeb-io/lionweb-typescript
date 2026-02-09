@@ -1728,46 +1728,6 @@ export const EventDefinitions: MessageGroup = {
             ],
         },
         {
-            name: "CompositeEvent",
-            properties: [
-                {
-                    name: "parts",
-                    type: "Event",
-                    isList: true,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
-                {
-                    name: "sequenceNumber",
-                    type: "Number",
-                    isList: false,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
-                {
-                    name: "originCommands",
-                    type: "CommandSource",
-                    isList: true,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
-                {
-                    name: "messageKind",
-                    type: "String",
-                    isList: false,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
-                {
-                    name: "protocolMessages",
-                    type: "ProtocolMessage",
-                    isList: true,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
-            ],
-        },
-        {
             name: "NoOp",
             properties: [
                 {

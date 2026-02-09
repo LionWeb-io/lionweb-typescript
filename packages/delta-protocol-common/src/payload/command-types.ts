@@ -237,9 +237,3 @@ export interface ChangeReferenceCommand extends Command {
     newResolveInfo?: string | null
 }
 
-/** § 6.5.8.1 */
-export interface CompositeCommand extends Command {
-    messageKind: "CompositeCommand"
-    parts: Command[]
-}
-

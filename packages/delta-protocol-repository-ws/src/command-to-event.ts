@@ -42,8 +42,6 @@ import {
     ChildReplacedEvent,
     ClassifierChangedEvent,
     Command,
-    CompositeCommand,
-    CompositeEvent,
     DeleteAnnotationCommand,
     DeleteChildCommand,
     DeletePartitionCommand,
@@ -353,12 +351,6 @@ export const commandAsEvent = (command: Command, participationId: string): Event
                     newResolveInfo,
                     oldReference,
                     oldResolveInfo
-                })
-            }
-            case "CompositeCommand": {
-                const {parts} = command as CompositeCommand // § 6.5.8.1
-                return completed<CompositeEvent>("CompositeEvent", { // § 6.6.7.1
-                    parts: parts.map(commandAsEvent_)
                 })
             }
             // Note: no command translates into a NoOpEvent, and ErrorEvent-s correspond to faults.

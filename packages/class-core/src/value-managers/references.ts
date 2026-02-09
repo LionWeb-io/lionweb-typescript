@@ -19,7 +19,7 @@ import { MultiRef, Reference, SingleRef } from "@lionweb/core"
 import { action, observable } from "mobx"
 
 import { INodeBase } from "../base-types.js"
-import { CompositeDelta, ReferenceAddedDelta, ReferenceChangedDelta, ReferenceDeletedDelta } from "../deltas/index.js"
+import { ReferenceAddedDelta, ReferenceChangedDelta, ReferenceDeletedDelta } from "../deltas/index.js"
 import { checkIndex, FeatureValueManager } from "./base.js"
 
 
@@ -214,10 +214,8 @@ export abstract class MultiReferenceValueManager<T extends INodeBase> extends Re
     @action move(oldIndex: number, newIndex: number) {
         const target = this.moveDirectly(oldIndex, newIndex);
         if (target !== undefined) {
-            this.emitDelta(() => new CompositeDelta([
-                new ReferenceDeletedDelta(this.container, this.reference, oldIndex, target),
-                new ReferenceAddedDelta(this.container, this.reference, newIndex < oldIndex ? newIndex : newIndex - 1, target)
-            ]));
+            this.emitDelta(() => new ReferenceDeletedDelta(this.container, this.reference, oldIndex, target));
+            this.emitDelta(() => new ReferenceAddedDelta(this.container, this.reference, newIndex < oldIndex ? newIndex : newIndex - 1, target));
         }
     }
 

@@ -32,7 +32,6 @@ import {
     ChildMovedFromOtherContainmentInSameParentDelta,
     ChildMovedInSameContainmentDelta,
     ChildReplacedDelta,
-    CompositeDelta,
     Deserializer,
     IDelta,
     IdMapping,
@@ -69,7 +68,6 @@ import {
     ChildMovedFromOtherContainmentInSameParentEvent,
     ChildMovedInSameContainmentEvent,
     ChildReplacedEvent,
-    CompositeEvent,
     Event,
     PartitionAddedEvent,
     PartitionDeletedEvent,
@@ -287,14 +285,6 @@ export const eventToDeltaTranslator = (
                 const resolvedOldTarget = resolvedRefTo(oldReference)
                 const resolvedNewTarget = resolvedRefTo(newReference)
                 return new ReferenceChangedDelta(resolvedParent, resolvedReference, index, resolvedNewTarget, resolvedOldTarget)
-            }
-            case "CompositeEvent": { // § 6.6.7.1
-                const { parts } = event as CompositeEvent
-                return new CompositeDelta(
-                    parts
-                        .map((part) => eventAsDelta(part, idMapping))
-                        .filter((deltaOrUndefined) => deltaOrUndefined !== undefined) as IDelta[]
-                )
             }
             case "NoOp": { // § 6.6.7.2
                 return new NoOpDelta()

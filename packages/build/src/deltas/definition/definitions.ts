@@ -17,7 +17,6 @@
 
 import { FeatureKinds } from "./Deltas.g.js"
 import {
-    customField,
     defineDelta,
     feature,
     index,
@@ -308,20 +307,6 @@ export const defineDeltas = () => {
      *
      *      Reference{ResolveInfo|Target}{Added|Deleted|Changed}
      */
-
-    /* ~ § 6.6.7.1 */
-    defineDelta(
-        "Composite",
-        [
-            customField(
-                "parts",
-                "IDelta[]",
-                "SerializedDelta[]",
-                "delta.parts.map(serializeDelta)",
-                "delta.parts.map(deserializedDelta)"
-            )
-        ]
-    )
 
     /* ~ § 6.6.7.2 */
     defineDelta("NoOp", [], "Delta that does nothing.")
