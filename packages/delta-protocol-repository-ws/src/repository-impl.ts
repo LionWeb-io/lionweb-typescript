@@ -81,7 +81,7 @@ export class LionWebRepository {
                         protocolMessages: []
                     } as SignOffResponse
                 }
-                // all commands, in order of the specification (§ 6.5):
+                // all commands, in order of the specification (§ 5.6):
                 /*
                  * **DEV note**: run
                  *

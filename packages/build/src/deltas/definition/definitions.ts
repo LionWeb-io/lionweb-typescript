@@ -32,7 +32,7 @@ export const defineDeltas = () => {
 
     // TODO  consider compounding the delta's name, e.g.: noun-verb style so we can derive past tense and such
 
-    /* ~ § 6.6.1.1 */
+    /* ~ § 5.7.1.1 */
     defineDelta(
         "PartitionAdded",
         [
@@ -40,7 +40,7 @@ export const defineDeltas = () => {
         ]
     )
 
-    /* ~ § 6.6.1.2 */
+    /* ~ § 5.7.1.2 */
     defineDelta(
         "PartitionDeleted",
         [
@@ -52,7 +52,7 @@ export const defineDeltas = () => {
      * Note: no delta counterpart for the ClassifierChanged event exists because no API exists to cause such a delta.
      */
 
-    /* ~ § 6.6.3.3 */
+    /* ~ § 5.7.3.3 */
     defineDelta(
         "PropertyAdded",
         [
@@ -61,7 +61,7 @@ export const defineDeltas = () => {
         ]
     )
 
-    /* ~ § 6.6.3.2 */
+    /* ~ § 5.7.3.2 */
     defineDelta(
         "PropertyDeleted",
         [
@@ -70,7 +70,7 @@ export const defineDeltas = () => {
         ]
     )
 
-    /* ~ § 6.6.3.3 */
+    /* ~ § 5.7.3.3 */
     defineDelta(
         "PropertyChanged",
         [
@@ -82,7 +82,7 @@ export const defineDeltas = () => {
 
     // Note:Each link-related ∂'s fields typically start with [parent, link, index]
 
-    /* ~ § 6.6.4.1 */
+    /* ~ § 5.7.4.1 */
     defineDelta(
         "ChildAdded",
         [
@@ -92,7 +92,7 @@ export const defineDeltas = () => {
         ]
     )
 
-    /* ~ § 6.6.4.2 */
+    /* ~ § 5.7.4.2 */
     defineDelta(
         "ChildDeleted",
         [
@@ -102,7 +102,7 @@ export const defineDeltas = () => {
         ]
     )
 
-    /* ~ § 6.6.4.3 */
+    /* ~ § 5.7.4.3 */
     defineDelta(
         "ChildReplaced",
         [
@@ -113,7 +113,7 @@ export const defineDeltas = () => {
         ]
     )
 
-    /* ~ § 6.6.4.4 */
+    /* ~ § 5.7.4.4 */
     defineDelta(
         "ChildMovedFromOtherContainment",
         [
@@ -125,7 +125,7 @@ export const defineDeltas = () => {
         ],
     )
 
-    /* ~ § 6.6.4.5 */
+    /* ~ § 5.7.4.5 */
     {
         const origin = parentage("parent", "oldContainment", FeatureKinds.containment)
         defineDelta(
@@ -140,7 +140,7 @@ export const defineDeltas = () => {
         )
     }
 
-    /* ~ § 6.6.4.6 */
+    /* ~ § 5.7.4.6 */
     defineDelta(
         "ChildMovedInSameContainment",
         [
@@ -151,7 +151,7 @@ export const defineDeltas = () => {
         ]
     )
 
-    /* ~ § 6.6.4.7 */
+    /* ~ § 5.7.4.7 */
     defineDelta(
         "ChildMovedAndReplacedFromOtherContainment",
         [
@@ -164,7 +164,7 @@ export const defineDeltas = () => {
         ]
     )
 
-    /* ~ § 6.6.4.8 */
+    /* ~ § 5.7.4.8 */
     {
         const origin = parentage("parent", "oldContainment", FeatureKinds.containment)
         defineDelta(
@@ -180,7 +180,7 @@ export const defineDeltas = () => {
         )
     }
 
-    /* ~ § 6.6.6.4.9 */
+    /* ~ § 5.7.6.4.9 */
     defineDelta(
         "ChildMovedAndReplacedInSameContainment",
         [
@@ -192,7 +192,7 @@ export const defineDeltas = () => {
         ]
     )
 
-    /* ~ § 6.6.5.1 */
+    /* ~ § 5.7.5.1 */
     defineDelta(
         "AnnotationAdded",
         [
@@ -202,7 +202,7 @@ export const defineDeltas = () => {
         ]
     )
 
-    /* ~ § 6.6.5.2 */
+    /* ~ § 5.7.5.2 */
     defineDelta(
         "AnnotationDeleted",
         [
@@ -212,7 +212,7 @@ export const defineDeltas = () => {
         ]
     )
 
-    /* ~ § 6.6.5.3 */
+    /* ~ § 5.7.5.3 */
     defineDelta(
         "AnnotationReplaced",
         [
@@ -223,7 +223,7 @@ export const defineDeltas = () => {
         ]
     )
 
-    /* ~ § 6.6.5.4 */
+    /* ~ § 5.7.5.4 */
     defineDelta(
         "AnnotationMovedFromOtherParent",
         [
@@ -235,7 +235,7 @@ export const defineDeltas = () => {
         ]
     )
 
-    /* ~ § 6.6.5.5 */
+    /* ~ § 5.7.5.5 */
     defineDelta(
         "AnnotationMovedInSameParent",
         [
@@ -246,7 +246,7 @@ export const defineDeltas = () => {
         ]
     )
 
-    /* ~ § 6.6.5.6 */
+    /* ~ § 5.7.5.6 */
     defineDelta(
         "AnnotationMovedAndReplacedFromOtherParent",
         [
@@ -259,7 +259,7 @@ export const defineDeltas = () => {
         ]
     )
 
-    /* ~ § 6.6.5.7 */
+    /* ~ § 5.7.5.7 */
     defineDelta(
         "AnnotationMovedAndReplacedInSameParent",
         [
@@ -271,7 +271,7 @@ export const defineDeltas = () => {
         ]
     )
 
-    /* ~ § 6.6.6.1 */
+    /* ~ § 5.7.6.1 */
     defineDelta(
         "ReferenceAdded",
         [
@@ -281,7 +281,7 @@ export const defineDeltas = () => {
         ]
     )
 
-    /* ~ § 6.6.6.2 */
+    /* ~ § 5.7.6.2 */
     defineDelta(
         "ReferenceDeleted",
         [
@@ -291,7 +291,7 @@ export const defineDeltas = () => {
         ]
     )
 
-    /* ~ § 6.6.6.3 */
+    /* ~ § 5.7.6.3 */
     defineDelta(
         "ReferenceChanged",
         [
@@ -308,7 +308,7 @@ export const defineDeltas = () => {
      *      Reference{ResolveInfo|Target}{Added|Deleted|Changed}
      */
 
-    /* ~ § 6.6.7.2 */
+    /* ~ § 5.7.7.1 */
     defineDelta("NoOp", [], "Delta that does nothing.")
 
     // Note: no delta is equivalent to ErrorEvent.

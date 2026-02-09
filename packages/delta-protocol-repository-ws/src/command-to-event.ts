@@ -103,47 +103,47 @@ export const commandAsEvent = (command: Command, participationId: string): Event
     const commandAsEvent_ = (command: Command): Event => {
         switch (command.messageKind) {
 
-            // in order of the specification (§ 6.5):
+            // in order of the specification (§ 5.5):
 
             case "AddPartition": {
-                const {newPartition} = command as AddPartitionCommand // § 6.5.2.1
-                return completed<PartitionAddedEvent>("PartitionAdded", { // § 6.6.1.1
+                const {newPartition} = command as AddPartitionCommand // § 5.6.2.1
+                return completed<PartitionAddedEvent>("PartitionAdded", { // § 5.7.1.1
                     newPartition
                 })
             }
             case "DeletePartition": {
-                const {deletedPartition} = command as DeletePartitionCommand // § 6.5.2.2
-                return completed<PartitionDeletedEvent>("PartitionDeleted", { // § 6.6.1.2
+                const {deletedPartition} = command as DeletePartitionCommand // § 5.6.2.2
+                return completed<PartitionDeletedEvent>("PartitionDeleted", { // § 5.7.1.2
                     deletedPartition
                 })
             }
             case "ChangeClassifier": {
-                const {node, newClassifier} = command as ChangeClassifierCommand // § 6.5.3.1
-                return completed<ClassifierChangedEvent>("ClassifierChanged", { // § 6.6.2.1
+                const {node, newClassifier} = command as ChangeClassifierCommand // § 5.6.3.1
+                return completed<ClassifierChangedEvent>("ClassifierChanged", { // § 5.7.2.1
                     node,
                     newClassifier,
                     oldClassifier:  { language: "???", version: "???", key: "???" },  // TODO  get from own model
                 })
             }
             case "AddProperty": {
-                const {node, property, newValue} = command as AddPropertyCommand // § 6.5.4.1
-                return completed<PropertyAddedEvent>("PropertyAdded", { // § 6.6.3.1
+                const {node, property, newValue} = command as AddPropertyCommand // § 5.6.4.1
+                return completed<PropertyAddedEvent>("PropertyAdded", { // § 5.7.3.1
                     node,
                     property,
                     newValue
                 })
             }
             case "DeleteProperty": {
-                const {node, property} = command as DeletePropertyCommand // § 6.5.4.2
-                return completed<PropertyDeletedEvent>("PropertyDeleted", { // § 6.6.3.2
+                const {node, property} = command as DeletePropertyCommand // § 5.6.4.2
+                return completed<PropertyDeletedEvent>("PropertyDeleted", { // § 5.7.3.2
                     node,
                     property,
                     oldValue: "???" // TODO  get from own model
                 })
             }
             case "ChangeProperty": {
-                const {node, property, newValue} = command as ChangePropertyCommand // § 6.5.4.3
-                return completed<PropertyChangedEvent>("PropertyChanged", { // § 6.6.3.3
+                const {node, property, newValue} = command as ChangePropertyCommand // § 5.6.4.3
+                return completed<PropertyChangedEvent>("PropertyChanged", { // § 5.7.3.3
                     node,
                     property,
                     newValue,
@@ -151,8 +151,8 @@ export const commandAsEvent = (command: Command, participationId: string): Event
                 })
             }
             case "AddChild": {
-                const {parent, newChild, containment, index} = command as AddChildCommand // § 6.5.5.1
-                return completed<ChildAddedEvent>("ChildAdded", { // § 6.6.4.1
+                const {parent, newChild, containment, index} = command as AddChildCommand // § 5.6.5.1
+                return completed<ChildAddedEvent>("ChildAdded", { // § 5.7.4.1
                     parent,
                     newChild,
                     containment,
@@ -160,8 +160,8 @@ export const commandAsEvent = (command: Command, participationId: string): Event
                 })
             }
             case "DeleteChild": {
-                const {parent, containment, index, deletedChild} = command as DeleteChildCommand // § 6.5.5.2
-                return completed<ChildDeletedEvent>("ChildDeleted", { // § 6.6.4.2
+                const {parent, containment, index, deletedChild} = command as DeleteChildCommand // § 5.6.5.2
+                return completed<ChildDeletedEvent>("ChildDeleted", { // § 5.7.4.2
                     parent,
                     containment,
                     index,
@@ -170,8 +170,8 @@ export const commandAsEvent = (command: Command, participationId: string): Event
                 })
             }
             case "ReplaceChild": {
-                const {newChild, parent, containment, index, replacedChild} = command as ReplaceChildCommand // § 6.5.5.3
-                return completed<ChildReplacedEvent>("ChildReplaced", { // § 6.6.4.3
+                const {newChild, parent, containment, index, replacedChild} = command as ReplaceChildCommand // § 5.6.5.3
+                return completed<ChildReplacedEvent>("ChildReplaced", { // § 5.7.4.3
                     newChild,
                     replacedChild,
                     replacedDescendants: [],    // TODO  get from own model
@@ -181,8 +181,8 @@ export const commandAsEvent = (command: Command, participationId: string): Event
                 })
             }
             case "MoveChildFromOtherContainment": {
-                const {newParent, newContainment, newIndex, movedChild} = command as MoveChildFromOtherContainmentCommand // § 6.5.5.4
-                return completed<ChildMovedFromOtherContainmentEvent>("ChildMovedFromOtherContainment", { // § 6.6.4.4
+                const {newParent, newContainment, newIndex, movedChild} = command as MoveChildFromOtherContainmentCommand // § 5.6.5.4
+                return completed<ChildMovedFromOtherContainmentEvent>("ChildMovedFromOtherContainment", { // § 5.7.4.4
                     newParent,
                     newContainment,
                     newIndex,
@@ -193,8 +193,8 @@ export const commandAsEvent = (command: Command, participationId: string): Event
                 })
             }
             case "MoveChildFromOtherContainmentInSameParent": {
-                const {parent, oldContainment, oldIndex, newContainment, newIndex, movedChild} = command as MoveChildFromOtherContainmentInSameParentCommand // § 6.5.5.5
-                return completed<ChildMovedFromOtherContainmentInSameParentEvent>("ChildMovedFromOtherContainmentInSameParent", { // § 6.6.4.5
+                const {parent, oldContainment, oldIndex, newContainment, newIndex, movedChild} = command as MoveChildFromOtherContainmentInSameParentCommand // § 5.6.5.5
+                return completed<ChildMovedFromOtherContainmentInSameParentEvent>("ChildMovedFromOtherContainmentInSameParent", { // § 5.7.4.5
                     parent,
                     oldContainment,
                     oldIndex,
@@ -204,8 +204,8 @@ export const commandAsEvent = (command: Command, participationId: string): Event
                 })
             }
             case "MoveChildInSameContainment": {
-                const {newIndex, movedChild} = command as MoveChildInSameContainmentCommand // § 6.5.5.6
-                return completed<ChildMovedInSameContainmentEvent>("ChildMovedInSameContainment", { // § 6.6.4.6
+                const {newIndex, movedChild} = command as MoveChildInSameContainmentCommand // § 5.6.5.6
+                return completed<ChildMovedInSameContainmentEvent>("ChildMovedInSameContainment", { // § 5.7.4.6
                     newIndex,
                     movedChild,
                     parent: "???",   // TODO  get from own model
@@ -214,8 +214,8 @@ export const commandAsEvent = (command: Command, participationId: string): Event
                 })
             }
             case "MoveAndReplaceChildFromOtherContainment": {
-                const {newParent, newContainment, newIndex, replacedChild, movedChild} = command as MoveAndReplaceChildFromOtherContainmentCommand // § 6.5.5.7
-                return completed<ChildMovedAndReplacedFromOtherContainmentEvent>("ChildMovedAndReplacedFromOtherContainment", { // § 6.6.4.7
+                const {newParent, newContainment, newIndex, replacedChild, movedChild} = command as MoveAndReplaceChildFromOtherContainmentCommand // § 5.6.5.7
+                return completed<ChildMovedAndReplacedFromOtherContainmentEvent>("ChildMovedAndReplacedFromOtherContainment", { // § 5.7.4.7
                     newParent,
                     newContainment,
                     newIndex,
@@ -228,8 +228,8 @@ export const commandAsEvent = (command: Command, participationId: string): Event
                 })
             }
             case "MoveAndReplaceChildFromOtherContainmentInSameParent": {
-                const {newContainment, newIndex, replacedChild, movedChild} = command as MoveAndReplaceChildFromOtherContainmentInSameParentCommand // § 6.5.5.8
-                return completed<ChildMovedAndReplacedFromOtherContainmentInSameParentEvent>("ChildMovedAndReplacedFromOtherContainmentInSameParent", { // § 6.6.4.8
+                const {newContainment, newIndex, replacedChild, movedChild} = command as MoveAndReplaceChildFromOtherContainmentInSameParentCommand // § 5.6.5.8
+                return completed<ChildMovedAndReplacedFromOtherContainmentInSameParentEvent>("ChildMovedAndReplacedFromOtherContainmentInSameParent", { // § 5.7.4.8
                     newContainment,
                     newIndex,
                     movedChild,
@@ -241,8 +241,8 @@ export const commandAsEvent = (command: Command, participationId: string): Event
                 })
             }
             case "MoveAndReplaceChildInSameContainment": {
-                const {newIndex, replacedChild} = command as MoveAndReplaceChildInSameContainmentCommand // § 6.5.5.9
-                return completed<ChildMovedAndReplacedInSameContainmentEvent>("ChildMovedAndReplacedInSameContainment", { // § 6.6.4.9
+                const {newIndex, replacedChild} = command as MoveAndReplaceChildInSameContainmentCommand // § 5.6.5.9
+                return completed<ChildMovedAndReplacedInSameContainmentEvent>("ChildMovedAndReplacedInSameContainment", { // § 5.7.4.9
                     newIndex,
                     movedChild: "???",   // TODO  get from own model
                     parent: "???",   // TODO  get from own model
@@ -253,16 +253,16 @@ export const commandAsEvent = (command: Command, participationId: string): Event
                 })
             }
             case "AddAnnotation": {
-                const {parent, newAnnotation, index} = command as AddAnnotationCommand // § 6.5.6.1
-                return completed<AnnotationAddedEvent>("AnnotationAdded", { // § 6.6.5.1
+                const {parent, newAnnotation, index} = command as AddAnnotationCommand // § 5.6.6.1
+                return completed<AnnotationAddedEvent>("AnnotationAdded", { // § 5.7.5.1
                     parent,
                     newAnnotation,
                     index
                 })
             }
             case "DeleteAnnotation": {
-                const {deletedAnnotation, parent, index} = command as DeleteAnnotationCommand // § 6.5.6.2
-                return completed<AnnotationDeletedEvent>("AnnotationDeleted", { // § 6.6.5.2
+                const {deletedAnnotation, parent, index} = command as DeleteAnnotationCommand // § 5.6.6.2
+                return completed<AnnotationDeletedEvent>("AnnotationDeleted", { // § 5.7.5.2
                     deletedAnnotation,
                     deletedDescendants: [],   // TODO  get from own model
                     parent,
@@ -270,8 +270,8 @@ export const commandAsEvent = (command: Command, participationId: string): Event
                 })
             }
             case "ReplaceAnnotation": {
-                const {newAnnotation, replacedAnnotation, parent, index} = command as ReplaceAnnotationCommand // § 6.5.6.3
-                return completed<AnnotationReplacedEvent>("AnnotationReplaced", { // § 6.6.5.3
+                const {newAnnotation, replacedAnnotation, parent, index} = command as ReplaceAnnotationCommand // § 5.6.6.3
+                return completed<AnnotationReplacedEvent>("AnnotationReplaced", { // § 5.7.5.3
                     newAnnotation,
                     replacedAnnotation,
                     replacedDescendants: [],   // TODO  get from own model
@@ -280,8 +280,8 @@ export const commandAsEvent = (command: Command, participationId: string): Event
                 })
             }
             case "MoveAnnotationFromOtherParent": {
-                const {newParent, newIndex, movedAnnotation} = command as MoveAnnotationFromOtherParentCommand // § 6.5.6.4
-                return completed<AnnotationMovedFromOtherParentEvent>("AnnotationMovedFromOtherParent", { // § 6.6.5.4
+                const {newParent, newIndex, movedAnnotation} = command as MoveAnnotationFromOtherParentCommand // § 5.6.6.4
+                return completed<AnnotationMovedFromOtherParentEvent>("AnnotationMovedFromOtherParent", { // § 5.7.5.4
                     newParent,
                     newIndex,
                     movedAnnotation,
@@ -290,8 +290,8 @@ export const commandAsEvent = (command: Command, participationId: string): Event
                 })
             }
             case "MoveAnnotationInSameParent": {
-                const {newIndex, movedAnnotation} = command as MoveAnnotationInSameParentCommand // § 6.5.6.5
-                return completed<AnnotationMovedInSameParentEvent>("AnnotationMovedInSameParent", { // § 6.6.5.5
+                const {newIndex, movedAnnotation} = command as MoveAnnotationInSameParentCommand // § 5.6.6.5
+                return completed<AnnotationMovedInSameParentEvent>("AnnotationMovedInSameParent", { // § 5.7.5.5
                     newIndex,
                     movedAnnotation,
                     parent: "???",   // TODO  get from own model
@@ -299,8 +299,8 @@ export const commandAsEvent = (command: Command, participationId: string): Event
                 })
             }
             case "MoveAndReplaceAnnotationFromOtherParent": {
-                const {newParent, newIndex, movedAnnotation, replacedAnnotation} = command as MoveAndReplaceAnnotationFromOtherParentCommand // § 6.5.6.6
-                return completed<AnnotationMovedAndReplacedFromOtherParentEvent>("AnnotationMovedAndReplacedFromOtherParent", { // § 6.6.5.6
+                const {newParent, newIndex, movedAnnotation, replacedAnnotation} = command as MoveAndReplaceAnnotationFromOtherParentCommand // § 5.6.6.6
+                return completed<AnnotationMovedAndReplacedFromOtherParentEvent>("AnnotationMovedAndReplacedFromOtherParent", { // § 5.7.5.6
                     newParent,
                     newIndex,
                     movedAnnotation,
@@ -311,8 +311,8 @@ export const commandAsEvent = (command: Command, participationId: string): Event
                 })
             }
             case "MoveAndReplaceAnnotationInSameParent": {
-                const {newIndex, movedAnnotation, replacedAnnotation} = command as MoveAndReplaceAnnotationInSameParentCommand // § 6.5.6.7
-                return completed<AnnotationMovedAndReplacedInSameParentEvent>("AnnotationMovedAndReplacedInSameParent", { // § 6.6.5.7
+                const {newIndex, movedAnnotation, replacedAnnotation} = command as MoveAndReplaceAnnotationInSameParentCommand // § 5.6.6.7
+                return completed<AnnotationMovedAndReplacedInSameParentEvent>("AnnotationMovedAndReplacedInSameParent", { // § 5.7.5.7
                     newIndex,
                     movedAnnotation,
                     parent: "???",   // TODO  get from own model
@@ -322,8 +322,8 @@ export const commandAsEvent = (command: Command, participationId: string): Event
                 })
             }
             case "AddReference": {
-                const {parent, reference, index, newReference, newResolveInfo} = command as AddReferenceCommand // § 6.5.7.1
-                return completed<ReferenceAddedEvent>("ReferenceAdded", { // § 6.6.6.1
+                const {parent, reference, index, newReference, newResolveInfo} = command as AddReferenceCommand // § 5.6.7.1
+                return completed<ReferenceAddedEvent>("ReferenceAdded", { // § 5.7.6.1
                     parent,
                     reference,
                     index,
@@ -332,8 +332,8 @@ export const commandAsEvent = (command: Command, participationId: string): Event
                 })
             }
             case "DeleteReference": {
-                const {parent, reference, index, deletedReference, deletedResolveInfo} = command as DeleteReferenceCommand // § 6.5.7.2
-                return completed<ReferenceDeletedEvent>("ReferenceDeleted", { // § 6.6.6.2
+                const {parent, reference, index, deletedReference, deletedResolveInfo} = command as DeleteReferenceCommand // § 5.6.7.2
+                return completed<ReferenceDeletedEvent>("ReferenceDeleted", { // § 5.7.6.2
                     parent,
                     reference,
                     index,
@@ -342,8 +342,8 @@ export const commandAsEvent = (command: Command, participationId: string): Event
                 })
             }
             case "ChangeReference": {
-                const {parent, reference, index, newReference, newResolveInfo, oldReference, oldResolveInfo} = command as ChangeReferenceCommand // § 6.5.7.3
-                return completed<ReferenceChangedEvent>("ReferenceChanged", { // § 6.6.6.3
+                const {parent, reference, index, newReference, newResolveInfo, oldReference, oldResolveInfo} = command as ChangeReferenceCommand // § 5.6.7.3
+                return completed<ReferenceChangedEvent>("ReferenceChanged", { // § 5.7.6.3
                     parent,
                     reference,
                     index,
