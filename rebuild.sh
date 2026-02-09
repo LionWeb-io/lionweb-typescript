@@ -88,10 +88,6 @@ mkdir -p metrics
 npm test
 cd ..
 
-cd artifacts
-npm run generate
-cd ..
-
 cd delta-protocol-common
 npm run build
 cd ..

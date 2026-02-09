@@ -60,7 +60,7 @@ export type SerializationOptions = Partial<{
     /**
      * A {@link PropertyValueSerializer} implementation.
      * Default = the value of the `propertyValueSerializer` property of the {@link LionWebVersion version} of the LionWeb serialization format,
-     * configured through {@code SerializerConfiguration.lionWebVersion} (which itself defaults to {@link LionWebVersions.v2023_1}).
+     * configured through `SerializerConfiguration.lionWebVersion` (which itself defaults to `LionWebVersions.v2023_1`).
      */
     propertyValueSerializer: PropertyValueSerializer
 

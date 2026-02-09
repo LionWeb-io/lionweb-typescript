@@ -61,7 +61,7 @@ export type RootsWithIdMapping = { roots: INodeBase[], idMapping: IdMapping };
  */
 export type DeserializerConfiguration = {
     // FIXME  parametrize (optionally) in LionWebVersion
-    /** Default: {@code lioncoreBuiltinsFacade.propertyValueDeserializer}. */
+    /** Default: `lioncoreBuiltinsFacade.propertyValueDeserializer`. */
     propertyValueDeserializer?: PropertyValueDeserializer,
     /** Default: {@link consoleProblemReporter}. */
     problemReporter?: ProblemReporter

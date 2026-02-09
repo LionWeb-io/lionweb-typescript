@@ -17,7 +17,7 @@ const factory = new LanguageFactory(
 /**
  * Definition of LionCore in terms of itself.
  *
- * @deprecated Use {@code lioncoreFacade.language} instead.
+ * @deprecated Use `lioncoreFacade.language` instead.
  */
 export const lioncore = factory.language.havingKey("LionCore-M3")
 
@@ -105,12 +105,12 @@ export const lioncoreFacade: LionCoreFacade = {
 
 
 /**
- * @deprecated Use {@code <LionWeb version>.lioncoreFacade.metaConcepts} instead.
+ * @deprecated Use `<LionWeb version>.lioncoreFacade.metaConcepts` instead.
  */
 export const metaConcepts = lioncoreFacade.metaConcepts
 
 /**
- * @deprecated Use {@code <LionWeb version>.lioncoreFacade.metaFeatures} instead.
+ * @deprecated Use `<LionWeb version>.lioncoreFacade.metaFeatures` instead.
  */
 export const metaFeatures = lioncoreFacade.metaFeatures
 

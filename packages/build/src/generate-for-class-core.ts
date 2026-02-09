@@ -17,68 +17,24 @@
 
 import { serializeNodeBases } from "@lionweb/class-core" // Note: this is a circular dependency!
 import { defaultTrumpfOriginatingApache2_0LicensedHeader, generateLanguage } from "@lionweb/class-core-generator"
-import { deserializeLanguages, LionWebVersions, serializeLanguages } from "@lionweb/core"
-import { LionWebJsonChunk } from "@lionweb/json"
-import {
-    generatePlantUmlForLanguage,
-    genericAsTreeText,
-    languageAsText,
-    readFileAsJson,
-    writeJsonAsFile
-} from "@lionweb/utilities"
-import { copyFileSync, lstatSync, writeFileSync } from "fs"
+import { LionWebVersions } from "@lionweb/core"
+import { generatePlantUmlForLanguage, genericAsTreeText, languageAsText } from "@lionweb/utilities"
+import { writeFileSync } from "fs"
 import { join } from "path"
-import { deltas } from "./deltas/definition/definition-base.js"
-import { defineDeltas } from "./deltas/definition/definitions.js"
-import { generateDeltaCode } from "./deltas/generator/generator.js"
-import { deltasLanguage } from "./deltas/meta-definition.js"
-import { getFromHttps } from "./curl.js"
+import { defineDeltas, deltas, deltasLanguage, generateDeltaCode } from "./deltas/index.js"
 
-
-const inArtifactsPath = (subPath: string) => join("artifacts", subPath)
+const artifactsPath = "artifacts/deltas"
 
 // generate LionCore-builtins:
 generateLanguage(LionWebVersions.v2023_1.builtinsFacade.language, "../class-core/src", { genericImportLocation: "./index.js", header: defaultTrumpfOriginatingApache2_0LicensedHeader })
 
 // generate artifacts for deltas definition language:
-writeJsonAsFile(inArtifactsPath("delta-language.json"), serializeLanguages(deltasLanguage))
-writeFileSync(inArtifactsPath("delta-language.txt"), languageAsText(deltasLanguage))
-writeFileSync(inArtifactsPath("delta-language.puml"), defaultTrumpfOriginatingApache2_0LicensedHeader + "\n" + generatePlantUmlForLanguage(deltasLanguage))
+writeFileSync(join(artifactsPath, "delta-language.txt"), languageAsText(deltasLanguage))
+writeFileSync(join(artifactsPath, "delta-language.puml"), defaultTrumpfOriginatingApache2_0LicensedHeader + "\n" + generatePlantUmlForLanguage(deltasLanguage))
 generateLanguage(deltasLanguage, "src/deltas/definition", { header: defaultTrumpfOriginatingApache2_0LicensedHeader })
 
 // generate artifacts for specification of deltas expressed in that language:
 defineDeltas()
-writeFileSync(inArtifactsPath("deltas.txt"), genericAsTreeText(serializeNodeBases([deltas]), [deltasLanguage]))
+writeFileSync(join(artifactsPath, "deltas.txt"), genericAsTreeText(serializeNodeBases([deltas]), [deltasLanguage]))
 generateDeltaCode("../class-core/src/deltas", defaultTrumpfOriginatingApache2_0LicensedHeader)
-
-// copy language JSON file from external repo:
-const externalRepoName = "lionweb-integration-testing"
-const pathWithinExternalRepo = "src/languages"
-const languageJsonFileName = "testLanguage.2023.1.json"
-const url = `https://raw.githubusercontent.com/LionWeb-io/${externalRepoName}/refs/heads/main/${pathWithinExternalRepo}/${languageJsonFileName}`
-const languageJsonPath = inArtifactsPath(languageJsonFileName)
-
-await getFromHttps(url)
-    .then((fileAsBuffer) => {
-        writeFileSync(languageJsonPath, fileAsBuffer)
-        console.log(`Retrieved serialization chunk JSON for test language from ${externalRepoName} repository from GitHub.`)
-    })
-    .catch((error) => {
-        console.error(`Couldn’t retrieve serialization chunk JSON for test language from ${externalRepoName} repository from GitHub, due to: ${error}.`)
-        const integrationTestingFilePath = join("../../..", externalRepoName, pathWithinExternalRepo, languageJsonFileName)
-        if (lstatSync(integrationTestingFilePath).isFile()) {
-            copyFileSync(integrationTestingFilePath, languageJsonPath)
-            console.log(`Copied serialization chunk JSON for test language from ${externalRepoName} repository.`)
-        } else {
-            console.log(`${externalRepoName} repository not found: using serialization chunk JSON for test language as provided here.`)
-        }
-    })
-console.log()
-
-// TestLanguage language:
-const TestLanguage = deserializeLanguages(readFileAsJson(languageJsonPath) as LionWebJsonChunk)[0]
-generateLanguage(TestLanguage, "../class-core-test-language/src/gen", { header: defaultTrumpfOriginatingApache2_0LicensedHeader })
-// (the same content as in the lionweb-integration-testing repository:)
-writeFileSync(inArtifactsPath("TestLanguage.txt"), languageAsText(TestLanguage))
-writeFileSync(inArtifactsPath("TestLanguage.puml"), generatePlantUmlForLanguage(TestLanguage))
 

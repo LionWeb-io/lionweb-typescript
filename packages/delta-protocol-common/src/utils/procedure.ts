@@ -23,7 +23,7 @@ export type Procedure<T> = (t: T) => void
 
 /**
  * @return a {@link Procedure procedure} that executes the procedures in the given order.
- * Any procedure that's {@code undefined} will be skipped.
+ * Any procedure that's `undefined` will be skipped.
  */
 export const combine = <T>(...procedures: (Procedure<T> | undefined)[]): Procedure<T> =>
     (t) => {

@@ -5,7 +5,7 @@ import { LionWebVersion } from "./version.js"
 /**
  * The *current* release(d) version.
  *
- * @deprecated Use {@code LionWebVersions.v2023_1.serializationFormatVersion} instead.
+ * @deprecated Use `LionWebVersions.v2023_1.serializationFormatVersion` instead.
  */
 export const currentReleaseVersion = "2023.1"
 

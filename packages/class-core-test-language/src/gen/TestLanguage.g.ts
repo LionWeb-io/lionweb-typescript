@@ -217,6 +217,11 @@ export class TestLanguageBase implements ILanguageBase {
         this.ensureWiredUp();
         return this._TestAnnotation;
     }
+    private readonly _TestAnnotation_ref = new Reference(this._TestAnnotation, "ref", "TestAnnotation-ref", "TestAnnotation-ref");
+    get TestAnnotation_ref(): Reference {
+        this.ensureWiredUp();
+        return this._TestAnnotation_ref;
+    }
 
     public readonly _TestPartition = new Concept(this._language, "TestPartition", "TestPartition", "TestPartition", false).isPartition();
     get TestPartition(): Concept {
@@ -262,6 +267,8 @@ export class TestLanguageBase implements ILanguageBase {
         this._LinkTestConcept_reference_0_n.ofType(this._LinkTestConcept);
         this._LinkTestConcept_reference_1_n.ofType(this._LinkTestConcept);
         this._TestAnnotation.implementing(LionCore_builtinsBase.INSTANCE._INamed);
+        this._TestAnnotation.havingFeatures(this._TestAnnotation_ref);
+        this._TestAnnotation_ref.ofType(LionCore_builtinsBase.INSTANCE._Node);
         this._TestPartition.implementing(LionCore_builtinsBase.INSTANCE._INamed);
         this._TestPartition.havingFeatures(this._TestPartition_links, this._TestPartition_data);
         this._TestPartition_links.ofType(this._LinkTestConcept);
@@ -579,6 +586,14 @@ export class TestAnnotation extends NodeBase implements INamed {
         return new TestAnnotation(TestLanguageBase.INSTANCE.TestAnnotation, id, receiveDelta, parentInfo);
     }
 
+    private readonly _ref: RequiredSingleReferenceValueManager<INodeBase>;
+    get ref(): SingleRef<INodeBase> {
+        return this._ref.get();
+    }
+    set ref(newValue: SingleRef<INodeBase>) {
+        this._ref.set(newValue);
+    }
+
     private readonly _name: RequiredPropertyValueManager<string>;
     get name(): string {
         return this._name.get();
@@ -589,6 +604,7 @@ export class TestAnnotation extends NodeBase implements INamed {
 
     public constructor(classifier: Classifier, id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage) {
         super(classifier, id, receiveDelta, parentInfo);
+        this._ref = new RequiredSingleReferenceValueManager<INodeBase>(TestLanguageBase.INSTANCE.TestAnnotation_ref, this);
         this._name = new RequiredPropertyValueManager<string>(LionCore_builtinsBase.INSTANCE.INamed_name, this);
     }
 
@@ -597,6 +613,13 @@ export class TestAnnotation extends NodeBase implements INamed {
             return this._name;
         }
         return super.getPropertyValueManager(property);
+    }
+
+    getReferenceValueManager(reference: Reference): ReferenceValueManager<INodeBase> {
+        if (reference.key === TestLanguageBase.INSTANCE.TestAnnotation_ref.key) {
+            return this._ref;
+        }
+        return super.getReferenceValueManager(reference);
     }
 }
 

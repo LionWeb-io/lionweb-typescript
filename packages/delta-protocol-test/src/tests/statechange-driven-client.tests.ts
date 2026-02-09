@@ -42,15 +42,15 @@ import { createWSLowLevelClient } from "@lionweb/delta-protocol-low-level-client
 import { commandAsEvent, createWebSocketServer, wsLocalhostUrl } from "@lionweb/delta-protocol-repository-ws"
 import { byIdMap } from "@lionweb/ts-utils"
 
-import { Geometry, ShapesBase } from "../gen/Shapes.g.js"
+import { TestLanguageBase } from "@lionweb/class-core-test-language"
 import { delayed } from "../test-utils/async.js"
 import { asLowLevelClientLogger } from "../test-utils/logging.js"
 import { nextPort } from "../test-utils/port.js"
-import { testModelChunk } from "../test-utils/test-model.js"
+import { getTextFrom, setTextOn, testModelChunk } from "../test-utils/test-model.js"
 import { timedConsoleLogger } from "../test-utils/time.js"
 
 
-const languageBases = [ShapesBase.INSTANCE]
+const languageBases = [TestLanguageBase.INSTANCE]
 
 
 /**
@@ -131,7 +131,7 @@ describe("WebSocket-driven client and repository", async function() {
         // end Arrange
 
         // Action:
-        ;(model[0] as Geometry).documentation!.text = "bye bye"
+        setTextOn(model, "bye bye")
 
         const waitTime = 20
         await delayed(waitTime, null)    // wait for a bit so the repository can receive the command and send the resulting event
@@ -140,8 +140,8 @@ describe("WebSocket-driven client and repository", async function() {
             commandID: "A-0",
             serializedDelta: {
                 kind: "PropertyChanged",
-                node: "documentation",
-                property: { language: "key-Shapes", version: "1", key: "key-text" },
+                node: "data",
+                property: { language: "TestLanguage", version: "0", key: "DataTypeTestConcept-stringValue_1" },
                 oldValue: "hello there",
                 newValue: "bye bye"
             }
@@ -150,8 +150,8 @@ describe("WebSocket-driven client and repository", async function() {
             commandID: "B-1",
             serializedDelta: {
                 kind: "PropertyChanged",
-                node: "documentation",
-                property: { language: "key-Shapes", version: "1", key: "key-text" },
+                node: "data",
+                property: { language: "TestLanguage", version: "0", key: "DataTypeTestConcept-stringValue_1" },
                 oldValue: "bye bye",
                 newValue: "see ya"
             }
@@ -170,7 +170,7 @@ describe("WebSocket-driven client and repository", async function() {
         expect(eventsSentByRepository).to.deep.equal([testPayload1, testPayload2])
         expect(eventsReceivedByClient).to.deep.equal([testPayload1, testPayload2])
 
-        expect((model[0] as Geometry).documentation!.text).to.equal("see ya")
+        expect(getTextFrom(model)).to.equal("see ya")
     })
 
 })
@@ -231,7 +231,7 @@ describe("WebSocket-driven client and repository including translation, without 
         // end Arrange
 
         // Action:
-        ;(modelA[0] as Geometry).documentation!.text = "bye bye"
+        setTextOn(modelA, "bye bye")
 
         await delayed(20, null)
         await clientA.disconnect()
@@ -239,7 +239,7 @@ describe("WebSocket-driven client and repository including translation, without 
         await lowLevelServer.shutdown()
 
         // Assert:
-        expect((modelB[0] as Geometry).documentation!.text).to.equal("bye bye")
+        expect(getTextFrom(modelB)).to.equal("bye bye")
     })
 
 })

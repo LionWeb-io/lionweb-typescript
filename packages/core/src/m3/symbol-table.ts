@@ -18,15 +18,15 @@ interface SymbolTable {
 
     /**
      * Looks up the {@link LanguageEntity}, as pointed to by the given {@link LionWebJsonMetaPointer},
-     * or {@code undefined} if it couldn't be found.
+     * or `undefined` if it couldn't be found.
      */
     entityMatching(entityMetaPointer: LionWebJsonMetaPointer): LanguageEntity | undefined
 
     /**
      * Looks up the {@link Feature}, as pointed to by the {@link LionWebJsonMetaPointer} given second,
      * as a feature of the {@link Classifier}, as pointed to by the {@link LionWebJsonMetaPointer} given first,
-     * or {@code undefined} it it couldn't be found.
-     * *Note* that the {@code language} and {@code version} values of both {@link LionWebJsonMetaPointer}-typed arguments should coincide,
+     * or `undefined` it it couldn't be found.
+     * *Note* that the `language` and `version` values of both {@link LionWebJsonMetaPointer}-typed arguments should coincide,
      * although this is typically not checked!
      */
     featureMatching(entityMetaPointer: LionWebJsonMetaPointer, featureMetaPointer: LionWebJsonMetaPointer): Feature | undefined

@@ -90,9 +90,6 @@ The implementation is divided up in a number of NPM packages in the directory [`
   This constitutes a *circular* dependency, but that only exists at compile+build time, so should not be problematic.
   To ensure that a “clean clone” of this repository is not impacted, the `rebuild.sh` script builds `class-core` first, before compiling and running `build`, and then builds `class-core` again.
 
-- `artifacts`
-  A package that generates artifacts (serialization chunks, diagrams, JSON Schemas) from some of the models constructed in the `core` and `test` packages.
-
 - Various packages related to the delta protocol:
   - `delta-protocol-common`
   - `delta-protocol-client`
