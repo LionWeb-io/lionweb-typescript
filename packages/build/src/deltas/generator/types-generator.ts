@@ -19,7 +19,6 @@ import { indent } from "@lionweb/textgen-utils"
 import { asString, commaSeparated, when } from "littoral-templates"
 
 import {
-    CustomType,
     Delta,
     FeatureType,
     Field,
@@ -43,9 +42,6 @@ const tsTypeForClassField = (type: Type) => {
     }
     if (type instanceof PrimitiveValueType) {
         return "T"
-    }
-    if (type instanceof CustomType) {
-        return type.type
     }
     throw new Error(`type ${type.classifier.name} not handled by tsTypeForClassField`)
 }

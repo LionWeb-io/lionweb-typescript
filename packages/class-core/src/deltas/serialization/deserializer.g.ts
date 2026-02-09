@@ -41,7 +41,6 @@ import {
     ChildMovedFromOtherContainmentInSameParentDelta,
     ChildMovedInSameContainmentDelta,
     ChildReplacedDelta,
-    CompositeDelta,
     NoOpDelta,
     PartitionAddedDelta,
     PartitionDeletedDelta,
@@ -219,27 +218,23 @@ export const deltaDeserializer = (languageBases: ILanguageBase[], idMapping: IdM
                 const parent = idMapping.fromId(delta.parent);
                 const reference = resolvedReferenceFrom(delta.reference, parent.classifier);
                 const index = delta.index;
-                const newTarget = idMapping.fromRefId(delta.newTarget);
-                return new ReferenceAddedDelta(parent, reference, index, newTarget);
+                const newReference = idMapping.fromRefId(delta.newReference);
+                return new ReferenceAddedDelta(parent, reference, index, newReference);
             }
             case "ReferenceDeleted": {
                 const parent = idMapping.fromId(delta.parent);
                 const reference = resolvedReferenceFrom(delta.reference, parent.classifier);
                 const index = delta.index;
-                const deletedTarget = idMapping.fromRefId(delta.deletedTarget);
-                return new ReferenceDeletedDelta(parent, reference, index, deletedTarget);
+                const deletedReference = idMapping.fromRefId(delta.deletedReference);
+                return new ReferenceDeletedDelta(parent, reference, index, deletedReference);
             }
             case "ReferenceChanged": {
                 const parent = idMapping.fromId(delta.parent);
                 const reference = resolvedReferenceFrom(delta.reference, parent.classifier);
                 const index = delta.index;
-                const newTarget = idMapping.fromRefId(delta.newTarget);
-                const oldTarget = idMapping.fromRefId(delta.oldTarget);
-                return new ReferenceChangedDelta(parent, reference, index, newTarget, oldTarget);
-            }
-            case "Composite": {
-                const parts = delta.parts.map(deserializedDelta);
-                return new CompositeDelta(parts);
+                const newReference = idMapping.fromRefId(delta.newReference);
+                const oldReference = idMapping.fromRefId(delta.oldReference);
+                return new ReferenceChangedDelta(parent, reference, index, newReference, oldReference);
             }
             case "NoOp": {
                 return new NoOpDelta();

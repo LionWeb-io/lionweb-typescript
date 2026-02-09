@@ -694,7 +694,7 @@ Deltas (id: Deltas) {
                         IndexType (id: 228)
                 }
                 Field (id: 232) {
-                    name = 'newTarget'
+                    name = 'newReference'
                     type:
                         NodeType (id: 231) {
                             serialization:
@@ -724,7 +724,7 @@ Deltas (id: Deltas) {
                         IndexType (id: 238)
                 }
                 Field (id: 242) {
-                    name = 'deletedTarget'
+                    name = 'deletedReference'
                     type:
                         NodeType (id: 241) {
                             serialization:
@@ -754,7 +754,7 @@ Deltas (id: Deltas) {
                         IndexType (id: 248)
                 }
                 Field (id: 252) {
-                    name = 'newTarget'
+                    name = 'newReference'
                     type:
                         NodeType (id: 251) {
                             serialization:
@@ -762,7 +762,7 @@ Deltas (id: Deltas) {
                         }
                 }
                 Field (id: 255) {
-                    name = 'oldTarget'
+                    name = 'oldReference'
                     type:
                         NodeType (id: 254) {
                             serialization:
@@ -770,21 +770,7 @@ Deltas (id: Deltas) {
                         }
                 }
         }
-        Delta (id: 259) {
-            name = 'Composite'
-            fields:
-                Field (id: 258) {
-                    name = 'parts'
-                    type:
-                        CustomType (id: 257) {
-                            type = 'IDelta[]'
-                            serializationType = 'SerializedDelta[]'
-                            serializationExpr = 'delta.parts.map(serializeDelta)'
-                            deserializationExpr = 'delta.parts.map(deserializedDelta)'
-                        }
-                }
-        }
-        Delta (id: 260) {
+        Delta (id: 257) {
             documentation = 'Delta that does nothing.'
             name = 'NoOp'
         }

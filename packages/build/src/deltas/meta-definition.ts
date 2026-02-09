@@ -59,12 +59,6 @@ factory.concept("IndexType", false).implementing(Type)
 
 factory.concept("PrimitiveValueType", false).implementing(Type)
 
-const CustomType = factory.concept("CustomType", false).implementing(Type)
-factory.property(CustomType, "type").ofType(stringDataType)
-factory.property(CustomType, "serializationType").ofType(stringDataType)
-factory.property(CustomType, "serializationExpr").ofType(stringDataType)
-factory.property(CustomType, "deserializationExpr").ofType(stringDataType)
-
 const Delta = factory.concept("Delta", false).implementing(inamed)
 factory.property(Delta, "documentation").isOptional().ofType(stringDataType)
 factory.containment(Delta, "fields").isOptional().isMultiple().ofType(Field)

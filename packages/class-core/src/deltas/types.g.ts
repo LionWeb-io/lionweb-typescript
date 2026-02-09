@@ -254,7 +254,7 @@ export class ReferenceAddedDelta implements IDelta {
         public readonly parent: INodeBase,
         public readonly reference: Reference,
         public readonly index: number,
-        public readonly newTarget: SingleRef<INodeBase>
+        public readonly newReference: SingleRef<INodeBase>
     ) {
     }
 }
@@ -264,7 +264,7 @@ export class ReferenceDeletedDelta implements IDelta {
         public readonly parent: INodeBase,
         public readonly reference: Reference,
         public readonly index: number,
-        public readonly deletedTarget: SingleRef<INodeBase>
+        public readonly deletedReference: SingleRef<INodeBase>
     ) {
     }
 }
@@ -274,15 +274,8 @@ export class ReferenceChangedDelta implements IDelta {
         public readonly parent: INodeBase,
         public readonly reference: Reference,
         public readonly index: number,
-        public readonly newTarget: SingleRef<INodeBase>,
-        public readonly oldTarget: SingleRef<INodeBase>
-    ) {
-    }
-}
-
-export class CompositeDelta implements IDelta {
-    constructor(
-        public readonly parts: IDelta[]
+        public readonly newReference: SingleRef<INodeBase>,
+        public readonly oldReference: SingleRef<INodeBase>
     ) {
     }
 }

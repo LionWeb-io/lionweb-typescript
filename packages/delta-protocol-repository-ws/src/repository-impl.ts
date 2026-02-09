@@ -81,7 +81,7 @@ export class LionWebRepository {
                         protocolMessages: []
                     } as SignOffResponse
                 }
-                // all commands, in order of the specification (§ 6.5):
+                // all commands, in order of the specification (§ 5.6):
                 /*
                  * **DEV note**: run
                  *
@@ -114,7 +114,6 @@ export class LionWebRepository {
                 case "AddReference":
                 case "DeleteReference":
                 case "ChangeReference":
-                case "CompositeCommand":
                 {
                     lowLevelServer.broadcastMessage(commandAsEvent(message as Command, checkedClientMetadata().participationId))    // FIXME  not correct: message to broadcast to a particular client holds sequence number for that particular participation
                     return undefined

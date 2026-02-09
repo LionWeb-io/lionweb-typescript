@@ -27,7 +27,7 @@ export interface QueryMessage extends DeltaProtocolMessage {
 }
 
 
-// in order of the specification (§ 6.3):
+// in order of the specification (§ 5.4):
 
 export interface SubscribeToPartitionChangesParameters {
     creation: boolean

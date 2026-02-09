@@ -92,42 +92,6 @@ await lionWebClient.disconnect()
 After this, the client can’t send any queries nor commands, nor receive any events anymore.
 
 
-## Hooking up an undo stack
-
-```typescript
-import { DeltaCompositor, deltaReceiverForwardingTo, IDelta } from "@lionweb/class-core"
-import { LionWebClient } from "@lionweb/delta-protocol-client"
-
-const deltas: IDelta[] = []
-let compositorToCreate: DeltaCompositor
-const lionWebClient = await LionWebClient.create({
-    // ...other parameters...
-    instantiateDeltaReceiverForwardingTo: (commandSender) => {
-        compositorToCreate = new DeltaCompositor(deltaReceiverForwardingTo(
-            (delta) => {
-                deltas.push(delta)
-            },
-            commandSender
-        ))
-        return compositorToCreate.upstreamReceiveDelta
-    }
-})
-const compositor = compositorToCreate!
-```
-
-Now composites can be opened and closed as follows:
-
-```typescript
-compositor.openComposite()
-// ...change the model...
-compositor.closeComposite()
-```
-
-The model changes emanating from the statements between `compositor.{open|close}Composite()` are emitted as the `parts` commands of a `CompositeCommand`.
-
-***TODO***
-
-
 ## Development
 
 Build this package from source as follows:

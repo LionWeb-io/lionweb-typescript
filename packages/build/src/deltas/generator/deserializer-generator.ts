@@ -20,7 +20,6 @@ import { sortedStrings } from "@lionweb/ts-utils"
 import { asString, commaSeparated } from "littoral-templates"
 
 import {
-    CustomType,
     Delta,
     FeatureType,
     IndexType,
@@ -42,9 +41,6 @@ const deserializationExpressionForField = (name: string, type: Type) => {
     }
     if (type instanceof IndexType || type instanceof PrimitiveValueType) {
         return `delta.${name}`
-    }
-    if (type instanceof CustomType) {
-        return type.deserializationExpr
     }
     throw new Error(`unhandled subtype ${type.constructor.name} of Type in deserializationExpressionForField`)
 }

@@ -37,7 +37,6 @@ import {
     ChildMovedFromOtherContainmentInSameParentDelta,
     ChildMovedInSameContainmentDelta,
     ChildReplacedDelta,
-    CompositeDelta,
     NoOpDelta,
     PartitionAddedDelta,
     PartitionDeletedDelta,
@@ -65,7 +64,6 @@ import {
     ChildMovedFromOtherContainmentSerializedDelta,
     ChildMovedInSameContainmentSerializedDelta,
     ChildReplacedSerializedDelta,
-    CompositeSerializedDelta,
     NoOpSerializedDelta,
     PartitionAddedSerializedDelta,
     PartitionDeletedSerializedDelta,
@@ -323,7 +321,7 @@ export const serializeDelta = (delta: IDelta): SerializedDelta => {
             parent: delta.parent.id,
             reference: metaPointerFor(delta.reference),
             index: delta.index,
-            newTarget: idFrom(delta.newTarget)
+            newReference: idFrom(delta.newReference)
         } as ReferenceAddedSerializedDelta;
     }
 
@@ -333,7 +331,7 @@ export const serializeDelta = (delta: IDelta): SerializedDelta => {
             parent: delta.parent.id,
             reference: metaPointerFor(delta.reference),
             index: delta.index,
-            deletedTarget: idFrom(delta.deletedTarget)
+            deletedReference: idFrom(delta.deletedReference)
         } as ReferenceDeletedSerializedDelta;
     }
 
@@ -343,16 +341,9 @@ export const serializeDelta = (delta: IDelta): SerializedDelta => {
             parent: delta.parent.id,
             reference: metaPointerFor(delta.reference),
             index: delta.index,
-            newTarget: idFrom(delta.newTarget),
-            oldTarget: idFrom(delta.oldTarget)
+            newReference: idFrom(delta.newReference),
+            oldReference: idFrom(delta.oldReference)
         } as ReferenceChangedSerializedDelta;
-    }
-
-    if (delta instanceof CompositeDelta) {
-        return {
-            kind: "Composite",
-            parts: delta.parts.map(serializeDelta)
-        } as CompositeSerializedDelta;
     }
 
     if (delta instanceof NoOpDelta) {

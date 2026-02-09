@@ -16,7 +16,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import {
-    CustomType,
     Delta,
     Deltas,
     FeatureKinds,
@@ -89,14 +88,5 @@ export const parentage = (containerName: string, featureName: string, featureKin
         nodeField,
         feature(featureName, featureKind, nodeField)
     ]
-}
-
-export const customField = (fieldName: string, type: string, serializationType: string, serializationExpr: string, deserializationExpr: string) => {
-    const custom = CustomType.create(newId())
-    custom.type = type
-    custom.serializationType = serializationType
-    custom.serializationExpr = serializationExpr
-    custom.deserializationExpr = deserializationExpr
-    return field(fieldName, custom)
 }
 

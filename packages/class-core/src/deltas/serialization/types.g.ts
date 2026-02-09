@@ -47,7 +47,6 @@ export type SerializedDelta =
     | ReferenceAddedSerializedDelta
     | ReferenceDeletedSerializedDelta
     | ReferenceChangedSerializedDelta
-    | CompositeSerializedDelta
     | NoOpSerializedDelta
     ;
 
@@ -249,7 +248,7 @@ export type ReferenceAddedSerializedDelta = {
     parent: LionWebId
     reference: LionWebJsonMetaPointer
     index: number
-    newTarget: IdOrNull
+    newReference: IdOrNull
 }
 
 export type ReferenceDeletedSerializedDelta = {
@@ -257,7 +256,7 @@ export type ReferenceDeletedSerializedDelta = {
     parent: LionWebId
     reference: LionWebJsonMetaPointer
     index: number
-    deletedTarget: IdOrNull
+    deletedReference: IdOrNull
 }
 
 export type ReferenceChangedSerializedDelta = {
@@ -265,13 +264,8 @@ export type ReferenceChangedSerializedDelta = {
     parent: LionWebId
     reference: LionWebJsonMetaPointer
     index: number
-    newTarget: IdOrNull
-    oldTarget: IdOrNull
-}
-
-export type CompositeSerializedDelta = {
-    kind: "Composite"
-    parts: SerializedDelta[]
+    newReference: IdOrNull
+    oldReference: IdOrNull
 }
 
 export type NoOpSerializedDelta = {

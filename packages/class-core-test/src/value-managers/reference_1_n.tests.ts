@@ -15,12 +15,7 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {
-    collectingDeltaReceiver,
-    CompositeDelta,
-    ReferenceAddedDelta,
-    ReferenceDeletedDelta
-} from "@lionweb/class-core"
+import { collectingDeltaReceiver, ReferenceAddedDelta, ReferenceDeletedDelta } from "@lionweb/class-core"
 
 import {
     attachedLinkTestConcept,
@@ -162,31 +157,33 @@ describe("[1..n] reference", () => {
         // action1+check:
         parent.moveReference_1_n(1, 3);
         deepEqual(parent.reference_1_n, [0, 2, 3, 1, 4].map(child));
-        equal(deltas.length, nChildren + 2);
+        equal(deltas.length, nChildren + 3);
         deepEqual(
             deltas[nChildren + 1],
-            new CompositeDelta([
-                new ReferenceDeletedDelta(parent, testLanguageBase.LinkTestConcept_reference_1_n, 1, child(1)),
-                new ReferenceAddedDelta(parent, testLanguageBase.LinkTestConcept_reference_1_n, 2, child(1))
-            ])
+            new ReferenceDeletedDelta(parent, testLanguageBase.LinkTestConcept_reference_1_n, 1, child(1))
+        );
+        deepEqual(
+            deltas[nChildren + 2],
+            new ReferenceAddedDelta(parent, testLanguageBase.LinkTestConcept_reference_1_n, 2, child(1))
         );
 
         // action2+check:
         parent.moveReference_1_n(3, 1);
         deepEqual(parent.reference_1_n, [0, 1, 2, 3, 4].map(child));
-        equal(deltas.length, nChildren + 3);
+        equal(deltas.length, nChildren + 5);
         deepEqual(
-            deltas[nChildren + 2],
-            new CompositeDelta([
-                new ReferenceDeletedDelta(parent, testLanguageBase.LinkTestConcept_reference_1_n, 3, child(1)),
-                new ReferenceAddedDelta(parent, testLanguageBase.LinkTestConcept_reference_1_n, 1, child(1))
-            ])
+            deltas[nChildren + 3],
+            new ReferenceDeletedDelta(parent, testLanguageBase.LinkTestConcept_reference_1_n, 3, child(1))
+        );
+        deepEqual(
+            deltas[nChildren + 4],
+            new ReferenceAddedDelta(parent, testLanguageBase.LinkTestConcept_reference_1_n, 1, child(1))
         );
 
         // action3+check:
         parent.moveReference_1_n(2, 2);
         deepEqual(parent.reference_1_n, [0, 1, 2, 3, 4].map(child));
-        equal(deltas.length, nChildren + 3);
+        equal(deltas.length, nChildren + 5);
     });
 
 });

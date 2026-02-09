@@ -2,13 +2,6 @@ language Deltas
     version: 0
     entities (↓name):
 
-        concept CustomType implements Type
-            features (↓name):
-                deserializationExpr: String
-                serializationExpr: String
-                serializationType: String
-                type: String
-
         concept Delta implements INamed
             features (↓name):
                 documentation: String?
