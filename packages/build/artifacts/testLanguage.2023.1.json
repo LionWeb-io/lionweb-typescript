@@ -1435,7 +1435,9 @@
                         "version": "2023.1",
                         "key": "Classifier-features"
                     },
-                    "children": []
+                    "children": [
+                        "TestAnnotation-ref"
+                    ]
                 }
             ],
             "references": [
@@ -1476,6 +1478,66 @@
             ],
             "annotations": [],
             "parent": "TestLanguage"
+        },
+        {
+            "id": "TestAnnotation-ref",
+            "classifier": {
+                "language": "LionCore-M3",
+                "version": "2023.1",
+                "key": "Reference"
+            },
+            "properties": [
+                {
+                    "property": {
+                        "language": "LionCore-M3",
+                        "version": "2023.1",
+                        "key": "Link-multiple"
+                    },
+                    "value": "false"
+                },
+                {
+                    "property": {
+                        "language": "LionCore-M3",
+                        "version": "2023.1",
+                        "key": "Feature-optional"
+                    },
+                    "value": "false"
+                },
+                {
+                    "property": {
+                        "language": "LionCore-M3",
+                        "version": "2023.1",
+                        "key": "IKeyed-key"
+                    },
+                    "value": "TestAnnotation-ref"
+                },
+                {
+                    "property": {
+                        "language": "LionCore-builtins",
+                        "version": "2023.1",
+                        "key": "LionCore-builtins-INamed-name"
+                    },
+                    "value": "ref"
+                }
+            ],
+            "containments": [],
+            "references": [
+                {
+                    "reference": {
+                        "language": "LionCore-M3",
+                        "version": "2023.1",
+                        "key": "Link-type"
+                    },
+                    "targets": [
+                        {
+                            "resolveInfo": "Node",
+                            "reference": "LionCore-builtins-Node"
+                        }
+                    ]
+                }
+            ],
+            "annotations": [],
+            "parent": "TestAnnotation"
         },
         {
             "id": "TestPartition",
