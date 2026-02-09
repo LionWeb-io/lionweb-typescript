@@ -34,6 +34,7 @@
 * Deprecate aliases/legacy versions: `PrimitiveType{Des|S}erializer` &rarr; `PropertyValue{Des|S}erializer`, `ExtractionFacade` &rarr; `Reader`, `InstantiationFacade` &rarr; `Writer`.
 * Pull the `iBuiltinNodeConcept` method from the `LionCoreBuiltinsFacade` interface, make it an exported function, and extend its functionality — see its JSDoc.
 * Add a `lionWebVersionFrom` function that tries to match a `serializationFormatVersion` string to a literal of `LionWebVersions`.
+* (Export `M3Node` as a class, not just as a type.)
 
 
 ## 0.7.2

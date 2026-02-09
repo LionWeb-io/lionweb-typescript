@@ -23,7 +23,7 @@ import { ioLionWebMpsSpecificLanguage } from "./definition.js"
 
 
 /**
- * @return the `io.lionweb.mps.specific` annotations present on the given node.
+ * @return the io.lionweb.mps.specific annotations present on the given node.
  */
 export const ioLionWebMpsSpecificAnnotationsFrom = (node: M3Concept): IoLionWebMpsSpecificAnnotation[] =>
     node

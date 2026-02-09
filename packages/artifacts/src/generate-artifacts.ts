@@ -1,12 +1,8 @@
 import { Language, LionWebVersions, serializeLanguages, serializerWith } from "@lionweb/core"
-import { ioLionWebMpsSpecificLanguage } from "@lionweb/io-lionweb-mps-specific"
-import { LionWebJsonChunk } from "@lionweb/json"
 import {
     generateMermaidForLanguage,
     generatePlantUmlForLanguage,
-    genericAsTreeText,
     languageAsText,
-    readFileAsJson,
     writeJsonAsFile
 } from "@lionweb/utilities"
 import { writeFileSync } from "fs"
@@ -59,8 +55,4 @@ saveLanguageFiles(multiLanguage, "multi")
 
 writeJsonAsFile(instancePath("multi.json"), serializerWith({ reader: multiReader} )(multiModel))
 console.log(`serialized multi-language M1`)
-
-const serializationChunk = readFileAsJson(`../${ioLionWebMpsSpecificLanguage.key}/meta/${ioLionWebMpsSpecificLanguage.name}.json`) as LionWebJsonChunk
-writeFileSync(languagePath(`${ioLionWebMpsSpecificLanguage.name}.generic.txt`), genericAsTreeText(serializationChunk, [lioncore]))
-console.log(`wrote generic textualization of ${ioLionWebMpsSpecificLanguage.name}`)
 

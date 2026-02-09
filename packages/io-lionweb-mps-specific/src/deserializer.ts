@@ -29,6 +29,7 @@ import { ioLionWebMpsSpecificLanguage } from "./definition.js"
 import { combinedWriter } from "./facade.js"
 
 const { v2023_1 } = LionWebVersions
+
 /**
  * @return the deserialization of the given {@link LionWebJsonChunk serialization chunk} as an array of {@link Language languages}.
  * Any LionCore/M3 node can be annotated using annotations from the `io.lionweb.mps.specific` language.
