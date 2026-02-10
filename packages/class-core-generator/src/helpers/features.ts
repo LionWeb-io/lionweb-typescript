@@ -126,11 +126,17 @@ export const tsTypeForValueManager = (feature: Feature, imports: Imports): strin
             return `unknown /* [ERROR] can't compute a TS type for feature ${feature.name} on classifier ${feature.classifier.name} whose type has an unhandled/-known meta-type ${type.constructor.name} */`
         })()
     }
-    if (isContainment(feature) || isReference(feature)) {
-        return isBuiltinNode(type)
-            ? (isContainment(feature) ? imports.generic("INodeBase") : imports.core("Node"))
-            : imports.entity(type)
+    if (!(isContainment(feature) || isReference(feature))) {
+        return `unknown /* [ERROR] can't compute a TS type for feature ${feature.name} on classifier ${feature.classifier.name} whose type has an unhandled/-known meta-type ${type.constructor.name} */`
     }
-    return `unknown /* [ERROR] can't compute a TS type for feature ${feature.name} on classifier ${feature.classifier.name} whose type has an unhandled/-known meta-type ${type.constructor.name} */`
+    if (isBuiltinNode(type)) {
+        if (isContainment(feature)) {
+            return imports.generic("INodeBase")
+        }
+        if (isReference(feature)) {
+            return imports.core("Node")
+        }
+    }
+    return imports.entity(type)
 }
 

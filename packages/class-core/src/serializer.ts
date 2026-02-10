@@ -16,6 +16,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import {
+    allLionWebVersions,
     allSuperTypesOf,
     Containment,
     Enumeration,
@@ -69,9 +70,11 @@ const nodeBaseResolveInfoDeducer: ResolveInfoDeducer<Node> = (node, _reference) 
     }
     if (node instanceof NodeBase) {
         const allSupertypes = allSuperTypesOf(node.classifier);
-        if (allSupertypes.indexOf(LionWebVersions.v2023_1.builtinsFacade.classifiers.inamed) > -1) {
-            return node.getPropertyValueManager(LionWebVersions.v2023_1.builtinsFacade.features.inamed_name).getDirectly() as (string | undefined);
-        }
+        allLionWebVersions.forEach((lionWebVersion) => {
+            if (allSupertypes.indexOf(lionWebVersion.builtinsFacade.classifiers.inamed) > -1) {
+                return node.getPropertyValueManager(lionWebVersion.builtinsFacade.features.inamed_name).getDirectly() as (string | undefined);
+            }
+        })
         if (allSupertypes.indexOf(LionCore_builtinsBase.INSTANCE.INamed) > -1) {
             return node.getPropertyValueManager(LionCore_builtinsBase.INSTANCE.INamed_name).getDirectly() as (string | undefined);
         }

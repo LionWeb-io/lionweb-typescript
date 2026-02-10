@@ -320,7 +320,11 @@ const deltaApplier = (idMapping?: IdMapping, updatablePartitions?: () => INodeBa
             if (delta instanceof ReferenceDeletedDelta) {
                 const valueManager = lookupNodeFrom(delta.parent).getReferenceValueManager(delta.reference);
                 if (delta.reference.multiple) {
-                    (valueManager as MultiReferenceValueManager<Node>).removeAtIndexDirectly(delta.index); // should be delta.deletedTarget
+                    const multiValueManager = valueManager as MultiReferenceValueManager<Node>;
+                    if (multiValueManager.getDirectly()[delta.index] !== delta.deletedReference) {
+                        throw new Error(`index ${delta.index} doesn’t match deleted reference`)
+                    }
+                    multiValueManager.removeAtIndexDirectly(delta.index);
                 } else {
                     (valueManager as SingleReferenceValueManager<Node>).setDirectly(undefined);
                 }

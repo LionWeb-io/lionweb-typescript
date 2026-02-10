@@ -22,11 +22,12 @@ import {
     ChildAddedDelta,
     ChildDeletedDelta,
     ChildMovedFromOtherContainmentDelta,
-    ChildReplacedDelta
+    ChildReplacedDelta,
+    ReferenceDeletedDelta
 } from "@lionweb/class-core"
 
 import { LinkTestConcept, TestAnnotation, TestLanguageBase } from "@lionweb/class-core-test-language"
-import { deepEqual, equal, isUndefined } from "../assertions.js"
+import { deepEqual, equal, isUndefined, throws } from "../assertions.js"
 
 const testLanguageBase = TestLanguageBase.INSTANCE
 
@@ -111,6 +112,26 @@ describe("delta application sets parentage correctly", () => {
 
         isUndefined(annotation.parent);
         deepEqual(node.annotations, []);
+    });
+
+    it("reference deleted from wrong index throws", () => {
+        const srcNode = LinkTestConcept.create("srcNode");
+        const targetNode1 = LinkTestConcept.create("targetNode1");
+        const targetNode2 = LinkTestConcept.create("targetNode2");
+        srcNode.addReference_0_n(targetNode1);
+        srcNode.addReference_0_n(targetNode1);
+        srcNode.addReference_0_n(targetNode2);
+
+        throws(() => {
+            applyDelta(new ReferenceDeletedDelta(srcNode, testLanguageBase.LinkTestConcept_reference_0_n, 0, targetNode2));
+        }, "index 0 doesn’t match deleted reference");
+
+        throws(() => {
+            applyDelta(new ReferenceDeletedDelta(srcNode, testLanguageBase.LinkTestConcept_reference_0_n, 3, targetNode2));
+        }, "index 3 doesn’t match deleted reference");
+
+        applyDelta(new ReferenceDeletedDelta(srcNode, testLanguageBase.LinkTestConcept_reference_0_n, 0, targetNode1));
+        deepEqual(srcNode.reference_0_n, [targetNode1, targetNode2]);
     });
 
 });

@@ -156,9 +156,16 @@ export const typeForLanguageEntity = (imports: Imports) => {
 
             const featureMetaType_ = featureMetaType(features[0])
             const argumentName = featureMetaType_.toLowerCase()
+            const typeParameter = (() => {
+                switch (featureMetaType_) {
+                    case "Property": return "unknown"
+                    case "Containment": return imports.generic("INodeBase")
+                    case "Reference": return imports.core("Node")
+                }
+            })()
             return [
                 ``,
-                `get${featureMetaType_}ValueManager(${argumentName}: ${imports.core(featureMetaType_)}): ${imports.generic(featureMetaType_ + "ValueManager")}<${featureMetaType_ === "Property" ? "unknown" : (featureMetaType_ === "Containment" ? imports.generic("INodeBase") : imports.core("Node"))}> {`,
+                `get${featureMetaType_}ValueManager(${argumentName}: ${imports.core(featureMetaType_)}): ${imports.generic(featureMetaType_ + "ValueManager")}<${typeParameter}> {`,
                 indent(
                     switchOrIf(
                         `${argumentName}.key`,
