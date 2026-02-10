@@ -20,7 +20,7 @@
         "@lionweb/textgen-utils": "0.8.0-beta.7",
         "@lionweb/ts-utils": "0.8.0-beta.7",
         "littoral-templates": "0.5.1",
-        "nanoid": "5.1.5"
+        "nanoid": "5.1.6"
     },
     "scripts": {
         "clean": "npx rimraf dist node_modules -g lionweb-utilities-*.tgz",
