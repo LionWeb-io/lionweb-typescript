@@ -58,178 +58,178 @@ export const deltaDeserializer = (languageBases: ILanguageBase[], idMapping: IdM
     const deserializedDelta = (delta: SerializedDelta): IDelta => {
         switch (delta.kind) {
             case "PartitionAdded": {
-                const newPartition = idMapping.fromId(delta.newPartition);
+                const newPartition = idMapping.nodeBaseFromId(delta.newPartition);
                 return new PartitionAddedDelta(newPartition);
             }
             case "PartitionDeleted": {
-                const deletedPartition = idMapping.fromId(delta.deletedPartition);
+                const deletedPartition = idMapping.nodeBaseFromId(delta.deletedPartition);
                 return new PartitionDeletedDelta(deletedPartition);
             }
             case "PropertyAdded": {
-                const node = idMapping.fromId(delta.node);
+                const node = idMapping.nodeBaseFromId(delta.node);
                 const property = resolvedPropertyFrom(delta.property, node.classifier);
                 const value = delta.value;
                 return new PropertyAddedDelta(node, property, value);
             }
             case "PropertyDeleted": {
-                const node = idMapping.fromId(delta.node);
+                const node = idMapping.nodeBaseFromId(delta.node);
                 const property = resolvedPropertyFrom(delta.property, node.classifier);
                 const oldValue = delta.oldValue;
                 return new PropertyDeletedDelta(node, property, oldValue);
             }
             case "PropertyChanged": {
-                const node = idMapping.fromId(delta.node);
+                const node = idMapping.nodeBaseFromId(delta.node);
                 const property = resolvedPropertyFrom(delta.property, node.classifier);
                 const oldValue = delta.oldValue;
                 const newValue = delta.newValue;
                 return new PropertyChangedDelta(node, property, oldValue, newValue);
             }
             case "ChildAdded": {
-                const parent = idMapping.fromId(delta.parent);
+                const parent = idMapping.nodeBaseFromId(delta.parent);
                 const containment = resolvedContainmentFrom(delta.containment, parent.classifier);
                 const index = delta.index;
-                const newChild = idMapping.fromId(delta.newChild);
+                const newChild = idMapping.nodeBaseFromId(delta.newChild);
                 return new ChildAddedDelta(parent, containment, index, newChild);
             }
             case "ChildDeleted": {
-                const parent = idMapping.fromId(delta.parent);
+                const parent = idMapping.nodeBaseFromId(delta.parent);
                 const containment = resolvedContainmentFrom(delta.containment, parent.classifier);
                 const index = delta.index;
-                const deletedChild = idMapping.fromId(delta.deletedChild);
+                const deletedChild = idMapping.nodeBaseFromId(delta.deletedChild);
                 return new ChildDeletedDelta(parent, containment, index, deletedChild);
             }
             case "ChildReplaced": {
-                const parent = idMapping.fromId(delta.parent);
+                const parent = idMapping.nodeBaseFromId(delta.parent);
                 const containment = resolvedContainmentFrom(delta.containment, parent.classifier);
                 const index = delta.index;
-                const replacedChild = idMapping.fromId(delta.replacedChild);
-                const newChild = idMapping.fromId(delta.newChild);
+                const replacedChild = idMapping.nodeBaseFromId(delta.replacedChild);
+                const newChild = idMapping.nodeBaseFromId(delta.newChild);
                 return new ChildReplacedDelta(parent, containment, index, replacedChild, newChild);
             }
             case "ChildMovedFromOtherContainment": {
-                const oldParent = idMapping.fromId(delta.oldParent);
+                const oldParent = idMapping.nodeBaseFromId(delta.oldParent);
                 const oldContainment = resolvedContainmentFrom(delta.oldContainment, oldParent.classifier);
                 const oldIndex = delta.oldIndex;
-                const newParent = idMapping.fromId(delta.newParent);
+                const newParent = idMapping.nodeBaseFromId(delta.newParent);
                 const newContainment = resolvedContainmentFrom(delta.newContainment, newParent.classifier);
                 const newIndex = delta.newIndex;
-                const movedChild = idMapping.fromId(delta.movedChild);
+                const movedChild = idMapping.nodeBaseFromId(delta.movedChild);
                 return new ChildMovedFromOtherContainmentDelta(oldParent, oldContainment, oldIndex, newParent, newContainment, newIndex, movedChild);
             }
             case "ChildMovedFromOtherContainmentInSameParent": {
-                const parent = idMapping.fromId(delta.parent);
+                const parent = idMapping.nodeBaseFromId(delta.parent);
                 const oldContainment = resolvedContainmentFrom(delta.oldContainment, parent.classifier);
                 const oldIndex = delta.oldIndex;
-                const movedChild = idMapping.fromId(delta.movedChild);
+                const movedChild = idMapping.nodeBaseFromId(delta.movedChild);
                 const newContainment = resolvedContainmentFrom(delta.newContainment, parent.classifier);
                 const newIndex = delta.newIndex;
                 return new ChildMovedFromOtherContainmentInSameParentDelta(parent, oldContainment, oldIndex, movedChild, newContainment, newIndex);
             }
             case "ChildMovedInSameContainment": {
-                const parent = idMapping.fromId(delta.parent);
+                const parent = idMapping.nodeBaseFromId(delta.parent);
                 const containment = resolvedContainmentFrom(delta.containment, parent.classifier);
                 const oldIndex = delta.oldIndex;
                 const newIndex = delta.newIndex;
-                const movedChild = idMapping.fromId(delta.movedChild);
+                const movedChild = idMapping.nodeBaseFromId(delta.movedChild);
                 return new ChildMovedInSameContainmentDelta(parent, containment, oldIndex, newIndex, movedChild);
             }
             case "ChildMovedAndReplacedFromOtherContainment": {
-                const newParent = idMapping.fromId(delta.newParent);
+                const newParent = idMapping.nodeBaseFromId(delta.newParent);
                 const newContainment = resolvedContainmentFrom(delta.newContainment, newParent.classifier);
                 const newIndex = delta.newIndex;
-                const movedChild = idMapping.fromId(delta.movedChild);
-                const oldParent = idMapping.fromId(delta.oldParent);
+                const movedChild = idMapping.nodeBaseFromId(delta.movedChild);
+                const oldParent = idMapping.nodeBaseFromId(delta.oldParent);
                 const oldContainment = resolvedContainmentFrom(delta.oldContainment, oldParent.classifier);
                 const oldIndex = delta.oldIndex;
-                const replacedChild = idMapping.fromId(delta.replacedChild);
+                const replacedChild = idMapping.nodeBaseFromId(delta.replacedChild);
                 return new ChildMovedAndReplacedFromOtherContainmentDelta(newParent, newContainment, newIndex, movedChild, oldParent, oldContainment, oldIndex, replacedChild);
             }
             case "ChildMovedAndReplacedFromOtherContainmentInSameParent": {
-                const parent = idMapping.fromId(delta.parent);
+                const parent = idMapping.nodeBaseFromId(delta.parent);
                 const oldContainment = resolvedContainmentFrom(delta.oldContainment, parent.classifier);
                 const oldIndex = delta.oldIndex;
                 const newContainment = resolvedContainmentFrom(delta.newContainment, parent.classifier);
                 const newIndex = delta.newIndex;
-                const movedChild = idMapping.fromId(delta.movedChild);
-                const replacedChild = idMapping.fromId(delta.replacedChild);
+                const movedChild = idMapping.nodeBaseFromId(delta.movedChild);
+                const replacedChild = idMapping.nodeBaseFromId(delta.replacedChild);
                 return new ChildMovedAndReplacedFromOtherContainmentInSameParentDelta(parent, oldContainment, oldIndex, newContainment, newIndex, movedChild, replacedChild);
             }
             case "ChildMovedAndReplacedInSameContainment": {
-                const parent = idMapping.fromId(delta.parent);
+                const parent = idMapping.nodeBaseFromId(delta.parent);
                 const containment = resolvedContainmentFrom(delta.containment, parent.classifier);
                 const oldIndex = delta.oldIndex;
                 const newIndex = delta.newIndex;
-                const movedChild = idMapping.fromId(delta.movedChild);
-                const replacedChild = idMapping.fromId(delta.replacedChild);
+                const movedChild = idMapping.nodeBaseFromId(delta.movedChild);
+                const replacedChild = idMapping.nodeBaseFromId(delta.replacedChild);
                 return new ChildMovedAndReplacedInSameContainmentDelta(parent, containment, oldIndex, newIndex, movedChild, replacedChild);
             }
             case "AnnotationAdded": {
-                const parent = idMapping.fromId(delta.parent);
+                const parent = idMapping.nodeBaseFromId(delta.parent);
                 const index = delta.index;
-                const newAnnotation = idMapping.fromId(delta.newAnnotation);
+                const newAnnotation = idMapping.nodeBaseFromId(delta.newAnnotation);
                 return new AnnotationAddedDelta(parent, index, newAnnotation);
             }
             case "AnnotationDeleted": {
-                const parent = idMapping.fromId(delta.parent);
+                const parent = idMapping.nodeBaseFromId(delta.parent);
                 const index = delta.index;
-                const deletedAnnotation = idMapping.fromId(delta.deletedAnnotation);
+                const deletedAnnotation = idMapping.nodeBaseFromId(delta.deletedAnnotation);
                 return new AnnotationDeletedDelta(parent, index, deletedAnnotation);
             }
             case "AnnotationReplaced": {
-                const parent = idMapping.fromId(delta.parent);
+                const parent = idMapping.nodeBaseFromId(delta.parent);
                 const index = delta.index;
-                const replacedAnnotation = idMapping.fromId(delta.replacedAnnotation);
-                const newAnnotation = idMapping.fromId(delta.newAnnotation);
+                const replacedAnnotation = idMapping.nodeBaseFromId(delta.replacedAnnotation);
+                const newAnnotation = idMapping.nodeBaseFromId(delta.newAnnotation);
                 return new AnnotationReplacedDelta(parent, index, replacedAnnotation, newAnnotation);
             }
             case "AnnotationMovedFromOtherParent": {
-                const oldParent = idMapping.fromId(delta.oldParent);
+                const oldParent = idMapping.nodeBaseFromId(delta.oldParent);
                 const oldIndex = delta.oldIndex;
-                const newParent = idMapping.fromId(delta.newParent);
+                const newParent = idMapping.nodeBaseFromId(delta.newParent);
                 const newIndex = delta.newIndex;
-                const movedAnnotation = idMapping.fromId(delta.movedAnnotation);
+                const movedAnnotation = idMapping.nodeBaseFromId(delta.movedAnnotation);
                 return new AnnotationMovedFromOtherParentDelta(oldParent, oldIndex, newParent, newIndex, movedAnnotation);
             }
             case "AnnotationMovedInSameParent": {
-                const parent = idMapping.fromId(delta.parent);
+                const parent = idMapping.nodeBaseFromId(delta.parent);
                 const oldIndex = delta.oldIndex;
                 const newIndex = delta.newIndex;
-                const movedAnnotation = idMapping.fromId(delta.movedAnnotation);
+                const movedAnnotation = idMapping.nodeBaseFromId(delta.movedAnnotation);
                 return new AnnotationMovedInSameParentDelta(parent, oldIndex, newIndex, movedAnnotation);
             }
             case "AnnotationMovedAndReplacedFromOtherParent": {
-                const oldParent = idMapping.fromId(delta.oldParent);
+                const oldParent = idMapping.nodeBaseFromId(delta.oldParent);
                 const oldIndex = delta.oldIndex;
-                const replacedAnnotation = idMapping.fromId(delta.replacedAnnotation);
-                const newParent = idMapping.fromId(delta.newParent);
+                const replacedAnnotation = idMapping.nodeBaseFromId(delta.replacedAnnotation);
+                const newParent = idMapping.nodeBaseFromId(delta.newParent);
                 const newIndex = delta.newIndex;
-                const movedAnnotation = idMapping.fromId(delta.movedAnnotation);
+                const movedAnnotation = idMapping.nodeBaseFromId(delta.movedAnnotation);
                 return new AnnotationMovedAndReplacedFromOtherParentDelta(oldParent, oldIndex, replacedAnnotation, newParent, newIndex, movedAnnotation);
             }
             case "AnnotationMovedAndReplacedInSameParent": {
-                const parent = idMapping.fromId(delta.parent);
+                const parent = idMapping.nodeBaseFromId(delta.parent);
                 const oldIndex = delta.oldIndex;
                 const newIndex = delta.newIndex;
-                const replacedAnnotation = idMapping.fromId(delta.replacedAnnotation);
-                const movedAnnotation = idMapping.fromId(delta.movedAnnotation);
+                const replacedAnnotation = idMapping.nodeBaseFromId(delta.replacedAnnotation);
+                const movedAnnotation = idMapping.nodeBaseFromId(delta.movedAnnotation);
                 return new AnnotationMovedAndReplacedInSameParentDelta(parent, oldIndex, newIndex, replacedAnnotation, movedAnnotation);
             }
             case "ReferenceAdded": {
-                const parent = idMapping.fromId(delta.parent);
+                const parent = idMapping.nodeBaseFromId(delta.parent);
                 const reference = resolvedReferenceFrom(delta.reference, parent.classifier);
                 const index = delta.index;
                 const newReference = idMapping.fromRefId(delta.newReference);
                 return new ReferenceAddedDelta(parent, reference, index, newReference);
             }
             case "ReferenceDeleted": {
-                const parent = idMapping.fromId(delta.parent);
+                const parent = idMapping.nodeBaseFromId(delta.parent);
                 const reference = resolvedReferenceFrom(delta.reference, parent.classifier);
                 const index = delta.index;
                 const deletedReference = idMapping.fromRefId(delta.deletedReference);
                 return new ReferenceDeletedDelta(parent, reference, index, deletedReference);
             }
             case "ReferenceChanged": {
-                const parent = idMapping.fromId(delta.parent);
+                const parent = idMapping.nodeBaseFromId(delta.parent);
                 const reference = resolvedReferenceFrom(delta.reference, parent.classifier);
                 const index = delta.index;
                 const newReference = idMapping.fromRefId(delta.newReference);

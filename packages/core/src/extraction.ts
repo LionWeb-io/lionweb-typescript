@@ -13,7 +13,7 @@ export type NodesExtractor<NT extends Node> = (node: NT) => NT[]
 /**
  * @return A function that extracts the children from a given node.
  */
-export const childrenExtractorUsing = <NT extends Node>(reader: Reader<NT>): NodesExtractor<NT> =>
+export const childrenExtractorUsing = <NT extends Node, RT extends Node = NT>(reader: Reader<NT, RT>): NodesExtractor<NT> =>
     (node: NT): NT[] => [
         ...(allFeaturesOf(reader.classifierOf(node))
             .filter(isContainment)
@@ -26,6 +26,6 @@ export const childrenExtractorUsing = <NT extends Node>(reader: Reader<NT>): Nod
 /**
  * @return a function that extracts *all* nodes from a given start node - usually a root node.
  */
-export const nodesExtractorUsing = <NT extends Node>(reader: Reader<NT>): NodesExtractor<NT> =>
-    flatMapNonCyclingFollowing(trivialFlatMapper, childrenExtractorUsing<NT>(reader))
+export const nodesExtractorUsing = <NT extends Node, RT extends Node = NT>(reader: Reader<NT, RT>): NodesExtractor<NT> =>
+    flatMapNonCyclingFollowing(trivialFlatMapper, childrenExtractorUsing<NT, RT>(reader))
 

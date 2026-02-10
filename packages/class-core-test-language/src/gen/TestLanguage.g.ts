@@ -36,6 +36,7 @@ import {
     EnumerationLiteral,
     Language,
     MultiRef,
+    Node,
     Property,
     Reference,
     SingleRef
@@ -570,7 +571,7 @@ export class LinkTestConcept extends NodeBase implements INamed {
         }
     }
 
-    getReferenceValueManager(reference: Reference): ReferenceValueManager<INodeBase> {
+    getReferenceValueManager(reference: Reference): ReferenceValueManager<Node> {
         switch (reference.key) {
             case TestLanguageBase.INSTANCE.LinkTestConcept_reference_0_1.key: return this._reference_0_1;
             case TestLanguageBase.INSTANCE.LinkTestConcept_reference_1.key: return this._reference_1;
@@ -586,11 +587,11 @@ export class TestAnnotation extends NodeBase implements INamed {
         return new TestAnnotation(TestLanguageBase.INSTANCE.TestAnnotation, id, receiveDelta, parentInfo);
     }
 
-    private readonly _ref: RequiredSingleReferenceValueManager<INodeBase>;
-    get ref(): SingleRef<INodeBase> {
+    private readonly _ref: RequiredSingleReferenceValueManager<Node>;
+    get ref(): SingleRef<Node> {
         return this._ref.get();
     }
-    set ref(newValue: SingleRef<INodeBase>) {
+    set ref(newValue: SingleRef<Node>) {
         this._ref.set(newValue);
     }
 
@@ -604,7 +605,7 @@ export class TestAnnotation extends NodeBase implements INamed {
 
     public constructor(classifier: Classifier, id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage) {
         super(classifier, id, receiveDelta, parentInfo);
-        this._ref = new RequiredSingleReferenceValueManager<INodeBase>(TestLanguageBase.INSTANCE.TestAnnotation_ref, this);
+        this._ref = new RequiredSingleReferenceValueManager<Node>(TestLanguageBase.INSTANCE.TestAnnotation_ref, this);
         this._name = new RequiredPropertyValueManager<string>(LionCore_builtinsBase.INSTANCE.INamed_name, this);
     }
 
@@ -615,7 +616,7 @@ export class TestAnnotation extends NodeBase implements INamed {
         return super.getPropertyValueManager(property);
     }
 
-    getReferenceValueManager(reference: Reference): ReferenceValueManager<INodeBase> {
+    getReferenceValueManager(reference: Reference): ReferenceValueManager<Node> {
         if (reference.key === TestLanguageBase.INSTANCE.TestAnnotation_ref.key) {
             return this._ref;
         }

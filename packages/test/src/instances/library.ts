@@ -1,4 +1,4 @@
-import { Writer as CoreWriter, nameBasedClassifierDeducerFor, Reader, updateSettingsNameBased } from "@lionweb/core"
+import { nameBasedClassifierDeducerFor, Reader, updateSettingsNameBased, Writer as CoreWriter } from "@lionweb/core"
 import { hasher } from "@lionweb/utilities"
 import { libraryLanguage } from "../languages/library.js"
 import { BaseNode } from "./base.js"

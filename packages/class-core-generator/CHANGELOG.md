@@ -5,6 +5,7 @@
 * Improve dealing with unresolved references.
   * Clear up an unnecessarily difficult piece of generator code while doing so.
   * Fix that concepts extending the built-in `Node` concept generates classes that extend `NodeBase` (rather than `Node`).
+* Reference targets can now be any `Node`, not just `INodeBase`.
 
 
 ## 0.7.2

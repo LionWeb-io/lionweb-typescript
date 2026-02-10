@@ -26,6 +26,9 @@
   *Note* that this is a **breaking change**, due to a [change to the protocol specification](https://github.com/LionWeb-io/specification/issues/414), without providing backward compatibility e.g. by only deprecating those classes.
 * Remove the `CompositeDelta` and `Compositor` classes entirely.
   *Note* that this is a **breaking change**, due to a [change to the protocol specification](https://github.com/LionWeb-io/specification/issues/420), without providing backward compatibility e.g. by only deprecating those classes.
+* The type `Reader<INodeBase, Node>` is used everywhere, so references from an `INodeBase` can now target any type of `Node`s, rather than only `INodeBase`s.
+  * The `IdMapping` class now maintains a mapping &rarr; `Node`, rather than `INodeBase.
+  * Add a `nodeBaseFromId` method to this class to specifically return `INodeBase`s.
 
 
 ## 0.7.2

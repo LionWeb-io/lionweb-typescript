@@ -29,9 +29,9 @@ export class ReferenceValue<NT extends Node> {
  * @param reader - a {@link Reader} to reflect on nodes.
  * _Note_ that it's assumed that its {@link getFeatureValue} function doesn't throw.
  */
-export const referenceValues = <NT extends Node>(
+export const referenceValues = <NT extends Node, RT extends Node = NT>(
     scope: NT[],
-    reader: Reader<NT>
+    reader: Reader<NT, RT>
 ): ReferenceValue<NT>[] => {
     const visit = (sourceNode: NT, reference: Reference): ReferenceValue<NT>[] => {
         if (reference.multiple) {
@@ -74,10 +74,10 @@ export const referenceValues = <NT extends Node>(
  * @param reader - a {@link Reader} to reflect on nodes.
  * _Note_ that it's assumed that its {@link getFeatureValue} function doesn't throw.
  */
-export const incomingReferences = <NT extends Node>(
+export const incomingReferences = <NT extends Node, RT extends Node = NT>(
     targetNodeOrNodes: NT[] | NT,
     scope: NT[],
-    reader: Reader<NT>
+    reader: Reader<NT, RT>
 ): ReferenceValue<NT>[] => {
     const targetNodes = Array.isArray(targetNodeOrNodes) ? targetNodeOrNodes : [targetNodeOrNodes]
     return referenceValues(scope, reader)
@@ -97,9 +97,9 @@ export const incomingReferences = <NT extends Node>(
  * @param reader - a {@link Reader} to reflect on nodes.
  * _Note_ that it's assumed that its {@link getFeatureValue} function doesn't throw.
  */
-export const referencesToOutOfScopeNodes = <NT extends Node>(
+export const referencesToOutOfScopeNodes = <NT extends Node, RT extends Node = NT>(
     scope: NT[],
-    reader: Reader<NT>
+    reader: Reader<NT, RT>
 ): ReferenceValue<NT>[] =>
     referenceValues(scope, reader)
         .filter((referenceValue) => scope.indexOf(referenceValue.targetNode) === -1)

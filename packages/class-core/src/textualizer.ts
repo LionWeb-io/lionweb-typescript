@@ -21,6 +21,7 @@ import {
     Feature,
     isUnresolvedReference,
     Link,
+    Node,
     Property,
     Reference,
     UnresolvedReference
@@ -53,12 +54,29 @@ const asINodeBases = (value: INodeBaseOrNotThere | INodeBaseOrNotThere[]): INode
     return []
 }
 
+type NodeOrNotThere = Node | UnresolvedReference | undefined
+
+const asNodes = (value: NodeOrNotThere | NodeOrNotThere[]): Node[] => {
+    const isNode = (value: NodeOrNotThere): value is Node =>
+        !(value === undefined || isUnresolvedReference(value))
+
+    if (Array.isArray(value)) {
+        return value
+            .filter((subValue) => isNode(subValue))
+            .map((subValue) => subValue as Node)
+    }
+    if (isNode(value)) {
+        return [value]
+    }
+    return []
+}
+
 
 /**
  * @return a function that renders the roots of a given forest of {@link INodeBase nodes} in a textual tree-representation.
  * @param identificationFor a function that renders an identification for the given {@link INodeBase node} — typically its name or its ID.
  */
-export const asTreeTextWith = (identificationFor: (node: INodeBase) => string): ((nodes: INodeBase[]) => string) => {
+export const asTreeTextWith = (identificationFor: (node: Node) => string): ((nodes: INodeBase[]) => string) => {
 
     const asText = (node: INodeBase): Template => {
         const featureValueAsText = (feature: Feature) => {
@@ -87,7 +105,7 @@ export const asTreeTextWith = (identificationFor: (node: INodeBase) => string): 
             }
             if (feature instanceof Reference) {
                 const valueManager= node.getReferenceValueManager(feature)
-                const references = asINodeBases(valueManager.getDirectly())
+                const references = asNodes(valueManager.getDirectly())
                 return [
                     `${feature.name} -> ${references.length === 0 ? nothing : references.map(identificationFor).join(", ")}`
                 ]

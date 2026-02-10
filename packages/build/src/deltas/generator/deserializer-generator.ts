@@ -37,7 +37,7 @@ const deserializationExpressionForField = (name: string, type: Type) => {
         return `resolved${tsMetaType}From(delta.${name}, ${(isUnresolvedReference(type.container) ? undefined : type.container?.name) ?? "<?container?>"}.classifier)`
     }
     if (type instanceof NodeType) {
-        return type.serialization instanceof RefOnly ? `idMapping.fromRefId(delta.${name})` : `idMapping.fromId(delta.${name})`
+        return type.serialization instanceof RefOnly ? `idMapping.fromRefId(delta.${name})` : `idMapping.nodeBaseFromId(delta.${name})`
     }
     if (type instanceof IndexType || type instanceof PrimitiveValueType) {
         return `delta.${name}`

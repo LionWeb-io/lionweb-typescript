@@ -22,15 +22,28 @@ import { isTrue } from "./assertions.js"
 
 describe(`class-core generator`, () => {
 
+    const { node } = LionWebVersions.v2023_1.builtinsFacade.classifiers
+
     it(`concept extends from Node or from nothing => class extends from NodeBase`, () => {
         const factory = new LanguageFactory("test", "0", concatenator("-"), concatenator("-"))
-        factory.concept("ConceptExtendingNode", false, LionWebVersions.v2023_1.builtinsFacade.classifiers.node)
+        factory.concept("ConceptExtendingNode", false, node)
         factory.concept("ConceptExtendingNothing", false)
         const languageFile = languageFileFor(factory.language, { verbose: false, genericImportLocation: "@lionweb/class-core" })
         const matchExtendsNode = languageFile.match(/export class ConceptExtendingNode extends (\w+) \{/)
         isTrue(matchExtendsNode !== null && matchExtendsNode[1] === "NodeBase")
         const matchExtendsNothing = languageFile.match(/export class ConceptExtendingNothing extends (\w+) \{/)
         isTrue(matchExtendsNothing !== null && matchExtendsNothing[1] === "NodeBase")
+    })
+
+    it(`reference on a classifier refers to Node => the Node type is used instead of INodeBase`, () => {
+        const factory = new LanguageFactory("test", "0", concatenator("-"), concatenator("-"))
+        const AConcept = factory.concept("AConcept", false)
+        factory.reference(AConcept, "ref").ofType(node)
+        const AnAnnotation = factory.annotation("AnAnnotation").annotating(AConcept)
+        factory.reference(AnAnnotation, "ref").ofType(node)
+        const languageFile = languageFileFor(factory.language, { verbose: false, genericImportLocation: "@lionweb/class-core" })
+        isTrue(languageFile.match(/<INodeBase>/) === null, "found <INodeBase>")
+        isTrue(languageFile.match(/<Node>/) !== null, "didn’t find <Node>")
     })
 
 })

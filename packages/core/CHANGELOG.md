@@ -35,6 +35,9 @@
 * Pull the `iBuiltinNodeConcept` method from the `LionCoreBuiltinsFacade` interface, make it an exported function, and extend its functionality — see its JSDoc.
 * Add a `lionWebVersionFrom` function that tries to match a `serializationFormatVersion` string to a literal of `LionWebVersions`.
 * (Export `M3Node` as a class, not just as a type.)
+* Extend `Reader` with an optional second type parameter `RT` (extending `Node`), which defaults to `NT`.
+  The type of its optional `resolveInfoFor` property is widened to `ResolveInfoDeducer<RT>`.
+  The default for the `RT` type parameter and the type-widening ensure that this change is backward compatible, also when propagated throughout the entire codebase.
 
 
 ## 0.7.2
