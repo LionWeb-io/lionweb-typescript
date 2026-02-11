@@ -48,7 +48,7 @@ describe("event-to-delta translator", () => {
             newPartition: newPartitionChunk,
             sequenceNumber: 0,
             originCommands: [],
-            protocolMessages: []
+            additionalInfos: []
         }
 
         const eventAsDelta = eventToDeltaTranslator(languageBases, nodeBaseDeserializerWithIdMapping(languageBases))

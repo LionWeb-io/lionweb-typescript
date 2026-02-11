@@ -38,7 +38,7 @@ export const DeltaTypesDefinitions: TypeGroup = {
     ],
     structuredTypes: [
         {
-            name: "ProtocolMessage",
+            name: "AdditionalInfo",
             properties: [
                 {
                     name: "kind",

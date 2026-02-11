@@ -17,12 +17,12 @@
 
 import { LionWebId, LionWebJsonChunk } from "@lionweb/json"
 import { mapFrom } from "@lionweb/ts-utils"
-import { DeltaProtocolMessage, Message } from "./common.js"
+import { DeltaAdditionalInfo, Message } from "./common.js"
 
 /**
  * Super interface for both query request and response messages.
  */
-export interface QueryMessage extends DeltaProtocolMessage {
+export interface QueryMessage extends DeltaAdditionalInfo {
     queryId: LionWebId
 }
 

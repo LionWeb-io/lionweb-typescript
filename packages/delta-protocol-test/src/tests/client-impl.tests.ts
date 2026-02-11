@@ -76,12 +76,12 @@ describe("implementation of LionWeb client", async function() {
                         messageKind: "SignOnResponse",
                         queryId: "query-1",
                         participationId: "participation-a",
-                        protocolMessages: []
+                        additionalInfos: []
                     } as SignOnResponse,
                     "query-2": {
                         messageKind: "SignOffResponse",
                         queryId: "query-2",
-                        protocolMessages: []
+                        additionalInfos: []
                     } as SignOffResponse
                 }
             )
@@ -153,7 +153,7 @@ describe("implementation of LionWeb client", async function() {
                                 commandId: "cmd-1"
                             }
                         ],
-                        protocolMessages: []
+                        additionalInfos: []
                     } as PartitionAddedEvent,
                     "cmd-2": {
                         messageKind: "PartitionDeleted",
@@ -165,7 +165,7 @@ describe("implementation of LionWeb client", async function() {
                                 commandId: "cmd-2"
                             }
                         ],
-                        protocolMessages: []
+                        additionalInfos: []
                     } as PartitionDeletedEvent
                 },
                 {
@@ -173,12 +173,12 @@ describe("implementation of LionWeb client", async function() {
                         messageKind: "SignOnResponse",
                         queryId: "query-1",
                         participationId: "participation-a",
-                        protocolMessages: []
+                        additionalInfos: []
                     } as SignOnResponse,
                     "query-2": {
                         messageKind: "SignOffResponse",
                         queryId: "query-2",
-                        protocolMessages: []
+                        additionalInfos: []
                     } as SignOffResponse
                 },
                 asLowLevelClientLogger(simpleConsoleLogger)

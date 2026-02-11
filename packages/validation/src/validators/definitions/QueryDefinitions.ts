@@ -12,8 +12,8 @@ export const QueryDefinitions: MessageGroup = {
             mayBeNull: false,
         },
         {
-            name: "protocolMessages",
-            type: "ProtocolMessage",
+            name: "additionalInfos",
+            type: "AdditionalInfo",
             isList: false,
             isOptional: false,
             mayBeNull: false,

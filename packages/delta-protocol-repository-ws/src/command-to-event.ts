@@ -86,7 +86,7 @@ export const commandAsEvent = (command: Command, participationId: string): Event
 
     const completed = <ET extends Event>(
             eventName: ET["messageKind"],
-            partialEvent: Omit<ET, "messageKind" | "originCommands" | "sequenceNumber" | "protocolMessages">
+            partialEvent: Omit<ET, "messageKind" | "originCommands" | "sequenceNumber" | "additionalInfos">
     ): Event => ({
         messageKind: eventName,
         ...partialEvent,
@@ -97,7 +97,7 @@ export const commandAsEvent = (command: Command, participationId: string): Event
             }
         ],
         sequenceNumber: nextSequenceNumber(),
-        protocolMessages: command.protocolMessages
+        additionalInfos: command.additionalInfos
     })
 
     const commandAsEvent_ = (command: Command): Event => {

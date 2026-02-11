@@ -69,7 +69,7 @@ export class LionWebRepository {
                         messageKind: "SignOnResponse",
                         queryId,
                         participationId: clientMetadata.participationId,
-                        protocolMessages: []
+                        additionalInfos: []
                     } as SignOnResponse
                 }
                 case "SignOffRequest": {
@@ -78,7 +78,7 @@ export class LionWebRepository {
                     return {
                         messageKind: "SignOffResponse",
                         queryId,
-                        protocolMessages: []
+                        additionalInfos: []
                     } as SignOffResponse
                 }
                 // all commands, in order of the specification (§ 5.6):

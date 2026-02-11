@@ -99,12 +99,12 @@ export const deltaToCommandTranslator = (
     const translated: DeltaToCommandTranslator = (delta, commandId) => {
         const completed = <CT extends Command>(
             commandName: CT["messageKind"],
-            partialCommand: Omit<CT, "messageKind" | "commandId" | "protocolMessages">
+            partialCommand: Omit<CT, "messageKind" | "commandId" | "additionalInfos">
         ) => ({
             messageKind: commandName,
             commandId,
             ...partialCommand,
-            protocolMessages: []
+            additionalInfos: []
         })
 
         // in order of the specification (§ 6.5):

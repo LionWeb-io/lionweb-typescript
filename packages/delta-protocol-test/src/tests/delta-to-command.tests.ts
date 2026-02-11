@@ -51,7 +51,7 @@ describe("delta-to-command translator", () => {
             property: { language: testLanguageBase.language.key, version: testLanguageBase.language.version, key: testLanguageBase.DataTypeTestConcept_enumValue_0_1.key },
             newValue: testLanguageBase.TestEnumeration_literal1.key,
             commandId: "cmd-1",
-            protocolMessages: []
+            additionalInfos: []
         } as AddPropertyCommand);
     });
 

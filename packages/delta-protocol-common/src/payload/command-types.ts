@@ -16,9 +16,9 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { LionWebId, LionWebJsonChunk, LionWebJsonMetaPointer } from "@lionweb/json"
-import { DeltaProtocolMessage } from "./common.js"
+import { DeltaAdditionalInfo } from "./common.js"
 
-export interface Command extends DeltaProtocolMessage {
+export interface Command extends DeltaAdditionalInfo {
     commandId: LionWebId
 }
 
