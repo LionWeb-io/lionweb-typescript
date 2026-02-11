@@ -104,8 +104,8 @@ export const tsFieldTypeForFeature = (feature: Feature, imports: Imports): strin
         return `${typeId}${feature.multiple ? "[]" : optionalityPostfix(feature)}`
     }
     if (isReference(feature)) {
-        const typeId = isBuiltinNode(type) ? imports.generic("INodeBase") : imports.entity(type)
-        return `${imports.core("SingleRef")}<${typeId}>${feature.multiple ? "[]" : optionalityPostfix(feature)}`
+        const typeParameter = isBuiltinNode(type) ? imports.core("Node") : imports.entity(type)
+        return `${imports.core("SingleRef")}<${typeParameter}>${feature.multiple ? "[]" : optionalityPostfix(feature)}`
     }
     return `unknown /* [ERROR] can't compute a TS type for feature ${feature.name} on classifier ${feature.classifier.name} whose type has an unhandled/-known meta-type ${type.constructor.name} */`
 }

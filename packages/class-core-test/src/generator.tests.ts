@@ -41,6 +41,8 @@ describe(`class-core generator`, () => {
         factory.reference(AConcept, "ref").ofType(node)
         const AnAnnotation = factory.annotation("AnAnnotation").annotating(AConcept)
         factory.reference(AnAnnotation, "ref").ofType(node)
+        const AnInterface = factory.interface("AnInterface")
+        factory.reference(AnInterface, "ref").ofType(node)
         const languageFile = languageFileFor(factory.language, { verbose: false, genericImportLocation: "@lionweb/class-core" })
         isTrue(languageFile.match(/<INodeBase>/) === null, "found <INodeBase>")
         isTrue(languageFile.match(/<Node>/) !== null, "didn’t find <Node>")
