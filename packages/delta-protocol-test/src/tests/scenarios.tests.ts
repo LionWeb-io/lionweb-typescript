@@ -116,8 +116,8 @@ describe(`scenarios (${ansi.colorSchemeExplanationString})`, async function() {
             }]
         }
         const expectedLogItems = [
-            new RepositoryReceivedMessage({}, { messageKind: "SignOnRequest", queryId, repositoryId, deltaProtocolVersion: "2025.1", clientId, protocolMessages: [] } as SignOnRequest),
-            new ClientReceivedMessage(clientId, { messageKind: "SignOnResponse", queryId, participationId: "participation-a", protocolMessages: [] } as SignOnResponse),
+            new RepositoryReceivedMessage({}, { messageKind: "SignOnRequest", queryId, repositoryId, deltaProtocolVersion: "2025.1", clientId, additionalInfos: [] } as SignOnRequest),
+            new ClientReceivedMessage(clientId, { messageKind: "SignOnResponse", queryId, participationId: "participation-a", additionalInfos: [] } as SignOnResponse),
             new DeltaOccurredOnClient(
                 clientId,
                 {
@@ -132,7 +132,7 @@ describe(`scenarios (${ansi.colorSchemeExplanationString})`, async function() {
                     messageKind: "AddPartition",
                     commandId: "cmd-1",
                     newPartition: serializationOfNewPartition,
-                    protocolMessages: []
+                    additionalInfos: []
                 }
             ),
             new RepositoryReceivedMessage(
@@ -141,7 +141,7 @@ describe(`scenarios (${ansi.colorSchemeExplanationString})`, async function() {
                     messageKind: "AddPartition",
                     commandId: "cmd-1",
                     newPartition: serializationOfNewPartition,
-                    protocolMessages: []
+                    additionalInfos: []
                 }
             ),
             new ClientReceivedMessage(
@@ -151,7 +151,7 @@ describe(`scenarios (${ansi.colorSchemeExplanationString})`, async function() {
                     newPartition: serializationOfNewPartition,
                     originCommands: [{ participationId: "participation-a", commandId: "cmd-1" }],
                     sequenceNumber: 0,
-                    protocolMessages: []
+                    additionalInfos: []
                 }
             ),
             new ClientDidNotApplyEventFromOwnCommand(clientId, "cmd-1")

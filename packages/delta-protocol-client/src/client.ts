@@ -208,7 +208,7 @@ export class LionWebClient {
             messageKind: "SubscribeToChangingPartitionsRequest",
             queryId,
             ...parameters,
-            protocolMessages: []
+            additionalInfos: []
         } as SubscribeToChangingPartitionsRequest)
     }
 
@@ -217,7 +217,7 @@ export class LionWebClient {
             messageKind: "SubscribeToPartitionContentsRequest",
             queryId,
             partition,
-            protocolMessages: []
+            additionalInfos: []
         } as SubscribeToPartitionContentsRequest) as SubscribeToPartitionContentsResponse
         return response.contents
     }
@@ -227,7 +227,7 @@ export class LionWebClient {
             messageKind: "UnsubscribeFromPartitionContentsRequest",
             queryId,
             partition,
-            protocolMessages: []
+            additionalInfos: []
         } as UnsubscribeFromPartitionContentsRequest)
     }
 
@@ -241,7 +241,7 @@ export class LionWebClient {
             repositoryId,
             deltaProtocolVersion: "2025.1",
             clientId: this.clientId,
-            protocolMessages: []
+            additionalInfos: []
         } as SignOnRequest) as SignOnResponse
         this._participationId = response.participationId
     }
@@ -250,7 +250,7 @@ export class LionWebClient {
         await this.makeQuery({
             messageKind: "SignOffRequest",
             queryId,
-            protocolMessages: []
+            additionalInfos: []
         } as SignOffRequest)
         this.signedOff = true
         this._participationId = undefined
@@ -262,7 +262,7 @@ export class LionWebClient {
             queryId,
             participationId,
             lastReceivedSequenceNumber,
-            protocolMessages: []
+            additionalInfos: []
         } as ReconnectRequest) as ReconnectResponse
         this._participationId = participationId
         this.lastReceivedSequenceNumber = response.lastReceivedSequenceNumber
@@ -273,7 +273,7 @@ export class LionWebClient {
             messageKind: "GetAvailableIdsRequest",
             queryId,
             count,
-            protocolMessages: []
+            additionalInfos: []
         } as GetAvailableIdsRequest) as GetAvailableIdsResponse
         return response.ids
     }
@@ -282,7 +282,7 @@ export class LionWebClient {
         const response = await this.makeQuery({
             messageKind: "ListPartitionsRequest",
             queryId,
-            protocolMessages: []
+            additionalInfos: []
         } as ListPartitionsRequest) as ListPartitionsResponse
         return response.partitions
     }

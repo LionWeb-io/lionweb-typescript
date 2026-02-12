@@ -82,14 +82,14 @@ describe(`scenarios where TypeScript client is the only system under test (using
                             commandId
                         }
                     ],
-                    protocolMessages: []
+                    additionalInfos: []
                 } as PartitionAddedEvent
             }, {
                 [queryId]: {
                     messageKind: "SignOnResponse",
                     queryId,
                     participationId: "participation-a",
-                    protocolMessages: []
+                    additionalInfos: []
                 } as SignOnResponse
             })
         })

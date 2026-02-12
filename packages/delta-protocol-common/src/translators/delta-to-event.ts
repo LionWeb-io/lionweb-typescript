@@ -51,6 +51,7 @@ import {
 } from "@lionweb/class-core"
 import { idOf, LionWebVersions, metaPointerFor, PropertyValueSerializer } from "@lionweb/core"
 import {
+    AdditionalInfo,
     AnnotationAddedEvent,
     AnnotationDeletedEvent,
     AnnotationMovedAndReplacedFromOtherParentEvent,
@@ -75,7 +76,6 @@ import {
     PropertyAddedEvent,
     PropertyChangedEvent,
     PropertyDeletedEvent,
-    ProtocolMessage,
     ReferenceAddedEvent,
     ReferenceChangedEvent,
     ReferenceDeletedEvent
@@ -106,10 +106,10 @@ export type DeltaToEventTranslator = (
 export type OriginCommandsGenerator = (delta: IDelta) => CommandSource[]
 
 /**
- * A type def. for functions that compute the `protocolMessages` part of the event corresponding to the given {@link IDelta delta},
+ * A type def. for functions that compute the `additionalInfos` part of the event corresponding to the given {@link IDelta delta},
  * with the given sequence number.
  */
-export type ProtocolMessagesGenerator = (delta: IDelta, sequenceNumber: number) => ProtocolMessage[]
+export type AdditionalInfosGenerator = (delta: IDelta, sequenceNumber: number) => AdditionalInfo[]
 
 /**
  * A type def. for the configuration of a {@link DeltaToEventTranslator}.
@@ -125,9 +125,9 @@ export type DeltaToEventTranslatorConfiguration = Partial<{
      */
     originCommandsGenerator: OriginCommandsGenerator,
     /**
-     * A {@link ProtocolMessagesGenerator} — defaults to producing `[]`.
+     * A {@link AdditionalInfosGenerator} — defaults to producing `[]`.
      */
-    protocolMessagesGenerator: ProtocolMessagesGenerator
+    additionalInfosGenerator: AdditionalInfosGenerator
 }>
 
 
@@ -135,7 +135,7 @@ export type DeltaToEventTranslatorConfiguration = Partial<{
  * @return a {@link DeltaToEventTranslator} instance using the given {@link DeltaToEventTranslatorConfiguration}.
  */
 export const deltaToEventTranslator = (
-    { primitiveValueSerializer, originCommandsGenerator, protocolMessagesGenerator }: DeltaToEventTranslatorConfiguration
+    { primitiveValueSerializer, originCommandsGenerator, additionalInfosGenerator }: DeltaToEventTranslatorConfiguration
 ): DeltaToEventTranslator => {
     const propertyValueSerializer = primitiveValueSerializer === undefined
         ? LionWebVersions.v2023_1.builtinsFacade.propertyValueSerializer
@@ -145,14 +145,14 @@ export const deltaToEventTranslator = (
         let sequenceNumber = lastUsedSequenceNumber
         const completed = <ET extends Event>(
             technicalName: ET["messageKind"],
-            partialEvent: Omit<ET, "messageKind" | "sequenceNumber" | "originCommands" | "protocolMessages">
+            partialEvent: Omit<ET, "messageKind" | "sequenceNumber" | "originCommands" | "additionalInfos">
         ) => ({
             messageKind: technicalName,
             ...partialEvent,
             sequenceNumber: ++sequenceNumber,
                 // (translated -> completed can be called recursively ==> need to do increment as late as possible)
             originCommands: originCommandsGenerator === undefined ? [] : originCommandsGenerator(delta),
-            protocolMessages: protocolMessagesGenerator === undefined ? [] : protocolMessagesGenerator(delta, sequenceNumber)
+            additionalInfos: additionalInfosGenerator === undefined ? [] : additionalInfosGenerator(delta, sequenceNumber)
         })
 
         // in order of the specification (§ 6.6):

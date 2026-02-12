@@ -17,14 +17,14 @@
 
 import { LionWebId, LionWebJsonChunk, LionWebJsonMetaPointer } from "@lionweb/json"
 import { mapFrom } from "@lionweb/ts-utils"
-import { DeltaProtocolMessage, Message } from "./common.js"
+import { DeltaAdditionalInfo, Message } from "./common.js"
 
 export type CommandSource = {
     participationId: LionWebId
     commandId: LionWebId
 }
 
-export interface Event extends DeltaProtocolMessage {
+export interface Event extends DeltaAdditionalInfo {
     originCommands: CommandSource[]
     sequenceNumber: number
 }
