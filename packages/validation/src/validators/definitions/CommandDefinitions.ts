@@ -1272,5 +1272,38 @@ export const CommandDefinitions: MessageGroup = {
                 },
             ],
         },
+        {
+            name: "CompositeCommand",
+            properties: [
+                {
+                    name: "parts",
+                    type: "Command",
+                    isList: true,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "commandId",
+                    type: "CommandId",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "messageKind",
+                    type: "String",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "additionalInfos",
+                    type: "AdditionalInfo",
+                    isList: true,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+            ],
+        },
     ],
 };

@@ -24,6 +24,13 @@ hide empty members
 ' qualified name: "Deltas"
 
 
+class CustomType implements Type {
+  type: String
+  serializationType: String
+  serializationExpr: String
+  deserializationExpr: String
+}
+
 class Delta implements INamed {
   documentation: String?
 }
@@ -59,6 +66,7 @@ interface Type
 
 
 ' relations:
+
 
 Delta "1" o--> "*" Field: fields
 Deltas "1" o--> "*" Delta: deltas

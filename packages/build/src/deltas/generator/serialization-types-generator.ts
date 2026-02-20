@@ -19,6 +19,7 @@ import { indent } from "@lionweb/textgen-utils"
 import { asString, when } from "littoral-templates"
 
 import {
+    CustomType,
     Delta,
     FeatureType,
     Field,
@@ -43,6 +44,9 @@ const tsTypeForTypeOfSerializationField = (type: Type) => {
     }
     if (type instanceof PrimitiveValueType) {
         return "string"
+    }
+    if (type instanceof CustomType) {
+        return type.serializationType
     }
     throw new Error(`type ${type.classifier.name} not handled by tsTypeForTypeOfSerializationField`)
 }

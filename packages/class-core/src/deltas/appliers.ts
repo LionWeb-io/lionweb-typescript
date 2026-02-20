@@ -32,6 +32,7 @@ import {
     ChildMovedFromOtherContainmentInSameParentDelta,
     ChildMovedInSameContainmentDelta,
     ChildReplacedDelta,
+    CompositeDelta,
     NoOpDelta,
     PartitionAddedDelta,
     PartitionDeletedDelta,
@@ -341,6 +342,9 @@ const deltaApplier = (idMapping?: IdMapping, updatablePartitions?: () => INodeBa
                     (valueManager as SingleReferenceValueManager<Node>).setDirectly(newTarget);
                 }
                 return;
+            }
+            if (delta instanceof CompositeDelta) {
+                delta.parts.forEach(applyDelta);
             }
             if (delta instanceof NoOpDelta) {
                 return;

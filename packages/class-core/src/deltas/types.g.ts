@@ -281,6 +281,13 @@ export class ReferenceChangedDelta implements IDelta {
     }
 }
 
+export class CompositeDelta implements IDelta {
+    constructor(
+        public readonly parts: IDelta[]
+    ) {
+    }
+}
+
 /**
  * Delta that does nothing.
  */
