@@ -47,6 +47,7 @@ export type SerializedDelta =
     | ReferenceAddedSerializedDelta
     | ReferenceDeletedSerializedDelta
     | ReferenceChangedSerializedDelta
+    | CompositeSerializedDelta
     | NoOpSerializedDelta
     ;
 
@@ -266,6 +267,11 @@ export type ReferenceChangedSerializedDelta = {
     index: number
     newReference: IdOrNull
     oldReference: IdOrNull
+}
+
+export type CompositeSerializedDelta = {
+    kind: "Composite"
+    parts: SerializedDelta[]
 }
 
 export type NoOpSerializedDelta = {

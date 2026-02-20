@@ -20,6 +20,7 @@ import { indent } from "@lionweb/textgen-utils"
 import { asString, commaSeparated } from "littoral-templates"
 
 import {
+    CustomType,
     Delta,
     FeatureType,
     Field,
@@ -44,6 +45,9 @@ const serializationExpressionFor = (name: string, type: Type) => {
     }
     if (type instanceof PrimitiveValueType) {
         return `defaultPropertyValueSerializer.serializeValue(delta.${name}, delta.property)`
+    }
+    if (type instanceof CustomType) {
+        return type.serializationExpr
     }
     throw new Error(`type ${type.classifier.name} not handled by serializationExpressionFor`)
 }

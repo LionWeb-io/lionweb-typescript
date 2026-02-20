@@ -37,6 +37,7 @@ import {
     ChildMovedFromOtherContainmentInSameParentDelta,
     ChildMovedInSameContainmentDelta,
     ChildReplacedDelta,
+    CompositeDelta,
     NoOpDelta,
     PartitionAddedDelta,
     PartitionDeletedDelta,
@@ -64,6 +65,7 @@ import {
     ChildMovedFromOtherContainmentSerializedDelta,
     ChildMovedInSameContainmentSerializedDelta,
     ChildReplacedSerializedDelta,
+    CompositeSerializedDelta,
     NoOpSerializedDelta,
     PartitionAddedSerializedDelta,
     PartitionDeletedSerializedDelta,
@@ -344,6 +346,13 @@ export const serializeDelta = (delta: IDelta): SerializedDelta => {
             newReference: idFrom(delta.newReference),
             oldReference: idFrom(delta.oldReference)
         } as ReferenceChangedSerializedDelta;
+    }
+
+    if (delta instanceof CompositeDelta) {
+        return {
+            kind: "Composite",
+            parts: delta.parts.map(serializeDelta)
+        } as CompositeSerializedDelta;
     }
 
     if (delta instanceof NoOpDelta) {
