@@ -4,7 +4,7 @@ import { ValidationResult } from "../ValidationResult.js"
 export type UnknownObjectType = { [key: string]: unknown }
 
 /**
- * Type representing a function that validate a primitive value.
+ * Type representing a function that validates a primitive value.
  */
 export type PrimitiveValidatorFunction = <T>(obj: T, result: ValidationResult, ctx: JsonContext) => void
 
@@ -33,7 +33,7 @@ export type StructuredType = {
 }
 
 /**
- * Represents a group of type defiunitions.
+ * Represents a group of type definitions.
  * Used for both the bulk and the delta protocol.
  */
 export type TypeGroup = {

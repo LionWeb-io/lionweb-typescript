@@ -4,11 +4,15 @@
 
 * New way to define the structure of the LionWeb JSON format.
 * Add delta format definitions.
-* Add local publish/unpublist script in package.json files for use with local verdaccio npm registry
+* Add local publish/unpublish script in `package.json` files for use with local Verdaccio NPM registry.
 * Propagate `reference` field of `LionWebJsonReferenceTarget` type now being `null`able.
 * Remove all definitions for reference-related events and commands, except for the ones associated with adding, changing, and deleting a reference.
 
+
 ## 0.7.2
+
+(No changes)
+
 
 ## 0.7.1
 
