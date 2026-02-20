@@ -1,4 +1,4 @@
-import { TypeGroup } from "../generic/schema/SyntaxDefinition.js";
+import type { TypeGroup } from "../generic/schema/SyntaxDefinition.js";
 
 export const ChunksDefinitions: TypeGroup = {
     name: "Chunks",

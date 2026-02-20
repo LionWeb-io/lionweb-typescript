@@ -1,4 +1,4 @@
-import { TypeGroup } from "../generic/schema/SyntaxDefinition.js";
+import type { TypeGroup } from "../generic/schema/SyntaxDefinition.js";
 
 export const DeltaTypesDefinitions: TypeGroup = {
     name: "DeltaTypes",
@@ -59,6 +59,13 @@ export const DeltaTypesDefinitions: TypeGroup = {
                     type: "KeyValuePair",
                     isList: true,
                     isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "distribute",
+                    type: "Boolean",
+                    isList: false,
+                    isOptional: true,
                     mayBeNull: false,
                 },
             ],

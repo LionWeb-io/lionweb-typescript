@@ -35,7 +35,10 @@
         "release-alpha": "npm run release-alpha -w packages --if-present",
         "release-beta": "npm run release-beta -w packages --if-present",
         "release": "npm run release -w packages --if-present",
-        "check-circular-deps": "node check-circular-dependencies.js"
+        "check-circular-deps": "node check-circular-dependencies.js",
+        "publish-local": "npm run publish-local --workspaces --if-present",
+        "unpublish-local": "npm run unpublish-local --workspaces --if-present",
+        "republish-local": "npm run unpublish-local && npm run publish-local"
     },
     "private": true,
     "workspaces": [
