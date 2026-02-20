@@ -189,7 +189,7 @@ export class LionWebClient {
     }
 
 
-    // queries, in order of the specification (§ 6.3):
+    // queries, in order of the specification (§ 5.4):
 
     /**
      * Makes the query in the sense that the given query request is sent (as a client message),
@@ -288,7 +288,7 @@ export class LionWebClient {
     }
 
 
-    // commands, in order of the specification (§ 6.5):
+    // commands, in order of the specification (§ 5.6):
 
     private checkSignedOn(): void {
         if (this._participationId === undefined) {
