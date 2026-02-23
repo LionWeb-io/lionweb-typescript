@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.8.0 — not yet released
+## 0.8.0
 
 * Tie the language explicitly to LionWeb version 2023.1 — see the [README.md](./README.md#lionweb-version) for more details.
 * Internal definition of the language is now read from [`meta/io.lionweb.mps.specific.json`] instead of being constructed programmatically.

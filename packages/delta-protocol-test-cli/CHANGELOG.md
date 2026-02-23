@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.8.0 - not yet released
+## 0.8.0
 
 * Remove the `<partition concept>` argument.
 * Align the semantics of the tasks with those of the C# delta test CLI client.

@@ -1,6 +1,6 @@
 {
     "name": "@lionweb/delta-protocol-repository-ws",
-    "version": "0.8.0-beta.8",
+    "version": "0.8.0",
     "description": "Implementation – currently: partial – of a delta protocol repository using the WebSocket protocol, relying on the 'ws' package",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -27,9 +27,9 @@
         "release": "npm publish"
     },
     "dependencies": {
-        "@lionweb/delta-protocol-common": "0.8.0-beta.8",
-        "@lionweb/json": "0.8.0-beta.8",
-        "@lionweb/ts-utils": "0.8.0-beta.8",
+        "@lionweb/delta-protocol-common": "0.8.0",
+        "@lionweb/json": "0.8.0",
+        "@lionweb/ts-utils": "0.8.0",
         "ws": "8.19.0"
     },
     "devDependencies": {

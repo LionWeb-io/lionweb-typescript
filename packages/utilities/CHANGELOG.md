@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.8.0 — not yet released
+## 0.8.0
 
 * Propagate `reference` field of `LionWebJsonReferenceTarget` type now being `null`able.
 * Harden `asText` textualizer function against unset and unresolved references.

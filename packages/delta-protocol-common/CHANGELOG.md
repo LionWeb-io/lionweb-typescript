@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.8.0 — not yet released
+## 0.8.0
 
 * Remove all reference-related event and command types, except for the ones associated with adding, changing, and deleting a reference.
   *Note* that this is a **breaking change**, due to a [change to the protocol specification](https://github.com/LionWeb-io/specification/issues/431), without providing backward compatibility e.g. by only deprecating those classes.

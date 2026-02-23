@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.8.0 — not yet released
+## 0.8.0
 
 * Remove all code relating to the removed reference-related event and command types.
 

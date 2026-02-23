@@ -1,6 +1,6 @@
 {
     "name": "@lionweb/json",
-    "version": "0.8.0-beta.8",
+    "version": "0.8.0",
     "description": "TypeScript types for LionWeb JSON",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -28,6 +28,5 @@
         "publish-local": "npm publish --registry http://localhost:4873 --tag local",
         "unpublish-local": "npm unpublish --force --registry http://localhost:4873",
         "republish-local": "npm unpublish-local && npm publish-local"
-
     }
 }

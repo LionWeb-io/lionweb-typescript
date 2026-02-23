@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.8.0 — not yet released
+## 0.8.0
 
 * Receive the `IdOrUnresolved` type from the `core` package, and export that and the `idFrom` function.
 * Improve the API surface of the `nodeBaseDeserializer[WithIdMapping]` functions:

@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.8.0 — not yet released
+## 0.8.0
 
 * Improve dealing with unresolved references.
   * Clear up an unnecessarily difficult piece of generator code while doing so.

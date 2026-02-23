@@ -1,6 +1,6 @@
 {
     "name": "@lionweb/class-core-generator",
-    "version": "0.8.0-beta.8",
+    "version": "0.8.0",
     "description": "Generator for implementations of languages based on the class-core package",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -27,12 +27,12 @@
         "release": "npm publish"
     },
     "dependencies": {
-        "@lionweb/core": "0.8.0-beta.8",
-        "@lionweb/io-lionweb-mps-specific": "0.8.0-beta.8",
-        "@lionweb/json": "0.8.0-beta.8",
-        "@lionweb/textgen-utils": "0.8.0-beta.8",
-        "@lionweb/ts-utils": "0.8.0-beta.8",
-        "@lionweb/utilities": "0.8.0-beta.8",
+        "@lionweb/core": "0.8.0",
+        "@lionweb/io-lionweb-mps-specific": "0.8.0",
+        "@lionweb/json": "0.8.0",
+        "@lionweb/textgen-utils": "0.8.0",
+        "@lionweb/ts-utils": "0.8.0",
+        "@lionweb/utilities": "0.8.0",
         "@types/node": "25.2.2",
         "littoral-templates": "0.5.1"
     },

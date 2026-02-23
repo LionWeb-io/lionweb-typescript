@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.8.0 — not yet released
+## 0.8.0
 
 * Rework the `LionWebClient` class to use the new `Forest` class from the `class-core` package.
 
