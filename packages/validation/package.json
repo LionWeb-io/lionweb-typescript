@@ -1,6 +1,6 @@
 {
     "name": "@lionweb/validation",
-    "version": "0.8.0",
+    "version": "0.9.0-beta.0",
     "license": "Apache 2.0",
     "description": "LionWeb Serialization validation",
     "author": "jos.warmer@openmodeling.nl",
@@ -36,8 +36,8 @@
         "republish-local": "npm unpublish-local && npm publish-local"
     },
     "dependencies": {
-        "@lionweb/json": "0.8.0",
-        "@lionweb/ts-utils": "0.8.0",
-        "@lionweb/json-utils": "0.8.0"
+        "@lionweb/json": "0.9.0-beta.0",
+        "@lionweb/ts-utils": "0.9.0-beta.0",
+        "@lionweb/json-utils": "0.9.0-beta.0"
     }
 }

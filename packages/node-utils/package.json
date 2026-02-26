@@ -1,6 +1,6 @@
 {
     "name": "@lionweb/node-utils",
-    "version": "0.8.0",
+    "version": "0.9.0-beta.0",
     "description": "Utilities that depend on Node.js",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
