@@ -17,31 +17,31 @@
 
 import { LionWebJsonChunk } from "@lionweb/json"
 import {
-    builtinPropertyValueDeserializer,
-    defaultSimplisticHandler,
-    deserializeChunk,
+    consoleProblemReporter,
+    deserializerWith,
     Language,
-    lioncore,
-    lioncoreBuiltins,
+    lioncoreReaderFor,
+    LionWebVersions,
     nodesExtractorUsing,
-    SimplisticHandler
+    ProblemReporter
 } from "@lionweb/core"
-import { lioncoreExtractionFacade } from "@lionweb/core/dist/m3/facade.js"
 import { ioLionWebMpsSpecificLanguage } from "./definition.js"
 import { combinedWriter } from "./facade.js"
+
+const { v2023_1 } = LionWebVersions
 
 /**
  * @return the deserialization of the given {@link LionWebJsonChunk serialization chunk} as an array of {@link Language languages}.
  * Any LionCore/M3 node can be annotated using annotations from the `io.lionweb.mps.specific` language.
- * Problems are reported through the given {@link SimplisticHandler} which defaults to {@link defaultSimplisticHandler}.
+ * Problems are reported through the given {@link ProblemReporter} which defaults to {@link consoleProblemReporter}.
  */
-export const deserializeLanguagesWithIoLionWebMpsSpecific = (serializationChunk: LionWebJsonChunk, problemHandler: SimplisticHandler = defaultSimplisticHandler) =>
-    deserializeChunk(
+export const deserializeLanguagesWithIoLionWebMpsSpecific = (serializationChunk: LionWebJsonChunk, problemHandler: ProblemReporter = consoleProblemReporter) =>
+    deserializerWith({
+        writer: combinedWriter,
+        languages: [v2023_1.lioncoreFacade.language, ioLionWebMpsSpecificLanguage],
+        problemReporter: problemHandler
+    })(
         serializationChunk,
-        combinedWriter,
-        [lioncore, ioLionWebMpsSpecificLanguage],
-        [lioncore, lioncoreBuiltins].flatMap(nodesExtractorUsing(lioncoreExtractionFacade)),
-        builtinPropertyValueDeserializer,
-        problemHandler
+        [v2023_1.lioncoreFacade.language, v2023_1.builtinsFacade.language].flatMap(nodesExtractorUsing(lioncoreReaderFor(v2023_1)))
     ).filter((node) => node instanceof Language) as Language[]
 

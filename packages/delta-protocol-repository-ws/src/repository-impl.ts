@@ -69,7 +69,7 @@ export class LionWebRepository {
                         messageKind: "SignOnResponse",
                         queryId,
                         participationId: clientMetadata.participationId,
-                        protocolMessages: []
+                        additionalInfos: []
                     } as SignOnResponse
                 }
                 case "SignOffRequest": {
@@ -78,10 +78,10 @@ export class LionWebRepository {
                     return {
                         messageKind: "SignOffResponse",
                         queryId,
-                        protocolMessages: []
+                        additionalInfos: []
                     } as SignOffResponse
                 }
-                // all commands, in order of the specification (§ 6.5):
+                // all commands, in order of the specification (§ 5.6):
                 /*
                  * **DEV note**: run
                  *
@@ -114,18 +114,6 @@ export class LionWebRepository {
                 case "AddReference":
                 case "DeleteReference":
                 case "ChangeReference":
-                case "MoveEntryFromOtherReference":
-                case "MoveEntryFromOtherReferenceInSameParent":
-                case "MoveEntryInSameReference":
-                case "MoveAndReplaceEntryFromOtherReference":
-                case "MoveAndReplaceEntryFromOtherReferenceInSameParent":
-                case "MoveAndReplaceEntryInSameReference":
-                case "AddReferenceResolveInfo":
-                case "DeleteReferenceResolveInfo":
-                case "ChangeReferenceResolveInfo":
-                case "AddReferenceTarget":
-                case "DeleteReferenceTarget":
-                case "ChangeReferenceTarget":
                 case "CompositeCommand":
                 {
                     lowLevelServer.broadcastMessage(commandAsEvent(message as Command, checkedClientMetadata().participationId))    // FIXME  not correct: message to broadcast to a particular client holds sequence number for that particular participation

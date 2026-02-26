@@ -16,5 +16,5 @@
 // SPDX-License-Identifier: Apache-2.0
 
 export { generateLanguage, generateApiFromLanguages, generateApiFromLanguagesJson } from "./generator.js"
-export * from "./generation-headers.js"
-export * from "./mega-factory.templates.js"
+export { defaultTrumpfOriginatingApache2_0LicensedHeader, generatedCodeWarningComments } from "./generation-headers.js"
+export { megaFactoryFor } from "./mega-factory.templates.js"

@@ -15,8 +15,12 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { builtinClassifiers, builtinPrimitives, LanguageFactory } from "@lionweb/core"
+import { LanguageFactory, LionWebVersions } from "@lionweb/core"
 import { concatenator } from "@lionweb/ts-utils"
+
+const { builtinsFacade } = LionWebVersions.v2023_1
+const { inamed } = builtinsFacade.classifiers
+const { stringDataType } = builtinsFacade.primitiveTypes
 
 const factory = new LanguageFactory("Deltas", "0", concatenator("-"), concatenator("-"))
 export const deltasLanguage = factory.language
@@ -25,7 +29,7 @@ const Deltas = factory.concept("Deltas", false).isPartition()
 
 const Type = factory.interface("Type")
 
-const Field = factory.concept("Field", false).implementing(builtinClassifiers.inamed)
+const Field = factory.concept("Field", false).implementing(inamed)
 factory.containment(Field, "type").ofType(Type)
 
 
@@ -44,7 +48,7 @@ factory.reference(FeatureType, "container").ofType(Field).isOptional()   // FIXM
 const NodeSerialization = factory.interface("NodeSerialization")
 
 const SerializeSubTree = factory.concept("SerializeSubTree", false).implementing(NodeSerialization)
-factory.property(SerializeSubTree, "fieldName").ofType(builtinPrimitives.stringDatatype)
+factory.property(SerializeSubTree, "fieldName").ofType(stringDataType)
 
 factory.concept("RefOnly", false).implementing(NodeSerialization)
 
@@ -56,13 +60,13 @@ factory.concept("IndexType", false).implementing(Type)
 factory.concept("PrimitiveValueType", false).implementing(Type)
 
 const CustomType = factory.concept("CustomType", false).implementing(Type)
-factory.property(CustomType, "type").ofType(builtinPrimitives.stringDatatype)
-factory.property(CustomType, "serializationType").ofType(builtinPrimitives.stringDatatype)
-factory.property(CustomType, "serializationExpr").ofType(builtinPrimitives.stringDatatype)
-factory.property(CustomType, "deserializationExpr").ofType(builtinPrimitives.stringDatatype)
+factory.property(CustomType, "type").ofType(stringDataType)
+factory.property(CustomType, "serializationType").ofType(stringDataType)
+factory.property(CustomType, "serializationExpr").ofType(stringDataType)
+factory.property(CustomType, "deserializationExpr").ofType(stringDataType)
 
-const Delta = factory.concept("Delta", false).implementing(builtinClassifiers.inamed)
-factory.property(Delta, "documentation").isOptional().ofType(builtinPrimitives.stringDatatype)
+const Delta = factory.concept("Delta", false).implementing(inamed)
+factory.property(Delta, "documentation").isOptional().ofType(stringDataType)
 factory.containment(Delta, "fields").isOptional().isMultiple().ofType(Field)
 
 factory.containment(Deltas, "deltas").isOptional().isMultiple().ofType(Delta)

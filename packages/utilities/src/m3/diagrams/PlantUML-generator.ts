@@ -7,6 +7,7 @@ import {
     Interface,
     isBuiltinNodeConcept,
     isRef,
+    isUnresolvedReference,
     Language,
     LanguageEntity,
     Link,
@@ -15,8 +16,7 @@ import {
     nonRelationalFeatures,
     PrimitiveType,
     relationsOf,
-    type,
-    unresolved
+    type
 } from "@lionweb/core"
 import { asString, indentWith } from "littoral-templates"
 
@@ -106,7 +106,7 @@ const generateForNonRelationalFeature = (feature: Feature) => {
     const { name, optional } = feature
     const multiple = feature instanceof Link && feature.multiple
     const type_ = type(feature)
-    return `${name}: ${multiple ? `List<` : ``}${type_ === unresolved ? `???` : type_.name}${optional && !multiple ? `?` : ``}${multiple ? `>` : ``}`
+    return `${name}: ${multiple ? `List<` : ``}${isUnresolvedReference(type_) ? `???` : type_.name}${optional && !multiple ? `?` : ``}${multiple ? `>` : ``}`
 }
 
 const generateForPrimitiveType = ({ name }: PrimitiveType) => `class "${name}" <<primitive type>>`
@@ -140,7 +140,7 @@ const generateForRelationsOf = (entity: LanguageEntity) => {
 
 const generateForRelation = ({ name: leftName }: LanguageEntity, relation: Link) => {
     const { name: relationName, type, optional, multiple } = relation
-    const rightName = isRef(type) ? type.name : type === unresolved ? `<unresolved>` : `<null>`
+    const rightName = isRef(type) ? type.name : isUnresolvedReference(type) ? `<unresolved>` : `<null>`
     const isContainment = relation instanceof Containment
     const leftMultiplicity = isContainment ? `1` : `*`
     const rightMultiplicity = multiple ? "*" : optional ? "0..1" : "1"

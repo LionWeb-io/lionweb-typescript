@@ -1,8 +1,48 @@
 # Changelog
 
+## 0.8.0
+
+* The `NT` type parameter of `SingleRef<NT>` now extends the `Node` base type.
+* Move `IdOrUnresolved` type to the `class-core` package, as it was used only there and in `delta-protocol-common`.
+  * Remove the `serializedRef` function as it was a duplicate of `idFrom` in `class-core`.
+* To be able to introduce multiple LionWeb versions explicitly:
+  * Introduce `Serializer` and `SerializerConfiguration` types, and `serializerWith` function as a replacement (keeping an alias for backward compatibility) for the `nodeSerializer` function with a better API (using the Parameter Object pattern).
+  * Introduce `Deserializer` and `DeserializerConfiguration` types, and a `deserializerWith` function as a replacement (keeping an alias for backward compatibility) for the `deserializeSerializationChunk` function with a better API (using the Parameter Object pattern).
+  * Rename `SimplisticHandler` interface to `ProblemReporter`, and propagate that renaming, keeping alias for backward compatibility.
+* Introduce an explicit `UnresolvedReference` type, a corresponding `isUnresolvedReference` type function, and a `referenceToSet` function to produce reference (target) placeholders, and propagate their use throughout the codebase.
+* Add a 2nd argument to the `ResolveInfoDeducer` function type, to also pass the containing reference.
+  *Note* that this is technically a breaking change, but the `ResolveInfoDeducer` type is essentially part of the internal API.
+* Introduce `propertyValue{Des|S}erializerFrom` functions to build `PropertyValue{Des|S}erializer` instances with in a more convenient and code-compact way.
+  * Deprecate the `BuiltinPropertyValue{Des|S}erializer` classes as legacy.
+* Array-typed fields in the LionCore classes are now read-only.
+* Add support for multiple LionWeb protocol versions:
+  * Introduce a `LionWebVersion` class that encapsulates a LionWeb version.
+    * Add a `LionWebVersions` enumeration, the latter having a single `v2023_1` literal.
+  * Introduce a `LionCoreBuiltinsFacade` type and `lioncoreBuiltinsFacade` instance that façades the details LionCore built-ins.
+    * The `builtin{Classifiers|Features|Primitives}` and `lioncoreBuiltins` constants, and `isBuiltinConcept` function, are kept for backward compatibility, but are now deprecated.
+    * (This change has been propagated throughout the entire codebase.)
+  * Introduce a `LionCoreFacade` type and `lioncoreFacade` instance that façades the details LionCore meta-meta-model language.
+    * The `meta{Concepts|Features}` and `lioncore` constants are kept for backward compatibility, but are now deprecated.
+    * (This change has been propagated throughout the entire codebase.)
+  * Introduce a `deserializeLanguagesFrom` function, deprecate the `deserializeLanguagesWithReporter` function, and replace use of the latter with the former throughout the codebase.
+  * Introduce `lioncoreReaderFor` and `lioncoreWriterFor` functions that are parametrized with a LionWeb version, deprecate the `lioncoreReader` and `lioncoreWriter` constants, and replace use of the latter with the former throughout the codebase.
+  * Introduce a `serializeLanguagesFor` function, and a `LanguageSerializationData` type for the single argument of that function.
+  * Deprecate the `currentReleaseVersion` constant, and replace use of the latter with `LionWebVersions.v2023_1.serializationFormatVersion` throughout the codebase.
+  * Add a LionWeb version to the parameters of (de-)serialization functions, which defaults to the `LionWebVersions.v2023_1`.
+  * Introduce an `allLionWebVersions` constant with all the `LionWebVersion`s.
+  * Add a `v2023_1` constant representing the 2023.1 LionWeb version, and replace the use of the `lioncore[Builtins]Facade` constants with `v2023_1.{lioncore|builtins}Facade` as much as possible throughout the codebase.
+* Deprecate aliases/legacy versions: `PrimitiveType{Des|S}erializer` &rarr; `PropertyValue{Des|S}erializer`, `ExtractionFacade` &rarr; `Reader`, `InstantiationFacade` &rarr; `Writer`.
+* Pull the `iBuiltinNodeConcept` method from the `LionCoreBuiltinsFacade` interface, make it an exported function, and extend its functionality — see its JSDoc.
+* Add a `lionWebVersionFrom` function that tries to match a `serializationFormatVersion` string to a literal of `LionWebVersions`.
+* (Export `M3Node` as a class, not just as a type.)
+* Extend `Reader` with an optional second type parameter `RT` (extending `Node`), which defaults to `NT`.
+  The type of its optional `resolveInfoFor` property is widened to `ResolveInfoDeducer<RT>`.
+  The default for the `RT` type parameter and the type-widening ensure that this change is backward compatible, also when propagated throughout the entire codebase.
+
+
 ## 0.7.2
 
-* Modify the `MultiRef<T>` type to also be able to explicitly contain unresolved references, represented through the `unresolved` type.
+* Modify the `MultiRef<NT>` type to also be able to explicitly contain unresolved references, represented through the `unresolved` type.
     ***Note***: this means that values that have this type need to actively deal with `unresolved` values!
     The easiest way to do this, is to just filter the multi-value using `.filter(isRef)`.
     (Previously, a deserialized multi-value could already contain `unresolved` values, but wasn't typed accordingly.)

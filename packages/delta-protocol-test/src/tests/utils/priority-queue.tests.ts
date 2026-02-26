@@ -17,6 +17,7 @@
 
 import { expect } from "chai"
 
+import { integerRange } from "@lionweb/class-core-test-language"
 import { insertionIndex, priorityQueueAcceptor } from "@lionweb/delta-protocol-client/dist/priority-queue.js"
 
 
@@ -119,9 +120,6 @@ describe("priority queue", () => {
     })
 
 
-    const range = (n: number): number[] =>
-        [...Array(n).keys()]
-
     const fuzzOnce = (nOffered: number, max: number) => {
         const {accept, processed} = priorityEnqueueFixture()
 
@@ -143,11 +141,11 @@ describe("priority queue", () => {
             accept(newOffer())
         }
 
-        expect(processed).to.deep.equal(range(headStreakLengthOf(offered)).map((i) => i + 1), `fuzz with offered numbers: ${offered.join(" ")}`)
+        expect(processed).to.deep.equal(integerRange(headStreakLengthOf(offered)).map((i) => i + 1), `fuzz with offered numbers: ${offered.join(" ")}`)
     }
 
     it("fuzzing", () => {
-        range(512).forEach(() => {
+        integerRange(512).forEach(() => {
             fuzzOnce(1024, 2048)
         })
     })

@@ -24,31 +24,31 @@ import {
 import { eventToDeltaTranslator, PartitionAddedEvent } from "@lionweb/delta-protocol-common"
 import { expect } from "chai"
 
-import { Documentation, Geometry, ShapesBase } from "../gen/Shapes.g.js"
+import { DataTypeTestConcept, TestLanguageBase, TestPartition } from "@lionweb/class-core-test-language"
 
 
 describe("event-to-delta translator", () => {
 
     it("updates ID mapping", () => {
-        const base = ShapesBase.INSTANCE
+        const base = TestLanguageBase.INSTANCE
         const languageBases = [base]
         const factory = base.factory()
 
         const rootId = "root"
         const childId = "child"
 
-        const geometry = factory(base.Geometry, rootId) as Geometry
-        const documentation = factory(base.Documentation, childId) as Documentation
-        documentation.text = "(some text)"
-        geometry.addAnnotation(documentation)
-        const newPartitionChunk = serializeNodeBases([geometry])
+        const partition = factory(base.TestPartition, rootId) as TestPartition
+        const data = factory(base.DataTypeTestConcept, childId) as DataTypeTestConcept
+        data.stringValue_1 = "(some text)"
+        partition.data = data
+        const newPartitionChunk = serializeNodeBases([partition])
 
         const event: PartitionAddedEvent = {
             messageKind: "PartitionAdded",
             newPartition: newPartitionChunk,
             sequenceNumber: 0,
             originCommands: [],
-            protocolMessages: []
+            additionalInfos: []
         }
 
         const eventAsDelta = eventToDeltaTranslator(languageBases, nodeBaseDeserializerWithIdMapping(languageBases))
@@ -56,8 +56,8 @@ describe("event-to-delta translator", () => {
 
         const delta = eventAsDelta(event, idMapping)
         expect(delta instanceof PartitionAddedDelta).to.be.true
-        expect(idMapping.fromId(rootId) instanceof Geometry).to.be.true
-        expect(idMapping.fromId(childId) instanceof Documentation).to.be.true
+        expect(idMapping.fromId(rootId) instanceof TestPartition).to.be.true
+        expect(idMapping.fromId(childId) instanceof DataTypeTestConcept).to.be.true
     })
 
 })

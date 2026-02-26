@@ -1,17 +1,18 @@
 import {
-    AggregatingSimplisticHandler,
-    BuiltinPropertyValueDeserializer,
+    AggregatingProblemReporter,
     Concept,
-    deserializeChunk,
-    deserializeSerializationChunk,
+    deserializerWith,
     dynamicWriter,
     Feature,
     Language,
+    LionWebVersions,
+    newPropertyValueDeserializerRegistry,
+    propertyValueDeserializerFrom,
     Reference,
     unresolved,
     Writer
 } from "@lionweb/core"
-import { currentSerializationFormatVersion, LionWebJsonChunk } from "@lionweb/json"
+import { LionWebJsonChunk } from "@lionweb/json"
 import { expect } from "chai"
 
 import { BaseNode } from "../instances/base.js"
@@ -19,6 +20,7 @@ import { libraryWriter } from "../instances/library.js"
 import { libraryLanguage } from "../languages/library.js"
 import { dateDataType, libraryWithDatesLanguage } from "../languages/libraryWithDates.js"
 import { deepEqual, equal } from "../test-utils/assertions.js"
+
 
 type NodeWithProperties = BaseNode & { properties: Record<string, unknown> }
 
@@ -37,10 +39,11 @@ export const libraryWithDatesWriter: Writer<BaseNode> = {
     }
 }
 
+
 describe("deserialization", () => {
     it("deserializes all nodes, also when there are effectively no root nodes", () => {
         const serializationChunk: LionWebJsonChunk = {
-            serializationFormatVersion: currentSerializationFormatVersion,
+            serializationFormatVersion: LionWebVersions.v2023_1.serializationFormatVersion,
             languages: [
                 {
                     key: "library",
@@ -63,7 +66,7 @@ describe("deserialization", () => {
                 }
             ]
         }
-        const deserialization = deserializeSerializationChunk(serializationChunk, libraryWriter, [libraryLanguage], [])
+        const deserialization = deserializerWith({ writer: libraryWriter, languages: [libraryLanguage] })(serializationChunk)
         deepEqual(deserialization, [
             {
                 id: "1",
@@ -75,7 +78,7 @@ describe("deserialization", () => {
 
     it("deserializes node with custom primitive type, without registering custom deserializer, leading to empty model (and console messages)", () => {
         const serializationChunk: LionWebJsonChunk = {
-            serializationFormatVersion: currentSerializationFormatVersion,
+            serializationFormatVersion: LionWebVersions.v2023_1.serializationFormatVersion,
             languages: [
                 {
                     key: "library-with-dates",
@@ -108,14 +111,14 @@ describe("deserialization", () => {
             ]
         }
         deepEqual(
-            deserializeSerializationChunk(serializationChunk, libraryWithDatesWriter, [libraryWithDatesLanguage], []),
+            deserializerWith({ writer: libraryWithDatesWriter, languages: [libraryWithDatesLanguage] })(serializationChunk),
             [] // because instantiation fails, but instantiation is effectively a flatmap
         )
     })
 
     it("deserializes node with custom primitive type, works when registering custom deserializer", () => {
         const serializationChunk: LionWebJsonChunk = {
-            serializationFormatVersion: currentSerializationFormatVersion,
+            serializationFormatVersion: LionWebVersions.v2023_1.serializationFormatVersion,
             languages: [
                 {
                     key: "libraryWithDates",
@@ -147,19 +150,19 @@ describe("deserialization", () => {
                 }
             ]
         }
-        const propertyValueDeserializer = new BuiltinPropertyValueDeserializer()
-        propertyValueDeserializer.register(dateDataType, value => {
-            const parts = value.split("-")
-            return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]))
-        })
-
-        const deserialization = deserializeSerializationChunk(
-            serializationChunk,
-            libraryWithDatesWriter,
-            [libraryWithDatesLanguage],
-            [],
-            propertyValueDeserializer
+        const propertyValueDeserializer = propertyValueDeserializerFrom(
+            newPropertyValueDeserializerRegistry()
+                .set(LionWebVersions.v2023_1.builtinsFacade.primitiveTypes.stringDataType, (value) => value)
+                .set(dateDataType, (value) => {
+                    const parts = value.split("-")
+                    return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]))
+                })
         )
+        const deserialization = deserializerWith({
+            writer: libraryWithDatesWriter,
+            languages: [libraryWithDatesLanguage],
+            propertyValueDeserializer
+        })(serializationChunk)
 
         const node = deserialization[0] as NodeWithProperties
         expect(node.properties["creationDate"]).to.eql(new Date(2024, 4, 28))
@@ -167,7 +170,7 @@ describe("deserialization", () => {
 
     it("skips nodes with unknown classifier, leading to an empty model (and console messages)", () => {
         const serializationChunk: LionWebJsonChunk = {
-            serializationFormatVersion: currentSerializationFormatVersion,
+            serializationFormatVersion: LionWebVersions.v2023_1.serializationFormatVersion,
             languages: [],
             nodes: [
                 {
@@ -185,7 +188,7 @@ describe("deserialization", () => {
                 }
             ]
         }
-        deepEqual(deserializeSerializationChunk(serializationChunk, dynamicWriter, [], []), [])
+        deepEqual(deserializerWith({ writer: dynamicWriter, languages: [] })(serializationChunk), [])
     })
 
     it("doesn't throw for unresolvable references", () => {
@@ -201,7 +204,7 @@ describe("deserialization", () => {
         someConcept.havingFeatures(someConcept_aReference)
 
         const serializationChunk: LionWebJsonChunk = {
-            serializationFormatVersion: currentSerializationFormatVersion,
+            serializationFormatVersion: LionWebVersions.v2023_1.serializationFormatVersion,
             languages: [
                 {
                     key: "someLanguage",
@@ -239,31 +242,31 @@ describe("deserialization", () => {
             ]
         }
 
-        const model = deserializeSerializationChunk(serializationChunk, dynamicWriter, [someLanguage], [])
+        const model = deserializerWith({ writer: dynamicWriter, languages: [someLanguage] })(serializationChunk)
         equal(model.length, 1)
         deepEqual(model[0].settings, { [someConcept_aReference.key]: unresolved })
     })
 
     it("aggregates problems", () => {
-        const aggregator = new AggregatingSimplisticHandler()
-        deserializeChunk(
+        const problemReporter = new AggregatingProblemReporter()
+        deserializerWith({
+            writer: dynamicWriter,
+            languages: [],
+            problemReporter
+        })(
             {
                 // misses "serializationFormatVersion"
                 languages: [],
                 nodes: []
             } as unknown as LionWebJsonChunk,
-            dynamicWriter,
-            [],
-            [],
-            undefined,
-            aggregator
         )
-        aggregator.reportAllProblemsOnConsole(true)
-        deepEqual(Object.entries(aggregator.allProblems()), [
+        problemReporter.reportAllProblemsOnConsole(true)
+        deepEqual(Object.entries(problemReporter.allProblems()), [
             [
-                `can't deserialize from serialization format other than version "${currentSerializationFormatVersion}" - assuming that version`,
+                `can't deserialize from serialization format other than version "${LionWebVersions.v2023_1.serializationFormatVersion}" - assuming that version`,
                 1
             ]
         ])
     })
 })
+

@@ -16,22 +16,24 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import {
-    builtinClassifiers,
     Classifier,
     DataType,
     Enumeration,
     Feature,
+    isBuiltinNodeConcept,
     isContainment,
     isProperty,
     isReference,
+    isUnresolvedReference,
     LanguageEntity,
     Link,
     PrimitiveType,
     Property,
-    SingleRef,
-    unresolved
+    referenceToSet,
+    SingleRef
 } from "@lionweb/core"
 import { Imports, tsTypeForPrimitiveType } from "./index.js"
+
 
 export const typeOf = (feature: Feature): SingleRef<LanguageEntity> => {
     if (feature instanceof Property) {
@@ -40,13 +42,13 @@ export const typeOf = (feature: Feature): SingleRef<LanguageEntity> => {
     if (feature instanceof Link) {
         return feature.type
     }
-    return null
+    return referenceToSet()
 }
 
 
 export const tsTypeForDataType = (dataType: SingleRef<DataType>, imports: Imports) => {
-    if (dataType === null) {
-        return `unknown /* [ERROR] can't compute a TS type for a null data type */`
+    if (isUnresolvedReference(dataType)) {
+        return `unknown /* [ERROR] can't compute a TS type for an unresolved data type */`
     }
     if (dataType instanceof PrimitiveType) {
         return tsTypeForPrimitiveType(dataType)
@@ -58,11 +60,23 @@ export const tsTypeForDataType = (dataType: SingleRef<DataType>, imports: Import
 }
 
 
-export const tsTypeForClassifier = (classifier: SingleRef<Classifier>, imports: Imports) => {
-    if (classifier === unresolved) {
+const isBuiltinNode = (type: SingleRef<LanguageEntity>): boolean => {
+    if (isUnresolvedReference(type)) {
+        throw new Error(`can’t say whether an unresolved reference is the built-in Node concept`)
+    }
+    return type instanceof Classifier && isBuiltinNodeConcept(type)
+}
+
+export const tsTypeForClassifier = (classifier: SingleRef<Classifier>, imports: Imports, isReference = false) => {
+    if (isUnresolvedReference(classifier)) {
         return `unknown /* [ERROR] can't compute a TS type for an unresolved classifier */`
     }
-    return classifier === builtinClassifiers.node ? imports.generic("INodeBase") : imports.entity(classifier)
+    if (isBuiltinNode(classifier)) {
+        return isReference
+            ? imports.core("Node")
+            : imports.generic("INodeBase")
+    }
+    return imports.entity(classifier)
 }
 
 
@@ -70,8 +84,8 @@ export const optionalityPostfix = (feature: Feature) => feature.optional ? " | u
 
 export const tsFieldTypeForFeature = (feature: Feature, imports: Imports): string => {
     const type = typeOf(feature)
-    if (type === null) {
-        return `unknown /* [ERROR] can't compute a TS type for feature ${feature.name} on classifier ${feature.classifier.name} with null type */`
+    if (isUnresolvedReference(type)) {
+        return `unknown /* [ERROR] can't compute a TS type for feature ${feature.name} on classifier ${feature.classifier.name} with unresolved type (${type}) */`
     }
     if (isProperty(feature)) {
         const typeId = (() => {
@@ -86,23 +100,23 @@ export const tsFieldTypeForFeature = (feature: Feature, imports: Imports): strin
         return `${typeId}${(optionalityPostfix(feature))}`
     }
     if (isContainment(feature)) {
-        const typeId = type === builtinClassifiers.node ? imports.generic("INodeBase") : imports.entity(type)
+        const typeId = isBuiltinNode(type) ? imports.generic("INodeBase") : imports.entity(type)
         return `${typeId}${feature.multiple ? "[]" : optionalityPostfix(feature)}`
     }
     if (isReference(feature)) {
-        const typeId = type === builtinClassifiers.node ? imports.generic("INodeBase") : imports.entity(type)
-        return `${imports.core("SingleRef")}<${typeId}>${feature.multiple ? "[]" : optionalityPostfix(feature)}`
+        const typeParameter = isBuiltinNode(type) ? imports.core("Node") : imports.entity(type)
+        return `${imports.core("SingleRef")}<${typeParameter}>${feature.multiple ? "[]" : optionalityPostfix(feature)}`
     }
     return `unknown /* [ERROR] can't compute a TS type for feature ${feature.name} on classifier ${feature.classifier.name} whose type has an unhandled/-known meta-type ${type.constructor.name} */`
 }
 
 export const tsTypeForValueManager = (feature: Feature, imports: Imports): string => {
     const type = typeOf(feature)
-    if (type === null) {
-        return `unknown /* [ERROR] can't compute a TS type for feature ${feature.name} on classifier ${feature.classifier.name} with null type */`
+    if (isUnresolvedReference(type)) {
+        return `unknown /* [ERROR] can't compute a TS type for feature ${feature.name} on classifier ${feature.classifier.name} with unresolved type (${type}) */`
     }
     if (isProperty(feature)) {
-        const typeId = (() => {
+        return (() => {
             if (type instanceof PrimitiveType) {
                 return tsTypeForPrimitiveType(type)
             }
@@ -111,11 +125,18 @@ export const tsTypeForValueManager = (feature: Feature, imports: Imports): strin
             }
             return `unknown /* [ERROR] can't compute a TS type for feature ${feature.name} on classifier ${feature.classifier.name} whose type has an unhandled/-known meta-type ${type.constructor.name} */`
         })()
-        return typeId
     }
-    if (isContainment(feature) || isReference(feature)) {
-        return type === builtinClassifiers.node ? imports.generic("INodeBase") : imports.entity(type)
+    if (!(isContainment(feature) || isReference(feature))) {
+        return `unknown /* [ERROR] can't compute a TS type for feature ${feature.name} on classifier ${feature.classifier.name} whose type has an unhandled/-known meta-type ${type.constructor.name} */`
     }
-    return `unknown /* [ERROR] can't compute a TS type for feature ${feature.name} on classifier ${feature.classifier.name} whose type has an unhandled/-known meta-type ${type.constructor.name} */`
+    if (isBuiltinNode(type)) {
+        if (isContainment(feature)) {
+            return imports.generic("INodeBase")
+        }
+        if (isReference(feature)) {
+            return imports.core("Node")
+        }
+    }
+    return imports.entity(type)
 }
 

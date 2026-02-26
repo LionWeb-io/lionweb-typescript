@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.8.0
+
+* Make `reference` field of `LionWebJsonReferenceTarget` type `null`able, and ensure that not both fields are `null`.
+* Deprecate usage of the `currentSerializationFormatVersion` constant, and propagate throughout the entire codebase.
+    Use `LionWebVersions.v2023_1.serializationFormatVersion` with `LionWebVersions` coming from the `core` package.
+
+
+## 0.7.2
+
+(No changes)
+
+
 ## 0.7.1
 
 (The 0.7.0 release was deprecated because its `validation` package was faulty.)

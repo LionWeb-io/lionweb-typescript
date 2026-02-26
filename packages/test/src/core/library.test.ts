@@ -1,29 +1,30 @@
 import {
     deserializeLanguages,
-    deserializeSerializationChunk,
+    deserializerWith,
     DynamicNode,
     dynamicWriter,
-    lioncoreBuiltins,
+    LionWebVersions,
     nameBasedClassifierDeducerFor,
-    nodeSerializer,
-    serializeLanguages
+    serializeLanguages,
+    serializerWith
 } from "@lionweb/core"
 
 import { libraryModel, libraryReader, libraryWriter } from "../instances/library.js"
 import { libraryLanguage } from "../languages/library.js"
 import { deepEqual } from "../test-utils/assertions.js"
 
+
 describe("Library test model", () => {
     it("[de-]serialize example library", () => {
-        const serializationChunk = nodeSerializer(libraryReader)(libraryModel)
+        const serializationChunk = serializerWith({ reader: libraryReader })(libraryModel)
         // FIXME  ensure that serialization does not produce key-value pairs with value === undefined
-        const deserialization = deserializeSerializationChunk(serializationChunk, libraryWriter, [libraryLanguage], [])
+        const deserialization = deserializerWith({ writer: libraryWriter, languages: [libraryLanguage] })(serializationChunk)
         deepEqual(deserialization, libraryModel)
     })
 
     it(`"dynamify" example library through serialization and deserialization using the DynamicNode facades`, () => {
-        const serializationChunk = nodeSerializer(libraryReader)(libraryModel)
-        const dynamification = deserializeSerializationChunk(serializationChunk, dynamicWriter, [libraryLanguage], [])
+        const serializationChunk = serializerWith({ reader: libraryReader })(libraryModel)
+        const dynamification = deserializerWith({ writer: dynamicWriter, languages: [libraryLanguage] })(serializationChunk)
         deepEqual(dynamification.length, 2)
         const lookup = nameBasedClassifierDeducerFor(libraryLanguage)
         deepEqual(dynamification[0].classifier, lookup("Library"))
@@ -39,7 +40,7 @@ describe("Library test model", () => {
 
 describe("Library test metamodel", () => {
     it("LionCore built-in primitive types are implicit", () => {
-        libraryLanguage.dependingOn(lioncoreBuiltins)
+        libraryLanguage.dependingOn(LionWebVersions.v2023_1.builtinsFacade.language)
         deepEqual(libraryLanguage.dependsOn, [])
     })
 

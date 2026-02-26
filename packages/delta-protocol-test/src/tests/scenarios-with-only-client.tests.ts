@@ -67,7 +67,7 @@ describe(`scenarios where TypeScript client is the only system under test (using
                         "nodes": [
                             {
                                 "id": "partition-A",
-                                "classifier": { "language": "TestLanguage", "version": "0", "key": "LinkTestConcept" },
+                                "classifier": { "language": "TestLanguage", "version": "0", "key": "TestPartition" },
                                 "properties": [],
                                 "containments": [],
                                 "references": [],
@@ -82,14 +82,14 @@ describe(`scenarios where TypeScript client is the only system under test (using
                             commandId
                         }
                     ],
-                    protocolMessages: []
+                    additionalInfos: []
                 } as PartitionAddedEvent
             }, {
                 [queryId]: {
                     messageKind: "SignOnResponse",
                     queryId,
                     participationId: "participation-a",
-                    protocolMessages: []
+                    additionalInfos: []
                 } as SignOnResponse
             })
         })
@@ -99,13 +99,13 @@ describe(`scenarios where TypeScript client is the only system under test (using
 
         expect(lionWebClient.participationId!).to.equal("participation-a")
 
-        const newPartition = lionWebClient.createNode(testLanguageBase.LinkTestConcept, "partition-A")
+        const newPartition = lionWebClient.forest.createNode(testLanguageBase.TestPartition, "partition-A")
         lionWebClient.addPartition(newPartition)
-        expect(lionWebClient.model).to.deep.equal([newPartition])
+        expect(lionWebClient.forest.partitions).to.deep.equal([newPartition])
 
         // assert idempotency of adding a new partition:
         lionWebClient.addPartition(newPartition)
-        expect(lionWebClient.model).to.deep.equal([newPartition])
+        expect(lionWebClient.forest.partitions).to.deep.equal([newPartition])
 
         await lionWebClient.disconnect()
     })

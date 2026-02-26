@@ -31,7 +31,7 @@ It does some implicit validation as it can error out on incorrect serializations
 Run the following command to sort a serialization chunk (e.g.):
 
 ```shell
-npx @lionweb/cli sort ../artifacts/chunks/languages/lioncore.json
+npx @lionweb/cli sort ../build/artifacts/core/v2023_1/lioncore.json
 ```
 
 Sorting a serialization chunk means the following:

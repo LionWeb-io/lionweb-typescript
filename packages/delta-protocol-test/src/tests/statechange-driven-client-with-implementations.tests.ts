@@ -21,10 +21,10 @@ import { LionWebClient } from "@lionweb/delta-protocol-client"
 import { createWSLowLevelClient } from "@lionweb/delta-protocol-low-level-client-ws"
 import { LionWebRepository, wsLocalhostUrl } from "@lionweb/delta-protocol-repository-ws"
 import { LionWebId } from "@lionweb/json"
-import { Geometry, ShapesBase } from "../gen/Shapes.g.js"
+import { TestLanguageBase } from "@lionweb/class-core-test-language"
 import { delayed } from "../test-utils/async.js"
 import { nextPort } from "../test-utils/port.js"
-import { testModelChunk } from "../test-utils/test-model.js"
+import { getTextFrom, setTextOn, testModelChunk } from "../test-utils/test-model.js"
 
 
 describe("WebSocket-driven implementations of client and repository", async function() {
@@ -34,7 +34,7 @@ describe("WebSocket-driven implementations of client and repository", async func
         const port = nextPort()
         const lionWebRepository = await LionWebRepository.create({ port })
 
-        const languageBases = [ShapesBase.INSTANCE]
+        const languageBases = [TestLanguageBase.INSTANCE]
 
         const createClient = (clientId: LionWebId) =>
             LionWebClient.create({ clientId, url: wsLocalhostUrl(port), languageBases, serializationChunk: testModelChunk, lowLevelClientInstantiator: createWSLowLevelClient })
@@ -47,7 +47,7 @@ describe("WebSocket-driven implementations of client and repository", async func
         await clientB.signOn("query-B", repositoryId)
 
         // Action:
-        ;(clientA.model[0] as Geometry).documentation!.text = "bye bye"
+        setTextOn(clientA.forest.partitions, "bye bye")
 
         await delayed(20, null)
         await clientA.disconnect()
@@ -55,7 +55,7 @@ describe("WebSocket-driven implementations of client and repository", async func
         await lionWebRepository.shutdown()
 
         // Assert:
-        expect((clientB.model[0] as Geometry).documentation!.text).to.equal("bye bye")
+        expect(getTextFrom(clientB.forest.partitions)).to.equal("bye bye")
     })
 
 })

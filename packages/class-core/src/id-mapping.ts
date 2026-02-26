@@ -15,16 +15,17 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { IdOrUnresolved, SingleRef, unresolved } from "@lionweb/core"
+import { Node, referenceToSet, SingleRef } from "@lionweb/core"
 import { LionWebId } from "@lionweb/json"
 
-import { INodeBase } from "./index.js"
+import { INodeBase, NodeBase } from "./base-types.js"
+import { IdOrNull } from "./references.js"
 
 
 /**
- * Type def. for a (hash-)map {@link LionWebId ID} &rarr; {@link INodeBase}.
+ * Type def. for a (hash-)map {@link LionWebId ID} &rarr; {@link Node}.
  */
-type NodesById = { [id: LionWebId]: INodeBase }
+type NodesById = { [id: LionWebId]: Node }
 
 
 /**
@@ -38,13 +39,13 @@ export class IdMapping {
     constructor(nodesById: NodesById) {
         this.nodesById = {...nodesById};
     }
-    // TODO  consider using an instance of Map<Id, INodeBase> instead
+    // TODO  consider using an instance of Map<Id, Node> instead
 
     /**
-     * @return the {@link INodeBase node} with the given {@link LionWebId `id`}, or
+     * @return the {@link Node node} with the given {@link LionWebId `id`}, or
      * @throws an Error if no node with the given ID was registered.
      */
-    fromId = (id: LionWebId): INodeBase => {
+    fromId = (id: LionWebId): Node => {
         if (!(id in this.nodesById)) {
             throw new Error(`node with id=${id} not in ID mapping`);
         }
@@ -52,28 +53,43 @@ export class IdMapping {
     }
 
     /**
-     * @return the {@link INodeBase node} with the given {@link LionWebId `id`},
+     * @return the {@link INodeBase node} with the given {@link LionWebId `id`}, or
+     * @throws an Error if no node with the given ID was registered, or
+     * if the node is not a {@link INodeBase}.
+     */
+    nodeBaseFromId = (id: LionWebId): INodeBase => {
+        const node = this.fromId(id);
+        if (node instanceof NodeBase) {
+            return node;
+        }
+        throw new Error(`node with id=${id} is not a[n I]NodeBase`)
+    }
+
+    /**
+     * @return the {@link Node node} with the given {@link LionWebId `id`},
      * or `undefined` if no node with the given ID was registered.
      */
-    tryFromId = (id: LionWebId): (INodeBase | undefined) =>
+    tryFromId = (id: LionWebId): (Node | undefined) =>
         this.nodesById[id];
 
     /**
-     * @return the {@link INodeBase node} referenced from the given {@link LionWebId ID},
+     * @return the {@link Node node} referenced from the given {@link LionWebId ID},
      * or `unresolved` if `unresolved` was passed in or no node with the given ID was registered.
      */
-    fromRefId = (idOrUnresolved: IdOrUnresolved): SingleRef<INodeBase> =>
-        idOrUnresolved === unresolved
-            ? unresolved
-            : (this.nodesById[idOrUnresolved] ?? unresolved);
+    fromRefId = (idOrNull: IdOrNull): SingleRef<Node> =>
+        idOrNull === null
+            ? referenceToSet()
+            : (this.nodesById[idOrNull] ?? referenceToSet());
 
     /**
      * Updates this {@link IdMapping} with the given `node` *and all its descendants* (recursively).
      */
-    updateWith= (node: INodeBase) => {
+    updateWith = (node: Node) => {
         this.nodesById[node.id] = node;
-        node.children   // recurse into all children
-            .forEach((child) => this.updateWith(child));
+        if (node instanceof NodeBase) {
+            node.children   // recurse into all children
+                .forEach((child) => this.updateWith(child));
+        }
         // TODO  figure out when it's really necessary to call this, as it's potentially *very* expensive
     }
 
@@ -87,7 +103,8 @@ export class IdMapping {
     }
 
     /**
-     * Merges the given `that` {@link IdMapping} **in**to `this`.
+     * Merges the given `that` {@link IdMapping} **in**to `this`,
+     * overwriting any previous mappings in `this`.
      */
     mergeIn = (that: IdMapping) => {
         for (const id in that.nodesById) {

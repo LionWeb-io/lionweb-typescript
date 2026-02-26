@@ -20,11 +20,14 @@ export * from "./convenience.js";
 export * from "./deltas/index.js";
 export * from "./deserializer.js";
 export { deepDuplicateWith } from "./duplicator.js";
-export * from "./id-mapping.js";
 export { combinedFactoryFor } from "./factory.js";
+export { Forest, ObservableForest } from "./forest.js";
+export * from "./id-mapping.js";
 // skip linking.js: see comment there
 export * from "./LionCore_builtins.g.js";
-export { propertyValueSerializerWith, serializeNodeBases } from "./serializer.js";
+export type { IdOrNull } from "./references.js";
+export { idFrom } from "./references.js";
+export { nodeBaseReader, propertyValueSerializerWith, serializeNodeBases } from "./serializer.js";
 export { asTreeTextWith } from "./textualizer.js";
 export * from "./value-managers/index.js";
 

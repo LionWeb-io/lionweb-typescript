@@ -16,6 +16,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import {
+    ChildAddedDelta,
     collectingDeltaReceiver,
     INodeBase,
     nodeBaseDeserializer,
@@ -25,11 +26,16 @@ import {
 } from "@lionweb/class-core"
 import { LionWebJsonChunk } from "@lionweb/json"
 import { readFileAsJson, writeJsonAsFile } from "@lionweb/utilities"
-import { observe } from "mobx"
 import { join } from "path"
 
-import { DataTypeTestConcept, TestEnumeration, TestLanguageBase } from "@lionweb/class-core-test-language"
-import { deepEqual, equal, fail, isTrue, throws } from "./assertions.js"
+import {
+    attachedDataTypeTestConcept,
+    DataTypeTestConcept,
+    TestEnumeration,
+    TestLanguageBase,
+    TestPartition
+} from "@lionweb/class-core-test-language"
+import { deepEqual, equal, isTrue, throws } from "./assertions.js"
 
 
 describe("TestConcept", () => {
@@ -92,43 +98,25 @@ describe("TestConcept", () => {
 
     it("receiving ∂s when changing .stringValue_1", done => {
         const [deltaReceiver, deltas] = collectingDeltaReceiver()
-        const instance = DataTypeTestConcept.create("foo", deltaReceiver)
+        const instance = attachedDataTypeTestConcept("foo", deltaReceiver)
 
         // pre-check:
-        equal(deltas.length, 0)
+        equal(deltas.length, 1)
 
         // action+check:
         instance.stringValue_1 = "bar"
-        equal(deltas.length, 1)
-        const delta1 = deltas[0]
-        isTrue(delta1 instanceof PropertyAddedDelta)
-        const pcd1 = delta1 as PropertyAddedDelta<string>
-        equal(pcd1.node, instance)
-        equal(pcd1.property, testLanguageBase.DataTypeTestConcept_stringValue_1)
-        equal(pcd1.value, "bar")
+        equal(deltas.length, 2)
+        deepEqual(deltas[1], new PropertyAddedDelta(instance, testLanguageBase.DataTypeTestConcept_stringValue_1, "bar"))
 
         instance.stringValue_1 = "fiddlesticks"
-        equal(deltas.length, 2)
-        deepEqual(deltas[1], new PropertyChangedDelta(instance, testLanguageBase.DataTypeTestConcept_stringValue_1, "bar", "fiddlesticks"))
+        equal(deltas.length, 3)
+        deepEqual(deltas[2], new PropertyChangedDelta(instance, testLanguageBase.DataTypeTestConcept_stringValue_1, "bar", "fiddlesticks"))
 
         instance.stringValue_1 = "fiddlesticks" // change to the same value
-        equal(deltas.length, 2)
+        equal(deltas.length, 3)
 
         done()
     })
-
-    it("MobX doesn't see a DataTypeTestConcept instance changing as a whole", done => {
-        const instance = DataTypeTestConcept.create("foo")
-        observe(instance, change => {
-            console.dir(change)
-            fail("saw a change while observing the instance")
-        })
-        done()
-    })
-    /*
-     * Note: this should not imply that observer(<stateless React component instance />) doesn't work!
-     * SomeClass is of the right type — IObservableValue
-     */
 
     const artifactsPath = "artifacts"
 
@@ -151,9 +139,9 @@ describe("TestConcept", () => {
         const serializationChunk = readFileAsJson(
             join(artifactsPath, "DataTypeTestConcept-value=bar-enumValue_1=literal3.expected.json")
         ) as LionWebJsonChunk
-        const [deltaReceiver, deltas] = collectingDeltaReceiver()
-        const deserialized = nodeBaseDeserializer([testLanguageBase], deltaReceiver)
-        const nodes = deserialized(serializationChunk, [])
+        const [receiveDelta, deltas] = collectingDeltaReceiver()
+        const deserialize = nodeBaseDeserializer([testLanguageBase], receiveDelta)
+        const nodes = deserialize(serializationChunk)
         equal(deltas.length, 0)
         equal(nodes.length, 1)
         const node1 = nodes[0]
@@ -163,27 +151,18 @@ describe("TestConcept", () => {
         equal(node1.containment, undefined)
         isTrue(node1 instanceof DataTypeTestConcept)
         const instance = node1 as DataTypeTestConcept
+        const partition = TestPartition.create("partition", receiveDelta)
+        partition.data = instance
         equal(instance.stringValue_1, "bar")
         equal(instance.enumValue_1, TestEnumeration.literal3)
-        equal(deltas.length, 0)
-        instance.stringValue_1 = "fiddlesticks"
         equal(deltas.length, 1)
-        const delta1 = deltas[0]
-        isTrue(delta1 instanceof PropertyChangedDelta)
-        const pcd1 = delta1 as PropertyChangedDelta<string>
-        equal(pcd1.node, instance)
-        equal(pcd1.property, testLanguageBase.DataTypeTestConcept_stringValue_1)
-        equal(pcd1.oldValue, "bar")
-        equal(pcd1.newValue, "fiddlesticks")
-        instance.enumValue_1 = TestEnumeration.literal2
+        deepEqual(deltas[0], new ChildAddedDelta(partition, testLanguageBase.TestPartition_data, 0, instance))
+        instance.stringValue_1 = "fiddlesticks"
         equal(deltas.length, 2)
-        const delta2 = deltas[1]
-        isTrue(delta2 instanceof PropertyChangedDelta)
-        const pcd2 = delta2 as PropertyChangedDelta<TestEnumeration>
-        equal(pcd2.node, instance)
-        equal(pcd2.property, testLanguageBase.DataTypeTestConcept_enumValue_1)
-        equal(pcd2.oldValue, TestEnumeration.literal3)
-        equal(pcd2.newValue, TestEnumeration.literal2)
+        deepEqual(deltas[1], new PropertyChangedDelta(instance, testLanguageBase.DataTypeTestConcept_stringValue_1, "bar", "fiddlesticks"))
+        instance.enumValue_1 = TestEnumeration.literal2
+        equal(deltas.length, 3)
+        deepEqual(deltas[2], new PropertyChangedDelta(instance, testLanguageBase.DataTypeTestConcept_enumValue_1, TestEnumeration.literal3, TestEnumeration.literal2))
         done()
     })
 

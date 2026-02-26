@@ -23,63 +23,67 @@ import {
 } from "@lionweb/class-core"
 import { LionWebId } from "@lionweb/json"
 
-import { LinkTestConcept, TestLanguageBase } from "@lionweb/class-core-test-language"
-import { equal, latestDeltaAsserter } from "../assertions.js"
+import { LinkTestConcept, TestLanguageBase, TestPartition } from "@lionweb/class-core-test-language"
+import { equal, emittedDeltaAsserter } from "../assertions.js"
 
 const testLanguageBase = TestLanguageBase.INSTANCE
 
 describe("containment (mixed)", () => {
 
     it(`integration test: "MoveAndReplaceChildFromOtherContainment_Single"`, () => {
-        const [receiveDeltas, deltas] = collectingDeltaReceiver();
+        const [receiveDelta, deltas] = collectingDeltaReceiver();
         const newLTC = (id: LionWebId)=>
-            LinkTestConcept.create(id, receiveDeltas);
-        const assertLatestDelta = latestDeltaAsserter(deltas);
-        const partition = newLTC("a");
+            LinkTestConcept.create(id, receiveDelta);
+        const topLTC = newLTC("a");
+        const partition = TestPartition.create("partition", receiveDelta)
+        partition.addLinks(topLTC)
+        const assertDeltaEmitted = emittedDeltaAsserter(deltas);
 
-        // 1] ~AddContainment_0_1: partition.containment_0_1 <- new LTC("containment_0_1")
+        // 1] ~AddContainment_0_1: topLTC.containment_0_1 <- new LTC("containment_0_1")
         const containment_0_1 = newLTC("containment_0_1");
-        partition.containment_0_1 = containment_0_1;
-        assertLatestDelta(new ChildAddedDelta(partition, testLanguageBase.LinkTestConcept_containment_0_1, 0, containment_0_1));
+        topLTC.containment_0_1 = containment_0_1;
+        assertDeltaEmitted(new ChildAddedDelta(topLTC, testLanguageBase.LinkTestConcept_containment_0_1, 0, containment_0_1));
 
-        // 2] ~AddContainment_0_1_Containment_0_1: partition.containment_0_1.containment_0_1 <- new LTC("containment_0_1_containment_0_1")
+        // 2] ~AddContainment_0_1_Containment_0_1: topLTC.containment_0_1.containment_0_1 <- new LTC("containment_0_1_containment_0_1")
         const containment_0_1_containment_0_1 = newLTC("containment_0_1_containment_0_1");
-        partition.containment_0_1.containment_0_1 = containment_0_1_containment_0_1;
-        assertLatestDelta(new ChildAddedDelta(partition.containment_0_1, testLanguageBase.LinkTestConcept_containment_0_1, 0, containment_0_1_containment_0_1));
+        topLTC.containment_0_1.containment_0_1 = containment_0_1_containment_0_1;
+        assertDeltaEmitted(new ChildAddedDelta(topLTC.containment_0_1, testLanguageBase.LinkTestConcept_containment_0_1, 0, containment_0_1_containment_0_1));
 
-        // 3] ~AddContainment_1: partition.containment_1 <- new LTC("containment_1")
+        // 3] ~AddContainment_1: topLTC.containment_1 <- new LTC("containment_1")
         const containment_1 = newLTC("containment_1");
-        partition.containment_1 = containment_1;
-        assertLatestDelta(new ChildAddedDelta(partition, testLanguageBase.LinkTestConcept_containment_1, 0, containment_1));
+        topLTC.containment_1 = containment_1;
+        assertDeltaEmitted(new ChildAddedDelta(topLTC, testLanguageBase.LinkTestConcept_containment_1, 0, containment_1));
 
-        // 4] ~AddContainment_1_Containment_0_1: partition.containment_1.containment_0_1 <- new LTC("containment_1_containment_0_1")
+        // 4] ~AddContainment_1_Containment_0_1: topLTC.containment_1.containment_0_1 <- new LTC("containment_1_containment_0_1")
         const containment_1_containment_0_1 = newLTC("containment_1_containment_0_1");
-        partition.containment_1.containment_0_1 = containment_1_containment_0_1;
-        assertLatestDelta(new ChildAddedDelta(containment_1, testLanguageBase.LinkTestConcept_containment_0_1, 0, containment_1_containment_0_1));
+        topLTC.containment_1.containment_0_1 = containment_1_containment_0_1;
+        assertDeltaEmitted(new ChildAddedDelta(containment_1, testLanguageBase.LinkTestConcept_containment_0_1, 0, containment_1_containment_0_1));
 
-        // 5] ~MoveAndReplaceChildFromOtherContainment_Single: partition.containment_1.containment_0_1.replaceWith({ partition.containment_0_1.containment_0_1 === LTC("containment_0_1_containment_0_1") })
-        equal(partition.containment_0_1.containment_0_1, containment_0_1_containment_0_1);
-        partition.containment_1.replaceContainment_0_1With(partition.containment_0_1.containment_0_1);
-        assertLatestDelta(new ChildMovedAndReplacedFromOtherContainmentDelta(partition.containment_1, testLanguageBase.LinkTestConcept_containment_0_1, 0, partition.containment_0_1.containment_0_1, containment_0_1, testLanguageBase.LinkTestConcept_containment_0_1, 0, containment_1_containment_0_1));
+        // 5] ~MoveAndReplaceChildFromOtherContainment_Single: topLTC.containment_1.containment_0_1.replaceWith({ topLTC.containment_0_1.containment_0_1 === LTC("containment_0_1_containment_0_1") })
+        equal(topLTC.containment_0_1.containment_0_1, containment_0_1_containment_0_1);
+        topLTC.containment_1.replaceContainment_0_1With(topLTC.containment_0_1.containment_0_1);
+        assertDeltaEmitted(new ChildMovedAndReplacedFromOtherContainmentDelta(topLTC.containment_1, testLanguageBase.LinkTestConcept_containment_0_1, 0, topLTC.containment_0_1.containment_0_1, containment_0_1, testLanguageBase.LinkTestConcept_containment_0_1, 0, containment_1_containment_0_1));
     });
 
     it(`integration test: "ReplaceChild"`, () => {
-        const [receiveDeltas, deltas] = collectingDeltaReceiver();
+        const [receiveDelta, deltas] = collectingDeltaReceiver();
         const newLTC = (id: LionWebId)=>
-            LinkTestConcept.create(id, receiveDeltas);
-        const assertLatestDelta = latestDeltaAsserter(deltas);
-        const partition = newLTC("a");
+            LinkTestConcept.create(id, receiveDelta);
+        const topLTC = newLTC("a");
+        const partition = TestPartition.create("partition", receiveDelta)
+        partition.addLinks(topLTC)
+        const assertDeltaEmitted = emittedDeltaAsserter(deltas);
 
-        // 1] ~AddContainment_0_1: partition.containment_0_1 <- new LTC("containment_0_1")
+        // 1] ~AddContainment_0_1: topLTC.containment_0_1 <- new LTC("containment_0_1")
         const containment_0_1 = newLTC("containment_0_1");
-        partition.containment_0_1 = containment_0_1;
-        assertLatestDelta(new ChildAddedDelta(partition, testLanguageBase.LinkTestConcept_containment_0_1, 0, containment_0_1));
+        topLTC.containment_0_1 = containment_0_1;
+        assertDeltaEmitted(new ChildAddedDelta(topLTC, testLanguageBase.LinkTestConcept_containment_0_1, 0, containment_0_1));
 
-        // 2] ~ReplaceContainment_0_1: partition.containment_0_1.replaceWith(new LTC("substitute"))
+        // 2] ~ReplaceContainment_0_1: topLTC.containment_0_1.replaceWith(new LTC("substitute"))
         const substitute = newLTC("substitute");
-        partition.replaceContainment_0_1With(substitute);
-        assertLatestDelta(new ChildReplacedDelta(partition, testLanguageBase.LinkTestConcept_containment_0_1, 0, containment_0_1, substitute));
-        equal(partition.containment_0_1, substitute);
+        topLTC.replaceContainment_0_1With(substitute);
+        assertDeltaEmitted(new ChildReplacedDelta(topLTC, testLanguageBase.LinkTestConcept_containment_0_1, 0, containment_0_1, substitute));
+        equal(topLTC.containment_0_1, substitute);
     });
 
 });

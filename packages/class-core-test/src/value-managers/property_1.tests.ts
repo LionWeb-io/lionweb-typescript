@@ -17,18 +17,18 @@
 
 import {
     collectingDeltaReceiver,
-    nodeBaseDeserializer,
     PropertyAddedDelta,
     PropertyChangedDelta,
     serializeNodeBases
 } from "@lionweb/class-core"
-import { AccumulatingSimplisticHandler } from "@lionweb/core"
 import { LionWebJsonMetaPointer } from "@lionweb/json"
 
-import { DataTypeTestConcept, TestLanguageBase } from "@lionweb/class-core-test-language"
+import { attachedDataTypeTestConcept, DataTypeTestConcept, TestLanguageBase } from "@lionweb/class-core-test-language"
 import { deepEqual, equal, isTrue, throws } from "../assertions.js"
+import { deserializeNodesAssertingNoProblems } from "./tests-helpers.js"
 
 const testLanguageBase = TestLanguageBase.INSTANCE
+
 
 describe("[1] string property", () => {
 
@@ -63,10 +63,7 @@ describe("[1] string property", () => {
         equal(nodes[0].properties.length, 0);
 
         const [receiveDelta, deltas] = collectingDeltaReceiver();
-        const deserialize = nodeBaseDeserializer([testLanguageBase], receiveDelta);
-        const problemHandler = new AccumulatingSimplisticHandler();
-        const deserializedNodes = deserialize(serializationChunk, undefined, undefined, undefined, problemHandler);
-        equal(problemHandler.allProblems.length, 0);
+        const deserializedNodes = deserializeNodesAssertingNoProblems(serializationChunk, receiveDelta);
         equal(deserializedNodes.length, 1);
         const root = deserializedNodes[0];
         isTrue(root instanceof DataTypeTestConcept);
@@ -85,17 +82,17 @@ describe("[1] string property", () => {
 
     it("setting a [1] string property", () => {
         const [receiveDelta, deltas] = collectingDeltaReceiver();
-        const node = DataTypeTestConcept.create("node", receiveDelta);
+        const node = attachedDataTypeTestConcept("node", receiveDelta);
 
         // pre-check:
-        equal(deltas.length, 0);
+        equal(deltas.length, 1);
 
         // action+check:
         node.stringValue_1 = "foo";
         equal(node.stringValue_1, "foo");
-        equal(deltas.length, 1);
+        equal(deltas.length, 2);
         deepEqual(
-            deltas[0],
+            deltas[1],
             new PropertyAddedDelta(node, testLanguageBase.DataTypeTestConcept_stringValue_1, "foo")
         );
     });
@@ -116,10 +113,7 @@ describe("[1] string property", () => {
         );
 
         const [receiveDelta, deltas] = collectingDeltaReceiver();
-        const deserialize = nodeBaseDeserializer([testLanguageBase], receiveDelta);
-        const problemHandler = new AccumulatingSimplisticHandler();
-        const deserializedNodes = deserialize(serializationChunk, undefined, undefined, undefined, problemHandler);
-        equal(problemHandler.allProblems.length, 0);
+        const deserializedNodes = deserializeNodesAssertingNoProblems(serializationChunk, receiveDelta);
         equal(deserializedNodes.length, 1);
         const root = deserializedNodes[0];
         isTrue(root instanceof DataTypeTestConcept);
@@ -128,16 +122,16 @@ describe("[1] string property", () => {
         equal(deserializedNode.classifier, testLanguageBase.DataTypeTestConcept);
         equal(deserializedNode.parent, undefined);
         equal(deserializedNode.stringValue_1, "foo");
-        equal(deltas.length, 0);    // FIXME
+        equal(deltas.length, 0);
     });
 
     it("unsetting a [1] string property", () => {
         const [receiveDelta, deltas] = collectingDeltaReceiver();
-        const node = DataTypeTestConcept.create("node", receiveDelta);
+        const node = attachedDataTypeTestConcept("node", receiveDelta);
 
         // pre-check:
         node.stringValue_1 = "foo";
-        equal(deltas.length, 1);
+        equal(deltas.length, 2);
 
         // action+check:
         throws(
@@ -147,23 +141,23 @@ describe("[1] string property", () => {
             },
             `can't unset required property "stringValue_1" on instance of TestLanguage.DataTypeTestConcept with id=node`
         )
-        equal(deltas.length, 1);
+        equal(deltas.length, 2);
     });
 
     it("changing a [1] string property", () => {
         const [receiveDelta, deltas] = collectingDeltaReceiver();
-        const node = DataTypeTestConcept.create("node", receiveDelta);
+        const node = attachedDataTypeTestConcept("node", receiveDelta);
 
         // pre-check:
         node.stringValue_1 = "foo";
-        equal(deltas.length, 1);
+        equal(deltas.length, 2);
 
         // action+check:
         node.stringValue_1 = "bar";
         equal(node.stringValue_1, "bar");
-        equal(deltas.length, 2);
+        equal(deltas.length, 3);
         deepEqual(
-            deltas[1],
+            deltas[2],
             new PropertyChangedDelta(node, testLanguageBase.DataTypeTestConcept_stringValue_1, "foo", "bar")
         );
     });

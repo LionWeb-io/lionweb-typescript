@@ -15,56 +15,31 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {
-    Annotation,
-    builtinClassifiers,
-    builtinPrimitives,
-    Classifier,
-    LanguageFactory,
-    metaConcepts
-} from "@lionweb/core"
-import { StringsMapper } from "@lionweb/ts-utils"
+import { Classifier, deserializeLanguages, Language, LionWebVersions } from "@lionweb/core"
+import { LionWebJsonChunk } from "@lionweb/json"
 
-const languageName = "io.lionweb.mps.specific"
-const dashedLanguageName = languageName.replaceAll(".", "-")
+import languageDefinitionJson from "../meta/io.lionweb.mps.specific.json" with { type: "json" }
 
-const idKeyGen: StringsMapper = (...names) =>
-    names.length === 1
-        ? names[0]
-        : names.slice(1).join("-")
+const { lioncoreFacade, builtinsFacade } = LionWebVersions.v2023_1
 
-const factory = new LanguageFactory(dashedLanguageName, "2024-01", idKeyGen, idKeyGen)
+export const ioLionWebMpsSpecificLanguage: Language = deserializeLanguages(languageDefinitionJson as LionWebJsonChunk, lioncoreFacade.language, builtinsFacade.language)[0]
 
+const classifierNamed = (name: string) =>
+    ioLionWebMpsSpecificLanguage.entities
+        .find((entity) => entity instanceof Classifier && entity.name === name)! as Classifier
 
-const defineAnnotation = (nameOfAnnotation: string, annotates: Classifier, ...namesOfOptionalStringProperties: string[]): Annotation => {
-    const annotation = factory.annotation(nameOfAnnotation).annotating(annotates)
-    namesOfOptionalStringProperties.forEach((name) => {
-        factory.property(annotation, name).ofType(builtinPrimitives.stringDatatype).isOptional()
-    })
-    return annotation
-}
-
-
-const ConceptDescription = defineAnnotation("ConceptDescription", metaConcepts.classifier, "conceptAlias", "conceptShortDescription", "helpUrl")
-
-const Deprecated = defineAnnotation("Deprecated", metaConcepts.ikeyed, "comment", "build")
-
-const KeyedDescription = defineAnnotation("KeyedDescription", metaConcepts.ikeyed, "documentation")
-factory.reference(KeyedDescription, "seeAlso").ofType(builtinClassifiers.node).isMultiple().isOptional()
-
-const ShortDescription = defineAnnotation("ShortDescription", builtinClassifiers.node, "description")
-
-const VirtualPackage = defineAnnotation("VirtualPackage", builtinClassifiers.node).implementing(builtinClassifiers.inamed)
-
-
-export const ioLionWebMpsSpecificLanguage = factory.language
-ioLionWebMpsSpecificLanguage.name = languageName
-
+/**
+ * The classifiers of the language, as a constant dictionary for type(d) convenience.
+ */
 export const ioLionWebMpsSpecificClassifiers = {
-    ConceptDescription,
-    Deprecated,
-    KeyedDescription,
-    ShortDescription,
-    VirtualPackage
-}
+    ConceptDescription: classifierNamed("ConceptDescription"),
+    Deprecated: classifierNamed("Deprecated"),
+    KeyedDescription: classifierNamed("KeyedDescription"),
+    ShortDescription: classifierNamed("ShortDescription"),
+    VirtualPackage: classifierNamed("VirtualPackage")
+} as const
+/*
+ * Note: `as const` only works for object literals, not for programmatically-created objects.
+ * There’s a unit test that checks whether `ioLionWebMpsSpecificClassifiers` is complete and correct.
+ */
 

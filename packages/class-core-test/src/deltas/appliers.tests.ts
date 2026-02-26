@@ -22,22 +22,24 @@ import {
     ChildAddedDelta,
     ChildDeletedDelta,
     ChildMovedFromOtherContainmentDelta,
-    ChildReplacedDelta
+    ChildReplacedDelta,
+    ReferenceDeletedDelta
 } from "@lionweb/class-core"
 
 import { LinkTestConcept, TestAnnotation, TestLanguageBase } from "@lionweb/class-core-test-language"
-import { deepEqual, equal, isUndefined } from "../assertions.js"
+import { deepEqual, equal, isUndefined, throws } from "../assertions.js"
 
-const testLanguage = TestLanguageBase.INSTANCE
+const testLanguageBase = TestLanguageBase.INSTANCE
+
 
 describe("delta application sets parentage correctly", () => {
 
     it("child added", () => {
         [
-            testLanguage.LinkTestConcept_containment_0_1,
-            testLanguage.LinkTestConcept_containment_1,
-            testLanguage.LinkTestConcept_containment_0_n,
-            testLanguage.LinkTestConcept_containment_1_n
+            testLanguageBase.LinkTestConcept_containment_0_1,
+            testLanguageBase.LinkTestConcept_containment_1,
+            testLanguageBase.LinkTestConcept_containment_0_n,
+            testLanguageBase.LinkTestConcept_containment_1_n
         ].forEach((containment) => {
             const parent = LinkTestConcept.create("parent");
             const child = LinkTestConcept.create("child");
@@ -54,7 +56,7 @@ describe("delta application sets parentage correctly", () => {
         const child = LinkTestConcept.create("child");
         parent.containment_0_1 = child;
         const dstLtc = LinkTestConcept.create("dstLtc");
-        const delta = new ChildMovedFromOtherContainmentDelta(parent, testLanguage.LinkTestConcept_containment_0_1, 0, dstLtc, testLanguage.LinkTestConcept_containment_0_1, 0, child);
+        const delta = new ChildMovedFromOtherContainmentDelta(parent, testLanguageBase.LinkTestConcept_containment_0_1, 0, dstLtc, testLanguageBase.LinkTestConcept_containment_0_1, 0, child);
 
         applyDelta(delta);
 
@@ -69,7 +71,7 @@ describe("delta application sets parentage correctly", () => {
         const dstParent = LinkTestConcept.create("dstParent");
         const child2 = LinkTestConcept.create("child2");
         dstParent.containment_0_1 = child2;
-        const delta = new ChildReplacedDelta(dstParent, testLanguage.LinkTestConcept_containment_0_1, 0, child2, child1);
+        const delta = new ChildReplacedDelta(dstParent, testLanguageBase.LinkTestConcept_containment_0_1, 0, child2, child1);
 
         applyDelta(delta);
 
@@ -81,7 +83,7 @@ describe("delta application sets parentage correctly", () => {
         const parent = LinkTestConcept.create("parent");
         const child = LinkTestConcept.create("child");
         parent.containment_0_1 = child;
-        const delta = new ChildDeletedDelta(parent, testLanguage.LinkTestConcept_containment_0_1, 0, child);
+        const delta = new ChildDeletedDelta(parent, testLanguageBase.LinkTestConcept_containment_0_1, 0, child);
 
         applyDelta(delta);
 
@@ -110,6 +112,26 @@ describe("delta application sets parentage correctly", () => {
 
         isUndefined(annotation.parent);
         deepEqual(node.annotations, []);
+    });
+
+    it("reference deleted from wrong index throws", () => {
+        const srcNode = LinkTestConcept.create("srcNode");
+        const targetNode1 = LinkTestConcept.create("targetNode1");
+        const targetNode2 = LinkTestConcept.create("targetNode2");
+        srcNode.addReference_0_n(targetNode1);
+        srcNode.addReference_0_n(targetNode1);
+        srcNode.addReference_0_n(targetNode2);
+
+        throws(() => {
+            applyDelta(new ReferenceDeletedDelta(srcNode, testLanguageBase.LinkTestConcept_reference_0_n, 0, targetNode2));
+        }, "index 0 doesn’t match deleted reference");
+
+        throws(() => {
+            applyDelta(new ReferenceDeletedDelta(srcNode, testLanguageBase.LinkTestConcept_reference_0_n, 3, targetNode2));
+        }, "index 3 doesn’t match deleted reference");
+
+        applyDelta(new ReferenceDeletedDelta(srcNode, testLanguageBase.LinkTestConcept_reference_0_n, 0, targetNode1));
+        deepEqual(srcNode.reference_0_n, [targetNode1, targetNode2]);
     });
 
 });

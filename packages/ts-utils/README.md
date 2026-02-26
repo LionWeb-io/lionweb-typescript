@@ -4,7 +4,7 @@
 ](./LICENSE)
 [![CI](https://github.com/LionWeb-io/lionweb-typescript/actions/workflows/test.yaml/badge.svg)
 ](https://github.com/LionWeb-io/lionweb-typescript/actions/workflows/test.yaml)
-[![npm](https://img.shields.io/npm/v/%40lionweb%2Fjson?label=%40lionweb%2Fts-utils)
+[![npm](https://img.shields.io/npm/v/%40lionweb%2Fts-utils?label=%40lionweb%2Fts-utils)
 ](https://www.npmjs.com/package/@lionweb/ts-utils)
 
 An NPM package that can be added to a Node.js/NPM codebase as follows:

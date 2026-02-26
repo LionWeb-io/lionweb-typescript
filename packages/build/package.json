@@ -1,6 +1,6 @@
 {
     "name": "@lionweb/build",
-    "version": "0.7.2-dev.0",
+    "version": "0.8.0-dev.0",
     "description": "Build the deltas language, and the delta types in -class-core from their specification",
     "private": true,
     "main": "dist/generate-for-class-core.js",
@@ -17,20 +17,20 @@
         "clean": "npx rimraf dist node_modules",
         "build": "tsc",
         "pregenerate": "npm run build",
-        "generate": "node dist/generate-for-class-core.js && node dist/generate-for-io.lionweb.mps.specific.js && node dist/generate-shapes-language-from-csharp.js",
+        "generate": "node dist/generate-core-artifacts.js && node dist/generate-for-class-core.js && node dist/generate-for-io.lionweb.mps.specific.js && node dist/generate-for-test-language.js",
         "lint": "eslint src"
     },
     "dependencies": {
-        "@lionweb/core": "0.7.2",
-        "@lionweb/class-core": "0.7.2",
-        "@lionweb/class-core-generator": "0.7.2",
-        "@lionweb/json": "0.7.2",
-        "@lionweb/textgen-utils": "0.7.2",
-        "@lionweb/ts-utils": "0.7.2",
-        "@lionweb/utilities": "0.7.2",
+        "@lionweb/core": "0.8.0",
+        "@lionweb/class-core": "0.8.0",
+        "@lionweb/class-core-generator": "0.8.0",
+        "@lionweb/json": "0.8.0",
+        "@lionweb/textgen-utils": "0.8.0",
+        "@lionweb/ts-utils": "0.8.0",
+        "@lionweb/utilities": "0.8.0",
         "littoral-templates": "0.5.1"
     },
     "devDependencies": {
-        "@types/node": "24.3.0"
+        "@types/node": "25.2.2"
     }
 }

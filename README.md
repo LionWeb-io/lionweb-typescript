@@ -31,9 +31,8 @@ This repository contains a TypeScript implementation for (parts of) the [LionWeb
 _Note_ that this repo doesn't implement the specification completely.
 In particular:
 
-* No support for release version 2024.1 (yet).
+* No support for release versions 2024.1 and 2025.1 (yet).
 * Not all constraints on the LionCore M3 have been implemented.
-* The functionality in the `utilities` and `validation` packages is provided “as-is”.
 
 The implementation of the JSON serialization format, serialization from in-memory representations to that format, and vice versa, are all pretty solid.
 
@@ -53,6 +52,9 @@ The implementation is divided up in a number of NPM packages in the directory [`
 
 - `core`
   The "core stuff" such as: base types, the LionCore M3 (including the `builtins` language), and (de-)serialization.
+
+- `node-utils`
+  General TypeScript utilities that rely on Node.js.
 
 - `utilities`
   Utilities on top of the `core` packages that might be broadly useful, but should not go into the `core` package.
@@ -88,9 +90,6 @@ The implementation is divided up in a number of NPM packages in the directory [`
   This constitutes a *circular* dependency, but that only exists at compile+build time, so should not be problematic.
   To ensure that a “clean clone” of this repository is not impacted, the `rebuild.sh` script builds `class-core` first, before compiling and running `build`, and then builds `class-core` again.
 
-- `artifacts`
-  A package that generates artifacts (serialization chunks, diagrams, JSON Schemas) from some of the models constructed in the `core` and `test` packages.
-
 - Various packages related to the delta protocol:
   - `delta-protocol-common`
   - `delta-protocol-client`
@@ -103,7 +102,7 @@ The implementation is divided up in a number of NPM packages in the directory [`
     A package that contains tests for the delta protocol implementation.
 
 Each of these packages have their own `README.md`.
-The following packages are published in the scope of [the `lionweb` organization](https://www.npmjs.com/org/lionweb), meaning that they're all prefixed with `@lionweb/`: `json`, `json-utils`, `js-diff`, `core`, `ts-utils`, `utilities`, `cli`, and `validation`, `class-core`, `class-core-generator`
+The following packages are published in the scope of [the `lionweb` organization](https://www.npmjs.com/org/lionweb), meaning that they're all prefixed with `@lionweb/`: `json`, `json-utils`, `js-diff`, `core`, `ts-utils`, `node-utils`, `utilities`, `cli`, and `validation`, `class-core`, `class-core-generator`
 The other packages are for internal use only.
 All these packages declare their own NPM semver identification, which isn't directly related to the release version of the LionWeb specification.
 
@@ -266,6 +265,28 @@ All the code in this repository is written in TypeScript, with the following cod
 
 We use prettier with parameters defined in `.prettierrc`.
 *Note* that currently we don't automatically run `prettier` over the source code.
+
+
+## Miscellaneous
+
+### Generate code metrics
+
+Run the following on the command line, in the repo’s root, to get some idea of the size of the code base:
+
+```shell
+$ find packages -name "*.ts*" \! -name "*.d.ts*" -print | grep -v -e "test" | xargs wc | sort > metrics.txt
+```
+
+
+### Lint TypeScript for mismatched dependencies
+
+The NPM `lint` task doesn’t check whether `import` statements refer to dependencies that are actually mentioned in the package’s `package.json`.
+
+Run the following on the command line, in the repo’s root, to see where there’s mismatches between `import` statements and the `dependencies` section in a package’s `package.json`.
+
+```shell
+$ node packages/build/src/code-reading/check-imports.js
+```
 
 
 ### Containerized development environment

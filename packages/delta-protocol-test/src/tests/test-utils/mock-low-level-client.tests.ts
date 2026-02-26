@@ -38,7 +38,7 @@ describe("mock low-level client", async function() {
         clientId: "A",
         queryId: "query-1",
         repositoryId: "myRepo",
-        protocolMessages: []
+        additionalInfos: []
     }
 
     // positive tests:
@@ -56,7 +56,7 @@ describe("mock low-level client", async function() {
             messageKind: "SignOnResponse",
             queryId: "query-1",
             participationId: "participation-1",
-            protocolMessages: []
+            additionalInfos: []
         }
         const mockLowLevelClient = await mockLowLevelClientInstantiator(
             {},
@@ -81,7 +81,7 @@ describe("mock low-level client", async function() {
                     commandId: "command-1"
                 }
             ],
-            protocolMessages: []
+            additionalInfos: []
         }
         const mockLowLevelClient = await mockLowLevelClientInstantiator(
             {
@@ -100,7 +100,7 @@ describe("mock low-level client", async function() {
             messageKind: "AddPartition",
             commandId: "command-1",
             newPartition: emptySerializationChunk,
-            protocolMessages: []
+            additionalInfos: []
         } as AddPartitionCommand)
         expect(logItems).to.deep.equal([
             {
@@ -112,7 +112,7 @@ describe("mock low-level client", async function() {
                         "languages": [],
                         "nodes": []
                     },
-                    "protocolMessages": []
+                    "additionalInfos": []
                 }
             },
             {
@@ -130,7 +130,7 @@ describe("mock low-level client", async function() {
                             "commandId": "command-1"
                         }
                     ],
-                    "protocolMessages": []
+                    "additionalInfos": []
                 }
             }
         ])
@@ -164,7 +164,7 @@ describe("mock low-level client", async function() {
                 messageKind: "AddPartition",
                 commandId: "command-1",
                 newPartition: emptySerializationChunk,
-                protocolMessages: []
+                additionalInfos: []
             } as AddPartitionCommand),
             `mock low-level client doesn't have a response configured for command with ID="command-1"`
         )

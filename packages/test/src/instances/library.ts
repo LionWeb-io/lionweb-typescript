@@ -1,4 +1,4 @@
-import { Writer as CoreWriter, nameBasedClassifierDeducerFor, Reader, updateSettingsNameBased } from "@lionweb/core"
+import { nameBasedClassifierDeducerFor, Reader, updateSettingsNameBased, Writer as CoreWriter } from "@lionweb/core"
 import { hasher } from "@lionweb/utilities"
 import { libraryLanguage } from "../languages/library.js"
 import { BaseNode } from "./base.js"
@@ -65,7 +65,7 @@ export const libraryWriter: CoreWriter<BaseNode> = {
         annotations: []
     }),
     setFeatureValue: updateSettingsNameBased,
-    encodingOf: literal => {
+    encodingOf: (literal) => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const rtEnum = rtEnums[literal.enumeration.key] as any
         return rtEnum[literal.key as unknown as number]

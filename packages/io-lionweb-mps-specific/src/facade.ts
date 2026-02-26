@@ -19,13 +19,13 @@ import {
     areSameClassifiers,
     areSameLanguages,
     Classifier,
-    InstantiationFacade,
-    lioncore,
-    lioncoreWriter,
+    lioncoreWriterFor,
+    LionWebVersions,
     M3Concept,
     M3Node,
     Node,
-    updateSettingsNameBased
+    updateSettingsNameBased,
+    Writer
 } from "@lionweb/core"
 import { LionWebId, LionWebKey } from "@lionweb/json"
 
@@ -38,6 +38,8 @@ import {
     ShortDescription,
     VirtualPackage
 } from "./implementation.js"
+
+const { v2023_1 } = LionWebVersions
 
 const ioLionWebMpsSpecificFactory = (parent: Node | undefined, classifier: Classifier, id: LionWebId, propertySettings: { [propertyKey: LionWebKey]: unknown }) => {
 
@@ -82,14 +84,14 @@ const ioLionWebMpsSpecificFactory = (parent: Node | undefined, classifier: Class
 }
 
 
-export const combinedWriter: InstantiationFacade<M3Node | IoLionWebMpsSpecificAnnotation, Node> = {
+export const combinedWriter: Writer<M3Node | IoLionWebMpsSpecificAnnotation, Node> = {
     encodingOf: (_literal) => undefined,    // (there are no literals in either LionCore/M3 or io.lionweb.mps.specific)
     nodeFor: (parent, classifier, id, propertySettings) => {
         if (areSameLanguages(classifier.language, ioLionWebMpsSpecificLanguage)) {
             return ioLionWebMpsSpecificFactory(parent, classifier, id, propertySettings)
         }
-        if (areSameLanguages(classifier.language, lioncore)) {
-            return lioncoreWriter.nodeFor(parent as M3Concept, classifier, id, propertySettings)
+        if (areSameLanguages(classifier.language, v2023_1.lioncoreFacade.language)) {
+            return lioncoreWriterFor(v2023_1).nodeFor(parent as M3Concept, classifier, id, propertySettings)
         }
         throw new Error(`don't know how to instantiate a ${classifier.name} from language ${classifier.language.name} (${classifier.language.key}, ${classifier.language.version})`)
     },

@@ -20,6 +20,7 @@
 
 import {
     Containment,
+    Node,
     Property,
     Reference,
     SingleRef
@@ -254,7 +255,7 @@ export class ReferenceAddedDelta implements IDelta {
         public readonly parent: INodeBase,
         public readonly reference: Reference,
         public readonly index: number,
-        public readonly newTarget: SingleRef<INodeBase>
+        public readonly newReference: SingleRef<Node>
     ) {
     }
 }
@@ -264,7 +265,7 @@ export class ReferenceDeletedDelta implements IDelta {
         public readonly parent: INodeBase,
         public readonly reference: Reference,
         public readonly index: number,
-        public readonly deletedTarget: SingleRef<INodeBase>
+        public readonly deletedReference: SingleRef<Node>
     ) {
     }
 }
@@ -274,83 +275,8 @@ export class ReferenceChangedDelta implements IDelta {
         public readonly parent: INodeBase,
         public readonly reference: Reference,
         public readonly index: number,
-        public readonly newTarget: SingleRef<INodeBase>,
-        public readonly oldTarget: SingleRef<INodeBase>
-    ) {
-    }
-}
-
-export class EntryMovedFromOtherReferenceDelta implements IDelta {
-    constructor(
-        public readonly oldParent: INodeBase,
-        public readonly oldReference: Reference,
-        public readonly oldIndex: number,
-        public readonly newParent: INodeBase,
-        public readonly newReference: Reference,
-        public readonly newIndex: number,
-        public readonly movedTarget: SingleRef<INodeBase>
-    ) {
-    }
-}
-
-export class EntryMovedFromOtherReferenceInSameParentDelta implements IDelta {
-    constructor(
-        public readonly parent: INodeBase,
-        public readonly oldReference: Reference,
-        public readonly oldIndex: number,
-        public readonly newReference: Reference,
-        public readonly newIndex: number,
-        public readonly movedTarget: SingleRef<INodeBase>
-    ) {
-    }
-}
-
-export class EntryMovedInSameReferenceDelta implements IDelta {
-    constructor(
-        public readonly parent: INodeBase,
-        public readonly reference: Reference,
-        public readonly oldIndex: number,
-        public readonly newIndex: number,
-        public readonly movedTarget: SingleRef<INodeBase>
-    ) {
-    }
-}
-
-export class EntryMovedAndReplacedFromOtherReferenceDelta implements IDelta {
-    constructor(
-        public readonly newParent: INodeBase,
-        public readonly newReference: Reference,
-        public readonly newIndex: number,
-        public readonly movedTarget: SingleRef<INodeBase>,
-        public readonly oldParent: INodeBase,
-        public readonly oldReference: Reference,
-        public readonly oldIndex: number,
-        public readonly replacedTarget: SingleRef<INodeBase>
-    ) {
-    }
-}
-
-export class EntryMovedAndReplacedFromOtherReferenceInSameParentDelta implements IDelta {
-    constructor(
-        public readonly parent: INodeBase,
-        public readonly oldReference: Reference,
-        public readonly oldIndex: number,
-        public readonly newReference: Reference,
-        public readonly newIndex: number,
-        public readonly movedTarget: SingleRef<INodeBase>,
-        public readonly replacedTarget: SingleRef<INodeBase>
-    ) {
-    }
-}
-
-export class EntryMovedAndReplacedInSameReferenceDelta implements IDelta {
-    constructor(
-        public readonly parent: INodeBase,
-        public readonly reference: Reference,
-        public readonly oldIndex: number,
-        public readonly newIndex: number,
-        public readonly movedTarget: SingleRef<INodeBase>,
-        public readonly replacedTarget: SingleRef<INodeBase>
+        public readonly newReference: SingleRef<Node>,
+        public readonly oldReference: SingleRef<Node>
     ) {
     }
 }

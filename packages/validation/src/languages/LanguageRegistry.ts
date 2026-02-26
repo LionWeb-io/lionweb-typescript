@@ -30,7 +30,10 @@ export class LanguageRegistry {
         return this.languages.getNodeByMetaPointer(metaPointer)
     }
 
-    findNode(nodeId: LionWebId) {
+    findNode(nodeId: LionWebId | undefined | null) {
+        if (nodeId === undefined || nodeId === null ) {
+            return undefined
+        }
         for (const chunk of this.languages.languages) {
             const node = chunk.getNode(nodeId)
             if (node !== undefined) {

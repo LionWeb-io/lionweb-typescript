@@ -18,8 +18,8 @@
 // Warning: this file is generated!
 // Modifying it by hand is useless at best, and sabotage at worst.
 
-import { IdOrUnresolved } from "@lionweb/core";
 import { LionWebId, LionWebJsonMetaPointer, LionWebJsonChunk } from "@lionweb/json";
+import { IdOrNull } from "../../references.js";
 
 
 export type SerializedDelta =
@@ -47,12 +47,6 @@ export type SerializedDelta =
     | ReferenceAddedSerializedDelta
     | ReferenceDeletedSerializedDelta
     | ReferenceChangedSerializedDelta
-    | EntryMovedFromOtherReferenceSerializedDelta
-    | EntryMovedFromOtherReferenceInSameParentSerializedDelta
-    | EntryMovedInSameReferenceSerializedDelta
-    | EntryMovedAndReplacedFromOtherReferenceSerializedDelta
-    | EntryMovedAndReplacedFromOtherReferenceInSameParentSerializedDelta
-    | EntryMovedAndReplacedInSameReferenceSerializedDelta
     | CompositeSerializedDelta
     | NoOpSerializedDelta
     ;
@@ -255,7 +249,7 @@ export type ReferenceAddedSerializedDelta = {
     parent: LionWebId
     reference: LionWebJsonMetaPointer
     index: number
-    newTarget: IdOrUnresolved
+    newReference: IdOrNull
 }
 
 export type ReferenceDeletedSerializedDelta = {
@@ -263,7 +257,7 @@ export type ReferenceDeletedSerializedDelta = {
     parent: LionWebId
     reference: LionWebJsonMetaPointer
     index: number
-    deletedTarget: IdOrUnresolved
+    deletedReference: IdOrNull
 }
 
 export type ReferenceChangedSerializedDelta = {
@@ -271,71 +265,8 @@ export type ReferenceChangedSerializedDelta = {
     parent: LionWebId
     reference: LionWebJsonMetaPointer
     index: number
-    newTarget: IdOrUnresolved
-    oldTarget: IdOrUnresolved
-}
-
-export type EntryMovedFromOtherReferenceSerializedDelta = {
-    kind: "EntryMovedFromOtherReference"
-    oldParent: LionWebId
-    oldReference: LionWebJsonMetaPointer
-    oldIndex: number
-    newParent: LionWebId
-    newReference: LionWebJsonMetaPointer
-    newIndex: number
-    movedTarget: IdOrUnresolved
-}
-
-export type EntryMovedFromOtherReferenceInSameParentSerializedDelta = {
-    kind: "EntryMovedFromOtherReferenceInSameParent"
-    parent: LionWebId
-    oldReference: LionWebJsonMetaPointer
-    oldIndex: number
-    newReference: LionWebJsonMetaPointer
-    newIndex: number
-    movedTarget: IdOrUnresolved
-}
-
-export type EntryMovedInSameReferenceSerializedDelta = {
-    kind: "EntryMovedInSameReference"
-    parent: LionWebId
-    reference: LionWebJsonMetaPointer
-    oldIndex: number
-    newIndex: number
-    movedTarget: IdOrUnresolved
-}
-
-export type EntryMovedAndReplacedFromOtherReferenceSerializedDelta = {
-    kind: "EntryMovedAndReplacedFromOtherReference"
-    newParent: LionWebId
-    newReference: LionWebJsonMetaPointer
-    newIndex: number
-    movedTarget: IdOrUnresolved
-    oldParent: LionWebId
-    oldReference: LionWebJsonMetaPointer
-    oldIndex: number
-    replacedTarget: IdOrUnresolved
-}
-
-export type EntryMovedAndReplacedFromOtherReferenceInSameParentSerializedDelta = {
-    kind: "EntryMovedAndReplacedFromOtherReferenceInSameParent"
-    parent: LionWebId
-    oldReference: LionWebJsonMetaPointer
-    oldIndex: number
-    newReference: LionWebJsonMetaPointer
-    newIndex: number
-    movedTarget: IdOrUnresolved
-    replacedTarget: IdOrUnresolved
-}
-
-export type EntryMovedAndReplacedInSameReferenceSerializedDelta = {
-    kind: "EntryMovedAndReplacedInSameReference"
-    parent: LionWebId
-    reference: LionWebJsonMetaPointer
-    oldIndex: number
-    newIndex: number
-    movedTarget: IdOrUnresolved
-    replacedTarget: IdOrUnresolved
+    newReference: IdOrNull
+    oldReference: IdOrNull
 }
 
 export type CompositeSerializedDelta = {

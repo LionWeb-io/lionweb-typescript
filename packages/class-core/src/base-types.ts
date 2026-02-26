@@ -48,7 +48,7 @@ import {
 
 /**
  * Encodes how a {@link INodeBase} is contained by a parent.
- * If the {@code containingFeature} is {@code null}, the {@link INodeBase} is an annotation
+ * If the `containingFeature` is `null`, the {@link INodeBase} is an annotation
  * and effectively contained by the {@link INodeBase.annotations} property.
  */
 export type Parentage = [ parent: INodeBase, containingFeature: Containment | null ];
@@ -66,7 +66,7 @@ export interface INodeBase extends Node {
 
     /**
      * The parent of this node object,
-     * or {@code undefined} if it's either a root (in which case it {@code this.classifier} should be a {@link Concept} which is a partition)
+     * or `undefined` if it's either a root (in which case it `this.classifier` should be a {@link Concept} which is a partition)
      *  or (currently/temporarily) an orphan.
      */
     parent: INodeBase | undefined;
@@ -107,7 +107,7 @@ export interface INodeBase extends Node {
      * @return the value manager for the given {@link Reference reference} feature.
      * @throws if this node('s {@link Classifier classifier}) doesn't have that reference.
      */
-    getReferenceValueManager(reference: Reference): ReferenceValueManager<INodeBase>;
+    getReferenceValueManager(reference: Reference): ReferenceValueManager<Node>;
 
     /**
      * @return the value manager for the given {@link Feature feature}.
@@ -247,7 +247,7 @@ export abstract class NodeBase implements INodeBase {
         throw new Error(`containment (feature) "${containment.name}" (with key=${containment.key}) doesn't exist on ${this.locationMessage}`);
     }
 
-    getReferenceValueManager(reference: Reference): ReferenceValueManager<INodeBase> {
+    getReferenceValueManager(reference: Reference): ReferenceValueManager<Node> {
         throw new Error(`reference (feature) "${reference.name}" (with key=${reference.key}) doesn't exist on ${this.locationMessage}`);
     }
 
@@ -335,7 +335,7 @@ export abstract class NodeBase implements INodeBase {
 
 /**
  * A type for functions that acts as factories, creating an instance of {@link INodeBase}
- * matching the given {@link Classifier classifier} and the given ID (of type {@link Id}).
+ * matching the given {@link Classifier classifier} and the given ID (of type {@link LionWebId}).
  */
 export type NodeBaseFactory = (classifier: Classifier, id: LionWebId) => INodeBase;
 
@@ -350,4 +350,15 @@ export interface ILanguageBase {
     factory(receiveDelta?: DeltaReceiver): NodeBaseFactory;
     enumLiteralFrom<T>(enumerationLiteral: EnumerationLiteral): T;
 }
+
+
+/**
+ * The configuration required to be able to instantiate a {@link NodeBaseFactory factory} for a set of languages.
+ */
+export type FactoryConfiguration = {
+    /** The {@link ILanguageBase}s for (at least) all the languages used, minus LionCore M3 and built-ins. */
+    languageBases: ILanguageBase[],
+    /** An optional {@link DeltaReceiver} that will be injected in all {@link INodeBase nodes} created. */
+    receiveDelta?: DeltaReceiver
+};
 

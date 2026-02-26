@@ -36,7 +36,7 @@ const tsTypeForClassField = (type: Type) => {
         return tsTypeForFeatureKind(type.kind)
     }
     if (type instanceof NodeType) {
-        return type.serialization instanceof RefOnly ? "SingleRef<INodeBase>" : "INodeBase"
+        return type.serialization instanceof RefOnly ? "SingleRef<Node>" : "INodeBase"
     }
     if (type instanceof IndexType) {
         return "number"
@@ -80,6 +80,7 @@ export const typesForDeltas = (deltas: Delta[], header?: string) => {
         header ?? [],
 `import {
     Containment,
+    Node,
     Property,
     Reference,
     SingleRef

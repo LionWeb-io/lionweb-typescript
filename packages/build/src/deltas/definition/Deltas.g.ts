@@ -35,6 +35,7 @@ import {
     EnumerationLiteral,
     Interface,
     Language,
+    Node,
     Property,
     Reference,
     SingleRef
@@ -424,7 +425,7 @@ export class FeatureType extends NodeBase implements Type {
         return super.getPropertyValueManager(property);
     }
 
-    getReferenceValueManager(reference: Reference): ReferenceValueManager<INodeBase> {
+    getReferenceValueManager(reference: Reference): ReferenceValueManager<Node> {
         if (reference.key === DeltasBase.INSTANCE.FeatureType_container.key) {
             return this._container;
         }

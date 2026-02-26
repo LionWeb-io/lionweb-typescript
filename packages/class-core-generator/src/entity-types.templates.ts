@@ -16,17 +16,18 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import {
-    builtinClassifiers,
     Classifier,
     Containment,
     Enumeration,
     Feature,
     featureMetaType,
     Interface,
+    isBuiltinNodeConcept,
     isContainment,
     isProperty,
     isRef,
     isReference,
+    isUnresolvedReference,
     LanguageEntity,
     Link,
     M3Concept,
@@ -34,8 +35,7 @@ import {
     Node,
     PrimitiveType,
     Property,
-    Reference,
-    SingleRef
+    Reference
 } from "@lionweb/core"
 import {
     ConceptDescription,
@@ -77,12 +77,6 @@ const valueManagerFor = (feature: Feature) =>
 
 export const typeForLanguageEntity = (imports: Imports) => {
 
-    const sortedSuperTypesCond = <T extends Classifier>(ts: T[], prefix: string): string =>
-        ts.length === 0 ? `` : `${prefix}${nameSorted(ts).map((t) => imports.entity(t)).join(", ")}`
-
-    const extendsCond = (ref: SingleRef<Classifier>): string =>
-        ` extends ${ref === builtinClassifiers.node ? imports.generic("NodeBase") : imports.entity(ref!)}`
-
     const classMembersForProperty = (property: Property) => {
         const {name, type} = property
         return [
@@ -100,7 +94,7 @@ export const typeForLanguageEntity = (imports: Imports) => {
     const classMembersForLink = (link: Link) => {
         const {name, type, multiple} = link
         const nameWithFirstUpper = withFirstUpper(name)
-        const tsTypeForClassifier_ = tsTypeForClassifier(type, imports)
+        const tsTypeForClassifier_ = tsTypeForClassifier(type, imports, link instanceof Reference)
         const tsTypeForLink_ = link instanceof Reference
             ? `${imports.core(multiple ? "MultiRef" : "SingleRef")}<${tsTypeForClassifier_}>${multiple ? "" : optionalityPostfix(link)}`
             : `${tsTypeForClassifier_}${multiple ? "[]" : optionalityPostfix(link)}`
@@ -162,9 +156,16 @@ export const typeForLanguageEntity = (imports: Imports) => {
 
             const featureMetaType_ = featureMetaType(features[0])
             const argumentName = featureMetaType_.toLowerCase()
+            const typeParameter = (() => {
+                switch (featureMetaType_) {
+                    case "Property": return "unknown"
+                    case "Containment": return imports.generic("INodeBase")
+                    case "Reference": return imports.core("Node")
+                }
+            })()
             return [
                 ``,
-                `get${featureMetaType_}ValueManager(${argumentName}: ${imports.core(featureMetaType_)}): ${imports.generic(featureMetaType_ + "ValueManager")}<${featureMetaType_ === "Property" ? "unknown" : imports.generic("INodeBase")}> {`,
+                `get${featureMetaType_}ValueManager(${argumentName}: ${imports.core(featureMetaType_)}): ${imports.generic(featureMetaType_ + "ValueManager")}<${typeParameter}> {`,
                 indent(
                     switchOrIf(
                         `${argumentName}.key`,
@@ -176,9 +177,22 @@ export const typeForLanguageEntity = (imports: Imports) => {
             ]
         }
 
+        const extendsFragment = "extends " + ((superConcept) => {
+            if (isUnresolvedReference(superConcept)) {
+                return `/* unresolved reference to super concept */`
+            }
+            if (superConcept === undefined || isBuiltinNodeConcept(superConcept)) {
+                return imports.generic("NodeBase")
+            }
+            return imports.entity(superConcept)
+        })(extendsFrom(classifier)) + " "
+        const implementsFragment = ((superInterfaces) =>
+                superInterfaces.length === 0
+                    ? ""
+                    : ("implements " + nameSorted(superInterfaces).map((t) => imports.entity(t)).join(", ") + " ")
+        )(implementsFrom(classifier))
         return [
-            //                                                                                        |    index (or generic for LionCore-builtins)    |                         | index (or generic for LionCore-builtins) |
-            `export ${isAbstract(classifier) ? "abstract " : ""}class ${classifier.name}${extendsCond(extendsFrom(classifier) ?? builtinClassifiers.node)}${sortedSuperTypesCond(implementsFrom(classifier), " implements ")} {`,
+            `export ${isAbstract(classifier) ? "abstract " : ""}class ${classifier.name} ${extendsFragment}${implementsFragment}{`,
             indent([
                 when(!isAbstract(classifier))(
                     () =>

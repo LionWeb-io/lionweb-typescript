@@ -33,6 +33,10 @@ cd core
 npm run build
 cd ..
 
+cd node-utils
+npm run build
+cd ..
+
 cd utilities
 npm run build
 cd ..
@@ -59,7 +63,7 @@ npm run build
 cd ..
 
 cd build
-ClassCoreTestGenPath="../class-core-test/src/gen"   # relative!
+ClassCoreTestGenPath="../class-core-test-language/src/gen"   # relative!
 rm -rf $ClassCoreTestGenPath
 mkdir -p $ClassCoreTestGenPath
 npm run generate
@@ -82,10 +86,6 @@ cd ..
 cd test
 mkdir -p metrics
 npm test
-cd ..
-
-cd artifacts
-npm run generate
 cd ..
 
 cd delta-protocol-common

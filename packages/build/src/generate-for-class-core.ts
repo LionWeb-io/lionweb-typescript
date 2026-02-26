@@ -17,55 +17,24 @@
 
 import { serializeNodeBases } from "@lionweb/class-core" // Note: this is a circular dependency!
 import { defaultTrumpfOriginatingApache2_0LicensedHeader, generateLanguage } from "@lionweb/class-core-generator"
-import {
-    builtinClassifiers,
-    Concept,
-    Containment,
-    deserializeLanguages,
-    lioncoreBuiltins,
-    serializeLanguages
-} from "@lionweb/core"
-import { LionWebJsonChunk } from "@lionweb/json"
-import {
-    generatePlantUmlForLanguage,
-    genericAsTreeText,
-    languageAsText,
-    readFileAsJson,
-    writeJsonAsFile
-} from "@lionweb/utilities"
+import { LionWebVersions } from "@lionweb/core"
+import { generatePlantUmlForLanguage, genericAsTreeText, languageAsText } from "@lionweb/utilities"
 import { writeFileSync } from "fs"
 import { join } from "path"
-import { deltas } from "./deltas/definition/definition-base.js"
-import { defineDeltas } from "./deltas/definition/definitions.js"
-import { generateDeltaCode } from "./deltas/generator/generator.js"
-import { deltasLanguage } from "./deltas/meta-definition.js"
+import { defineDeltas, deltas, deltasLanguage, generateDeltaCode } from "./deltas/index.js"
 
-const inArtifactsPath = (subPath: string) => join("artifacts", subPath)
+const artifactsPath = "artifacts/deltas"
 
 // generate LionCore-builtins:
-generateLanguage(lioncoreBuiltins, "../class-core/src", { genericImportLocation: "./index.js", header: defaultTrumpfOriginatingApache2_0LicensedHeader })
+generateLanguage(LionWebVersions.v2023_1.builtinsFacade.language, "../class-core/src", { genericImportLocation: "./index.js", header: defaultTrumpfOriginatingApache2_0LicensedHeader })
 
 // generate artifacts for deltas definition language:
-writeJsonAsFile(inArtifactsPath("delta-language.json"), serializeLanguages(deltasLanguage))
-writeFileSync(inArtifactsPath("delta-language.txt"), languageAsText(deltasLanguage))
-writeFileSync(inArtifactsPath("delta-language.puml"), defaultTrumpfOriginatingApache2_0LicensedHeader + "\n" + generatePlantUmlForLanguage(deltasLanguage))
+writeFileSync(join(artifactsPath, "delta-language.txt"), languageAsText(deltasLanguage))
+writeFileSync(join(artifactsPath, "delta-language.puml"), defaultTrumpfOriginatingApache2_0LicensedHeader + "\n" + generatePlantUmlForLanguage(deltasLanguage))
 generateLanguage(deltasLanguage, "src/deltas/definition", { header: defaultTrumpfOriginatingApache2_0LicensedHeader })
 
 // generate artifacts for specification of deltas expressed in that language:
 defineDeltas()
-writeFileSync(inArtifactsPath("deltas.txt"), genericAsTreeText(serializeNodeBases([deltas]), [deltasLanguage]))
+writeFileSync(join(artifactsPath, "deltas.txt"), genericAsTreeText(serializeNodeBases([deltas]), [deltasLanguage]))
 generateDeltaCode("../class-core/src/deltas", defaultTrumpfOriginatingApache2_0LicensedHeader)
-
-// TestLanguage language:
-const TestLanguage = deserializeLanguages(readFileAsJson(inArtifactsPath("TestLanguage.json")) as LionWebJsonChunk)[0]
-
-const PartitionTestConcept = new Concept(TestLanguage, "PartitionTestConcept", "PartitionTestConcept", "PartitionTestConcept", false).isPartition();
-const NonPartitionTestConcept = new Concept(TestLanguage, "NonPartitionTestConcept", "NonPartitionTestConcept", "NonPartitionTestConcept", false).implementing(builtinClassifiers.inamed);
-NonPartitionTestConcept.havingFeatures(new Containment(NonPartitionTestConcept, "nestedChild", "NonPartitionTestConcept-nestedChild", "NonPartitionTestConcept-nestedChild").ofType(NonPartitionTestConcept).isOptional());
-PartitionTestConcept.havingFeatures(new Containment(PartitionTestConcept,  "child","PartitionTestConcept-child", "PartitionTestConcept-child").ofType(NonPartitionTestConcept));
-TestLanguage.entities.push(PartitionTestConcept, NonPartitionTestConcept);
-
-writeFileSync(inArtifactsPath("TestLanguage.txt"), languageAsText(TestLanguage))
-generateLanguage(TestLanguage, "../class-core-test-language/src/gen", { header: defaultTrumpfOriginatingApache2_0LicensedHeader })
-writeFileSync(inArtifactsPath("TestLanguage.puml"), generatePlantUmlForLanguage(TestLanguage))
 

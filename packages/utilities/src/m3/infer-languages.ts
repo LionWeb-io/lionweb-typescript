@@ -1,9 +1,10 @@
 import {
-    builtinPrimitives,
     Concept,
     Containment,
     Language,
     Link,
+    lionWebVersionFrom,
+    LionWebVersions,
     Property,
     Reference
 } from "@lionweb/core"
@@ -16,9 +17,11 @@ const possibleKeySeparators = ["-", "_"]
 const id = chain(concatenator("-"), hasher())
 const key = lastOf
 
-const { stringDataType, booleanDataType, integerDataType } = builtinPrimitives
 
 export const inferLanguagesFromSerializationChunk = (chunk: LionWebJsonChunk): Language[] => {
+    const lionWebVersion = lionWebVersionFrom(chunk.serializationFormatVersion) ?? LionWebVersions.v2023_1
+    const { stringDataType, booleanDataType, integerDataType } = lionWebVersion.builtinsFacade.primitiveTypes
+
     const languages = new Map<string, Language>()
     const concepts = new Map<string, Concept>()
     const links = new Array<{ link: Link; conceptId: LionWebId }>()
@@ -107,7 +110,9 @@ export const inferLanguagesFromSerializationChunk = (chunk: LionWebJsonChunk): L
             concept.havingFeatures(feature)
 
             const value = reference.targets[0].reference
-            links.push({ link: feature, conceptId: value })
+            if (value !== null) {
+                links.push({ link: feature, conceptId: value })
+            }
         }
     }
 

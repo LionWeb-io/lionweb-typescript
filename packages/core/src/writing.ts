@@ -23,7 +23,7 @@ export interface Writer<NT extends Node, PNT extends Node = NT> {
 
     /**
      * Sets the *single* given value of the indicated {@link Feature} on the given node.
-     * This means adding it in case the feature is multi-valued, meaning it is a {@link Link} with {@code multiple = true}.
+     * This means adding it in case the feature is multi-valued, meaning it is a {@link Link} with `multiple = true`.
      */
     setFeatureValue: (node: NT, feature: Feature, value: unknown) => void
 // TODO  split to setPropertyValue, &c.?
@@ -37,6 +37,8 @@ export interface Writer<NT extends Node, PNT extends Node = NT> {
 
 /**
  * Alias for {@link Writer}, kept for backward compatibility, and to be deprecated and removed later.
+ *
+ * @deprecated Use {@link Writer} instead.
  */
 export interface InstantiationFacade<NT extends Node, PNT extends Node = NT> extends Writer<NT, PNT> {}
 

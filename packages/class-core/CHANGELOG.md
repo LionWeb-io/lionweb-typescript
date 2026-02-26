@@ -1,5 +1,34 @@
 # Changelog
 
+## 0.8.0
+
+* Receive the `IdOrUnresolved` type from the `core` package, and export that and the `idFrom` function.
+* Improve the API surface of the `nodeBaseDeserializer[WithIdMapping]` functions:
+    * Expose a `DeserializerConfiguration` type, which encompasses the (partially optional) parameters that are likely unchanging per invocation of the deserializer.
+    * Use that type to as the single parameter to the `nodeBaseDeserializer[WithIdMapping]` functions.
+      The original signature is also still valid, but deprecated.
+    * Move the `propertyValueDeserializer` and `problem[s]Handler` parameters of the `Deserializer` type to the `DeserializerConfiguration` type.
+      *Note* that this is a **breaking change**, but these parameters weren’t used outside of tests anyway.
+* Simplify `Deserializer` type, by removing the `dependentNodes` parameter: (only) pass an appropriate instance of `IdMapping` instead.
+  *Note* that this is a **breaking change**, but either parameter is optional and carries the same information, so this should avoid confusion and misuse.
+* Add a `Forest` class that encapsulates a “forest” of partitions, together with their ID mapping, a factory, a deserializer – also deserializing into the forest –, and methods to apply deltas.
+    * Add a `ObservableForest` class that is Mobx-observable.
+* Propagate `reference` field of `LionWebJsonReferenceTarget` type now being `null`able.
+* Fix that the annotations value manager always tries to detach an annotation to remove, even if it isn’t contained through the value manager’s container.
+* Rename the `problemsHandler` property of the `DeserializerConfiguration` to `problemReporter` (also using the renamed type), keeping an alias for backward compatibility.
+* Rename the `IdOrUnresolved` type to `IdOrNull`, without keeping an alias because this type is essentially for internal use only.
+* Improve textualization: “none” for empty multi-valued links, and “not set” for unset single-valued links, instead of “nothing” in both cases.
+* Remove all reference-related deltas, except for `Reference{Added|Changed|Deleted}Delta`.
+  *Note* that this is a **breaking change**, due to a [change to the protocol specification](https://github.com/LionWeb-io/specification/issues/431), without providing backward compatibility e.g. by only deprecating those classes.
+* Propagate the change to the `ResolveInfoDeducer` type from the `core` package.
+* Expose the `nodeBaseReader` function that’s already used by packages downstream.
+* Adjust the `Reference{Added|Changed|Deleted}Delta` delta types, replacing “target” with “reference”, and propagate that change to the entire codebase.
+  *Note* that this is a **breaking change**, due to a [change to the protocol specification](https://github.com/LionWeb-io/specification/issues/414), without providing backward compatibility e.g. by only deprecating those classes.
+* The type `Reader<INodeBase, Node>` is used everywhere, so references from an `INodeBase` can now target any type of `Node`s, rather than only `INodeBase`s.
+  * The `IdMapping` class now maintains a mapping &rarr; `Node`, rather than `INodeBase.
+  * Add a `nodeBaseFromId` method to this class to specifically return `INodeBase`s.
+
+
 ## 0.7.2
 
 * Implement a `propertyValueSerializerWith` function that produces a `PropertyValueSerializer` instance to serialize properties’ values with, properly dealing with enumerations as well.

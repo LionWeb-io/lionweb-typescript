@@ -15,23 +15,18 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { MultiRef, Reference, SingleRef } from "@lionweb/core"
+import { MultiRef, Node, Reference, SingleRef } from "@lionweb/core"
 import { action, observable } from "mobx"
 
 import { INodeBase } from "../base-types.js"
-import {
-    EntryMovedInSameReferenceDelta,
-    ReferenceAddedDelta,
-    ReferenceChangedDelta,
-    ReferenceDeletedDelta
-} from "../deltas/index.js"
+import { CompositeDelta, ReferenceAddedDelta, ReferenceChangedDelta, ReferenceDeletedDelta } from "../deltas/index.js"
 import { checkIndex, FeatureValueManager } from "./base.js"
 
 
 /**
  * An instance manages the value of a particular reference feature on a particular instance of a classifier.
  */
-export abstract class ReferenceValueManager<T extends INodeBase> extends FeatureValueManager<Reference> {
+export abstract class ReferenceValueManager<T extends Node> extends FeatureValueManager<Reference> {
 
     get reference(): Reference {
         return this.feature;
@@ -49,7 +44,7 @@ export abstract class ReferenceValueManager<T extends INodeBase> extends Feature
 }
 
 
-export abstract class SingleReferenceValueManager<T extends INodeBase> extends ReferenceValueManager<T> {
+export abstract class SingleReferenceValueManager<T extends Node> extends ReferenceValueManager<T> {
 
     protected constructor(reference: Reference, container: INodeBase) {
         super(reference, container);
@@ -77,7 +72,7 @@ export abstract class SingleReferenceValueManager<T extends INodeBase> extends R
 }
 
 
-export class OptionalSingleReferenceValueManager<T extends INodeBase> extends SingleReferenceValueManager<T> {
+export class OptionalSingleReferenceValueManager<T extends Node> extends SingleReferenceValueManager<T> {
 
     constructor(reference: Reference, container: INodeBase) {
         super(reference, container);
@@ -114,7 +109,7 @@ export class OptionalSingleReferenceValueManager<T extends INodeBase> extends Si
 }
 
 
-export class RequiredSingleReferenceValueManager<T extends INodeBase> extends SingleReferenceValueManager<T> {
+export class RequiredSingleReferenceValueManager<T extends Node> extends SingleReferenceValueManager<T> {
 
     constructor(reference: Reference, container: INodeBase) {
         super(reference, container);
@@ -150,7 +145,7 @@ export class RequiredSingleReferenceValueManager<T extends INodeBase> extends Si
 }
 
 
-export abstract class MultiReferenceValueManager<T extends INodeBase> extends ReferenceValueManager<T> {
+export abstract class MultiReferenceValueManager<T extends Node> extends ReferenceValueManager<T> {
 
     protected constructor(reference: Reference, container: INodeBase) {
         super(reference, container);
@@ -219,7 +214,10 @@ export abstract class MultiReferenceValueManager<T extends INodeBase> extends Re
     @action move(oldIndex: number, newIndex: number) {
         const target = this.moveDirectly(oldIndex, newIndex);
         if (target !== undefined) {
-            this.emitDelta(() => new EntryMovedInSameReferenceDelta(this.container, this.reference, oldIndex, newIndex, target));
+            this.emitDelta(() => new CompositeDelta([
+                new ReferenceDeletedDelta(this.container, this.reference, oldIndex, target),
+                new ReferenceAddedDelta(this.container, this.reference, newIndex < oldIndex ? newIndex : newIndex - 1, target)
+            ]));
         }
     }
 
@@ -235,7 +233,7 @@ export abstract class MultiReferenceValueManager<T extends INodeBase> extends Re
 }
 
 
-export class OptionalMultiReferenceValueManager<T extends INodeBase> extends MultiReferenceValueManager<T> {
+export class OptionalMultiReferenceValueManager<T extends Node> extends MultiReferenceValueManager<T> {
 
     constructor(reference: Reference, container: INodeBase) {
         super(reference, container);
@@ -252,7 +250,7 @@ export class OptionalMultiReferenceValueManager<T extends INodeBase> extends Mul
 }
 
 
-export class RequiredMultiReferenceValueManager<T extends INodeBase> extends MultiReferenceValueManager<T> {
+export class RequiredMultiReferenceValueManager<T extends Node> extends MultiReferenceValueManager<T> {
 
     constructor(reference: Reference, container: INodeBase) {
         super(reference, container);

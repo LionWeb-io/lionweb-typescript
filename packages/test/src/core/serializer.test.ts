@@ -1,8 +1,5 @@
 import {
     Annotation,
-    builtinClassifiers,
-    builtinPrimitives,
-    BuiltinPropertyValueSerializer,
     Concept,
     DynamicNode,
     dynamicReader,
@@ -10,11 +7,14 @@ import {
     EnumerationLiteral,
     Language,
     LanguageFactory,
-    nodeSerializer,
+    LionWebVersions,
+    newPropertyValueSerializerRegistry,
+    propertyValueSerializerFrom,
     Reference,
-    serializeLanguages
+    serializeLanguages,
+    serializerWith
 } from "@lionweb/core"
-import { currentSerializationFormatVersion, LionWebJsonChunk } from "@lionweb/json"
+import { LionWebJsonChunk } from "@lionweb/json"
 import { concatenator, lastOf } from "@lionweb/ts-utils"
 import { expect } from "chai"
 import { TestNode, TestNodeReader } from "../instances/test-node.js"
@@ -27,25 +27,26 @@ describe("serialization", () => {
         myNode.properties["creationDate"] = new Date(30, 4, 2024)
         myNode.containments["books"] = []
 
-        expect(() => nodeSerializer(new TestNodeReader([libraryWithDatesLanguage]))([myNode])).to.throw()
+        expect(() => serializerWith({ reader: new TestNodeReader([libraryWithDatesLanguage]) })([myNode])).to.throw()
     })
 
     it("serializes node with custom primitive type, works when registering custom deserializer", () => {
-        const builtinsPropertyValueSerializer = new BuiltinPropertyValueSerializer()    // (can't use the sealed builtinPropertyValueSerializer singleton instance!)
-        builtinsPropertyValueSerializer.register(dateDataType, (value: unknown) => {
-            const d = value as Date
-            return `${Number(d.getFullYear()).toString().padStart(4, "0")}-${Number(d.getMonth() + 1)
-                .toString()
-                .padStart(2, "0")}-${Number(d.getDate()).toString().padStart(2, "0")}`
-        })
-
+        const builtinsPropertyValueSerializer = propertyValueSerializerFrom(
+            newPropertyValueSerializerRegistry()
+                .set(LionWebVersions.v2023_1.builtinsFacade.primitiveTypes.stringDataType, (value) => value as string)
+                .set(dateDataType, (value) => {
+                    const d = value as Date
+                    return `${Number(d.getFullYear()).toString().padStart(4, "0")}-${Number(d.getMonth() + 1)
+                        .toString()
+                        .padStart(2, "0")}-${Number(d.getDate()).toString().padStart(2, "0")}`
+                }))
         const myNode = new TestNode("1", "LibraryWithDates")
         myNode.properties["name"] = "myLibrary"
         myNode.properties["creationDate"] = new Date(2024, 4, 28)
         myNode.containments["books"] = []
 
         const expectedSerializationChunk: LionWebJsonChunk = {
-            serializationFormatVersion: currentSerializationFormatVersion,
+            serializationFormatVersion: LionWebVersions.v2023_1.serializationFormatVersion,
             languages: [
                 {
                     key: "libraryWithDates",
@@ -95,17 +96,19 @@ describe("serialization", () => {
             ]
         }
         expect(
-            nodeSerializer(new TestNodeReader([libraryWithDatesLanguage]), { propertyValueSerializer: builtinsPropertyValueSerializer })([myNode])
+            serializerWith({ reader: new TestNodeReader([libraryWithDatesLanguage]), propertyValueSerializer: builtinsPropertyValueSerializer })([myNode])
         )
             .to.eql(expectedSerializationChunk)
     })
 
+    const { inamed } = LionWebVersions.v2023_1.builtinsFacade.classifiers
+
     it("serializes annotations", () => {
         const language = new Language("test language", "0", "test-language", "test-language")
         const annotatedConcept = new Concept(language, "Annotated", "Annotated", "Annotated", false)
-        annotatedConcept.implementing(builtinClassifiers.inamed)
+        annotatedConcept.implementing(inamed)
         const testAnnotation = new Annotation(language, "Annotation", "Annotation", "Annotation")
-        testAnnotation.implementing(builtinClassifiers.inamed)
+        testAnnotation.implementing(inamed)
         language.havingEntities(annotatedConcept, testAnnotation)
 
         const annotation = new TestNode("0", "Annotation")
@@ -173,7 +176,7 @@ describe("serialization", () => {
                 }
             ]
         }
-        expect(nodeSerializer(new TestNodeReader([language]))([annotatedNode], )).to.eql(expectedSerializationChunk)
+        expect(serializerWith({ reader: new TestNodeReader([language]) })([annotatedNode], )).to.eql(expectedSerializationChunk)
     })
 
     it(`doesn't fail on "unconnected" (i.e., unset or previously unresolved) null reference target values`, () => {
@@ -218,7 +221,7 @@ describe("serialization", () => {
         const instance = new TestNode("instance", "Concept")
         instance.references["selfRef"] = [instance]
         const reader = new TestNodeReader([language])
-        const serializationChunk = nodeSerializer(reader)([instance])
+        const serializationChunk = serializerWith({ reader: reader })([instance])
 
         const serNode = serializationChunk.nodes[0]
         expect(serNode).to.not.be.undefined
@@ -228,13 +231,16 @@ describe("serialization", () => {
     })
 })
 
+
+const { primitiveTypes } = LionWebVersions.v2023_1.builtinsFacade
+
 describe("serialization of empty (unset) values", () => {
     const factory = new LanguageFactory("serialization-language", "0", concatenator("-"), lastOf)
     const enumeration = factory.enumeration("enumeration")
     const concept = factory.concept("concept", false)
-    factory.property(concept, "stringProperty").ofType(builtinPrimitives.stringDataType).isOptional()
-    factory.property(concept, "integerProperty").ofType(builtinPrimitives.integerDataType).isOptional()
-    factory.property(concept, "booleanProperty").ofType(builtinPrimitives.booleanDataType).isOptional()
+    factory.property(concept, "stringProperty").ofType(primitiveTypes.stringDataType).isOptional()
+    factory.property(concept, "integerProperty").ofType(primitiveTypes.integerDataType).isOptional()
+    factory.property(concept, "booleanProperty").ofType(primitiveTypes.booleanDataType).isOptional()
     factory.property(concept, "enumProperty").ofType(enumeration).isOptional()
     factory.containment(concept, "containment").ofType(concept).isOptional()
     factory.containment(concept, "containments").ofType(concept).isOptional().isMultiple()
@@ -340,9 +346,9 @@ describe("serialization of empty (unset) values", () => {
                 }
             ]
         }
-        const actualSerializationChunk = nodeSerializer(dynamicReader)([node]) // (serializeEmptyFeatures has true as default)
+        const actualSerializationChunk = serializerWith({ reader: dynamicReader })([node]) // (serializeEmptyFeatures has true as default)
         expect(actualSerializationChunk).to.eql(expectedSerializationChunk)
-        const usingExplicitOption = nodeSerializer(dynamicReader, { serializeEmptyFeatures: true })([node])
+        const usingExplicitOption = serializerWith({ reader: dynamicReader, serializeEmptyFeatures: true })([node])
         expect(usingExplicitOption).to.eql(expectedSerializationChunk)
     })
 
@@ -371,7 +377,7 @@ describe("serialization of empty (unset) values", () => {
                 }
             ]
         }
-        const actualSerializationChunk = nodeSerializer(dynamicReader, { serializeEmptyFeatures: false })([node])
+        const actualSerializationChunk = serializerWith({ reader: dynamicReader, serializeEmptyFeatures: false })([node])
         expect(actualSerializationChunk).to.eql(expectedSerializationChunk)
     })
 })

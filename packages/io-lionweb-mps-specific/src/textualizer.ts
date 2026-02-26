@@ -41,7 +41,7 @@ import { ioLionWebMpsSpecificAnnotationsFrom } from "./annotations.js"
 
 
 /**
- * @return human-readable text of the location/“path to” the given {@link Node node},
+ * @return human-readable text of the location/“path to” the given {@link Node `node`},
  * which is *assumed* to be a language element – i.e., a {@link M3Concept}.
  */
 const pathTo = (node: Node): string => {

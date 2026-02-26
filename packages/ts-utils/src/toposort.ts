@@ -17,7 +17,7 @@
 
 /**
  * Computes the topological order of the transitive closure of the graph with the given vertices and edges given by the edge function,
- * or returns {@code false} if there's a cycle.
+ * or returns `false` if there's a cycle.
  */
 export const dependencyOrderOf = <T>(vertices: T[], edgesOf: (vertex: T) => T[]): T[] | false => {
     const ordered: T[] = []

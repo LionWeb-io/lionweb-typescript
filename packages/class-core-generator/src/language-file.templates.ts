@@ -15,7 +15,7 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { Concept, Language } from "@lionweb/core"
+import { Concept, isUnresolvedReference, Language } from "@lionweb/core"
 import { indent } from "@lionweb/textgen-utils"
 import { dependencyOrderOf, sortedStringsByUppercase } from "@lionweb/ts-utils"
 import { asString, commaSeparated, when, withNewlineAppended } from "littoral-templates"
@@ -35,7 +35,11 @@ export const languageFileFor = (language: Language, options: GeneratorOptions) =
 
     const imports = new Imports(language)
 
-    const orderedEntities = dependencyOrderOf(entities, (entity) => (entity instanceof Concept && !!entity.extends) ? [entity.extends] : [])
+    const orderedEntities = dependencyOrderOf(
+        entities,
+        (entity) =>
+            (entity instanceof Concept && entity.extends !== undefined && !isUnresolvedReference(entity.extends)) ? [entity.extends] : []
+    )
     if (typeof orderedEntities === "boolean") {
         throw new Error(`language ${name} has a cycle among the graph of entities with edges formed by the inheritance dependency`)
     }

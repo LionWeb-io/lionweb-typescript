@@ -15,7 +15,17 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { allFeaturesOf, Containment, Feature, Property, Reference, unresolved } from "@lionweb/core"
+import {
+    allFeaturesOf,
+    Containment,
+    Feature,
+    isUnresolvedReference,
+    Link,
+    Node,
+    Property,
+    Reference,
+    UnresolvedReference
+} from "@lionweb/core"
 import { asString, indentWith, Template } from "littoral-templates"
 
 import { INodeBase } from "./base-types.js"
@@ -27,18 +37,38 @@ const prependWith = (template: Template, prefix: string): Template =>
     prefix + asString(template)
 
 
-type INodeBaseOrNotThere = INodeBase | typeof unresolved | undefined
+type INodeBaseOrNotThere = INodeBase | UnresolvedReference | undefined
 
 const asINodeBases = (value: INodeBaseOrNotThere | INodeBaseOrNotThere[]): INodeBase[] => {
     const isINodeBase = (value: INodeBaseOrNotThere): value is INodeBase =>
-        !(value === unresolved || value === undefined)
+        !(value === undefined || isUnresolvedReference(value))
 
     if (Array.isArray(value)) {
         return value
             .filter((subValue) => isINodeBase(subValue))
             .map((subValue) => subValue as INodeBase)
     }
-    return isINodeBase(value) ? [value] : []
+    if (isINodeBase(value)) {
+        return [value]
+    }
+    return []
+}
+
+type NodeOrNotThere = Node | UnresolvedReference | undefined
+
+const asNodes = (value: NodeOrNotThere | NodeOrNotThere[]): Node[] => {
+    const isNode = (value: NodeOrNotThere): value is Node =>
+        !(value === undefined || isUnresolvedReference(value))
+
+    if (Array.isArray(value)) {
+        return value
+            .filter((subValue) => isNode(subValue))
+            .map((subValue) => subValue as Node)
+    }
+    if (isNode(value)) {
+        return [value]
+    }
+    return []
 }
 
 
@@ -46,7 +76,7 @@ const asINodeBases = (value: INodeBaseOrNotThere | INodeBaseOrNotThere[]): INode
  * @return a function that renders the roots of a given forest of {@link INodeBase nodes} in a textual tree-representation.
  * @param identificationFor a function that renders an identification for the given {@link INodeBase node} — typically its name or its ID.
  */
-export const asTreeTextWith = (identificationFor: (node: INodeBase) => string): ((nodes: INodeBase[]) => string) => {
+export const asTreeTextWith = (identificationFor: (node: Node) => string): ((nodes: INodeBase[]) => string) => {
 
     const asText = (node: INodeBase): Template => {
         const featureValueAsText = (feature: Feature) => {
@@ -64,19 +94,20 @@ export const asTreeTextWith = (identificationFor: (node: INodeBase) => string): 
                 })()
                 return `${feature.name} = ${displayValue}`
             }
+            const nothing = `<${(feature as Link).multiple ? "none" : "not set"}>`
             if (feature instanceof Containment) {
                 const valueManager = node.getContainmentValueManager(feature)
                 const children = asINodeBases(valueManager.getDirectly())
                 return [
-                    `${feature.name}:${children.length === 0 ? " <nothing>" : ""}`,
+                    `${feature.name}:${children.length === 0 ? ` ${nothing}` : ""}`,
                     indent(children.map(asText))
                 ]
             }
             if (feature instanceof Reference) {
                 const valueManager= node.getReferenceValueManager(feature)
-                const references = asINodeBases(valueManager.getDirectly())
+                const references = asNodes(valueManager.getDirectly())
                 return [
-                    `${feature.name} -> ${references.length === 0 ? "<none>" : references.map(identificationFor).join(", ")}`
+                    `${feature.name} -> ${references.length === 0 ? nothing : references.map(identificationFor).join(", ")}`
                 ]
             }
             return `!!! can't handle feature ${feature.name} (of meta type ${feature.metaType()})`

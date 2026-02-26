@@ -16,23 +16,24 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import {
+    allLionWebVersions,
     allSuperTypesOf,
-    builtinClassifiers,
-    builtinFeatures,
-    builtinPropertyValueSerializer,
     Containment,
     Enumeration,
     Feature,
-    nodeSerializer,
+    isUnresolvedReference,
+    LionWebVersions,
+    Node,
     PrimitiveType,
     Property,
     PropertyValueSerializer,
     Reader,
     Reference,
-    unresolved
+    ResolveInfoDeducer,
+    serializerWith
 } from "@lionweb/core"
 
-import { INodeBase, LionCore_builtinsBase } from "./index.js"
+import { INodeBase, LionCore_builtinsBase, NodeBase } from "./index.js"
 
 
 /**
@@ -53,40 +54,51 @@ export const getFeatureValue = (node: INodeBase, feature: Feature) => {
 };
 
 /**
+ * A {@link ResolveInfoDeducer} that works on {@link INodeBase}s.
+ * *Note*: the {@link Reference} passed is not taken into account (yet).
+ */
+const nodeBaseResolveInfoDeducer: ResolveInfoDeducer<Node> = (node, _reference) => {
+    // TODO  put innards in separate function
+    if ("name" in node) {
+        // evaluating `node.name` might cause an error through FeatureValueManager.throwOnReadOfUnset:
+        try {
+            const value = node.name;
+            return typeof value === "string" ? value : undefined;
+        } catch (_) {
+            return undefined;
+        }
+    }
+    if (node instanceof NodeBase) {
+        const allSupertypes = allSuperTypesOf(node.classifier);
+        allLionWebVersions.forEach((lionWebVersion) => {
+            if (allSupertypes.indexOf(lionWebVersion.builtinsFacade.classifiers.inamed) > -1) {
+                return node.getPropertyValueManager(lionWebVersion.builtinsFacade.features.inamed_name).getDirectly() as (string | undefined);
+            }
+        })
+        if (allSupertypes.indexOf(LionCore_builtinsBase.INSTANCE.INamed) > -1) {
+            return node.getPropertyValueManager(LionCore_builtinsBase.INSTANCE.INamed_name).getDirectly() as (string | undefined);
+        }
+    }
+    return undefined;
+};
+
+/**
  * A {@link Reader} that works on/for {@link INodeBase}s specifically.
  * **Note** that this function is for internal use only!
  */
-export const nodeBaseReader: Reader<INodeBase> = {
+export const nodeBaseReader: Reader<INodeBase, Node> = {
     classifierOf: (node) => node.classifier,
     getFeatureValue,
     enumerationLiteralFrom: (encoding, enumeration) => {
         return enumeration.literals.find((literal) => literal.key === encoding)!;
     },
-    resolveInfoFor: (node: INodeBase) => {
-        if ("name" in node) {
-            // evaluating `node.name` might cause an error through FeatureValueManager.throwOnReadOfUnset:
-            try {
-                const value = node.name;
-                return typeof value === "string" ? value : undefined;
-            } catch (_) {
-                return undefined;
-            }
-        }
-        const allSupertypes = allSuperTypesOf(node.classifier);
-        if (allSupertypes.indexOf(builtinClassifiers.inamed) > -1) {
-            return node.getPropertyValueManager(builtinFeatures.inamed_name).getDirectly() as (string | undefined);
-        }
-        if (allSupertypes.indexOf(LionCore_builtinsBase.INSTANCE.INamed) > -1) {
-            return node.getPropertyValueManager(LionCore_builtinsBase.INSTANCE.INamed_name).getDirectly() as (string | undefined);
-        }
-        return undefined;
-    }
+    resolveInfoFor: nodeBaseResolveInfoDeducer
 };
 
 /**
  * @return a serialization of the given nodes (of type {@link INodeBase}) as a {@link LionWebJsonChunk}.
  */
-export const serializeNodeBases = nodeSerializer(nodeBaseReader, { serializeEmptyFeatures: false });
+export const serializeNodeBases = serializerWith({ reader: nodeBaseReader, serializeEmptyFeatures: false });
 
 
 /**
@@ -99,16 +111,16 @@ type PropertyValueSerializerConfiguration = Partial<{
 
 /**
  * @return a {@link PropertyValueSerializer} that uses the given {@link PropertyValueSerializer `primitiveValueSerializer`} *solely* for serializing values of primitively-typed properties,
- * and serializes {@link unresolved} and enumeration-typed properties the same way as {@link serializeNodeBases}.
+ * and serializes properties whose types are enumerations or unresolved the same way as {@link serializeNodeBases}.
  * Unrecoverable issues are passed to the optional `reportIssue` argument, and
  */
 export const propertyValueSerializerWith = (configuration?: PropertyValueSerializerConfiguration) => {
-    const primitiveValueSerializer = configuration?.primitiveValueSerializer ?? builtinPropertyValueSerializer
+    const primitiveValueSerializer = configuration?.primitiveValueSerializer ?? LionWebVersions.v2023_1.builtinsFacade.propertyValueSerializer
     const reportIssue = configuration?.reportIssue ?? ((message) => { throw new Error(message) })
     return {
         serializeValue: (value: unknown, property: Property) => {
             const { type } = property
-            if (type === unresolved) {
+            if (isUnresolvedReference(type)) {
                 reportIssue(`can't serialize value of property "${property.name}" (on classifier "${property.classifier.name}" in language "${property.classifier.language.name}") having unresolved type: ${value}`)
                 return null
             }

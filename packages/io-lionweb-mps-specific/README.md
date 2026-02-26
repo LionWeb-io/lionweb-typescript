@@ -28,7 +28,13 @@ The API consists of the following things exported from this package:
     Its classifiers are exported separately through the `ioLionWebMpsSpecificClassifiers` dictionary.
 * The `deserializeLanguagesWithIoLionWebMpsSpecific` function deserializes a LionWeb serialization chunk as an array of `Language`s, potentially being annotated with instances of annotations from the `io.lionweb.mps.specific` language.
 * The `ioLionWebMpsSpecificAnnotationsFrom` function returns the (instances of the) `io.lionweb.mps.specific` language's annotations that annotate the given language element (of type `M3Concept`).
-* The `textualizationOfAnnotationsIn` function renders an textualization of all instances of `io.lionweb.mps.specific` annotations, in the given languages' tree structure.
+* The `textualizationOfAnnotationsIn` function renders a textualization of all instances of `io.lionweb.mps.specific` annotations, in the given languages' tree structure.
     **Note**: only language elements having annotations (at any nesting depth) are rendered.
     This is useful to get a quick overview of the annotations.
+
+
+## LionWeb version
+
+The implementation is explicitly tied to LionWeb version 2023.1, meaning that its definition refers to the LionCore and LionCore builtins languages in that version.
+No parametrization in the LionWeb version is provided at the moment.
 

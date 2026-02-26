@@ -1,6 +1,7 @@
-import { LionWebId } from "@lionweb/json"
+import { LionWebId, LionWebJsonMetaPointer } from "@lionweb/json"
 import { flatMapNonCyclingFollowing, trivialFlatMapper } from "@lionweb/ts-utils"
 import { Node } from "./types.js"
+import { Feature } from "./m3/index.js"
 
 
 /**
@@ -25,4 +26,17 @@ export const asIds = (nodeOrNulls: (Node | null)[]): (LionWebId | null)[] =>
  */
 export const idOf = <T extends Node>({id}: T): LionWebId =>
     id
+
+
+/**
+ * @return the {@link LionWebJsonMetaPointer} for the given {@link Feature}.
+ */
+export const metaPointerFor = (feature: Feature): LionWebJsonMetaPointer => {
+    const { language } = feature.classifier
+    return {
+        language: language.key,
+        version: language.version,
+        key: feature.key
+    }
+}
 

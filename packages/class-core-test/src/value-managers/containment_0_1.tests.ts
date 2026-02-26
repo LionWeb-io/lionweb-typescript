@@ -23,14 +23,14 @@ import {
     ChildMovedFromOtherContainmentInSameParentDelta,
     ChildReplacedDelta,
     collectingDeltaReceiver,
-    nodeBaseDeserializer,
     serializeNodeBases
 } from "@lionweb/class-core"
-import { AccumulatingSimplisticHandler } from "@lionweb/core"
 import { LionWebJsonMetaPointer } from "@lionweb/json"
 
-import { LinkTestConcept, TestLanguageBase } from "@lionweb/class-core-test-language"
+import { attachedLinkTestConcept, LinkTestConcept, TestLanguageBase } from "@lionweb/class-core-test-language"
 import { deepEqual, equal, isTrue, isUndefined, throws } from "../assertions.js"
+import { deserializeNodesAssertingNoProblems } from "./tests-helpers.js"
+
 
 const testLanguageBase = TestLanguageBase.INSTANCE
 
@@ -39,23 +39,23 @@ describe("write access to a [0..1] containment through .set", () => {
 
     it("adding an unattached child (ChildAddedDelta)", () => {
         const [receiveDelta, deltas] = collectingDeltaReceiver();
+        const parent = attachedLinkTestConcept("parent", receiveDelta);
         const child = LinkTestConcept.create("child", receiveDelta);
-        const parent = LinkTestConcept.create("parent", receiveDelta);
 
         // pre-check:
         equal(parent.containment_0_1, undefined);
-        equal(deltas.length, 0);
+        equal(deltas.length, 1);
 
         // action+check:
         parent.containment_0_1 = child;
         equal(parent.containment_0_1, child);
-        equal(deltas.length, 1);
-        deepEqual(deltas[0], new ChildAddedDelta(parent, testLanguageBase.LinkTestConcept_containment_0_1, 0, child));
+        equal(deltas.length, 2);
+        deepEqual(deltas[1], new ChildAddedDelta(parent, testLanguageBase.LinkTestConcept_containment_0_1, 0, child));
     });
 
     it("deleting a child (ChildDeletedDelta)", () => {
         const [receiveDelta, deltas] = collectingDeltaReceiver();
-        const parent = LinkTestConcept.create("parent", receiveDelta);
+        const parent = attachedLinkTestConcept("parent", receiveDelta);
         const child = LinkTestConcept.create("child", receiveDelta);
         parent.containment_0_1 = child;
 
@@ -63,25 +63,25 @@ describe("write access to a [0..1] containment through .set", () => {
         equal(parent.containment_0_1, child);
         equal(child.parent, parent);
         equal(child.containment, testLanguageBase.LinkTestConcept_containment_0_1);
-        equal(deltas.length, 1);
+        equal(deltas.length, 2);
 
         // action+check:
         parent.containment_0_1 = undefined;
         equal(parent.containment_0_1, undefined);
         equal(child.containment, undefined);
-        equal(deltas.length, 2);
-        deepEqual(deltas[1], new ChildDeletedDelta(parent, testLanguageBase.LinkTestConcept_containment_0_1, 0, child));
+        equal(deltas.length, 3);
+        deepEqual(deltas[2], new ChildDeletedDelta(parent, testLanguageBase.LinkTestConcept_containment_0_1, 0, child));
     });
 
     it(`replacing a child with an unattached node (ChildReplacedDelta)`, () => {
         const [receiveDelta, deltas] = collectingDeltaReceiver();
-        const parent = LinkTestConcept.create("parent", receiveDelta);
+        const parent = attachedLinkTestConcept("parent", receiveDelta);
         const childAlreadyAssigned = LinkTestConcept.create("childAlreadyAssigned", receiveDelta);
         parent.containment_0_1 = childAlreadyAssigned;
         const childToAssign = LinkTestConcept.create("childToAssign", receiveDelta);
 
         // pre-check:
-        equal(deltas.length, 1);
+        equal(deltas.length, 2);
         equal(childToAssign.parent, undefined);
 
         // action:
@@ -92,41 +92,41 @@ describe("write access to a [0..1] containment through .set", () => {
         equal(childToAssign.parent, parent);
         equal(childToAssign.containment, testLanguageBase.LinkTestConcept_containment_0_1);
         equal(childAlreadyAssigned.parent, undefined);
-        equal(deltas.length, 2);
-        deepEqual(deltas[1], new ChildReplacedDelta(parent, testLanguageBase.LinkTestConcept_containment_0_1, 0, childAlreadyAssigned, childToAssign));
+        equal(deltas.length, 3);
+        deepEqual(deltas[2], new ChildReplacedDelta(parent, testLanguageBase.LinkTestConcept_containment_0_1, 0, childAlreadyAssigned, childToAssign));
     });
 
     it("moving a child between different parents (ChildMovedFromOtherContainmentDelta)", () => {
         const [receiveDelta, deltas] = collectingDeltaReceiver();
         const child = LinkTestConcept.create("child", receiveDelta);
-        const srcParent = LinkTestConcept.create("srcParent", receiveDelta);
-        const dstParent = LinkTestConcept.create("dstParent", receiveDelta);
+        const srcParent = attachedLinkTestConcept("srcParent", receiveDelta);
+        const dstParent = attachedLinkTestConcept("dstParent", receiveDelta);
 
         // pre-check:
         equal(srcParent.containment_0_1, undefined);
         equal(dstParent.containment_0_1, undefined);
-        equal(deltas.length, 0);
+        equal(deltas.length, 2);
 
         // action+check:
         srcParent.containment_0_1 = child;
         equal(child.parent, srcParent);
         equal(child.containment, testLanguageBase.LinkTestConcept_containment_0_1);
         equal(dstParent.containment_0_1, undefined);
-        equal(deltas.length, 1);
-        deepEqual(deltas[0], new ChildAddedDelta(srcParent, testLanguageBase.LinkTestConcept_containment_0_1, 0, child));
+        equal(deltas.length, 3);
+        deepEqual(deltas[2], new ChildAddedDelta(srcParent, testLanguageBase.LinkTestConcept_containment_0_1, 0, child));
 
         // action+check:
         dstParent.containment_0_1 = child;
         equal(child.parent, dstParent);
         equal(child.containment, testLanguageBase.LinkTestConcept_containment_0_1);
         equal(srcParent.containment_0_1, undefined);
-        equal(deltas.length, 2);
-        deepEqual(deltas[1], new ChildMovedFromOtherContainmentDelta(srcParent, testLanguageBase.LinkTestConcept_containment_0_1, 0, dstParent, testLanguageBase.LinkTestConcept_containment_0_1, 0, child));
+        equal(deltas.length, 4);
+        deepEqual(deltas[3], new ChildMovedFromOtherContainmentDelta(srcParent, testLanguageBase.LinkTestConcept_containment_0_1, 0, dstParent, testLanguageBase.LinkTestConcept_containment_0_1, 0, child));
     });
 
     it("moving a child between different containments in same parent (ChildMovedFromOtherContainmentInSameParentDelta)", () => {
         const [receiveDelta, deltas] = collectingDeltaReceiver();
-        const parent = LinkTestConcept.create("parent", receiveDelta);
+        const parent = attachedLinkTestConcept("parent", receiveDelta);
         const child = LinkTestConcept.create("child", receiveDelta);
 
         // setup+pre-check:
@@ -135,8 +135,8 @@ describe("write access to a [0..1] containment through .set", () => {
         equal(child.parent, parent);
         equal(child.containment, testLanguageBase.LinkTestConcept_containment_1);
         equal(parent.containment_0_1, undefined);
-        equal(deltas.length, 1);
-        deepEqual(deltas[0], new ChildAddedDelta(parent, testLanguageBase.LinkTestConcept_containment_1, 0, child));
+        equal(deltas.length, 2);
+        deepEqual(deltas[1], new ChildAddedDelta(parent, testLanguageBase.LinkTestConcept_containment_1, 0, child));
 
         // action+check:
         parent.containment_0_1 = child;
@@ -148,13 +148,13 @@ describe("write access to a [0..1] containment through .set", () => {
             },
             `can't read required containment "containment_1" that's unset on instance of TestLanguage.LinkTestConcept with id=parent`
         );
-        equal(deltas.length, 2);
-        deepEqual(deltas[1], new ChildMovedFromOtherContainmentInSameParentDelta(parent, testLanguageBase.LinkTestConcept_containment_1, 0, child, testLanguageBase.LinkTestConcept_containment_0_1, 0));
+        equal(deltas.length, 3);
+        deepEqual(deltas[2], new ChildMovedFromOtherContainmentInSameParentDelta(parent, testLanguageBase.LinkTestConcept_containment_1, 0, child, testLanguageBase.LinkTestConcept_containment_0_1, 0));
     });
 
     it("moving a child within same containment (no ChildMovedInSameContainmentDelta)", () => {
         const [receiveDelta, deltas] = collectingDeltaReceiver();
-        const parent = LinkTestConcept.create("parent", receiveDelta);
+        const parent = attachedLinkTestConcept("parent", receiveDelta);
         const child = LinkTestConcept.create("child", receiveDelta);
 
         // setup+pre-check:
@@ -162,28 +162,28 @@ describe("write access to a [0..1] containment through .set", () => {
         equal(parent.containment_0_1, child);
         equal(child.parent, parent);
         equal(child.containment, testLanguageBase.LinkTestConcept_containment_0_1);
-        equal(deltas.length, 1);
-        deepEqual(deltas[0], new ChildAddedDelta(parent, testLanguageBase.LinkTestConcept_containment_0_1, 0, child));
+        equal(deltas.length, 2);
+        deepEqual(deltas[1], new ChildAddedDelta(parent, testLanguageBase.LinkTestConcept_containment_0_1, 0, child));
 
         // action+check:
         parent.containment_0_1 = child;
         equal(child.parent, parent);
         equal(child.containment, testLanguageBase.LinkTestConcept_containment_0_1);
         equal(parent.containment_0_1, child);
-        equal(deltas.length, 1);
+        equal(deltas.length, 2);
     });
 
     it("moving a child between different parents, replacing an already-present child (ChildMovedAndReplacedFromOtherContainmentDelta)", () => {
         const [receiveDelta, deltas] = collectingDeltaReceiver();
-        const childAlreadyAssigned = LinkTestConcept.create("childAlreadyAssigned", receiveDelta);
-        const dstParent = LinkTestConcept.create("dstParent", receiveDelta);
+        const childAlreadyAssigned = attachedLinkTestConcept("childAlreadyAssigned", receiveDelta);
+        const dstParent = attachedLinkTestConcept("dstParent", receiveDelta);
         dstParent.containment_0_1 = childAlreadyAssigned;
-        const srcParent = LinkTestConcept.create("srcParent", receiveDelta);
+        const srcParent = attachedLinkTestConcept("srcParent", receiveDelta);
         const childToMove = LinkTestConcept.create("childToMove", receiveDelta);
         srcParent.containment_0_1 = childToMove;
 
         // pre-check:
-        equal(deltas.length, 2);
+        equal(deltas.length, 5);
 
         // action+check:
         dstParent.containment_0_1 = childToMove;
@@ -191,8 +191,8 @@ describe("write access to a [0..1] containment through .set", () => {
         equal(dstParent.containment_0_1, childToMove);
         equal(childToMove.parent, dstParent);
         equal(childAlreadyAssigned.parent, undefined);
-        equal(deltas.length, 3);
-        deepEqual(deltas[2], new ChildMovedAndReplacedFromOtherContainmentDelta(dstParent, testLanguageBase.LinkTestConcept_containment_0_1, 0, childToMove, srcParent, testLanguageBase.LinkTestConcept_containment_0_1, 0, childAlreadyAssigned));
+        equal(deltas.length, 6);
+        deepEqual(deltas[5], new ChildMovedAndReplacedFromOtherContainmentDelta(dstParent, testLanguageBase.LinkTestConcept_containment_0_1, 0, childToMove, srcParent, testLanguageBase.LinkTestConcept_containment_0_1, 0, childAlreadyAssigned));
     });
 
 });
@@ -207,17 +207,14 @@ describe("serialization and deserialization w.r.t. a [0..1] containment", () => 
     };
 
     it("serializes and deserializes an unset containment correctly", () => {
-        const ltc = LinkTestConcept.create("ltc");    // leave .containment_0_1 unset
+        const ltc = attachedLinkTestConcept("ltc");    // leave .containment_0_1 unset
         const serializationChunk = serializeNodeBases([ltc]);
         const {nodes} = serializationChunk;
         equal(nodes.length, 1);
         const serContainment = nodes[0].containments.find(({containment}) => containment.key === metaPointer.key);
         isUndefined(serContainment);
 
-        const deserialize = nodeBaseDeserializer([testLanguageBase]);
-        const problemHandler = new AccumulatingSimplisticHandler();
-        const deserializedNodes = deserialize(serializationChunk, undefined, undefined, undefined, problemHandler);
-        equal(problemHandler.allProblems.length, 0);
+        const deserializedNodes = deserializeNodesAssertingNoProblems(serializationChunk);
         equal(deserializedNodes.length, 1);
         const root = deserializedNodes[0];
         isTrue(root instanceof LinkTestConcept);
@@ -230,7 +227,7 @@ describe("serialization and deserialization w.r.t. a [0..1] containment", () => 
 
     it("serializes a set containment correctly", () => {
         const child = LinkTestConcept.create("child");
-        const parent = LinkTestConcept.create("parent");
+        const parent = attachedLinkTestConcept("parent");
         parent.containment_0_1 = child;
         const serializationChunk = serializeNodeBases([parent]);
         const {nodes} = serializationChunk;
@@ -241,10 +238,7 @@ describe("serialization and deserialization w.r.t. a [0..1] containment", () => 
             children: ["child"]
         });
 
-        const deserialize = nodeBaseDeserializer([testLanguageBase]);
-        const problemHandler = new AccumulatingSimplisticHandler();
-        const deserializedNodes = deserialize(serializationChunk, undefined, undefined, undefined, problemHandler);
-        equal(problemHandler.allProblems.length, 0);
+        const deserializedNodes = deserializeNodesAssertingNoProblems(serializationChunk);
         equal(deserializedNodes.length, 1); // (because there's only one “root”)
         const root = deserializedNodes[0];
         isTrue(root instanceof LinkTestConcept);

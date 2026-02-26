@@ -17,17 +17,17 @@
 
 import { LionWebId, LionWebJsonChunk } from "@lionweb/json"
 import { mapFrom } from "@lionweb/ts-utils"
-import { DeltaProtocolMessage, Message } from "./common.js"
+import { DeltaAdditionalInfo, Message } from "./common.js"
 
 /**
  * Super interface for both query request and response messages.
  */
-export interface QueryMessage extends DeltaProtocolMessage {
+export interface QueryMessage extends DeltaAdditionalInfo {
     queryId: LionWebId
 }
 
 
-// in order of the specification (§ 6.3):
+// in order of the specification (§ 5.4):
 
 export interface SubscribeToPartitionChangesParameters {
     creation: boolean
@@ -96,17 +96,6 @@ export interface ReconnectRequest extends QueryMessage {
 export interface ReconnectResponse extends QueryMessage {
     messageKind: "ReconnectResponse"
     lastReceivedSequenceNumber: number
-}
-
-
-export interface GetAvailableIdsRequest extends QueryMessage {
-    messageKind: "GetAvailableIdsRequest"
-    count: number
-}
-
-export interface GetAvailableIdsResponse extends QueryMessage {
-    messageKind: "GetAvailableIdsResponse"
-    ids: LionWebId[]
 }
 
 

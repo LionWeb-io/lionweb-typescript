@@ -21,13 +21,13 @@ export interface Message {
     messageKind: string
 }
 
-export interface ProtocolMessage {
+export interface AdditionalInfo {
     kind: LionWebId
     message: string
     data: Record<LionWebId, string>
 }
 
-export interface DeltaProtocolMessage extends Message {
-    protocolMessages: ProtocolMessage[]
+export interface DeltaAdditionalInfo extends Message {
+    additionalInfos: AdditionalInfo[]
 }
 

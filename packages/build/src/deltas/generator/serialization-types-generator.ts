@@ -37,7 +37,7 @@ const tsTypeForTypeOfSerializationField = (type: Type) => {
         return "LionWebJsonMetaPointer"
     }
     if (type instanceof NodeType) {
-        return type.serialization instanceof RefOnly ? "IdOrUnresolved" : "LionWebId"
+        return type.serialization instanceof RefOnly ? "IdOrNull" : "LionWebId"
     }
     if (type instanceof IndexType) {
         return "number"
@@ -73,8 +73,8 @@ const typeForDelta = ({name, fields}: Delta) =>
 export const serializationTypesForDeltas = (deltas: Delta[], header?: string) =>
     asString([
         header ?? [],
-        `import { IdOrUnresolved } from "@lionweb/core";`,
         `import { LionWebId, LionWebJsonMetaPointer, LionWebJsonChunk } from "@lionweb/json";`,
+        `import { IdOrNull } from "../../references.js";`,
         ``,
         ``,
         `export type SerializedDelta =`,

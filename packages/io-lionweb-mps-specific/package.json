@@ -1,6 +1,6 @@
 {
     "name": "@lionweb/io-lionweb-mps-specific",
-    "version": "0.7.2",
+    "version": "0.8.0",
     "description": "TypeScript implementation of the io.lionweb.mps.specific language",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -15,10 +15,10 @@
         "url": "https://github.com/LionWeb-io/lionweb-typescript/issues"
     },
     "dependencies": {
-        "@lionweb/core": "0.7.2",
-        "@lionweb/json": "0.7.2",
-        "@lionweb/textgen-utils": "0.7.2",
-        "@lionweb/ts-utils": "0.7.2",
+        "@lionweb/core": "0.8.0",
+        "@lionweb/json": "0.8.0",
+        "@lionweb/textgen-utils": "0.8.0",
+        "@lionweb/ts-utils": "0.8.0",
         "littoral-templates": "0.5.1"
     },
     "scripts": {

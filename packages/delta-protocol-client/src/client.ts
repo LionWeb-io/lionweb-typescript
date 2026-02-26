@@ -15,25 +15,8 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {
-    allNodesFrom,
-    applyDelta,
-    combinedFactoryFor,
-    DeltaReceiver,
-    Deserializer,
-    IdMapping,
-    ILanguageBase,
-    INodeBase,
-    nodeBaseDeserializerWithIdMapping,
-    NodeBaseFactory,
-    PartitionAddedDelta,
-    PartitionDeletedDelta,
-    RootsWithIdMapping,
-    serializeDelta
-} from "@lionweb/class-core"
-import { Concept } from "@lionweb/core"
+import { DeltaReceiver, Forest, ILanguageBase, INodeBase, serializeDelta } from "@lionweb/class-core"
 import { LionWebId, LionWebJsonChunk } from "@lionweb/json"
-import { byIdMap } from "@lionweb/ts-utils"
 
 import {
     ansi,
@@ -105,19 +88,11 @@ export class LionWebClient {
 
     private constructor(
         public readonly clientId: LionWebId,
-        public model: INodeBase[],
-        public readonly idMapping: IdMapping,
-        public readonly createNode: NodeBaseFactory,
-        public readonly deserialize: Deserializer<INodeBase[]>,
-        public readonly deserializeWithIdMapping: Deserializer<RootsWithIdMapping>,
-        private readonly effectiveReceiveDelta: DeltaReceiver,
+        public forest: Forest,
         private readonly lowLevelClient: LowLevelClient<Command | QueryMessage>
     ) {}
 
     private readonly queryResolveById: { [queryId: string]: (value: QueryMessage) => void } = {}
-
-    private static readonly nodesByIdFrom = (model: INodeBase[]) =>
-        byIdMap(model.flatMap(allNodesFrom))
 
     static async create({clientId, url, languageBases, instantiateDeltaReceiverForwardingTo, serializationChunk, semanticLogger, lowLevelClientInstantiator}: LionWebClientParameters): Promise<LionWebClient> {
         const log = semanticLoggerFunctionFrom(semanticLogger)
@@ -146,11 +121,11 @@ export class LionWebClient {
             }
         }
         const effectiveReceiveDelta = instantiateDeltaReceiverForwardingTo === undefined ? commandSender : instantiateDeltaReceiverForwardingTo(commandSender)
-        const { roots: model, idMapping } = serializationChunk === undefined
-            ? { roots: [], idMapping: new IdMapping({}) }
-            : nodeBaseDeserializerWithIdMapping(languageBases, effectiveReceiveDelta)(serializationChunk)
-        const deserializerWithIdMapping = nodeBaseDeserializerWithIdMapping(languageBases, effectiveReceiveDelta)
-        const eventAsDelta = eventToDeltaTranslator(languageBases, deserializerWithIdMapping)
+        const forest = new Forest({ languageBases, receiveDelta: effectiveReceiveDelta })
+        if (serializationChunk !== undefined) {
+            forest.deserializeInto(serializationChunk)
+        }
+        const eventAsDelta = eventToDeltaTranslator(languageBases, forest.deserializeWithIdMapping)
         loading = false
 
         const processEvent = (event: Event) => {
@@ -159,10 +134,10 @@ export class LionWebClient {
             // Note: we can't remove members from issuedCommandIds because there may be multiple events originating fom a single command.
             if (commandOriginatingFromSelf === undefined) {
                 try {
-                    const delta = eventAsDelta(event, idMapping)
+                    const delta = eventAsDelta(event, forest.idMapping)
                     if (delta !== undefined) {
                         try {
-                            applyDelta(delta)
+                            forest.applyDelta(delta)
                             log(new ClientAppliedEvent(clientId, event))
                         } catch (e) {
                             log(new ClientHadProblem(clientId, `couldn't apply delta of type ${delta.constructor.name} because of: ${(e as Error).message}`))
@@ -202,26 +177,10 @@ export class LionWebClient {
 
         const lionWebClient = new LionWebClient(
             clientId,
-            model,
-            idMapping,
-            combinedFactoryFor(languageBases, effectiveReceiveDelta),
-            (serializationChunk) => deserializerWithIdMapping(serializationChunk).roots,
-            deserializerWithIdMapping,
-            effectiveReceiveDelta,
+            forest,
             lowLevelClient
         ) // Note: we need this `lionWebClient` constant non-inlined for write-access to lastReceivedSequenceNumber and queryResolveById.
         return lionWebClient
-    }
-
-    /**
-     * Sets the model held by the client to the given model, discarding the previous one.
-     * **Note**:
-     *  - The model is assumed to be injected with `this.effectiveReceiveDelta` — e.g. using this.createNode(...) or this.deserialize(...)`!
-     *  - No commands will be sent because of this action.
-     */
-    setModel(newModel: INodeBase[]) {
-        this.model = newModel
-        this.idMapping.reinitializeWith(LionWebClient.nodesByIdFrom(newModel))
     }
 
     async disconnect(): Promise<void> {
@@ -230,7 +189,7 @@ export class LionWebClient {
     }
 
 
-    // queries, in order of the specification (§ 6.3):
+    // queries, in order of the specification (§ 5.4):
 
     /**
      * Makes the query in the sense that the given query request is sent (as a client message),
@@ -249,7 +208,7 @@ export class LionWebClient {
             messageKind: "SubscribeToChangingPartitionsRequest",
             queryId,
             ...parameters,
-            protocolMessages: []
+            additionalInfos: []
         } as SubscribeToChangingPartitionsRequest)
     }
 
@@ -258,7 +217,7 @@ export class LionWebClient {
             messageKind: "SubscribeToPartitionContentsRequest",
             queryId,
             partition,
-            protocolMessages: []
+            additionalInfos: []
         } as SubscribeToPartitionContentsRequest) as SubscribeToPartitionContentsResponse
         return response.contents
     }
@@ -268,7 +227,7 @@ export class LionWebClient {
             messageKind: "UnsubscribeFromPartitionContentsRequest",
             queryId,
             partition,
-            protocolMessages: []
+            additionalInfos: []
         } as UnsubscribeFromPartitionContentsRequest)
     }
 
@@ -282,7 +241,7 @@ export class LionWebClient {
             repositoryId,
             deltaProtocolVersion: "2025.1",
             clientId: this.clientId,
-            protocolMessages: []
+            additionalInfos: []
         } as SignOnRequest) as SignOnResponse
         this._participationId = response.participationId
     }
@@ -291,7 +250,7 @@ export class LionWebClient {
         await this.makeQuery({
             messageKind: "SignOffRequest",
             queryId,
-            protocolMessages: []
+            additionalInfos: []
         } as SignOffRequest)
         this.signedOff = true
         this._participationId = undefined
@@ -303,7 +262,7 @@ export class LionWebClient {
             queryId,
             participationId,
             lastReceivedSequenceNumber,
-            protocolMessages: []
+            additionalInfos: []
         } as ReconnectRequest) as ReconnectResponse
         this._participationId = participationId
         this.lastReceivedSequenceNumber = response.lastReceivedSequenceNumber
@@ -314,7 +273,7 @@ export class LionWebClient {
             messageKind: "GetAvailableIdsRequest",
             queryId,
             count,
-            protocolMessages: []
+            additionalInfos: []
         } as GetAvailableIdsRequest) as GetAvailableIdsResponse
         return response.ids
     }
@@ -323,23 +282,13 @@ export class LionWebClient {
         const response = await this.makeQuery({
             messageKind: "ListPartitionsRequest",
             queryId,
-            protocolMessages: []
+            additionalInfos: []
         } as ListPartitionsRequest) as ListPartitionsResponse
         return response.partitions
     }
 
 
-    // commands, in order of the specification (§ 6.5):
-
-    private static checkWhetherPartition(node: INodeBase): void {
-        const {classifier} = node
-        if (!(classifier instanceof Concept)) {
-            throw new Error(`node with classifier ${classifier.name} from language ${classifier.language.name} is not an instance of a Concept`)
-        }
-        if (!classifier.partition) {
-            throw new Error(`classifier ${classifier.name} from language ${classifier.language.name} is not a partition`)
-        }
-    }
+    // commands, in order of the specification (§ 5.6):
 
     private checkSignedOn(): void {
         if (this._participationId === undefined) {
@@ -349,23 +298,12 @@ export class LionWebClient {
 
     addPartition(partition: INodeBase): void {
         this.checkSignedOn()
-        LionWebClient.checkWhetherPartition(partition)
-        if (this.model.indexOf(partition) === -1) {
-            this.model.push(partition)
-            this.idMapping.updateWith(partition)
-            this.effectiveReceiveDelta(new PartitionAddedDelta(partition))
-        } // else: ignore; already done
+        this.forest.addPartition(partition)
     }
 
     deletePartition(partition: INodeBase): void {
         this.checkSignedOn()
-        const index = this.model.indexOf(partition)
-        if (index > -1) {
-            this.model.splice(index, 1)
-            this.effectiveReceiveDelta(new PartitionDeletedDelta(partition))
-        } else {
-            throw new Error(`node with id "${partition.id}" is not a partition in the current model`)
-        }
+        this.forest.deletePartition(partition)
     }
 
 }

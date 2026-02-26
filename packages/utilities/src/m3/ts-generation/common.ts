@@ -1,25 +1,26 @@
 import {
     Annotation,
-    builtinClassifiers,
-    builtinPrimitives,
     Concept,
     Datatype,
     Enumeration,
     Interface,
     isRef,
     LanguageEntity,
+    LionWebVersions,
     PrimitiveType,
     SingleRef
 } from "@lionweb/core"
 
 
+const { builtinsFacade } = LionWebVersions.v2023_1
+
 export const tsTypeFor = (datatype: SingleRef<Datatype>): string => {
     if (datatype instanceof PrimitiveType) {
-        switch (datatype) {
-            case builtinPrimitives.booleanDatatype: return `boolean`
-            case builtinPrimitives.stringDatatype: return `string`
-            case builtinPrimitives.integerDatatype: return `number`
-            case builtinPrimitives.jsonDatatype: return `unknown`
+        switch (datatype.key) {
+            case builtinsFacade.primitiveTypes.booleanDataType.key: return `boolean`
+            case builtinsFacade.primitiveTypes.stringDataType.key: return `string`
+            case builtinsFacade.primitiveTypes.integerDataType.key: return `number`
+            case builtinsFacade.primitiveTypes.jsonDataType.key: return `unknown`
             default:
                 return `string`
         }
@@ -31,7 +32,9 @@ export const tsTypeFor = (datatype: SingleRef<Datatype>): string => {
 }
 
 export const isINamed = (entity: LanguageEntity): boolean =>
-    entity === builtinClassifiers.inamed
+       entity instanceof Interface
+    && entity.language.key === builtinsFacade.classifiers.inamed.language.key
+    && entity.key === builtinsFacade.classifiers.inamed.key
 
 
 export const usesINamedDirectly = (entity: LanguageEntity): boolean => {

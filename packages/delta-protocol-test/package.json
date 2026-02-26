@@ -1,6 +1,6 @@
 {
     "name": "@lionweb/delta-protocol-test",
-    "version": "0.7.2-dev.0",
+    "version": "0.8.0-dev.0",
     "description": "Tests for the delta protocol implementation",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -22,19 +22,19 @@
         "test": "mocha --recursive dist/tests/"
     },
     "dependencies": {
-        "@lionweb/class-core-test-language": "0.7.2",
-        "@lionweb/delta-protocol-client": "0.7.2",
-        "@lionweb/delta-protocol-common": "0.7.2",
-        "@lionweb/delta-protocol-low-level-client-ws": "0.7.2",
-        "@lionweb/delta-protocol-repository-ws": "0.7.2",
-        "@lionweb/delta-protocol-test-cli": "0.7.2",
-        "@lionweb/ts-utils": "0.7.2"
+        "@lionweb/class-core-test-language": "0.8.0",
+        "@lionweb/delta-protocol-client": "0.8.0",
+        "@lionweb/delta-protocol-common": "0.8.0",
+        "@lionweb/delta-protocol-low-level-client-ws": "0.8.0",
+        "@lionweb/delta-protocol-repository-ws": "0.8.0",
+        "@lionweb/delta-protocol-test-cli": "0.8.0",
+        "@lionweb/ts-utils": "0.8.0"
     },
     "devDependencies": {
-        "@types/chai": "5.2.2",
+        "@types/chai": "5.2.3",
         "@types/mocha": "10.0.10",
-        "@types/node": "24.3.0",
-        "chai": "5.3.1",
-        "mocha": "11.7.1"
+        "@types/node": "25.2.2",
+        "chai": "6.2.2",
+        "mocha": "11.7.5"
     }
 }

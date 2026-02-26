@@ -1,6 +1,6 @@
 {
     "name": "@lionweb/json-diff",
-    "version": "0.7.2",
+    "version": "0.8.0",
     "description": "Find diff between LionWeb JSON chunks",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -24,11 +24,14 @@
         "prerelease-beta": "npm run prep:pre-release",
         "release-beta": "npm publish --tag beta",
         "prerelease": "npm run prep:pre-release",
-        "release": "npm publish"
+        "release": "npm publish",
+        "publish-local": "npm publish --registry http://localhost:4873 --tag local",
+        "unpublish-local": "npm unpublish --force --registry http://localhost:4873",
+        "republish-local": "npm unpublish-local && npm publish-local"
     },
     "dependencies": {
-        "@lionweb/json": "0.7.2",
-        "@lionweb/json-utils": "0.7.2",
-        "@lionweb/ts-utils": "0.7.2"
+        "@lionweb/json": "0.8.0",
+        "@lionweb/json-utils": "0.8.0",
+        "@lionweb/ts-utils": "0.8.0"
     }
 }

@@ -48,11 +48,11 @@ function validationTest(testDir: TestDir, validateAgainstLanguage: boolean, regi
                 continue
             }
             const expectedError = testExpectations.find(expect => file === expect.file)
-            const msg = expectedError == undefined ? "none" : asMinimalJsonString(expectedError)
+            const msg = expectedError === undefined ? "none" : asMinimalJsonString(expectedError)
             it("Validate file " + dir + "/" + file + " expected error: " + msg, () => {
                 const result: ValidationResult = validateFileResult(dir + "/" + file, validateAgainstLanguage, registry)
                 const success =
-                    expectedError !== undefined
+                    (expectedError !== undefined || expectedError === "none")
                         ? result.issues.find(issue => issue.issueType === expectedError.error) !== undefined
                         : !result.hasErrors()
                 if (verbose) {

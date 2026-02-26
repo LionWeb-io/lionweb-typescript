@@ -13,8 +13,8 @@ import {
 } from "@lionweb/core"
 import { LionWebId } from "@lionweb/json"
 
-import { metaLanguage } from "../languages/meta.js"
 import { deepEqual, equal } from "../test-utils/assertions.js"
+import { TestLanguageBase } from "@lionweb/class-core-test-language"
 
 describe("containmentChain function", () => {
     const node = (id: LionWebId, parent?: Node): Node => ({
@@ -142,7 +142,7 @@ describe("directlyContaineds function", () => {
 
 describe("meta-typed classifier deducer", () => {
     it("works for M3", () => {
-        for (const thing of allContaineds(metaLanguage)) {
+        for (const thing of allContaineds(TestLanguageBase.INSTANCE.language)) {
             equal(thing.metaType(), thing.constructor.name)
         }
     })

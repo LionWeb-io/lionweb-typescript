@@ -85,13 +85,13 @@ describe(`scenarios (${ansi.colorSchemeExplanationString})`, async function() {
 
         expect(lionWebClient.participationId!).to.equal("participation-a")
 
-        const newPartition = lionWebClient.createNode(testLanguageBase.LinkTestConcept, "partition-A")
+        const newPartition = lionWebClient.forest.createNode(testLanguageBase.TestPartition, "partition-A")
         lionWebClient.addPartition(newPartition)
-        expect(lionWebClient.model).to.deep.equal([newPartition])
+        expect(lionWebClient.forest.partitions).to.deep.equal([newPartition])
 
         // assert idempotency of adding a new partition:
         lionWebClient.addPartition(newPartition)
-        expect(lionWebClient.model).to.deep.equal([newPartition])
+        expect(lionWebClient.forest.partitions).to.deep.equal([newPartition])
 
         await delayed(20, null)
         await lionWebClient.disconnect()
@@ -107,7 +107,7 @@ describe(`scenarios (${ansi.colorSchemeExplanationString})`, async function() {
             ],
             nodes: [{
                 id: "partition-A",
-                classifier: { language: "TestLanguage", version: "0", key: "LinkTestConcept" },
+                classifier: { language: "TestLanguage", version: "0", key: "TestPartition" },
                 properties: [],
                 containments: [],
                 references: [],
@@ -116,8 +116,8 @@ describe(`scenarios (${ansi.colorSchemeExplanationString})`, async function() {
             }]
         }
         const expectedLogItems = [
-            new RepositoryReceivedMessage({}, { messageKind: "SignOnRequest", queryId, repositoryId, deltaProtocolVersion: "2025.1", clientId, protocolMessages: [] } as SignOnRequest),
-            new ClientReceivedMessage(clientId, { messageKind: "SignOnResponse", queryId, participationId: "participation-a", protocolMessages: [] } as SignOnResponse),
+            new RepositoryReceivedMessage({}, { messageKind: "SignOnRequest", queryId, repositoryId, deltaProtocolVersion: "2025.1", clientId, additionalInfos: [] } as SignOnRequest),
+            new ClientReceivedMessage(clientId, { messageKind: "SignOnResponse", queryId, participationId: "participation-a", additionalInfos: [] } as SignOnResponse),
             new DeltaOccurredOnClient(
                 clientId,
                 {
@@ -132,7 +132,7 @@ describe(`scenarios (${ansi.colorSchemeExplanationString})`, async function() {
                     messageKind: "AddPartition",
                     commandId: "cmd-1",
                     newPartition: serializationOfNewPartition,
-                    protocolMessages: []
+                    additionalInfos: []
                 }
             ),
             new RepositoryReceivedMessage(
@@ -141,7 +141,7 @@ describe(`scenarios (${ansi.colorSchemeExplanationString})`, async function() {
                     messageKind: "AddPartition",
                     commandId: "cmd-1",
                     newPartition: serializationOfNewPartition,
-                    protocolMessages: []
+                    additionalInfos: []
                 }
             ),
             new ClientReceivedMessage(
@@ -151,7 +151,7 @@ describe(`scenarios (${ansi.colorSchemeExplanationString})`, async function() {
                     newPartition: serializationOfNewPartition,
                     originCommands: [{ participationId: "participation-a", commandId: "cmd-1" }],
                     sequenceNumber: 0,
-                    protocolMessages: []
+                    additionalInfos: []
                 }
             ),
             new ClientDidNotApplyEventFromOwnCommand(clientId, "cmd-1")

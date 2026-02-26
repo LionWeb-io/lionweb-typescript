@@ -18,6 +18,15 @@
 import { Classifier, INamed, Node } from "@lionweb/core"
 import { ioLionWebMpsSpecificClassifiers } from "./definition.js"
 
+/*
+ * An implementation of the io.lionweb.mps.specific language as TypeScript classes.
+ *
+ * This is written by hand (and not generated e.g. using the `class-core-generator`) to avoid meta-level crossing headaches.
+ * That means it has to be kept in sync with its definition in the meta/io.lionweb.mps.specific.json file manually!
+ * Specifically, each language’s concept maps to a concrete class that extends IoLionWebMpsSpecificAnnotation.
+ * (The `IoLionWebMpsSpecificAnnotation` abstract class is an implementation detail, and there’s no concept corresponding to it.)
+ */
+
 export abstract class IoLionWebMpsSpecificAnnotation implements Node {
     protected constructor(public readonly id: string, public readonly classifier: Classifier) {
     }

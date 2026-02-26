@@ -1,148 +1,128 @@
-import {
-    Classifier,
-    DynamicNode,
-    dynamicReader,
-    dynamicWriter,
-    incomingReferences,
-    referencesToOutOfScopeNodes,
-    ReferenceValue,
-    referenceValues
-} from "@lionweb/core"
-import { LionWebId } from "@lionweb/json"
+import { incomingReferences, referencesToOutOfScopeNodes, ReferenceValue, referenceValues } from "@lionweb/core"
 
-import {
-    AnotherConcept,
-    SomeAnnotation,
-    SomeAnnotation_ref,
-    SomeConcept,
-    SomeConcept_ref
-} from "../languages/generic.js"
-import { MyConcept, MyConcept_multivaluedRef, MyConcept_singularRef } from "../languages/tiny-ref.js"
 import { deepEqual } from "../test-utils/assertions.js"
+import { INodeBase, nodeBaseReader } from "@lionweb/class-core"
+import {
+    DataTypeTestConcept,
+    LinkTestConcept,
+    TestAnnotation,
+    TestLanguageBase
+} from "@lionweb/class-core-test-language"
 
 /*
- * These unit tests are pretty much a straight-up copy of the ones in the ReferenceUtilsTests class in the LionWeb C# implementation:
+ * These unit tests were “inspired” by the ones in the ReferenceUtilsTests class in the LionWeb C# implementation:
  * https://github.com/LionWeb-io/lionweb-csharp/blob/main/test/LionWeb-CSharp-Test/tests/ReferenceUtilsTests.cs .
  */
 
+const base = TestLanguageBase.INSTANCE
+
 describe("reference utils", () => {
-    const createNode = (id: LionWebId, classifier: Classifier): DynamicNode => ({
-        id,
-        classifier,
-        settings: {},
-        annotations: []
-    })
-    const setValue = dynamicWriter.setFeatureValue
 
     it("find a reference from a feature of a concept", () => {
-        const targetNode = createNode("target", AnotherConcept)
-        const sourceNode = createNode("source", SomeConcept)
-        setValue(sourceNode, SomeConcept_ref, targetNode)
-        const scope = [sourceNode, targetNode]
+        const targetNode = LinkTestConcept.create("target")
+        const sourceNode = LinkTestConcept.create("source")
+        sourceNode.reference_1 = targetNode
+        const scope = [sourceNode]
 
-        const expectedRefs = [new ReferenceValue(sourceNode, targetNode, SomeConcept_ref, null)]
-        deepEqual(referenceValues(scope, dynamicReader), expectedRefs)
-        deepEqual(incomingReferences(targetNode, scope, dynamicReader), expectedRefs)
+        const expectedRefs = [new ReferenceValue(sourceNode, targetNode, base.LinkTestConcept_reference_1, null)]
+        deepEqual(referenceValues(scope, nodeBaseReader), expectedRefs)
+        deepEqual(incomingReferences(targetNode, scope, nodeBaseReader), expectedRefs)
     })
 
     it("find a reference from an annotation", () => {
-        const targetNode = createNode("target", SomeConcept)
-        const sourceNode = createNode("source", SomeAnnotation)
-        setValue(sourceNode, SomeAnnotation_ref, targetNode)
-        const sourceContainer = createNode("sourceContainer", AnotherConcept)
-        sourceNode.annotations.push(sourceNode)
-        const scope = [sourceContainer, sourceNode, targetNode]
+        const targetNode = LinkTestConcept.create("target")
+        const sourceNode = TestAnnotation.create("source")
+        sourceNode.ref = targetNode
+        const sourceContainer = DataTypeTestConcept.create("sourceContainer")
+        sourceContainer.addAnnotation(sourceNode)
+        const scope = [sourceContainer, sourceNode]
 
-        /*
-         * Note: this doesn't actually test anything new relative to the 1st test,
-         * because the annotation [instance] has a reference just like a concept instance has,
-         * and because the annotation is explicitly declared as part of the scope.
-         * It's more interesting to verify that a scope computed from root nodes would contain the annotation!
-         */
-        deepEqual(incomingReferences(targetNode, scope, dynamicReader), [
-            new ReferenceValue(sourceNode, targetNode, SomeAnnotation_ref, null)
+        deepEqual(incomingReferences(targetNode, scope, nodeBaseReader), [
+            new ReferenceValue<INodeBase>(sourceNode, targetNode, base.TestAnnotation_ref, null)
         ])
     })
 
     it("find a reference to itself", () => {
-        const node = createNode("node", MyConcept)
-        setValue(node, MyConcept_singularRef, node)
+        const node = LinkTestConcept.create("node")
+        node.reference_1 = node
 
-        deepEqual(incomingReferences(node, [node], dynamicReader), [new ReferenceValue(node, node, MyConcept_singularRef, null)])
+        deepEqual(incomingReferences(node, [node], nodeBaseReader), [new ReferenceValue(node, node, base.LinkTestConcept_reference_1, null)])
     })
 
     it("find references in different features of the source", () => {
-        const targetNode = createNode("target", MyConcept)
-        const sourceNode = createNode("source", MyConcept)
-        setValue(sourceNode, MyConcept_singularRef, targetNode)
-        setValue(sourceNode, MyConcept_multivaluedRef, targetNode)
-        deepEqual(sourceNode.settings["multivaluedRef"], [targetNode]) // assert that setValue(<node>, <multivalued feature>, <value>) _added_ the value
+        const targetNode = LinkTestConcept.create("target")
+        const sourceNode = LinkTestConcept.create("source")
+        sourceNode.reference_1 = targetNode
+        sourceNode.addReference_1_n(targetNode)
+        deepEqual(sourceNode.reference_1_n, [targetNode]) // (this checks the previous statement)
 
-        deepEqual(incomingReferences(targetNode, [sourceNode], dynamicReader), [
-            new ReferenceValue(sourceNode, targetNode, MyConcept_singularRef, null),
-            new ReferenceValue(sourceNode, targetNode, MyConcept_multivaluedRef, 0)
+        deepEqual(incomingReferences(targetNode, [sourceNode], nodeBaseReader), [
+            new ReferenceValue(sourceNode, targetNode, base.LinkTestConcept_reference_1, null),
+            new ReferenceValue(sourceNode, targetNode, base.LinkTestConcept_reference_1_n, 0)
         ])
     })
 
     it("find multiple references to target in a multivalued feature of the source", () => {
-        const targetNode = createNode("target", MyConcept)
-        const sourceNode = createNode("source", MyConcept)
-        setValue(sourceNode, MyConcept_multivaluedRef, targetNode)
-        setValue(sourceNode, MyConcept_multivaluedRef, targetNode)
-        deepEqual(sourceNode.settings["multivaluedRef"], [targetNode, targetNode]) // assert that setValue(<node>, <multivalued feature>, <value>) _added_ the values
+        const targetNode = LinkTestConcept.create("target")
+        const sourceNode = LinkTestConcept.create("source")
+        sourceNode.addReference_1_n(targetNode)
+        sourceNode.addReference_1_n(targetNode)
+        deepEqual(sourceNode.reference_1_n, [targetNode, targetNode]) // (this checks the previous statement)
 
-        deepEqual(incomingReferences(targetNode, [sourceNode], dynamicReader), [
-            new ReferenceValue(sourceNode, targetNode, MyConcept_multivaluedRef, 0),
-            new ReferenceValue(sourceNode, targetNode, MyConcept_multivaluedRef, 1)
+        deepEqual(incomingReferences(targetNode, [sourceNode], nodeBaseReader), [
+            new ReferenceValue(sourceNode, targetNode, base.LinkTestConcept_reference_1_n, 0),
+            new ReferenceValue(sourceNode, targetNode, base.LinkTestConcept_reference_1_n, 1)
         ])
     })
 
     it("find references among multiple sources and targets", () => {
-        const sourceNode1 = createNode("sourceNode1", MyConcept)
-        const sourceNode2 = createNode("sourceNode2", MyConcept)
-        const targetNode1 = createNode("targetNode1", MyConcept)
-        const targetNode2 = createNode("targetNode2", MyConcept)
-        setValue(sourceNode1, MyConcept_singularRef, targetNode1)
-        setValue(sourceNode2, MyConcept_singularRef, targetNode2)
+        const sourceNode1 = LinkTestConcept.create("sourceNode1")
+        const sourceNode2 = LinkTestConcept.create("sourceNode2")
+        const targetNode1 = LinkTestConcept.create("targetNode1")
+        const targetNode2 = LinkTestConcept.create("targetNode2")
+        sourceNode1.reference_1 = targetNode1
+        sourceNode2.reference_0_1 = targetNode2
 
-        deepEqual(incomingReferences([targetNode1, targetNode2], [sourceNode1, sourceNode2], dynamicReader), [
-            new ReferenceValue(sourceNode1, targetNode1, MyConcept_singularRef, null),
-            new ReferenceValue(sourceNode2, targetNode2, MyConcept_singularRef, null)
+        deepEqual(incomingReferences([targetNode1, targetNode2], [sourceNode1, sourceNode2], nodeBaseReader), [
+            new ReferenceValue(sourceNode1, targetNode1, base.LinkTestConcept_reference_1, null),
+            new ReferenceValue(sourceNode2, targetNode2, base.LinkTestConcept_reference_0_1, null)
         ])
     })
 
     it("have defined behavior for duplicate target nodes", () => {
-        const targetNode = createNode("target", AnotherConcept)
-        const sourceNode = createNode("source", SomeConcept)
-        setValue(sourceNode, SomeConcept_ref, targetNode)
+        const targetNode = LinkTestConcept.create("target")
+        const sourceNode = LinkTestConcept.create("source")
+        sourceNode.reference_1 = targetNode
         const scope = [sourceNode, targetNode]
 
-        const expectedRefs = [new ReferenceValue(sourceNode, targetNode, SomeConcept_ref, null)]
+        const expectedRefs = [new ReferenceValue(sourceNode, targetNode, base.LinkTestConcept_reference_1, null)]
         const duplicateTargetNodes = [targetNode, targetNode]
-        deepEqual(incomingReferences(duplicateTargetNodes, scope, dynamicReader), expectedRefs)
-        deepEqual(referenceValues(scope, dynamicReader), expectedRefs)
+        deepEqual(incomingReferences(duplicateTargetNodes, scope, nodeBaseReader), expectedRefs)
+        deepEqual(referenceValues(scope, nodeBaseReader), expectedRefs)
     })
 
     it("have defined behavior when duplicate nodes in scope", () => {
-        const targetNode = createNode("target", AnotherConcept)
-        const sourceNode = createNode("source", SomeConcept)
-        setValue(sourceNode, SomeConcept_ref, targetNode)
+        const targetNode = LinkTestConcept.create("target")
+        const sourceNode = LinkTestConcept.create("source")
+        sourceNode.reference_1 = targetNode
         const scope = [sourceNode, targetNode]
 
-        const expectedRefs = [new ReferenceValue(sourceNode, targetNode, SomeConcept_ref, null)]
+        const expectedRefs = [new ReferenceValue(sourceNode, targetNode, base.LinkTestConcept_reference_1, null)]
         const duplicateScope = [...scope, ...scope]
-        deepEqual(incomingReferences(targetNode, duplicateScope, dynamicReader), expectedRefs)
-        deepEqual(referenceValues(duplicateScope, dynamicReader), expectedRefs)
+        deepEqual(incomingReferences(targetNode, duplicateScope, nodeBaseReader), expectedRefs)
+        deepEqual(referenceValues(duplicateScope, nodeBaseReader), expectedRefs)
     })
 
     it("find unreachable nodes", () => {
-        const targetNode = createNode("target", AnotherConcept)
-        const sourceNode = createNode("source", SomeConcept)
-        setValue(sourceNode, SomeConcept_ref, targetNode)
+        const targetNode = LinkTestConcept.create("target")
+        const sourceNode = LinkTestConcept.create("source")
+        sourceNode.reference_1 = targetNode
 
         deepEqual(
-            referencesToOutOfScopeNodes([sourceNode, sourceNode], dynamicReader), // Note: scope is duplicate
-            [new ReferenceValue(sourceNode, targetNode, SomeConcept_ref, null)]
+            referencesToOutOfScopeNodes([sourceNode, sourceNode], nodeBaseReader), // Note: scope is duplicate
+            [new ReferenceValue(sourceNode, targetNode, base.LinkTestConcept_reference_1, null)]
         )
     })
+
 })
+

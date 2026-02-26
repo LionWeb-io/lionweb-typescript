@@ -15,5 +15,6 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-export * from "./gen/TestLanguage.g.js";
+export * from "./gen/TestLanguage.g.js"
+export { attachedDataTypeTestConcept, attachedLinkTestConcept, integerRange } from "./test-helpers.js"
 

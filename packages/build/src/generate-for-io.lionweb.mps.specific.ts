@@ -15,9 +15,7 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { writeFileSync } from "fs"
-import { join } from "path"
-import { deserializeLanguages, lioncore } from "@lionweb/core"
+import { deserializeLanguages, LionWebVersions } from "@lionweb/core"
 import { LionWebJsonChunk } from "@lionweb/json"
 import {
     generateMermaidForLanguage,
@@ -25,14 +23,18 @@ import {
     languageAsText,
     readFileAsJson
 } from "@lionweb/utilities"
+import { writeFileSync } from "fs"
+import { join } from "path"
 
 const languageName = "io.lionweb.mps.specific"
-const packagePath = join("..", languageName.replaceAll(".", "-"), "meta")
+const packagePath = join("..", languageName.replaceAll(".", "-"))   // (-> package)
+const metaPath = join(packagePath, "meta")
 
-const chunk = readFileAsJson(join(packagePath, `${languageName}.json`)) as LionWebJsonChunk
-const language = deserializeLanguages(chunk, lioncore)[0]
+// read language definition from package:
+const chunk = readFileAsJson(join(metaPath, `${languageName}.json`)) as LionWebJsonChunk
+const language = deserializeLanguages(chunk, LionWebVersions.v2023_1.lioncoreFacade.language)[0]
 
-writeFileSync(join(packagePath, `${languageName}.txt`), languageAsText(language))
-writeFileSync(join(packagePath, `${languageName}.puml`), generatePlantUmlForLanguage(language))
-writeFileSync(join(packagePath, `${languageName}.md`), generateMermaidForLanguage(language))
+writeFileSync(join(metaPath, `${languageName}.txt`), languageAsText(language))
+writeFileSync(join(metaPath, `${languageName}.puml`), generatePlantUmlForLanguage(language))
+writeFileSync(join(metaPath, `${languageName}.md`), generateMermaidForLanguage(language))
 

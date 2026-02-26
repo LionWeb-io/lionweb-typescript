@@ -7,8 +7,8 @@ import { byIdMap } from "@lionweb/ts-utils"
 
 /**
  * Removes all annotations from the given {@link LionWebJsonChunk}, i.e.:
- *  * all annotations on nodes in the form of the {@code annotations} property,
- *  * all nodes that can be identified as instances of an {@link Annotation} by being referred to from {@code annotations}.
+ *  * all annotations on nodes in the form of the `annotations` property,
+ *  * all nodes that can be identified as instances of an {@link Annotation} by being referred to from `annotations`.
  * It also removes all descendants of all annotations (insofar present in the given chunk).
  * @param serializationChunk - The {@link LionWebJsonChunk}
  */

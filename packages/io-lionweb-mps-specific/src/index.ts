@@ -15,9 +15,9 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-export * from "./annotations.js"
-export * from "./definition.js"
-export * from "./deserializer.js"
-export * from "./implementation.js"
-export * from "./textualizer.js"
+export { ioLionWebMpsSpecificAnnotationsFrom, repairIoLionWebMpsSpecificAnnotations } from "./annotations.js"
+export { ioLionWebMpsSpecificClassifiers, ioLionWebMpsSpecificLanguage } from "./definition.js"
+export { deserializeLanguagesWithIoLionWebMpsSpecific } from "./deserializer.js"
+export { ConceptDescription, Deprecated, IoLionWebMpsSpecificAnnotation, KeyedDescription, ShortDescription, VirtualPackage } from "./implementation.js"
+export { textualizationOfAnnotationsIn } from "./textualizer.js"
 

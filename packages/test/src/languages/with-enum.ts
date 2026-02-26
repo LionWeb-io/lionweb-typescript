@@ -8,9 +8,7 @@ const myEnum = factory.enumeration("MyEnum")
 myEnum.havingLiterals(...[1, 2].map(i => factory.enumerationLiteral(myEnum, `literal${i}`).havingKey(`lit${i}`)))
 
 const enumHolder = factory.concept("EnumHolder", false)
-const enumHolder_enumValue = factory.property(enumHolder, "enumValue").ofType(myEnum)
-enumHolder.havingFeatures(enumHolder_enumValue)
+factory.property(enumHolder, "enumValue").ofType(myEnum)
 
-const languageWithEnum = factory.language.havingEntities(myEnum, enumHolder)
+export const languageWithEnum = factory.language
 
-export { languageWithEnum }
