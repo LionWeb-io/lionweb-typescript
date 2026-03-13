@@ -99,6 +99,13 @@ export const EventDefinitions: MessageGroup = {
                     mayBeNull: false,
                 },
                 {
+                    name: "split",
+                    type: "Boolean",
+                    isList: false,
+                    isOptional: true,
+                    mayBeNull: false,
+                },
+                {
                     name: "messageKind",
                     type: "String",
                     isList: false,
@@ -376,6 +383,13 @@ export const EventDefinitions: MessageGroup = {
                     mayBeNull: false,
                 },
                 {
+                    name: "split",
+                    type: "Boolean",
+                    isList: false,
+                    isOptional: true,
+                    mayBeNull: false,
+                },
+                {
                     name: "messageKind",
                     type: "String",
                     isList: false,
@@ -598,6 +612,13 @@ export const EventDefinitions: MessageGroup = {
                     type: "LionWebId",
                     isList: false,
                     isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "split",
+                    type: "Boolean",
+                    isList: false,
+                    isOptional: true,
                     mayBeNull: false,
                 },
                 {
@@ -1194,6 +1215,13 @@ export const EventDefinitions: MessageGroup = {
                     mayBeNull: false,
                 },
                 {
+                    name: "split",
+                    type: "Boolean",
+                    isList: false,
+                    isOptional: true,
+                    mayBeNull: false,
+                },
+                {
                     name: "messageKind",
                     type: "String",
                     isList: false,
@@ -1728,12 +1756,26 @@ export const EventDefinitions: MessageGroup = {
             ],
         },
         {
-            name: "CompositeEvent",
+            name: "ChunkedEvent",
             properties: [
                 {
-                    name: "parts",
-                    type: "Event",
-                    isList: true,
+                    name: "chunk",
+                    type: "LionWebDeltaJsonChunk",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "continuedChunkCompleted",
+                    type: "Boolean",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "continuedChunkSequenceNumber",
+                    type: "Number",
+                    isList: false,
                     isOptional: false,
                     mayBeNull: false,
                 },
@@ -1778,6 +1820,13 @@ export const EventDefinitions: MessageGroup = {
                     mayBeNull: false,
                 },
                 {
+                    name: "messageKind",
+                    type: "String",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
                     name: "sequenceNumber",
                     type: "Number",
                     isList: false,
@@ -1788,13 +1837,6 @@ export const EventDefinitions: MessageGroup = {
                     name: "originCommands",
                     type: "CommandSource",
                     isList: true,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
-                {
-                    name: "messageKind",
-                    type: "String",
-                    isList: false,
                     isOptional: false,
                     mayBeNull: false,
                 },

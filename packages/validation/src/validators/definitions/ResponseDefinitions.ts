@@ -90,6 +90,13 @@ export const ResponseDefinitions: MessageGroup = {
                     mayBeNull: false,
                 },
                 {
+                    name: "split",
+                    type: "Boolean",
+                    isList: false,
+                    isOptional: true,
+                    mayBeNull: false,
+                },
+                {
                     name: "queryId",
                     type: "QueryId",
                     isList: false,
@@ -115,6 +122,53 @@ export const ResponseDefinitions: MessageGroup = {
         {
             name: "UnsubscribeFromPartitionContentsResponse",
             properties: [
+                {
+                    name: "queryId",
+                    type: "QueryId",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "messageKind",
+                    type: "String",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "additionalInfos",
+                    type: "AdditionalInfo",
+                    isList: true,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+            ],
+        },
+        {
+            name: "ChunkedQueryResponse",
+            properties: [
+                {
+                    name: "chunk",
+                    type: "LionWebDeltaJsonChunk",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "continuedChunkCompleted",
+                    type: "Boolean",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "continuedChunkSequenceNumber",
+                    type: "Number",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
                 {
                     name: "queryId",
                     type: "QueryId",
@@ -271,6 +325,53 @@ export const ResponseDefinitions: MessageGroup = {
                     type: "LionWebDeltaJsonChunk",
                     isList: false,
                     isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "split",
+                    type: "Boolean",
+                    isList: false,
+                    isOptional: true,
+                    mayBeNull: false,
+                },
+                {
+                    name: "queryId",
+                    type: "QueryId",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "messageKind",
+                    type: "String",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "additionalInfos",
+                    type: "AdditionalInfo",
+                    isList: true,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+            ],
+        },
+        {
+            name: "ListAndSubscribePartitionsResponse",
+            properties: [
+                {
+                    name: "partitions",
+                    type: "LionWebDeltaJsonChunk",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "split",
+                    type: "Boolean",
+                    isList: false,
+                    isOptional: true,
                     mayBeNull: false,
                 },
                 {

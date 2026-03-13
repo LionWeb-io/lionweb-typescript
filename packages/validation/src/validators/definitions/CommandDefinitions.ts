@@ -38,6 +38,13 @@ export const CommandDefinitions: MessageGroup = {
                     mayBeNull: false,
                 },
                 {
+                    name: "split",
+                    type: "Boolean",
+                    isList: false,
+                    isOptional: true,
+                    mayBeNull: false,
+                },
+                {
                     name: "commandId",
                     type: "CommandId",
                     isList: false,
@@ -299,6 +306,13 @@ export const CommandDefinitions: MessageGroup = {
                     mayBeNull: false,
                 },
                 {
+                    name: "split",
+                    type: "Boolean",
+                    isList: false,
+                    isOptional: true,
+                    mayBeNull: false,
+                },
+                {
                     name: "commandId",
                     type: "CommandId",
                     isList: false,
@@ -411,6 +425,13 @@ export const CommandDefinitions: MessageGroup = {
                     type: "LionWebId",
                     isList: false,
                     isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "split",
+                    type: "Boolean",
+                    isList: false,
+                    isOptional: true,
                     mayBeNull: false,
                 },
                 {
@@ -764,6 +785,13 @@ export const CommandDefinitions: MessageGroup = {
                     mayBeNull: false,
                 },
                 {
+                    name: "split",
+                    type: "Boolean",
+                    isList: false,
+                    isOptional: true,
+                    mayBeNull: false,
+                },
+                {
                     name: "commandId",
                     type: "CommandId",
                     isList: false,
@@ -862,6 +890,13 @@ export const CommandDefinitions: MessageGroup = {
                     type: "LionWebId",
                     isList: false,
                     isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "split",
+                    type: "Boolean",
+                    isList: false,
+                    isOptional: true,
                     mayBeNull: false,
                 },
                 {
@@ -1273,12 +1308,26 @@ export const CommandDefinitions: MessageGroup = {
             ],
         },
         {
-            name: "CompositeCommand",
+            name: "ChunkedCommand",
             properties: [
                 {
-                    name: "parts",
-                    type: "Command",
-                    isList: true,
+                    name: "chunk",
+                    type: "LionWebDeltaJsonChunk",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "continuedChunkCompleted",
+                    type: "Boolean",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "continuedChunkSequenceNumber",
+                    type: "Number",
+                    isList: false,
                     isOptional: false,
                     mayBeNull: false,
                 },
