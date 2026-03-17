@@ -1,0 +1,83 @@
+{
+    "languagesWithInstantiations": [
+        {
+            "key": "library",
+            "version": "1",
+            "name": "library",
+            "instantiations": 6
+        },
+        {
+            "key": "multi",
+            "version": "1",
+            "name": "multi",
+            "instantiations": 1
+        }
+    ],
+    "instantiatedClassifiers": [
+        {
+            "language": {
+                "key": "library",
+                "version": "1",
+                "name": "library"
+            },
+            "key": "Library",
+            "name": "Library",
+            "metaType": "concept",
+            "instantiations": 2
+        },
+        {
+            "language": {
+                "key": "library",
+                "version": "1",
+                "name": "library"
+            },
+            "key": "Book",
+            "name": "Book",
+            "metaType": "concept",
+            "instantiations": 2
+        },
+        {
+            "language": {
+                "key": "library",
+                "version": "1",
+                "name": "library"
+            },
+            "key": "GuideBookWriter",
+            "name": "GuideBookWriter",
+            "metaType": "concept",
+            "instantiations": 2
+        },
+        {
+            "language": {
+                "key": "multi",
+                "version": "1",
+                "name": "multi"
+            },
+            "key": "Container",
+            "name": "Container",
+            "metaType": "concept",
+            "instantiations": 1
+        }
+    ],
+    "languagesWithoutInstantiations": [],
+    "uninstantiatedInstantiableClassifiers": [
+        {
+            "language": {
+                "key": "library",
+                "version": "1",
+                "name": "library"
+            },
+            "key": "Writer",
+            "name": "Writer"
+        },
+        {
+            "language": {
+                "key": "library",
+                "version": "1",
+                "name": "library"
+            },
+            "key": "SpecialistBookWriter",
+            "name": "SpecialistBookWriter"
+        }
+    ]
+}

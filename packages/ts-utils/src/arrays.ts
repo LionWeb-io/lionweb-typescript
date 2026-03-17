@@ -47,3 +47,9 @@ export const lastOfArray = <T>(ts: T[]): T => {
     return ts[ts.length - 1]
 }
 
+/**
+ * @return the sum of the given array `nums` of numbers.
+ */
+export const sumOfNumbers = (nums: number[]): number =>
+    nums.reduce((acc, cur) => acc + cur, 0)
+

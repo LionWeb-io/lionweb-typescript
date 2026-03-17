@@ -9,7 +9,7 @@ type LanguagePointer = {
     version: string
 } & OptionallyNamed
 
-/* abstract */ type ClassifierMetric = {
+/* abstract */ type ClassifierPointer = {
     language: LanguagePointer
     key: LionWebKey         // key of classifier
 } & OptionallyNamed
@@ -19,7 +19,7 @@ type ClassifierMetaTypes = "annotation" | "concept" | "interface"
 type ClassifierInstantiationMetric = {
     metaType?: ClassifierMetaTypes
     instantiations: number
-} & ClassifierMetric
+} & ClassifierPointer
 
 type LanguageMetric = {
     instantiations: number
@@ -27,16 +27,18 @@ type LanguageMetric = {
 
 // TODO  order?
 type Metrics = {
-    languagesWithInstantiations: LanguageMetric[]
+    languagesWithInstantiations: LanguageMetric[]   // (note: is derivable from instantiatedClassifiers, in principle)
     instantiatedClassifiers: ClassifierInstantiationMetric[]
-    uninstantiatedInstantiableClassifiers: ClassifierMetric[]
-    languagesWithoutInstantiations: LanguagePointer[]
+    languagesWithoutInstantiations: LanguagePointer[]   // (note: is derivable from uninstantiatedInstantiableClassifiers, in principle)
+    uninstantiatedInstantiableClassifiers: ClassifierPointer[]
 }
 
 
 export type {
     ClassifierInstantiationMetric,
     ClassifierMetaTypes,
+    ClassifierPointer,
+    LanguageMetric,
     LanguagePointer,
     Metrics
 }
