@@ -7,9 +7,9 @@ import {
     nested3Grouper,
     nested3Mapper,
     nestedFlatMap2,
-    nestedFlatMap3
+    nestedFlatMap3,
+    sumOfNumbers
 } from "@lionweb/ts-utils"
-import { sumNumbers } from "@lionweb/utilities/dist/serialization/measurer.js"
 import { deepEqual } from "../test-utils/assertions.js"
 
 describe("nested map utils work", () => {
@@ -80,21 +80,21 @@ describe("nested map utils work", () => {
 
     it("flatMapValues", () => {
         deepEqual(
-            flatMapValues({ x: [0, 1], y: [2, 3] }, (nums, key1) => `${key1}:${sumNumbers(nums)}`),
+            flatMapValues({ x: [0, 1], y: [2, 3] }, (nums, key1) => `${key1}:${sumOfNumbers(nums)}`),
             ["x:1", "y:5"]
         )
     })
 
     it("nestedFlatMap2", () => {
         deepEqual(
-            nestedFlatMap2({ x: { y: [0, 1], z: [2] }, a: { b: [3, 4] } }, (nums, key1, key2) => `${key1}:${key2}:${sumNumbers(nums)}`),
+            nestedFlatMap2({ x: { y: [0, 1], z: [2] }, a: { b: [3, 4] } }, (nums, key1, key2) => `${key1}:${key2}:${sumOfNumbers(nums)}`),
             ["x:y:1", "x:z:2", "a:b:7"]
         )
     })
 
     it("nestedFlatMap3", () => {
         deepEqual(
-            nestedFlatMap3({ x: { y: { z: [1] } } }, (nums, key1, key2, key3) => `${key1}:${key2}:${key3}:${sumNumbers(nums)}`),
+            nestedFlatMap3({ x: { y: { z: [1] } } }, (nums, key1, key2, key3) => `${key1}:${key2}:${key3}:${sumOfNumbers(nums)}`),
             ["x:y:z:1"]
         )
     })

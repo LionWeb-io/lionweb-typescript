@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.9.0 — not yet released
+
+* Expose types associated with the `measure` function — m.n. `Metrics`.
+* Add a `zeroMetrics` constant, and `mergeMetrics` and `aggregateMetrics` functions, to aggregate `Metrics`.
+
+
 ## 0.8.0
 
 * Propagate `reference` field of `LionWebJsonReferenceTarget` type now being `null`able.

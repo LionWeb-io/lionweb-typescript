@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.9.0 — not yet released
+
+* Add `sumOfNumbers` function.
+
+
 ## 0.7.1
 
 (The 0.7.0 release was deprecated because its `validation` package was faulty.)
