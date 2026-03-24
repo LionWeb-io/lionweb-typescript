@@ -1,5 +1,5 @@
 import { extname, join } from "path"
-import { writeFileSync } from "fs"
+import { writeFile } from "fs/promises"
 
 import { AggregatingProblemReporter, deserializeLanguagesFrom } from "@lionweb/core"
 import {
@@ -24,11 +24,14 @@ const generateTsTypesFromSerialization = async (path: string, generationOptions:
     const languages = deserializeLanguagesFrom({ serializationChunk: await readSerializationChunk(path), problemReporter })
     problemReporter.reportAllProblemsOnConsole()
 
-    languages.forEach((language) => {
-        const fileName = `${language.name}.g.ts`
-        writeFileSync(join(genPath, fileName), tsTypeDefsForLanguage(language, ...generationOptions))
-        console.log(`generated ${language.name}.g.ts for language "${language.name}"`)
-    })
+    await Promise.all(
+        languages.map((language) => {
+            const fileName = `${language.name}.g.ts`
+            const promise = writeFile(join(genPath, fileName), tsTypeDefsForLanguage(language, ...generationOptions))
+            console.log(`generated ${language.name}.g.ts for language "${language.name}"`)
+            return promise
+        })
+    )
 
     console.log(`generated TS types: "${path}" -> "${genPath}"`)
 
@@ -36,7 +39,7 @@ const generateTsTypesFromSerialization = async (path: string, generationOptions:
         const linesIndexTs = [
             languages.map((language) => `export * as ${language.name.replaceAll(".", "_")} from "./${language.name}.g.js"`)
         ]
-        writeFileSync(join(genPath, "index.g.ts"), linesIndexTs.join(`\n`) + `\n`)
+        await writeFile(join(genPath, "index.g.ts"), linesIndexTs.join(`\n`) + `\n`)
         console.log("generated index.g.ts")
     }
 }
