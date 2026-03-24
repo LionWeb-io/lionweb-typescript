@@ -29,6 +29,7 @@
         "release": "npm publish"
     },
     "dependencies": {
+        "@lionweb/class-core-generator": "0.9.0-beta.2",
         "@lionweb/core": "0.9.0-beta.2",
         "@lionweb/json-diff": "0.9.0-beta.2",
         "@lionweb/ts-utils": "0.9.0-beta.2",

@@ -45,10 +45,6 @@ cd validation
 npm run build
 cd ..
 
-cd cli
-npm run build
-cd ..
-
 cd io-lionweb-mps-specific
 npm run build
 cd ..
@@ -114,6 +110,10 @@ cd ..
 
 cd delta-protocol-test
 npm test
+cd ..
+
+cd cli
+npm run build
 cd ..
 
 cd .. # (/<root>)

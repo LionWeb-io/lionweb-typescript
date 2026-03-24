@@ -1,5 +1,5 @@
 import { extname, join } from "path"
-import { existsSync, mkdirSync, statSync, writeFileSync } from "fs"
+import { writeFileSync } from "fs"
 
 import { AggregatingProblemReporter, deserializeLanguagesFrom } from "@lionweb/core"
 import {
@@ -8,12 +8,11 @@ import {
     tryReadSerializationChunk,
     tsTypeDefsForLanguage
 } from "@lionweb/utilities"
+import { ensurePathSync } from "../fs-utils.js"
 
 const generateTsTypesFromSerialization = async (path: string, generationOptions: GenerationOptions[]) => {
     const genPath = path.substring(0, path.length - extname(path).length) + "_gen"
-    if (!(existsSync(genPath) && statSync(genPath).isDirectory())) {
-        mkdirSync(genPath)
-    }
+    ensurePathSync(genPath)
 
     const problemReporter = new AggregatingProblemReporter()
     const jsonOrError = await tryReadSerializationChunk(path)
