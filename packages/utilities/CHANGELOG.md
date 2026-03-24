@@ -4,6 +4,7 @@
 
 * Expose types associated with the `measure` function — m.n. `Metrics`.
 * Add a `zeroMetrics` constant, and `mergeMetrics` and `aggregateMetrics` functions, to aggregate `Metrics`.
+* Add a `tryReadSerializationChunk` that plays better with async “versus” throwing exceptions.
 
 
 ## 0.8.0

@@ -4,8 +4,9 @@
 import { argv } from "process"
 import { inferLanguages } from "./infer-languages-command.js"
 
-import { diagramFromSerializationChunkAt } from "./m3/diagram-command.js"
-import { generateTsTypesWith } from "./m3/generate-ts-types-command.js"
+import { diagramFromSerializationChunkAt } from "./m2/diagram-command.js"
+import { generateClassCoreTypes, headerFlag, notVerboseFlag } from "./m2/generate-class-core-types-command.js"
+import { generateTsTypesWith } from "./m2/generate-ts-types-command.js"
 import { diffSerializationChunks } from "./serialization/diff-command.js"
 import { executeMeasureCommand } from "./serialization/measure-command.js"
 import { repairSerializationChunkAt } from "./serialization/repair-command.js"
@@ -23,6 +24,7 @@ const main = async (args: string[]) => {
     const SORT_COMMAND = "sort"
     const TEXTUALIZE_COMMAND = "textualize"
     const VALIDATE_COMMAND = "validate"
+    const GENERATE_CLASS_CORE_TYPES = "generate-class-core-types"
 
     const commands = [
         DIAGRAM_COMMAND,
@@ -33,7 +35,8 @@ const main = async (args: string[]) => {
         REPAIR_COMMAND,
         SORT_COMMAND,
         TEXTUALIZE_COMMAND,
-        VALIDATE_COMMAND
+        VALIDATE_COMMAND,
+        GENERATE_CLASS_CORE_TYPES
     ].sort()
 
     if (args.length <= 2) {
@@ -145,7 +148,7 @@ textual syntax is used, unless a flag '--asRegular' is provided.
         }
 
         case VALIDATE_COMMAND: {
-            if (commandArgs.length === 0) {
+            if (commandArgs.length !== 1) {
                 console.log(
                     `The ${VALIDATE_COMMAND} command validates a serialization chunk.
 Usage: npx @lionweb/cli ${VALIDATE_COMMAND} <path_to_chunk>`
@@ -157,12 +160,25 @@ Usage: npx @lionweb/cli ${VALIDATE_COMMAND} <path_to_chunk>`
         }
 
         case INFER_LANGUAGES_COMMAND: {
-            if (commandArgs.length === 0) {
+            if (commandArgs.length !== 1) {
                 console.log(
-                    `The ${INFER_LANGUAGES_COMMAND} command infer language(s) from a given serialization chunk. \nUsage: npx @lionweb/cli infer-language <path_to_chunk>`
+                    `The ${INFER_LANGUAGES_COMMAND} command infer language(s) from a given serialization chunk.
+Usage: npx @lionweb/cli ${INFER_LANGUAGES_COMMAND} <path_to_chunk>`
                 )
             } else {
                 await inferLanguages(commandArgs[0])
+            }
+            return
+        }
+
+        case GENERATE_CLASS_CORE_TYPES: {
+            if (commandArgs.length === 0) {
+                console.log(
+                    `The ${GENERATE_CLASS_CORE_TYPES} command generates an API that’s based on the @lionweb/class-core from a given serialization chunk containing one or more languages.
+Usage: npx @lionweb/cli ${GENERATE_CLASS_CORE_TYPES} <path_to_chunk> <path_to_generate_to> [--${headerFlag} <path_to_file_with_header_text] [--${notVerboseFlag}]`
+                )
+            } else {
+                await generateClassCoreTypes(commandArgs)
             }
             return
         }

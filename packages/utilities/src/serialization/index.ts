@@ -1,5 +1,5 @@
 export {withoutAnnotations} from "./annotation-remover.js"
-export {looksLikeSerializedLanguages, readSerializationChunk, tryReadAllAsLanguages, tryReadAsLanguages} from "./chunk.js"
+export {looksLikeSerializedLanguages, readSerializationChunk, tryReadAllAsLanguages, tryReadAsLanguages, tryReadSerializationChunk} from "./chunk.js"
 export {aggregateMetrics, measure, mergeMetrics, zeroMetrics} from "./metrics/index.js"
 export type {ClassifierInstantiationMetric, ClassifierMetaTypes, ClassifierPointer, Metrics, LanguageMetric, LanguagePointer} from "./metrics/index.js"
 export {orderedSerializationChunk} from "./ordering.js"
