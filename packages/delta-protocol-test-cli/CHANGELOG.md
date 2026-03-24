@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8.1
+
+* Add the "AddAnnotationWithLanguageReference" task.
+
 ## 0.8.0
 
 * Remove the `<partition concept>` argument.
