@@ -121,21 +121,21 @@ export class LionWebJsonChunkWrapper {
      * @param nodeId
      */
     getAllChildNodes(node: LionWebJsonNode): LionWebJsonNode[] {
-        return node.containments?.flatMap(cont => this.getContainmentNodes(node, cont.containment))
+        return node.containments.flatMap(cont => this.getContainmentNodes(node, cont.containment))
     }
 
     /**
-     * Return an array with all child nodes of `node`
+     * Return an array with all child nodes of `node` for the containment `containment`.
      * @param nodeId
      */
     getContainmentNodes(node: LionWebJsonNode, containment: LionWebJsonMetaPointer): LionWebJsonNode[] {
-        const cnt = node.containments?.find(c => isEqualMetaPointer(containment, c.containment))
+        const cnt = node.containments.find(c => isEqualMetaPointer(containment, c.containment))
         if (cnt === undefined) {
             return []
         } else {
             return cnt.children.flatMap(child => {
                 const childNode = this.getNode(child)
-                return (childNode === undefined ? [] : [childNode])
+                return childNode === undefined ? [] : [childNode]
             })
         }
     }
