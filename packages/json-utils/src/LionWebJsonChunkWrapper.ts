@@ -25,6 +25,17 @@ export class LionWebJsonChunkWrapper {
     protected nodesIdMap: Map<LionWebId, LionWebJsonNode> = new Map<LionWebId, LionWebJsonNode>()
 
     /**
+     * Create from a collection of nodes
+     * @param nodes
+     */
+    static fromNodesArray(nodes: LionWebJsonNode[]) {
+        return new LionWebJsonChunkWrapper({
+            languages: [],
+            serializationFormatVersion: "2023.1",
+            nodes: nodes
+        })
+    }
+    /**
      * Create a wrapper with `chunk` as its chunk
      * @param chunk
      */
@@ -69,8 +80,68 @@ export class LionWebJsonChunkWrapper {
         return result
     }
 
+    setProperty(node: LionWebJsonNode, mp: LionWebJsonMetaPointer, value: string): void {
+        let property = node.properties.find(p => isEqualMetaPointer(p.property, mp))
+        if (property === undefined) {
+            property = {
+                property: mp,
+                value: value
+            }
+            node.properties.push(property)
+        } else {
+            property.value = value
+        }
+    }
+
+    addChild(node: LionWebJsonNode, mp: LionWebJsonMetaPointer, value: LionWebJsonNode): void {
+        let containment = node.containments.find(c => isEqualMetaPointer(c.containment, mp))
+        if (containment === undefined) {
+            containment = {
+                containment: mp,
+                children: []
+            }
+            node.containments.push(containment)
+        }
+        containment.children.push(value.id)
+    }
+
+    removeChild(node: LionWebJsonNode, mp: LionWebJsonMetaPointer, value: LionWebJsonNode): void {
+        const containment = node.containments.find(c => isEqualMetaPointer(c.containment, mp))
+        if (containment === undefined) {
+            return
+        }
+        const index = containment.children.findIndex(c => c === value.id)
+        if (index !== -1) {
+            containment.children.splice(index, 1)
+        }
+    }
+
     /**
-     * Return the target nodes inside `reference` as a list of actual nodes (LionWebJsonNode[])
+     * Return an array with _all_ child nodes of `node`
+     * @param nodeId
+     */
+    getAllChildNodes(node: LionWebJsonNode): LionWebJsonNode[] {
+        return node.containments.flatMap(cont => this.getContainmentNodes(node, cont.containment))
+    }
+
+    /**
+     * Return an array with all child nodes of `node` for the containment `containment`.
+     * @param nodeId
+     */
+    getContainmentNodes(node: LionWebJsonNode, containment: LionWebJsonMetaPointer): LionWebJsonNode[] {
+        const cnt = node.containments.find(c => isEqualMetaPointer(containment, c.containment))
+        if (cnt === undefined) {
+            return []
+        } else {
+            return cnt.children.flatMap(child => {
+                const childNode = this.getNode(child)
+                return childNode === undefined ? [] : [childNode]
+            })
+        }
+    }
+
+    /**
+     * Return the nodes inside `containment` as a list of actual nodes (LionWebJsonNode[])
      * @param reference
      */
     getChildrenAsNodes(containment: LionWebJsonContainment | undefined) {
@@ -84,6 +155,24 @@ export class LionWebJsonChunkWrapper {
                 result.push(childNode)
             }
         })
+        return result
+    }
+
+    getSubtreeWithDepth(nodeId: LionWebId, depthLimit: number): LionWebJsonNode[] {
+        const node = this.getNode(nodeId)
+        if (node === undefined) {
+            return []
+        }
+        const result: LionWebJsonNode[] = [node]
+        let baseNodes: LionWebJsonNode[] = [node]
+        for (let depth = 0; depth < depthLimit; depth++) {
+            const children = baseNodes.flatMap(node => this.getAllChildNodes(node))
+            result.push(...children)
+            baseNodes = children
+            if (baseNodes.length === 0) {
+                break
+            }
+        }
         return result
     }
 
