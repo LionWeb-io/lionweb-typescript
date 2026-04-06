@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.9.0 — not yet released
+
+* Avoid name collisions between types in generated code and types imported from LionWeb itself.
+  * Make every property of `GeneratorOptions` optional.
+
+
 ## 0.8.0
 
 * Improve dealing with unresolved references.
