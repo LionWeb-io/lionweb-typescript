@@ -27,202 +27,167 @@
  */
 
 
-import {
-    Classifier,
-    Concept,
-    Containment,
-    Enumeration,
-    EnumerationLiteral,
-    Interface,
-    Language,
-    Node,
-    Property,
-    Reference,
-    SingleRef
-} from "@lionweb/core";
+import * as $lwClassCore from "@lionweb/class-core";
+import * as $lwCore from "@lionweb/core";
+import * as $lwJson from "@lionweb/json";
 
-import {
-    LionWebId
-} from "@lionweb/json";
+export class DeltasBase implements $lwClassCore.ILanguageBase {
 
-import {
-    ContainmentValueManager,
-    DeltaReceiver,
-    ILanguageBase,
-    INamed,
-    INodeBase,
-    LionCore_builtinsBase,
-    NodeBase,
-    NodeBaseFactory,
-    OptionalMultiContainmentValueManager,
-    OptionalPropertyValueManager,
-    OptionalSingleContainmentValueManager,
-    OptionalSingleReferenceValueManager,
-    Parentage,
-    PropertyValueManager,
-    ReferenceValueManager,
-    RequiredPropertyValueManager,
-    RequiredSingleContainmentValueManager
-} from "@lionweb/class-core";
-
-
-export class DeltasBase implements ILanguageBase {
-
-    private readonly _language: Language = new Language("Deltas", "0", "Deltas", "Deltas");
-    get language(): Language {
+    private readonly _language: $lwCore.Language = new $lwCore.Language("Deltas", "0", "Deltas", "Deltas");
+    get language(): $lwCore.Language {
         this.ensureWiredUp();
         return this._language;
     }
 
-    public readonly _Deltas = new Concept(this._language, "Deltas", "Deltas-Deltas", "Deltas-Deltas", false).isPartition();
-    get Deltas(): Concept {
+    public readonly _Deltas = new $lwCore.Concept(this._language, "Deltas", "Deltas-Deltas", "Deltas-Deltas", false).isPartition();
+    get Deltas(): $lwCore.Concept {
         this.ensureWiredUp();
         return this._Deltas;
     }
-    private readonly _Deltas_deltas = new Containment(this._Deltas, "deltas", "Deltas-Deltas-deltas", "Deltas-Deltas-deltas").isOptional().isMultiple();
-    get Deltas_deltas(): Containment {
+    private readonly _Deltas_deltas = new $lwCore.Containment(this._Deltas, "deltas", "Deltas-Deltas-deltas", "Deltas-Deltas-deltas").isOptional().isMultiple();
+    get Deltas_deltas(): $lwCore.Containment {
         this.ensureWiredUp();
         return this._Deltas_deltas;
     }
 
-    public readonly _Type = new Interface(this._language, "Type", "Deltas-Type", "Deltas-Type");
-    get Type(): Interface {
+    public readonly _Type = new $lwCore.Interface(this._language, "Type", "Deltas-Type", "Deltas-Type");
+    get Type(): $lwCore.Interface {
         this.ensureWiredUp();
         return this._Type;
     }
 
-    public readonly _Field = new Concept(this._language, "Field", "Deltas-Field", "Deltas-Field", false);
-    get Field(): Concept {
+    public readonly _Field = new $lwCore.Concept(this._language, "Field", "Deltas-Field", "Deltas-Field", false);
+    get Field(): $lwCore.Concept {
         this.ensureWiredUp();
         return this._Field;
     }
-    private readonly _Field_type = new Containment(this._Field, "type", "Deltas-Field-type", "Deltas-Field-type");
-    get Field_type(): Containment {
+    private readonly _Field_type = new $lwCore.Containment(this._Field, "type", "Deltas-Field-type", "Deltas-Field-type");
+    get Field_type(): $lwCore.Containment {
         this.ensureWiredUp();
         return this._Field_type;
     }
 
-    public readonly _FeatureKinds = new Enumeration(this._language, "FeatureKinds", "Deltas-FeatureKinds", "Deltas-FeatureKinds");
-    get FeatureKinds(): Enumeration {
+    public readonly _FeatureKinds = new $lwCore.Enumeration(this._language, "FeatureKinds", "Deltas-FeatureKinds", "Deltas-FeatureKinds");
+    get FeatureKinds(): $lwCore.Enumeration {
         this.ensureWiredUp();
         return this._FeatureKinds;
     }
-    private readonly _FeatureKinds_property = new EnumerationLiteral(this._FeatureKinds, "property", "Deltas-FeatureKinds-property", "Deltas-FeatureKinds-property");
-    get FeatureKinds_property(): EnumerationLiteral {
+    private readonly _FeatureKinds_property = new $lwCore.EnumerationLiteral(this._FeatureKinds, "property", "Deltas-FeatureKinds-property", "Deltas-FeatureKinds-property");
+    get FeatureKinds_property(): $lwCore.EnumerationLiteral {
         this.ensureWiredUp();
         return this._FeatureKinds_property;
     }
-    private readonly _FeatureKinds_containment = new EnumerationLiteral(this._FeatureKinds, "containment", "Deltas-FeatureKinds-containment", "Deltas-FeatureKinds-containment");
-    get FeatureKinds_containment(): EnumerationLiteral {
+    private readonly _FeatureKinds_containment = new $lwCore.EnumerationLiteral(this._FeatureKinds, "containment", "Deltas-FeatureKinds-containment", "Deltas-FeatureKinds-containment");
+    get FeatureKinds_containment(): $lwCore.EnumerationLiteral {
         this.ensureWiredUp();
         return this._FeatureKinds_containment;
     }
-    private readonly _FeatureKinds_reference = new EnumerationLiteral(this._FeatureKinds, "reference", "Deltas-FeatureKinds-reference", "Deltas-FeatureKinds-reference");
-    get FeatureKinds_reference(): EnumerationLiteral {
+    private readonly _FeatureKinds_reference = new $lwCore.EnumerationLiteral(this._FeatureKinds, "reference", "Deltas-FeatureKinds-reference", "Deltas-FeatureKinds-reference");
+    get FeatureKinds_reference(): $lwCore.EnumerationLiteral {
         this.ensureWiredUp();
         return this._FeatureKinds_reference;
     }
 
-    public readonly _FeatureType = new Concept(this._language, "FeatureType", "Deltas-FeatureType", "Deltas-FeatureType", false);
-    get FeatureType(): Concept {
+    public readonly _FeatureType = new $lwCore.Concept(this._language, "FeatureType", "Deltas-FeatureType", "Deltas-FeatureType", false);
+    get FeatureType(): $lwCore.Concept {
         this.ensureWiredUp();
         return this._FeatureType;
     }
-    private readonly _FeatureType_kind = new Property(this._FeatureType, "kind", "Deltas-FeatureType-kind", "Deltas-FeatureType-kind");
-    get FeatureType_kind(): Property {
+    private readonly _FeatureType_kind = new $lwCore.Property(this._FeatureType, "kind", "Deltas-FeatureType-kind", "Deltas-FeatureType-kind");
+    get FeatureType_kind(): $lwCore.Property {
         this.ensureWiredUp();
         return this._FeatureType_kind;
     }
-    private readonly _FeatureType_container = new Reference(this._FeatureType, "container", "Deltas-FeatureType-container", "Deltas-FeatureType-container").isOptional();
-    get FeatureType_container(): Reference {
+    private readonly _FeatureType_container = new $lwCore.Reference(this._FeatureType, "container", "Deltas-FeatureType-container", "Deltas-FeatureType-container").isOptional();
+    get FeatureType_container(): $lwCore.Reference {
         this.ensureWiredUp();
         return this._FeatureType_container;
     }
 
-    public readonly _NodeSerialization = new Interface(this._language, "NodeSerialization", "Deltas-NodeSerialization", "Deltas-NodeSerialization");
-    get NodeSerialization(): Interface {
+    public readonly _NodeSerialization = new $lwCore.Interface(this._language, "NodeSerialization", "Deltas-NodeSerialization", "Deltas-NodeSerialization");
+    get NodeSerialization(): $lwCore.Interface {
         this.ensureWiredUp();
         return this._NodeSerialization;
     }
 
-    public readonly _SerializeSubTree = new Concept(this._language, "SerializeSubTree", "Deltas-SerializeSubTree", "Deltas-SerializeSubTree", false);
-    get SerializeSubTree(): Concept {
+    public readonly _SerializeSubTree = new $lwCore.Concept(this._language, "SerializeSubTree", "Deltas-SerializeSubTree", "Deltas-SerializeSubTree", false);
+    get SerializeSubTree(): $lwCore.Concept {
         this.ensureWiredUp();
         return this._SerializeSubTree;
     }
-    private readonly _SerializeSubTree_fieldName = new Property(this._SerializeSubTree, "fieldName", "Deltas-SerializeSubTree-fieldName", "Deltas-SerializeSubTree-fieldName");
-    get SerializeSubTree_fieldName(): Property {
+    private readonly _SerializeSubTree_fieldName = new $lwCore.Property(this._SerializeSubTree, "fieldName", "Deltas-SerializeSubTree-fieldName", "Deltas-SerializeSubTree-fieldName");
+    get SerializeSubTree_fieldName(): $lwCore.Property {
         this.ensureWiredUp();
         return this._SerializeSubTree_fieldName;
     }
 
-    public readonly _RefOnly = new Concept(this._language, "RefOnly", "Deltas-RefOnly", "Deltas-RefOnly", false);
-    get RefOnly(): Concept {
+    public readonly _RefOnly = new $lwCore.Concept(this._language, "RefOnly", "Deltas-RefOnly", "Deltas-RefOnly", false);
+    get RefOnly(): $lwCore.Concept {
         this.ensureWiredUp();
         return this._RefOnly;
     }
 
-    public readonly _NodeType = new Concept(this._language, "NodeType", "Deltas-NodeType", "Deltas-NodeType", false);
-    get NodeType(): Concept {
+    public readonly _NodeType = new $lwCore.Concept(this._language, "NodeType", "Deltas-NodeType", "Deltas-NodeType", false);
+    get NodeType(): $lwCore.Concept {
         this.ensureWiredUp();
         return this._NodeType;
     }
-    private readonly _NodeType_serialization = new Containment(this._NodeType, "serialization", "Deltas-NodeType-serialization", "Deltas-NodeType-serialization").isOptional();
-    get NodeType_serialization(): Containment {
+    private readonly _NodeType_serialization = new $lwCore.Containment(this._NodeType, "serialization", "Deltas-NodeType-serialization", "Deltas-NodeType-serialization").isOptional();
+    get NodeType_serialization(): $lwCore.Containment {
         this.ensureWiredUp();
         return this._NodeType_serialization;
     }
 
-    public readonly _IndexType = new Concept(this._language, "IndexType", "Deltas-IndexType", "Deltas-IndexType", false);
-    get IndexType(): Concept {
+    public readonly _IndexType = new $lwCore.Concept(this._language, "IndexType", "Deltas-IndexType", "Deltas-IndexType", false);
+    get IndexType(): $lwCore.Concept {
         this.ensureWiredUp();
         return this._IndexType;
     }
 
-    public readonly _PrimitiveValueType = new Concept(this._language, "PrimitiveValueType", "Deltas-PrimitiveValueType", "Deltas-PrimitiveValueType", false);
-    get PrimitiveValueType(): Concept {
+    public readonly _PrimitiveValueType = new $lwCore.Concept(this._language, "PrimitiveValueType", "Deltas-PrimitiveValueType", "Deltas-PrimitiveValueType", false);
+    get PrimitiveValueType(): $lwCore.Concept {
         this.ensureWiredUp();
         return this._PrimitiveValueType;
     }
 
-    public readonly _CustomType = new Concept(this._language, "CustomType", "Deltas-CustomType", "Deltas-CustomType", false);
-    get CustomType(): Concept {
+    public readonly _CustomType = new $lwCore.Concept(this._language, "CustomType", "Deltas-CustomType", "Deltas-CustomType", false);
+    get CustomType(): $lwCore.Concept {
         this.ensureWiredUp();
         return this._CustomType;
     }
-    private readonly _CustomType_type = new Property(this._CustomType, "type", "Deltas-CustomType-type", "Deltas-CustomType-type");
-    get CustomType_type(): Property {
+    private readonly _CustomType_type = new $lwCore.Property(this._CustomType, "type", "Deltas-CustomType-type", "Deltas-CustomType-type");
+    get CustomType_type(): $lwCore.Property {
         this.ensureWiredUp();
         return this._CustomType_type;
     }
-    private readonly _CustomType_serializationType = new Property(this._CustomType, "serializationType", "Deltas-CustomType-serializationType", "Deltas-CustomType-serializationType");
-    get CustomType_serializationType(): Property {
+    private readonly _CustomType_serializationType = new $lwCore.Property(this._CustomType, "serializationType", "Deltas-CustomType-serializationType", "Deltas-CustomType-serializationType");
+    get CustomType_serializationType(): $lwCore.Property {
         this.ensureWiredUp();
         return this._CustomType_serializationType;
     }
-    private readonly _CustomType_serializationExpr = new Property(this._CustomType, "serializationExpr", "Deltas-CustomType-serializationExpr", "Deltas-CustomType-serializationExpr");
-    get CustomType_serializationExpr(): Property {
+    private readonly _CustomType_serializationExpr = new $lwCore.Property(this._CustomType, "serializationExpr", "Deltas-CustomType-serializationExpr", "Deltas-CustomType-serializationExpr");
+    get CustomType_serializationExpr(): $lwCore.Property {
         this.ensureWiredUp();
         return this._CustomType_serializationExpr;
     }
-    private readonly _CustomType_deserializationExpr = new Property(this._CustomType, "deserializationExpr", "Deltas-CustomType-deserializationExpr", "Deltas-CustomType-deserializationExpr");
-    get CustomType_deserializationExpr(): Property {
+    private readonly _CustomType_deserializationExpr = new $lwCore.Property(this._CustomType, "deserializationExpr", "Deltas-CustomType-deserializationExpr", "Deltas-CustomType-deserializationExpr");
+    get CustomType_deserializationExpr(): $lwCore.Property {
         this.ensureWiredUp();
         return this._CustomType_deserializationExpr;
     }
 
-    public readonly _Delta = new Concept(this._language, "Delta", "Deltas-Delta", "Deltas-Delta", false);
-    get Delta(): Concept {
+    public readonly _Delta = new $lwCore.Concept(this._language, "Delta", "Deltas-Delta", "Deltas-Delta", false);
+    get Delta(): $lwCore.Concept {
         this.ensureWiredUp();
         return this._Delta;
     }
-    private readonly _Delta_documentation = new Property(this._Delta, "documentation", "Deltas-Delta-documentation", "Deltas-Delta-documentation").isOptional();
-    get Delta_documentation(): Property {
+    private readonly _Delta_documentation = new $lwCore.Property(this._Delta, "documentation", "Deltas-Delta-documentation", "Deltas-Delta-documentation").isOptional();
+    get Delta_documentation(): $lwCore.Property {
         this.ensureWiredUp();
         return this._Delta_documentation;
     }
-    private readonly _Delta_fields = new Containment(this._Delta, "fields", "Deltas-Delta-fields", "Deltas-Delta-fields").isOptional().isMultiple();
-    get Delta_fields(): Containment {
+    private readonly _Delta_fields = new $lwCore.Containment(this._Delta, "fields", "Deltas-Delta-fields", "Deltas-Delta-fields").isOptional().isMultiple();
+    get Delta_fields(): $lwCore.Containment {
         this.ensureWiredUp();
         return this._Delta_fields;
     }
@@ -235,7 +200,7 @@ export class DeltasBase implements ILanguageBase {
         this._language.havingEntities(this._Deltas, this._Type, this._Field, this._FeatureKinds, this._FeatureType, this._NodeSerialization, this._SerializeSubTree, this._RefOnly, this._NodeType, this._IndexType, this._PrimitiveValueType, this._CustomType, this._Delta);
         this._Deltas.havingFeatures(this._Deltas_deltas);
         this._Deltas_deltas.ofType(this._Delta);
-        this._Field.implementing(LionCore_builtinsBase.INSTANCE._INamed);
+        this._Field.implementing($lwClassCore.LionCore_builtinsBase.INSTANCE._INamed);
         this._Field.havingFeatures(this._Field_type);
         this._Field_type.ofType(this._Type);
         this._FeatureKinds.havingLiterals(this._FeatureKinds_property, this._FeatureKinds_containment, this._FeatureKinds_reference);
@@ -245,7 +210,7 @@ export class DeltasBase implements ILanguageBase {
         this._FeatureType_container.ofType(this._Field);
         this._SerializeSubTree.implementing(this._NodeSerialization);
         this._SerializeSubTree.havingFeatures(this._SerializeSubTree_fieldName);
-        this._SerializeSubTree_fieldName.ofType(LionCore_builtinsBase.INSTANCE._String);
+        this._SerializeSubTree_fieldName.ofType($lwClassCore.LionCore_builtinsBase.INSTANCE._String);
         this._RefOnly.implementing(this._NodeSerialization);
         this._NodeType.implementing(this._Type);
         this._NodeType.havingFeatures(this._NodeType_serialization);
@@ -254,19 +219,19 @@ export class DeltasBase implements ILanguageBase {
         this._PrimitiveValueType.implementing(this._Type);
         this._CustomType.implementing(this._Type);
         this._CustomType.havingFeatures(this._CustomType_type, this._CustomType_serializationType, this._CustomType_serializationExpr, this._CustomType_deserializationExpr);
-        this._CustomType_type.ofType(LionCore_builtinsBase.INSTANCE._String);
-        this._CustomType_serializationType.ofType(LionCore_builtinsBase.INSTANCE._String);
-        this._CustomType_serializationExpr.ofType(LionCore_builtinsBase.INSTANCE._String);
-        this._CustomType_deserializationExpr.ofType(LionCore_builtinsBase.INSTANCE._String);
-        this._Delta.implementing(LionCore_builtinsBase.INSTANCE._INamed);
+        this._CustomType_type.ofType($lwClassCore.LionCore_builtinsBase.INSTANCE._String);
+        this._CustomType_serializationType.ofType($lwClassCore.LionCore_builtinsBase.INSTANCE._String);
+        this._CustomType_serializationExpr.ofType($lwClassCore.LionCore_builtinsBase.INSTANCE._String);
+        this._CustomType_deserializationExpr.ofType($lwClassCore.LionCore_builtinsBase.INSTANCE._String);
+        this._Delta.implementing($lwClassCore.LionCore_builtinsBase.INSTANCE._INamed);
         this._Delta.havingFeatures(this._Delta_documentation, this._Delta_fields);
-        this._Delta_documentation.ofType(LionCore_builtinsBase.INSTANCE._String).isOptional();
+        this._Delta_documentation.ofType($lwClassCore.LionCore_builtinsBase.INSTANCE._String).isOptional();
         this._Delta_fields.ofType(this._Field);
         this._wiredUp = true;
     }
 
-    factory(receiveDelta?: DeltaReceiver): NodeBaseFactory {
-        return (classifier: Classifier, id: LionWebId) => {
+    factory(receiveDelta?: $lwClassCore.DeltaReceiver): $lwClassCore.NodeBaseFactory {
+        return (classifier: $lwCore.Classifier, id: $lwJson.LionWebId) => {
             switch (classifier.key) {
                 case this._Deltas.key: return Deltas.create(id, receiveDelta);
                 case this._Field.key: return Field.create(id, receiveDelta);
@@ -286,7 +251,7 @@ export class DeltasBase implements ILanguageBase {
         }
     }
 
-    enumLiteralFrom<EnumType>(enumerationLiteral: EnumerationLiteral): EnumType {
+    enumLiteralFrom<EnumType>(enumerationLiteral: $lwCore.EnumerationLiteral): EnumType {
         const {enumeration} = enumerationLiteral;
         if (enumeration.key === this._FeatureKinds.key) {
             return enumerationLiteral.key as EnumType;
@@ -299,12 +264,12 @@ export class DeltasBase implements ILanguageBase {
 }
 
 
-export class Deltas extends NodeBase {
-    static create(id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage): Deltas {
+export class Deltas extends $lwClassCore.NodeBase {
+    static create(id: $lwJson.LionWebId, receiveDelta?: $lwClassCore.DeltaReceiver, parentInfo?: $lwClassCore.Parentage): Deltas {
         return new Deltas(DeltasBase.INSTANCE.Deltas, id, receiveDelta, parentInfo);
     }
 
-    private readonly _deltas: OptionalMultiContainmentValueManager<Delta>;
+    private readonly _deltas: $lwClassCore.OptionalMultiContainmentValueManager<Delta>;
     get deltas(): Delta[] {
         return this._deltas.get();
     }
@@ -324,12 +289,12 @@ export class Deltas extends NodeBase {
         this._deltas.replaceAtIndex(movedChild, newIndex);
     }
 
-    public constructor(classifier: Classifier, id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage) {
+    public constructor(classifier: $lwCore.Classifier, id: $lwJson.LionWebId, receiveDelta?: $lwClassCore.DeltaReceiver, parentInfo?: $lwClassCore.Parentage) {
         super(classifier, id, receiveDelta, parentInfo);
-        this._deltas = new OptionalMultiContainmentValueManager<Delta>(DeltasBase.INSTANCE.Deltas_deltas, this);
+        this._deltas = new $lwClassCore.OptionalMultiContainmentValueManager<Delta>(DeltasBase.INSTANCE.Deltas_deltas, this);
     }
 
-    getContainmentValueManager(containment: Containment): ContainmentValueManager<INodeBase> {
+    getContainmentValueManager(containment: $lwCore.Containment): $lwClassCore.ContainmentValueManager<$lwClassCore.INodeBase> {
         if (containment.key === DeltasBase.INSTANCE.Deltas_deltas.key) {
             return this._deltas;
         }
@@ -337,15 +302,15 @@ export class Deltas extends NodeBase {
     }
 }
 
-export interface Type extends INodeBase {
+export interface Type extends $lwClassCore.INodeBase {
 }
 
-export class Field extends NodeBase implements INamed {
-    static create(id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage): Field {
+export class Field extends $lwClassCore.NodeBase implements $lwClassCore.INamed {
+    static create(id: $lwJson.LionWebId, receiveDelta?: $lwClassCore.DeltaReceiver, parentInfo?: $lwClassCore.Parentage): Field {
         return new Field(DeltasBase.INSTANCE.Field, id, receiveDelta, parentInfo);
     }
 
-    private readonly _type: RequiredSingleContainmentValueManager<Type>;
+    private readonly _type: $lwClassCore.RequiredSingleContainmentValueManager<Type>;
     get type(): Type {
         return this._type.get();
     }
@@ -356,7 +321,7 @@ export class Field extends NodeBase implements INamed {
         this._type.replaceWith(newValue);
     }
 
-    private readonly _name: RequiredPropertyValueManager<string>;
+    private readonly _name: $lwClassCore.RequiredPropertyValueManager<string>;
     get name(): string {
         return this._name.get();
     }
@@ -364,20 +329,20 @@ export class Field extends NodeBase implements INamed {
         this._name.set(newValue);
     }
 
-    public constructor(classifier: Classifier, id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage) {
+    public constructor(classifier: $lwCore.Classifier, id: $lwJson.LionWebId, receiveDelta?: $lwClassCore.DeltaReceiver, parentInfo?: $lwClassCore.Parentage) {
         super(classifier, id, receiveDelta, parentInfo);
-        this._type = new RequiredSingleContainmentValueManager<Type>(DeltasBase.INSTANCE.Field_type, this);
-        this._name = new RequiredPropertyValueManager<string>(LionCore_builtinsBase.INSTANCE.INamed_name, this);
+        this._type = new $lwClassCore.RequiredSingleContainmentValueManager<Type>(DeltasBase.INSTANCE.Field_type, this);
+        this._name = new $lwClassCore.RequiredPropertyValueManager<string>($lwClassCore.LionCore_builtinsBase.INSTANCE.INamed_name, this);
     }
 
-    getPropertyValueManager(property: Property): PropertyValueManager<unknown> {
-        if (property.key === LionCore_builtinsBase.INSTANCE.INamed_name.key) {
+    getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
+        if (property.key === $lwClassCore.LionCore_builtinsBase.INSTANCE.INamed_name.key) {
             return this._name;
         }
         return super.getPropertyValueManager(property);
     }
 
-    getContainmentValueManager(containment: Containment): ContainmentValueManager<INodeBase> {
+    getContainmentValueManager(containment: $lwCore.Containment): $lwClassCore.ContainmentValueManager<$lwClassCore.INodeBase> {
         if (containment.key === DeltasBase.INSTANCE.Field_type.key) {
             return this._type;
         }
@@ -391,12 +356,12 @@ export enum FeatureKinds {
     reference = "Deltas-FeatureKinds-reference"
 }
 
-export class FeatureType extends NodeBase implements Type {
-    static create(id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage): FeatureType {
+export class FeatureType extends $lwClassCore.NodeBase implements Type {
+    static create(id: $lwJson.LionWebId, receiveDelta?: $lwClassCore.DeltaReceiver, parentInfo?: $lwClassCore.Parentage): FeatureType {
         return new FeatureType(DeltasBase.INSTANCE.FeatureType, id, receiveDelta, parentInfo);
     }
 
-    private readonly _kind: RequiredPropertyValueManager<FeatureKinds>;
+    private readonly _kind: $lwClassCore.RequiredPropertyValueManager<FeatureKinds>;
     get kind(): FeatureKinds {
         return this._kind.get();
     }
@@ -404,28 +369,28 @@ export class FeatureType extends NodeBase implements Type {
         this._kind.set(newValue);
     }
 
-    private readonly _container: OptionalSingleReferenceValueManager<Field>;
-    get container(): SingleRef<Field> | undefined {
+    private readonly _container: $lwClassCore.OptionalSingleReferenceValueManager<Field>;
+    get container(): $lwCore.SingleRef<Field> | undefined {
         return this._container.get();
     }
-    set container(newValue: SingleRef<Field> | undefined) {
+    set container(newValue: $lwCore.SingleRef<Field> | undefined) {
         this._container.set(newValue);
     }
 
-    public constructor(classifier: Classifier, id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage) {
+    public constructor(classifier: $lwCore.Classifier, id: $lwJson.LionWebId, receiveDelta?: $lwClassCore.DeltaReceiver, parentInfo?: $lwClassCore.Parentage) {
         super(classifier, id, receiveDelta, parentInfo);
-        this._kind = new RequiredPropertyValueManager<FeatureKinds>(DeltasBase.INSTANCE.FeatureType_kind, this);
-        this._container = new OptionalSingleReferenceValueManager<Field>(DeltasBase.INSTANCE.FeatureType_container, this);
+        this._kind = new $lwClassCore.RequiredPropertyValueManager<FeatureKinds>(DeltasBase.INSTANCE.FeatureType_kind, this);
+        this._container = new $lwClassCore.OptionalSingleReferenceValueManager<Field>(DeltasBase.INSTANCE.FeatureType_container, this);
     }
 
-    getPropertyValueManager(property: Property): PropertyValueManager<unknown> {
+    getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
         if (property.key === DeltasBase.INSTANCE.FeatureType_kind.key) {
             return this._kind;
         }
         return super.getPropertyValueManager(property);
     }
 
-    getReferenceValueManager(reference: Reference): ReferenceValueManager<Node> {
+    getReferenceValueManager(reference: $lwCore.Reference): $lwClassCore.ReferenceValueManager<$lwCore.Node> {
         if (reference.key === DeltasBase.INSTANCE.FeatureType_container.key) {
             return this._container;
         }
@@ -433,15 +398,15 @@ export class FeatureType extends NodeBase implements Type {
     }
 }
 
-export interface NodeSerialization extends INodeBase {
+export interface NodeSerialization extends $lwClassCore.INodeBase {
 }
 
-export class SerializeSubTree extends NodeBase implements NodeSerialization {
-    static create(id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage): SerializeSubTree {
+export class SerializeSubTree extends $lwClassCore.NodeBase implements NodeSerialization {
+    static create(id: $lwJson.LionWebId, receiveDelta?: $lwClassCore.DeltaReceiver, parentInfo?: $lwClassCore.Parentage): SerializeSubTree {
         return new SerializeSubTree(DeltasBase.INSTANCE.SerializeSubTree, id, receiveDelta, parentInfo);
     }
 
-    private readonly _fieldName: RequiredPropertyValueManager<string>;
+    private readonly _fieldName: $lwClassCore.RequiredPropertyValueManager<string>;
     get fieldName(): string {
         return this._fieldName.get();
     }
@@ -449,12 +414,12 @@ export class SerializeSubTree extends NodeBase implements NodeSerialization {
         this._fieldName.set(newValue);
     }
 
-    public constructor(classifier: Classifier, id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage) {
+    public constructor(classifier: $lwCore.Classifier, id: $lwJson.LionWebId, receiveDelta?: $lwClassCore.DeltaReceiver, parentInfo?: $lwClassCore.Parentage) {
         super(classifier, id, receiveDelta, parentInfo);
-        this._fieldName = new RequiredPropertyValueManager<string>(DeltasBase.INSTANCE.SerializeSubTree_fieldName, this);
+        this._fieldName = new $lwClassCore.RequiredPropertyValueManager<string>(DeltasBase.INSTANCE.SerializeSubTree_fieldName, this);
     }
 
-    getPropertyValueManager(property: Property): PropertyValueManager<unknown> {
+    getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
         if (property.key === DeltasBase.INSTANCE.SerializeSubTree_fieldName.key) {
             return this._fieldName;
         }
@@ -462,18 +427,18 @@ export class SerializeSubTree extends NodeBase implements NodeSerialization {
     }
 }
 
-export class RefOnly extends NodeBase implements NodeSerialization {
-    static create(id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage): RefOnly {
+export class RefOnly extends $lwClassCore.NodeBase implements NodeSerialization {
+    static create(id: $lwJson.LionWebId, receiveDelta?: $lwClassCore.DeltaReceiver, parentInfo?: $lwClassCore.Parentage): RefOnly {
         return new RefOnly(DeltasBase.INSTANCE.RefOnly, id, receiveDelta, parentInfo);
     }
 }
 
-export class NodeType extends NodeBase implements Type {
-    static create(id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage): NodeType {
+export class NodeType extends $lwClassCore.NodeBase implements Type {
+    static create(id: $lwJson.LionWebId, receiveDelta?: $lwClassCore.DeltaReceiver, parentInfo?: $lwClassCore.Parentage): NodeType {
         return new NodeType(DeltasBase.INSTANCE.NodeType, id, receiveDelta, parentInfo);
     }
 
-    private readonly _serialization: OptionalSingleContainmentValueManager<NodeSerialization>;
+    private readonly _serialization: $lwClassCore.OptionalSingleContainmentValueManager<NodeSerialization>;
     get serialization(): NodeSerialization | undefined {
         return this._serialization.get();
     }
@@ -484,12 +449,12 @@ export class NodeType extends NodeBase implements Type {
         this._serialization.replaceWith(newValue);
     }
 
-    public constructor(classifier: Classifier, id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage) {
+    public constructor(classifier: $lwCore.Classifier, id: $lwJson.LionWebId, receiveDelta?: $lwClassCore.DeltaReceiver, parentInfo?: $lwClassCore.Parentage) {
         super(classifier, id, receiveDelta, parentInfo);
-        this._serialization = new OptionalSingleContainmentValueManager<NodeSerialization>(DeltasBase.INSTANCE.NodeType_serialization, this);
+        this._serialization = new $lwClassCore.OptionalSingleContainmentValueManager<NodeSerialization>(DeltasBase.INSTANCE.NodeType_serialization, this);
     }
 
-    getContainmentValueManager(containment: Containment): ContainmentValueManager<INodeBase> {
+    getContainmentValueManager(containment: $lwCore.Containment): $lwClassCore.ContainmentValueManager<$lwClassCore.INodeBase> {
         if (containment.key === DeltasBase.INSTANCE.NodeType_serialization.key) {
             return this._serialization;
         }
@@ -497,24 +462,24 @@ export class NodeType extends NodeBase implements Type {
     }
 }
 
-export class IndexType extends NodeBase implements Type {
-    static create(id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage): IndexType {
+export class IndexType extends $lwClassCore.NodeBase implements Type {
+    static create(id: $lwJson.LionWebId, receiveDelta?: $lwClassCore.DeltaReceiver, parentInfo?: $lwClassCore.Parentage): IndexType {
         return new IndexType(DeltasBase.INSTANCE.IndexType, id, receiveDelta, parentInfo);
     }
 }
 
-export class PrimitiveValueType extends NodeBase implements Type {
-    static create(id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage): PrimitiveValueType {
+export class PrimitiveValueType extends $lwClassCore.NodeBase implements Type {
+    static create(id: $lwJson.LionWebId, receiveDelta?: $lwClassCore.DeltaReceiver, parentInfo?: $lwClassCore.Parentage): PrimitiveValueType {
         return new PrimitiveValueType(DeltasBase.INSTANCE.PrimitiveValueType, id, receiveDelta, parentInfo);
     }
 }
 
-export class CustomType extends NodeBase implements Type {
-    static create(id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage): CustomType {
+export class CustomType extends $lwClassCore.NodeBase implements Type {
+    static create(id: $lwJson.LionWebId, receiveDelta?: $lwClassCore.DeltaReceiver, parentInfo?: $lwClassCore.Parentage): CustomType {
         return new CustomType(DeltasBase.INSTANCE.CustomType, id, receiveDelta, parentInfo);
     }
 
-    private readonly _type: RequiredPropertyValueManager<string>;
+    private readonly _type: $lwClassCore.RequiredPropertyValueManager<string>;
     get type(): string {
         return this._type.get();
     }
@@ -522,7 +487,7 @@ export class CustomType extends NodeBase implements Type {
         this._type.set(newValue);
     }
 
-    private readonly _serializationType: RequiredPropertyValueManager<string>;
+    private readonly _serializationType: $lwClassCore.RequiredPropertyValueManager<string>;
     get serializationType(): string {
         return this._serializationType.get();
     }
@@ -530,7 +495,7 @@ export class CustomType extends NodeBase implements Type {
         this._serializationType.set(newValue);
     }
 
-    private readonly _serializationExpr: RequiredPropertyValueManager<string>;
+    private readonly _serializationExpr: $lwClassCore.RequiredPropertyValueManager<string>;
     get serializationExpr(): string {
         return this._serializationExpr.get();
     }
@@ -538,7 +503,7 @@ export class CustomType extends NodeBase implements Type {
         this._serializationExpr.set(newValue);
     }
 
-    private readonly _deserializationExpr: RequiredPropertyValueManager<string>;
+    private readonly _deserializationExpr: $lwClassCore.RequiredPropertyValueManager<string>;
     get deserializationExpr(): string {
         return this._deserializationExpr.get();
     }
@@ -546,15 +511,15 @@ export class CustomType extends NodeBase implements Type {
         this._deserializationExpr.set(newValue);
     }
 
-    public constructor(classifier: Classifier, id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage) {
+    public constructor(classifier: $lwCore.Classifier, id: $lwJson.LionWebId, receiveDelta?: $lwClassCore.DeltaReceiver, parentInfo?: $lwClassCore.Parentage) {
         super(classifier, id, receiveDelta, parentInfo);
-        this._type = new RequiredPropertyValueManager<string>(DeltasBase.INSTANCE.CustomType_type, this);
-        this._serializationType = new RequiredPropertyValueManager<string>(DeltasBase.INSTANCE.CustomType_serializationType, this);
-        this._serializationExpr = new RequiredPropertyValueManager<string>(DeltasBase.INSTANCE.CustomType_serializationExpr, this);
-        this._deserializationExpr = new RequiredPropertyValueManager<string>(DeltasBase.INSTANCE.CustomType_deserializationExpr, this);
+        this._type = new $lwClassCore.RequiredPropertyValueManager<string>(DeltasBase.INSTANCE.CustomType_type, this);
+        this._serializationType = new $lwClassCore.RequiredPropertyValueManager<string>(DeltasBase.INSTANCE.CustomType_serializationType, this);
+        this._serializationExpr = new $lwClassCore.RequiredPropertyValueManager<string>(DeltasBase.INSTANCE.CustomType_serializationExpr, this);
+        this._deserializationExpr = new $lwClassCore.RequiredPropertyValueManager<string>(DeltasBase.INSTANCE.CustomType_deserializationExpr, this);
     }
 
-    getPropertyValueManager(property: Property): PropertyValueManager<unknown> {
+    getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
         switch (property.key) {
             case DeltasBase.INSTANCE.CustomType_type.key: return this._type;
             case DeltasBase.INSTANCE.CustomType_serializationType.key: return this._serializationType;
@@ -565,12 +530,12 @@ export class CustomType extends NodeBase implements Type {
     }
 }
 
-export class Delta extends NodeBase implements INamed {
-    static create(id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage): Delta {
+export class Delta extends $lwClassCore.NodeBase implements $lwClassCore.INamed {
+    static create(id: $lwJson.LionWebId, receiveDelta?: $lwClassCore.DeltaReceiver, parentInfo?: $lwClassCore.Parentage): Delta {
         return new Delta(DeltasBase.INSTANCE.Delta, id, receiveDelta, parentInfo);
     }
 
-    private readonly _documentation: OptionalPropertyValueManager<string>;
+    private readonly _documentation: $lwClassCore.OptionalPropertyValueManager<string>;
     get documentation(): string | undefined {
         return this._documentation.get();
     }
@@ -578,7 +543,7 @@ export class Delta extends NodeBase implements INamed {
         this._documentation.set(newValue);
     }
 
-    private readonly _fields: OptionalMultiContainmentValueManager<Field>;
+    private readonly _fields: $lwClassCore.OptionalMultiContainmentValueManager<Field>;
     get fields(): Field[] {
         return this._fields.get();
     }
@@ -598,7 +563,7 @@ export class Delta extends NodeBase implements INamed {
         this._fields.replaceAtIndex(movedChild, newIndex);
     }
 
-    private readonly _name: RequiredPropertyValueManager<string>;
+    private readonly _name: $lwClassCore.RequiredPropertyValueManager<string>;
     get name(): string {
         return this._name.get();
     }
@@ -606,22 +571,22 @@ export class Delta extends NodeBase implements INamed {
         this._name.set(newValue);
     }
 
-    public constructor(classifier: Classifier, id: LionWebId, receiveDelta?: DeltaReceiver, parentInfo?: Parentage) {
+    public constructor(classifier: $lwCore.Classifier, id: $lwJson.LionWebId, receiveDelta?: $lwClassCore.DeltaReceiver, parentInfo?: $lwClassCore.Parentage) {
         super(classifier, id, receiveDelta, parentInfo);
-        this._documentation = new OptionalPropertyValueManager<string>(DeltasBase.INSTANCE.Delta_documentation, this);
-        this._fields = new OptionalMultiContainmentValueManager<Field>(DeltasBase.INSTANCE.Delta_fields, this);
-        this._name = new RequiredPropertyValueManager<string>(LionCore_builtinsBase.INSTANCE.INamed_name, this);
+        this._documentation = new $lwClassCore.OptionalPropertyValueManager<string>(DeltasBase.INSTANCE.Delta_documentation, this);
+        this._fields = new $lwClassCore.OptionalMultiContainmentValueManager<Field>(DeltasBase.INSTANCE.Delta_fields, this);
+        this._name = new $lwClassCore.RequiredPropertyValueManager<string>($lwClassCore.LionCore_builtinsBase.INSTANCE.INamed_name, this);
     }
 
-    getPropertyValueManager(property: Property): PropertyValueManager<unknown> {
+    getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
         switch (property.key) {
             case DeltasBase.INSTANCE.Delta_documentation.key: return this._documentation;
-            case LionCore_builtinsBase.INSTANCE.INamed_name.key: return this._name;
+            case $lwClassCore.LionCore_builtinsBase.INSTANCE.INamed_name.key: return this._name;
             default: return super.getPropertyValueManager(property);
         }
     }
 
-    getContainmentValueManager(containment: Containment): ContainmentValueManager<INodeBase> {
+    getContainmentValueManager(containment: $lwCore.Containment): $lwClassCore.ContainmentValueManager<$lwClassCore.INodeBase> {
         if (containment.key === DeltasBase.INSTANCE.Delta_fields.key) {
             return this._fields;
         }

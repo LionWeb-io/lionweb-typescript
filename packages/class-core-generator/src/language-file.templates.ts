@@ -25,10 +25,6 @@ import { GeneratorOptions } from "./generator.js"
 import { Imports } from "./helpers/index.js"
 import { reflectiveClassFor } from "./reflective-layer.templates.js"
 
-const importStatement = (dep: string, items: string[]) =>
-    when(items.length > 0)([`import {`, indent(commaSeparated(sortedStringsByUppercase(items))), `} from "${dep}";`, ``])
-
-
 export const languageFileFor = (language: Language, options: GeneratorOptions) => {
 
     const {name, version, key, id, entities} = language
@@ -65,10 +61,12 @@ export const languageFileFor = (language: Language, options: GeneratorOptions) =
  */`,
         ``,
         ``,
-        importStatement(`@lionweb/core`, imports.coreImports),
-        importStatement(`@lionweb/json`, imports.jsonImports),
-        importStatement(options.genericImportLocation, imports.genericImports),
-        importStatement(`./index.g.js`, imports.languageImports),
+        `import * as ${Imports.importAlias("classCore")} from "${options.genericImportLocation}";`,
+        `import * as ${Imports.importAlias("core")} from "@lionweb/core";`,
+        `import * as ${Imports.importAlias("json")} from "@lionweb/json";`,
+        when(imports.languageImports.length > 0)(
+            `import {`, indent(commaSeparated(sortedStringsByUppercase(imports.languageImports))), `} from "${`./index.g.js`}";`
+        ),
         postImportsPart
     ])
 }

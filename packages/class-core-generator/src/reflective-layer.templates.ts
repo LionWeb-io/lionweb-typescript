@@ -52,8 +52,7 @@ export const reflectiveClassFor = (imports: Imports) => {
         const qName = `${classifier.name}_${name}`
         return [
             `private readonly _${qName} = new ${imports.core(metaType)}(this._${classifier.name}, "${name}", "${key}", "${id}")${optional ? ".isOptional()" : ""}${isMultiple(feature) ? ".isMultiple()" : ""};`,
-            //               | core (2nd x) |
-            `get ${qName}(): ${metaType} {`,
+            `get ${qName}(): ${imports.core(metaType)} {`,
             indent([`this.ensureWiredUp();`, `return this._${qName};`]),
             `}`
         ]
@@ -64,8 +63,7 @@ export const reflectiveClassFor = (imports: Imports) => {
         const metaType = entityMetaType(classifier)
         return [
             `public readonly _${name} = new ${imports.core(metaType)}(this._language, "${name}", "${key}", "${id}"${classifier instanceof Concept ? ", " + classifier.abstract : ""})${isPartition(classifier) ? ".isPartition()" : ""};`,
-            //              | core (2nd x) |
-            `get ${name}(): ${metaType} {`,
+            `get ${name}(): ${imports.core(metaType)} {`,
             indent([`this.ensureWiredUp();`, `return this._${name};`]),
             `}`,
             features.map(reflectiveMembersForFeature)
@@ -78,8 +76,7 @@ export const reflectiveClassFor = (imports: Imports) => {
         const qName = `${enumeration.name}_${name}`
         return [
             `private readonly _${qName} = new ${imports.core("EnumerationLiteral")}(this._${enumeration.name}, "${name}", "${key}", "${id}");`,
-            //               |  core (2nd x)  |
-            `get ${qName}(): EnumerationLiteral {`,
+            `get ${qName}(): ${imports.core("EnumerationLiteral")} {`,
             indent([`this.ensureWiredUp();`, `return this._${qName};`]),
             `}`
         ]
@@ -87,8 +84,7 @@ export const reflectiveClassFor = (imports: Imports) => {
 
     const reflectiveMembersForEnumeration = ({ name, key, id, literals }: Enumeration) => [
         `public readonly _${name} = new ${imports.core("Enumeration")}(this._language, "${name}", "${key}", "${id}");`,
-        //              | core (2nd x) |
-        `get ${name}(): Enumeration {`,
+        `get ${name}(): ${imports.core("Enumeration")} {`,
         indent([`this.ensureWiredUp();`, `return this._${name};`]),
         `}`,
         literals.map(reflectiveMemberForEnumerationLiteral)
@@ -96,8 +92,7 @@ export const reflectiveClassFor = (imports: Imports) => {
 
     const reflectiveMembersForPrimitiveType = ({ name, key, id }: PrimitiveType) => [
         `public readonly _${name} = new ${imports.core("PrimitiveType")}(this._language, "${name}", "${key}", "${id}");`,
-        //              | core (2nd x) |
-        `get ${name}(): PrimitiveType {`,
+        `get ${name}(): ${imports.core("PrimitiveType")} {`,
         indent([`this.ensureWiredUp();`, `return this._${name};`]),
         `}`
     ]
@@ -145,7 +140,7 @@ export const reflectiveClassFor = (imports: Imports) => {
         return `// unhandled feature <${featureMetaType(feature)}>"${feature.name}"`
     }
 
-    const isConcreteClassifier = (classifier: Classifier): classifier is Annotation | Concept =>
+    const isConcreteClassifier = (classifier: Classifier): classifier is (Annotation | Concept) =>
         classifier instanceof Annotation || classifier instanceof Concept
 
     const wireUpStatementsForEntity = (entity: LanguageEntity) => {
@@ -189,10 +184,8 @@ export const reflectiveClassFor = (imports: Imports) => {
             `export class ${imports.thisBaseClassName} implements ${imports.generic("ILanguageBase")} {`,
             ``,
             indent([
-                //                                                             | core | (2nd x)
-                `private readonly _language: ${imports.core("Language")} = new Language("${imports.thisLanguageNameAsJsIdentifier}", "${version}", "${id}", "${key}");`,
-                //               | core | (3rd x)
-                `get language(): Language {`,
+                `private readonly _language: ${imports.core("Language")} = new ${imports.core("Language")}("${imports.thisLanguageNameAsJsIdentifier}", "${version}", "${id}", "${key}");`,
+                `get language(): ${imports.core("Language")} {`,
                 indent([`this.ensureWiredUp();`, `return this._language;`]),
                 `}`,
                 ``,

@@ -31,21 +31,21 @@ const properGenericImportLocation = "@lionweb/class-core"
 /**
  * A type def. for options objects configuring code generation.
  */
-export type GeneratorOptions = {
+export type GeneratorOptions = Partial<{
     /**
      * The `from`-part of the `import`-statement that imports the `class-core` package.
-     * Default (which you should always use!): `@lionweb/class-core`.
+     * Default (which should always be used!): `@lionweb/class-core`.
      */
     genericImportLocation: string
     /**
      * The optional header for generated files.
      */
-    header?: string
+    header: string
     /**
      * Whether to output logging on the `stdout`. Default: `true`.
      */
     verbose: boolean
-}
+}>
 
 
 const withDefaults = (options?: Partial<GeneratorOptions>): GeneratorOptions => ({
