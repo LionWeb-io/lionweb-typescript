@@ -3,6 +3,7 @@
 ## 0.10.0 — not yet released
 
 * Add “`old*`” properties to `Move[AndReplace]{Child|Annotation}*Command`s, and propagate to delta&rarr;command translator.
+* Implement splittable messages.
 
 
 ## 0.9.0

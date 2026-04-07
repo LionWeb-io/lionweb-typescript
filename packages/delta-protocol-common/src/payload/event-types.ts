@@ -17,7 +17,7 @@
 
 import { LionWebId, LionWebJsonChunk, LionWebJsonMetaPointer } from "@lionweb/json"
 import { mapFrom } from "@lionweb/ts-utils"
-import { DeltaAdditionalInfo, Message } from "./common.js"
+import { ContinuedChunkMessage, DeltaAdditionalInfo, Message, SplittableMessage } from "./common.js"
 
 export type CommandSource = {
     participationId: LionWebId
@@ -32,8 +32,15 @@ export interface Event extends DeltaAdditionalInfo {
 
 // in order of the specification (§ 5.8):
 
+/** § 5.8.1 */
+export interface ChunkedEvent extends Event, ContinuedChunkMessage {
+    messageKind: "ChunkedEvent"
+    chunkedEventSequenceNumber: number
+    sequenceNumber: number
+}
+
 /** § 5.8.2.1 */
-export interface PartitionAddedEvent extends Event {
+export interface PartitionAddedEvent extends Event, SplittableMessage {
     messageKind: "PartitionAdded"
     newPartition: LionWebJsonChunk
 }
@@ -78,7 +85,7 @@ export interface PropertyChangedEvent extends Event {
 }
 
 /** § 5.8.5.1 */
-export interface ChildAddedEvent extends Event {
+export interface ChildAddedEvent extends Event, SplittableMessage {
     messageKind: "ChildAdded"
     parent: LionWebId
     newChild: LionWebJsonChunk
@@ -97,7 +104,7 @@ export interface ChildDeletedEvent extends Event {
 }
 
 /** § 5.8.5.3 */
-export interface ChildReplacedEvent extends Event {
+export interface ChildReplacedEvent extends Event, SplittableMessage {
     messageKind: "ChildReplaced"
     newChild: LionWebJsonChunk
     replacedChild: LionWebId
@@ -180,7 +187,7 @@ export interface ChildMovedAndReplacedInSameContainmentEvent extends Event {
 }
 
 /** § 5.8.6.1 */
-export interface AnnotationAddedEvent extends Event {
+export interface AnnotationAddedEvent extends Event, SplittableMessage {
     messageKind: "AnnotationAdded"
     parent: LionWebId
     newAnnotation: LionWebJsonChunk
@@ -197,7 +204,7 @@ export interface AnnotationDeletedEvent extends Event {
 }
 
 /** § 5.8.6.3 */
-export interface AnnotationReplacedEvent extends Event {
+export interface AnnotationReplacedEvent extends Event, SplittableMessage {
     messageKind: "AnnotationReplaced"
     newAnnotation: LionWebJsonChunk
     replacedAnnotation: LionWebId
@@ -309,6 +316,7 @@ export interface ErrorEvent extends Event {
 
 const eventMessageKinds = mapFrom(
     [
+        "ChunkedEvent",
         "PartitionAdded",
         "PartitionDeleted",
         "ClassifierChanged",
@@ -344,4 +352,23 @@ const eventMessageKinds = mapFrom(
 
 export const isEvent = (message: Message): message is Event =>
     message.messageKind in eventMessageKinds
+
+export const isChunkedEvent = (message: Message): message is ChunkedEvent =>
+    message.messageKind === "ChunkedEvent"
+
+/**
+ * (See § 3.7.1 of the specification of the delta protocol.)
+ *
+ * @return the name of the property of the given {@link Event} that holds the chunk that may be split, or `undefined` if the given `event` isn’t splittable.
+ */
+export const maybeChunkPropertyForSplittableEvent = (event: Event): (string | undefined) => {
+    switch (event.messageKind) {
+        case "PartitionAdded": return "newPartition"
+        case "ChildAdded": return "newChild"
+        case "ChildReplaced": return "newChild"
+        case "AnnotationAdded": return "newAnnotation"
+        case "AnnotationReplaced": return "newAnnotation"
+        default: return undefined
+    }
+}
 

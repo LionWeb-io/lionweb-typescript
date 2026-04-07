@@ -16,7 +16,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { LionWebId, LionWebJsonChunk, LionWebJsonMetaPointer } from "@lionweb/json"
-import { DeltaAdditionalInfo } from "./common.js"
+import { ContinuedChunkMessage, DeltaAdditionalInfo, SplittableMessage } from "./common.js"
 
 export interface Command extends DeltaAdditionalInfo {
     commandId: LionWebId
@@ -25,8 +25,13 @@ export interface Command extends DeltaAdditionalInfo {
 
 // in order of the specification (§ 5.7):
 
+/** § 5.7.1 */
+export interface ChunkedCommand extends Command, ContinuedChunkMessage {
+    messageKind: "ChunkedCommand"
+}
+
 /** § 5.7.2.1 */
-export interface AddPartitionCommand extends Command {
+export interface AddPartitionCommand extends Command, SplittableMessage {
     messageKind: "AddPartition"
     newPartition: LionWebJsonChunk
 }
@@ -68,7 +73,7 @@ export interface ChangePropertyCommand extends Command {
 }
 
 /** § 5.7.5.1 */
-export interface AddChildCommand extends Command {
+export interface AddChildCommand extends Command, SplittableMessage {
     messageKind: "AddChild"
     parent: LionWebId
     newChild: LionWebJsonChunk
@@ -86,7 +91,7 @@ export interface DeleteChildCommand extends Command {
 }
 
 /** § 5.7.5.3 */
-export interface ReplaceChildCommand extends Command {
+export interface ReplaceChildCommand extends Command, SplittableMessage {
     messageKind: "ReplaceChild"
     newChild: LionWebJsonChunk
     parent: LionWebId
@@ -165,7 +170,7 @@ export interface MoveAndReplaceChildInSameContainmentCommand extends Command {
 }
 
 /** § 5.7.6.1 */
-export interface AddAnnotationCommand extends Command {
+export interface AddAnnotationCommand extends Command, SplittableMessage {
     messageKind: "AddAnnotation"
     parent: LionWebId
     newAnnotation: LionWebJsonChunk
@@ -181,7 +186,7 @@ export interface DeleteAnnotationCommand extends Command {
 }
 
 /** § 5.7.6.3 */
-export interface ReplaceAnnotationCommand extends Command {
+export interface ReplaceAnnotationCommand extends Command, SplittableMessage {
     messageKind: "ReplaceAnnotation"
     newAnnotation: LionWebJsonChunk
     parent: LionWebId
