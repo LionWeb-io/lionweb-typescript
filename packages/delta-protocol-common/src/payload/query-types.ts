@@ -29,6 +29,23 @@ export interface QueryMessage extends DeltaAdditionalInfo {
 
 // in order of the specification (§ 5.5):
 
+/** § 5.5.1.1 (response) */
+export interface ErrorResponse extends QueryMessage {
+    messageKind: "ErrorResponse"
+    errorCode: string
+    message: string
+}
+
+
+/** § 5.5.1.2 (response) */
+export interface ChunkedQueryResponse extends QueryMessage {
+    messageKind: "ChunkedQueryResponse"
+    chunk: LionWebJsonChunk
+    continuedChunkCompleted: boolean
+    continuedChunkSequenceNumber: number
+}
+
+
 export interface SubscribeToPartitionChangesParameters {
     creation: boolean
     deletion: boolean
@@ -43,6 +60,18 @@ export interface SubscribeToChangingPartitionsRequest extends QueryMessage, Subs
 /** § 5.5.2.1 (response) */
 export interface SubscribeToChangingPartitionsResponse extends QueryMessage {
     messageKind: "SubscribeToChangingPartitionsResponse"
+}
+
+
+/** § 5.5.2.2 (request) */
+export interface InformAboutChangingPartitionsRequest extends QueryMessage, SubscribeToPartitionChangesParameters {
+    messageKind: "InformAboutChangingPartitionsRequest"
+    depthLimit: number
+}
+
+/** § 5.5.2.2 (response) */
+export interface InformAboutChangingPartitionsResponse extends QueryMessage {
+    messageKind: "InformAboutChangingPartitionsResponse"
 }
 
 
@@ -140,15 +169,31 @@ export interface ListPartitionsResponse extends QueryMessage {
 }
 
 
+/** § 5.5.4.3 (request) */
+export interface ListAndSubscribePartitionsRequest extends QueryMessage {
+    messageKind: "ListAndSubscribePartitionsRequest"
+}
+
+/** § 5.5.4.3 (response) */
+export interface ListAndSubscribePartitionsResponse extends QueryMessage {
+    messageKind: "ListAndSubscribePartitionsResponse"
+    partitions: LionWebJsonChunk
+}
+
+
 const queryMessageKinds = [
+    "Error",
+    "ChunkedQuery",
     "SubscribeToChangingPartitions",
+    "InformAboutChangingPartitions",
     "SubscribeToPartitionContents",
     "UnsubscribeFromPartitionContents",
     "SignOn",
     "SignOff",
     "Reconnect",
     "GetAvailableIds",
-    "ListPartitions"
+    "ListPartitions",
+    "ListAndSubscribePartitions"
 ]
 
 const queryResponseMessageKinds = mapFrom(queryMessageKinds, (str) => `${str}Response`, (_) => true)

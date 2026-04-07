@@ -32,8 +32,11 @@ import {
     eventToDeltaTranslator,
     GetAvailableIdsRequest,
     GetAvailableIdsResponse,
+    InformAboutChangingPartitionsRequest,
     isEvent,
     isQueryResponse,
+    ListAndSubscribePartitionsRequest,
+    ListAndSubscribePartitionsResponse,
     ListPartitionsRequest,
     ListPartitionsResponse,
     QueryMessage,
@@ -225,6 +228,17 @@ export class LionWebClient {
         } as SubscribeToChangingPartitionsRequest)
     }
 
+    /** § 5.5.2.2 */
+    async informAboutChangingPartitions(queryId: LionWebId, parameters: SubscribeToPartitionChangesParameters, depthLimit: number): Promise<void> {
+        await this.makeQuery({
+            messageKind: "InformAboutChangingPartitionsRequest",
+            queryId,
+            ...parameters,
+            depthLimit,
+            additionalInfos: []
+        } as InformAboutChangingPartitionsRequest)
+    }
+
     /** § 5.5.2.3 */
     async subscribeToPartitionContents(queryId: LionWebId, partition: LionWebId): Promise<LionWebJsonChunk> {   // TODO  already deserialize, because we've got everything we need
         const response = await this.makeQuery({
@@ -307,6 +321,16 @@ export class LionWebClient {
             queryId,
             additionalInfos: []
         } as ListPartitionsRequest) as ListPartitionsResponse
+        return response.partitions
+    }
+
+    /** § 5.5.4.3 */
+    async listAndSubscribePartitions(queryId: LionWebId): Promise<LionWebJsonChunk> {
+        const response = await this.makeQuery({
+            messageKind: "ListAndSubscribePartitionsRequest",
+            queryId,
+            additionalInfos: []
+        } as ListAndSubscribePartitionsRequest) as ListAndSubscribePartitionsResponse
         return response.partitions
     }
 
