@@ -39,6 +39,7 @@ describe("combining delta protocol and an “adjacent” delta receiver", () => 
 
         const messagesSent: Message[] = []
         const lionWebClient = await LionWebClient.create({
+            repositoryId: "myRepo",
             clientId: "A",
             url: "",
             languageBases: [testLanguageBase],

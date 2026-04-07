@@ -60,6 +60,7 @@ const { clientWarning } = ansi
  * Type def. for parameters – required and optional – for instantiating a {@link LionWebClient LionWeb delta protocol client}.
  */
 export type LionWebClientParameters = {
+    repositoryId: LionWebId
     clientId: LionWebId
     url: string
     languageBases: ILanguageBase[]
@@ -87,6 +88,7 @@ export class LionWebClient {
     // TODO  could also get this from the priority queue (which would need to be adapted for that)
 
     private constructor(
+        public readonly repositoryId: LionWebId,
         public readonly clientId: LionWebId,
         public forest: Forest,
         private readonly lowLevelClient: LowLevelClient<Command | QueryMessage>
@@ -94,7 +96,16 @@ export class LionWebClient {
 
     private readonly queryResolveById: { [queryId: string]: (value: QueryMessage) => void } = {}
 
-    static async create({clientId, url, languageBases, instantiateDeltaReceiverForwardingTo, serializationChunk, semanticLogger, lowLevelClientInstantiator}: LionWebClientParameters): Promise<LionWebClient> {
+    static async create({
+        repositoryId,
+        clientId,
+        url,
+        languageBases,
+        instantiateDeltaReceiverForwardingTo,
+        serializationChunk,
+        semanticLogger,
+        lowLevelClientInstantiator
+    }: LionWebClientParameters): Promise<LionWebClient> {
         const log = semanticLoggerFunctionFrom(semanticLogger)
 
         const deltaAsCommand = deltaToCommandTranslator()
@@ -176,6 +187,7 @@ export class LionWebClient {
             lowLevelClientInstantiator({ url, clientId, receiveMessageOnClient /* no logging parameter */ })
 
         const lionWebClient = new LionWebClient(
+            repositoryId,
             clientId,
             forest,
             lowLevelClient
@@ -203,6 +215,7 @@ export class LionWebClient {
                 .catch(rejectResponse)
         })
 
+    /** § 5.5.2.1 */
     async subscribeToChangingPartitions(queryId: LionWebId, parameters: SubscribeToPartitionChangesParameters): Promise<void> {
         await this.makeQuery({
             messageKind: "SubscribeToChangingPartitionsRequest",
@@ -212,6 +225,7 @@ export class LionWebClient {
         } as SubscribeToChangingPartitionsRequest)
     }
 
+    /** § 5.5.2.3 */
     async subscribeToPartitionContents(queryId: LionWebId, partition: LionWebId): Promise<LionWebJsonChunk> {   // TODO  already deserialize, because we've got everything we need
         const response = await this.makeQuery({
             messageKind: "SubscribeToPartitionContentsRequest",
@@ -222,6 +236,7 @@ export class LionWebClient {
         return response.contents
     }
 
+    /** § 5.5.2.4 */
     async unsubscribeFromPartitionContents(queryId: LionWebId, partition: LionWebId): Promise<void> {
         await this.makeQuery({
             messageKind: "UnsubscribeFromPartitionContentsRequest",
@@ -231,6 +246,7 @@ export class LionWebClient {
         } as UnsubscribeFromPartitionContentsRequest)
     }
 
+    /** § 5.5.3.1 */
     async signOn(queryId: LionWebId, repositoryId: LionWebId): Promise<void> {
         if (this.signedOff) {
             return Promise.reject(new Error(`can't sign on after having signed off`))
@@ -239,13 +255,14 @@ export class LionWebClient {
             messageKind: "SignOnRequest",
             queryId,
             repositoryId,
-            deltaProtocolVersion: "2025.1",
+            deltaProtocolVersion: "2026.1",
             clientId: this.clientId,
             additionalInfos: []
         } as SignOnRequest) as SignOnResponse
         this._participationId = response.participationId
     }
 
+    /** § 5.5.3.2 */
     async signOff(queryId: LionWebId): Promise<void> {
         await this.makeQuery({
             messageKind: "SignOffRequest",
@@ -256,18 +273,22 @@ export class LionWebClient {
         this._participationId = undefined
     }
 
-    async reconnect(queryId: LionWebId, participationId: LionWebId, lastReceivedSequenceNumber: number): Promise<void> {
+    /** § 5.5.3.3 */
+    async reconnect(queryId: LionWebId, lastReceivedSequenceNumber: number): Promise<void> {
         const response = await this.makeQuery({
             messageKind: "ReconnectRequest",
             queryId,
-            participationId,
+            deltaProtocolVersion: "2026.1",
+            clientId: this.clientId,
+            repositoryId: "???",
+            participationId: this.participationId,
             lastReceivedSequenceNumber,
             additionalInfos: []
         } as ReconnectRequest) as ReconnectResponse
-        this._participationId = participationId
-        this.lastReceivedSequenceNumber = response.lastReceivedSequenceNumber
+        this.lastReceivedSequenceNumber = response.lastSentSequenceNumber
     }
 
+    /** § 5.5.4.1 */
     async getAvailableIds(queryId: LionWebId, count: number): Promise<LionWebId[]> {
         const response = await this.makeQuery({
             messageKind: "GetAvailableIdsRequest",
@@ -278,9 +299,11 @@ export class LionWebClient {
         return response.ids
     }
 
-    async listPartitions(queryId: LionWebId): Promise<LionWebJsonChunk> {
+    /** § 5.5.4.2 */
+    async listPartitions(queryId: LionWebId, depthLimit: number): Promise<LionWebJsonChunk> {
         const response = await this.makeQuery({
             messageKind: "ListPartitionsRequest",
+            depthLimit,
             queryId,
             additionalInfos: []
         } as ListPartitionsRequest) as ListPartitionsResponse
@@ -296,11 +319,13 @@ export class LionWebClient {
         }
     }
 
+    /** § 5.7.2.1 */
     addPartition(partition: INodeBase): void {
         this.checkSignedOn()
         this.forest.addPartition(partition)
     }
 
+    /** § 5.7.2.2 */
     deletePartition(partition: INodeBase): void {
         this.checkSignedOn()
         this.forest.deletePartition(partition)

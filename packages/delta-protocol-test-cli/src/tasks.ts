@@ -126,8 +126,7 @@ export const taskExecutor = (lionWebClient: LionWebClient, semanticLogItems: ISe
             case "SubscribeToChangingPartitions":
                 return await lionWebClient.subscribeToChangingPartitions(queryId, {
                     creation: true,
-                    deletion: true,
-                    partitions: true
+                    deletion: true
                 })
 
             case "SignOff":

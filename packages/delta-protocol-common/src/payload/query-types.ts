@@ -32,8 +32,8 @@ export interface QueryMessage extends DeltaAdditionalInfo {
 export interface SubscribeToPartitionChangesParameters {
     creation: boolean
     deletion: boolean
-    partitions: boolean
 }
+
 
 /** § 5.5.2.1 (request) */
 export interface SubscribeToChangingPartitionsRequest extends QueryMessage, SubscribeToPartitionChangesParameters {
@@ -74,7 +74,7 @@ export interface UnsubscribeFromPartitionContentsResponse extends QueryMessage {
 /** § 5.5.3.1 (request) */
 export interface SignOnRequest extends QueryMessage {
     messageKind: "SignOnRequest"
-    deltaProtocolVersion: "2025.1"
+    deltaProtocolVersion: "2026.1"
     clientId: LionWebId
     repositoryId: LionWebId
 }
@@ -100,6 +100,9 @@ export interface SignOffResponse extends QueryMessage {
 /** § 5.5.3.3 (request) */
 export interface ReconnectRequest extends QueryMessage {
     messageKind: "ReconnectRequest"
+    deltaProtocolVersion: "2026.1"
+    clientId: LionWebId
+    repositoryId: LionWebId
     participationId: LionWebId
     lastReceivedSequenceNumber: number
 }
@@ -107,7 +110,7 @@ export interface ReconnectRequest extends QueryMessage {
 /** § 5.5.3.3 (response) */
 export interface ReconnectResponse extends QueryMessage {
     messageKind: "ReconnectResponse"
-    lastReceivedSequenceNumber: number
+    lastSentSequenceNumber: number
 }
 
 
@@ -127,6 +130,7 @@ export interface GetAvailableIdsResponse extends QueryMessage {
 /** § 5.5.4.2 (request) */
 export interface ListPartitionsRequest extends QueryMessage {
     messageKind: "ListPartitionsRequest"
+    depthLimit: number
 }
 
 /** § 5.5.4.2 (response) */
