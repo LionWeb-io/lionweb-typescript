@@ -158,35 +158,35 @@ export const deltaToEventTranslator = (
             additionalInfos: additionalInfosGenerator === undefined ? [] : additionalInfosGenerator(delta, sequenceNumber)
         })
 
-        // in order of the specification (§ 5.7):
+        // in order of the specification (§ 5.8):
 
         const translated = (delta: IDelta): Event => {
             if (delta instanceof PartitionAddedDelta) {
-                return completed<PartitionAddedEvent>("PartitionAdded", { // § 5.7.2.1
+                return completed<PartitionAddedEvent>("PartitionAdded", { // § 5.8.2.1
                     newPartition: serializeNodeBases([delta.newPartition])
                 })
             }
             if (delta instanceof PartitionDeletedDelta) {
-                return completed<PartitionDeletedEvent>("PartitionDeleted", { // § 5.7.2.2
+                return completed<PartitionDeletedEvent>("PartitionDeleted", { // § 5.8.2.2
                     deletedPartition: delta.deletedPartition.id
                 })
             }
             if (delta instanceof PropertyAddedDelta) {
-                return completed<PropertyAddedEvent>("PropertyAdded", { // § 5.7.4.1
+                return completed<PropertyAddedEvent>("PropertyAdded", { // § 5.8.4.1
                     node: delta.node.id,
                     property: metaPointerFor(delta.property),
                     newValue: propertyValueSerializer.serializeValue(delta.value, delta.property)!
                 })
             }
             if (delta instanceof PropertyDeletedDelta) {
-                return completed<PropertyDeletedEvent>("PropertyDeleted", { // § 5.7.4.2
+                return completed<PropertyDeletedEvent>("PropertyDeleted", { // § 5.8.4.2
                     node: delta.node.id,
                     property: metaPointerFor(delta.property),
                     oldValue: propertyValueSerializer.serializeValue(delta.oldValue, delta.property)!
                 })
             }
             if (delta instanceof PropertyChangedDelta) {
-                return completed<PropertyChangedEvent>("PropertyChanged", { // § 5.7.4.3
+                return completed<PropertyChangedEvent>("PropertyChanged", { // § 5.8.4.3
                     node: delta.node.id,
                     property: metaPointerFor(delta.property),
                     newValue: propertyValueSerializer.serializeValue(delta.newValue, delta.property)!,
@@ -194,7 +194,7 @@ export const deltaToEventTranslator = (
                 })
             }
             if (delta instanceof ChildAddedDelta) {
-                return completed<ChildAddedEvent>("ChildAdded", { // § 5.7.5.1
+                return completed<ChildAddedEvent>("ChildAdded", { // § 5.8.5.1
                     parent: delta.parent.id,
                     newChild: serializeNodeBases([delta.newChild]),
                     containment: metaPointerFor(delta.containment),
@@ -202,7 +202,7 @@ export const deltaToEventTranslator = (
                 })
             }
             if (delta instanceof ChildDeletedDelta) {
-                return completed<ChildDeletedEvent>("ChildDeleted", { // § 5.7.5.2
+                return completed<ChildDeletedEvent>("ChildDeleted", { // § 5.8.5.2
                     parent: delta.parent.id,
                     containment: metaPointerFor(delta.containment),
                     index: delta.index,
@@ -211,7 +211,7 @@ export const deltaToEventTranslator = (
                 })
             }
             if (delta instanceof ChildReplacedDelta) {
-                return completed<ChildReplacedEvent>("ChildReplaced", { // § 5.7.5.3
+                return completed<ChildReplacedEvent>("ChildReplaced", { // § 5.8.5.3
                     newChild: serializeNodeBases([delta.newChild]),
                     parent: delta.parent.id,
                     containment: metaPointerFor(delta.containment),
@@ -221,7 +221,7 @@ export const deltaToEventTranslator = (
                 })
             }
             if (delta instanceof ChildMovedFromOtherContainmentDelta) {
-                return completed<ChildMovedFromOtherContainmentEvent>("ChildMovedFromOtherContainment", { // § 5.7.5.4
+                return completed<ChildMovedFromOtherContainmentEvent>("ChildMovedFromOtherContainment", { // § 5.8.5.4
                     newParent: delta.newParent.id,
                     newContainment: metaPointerFor(delta.newContainment),
                     newIndex: delta.newIndex,
@@ -232,7 +232,7 @@ export const deltaToEventTranslator = (
                 })
             }
             if (delta instanceof ChildMovedFromOtherContainmentInSameParentDelta) {
-                return completed<ChildMovedFromOtherContainmentInSameParentEvent>("ChildMovedFromOtherContainmentInSameParent", { // § 5.7.5.5
+                return completed<ChildMovedFromOtherContainmentInSameParentEvent>("ChildMovedFromOtherContainmentInSameParent", { // § 5.8.5.5
                     newContainment: metaPointerFor(delta.newContainment),
                     newIndex: delta.newIndex,
                     movedChild: delta.movedChild.id,
@@ -242,7 +242,7 @@ export const deltaToEventTranslator = (
                 })
             }
             if (delta instanceof ChildMovedInSameContainmentDelta) {
-                return completed<ChildMovedInSameContainmentEvent>("ChildMovedInSameContainment", { // § 5.7.5.6
+                return completed<ChildMovedInSameContainmentEvent>("ChildMovedInSameContainment", { // § 5.8.5.6
                     parent: delta.parent.id,
                     containment: metaPointerFor(delta.containment),
                     oldIndex: delta.oldIndex,
@@ -251,7 +251,7 @@ export const deltaToEventTranslator = (
                 })
             }
             if (delta instanceof ChildMovedAndReplacedFromOtherContainmentDelta) {
-                return completed<ChildMovedAndReplacedFromOtherContainmentEvent>("ChildMovedAndReplacedFromOtherContainment", { // § 5.7.5.7
+                return completed<ChildMovedAndReplacedFromOtherContainmentEvent>("ChildMovedAndReplacedFromOtherContainment", { // § 5.8.5.7
                     newParent: delta.newParent.id,
                     newContainment: metaPointerFor(delta.newContainment),
                     newIndex: delta.newIndex,
@@ -264,7 +264,7 @@ export const deltaToEventTranslator = (
                 })
             }
             if (delta instanceof ChildMovedAndReplacedFromOtherContainmentInSameParentDelta) {
-                return completed<ChildMovedAndReplacedFromOtherContainmentInSameParentEvent>("ChildMovedAndReplacedFromOtherContainmentInSameParent", { // § 5.7.5.8
+                return completed<ChildMovedAndReplacedFromOtherContainmentInSameParentEvent>("ChildMovedAndReplacedFromOtherContainmentInSameParent", { // § 5.8.5.8
                     parent: delta.parent.id,
                     oldContainment: metaPointerFor(delta.oldContainment),
                     oldIndex: delta.oldIndex,
@@ -276,7 +276,7 @@ export const deltaToEventTranslator = (
                 })
             }
             if (delta instanceof ChildMovedAndReplacedInSameContainmentDelta) {
-                return completed<ChildMovedAndReplacedInSameContainmentEvent>("ChildMovedAndReplacedInSameContainment", { // § 5.7.5.9
+                return completed<ChildMovedAndReplacedInSameContainmentEvent>("ChildMovedAndReplacedInSameContainment", { // § 5.8.5.9
                     parent: delta.parent.id,
                     containment: metaPointerFor(delta.containment),
                     oldIndex: delta.oldIndex,
@@ -287,14 +287,14 @@ export const deltaToEventTranslator = (
                 })
             }
             if (delta instanceof AnnotationAddedDelta) {
-                return completed<AnnotationAddedEvent>("AnnotationAdded", { // § 5.7.6.1
+                return completed<AnnotationAddedEvent>("AnnotationAdded", { // § 5.8.6.1
                     parent: delta.parent.id,
                     index: delta.index,
                     newAnnotation: serializeNodeBases([delta.newAnnotation])
                 })
             }
             if (delta instanceof AnnotationDeletedDelta) {
-                return completed<AnnotationDeletedEvent>("AnnotationDeleted", { // § 5.7.6.2
+                return completed<AnnotationDeletedEvent>("AnnotationDeleted", { // § 5.8.6.2
                     parent: delta.parent.id,
                     deletedAnnotation: delta.deletedAnnotation.id,
                     index: delta.index,
@@ -302,7 +302,7 @@ export const deltaToEventTranslator = (
                 })
             }
             if (delta instanceof AnnotationReplacedDelta) {
-                return completed<AnnotationReplacedEvent>("AnnotationReplaced", { // § 5.7.6.3
+                return completed<AnnotationReplacedEvent>("AnnotationReplaced", { // § 5.8.6.3
                     newAnnotation: serializeNodeBases([delta.newAnnotation]),
                     parent: delta.parent.id,
                     index: delta.index,
@@ -311,7 +311,7 @@ export const deltaToEventTranslator = (
                 })
             }
             if (delta instanceof AnnotationMovedFromOtherParentDelta) {
-                return completed<AnnotationMovedFromOtherParentEvent>("AnnotationMovedFromOtherParent", { // § 5.7.6.4
+                return completed<AnnotationMovedFromOtherParentEvent>("AnnotationMovedFromOtherParent", { // § 5.8.6.4
                     oldParent: delta.oldParent.id,
                     oldIndex: delta.oldIndex,
                     newParent: delta.newParent.id,
@@ -320,7 +320,7 @@ export const deltaToEventTranslator = (
                 })
             }
             if (delta instanceof AnnotationMovedInSameParentDelta) {
-                return completed<AnnotationMovedInSameParentEvent>("AnnotationMovedInSameParent", { // § 5.7.6.5
+                return completed<AnnotationMovedInSameParentEvent>("AnnotationMovedInSameParent", { // § 5.8.6.5
                     parent: delta.parent.id,
                     oldIndex: delta.oldIndex,
                     newIndex: delta.newIndex,
@@ -328,7 +328,7 @@ export const deltaToEventTranslator = (
                 })
             }
             if (delta instanceof AnnotationMovedAndReplacedFromOtherParentDelta) {
-                return completed<AnnotationMovedAndReplacedFromOtherParentEvent>("AnnotationMovedAndReplacedFromOtherParent", { // § 5.7.6.6
+                return completed<AnnotationMovedAndReplacedFromOtherParentEvent>("AnnotationMovedAndReplacedFromOtherParent", { // § 5.8.6.6
                     oldParent: delta.oldParent.id,
                     oldIndex: delta.oldIndex,
                     newParent: delta.newParent.id,
@@ -339,7 +339,7 @@ export const deltaToEventTranslator = (
                 })
             }
             if (delta instanceof AnnotationMovedAndReplacedInSameParentDelta) {
-                return completed<AnnotationMovedAndReplacedInSameParentEvent>("AnnotationMovedAndReplacedInSameParent", { // § 5.7.6.7
+                return completed<AnnotationMovedAndReplacedInSameParentEvent>("AnnotationMovedAndReplacedInSameParent", { // § 5.8.6.7
                     parent: delta.parent.id,
                     oldIndex: delta.oldIndex,
                     newIndex: delta.newIndex,
@@ -349,7 +349,7 @@ export const deltaToEventTranslator = (
                 })
             }
             if (delta instanceof ReferenceAddedDelta) {
-                return completed<ReferenceAddedEvent>("ReferenceAdded", { // § 5.7.7.1
+                return completed<ReferenceAddedEvent>("ReferenceAdded", { // § 5.8.7.1
                     parent: delta.parent.id,
                     reference: metaPointerFor(delta.reference),
                     index: delta.index,
@@ -358,7 +358,7 @@ export const deltaToEventTranslator = (
                 })
             }
             if (delta instanceof ReferenceDeletedDelta) {
-                return completed<ReferenceDeletedEvent>("ReferenceDeleted", { // § 5.7.7.2
+                return completed<ReferenceDeletedEvent>("ReferenceDeleted", { // § 5.8.7.2
                     parent: delta.parent.id,
                     reference: metaPointerFor(delta.reference),
                     index: delta.index,
@@ -367,7 +367,7 @@ export const deltaToEventTranslator = (
                 })
             }
             if (delta instanceof ReferenceChangedDelta) {
-                return completed<ReferenceChangedEvent>("ReferenceChanged", { // § 5.7.7.3
+                return completed<ReferenceChangedEvent>("ReferenceChanged", { // § 5.8.7.3
                     parent: delta.parent.id,
                     reference: metaPointerFor(delta.reference),
                     index: delta.index,
@@ -378,7 +378,7 @@ export const deltaToEventTranslator = (
                 })
             }
             if (delta instanceof CompositeDelta) {
-                return completed<CompositeEvent>("CompositeEvent", { // § 5.7.8.1
+                return completed<CompositeEvent>("CompositeEvent", { // § 5.8.8.1
                     parts: delta.parts
                         .map((part) => translated(part))
                         .filter((event) => event !== undefined) as Event[]

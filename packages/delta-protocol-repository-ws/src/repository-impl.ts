@@ -81,7 +81,7 @@ export class LionWebRepository {
                         additionalInfos: []
                     } as SignOffResponse
                 }
-                // all commands, in order of the specification (§ 5.6):
+                // all commands, in order of the specification (§ 5.7):
                 /*
                  * **DEV note**: run
                  *
