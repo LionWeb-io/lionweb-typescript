@@ -32,8 +32,11 @@ describe("deep-duplication", () => {
         const parentDuplicate = deepDuplicatorFor([TestLanguageBase.INSTANCE], originalNode => originalNode.id + "-copied")(parent)[0]
 
         equal(parentDuplicate.id, "parent-copied")
+        notEqual(parentDuplicate, parent)
         isTrue(parentDuplicate instanceof LinkTestConcept)
+        // deep-duplicated reference to node not contained by the node that’s deep-duplicated, keeps pointing to the original node:
         equal((parentDuplicate as LinkTestConcept).reference_0_1, child1)
+        // child of deep-duplicated node is deep-duplicated as well:
         notEqual((parentDuplicate as LinkTestConcept).containment_0_1, child2)
         equal((parentDuplicate as LinkTestConcept).containment_0_1?.id, "child2-copied")
     })
