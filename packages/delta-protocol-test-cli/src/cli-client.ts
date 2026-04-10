@@ -81,6 +81,7 @@ await runAsApp(async () => {
     const logItems: LowLevelClientLogItem<unknown, unknown>[] = []
 
     const lionWebClient = await LionWebClient.create({
+        repositoryId: "myRepo",
         clientId,
         url,
         languageBases,

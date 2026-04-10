@@ -37,7 +37,7 @@ describe("WebSocket-driven implementations of client and repository", async func
         const languageBases = [TestLanguageBase.INSTANCE]
 
         const createClient = (clientId: LionWebId) =>
-            LionWebClient.create({ clientId, url: wsLocalhostUrl(port), languageBases, serializationChunk: testModelChunk, lowLevelClientInstantiator: createWSLowLevelClient })
+            LionWebClient.create({ repositoryId: "myRepo", clientId, url: wsLocalhostUrl(port), languageBases, serializationChunk: testModelChunk, lowLevelClientInstantiator: createWSLowLevelClient })
         const clientA = await createClient("A")
         const clientB = await createClient("B")
         // end Arrange

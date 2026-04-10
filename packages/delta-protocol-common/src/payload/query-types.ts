@@ -27,108 +27,173 @@ export interface QueryMessage extends DeltaAdditionalInfo {
 }
 
 
-// in order of the specification (§ 5.4):
+// in order of the specification (§ 5.5):
+
+/** § 5.5.1.1 (response) */
+export interface ErrorResponse extends QueryMessage {
+    messageKind: "ErrorResponse"
+    errorCode: string
+    message: string
+}
+
+
+/** § 5.5.1.2 (response) */
+export interface ChunkedQueryResponse extends QueryMessage {
+    messageKind: "ChunkedQueryResponse"
+    chunk: LionWebJsonChunk
+    continuedChunkCompleted: boolean
+    continuedChunkSequenceNumber: number
+}
+
 
 export interface SubscribeToPartitionChangesParameters {
     creation: boolean
     deletion: boolean
-    partitions: boolean
 }
 
+
+/** § 5.5.2.1 (request) */
 export interface SubscribeToChangingPartitionsRequest extends QueryMessage, SubscribeToPartitionChangesParameters {
     messageKind: "SubscribeToChangingPartitionsRequest"
 }
 
+/** § 5.5.2.1 (response) */
 export interface SubscribeToChangingPartitionsResponse extends QueryMessage {
     messageKind: "SubscribeToChangingPartitionsResponse"
 }
 
 
+/** § 5.5.2.2 (request) */
+export interface InformAboutChangingPartitionsRequest extends QueryMessage, SubscribeToPartitionChangesParameters {
+    messageKind: "InformAboutChangingPartitionsRequest"
+    depthLimit: number
+}
+
+/** § 5.5.2.2 (response) */
+export interface InformAboutChangingPartitionsResponse extends QueryMessage {
+    messageKind: "InformAboutChangingPartitionsResponse"
+}
+
+
+/** § 5.5.2.3 (request) */
 export interface SubscribeToPartitionContentsRequest extends QueryMessage {
     messageKind: "SubscribeToPartitionContentsRequest"
     partition: LionWebId
 }
 
+/** § 5.5.2.3 (response) */
 export interface SubscribeToPartitionContentsResponse extends QueryMessage {
     messageKind: "SubscribeToPartitionContentsResponse"
     contents: LionWebJsonChunk
 }
 
 
+/** § 5.5.2.4 (request) */
 export interface UnsubscribeFromPartitionContentsRequest extends QueryMessage {
     messageKind: "UnsubscribeFromPartitionContentsRequest"
     partition: LionWebId
 }
 
+/** § 5.5.2.4 (response) */
 export interface UnsubscribeFromPartitionContentsResponse extends QueryMessage {
     messageKind: "UnsubscribeFromPartitionContentsResponse"
 }
 
 
+/** § 5.5.3.1 (request) */
 export interface SignOnRequest extends QueryMessage {
     messageKind: "SignOnRequest"
-    deltaProtocolVersion: "2025.1"
+    deltaProtocolVersion: "2026.1"
     clientId: LionWebId
     repositoryId: LionWebId
 }
 
+/** § 5.5.3.1 (response) */
 export interface SignOnResponse extends QueryMessage {
     messageKind: "SignOnResponse"
     participationId: LionWebId
 }
 
 
+/** § 5.5.3.2 (request) */
 export interface SignOffRequest extends QueryMessage {
     messageKind: "SignOffRequest"
 }
 
+/** § 5.5.3.2 (response) */
 export interface SignOffResponse extends QueryMessage {
     messageKind: "SignOffResponse"
 }
 
 
+/** § 5.5.3.3 (request) */
 export interface ReconnectRequest extends QueryMessage {
     messageKind: "ReconnectRequest"
+    deltaProtocolVersion: "2026.1"
+    clientId: LionWebId
+    repositoryId: LionWebId
     participationId: LionWebId
     lastReceivedSequenceNumber: number
 }
 
+/** § 5.5.3.3 (response) */
 export interface ReconnectResponse extends QueryMessage {
     messageKind: "ReconnectResponse"
-    lastReceivedSequenceNumber: number
+    lastSentSequenceNumber: number
 }
 
 
+/** § 5.5.4.1 (request) */
 export interface GetAvailableIdsRequest extends QueryMessage {
     messageKind: "GetAvailableIdsRequest"
     count: number
 }
 
+/** § 5.5.4.1 (response) */
 export interface GetAvailableIdsResponse extends QueryMessage {
     messageKind: "GetAvailableIdsResponse"
     ids: LionWebId[]
 }
 
 
+/** § 5.5.4.2 (request) */
 export interface ListPartitionsRequest extends QueryMessage {
     messageKind: "ListPartitionsRequest"
+    depthLimit: number
 }
 
+/** § 5.5.4.2 (response) */
 export interface ListPartitionsResponse extends QueryMessage {
     messageKind: "ListPartitionsResponse"
     partitions: LionWebJsonChunk
 }
 
 
+/** § 5.5.4.3 (request) */
+export interface ListAndSubscribePartitionsRequest extends QueryMessage {
+    messageKind: "ListAndSubscribePartitionsRequest"
+}
+
+/** § 5.5.4.3 (response) */
+export interface ListAndSubscribePartitionsResponse extends QueryMessage {
+    messageKind: "ListAndSubscribePartitionsResponse"
+    partitions: LionWebJsonChunk
+}
+
+
 const queryMessageKinds = [
+    "Error",
+    "ChunkedQuery",
     "SubscribeToChangingPartitions",
+    "InformAboutChangingPartitions",
     "SubscribeToPartitionContents",
     "UnsubscribeFromPartitionContents",
     "SignOn",
     "SignOff",
     "Reconnect",
     "GetAvailableIds",
-    "ListPartitions"
+    "ListPartitions",
+    "ListAndSubscribePartitions"
 ]
 
 const queryResponseMessageKinds = mapFrom(queryMessageKinds, (str) => `${str}Response`, (_) => true)

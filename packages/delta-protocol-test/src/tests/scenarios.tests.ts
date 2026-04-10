@@ -72,6 +72,7 @@ describe(`scenarios (${ansi.colorSchemeExplanationString})`, async function() {
         const clientId = "myClient" // but participation ID is handed out by the repository!
         const repositoryId = "myRepo"
         const lionWebClient = await LionWebClient.create({
+            repositoryId: "myRepo",
             clientId,
             url: wsLocalhostUrl(port),
             languageBases: [testLanguageBase],
@@ -116,7 +117,7 @@ describe(`scenarios (${ansi.colorSchemeExplanationString})`, async function() {
             }]
         }
         const expectedLogItems = [
-            new RepositoryReceivedMessage({}, { messageKind: "SignOnRequest", queryId, repositoryId, deltaProtocolVersion: "2025.1", clientId, additionalInfos: [] } as SignOnRequest),
+            new RepositoryReceivedMessage({}, { messageKind: "SignOnRequest", queryId, repositoryId, deltaProtocolVersion: "2026.1", clientId, additionalInfos: [] } as SignOnRequest),
             new ClientReceivedMessage(clientId, { messageKind: "SignOnResponse", queryId, participationId: "participation-a", additionalInfos: [] } as SignOnResponse),
             new DeltaOccurredOnClient(
                 clientId,
