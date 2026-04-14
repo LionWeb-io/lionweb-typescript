@@ -7,7 +7,28 @@ import {
     LionWebVersions
 } from "@lionweb/core"
 import { LionWebJsonChunk, LionWebJsonUsedLanguage } from "@lionweb/json"
-import { readFileAsJson } from "../utils/json.js"
+import { readFile } from "fs/promises"
+
+
+/**
+ * Tries to read the file at the given `path` as a {@link LionWebJsonChunk serialization chunk}.
+ * **Note** that it's only checked that the file exists and can be parsed as JSON,
+ * _not_ whether it satisfies the specified serialization chunk format!
+ */
+export const tryReadSerializationChunk = async (path: string): Promise<LionWebJsonChunk | Error> => {
+    try {
+        const json = await readFile(path)
+        try {
+            return JSON.parse(json.toString()) as LionWebJsonChunk
+        } catch (e) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            return Promise.reject(new Error(`${path} is not a valid JSON file: ${(e as any).message}`))
+        }
+    } catch(e) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return Promise.reject(new Error(`${path} is not a valid JSON file: ${(e as any).message}`))
+    }
+}
 
 
 /**
@@ -16,14 +37,12 @@ import { readFileAsJson } from "../utils/json.js"
  * _not_ whether it satisfies the specified serialization chunk format!
  */
 export const readSerializationChunk = async (path: string) => {
-    try {
-        return readFileAsJson(path) as LionWebJsonChunk
-    } catch (e) {
-        console.error(`${path} is not a valid JSON file`)
-        throw e
+    const result = await tryReadSerializationChunk(path)
+    if (result instanceof Error) {
+        throw result
     }
+    return result
 }
-// TODO  don't throw, but return some kind of error object (– possibly using Promise.reject)
 
 
 const isRecord = (json: unknown): json is Record<string, unknown> =>

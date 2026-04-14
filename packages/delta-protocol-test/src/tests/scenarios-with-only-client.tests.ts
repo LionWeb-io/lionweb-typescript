@@ -51,6 +51,7 @@ describe(`scenarios where TypeScript client is the only system under test (using
         const queryId = "query-1"
         const commandId = "command-1"
         const lionWebClient = await LionWebClient.create({
+            repositoryId: "myRepo",
             clientId,
             url: wsLocalhostUrl(nextPort()),
             languageBases: [testLanguageBase],

@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.9.0
+
+(No changes)
+
+
 ## 0.8.0
 
 * The `NT` type parameter of `SingleRef<NT>` now extends the `Node` base type.

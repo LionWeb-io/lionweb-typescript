@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.0
+
+* Add a command `generate-class-core-types` to invoke the `@lionweb/class-core-generator`.
+
+
+## 0.8.0, 0.7.2
+
+(No changes)
+
+
 ## 0.7.1
 
 (The 0.7.0 release was deprecated because its `validation` package was faulty.)
@@ -16,7 +26,7 @@ Changes in this version:
 
 Dependencies: `@lionweb/core` and `@lionweb/utilities` version 0.6.12
 
-(no changes)
+(No changes)
 
 
 ## 0.6.12
@@ -30,7 +40,7 @@ Dependencies: `@lionweb/core` and `@lionweb/utilities` version 0.6.11
 
 Dependencies: `@lionweb/core` and `@lionweb/utilities` version 0.6.10
 
-(no changes)
+(No changes)
 
 
 ## 0.6.10
@@ -44,21 +54,21 @@ Dependencies: `@lionweb/core` and `@lionweb/utilities` version 0.6.9
 
 Dependencies: `@lionweb/core` and `@lionweb/utilities` version 0.6.8
 
-(no changes)
+(No changes)
 
 
 ## 0.6.8
 
 Dependencies: `@lionweb/core` and `@lionweb/utilities` version 0.6.7
 
-(no changes)
+(No changes)
 
 
 ## 0.6.7
 
 Dependencies: `@lionweb/core` and `@lionweb/utilities` version 0.6.6
 
-(no changes)
+(No changes)
 
 
 ## 0.6.6

@@ -49,6 +49,7 @@ export const recognizedTasks: Record<string, boolean> = {
     "AddAnnotation": true,
     "AddAnnotations": true,
     "AddAnnotation_to_Containment_0_1": true,
+    "AddAnnotationWithLanguageReference": true,
     "DeleteAnnotation": true,
     "MoveAnnotationInSameParent": true,
     "MoveAnnotationFromOtherParent": true,
@@ -125,8 +126,7 @@ export const taskExecutor = (lionWebClient: LionWebClient, semanticLogItems: ISe
             case "SubscribeToChangingPartitions":
                 return await lionWebClient.subscribeToChangingPartitions(queryId, {
                     creation: true,
-                    deletion: true,
-                    partitions: true
+                    deletion: true
                 })
 
             case "SignOff":
@@ -171,6 +171,13 @@ export const taskExecutor = (lionWebClient: LionWebClient, semanticLogItems: ISe
             case "AddAnnotation_to_Containment_0_1":
                 linkTestConcept().containment_0_1!.addAnnotation(annotation("annotation"))
                 return waitForReceivedMessages(1)
+
+            case "AddAnnotationWithLanguageReference": {
+                const ann = annotation("annotation")
+                ann.ref = testLanguageBase.DataTypeTestConcept_booleanValue_0_1
+                thePartition().addAnnotation(ann)
+                return waitForReceivedMessages(1)
+            }
 
             case "DeleteAnnotation": {
                 const nAnnotations = thePartition().annotations.length

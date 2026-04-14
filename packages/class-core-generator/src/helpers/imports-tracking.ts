@@ -16,7 +16,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { Language, LanguageEntity, LionWebVersions } from "@lionweb/core"
-import { asJSIdentifier } from "@lionweb/textgen-utils"
+import { asJSIdentifier, withFirstUpper } from "@lionweb/textgen-utils"
 
 export const importRenamingForLanguage = (language: Language) => asJSIdentifier(language.name)
 
@@ -42,41 +42,33 @@ export class Imports {
         return this.thisLanguageNameAsJsIdentifier + "Base"
     }
 
+    public static importAlias = (libName: string) =>
+        `$lw${withFirstUpper(libName)}`
+    private aliased = (libName: string, identifier: string) =>
+        `${Imports.importAlias(libName)}.${identifier}`
+
     private readonly _jsonImports = new Set<string>()
-    get jsonImports() {
-        return [...this._jsonImports]
-    }
     json(identifier: string) {
         this._jsonImports.add(identifier)
-        return identifier
+        return this.aliased("json", identifier)
     }
 
     private readonly _coreImports = new Set<string>()
-    get coreImports() {
-        return [...this._coreImports]
-    }
     core(identifier: string) {
         this._coreImports.add(identifier)
-        return identifier
+        return this.aliased("core", identifier)
     }
 
     private readonly _genericImports = new Set<string>()
-    get genericImports() {
-        return [...this._genericImports]
-    }
     generic(identifier: string) {
         this._genericImports.add(identifier)
-        return identifier
+        return this.aliased("classCore", identifier)
     }
 
     private readonly _indexImports = new Set<string>()
-    get indexImports() {
-        return [...this._indexImports]
-    }
     entity(entity: LanguageEntity) {
         if (entity.language === lioncoreBuiltins) {
-            this._genericImports.add(entity.name)
-            return entity.name
+            return this.generic(entity.name)
         }
         if (entity.language === this.thisLanguage) {
             return entity.name
@@ -91,8 +83,7 @@ export class Imports {
     }
     language(language: Language) {
         if (language === lioncoreBuiltins) {
-            this._genericImports.add(lioncoreBuiltinsIdentifier)
-            return lioncoreBuiltinsIdentifier
+            return this.generic(lioncoreBuiltinsIdentifier)
         }
         const externalName = importRenamingForLanguage(language)
         if (language === this.thisLanguage) {

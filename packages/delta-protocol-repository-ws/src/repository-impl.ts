@@ -61,6 +61,7 @@ export class LionWebRepository {
                 return clientMetadata as ClientMetadata
             }
             switch (message.messageKind) {
+                // TODO  remaining queries
                 case "SignOnRequest": {
                     const { clientId, queryId } = message as SignOnRequest
                     clientMetadata.participationId = `participation-${String.fromCharCode(97 + (nextParticipationIdSequenceNumber++))}`
@@ -81,7 +82,7 @@ export class LionWebRepository {
                         additionalInfos: []
                     } as SignOffResponse
                 }
-                // all commands, in order of the specification (§ 5.6):
+                // all commands, in order of the specification (§ 5.7):
                 /*
                  * **DEV note**: run
                  *

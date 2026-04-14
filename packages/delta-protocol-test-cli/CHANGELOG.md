@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.9.0
+
+* Set ID of repository to connect to, to `myRepo`.
+* Update to latest spec. of delta protocol.
+
+
+## 0.8.1
+
+* Add the "AddAnnotationWithLanguageReference" task.
+
+
 ## 0.8.0
 
 * Remove the `<partition concept>` argument.

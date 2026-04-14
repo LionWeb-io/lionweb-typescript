@@ -330,6 +330,39 @@ export const RequestDefinitions: MessageGroup = {
             name: "ListPartitionsRequest",
             properties: [
                 {
+                    name: "depthLimit",
+                    type: "Number",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "queryId",
+                    type: "QueryId",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "messageKind",
+                    type: "String",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "additionalInfos",
+                    type: "AdditionalInfo",
+                    isList: true,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+            ],
+        },
+        {
+            name: "ListAndSubscribePartitionsRequest",
+            properties: [
+                {
                     name: "queryId",
                     type: "QueryId",
                     isList: false,

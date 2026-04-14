@@ -39,6 +39,7 @@ describe("implementation of LionWeb client", async function() {
 
     it("what happens when sending a message through an unwilling low-level client", async function() {
         const lionWebClient = await LionWebClient.create({
+            repositoryId: "myRepo",
             clientId: "A",
             url: "",
             languageBases: [testLanguageBase],
@@ -53,6 +54,7 @@ describe("implementation of LionWeb client", async function() {
 
     it("can disconnect", async function() {
         const lionWebClient = await LionWebClient.create({
+            repositoryId: "myRepo",
             clientId: "A",
             url: "",
             languageBases: [testLanguageBase],
@@ -66,6 +68,7 @@ describe("implementation of LionWeb client", async function() {
 
     it("can sign on and off (and add a partition)", async function() {
         const lionWebClient = await LionWebClient.create({
+            repositoryId: "myRepo",
             clientId: "A",
             url: "",
             languageBases: [testLanguageBase],
@@ -121,6 +124,7 @@ describe("implementation of LionWeb client", async function() {
 
     it("can delete a partition", async function() {
         const lionWebClient = await LionWebClient.create({
+            repositoryId: "myRepo",
             clientId: "A",
             url: "",
             languageBases: [testLanguageBase],

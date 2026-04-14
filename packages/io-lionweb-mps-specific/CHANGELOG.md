@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.9.0
+
+(No changes)
+
+
 ## 0.8.0
 
 * Tie the language explicitly to LionWeb version 2023.1 — see the [README.md](./README.md#lionweb-version) for more details.
