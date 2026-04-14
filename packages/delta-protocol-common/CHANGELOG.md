@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.0
+
+* Update to latest spec. of delta protocol:
+    * Implement missing query types.
+    * Update `Reconnect*` types.
+    * Change/replace delta protocol version 2025.1 &rarr; 2026.1.
+    * Update references to delta protocol specification document.
+    * Annotate query types with paragraph in specification.
+
+
 ## 0.8.0
 
 * Remove all reference-related event and command types, except for the ones associated with adding, changing, and deleting a reference.

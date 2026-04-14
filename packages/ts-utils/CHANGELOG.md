@@ -1,8 +1,13 @@
 # Changelog
 
-## 0.9.0 — not yet released
+## 0.9.0
 
 * Add `sumOfNumbers` function.
+
+
+## 0.8.0, 0.7.2
+
+(No changes)
 
 
 ## 0.7.1

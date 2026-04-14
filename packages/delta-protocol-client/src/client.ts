@@ -294,7 +294,7 @@ export class LionWebClient {
             queryId,
             deltaProtocolVersion: "2026.1",
             clientId: this.clientId,
-            repositoryId: "???",
+            repositoryId: this.repositoryId,
             participationId: this.participationId,
             lastReceivedSequenceNumber,
             additionalInfos: []

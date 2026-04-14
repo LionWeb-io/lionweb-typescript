@@ -1,16 +1,11 @@
 # Changelog
 
-## 0.9.0 — not yet released
+## 0.9.0
 
 * Add a command `generate-class-core-types` to invoke the `@lionweb/class-core-generator`.
 
 
-## 0.8.0
-
-(No changes)
-
-
-## 0.7.2
+## 0.8.0, 0.7.2
 
 (No changes)
 

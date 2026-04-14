@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.9.0
+
+(No changes)
+
+
 ## 0.8.0
 
 * Make `reference` field of `LionWebJsonReferenceTarget` type `null`able, and ensure that not both fields are `null`.

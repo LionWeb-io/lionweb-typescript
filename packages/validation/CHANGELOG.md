@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.9.0
+
+* Update to latest spec. of delta protocol.
+
+
 ## 0.8.0
 
 * New way to define the structure of the LionWeb JSON format.

@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.9.0
+
+* (Update references to delta protocol specification document.)
+
+
 ## 0.8.0
 
 * Remove all code relating to the removed reference-related event and command types.

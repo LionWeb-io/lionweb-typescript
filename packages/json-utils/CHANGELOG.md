@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.0
+
+* Add several methods to `LionWebJsonChunkWrapper`.
+
+
+## 0.8.0, 0.7.2
+
+(No changes)
+
+
 ## 0.7.1
 
 (The 0.7.0 release was deprecated because its `validation` package was faulty.)

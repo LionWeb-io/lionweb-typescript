@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.9.0
+
+* (Regenerate built-ins language implementation after changes to `class-core-generator`.)
+
+
 ## 0.8.0
 
 * Receive the `IdOrUnresolved` type from the `core` package, and export that and the `idFrom` function.
