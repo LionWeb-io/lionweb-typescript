@@ -183,11 +183,11 @@ npm run lint
 
 ### Version numbers
 
-To keep the version numbers of the various packages under `packages/` aligned throughout this repository, you use the Node.js script [`update-package-versions.js`](./update-package-versions.js).
+To keep the version numbers of the various packages under `packages/` aligned throughout this repository, you use the Node.js script [`update-package-versions.js`](./scripts/update-package-versions.js).
 You execute this script as follows from the repo's root:
 
 ```shell
-./update-package-versions.js
+./scripts/update-package-versions.js
 ```
 
 This reads the file [`packages/versions.json`](versions.json) and updates the `package.json` files of all *workspace packages* (as listed in the root-level `package.json`) under `packages/` according to it, as well as the main(/root-level) `package.json`.
