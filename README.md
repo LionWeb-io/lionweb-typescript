@@ -232,6 +232,27 @@ You can also perform an alpha release in exactly the same way as a beta release,
 Alpha releases should be limited to experimental features.
 
 
+### Updating external dependencies
+
+Execute the following script from the repo’s root to see whether external dependencies can be updated to a newer version:
+
+```shell
+./scripts/update-external-deps.js
+```
+
+If any of the external dependencies has a newer(/other) version, then re-run this script with the `--update` flag as argument to update `versions.json` accordingly.
+Then, run `./scripts/update-package-versions.js` again to update all `package.json` files.
+
+**Note** that external dependencies have to adhere to a mininum release age of 30 days, configured through the `min-release-age` property in `.npmrc`.
+This is to avoid supply chain attacks.
+The `update-external-deps.js` script doesn’t check whether a newer version of an external dependency adheres to that.
+If it doesn’t, you’re going to see an error message of the following kind when running `npm i[nstall]`:
+
+```
+npm error notarget No matching version found for nanoid@5.1.9 with a date before 3/18/2026, 12:50:38 PM.
+```
+
+
 ## Circular dependencies
 
 Run the NPM task `check-circular-dependencies` to check whether circular dependencies exist in any of the packages.
