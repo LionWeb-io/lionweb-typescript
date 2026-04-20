@@ -1,5 +1,11 @@
 # Changelog
 
+
+## 0.10.0
+
+* Update to latest spec. of delta protocol.
+Especially additional properties for all Move/Replace child and annotation commands.
+
 ## 0.9.0
 
 * Update to latest spec. of delta protocol.
