@@ -30,14 +30,13 @@
         "release": "npm publish"
     },
     "dependencies": {
-        "@lionweb/class-core": "0.10.0-beta.0",
         "@lionweb/class-core-test-language": "0.10.0-beta.0",
-        "@lionweb/core": "0.10.0-beta.0",
         "@lionweb/delta-protocol-client": "0.10.0-beta.0",
         "@lionweb/delta-protocol-common": "0.10.0-beta.0",
         "@lionweb/delta-protocol-low-level-client-ws": "0.10.0-beta.0",
         "@lionweb/delta-protocol-repository-ws": "0.10.0-beta.0",
         "@lionweb/json": "0.10.0-beta.0",
+        "@lionweb/ts-utils": "0.10.0-beta.0",
         "@lionweb/utilities": "0.10.0-beta.0"
     }
 }
