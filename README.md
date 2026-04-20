@@ -309,6 +309,8 @@ Run the following on the command line, in the repoâ€™s root, to see where thereâ
 $ node packages/build/src/code-reading/check-imports.js
 ```
 
+Inspect the console output for mismatches, which are flagged with red or yellow backgrounds.
+
 
 ### Containerized development environment
 
