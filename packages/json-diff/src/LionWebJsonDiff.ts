@@ -121,7 +121,7 @@ export class LionWebJsonDiff {
             }
         })
         afterNode.references.forEach((afterReference: LionWebJsonReference, index: number) => {
-            const beforeReference = NodeUtils.findReference(afterNode, afterReference.reference)
+            const beforeReference = NodeUtils.findReference(beforeNode, afterReference.reference)
             if (beforeReference === undefined) {
                 if (afterReference.targets.length !== 0) {
                     afterReference.targets.forEach(target => {
