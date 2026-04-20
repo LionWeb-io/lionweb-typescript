@@ -91,7 +91,7 @@ export type DeltaToCommandTranslator = (delta: IDelta, commandId: LionWebId) => 
  * @return a {@link DeltaToCommandTranslator} function instance
  * that translates a given {@link IDelta `delta`} into a {@link Command command} with the given `commandId`.
  * Serialization of primitively-typed values is governed by the given {@link PropertyValueSerializer `primitiveValueSerializer`},
- * which defaults to the {@link builtinPropertyValueSerializer}.
+ * which has a default `LionWebVersions.v2023_1.builtinsFacade.propertyValueSerializer`.
  */
 export const deltaToCommandTranslator = (
     primitiveValueSerializer: PropertyValueSerializer = LionWebVersions.v2023_1.builtinsFacade.propertyValueSerializer
@@ -171,22 +171,28 @@ export const deltaToCommandTranslator = (
                 newParent: delta.newParent.id,
                 newContainment: metaPointerFor(delta.newContainment),
                 newIndex: delta.newIndex,
+                oldParent: delta.oldParent.id,
+                oldContainment: metaPointerFor(delta.oldContainment),
+                oldIndex: delta.oldIndex,
                 movedChild: delta.movedChild.id
             })
         }
         if (delta instanceof ChildMovedFromOtherContainmentInSameParentDelta) {
             return completed<MoveChildFromOtherContainmentInSameParentCommand>("MoveChildFromOtherContainmentInSameParent", { // § 5.7.5.5
+                parent: delta.parent.id,
                 newContainment: metaPointerFor(delta.newContainment),
                 newIndex: delta.newIndex,
-                movedChild: delta.movedChild.id,
-                parent: delta.parent.id,
                 oldContainment: metaPointerFor(delta.oldContainment),
-                oldIndex: delta.oldIndex
+                oldIndex: delta.oldIndex,
+                movedChild: delta.movedChild.id
             })
         }
         if (delta instanceof ChildMovedInSameContainmentDelta) {
             return completed<MoveChildInSameContainmentCommand>("MoveChildInSameContainment", { // § 5.7.5.6
+                parent: delta.parent.id,
+                containment: metaPointerFor(delta.containment),
                 newIndex: delta.newIndex,
+                oldIndex: delta.oldIndex,
                 movedChild: delta.movedChild.id
             })
         }
@@ -195,21 +201,30 @@ export const deltaToCommandTranslator = (
                 newParent: delta.newParent.id,
                 newContainment: metaPointerFor(delta.newContainment),
                 newIndex: delta.newIndex,
+                oldParent: delta.oldParent.id,
+                oldContainment: metaPointerFor(delta.oldContainment),
+                oldIndex: delta.oldIndex,
                 replacedChild: delta.replacedChild.id,
                 movedChild: delta.movedChild.id
             })
         }
         if (delta instanceof ChildMovedAndReplacedFromOtherContainmentInSameParentDelta) {
             return completed<MoveAndReplaceChildFromOtherContainmentInSameParentCommand>("MoveAndReplaceChildFromOtherContainmentInSameParent", { // § 5.7.5.8
+                parent: delta.parent.id,
                 newContainment: metaPointerFor(delta.newContainment),
                 newIndex: delta.newIndex,
+                oldContainment: metaPointerFor(delta.oldContainment),
+                oldIndex: delta.oldIndex,
                 replacedChild: delta.replacedChild.id,
                 movedChild: delta.movedChild.id
             })
         }
         if (delta instanceof ChildMovedAndReplacedInSameContainmentDelta) {
             return completed<MoveAndReplaceChildInSameContainmentCommand>("MoveAndReplaceChildInSameContainment", { // § 5.7.5.9
+                parent: delta.parent.id,
+                containment: metaPointerFor(delta.containment),
                 newIndex: delta.newIndex,
+                oldIndex: delta.oldIndex,
                 replacedChild: delta.replacedChild.id
             })
         }
@@ -239,12 +254,16 @@ export const deltaToCommandTranslator = (
             return completed<MoveAnnotationFromOtherParentCommand>("MoveAnnotationFromOtherParent", { // § 5.7.6.4
                 newParent: delta.newParent.id,
                 newIndex: delta.newIndex,
+                oldParent: delta.oldParent.id,
+                oldIndex: delta.oldIndex,
                 movedAnnotation: delta.movedAnnotation.id
             })
         }
         if (delta instanceof AnnotationMovedInSameParentDelta) {
             return completed<MoveAnnotationInSameParentCommand>("MoveAnnotationInSameParent", { // § 5.7.6.5
+                parent: delta.parent.id,
                 newIndex: delta.newIndex,
+                oldIndex: delta.oldIndex,
                 movedAnnotation: delta.movedAnnotation.id
             })
         }
@@ -252,13 +271,17 @@ export const deltaToCommandTranslator = (
             return completed<MoveAndReplaceAnnotationFromOtherParentCommand>("MoveAndReplaceAnnotationFromOtherParent", { // § 5.7.6.6
                 newParent: delta.newParent.id,
                 newIndex: delta.newIndex,
+                oldParent: delta.oldParent.id,
+                oldIndex: delta.oldIndex,
                 replacedAnnotation: delta.replacedAnnotation.id,
                 movedAnnotation: delta.movedAnnotation.id
             })
         }
         if (delta instanceof AnnotationMovedAndReplacedInSameParentDelta) {
             return completed<MoveAndReplaceAnnotationInSameParentCommand>("MoveAndReplaceAnnotationInSameParent", { // § 5.7.6.7
+                parent: delta.parent.id,
                 newIndex: delta.newIndex,
+                oldIndex: delta.oldIndex,
                 replacedAnnotation: delta.replacedAnnotation.id,
                 movedAnnotation: delta.movedAnnotation.id
             })
