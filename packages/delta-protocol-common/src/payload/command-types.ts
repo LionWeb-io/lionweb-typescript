@@ -161,6 +161,7 @@ export interface MoveAndReplaceChildInSameContainmentCommand extends Command {
     newIndex: number
     oldIndex: number
     replacedChild: LionWebId
+    movedChild: LionWebId
 }
 
 /** § 5.7.6.1 */
