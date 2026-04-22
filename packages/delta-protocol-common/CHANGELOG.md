@@ -4,6 +4,7 @@
 
 * Add “`old*`” properties to `Move[AndReplace]{Child|Annotation}*Command`s, and propagate to delta&rarr;command translator.
 * Implement splittable messages.
+* Implement types for custom messages.
 
 
 ## 0.9.0

@@ -37,6 +37,21 @@ export interface OriginatedEvent extends Event {
 }
 
 
+/**
+ * “Abstract” interface for custom commands.
+ *
+ * § 5.3.3
+ */
+export interface CustomEvent extends Event {
+    /*
+     * messageKind to be specified:
+     *  - MUST adhere to the same format as identifiers,
+     *  - MUST start with "custom_", and
+     *  - MUST have at least 8 characters.
+     */
+}
+
+
 // in order of the specification (§ 5.8):
 
 /**

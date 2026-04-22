@@ -23,6 +23,21 @@ export interface Command extends DeltaAdditionalInfo {
 }
 
 
+/**
+ * “Abstract” interface for custom commands.
+ *
+ * § 5.3.2
+ */
+export interface CustomCommand extends Command {
+    /*
+     * messageKind to be specified:
+     *  - MUST adhere to the same format as identifiers,
+     *  - MUST start with "custom_", and
+     *  - MUST have at least 8 characters.
+     */
+}
+
+
 // in order of the specification (§ 5.7):
 
 /** § 5.7.1 */

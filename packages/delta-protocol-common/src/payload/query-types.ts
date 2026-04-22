@@ -27,6 +27,37 @@ export interface QueryMessage extends DeltaAdditionalInfo {
 }
 
 
+/**
+ * “Abstract” interface for custom queries’ requests.
+ *
+ * § 5.3.1 (request)
+ */
+export interface CustomQueryRequest extends QueryMessage {
+    /*
+     * messageKind to be specified:
+     *  - MUST adhere to the same format as identifiers,
+     *  - MUST start with "custom_", and
+     *  - MUST have at least 8 characters,
+     *  - SHOULD end in "Request".
+     */
+}
+
+/**
+ * “Abstract” interface for custom queries’ responses.
+ *
+ * § 5.3.1 (response)
+ */
+export interface CustomQueryResponse extends QueryMessage {
+    /*
+     * messageKind to be specified:
+     *  - MUST adhere to the same format as identifiers,
+     *  - MUST start with "custom_", and
+     *  - MUST have at least 8 characters,
+     *  - SHOULD end in "Response".
+     */
+}
+
+
 // in order of the specification (§ 5.5):
 
 /** § 5.5.1.1 (response) */
