@@ -1,6 +1,6 @@
 {
     "lionweb": {
-        "publish-version": "0.10.0-beta.1",
+        "publish-version": "0.10.0-alpha.0",
         "internal-version": "0.10.0-dev.0",
         "internal-packages": [
             "build",
@@ -20,6 +20,6 @@
         "mobx": "6.15.0",
         "mocha": "11.7.5",
         "nanoid": "5.1.6",
-        "ws": "8.21.0"
+        "ws": "8.19.0"
     }
 }
