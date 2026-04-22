@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.10.0 — not yet released
+
+* Adding the same child twice using `SingleContainmentValueManager.addDirectly` – used exclusively and internally by the deserializer and duplicator – doesn’t throw an error (regardless of whether the serialization format specification allows this).
+
+
 ## 0.9.0
 
 * (Regenerate built-ins language implementation after changes to `class-core-generator`.)
