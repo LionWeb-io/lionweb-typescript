@@ -18,7 +18,7 @@
 // Warning: this file is generated!
 // Modifying it by hand is useless at best, and sabotage at worst.
 
-import { metaPointerFor } from "@lionweb/core";
+import { metaPointerForFeature } from "@lionweb/core";
 import { IDelta } from "../base.js";
 import {
     AnnotationAddedDelta,
@@ -102,7 +102,7 @@ export const serializeDelta = (delta: IDelta): SerializedDelta => {
         return {
             kind: "PropertyAdded",
             node: delta.node.id,
-            property: metaPointerFor(delta.property),
+            property: metaPointerForFeature(delta.property),
             value: defaultPropertyValueSerializer.serializeValue(delta.value, delta.property)
         } as PropertyAddedSerializedDelta;
     }
@@ -111,7 +111,7 @@ export const serializeDelta = (delta: IDelta): SerializedDelta => {
         return {
             kind: "PropertyDeleted",
             node: delta.node.id,
-            property: metaPointerFor(delta.property),
+            property: metaPointerForFeature(delta.property),
             oldValue: defaultPropertyValueSerializer.serializeValue(delta.oldValue, delta.property)
         } as PropertyDeletedSerializedDelta;
     }
@@ -120,7 +120,7 @@ export const serializeDelta = (delta: IDelta): SerializedDelta => {
         return {
             kind: "PropertyChanged",
             node: delta.node.id,
-            property: metaPointerFor(delta.property),
+            property: metaPointerForFeature(delta.property),
             oldValue: defaultPropertyValueSerializer.serializeValue(delta.oldValue, delta.property),
             newValue: defaultPropertyValueSerializer.serializeValue(delta.newValue, delta.property)
         } as PropertyChangedSerializedDelta;
@@ -130,7 +130,7 @@ export const serializeDelta = (delta: IDelta): SerializedDelta => {
         return {
             kind: "ChildAdded",
             parent: delta.parent.id,
-            containment: metaPointerFor(delta.containment),
+            containment: metaPointerForFeature(delta.containment),
             index: delta.index,
             newChild: delta.newChild.id,
             newNodes: serializeNodeBases([delta.newChild])
@@ -141,7 +141,7 @@ export const serializeDelta = (delta: IDelta): SerializedDelta => {
         return {
             kind: "ChildDeleted",
             parent: delta.parent.id,
-            containment: metaPointerFor(delta.containment),
+            containment: metaPointerForFeature(delta.containment),
             index: delta.index,
             deletedChild: delta.deletedChild.id,
             deletedNodes: serializeNodeBases([delta.deletedChild])
@@ -152,7 +152,7 @@ export const serializeDelta = (delta: IDelta): SerializedDelta => {
         return {
             kind: "ChildReplaced",
             parent: delta.parent.id,
-            containment: metaPointerFor(delta.containment),
+            containment: metaPointerForFeature(delta.containment),
             index: delta.index,
             replacedChild: delta.replacedChild.id,
             replacedNodes: serializeNodeBases([delta.replacedChild]),
@@ -165,10 +165,10 @@ export const serializeDelta = (delta: IDelta): SerializedDelta => {
         return {
             kind: "ChildMovedFromOtherContainment",
             oldParent: delta.oldParent.id,
-            oldContainment: metaPointerFor(delta.oldContainment),
+            oldContainment: metaPointerForFeature(delta.oldContainment),
             oldIndex: delta.oldIndex,
             newParent: delta.newParent.id,
-            newContainment: metaPointerFor(delta.newContainment),
+            newContainment: metaPointerForFeature(delta.newContainment),
             newIndex: delta.newIndex,
             movedChild: delta.movedChild.id
         } as ChildMovedFromOtherContainmentSerializedDelta;
@@ -178,10 +178,10 @@ export const serializeDelta = (delta: IDelta): SerializedDelta => {
         return {
             kind: "ChildMovedFromOtherContainmentInSameParent",
             parent: delta.parent.id,
-            oldContainment: metaPointerFor(delta.oldContainment),
+            oldContainment: metaPointerForFeature(delta.oldContainment),
             oldIndex: delta.oldIndex,
             movedChild: delta.movedChild.id,
-            newContainment: metaPointerFor(delta.newContainment),
+            newContainment: metaPointerForFeature(delta.newContainment),
             newIndex: delta.newIndex
         } as ChildMovedFromOtherContainmentInSameParentSerializedDelta;
     }
@@ -190,7 +190,7 @@ export const serializeDelta = (delta: IDelta): SerializedDelta => {
         return {
             kind: "ChildMovedInSameContainment",
             parent: delta.parent.id,
-            containment: metaPointerFor(delta.containment),
+            containment: metaPointerForFeature(delta.containment),
             oldIndex: delta.oldIndex,
             newIndex: delta.newIndex,
             movedChild: delta.movedChild.id
@@ -201,11 +201,11 @@ export const serializeDelta = (delta: IDelta): SerializedDelta => {
         return {
             kind: "ChildMovedAndReplacedFromOtherContainment",
             newParent: delta.newParent.id,
-            newContainment: metaPointerFor(delta.newContainment),
+            newContainment: metaPointerForFeature(delta.newContainment),
             newIndex: delta.newIndex,
             movedChild: delta.movedChild.id,
             oldParent: delta.oldParent.id,
-            oldContainment: metaPointerFor(delta.oldContainment),
+            oldContainment: metaPointerForFeature(delta.oldContainment),
             oldIndex: delta.oldIndex,
             replacedChild: delta.replacedChild.id,
             replacedChildAsNodes: serializeNodeBases([delta.replacedChild])
@@ -216,9 +216,9 @@ export const serializeDelta = (delta: IDelta): SerializedDelta => {
         return {
             kind: "ChildMovedAndReplacedFromOtherContainmentInSameParent",
             parent: delta.parent.id,
-            oldContainment: metaPointerFor(delta.oldContainment),
+            oldContainment: metaPointerForFeature(delta.oldContainment),
             oldIndex: delta.oldIndex,
-            newContainment: metaPointerFor(delta.newContainment),
+            newContainment: metaPointerForFeature(delta.newContainment),
             newIndex: delta.newIndex,
             movedChild: delta.movedChild.id,
             replacedChild: delta.replacedChild.id,
@@ -230,7 +230,7 @@ export const serializeDelta = (delta: IDelta): SerializedDelta => {
         return {
             kind: "ChildMovedAndReplacedInSameContainment",
             parent: delta.parent.id,
-            containment: metaPointerFor(delta.containment),
+            containment: metaPointerForFeature(delta.containment),
             oldIndex: delta.oldIndex,
             newIndex: delta.newIndex,
             movedChild: delta.movedChild.id,
@@ -321,7 +321,7 @@ export const serializeDelta = (delta: IDelta): SerializedDelta => {
         return {
             kind: "ReferenceAdded",
             parent: delta.parent.id,
-            reference: metaPointerFor(delta.reference),
+            reference: metaPointerForFeature(delta.reference),
             index: delta.index,
             newReference: idFrom(delta.newReference)
         } as ReferenceAddedSerializedDelta;
@@ -331,7 +331,7 @@ export const serializeDelta = (delta: IDelta): SerializedDelta => {
         return {
             kind: "ReferenceDeleted",
             parent: delta.parent.id,
-            reference: metaPointerFor(delta.reference),
+            reference: metaPointerForFeature(delta.reference),
             index: delta.index,
             deletedReference: idFrom(delta.deletedReference)
         } as ReferenceDeletedSerializedDelta;
@@ -341,7 +341,7 @@ export const serializeDelta = (delta: IDelta): SerializedDelta => {
         return {
             kind: "ReferenceChanged",
             parent: delta.parent.id,
-            reference: metaPointerFor(delta.reference),
+            reference: metaPointerForFeature(delta.reference),
             index: delta.index,
             newReference: idFrom(delta.newReference),
             oldReference: idFrom(delta.oldReference)
