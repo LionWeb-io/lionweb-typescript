@@ -35,7 +35,7 @@ import { isSerializingAsChunk } from "./helpers.js"
 
 const serializationExpressionFor = (name: string, type: Type) => {
     if (type instanceof FeatureType) {
-        return `metaPointerFor(delta.${name})`
+        return `metaPointerForFeature(delta.${name})`
     }
     if (type instanceof NodeType) {
         return type.serialization instanceof RefOnly ? `idFrom(delta.${name})` : `delta.${name}.id`
@@ -81,7 +81,7 @@ const serializationOf = ({name, fields}: Delta) =>
 export const serializerForDeltas = (deltas: Delta[], header?: string) =>
     asString([
         header ?? [],
-        `import { metaPointerFor } from "@lionweb/core";`,
+        `import { metaPointerForFeature } from "@lionweb/core";`,
         `import { IDelta } from "../base.js";`,
         `import {`,
         indent(
