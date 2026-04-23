@@ -22,6 +22,9 @@
         "littoral-templates": "0.5.1",
         "nanoid": "5.1.6"
     },
+    "optionalDependencies": {
+        "@types/node": "25.2.2"
+    },
     "scripts": {
         "clean": "npx rimraf dist node_modules -g lionweb-utilities-*.tgz",
         "build": "tsc",

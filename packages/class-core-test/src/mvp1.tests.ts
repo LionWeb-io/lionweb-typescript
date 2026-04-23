@@ -25,7 +25,7 @@ import {
     serializeNodeBases
 } from "@lionweb/class-core"
 import { LionWebJsonChunk } from "@lionweb/json"
-import { readFileAsJson, writeJsonAsFile } from "@lionweb/utilities"
+import { readFileAsJsonSync, writeJsonAsFileSync } from "@lionweb/node-utils"
 import { join } from "path"
 
 import {
@@ -122,8 +122,8 @@ describe("TestConcept", () => {
 
     const persistSerialization = (nodes: INodeBase[], name: string) => {
         const actual = serializeNodeBases(nodes)
-        writeJsonAsFile(join(artifactsPath, `${name}.actual.json`), actual)
-        const expected = readFileAsJson(join(artifactsPath, `${name}.expected.json`))
+        writeJsonAsFileSync(join(artifactsPath, `${name}.actual.json`), actual)
+        const expected = readFileAsJsonSync(join(artifactsPath, `${name}.expected.json`))
         deepEqual(actual, expected)
     }
 
@@ -136,7 +136,7 @@ describe("TestConcept", () => {
     })
 
     it("can be deserialized without sending deltas, but then changes do send deltas", done => {
-        const serializationChunk = readFileAsJson(
+        const serializationChunk = readFileAsJsonSync(
             join(artifactsPath, "DataTypeTestConcept-value=bar-enumValue_1=literal3.expected.json")
         ) as LionWebJsonChunk
         const [receiveDelta, deltas] = collectingDeltaReceiver()
