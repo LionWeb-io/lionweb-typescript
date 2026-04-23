@@ -18,7 +18,8 @@
 import { deserializeLanguages } from "@lionweb/core"
 import { defaultTrumpfOriginatingApache2_0LicensedHeader, generateLanguage } from "@lionweb/class-core-generator"
 import { LionWebJsonChunk } from "@lionweb/json"
-import { generatePlantUmlForLanguage, languageAsText, readFileAsJson } from "@lionweb/utilities"
+import { readFileAsJsonSync } from "@lionweb/node-utils"
+import { generatePlantUmlForLanguage, languageAsText } from "@lionweb/utilities"
 import { copyFileSync, lstatSync, writeFileSync } from "fs"
 import { join } from "path"
 import { argv } from "process"
@@ -58,7 +59,7 @@ if (argv.length > 2 && argv[2] === "--force-local") {
 }
 console.log()
 
-const TestLanguage = deserializeLanguages(readFileAsJson(languageJsonPath) as LionWebJsonChunk)[0]
+const TestLanguage = deserializeLanguages(readFileAsJsonSync(languageJsonPath) as LionWebJsonChunk)[0]
 generateLanguage(TestLanguage, join(packagePath, "src/gen"), { header: defaultTrumpfOriginatingApache2_0LicensedHeader })
 // (the same content as in the lionweb-integration-testing repository:)
 writeFileSync(join(metaPath, "TestLanguage.txt"), languageAsText(TestLanguage))

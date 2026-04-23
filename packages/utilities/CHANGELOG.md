@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.10.0 — not yet released
+
+* Deprecate the `readFileAsJson` and `writeJsonAsFile` functions in favor of the `readFileAsJsonSync` and `writeJsonAsFileSync` functions from `@lionweb/node-utils`.
+  (This change has been propagated throughout the entire codebase.)
+
+
 ## 0.9.0
 
 * Expose types associated with the `measure` function — m.n. `Metrics`.

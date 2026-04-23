@@ -17,7 +17,7 @@
 
 import { deserializeLanguages, Language, LionWebVersions } from "@lionweb/core"
 import { LionWebJsonChunk } from "@lionweb/json"
-import { readFileAsJson } from "@lionweb/utilities"
+import { readFileAsJsonSync } from "@lionweb/node-utils"
 import { writeFileSync } from "fs"
 import { join } from "path"
 import { cwd } from "process"
@@ -87,7 +87,7 @@ export const generateApiFromLanguagesJson = (languagesJsonPath: string, generati
     log(`   Path to languages: ${languagesJsonPath}`)
     log(`   Generation path:   ${generationPath}`)
 
-    const languagesJson = readFileAsJson(languagesJsonPath) as LionWebJsonChunk
+    const languagesJson = readFileAsJsonSync(languagesJsonPath) as LionWebJsonChunk
     const languages = deserializeLanguages(languagesJson, LionWebVersions.v2023_1.lioncoreFacade.language)
     generateApiFromLanguages(languages, generationPath, mayBeOptions)
 }

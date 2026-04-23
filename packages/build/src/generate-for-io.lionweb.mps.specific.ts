@@ -17,11 +17,11 @@
 
 import { deserializeLanguages, LionWebVersions } from "@lionweb/core"
 import { LionWebJsonChunk } from "@lionweb/json"
+import { readFileAsJsonSync } from "@lionweb/node-utils"
 import {
     generateMermaidForLanguage,
     generatePlantUmlForLanguage,
-    languageAsText,
-    readFileAsJson
+    languageAsText
 } from "@lionweb/utilities"
 import { writeFileSync } from "fs"
 import { join } from "path"
@@ -31,7 +31,7 @@ const packagePath = join("..", languageName.replaceAll(".", "-"))   // (-> packa
 const metaPath = join(packagePath, "meta")
 
 // read language definition from package:
-const chunk = readFileAsJson(join(metaPath, `${languageName}.json`)) as LionWebJsonChunk
+const chunk = readFileAsJsonSync(join(metaPath, `${languageName}.json`)) as LionWebJsonChunk
 const language = deserializeLanguages(chunk, LionWebVersions.v2023_1.lioncoreFacade.language)[0]
 
 writeFileSync(join(metaPath, `${languageName}.txt`), languageAsText(language))
