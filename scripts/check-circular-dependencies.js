@@ -15,7 +15,7 @@ const checkPackage = async (pkg) =>
         })
 
 Promise.all(
-    JSON.parse(readFileSync("package.json", { encoding: "utf8" }))
+    JSON.parse(readFileSync("../package.json", { encoding: "utf8" }))
         .workspaces
         .map((path) => path.substring("./packages/".length))
         .map(checkPackage)
