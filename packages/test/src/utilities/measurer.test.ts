@@ -1,13 +1,12 @@
 import { serializerWith } from "@lionweb/core"
 import { LionWebKey } from "@lionweb/json"
+import { readFileAsJsonSync, writeJsonAsFileSync } from "@lionweb/node-utils"
 import { asMinimalJsonString } from "@lionweb/ts-utils"
 import {
     aggregateMetrics, ClassifierInstantiationMetric, ClassifierPointer,
     LanguageMetric, LanguagePointer,
     measure,
-    mergeMetrics,
-    readFileAsJson,
-    writeJsonAsFile
+    mergeMetrics
 } from "@lionweb/utilities"
 import { join } from "path"
 
@@ -25,9 +24,9 @@ describe("metrics computation", () => {
 
     const compareWithFile = (json: unknown, path: string) => {
         try {
-            deepEqual(withoutUndefineds(json), readFileAsJson(path))
+            deepEqual(withoutUndefineds(json), readFileAsJsonSync(path))
         } catch (_) {
-            writeJsonAsFile(path, json)
+            writeJsonAsFileSync(path, json)
             console.error(`[NOTE] overwrote ${path} with actual contents — check correct, and commit if it is`)
         }
     }
