@@ -26,8 +26,8 @@
         "@lionweb/core": "0.10.0-alpha.0",
         "@lionweb/io-lionweb-mps-specific": "0.10.0-alpha.0",
         "@lionweb/json": "0.10.0-alpha.0",
+        "@lionweb/node-utils": "0.10.0-alpha.0",
         "@lionweb/ts-utils": "0.10.0-alpha.0",
-        "@lionweb/utilities": "0.10.0-alpha.0",
         "chai": "6.2.2",
         "mobx": "6.15.0",
         "mocha": "11.7.5"

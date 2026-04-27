@@ -22,7 +22,7 @@ import { LionWebClient, LowLevelClientLogItem } from "@lionweb/delta-protocol-cl
 import { ansi, combine, semanticConsoleLogger, semanticLogItemStorer } from "@lionweb/delta-protocol-common"
 import { createWSLowLevelClient } from "@lionweb/delta-protocol-low-level-client-ws"
 import { wsLocalhostUrl } from "@lionweb/delta-protocol-repository-ws"
-import { writeJsonAsFile } from "@lionweb/utilities"
+import { writeJsonAsFileSync } from "@lionweb/node-utils"
 import { argv, exit } from "process"
 
 import { runAsApp, tryParseInteger } from "./common.js"
@@ -108,7 +108,7 @@ await runAsApp(async () => {
     }
 
     if (protocolLogPathIndex > -1) {
-        writeJsonAsFile(argv[protocolLogPathIndex].substring(protocolLogOptionPrefix.length), logItems)
+        writeJsonAsFileSync(argv[protocolLogPathIndex].substring(protocolLogOptionPrefix.length), logItems)
     }
 
     return () => {

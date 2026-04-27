@@ -1,6 +1,6 @@
 import { LionWebId, LionWebJsonChunk, LionWebJsonNode } from "@lionweb/json"
 import { asArray, keepDefineds, lazyMapGet, Nested3Map, uniquesAmong } from "@lionweb/ts-utils"
-import { asIds, metaPointerFor } from "./functions.js"
+import { asIds, metaPointerForFeature } from "./functions.js"
 import { Reader } from "./reading.js"
 import { Node } from "./types.js"
 import { inheritsDirectlyFrom } from "./m3/functions.js"
@@ -177,7 +177,7 @@ export const serializerWith = <NT extends Node, RT extends Node = NT>(configurat
                 const value = reader.getFeatureValue(node, feature)
                 const featureLanguage = feature.classifier.language
                 registerLanguageUsed(featureLanguage)
-                const featureMetaPointer = metaPointerFor(feature)
+                const featureMetaPointer = metaPointerForFeature(feature)
                 if (feature instanceof Property) {
                     if (value === undefined && !serializeEmptyFeatures) {
                         // for immediate backward compatibility: skip empty property values regardless of options?.skipEmptyValues

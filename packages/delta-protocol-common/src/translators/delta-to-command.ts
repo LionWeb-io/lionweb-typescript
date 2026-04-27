@@ -48,7 +48,7 @@ import {
     ReferenceDeletedDelta,
     serializeNodeBases
 } from "@lionweb/class-core"
-import { LionWebVersions, metaPointerFor, PropertyValueSerializer } from "@lionweb/core"
+import { LionWebVersions, metaPointerForFeature, PropertyValueSerializer } from "@lionweb/core"
 import { LionWebId } from "@lionweb/json"
 import {
     AddAnnotationCommand,
@@ -124,20 +124,20 @@ export const deltaToCommandTranslator = (
         if (delta instanceof PropertyAddedDelta) {
             return completed<AddPropertyCommand>("AddProperty", { // § 5.7.4.1
                 node: delta.node.id,
-                property: metaPointerFor(delta.property),
+                property: metaPointerForFeature(delta.property),
                 newValue: propertyValueSerializer.serializeValue(delta.value, delta.property)!
             })
         }
         if (delta instanceof PropertyDeletedDelta) {
             return completed<DeletePropertyCommand>("DeleteProperty", { // § 5.7.4.2
                 node: delta.node.id,
-                property: metaPointerFor(delta.property)
+                property: metaPointerForFeature(delta.property)
             })
         }
         if (delta instanceof PropertyChangedDelta) {
             return completed<ChangePropertyCommand>("ChangeProperty", { // § 5.7.4.3
                 node: delta.node.id,
-                property: metaPointerFor(delta.property),
+                property: metaPointerForFeature(delta.property),
                 newValue: propertyValueSerializer.serializeValue(delta.newValue, delta.property)!
             })
         }
@@ -145,14 +145,14 @@ export const deltaToCommandTranslator = (
             return completed<AddChildCommand>("AddChild", { // § 5.7.5.1
                 parent: delta.parent.id,
                 newChild: serializeNodeBases([delta.newChild]),
-                containment: metaPointerFor(delta.containment),
+                containment: metaPointerForFeature(delta.containment),
                 index: delta.index
             })
         }
         if (delta instanceof ChildDeletedDelta) {
             return completed<DeleteChildCommand>("DeleteChild", { // § 5.7.5.2
                 parent: delta.parent.id,
-                containment: metaPointerFor(delta.containment),
+                containment: metaPointerForFeature(delta.containment),
                 index: delta.index,
                 deletedChild: delta.deletedChild.id
             })
@@ -161,7 +161,7 @@ export const deltaToCommandTranslator = (
             return completed<ReplaceChildCommand>("ReplaceChild", { // § 5.7.5.3
                 newChild: serializeNodeBases([delta.newChild]),
                 parent: delta.parent.id,
-                containment: metaPointerFor(delta.containment),
+                containment: metaPointerForFeature(delta.containment),
                 index: delta.index,
                 replacedChild: delta.replacedChild.id
             })
@@ -169,10 +169,10 @@ export const deltaToCommandTranslator = (
         if (delta instanceof ChildMovedFromOtherContainmentDelta) {
             return completed<MoveChildFromOtherContainmentCommand>("MoveChildFromOtherContainment", { // § 5.7.5.4
                 newParent: delta.newParent.id,
-                newContainment: metaPointerFor(delta.newContainment),
+                newContainment: metaPointerForFeature(delta.newContainment),
                 newIndex: delta.newIndex,
                 oldParent: delta.oldParent.id,
-                oldContainment: metaPointerFor(delta.oldContainment),
+                oldContainment: metaPointerForFeature(delta.oldContainment),
                 oldIndex: delta.oldIndex,
                 movedChild: delta.movedChild.id
             })
@@ -180,9 +180,9 @@ export const deltaToCommandTranslator = (
         if (delta instanceof ChildMovedFromOtherContainmentInSameParentDelta) {
             return completed<MoveChildFromOtherContainmentInSameParentCommand>("MoveChildFromOtherContainmentInSameParent", { // § 5.7.5.5
                 parent: delta.parent.id,
-                newContainment: metaPointerFor(delta.newContainment),
+                newContainment: metaPointerForFeature(delta.newContainment),
                 newIndex: delta.newIndex,
-                oldContainment: metaPointerFor(delta.oldContainment),
+                oldContainment: metaPointerForFeature(delta.oldContainment),
                 oldIndex: delta.oldIndex,
                 movedChild: delta.movedChild.id
             })
@@ -190,7 +190,7 @@ export const deltaToCommandTranslator = (
         if (delta instanceof ChildMovedInSameContainmentDelta) {
             return completed<MoveChildInSameContainmentCommand>("MoveChildInSameContainment", { // § 5.7.5.6
                 parent: delta.parent.id,
-                containment: metaPointerFor(delta.containment),
+                containment: metaPointerForFeature(delta.containment),
                 newIndex: delta.newIndex,
                 oldIndex: delta.oldIndex,
                 movedChild: delta.movedChild.id
@@ -199,10 +199,10 @@ export const deltaToCommandTranslator = (
         if (delta instanceof ChildMovedAndReplacedFromOtherContainmentDelta) {
             return completed<MoveAndReplaceChildFromOtherContainmentCommand>("MoveAndReplaceChildFromOtherContainment", { // § 5.7.5.7
                 newParent: delta.newParent.id,
-                newContainment: metaPointerFor(delta.newContainment),
+                newContainment: metaPointerForFeature(delta.newContainment),
                 newIndex: delta.newIndex,
                 oldParent: delta.oldParent.id,
-                oldContainment: metaPointerFor(delta.oldContainment),
+                oldContainment: metaPointerForFeature(delta.oldContainment),
                 oldIndex: delta.oldIndex,
                 replacedChild: delta.replacedChild.id,
                 movedChild: delta.movedChild.id
@@ -211,9 +211,9 @@ export const deltaToCommandTranslator = (
         if (delta instanceof ChildMovedAndReplacedFromOtherContainmentInSameParentDelta) {
             return completed<MoveAndReplaceChildFromOtherContainmentInSameParentCommand>("MoveAndReplaceChildFromOtherContainmentInSameParent", { // § 5.7.5.8
                 parent: delta.parent.id,
-                newContainment: metaPointerFor(delta.newContainment),
+                newContainment: metaPointerForFeature(delta.newContainment),
                 newIndex: delta.newIndex,
-                oldContainment: metaPointerFor(delta.oldContainment),
+                oldContainment: metaPointerForFeature(delta.oldContainment),
                 oldIndex: delta.oldIndex,
                 replacedChild: delta.replacedChild.id,
                 movedChild: delta.movedChild.id
@@ -222,7 +222,7 @@ export const deltaToCommandTranslator = (
         if (delta instanceof ChildMovedAndReplacedInSameContainmentDelta) {
             return completed<MoveAndReplaceChildInSameContainmentCommand>("MoveAndReplaceChildInSameContainment", { // § 5.7.5.9
                 parent: delta.parent.id,
-                containment: metaPointerFor(delta.containment),
+                containment: metaPointerForFeature(delta.containment),
                 newIndex: delta.newIndex,
                 oldIndex: delta.oldIndex,
                 replacedChild: delta.replacedChild.id,
@@ -290,7 +290,7 @@ export const deltaToCommandTranslator = (
         if (delta instanceof ReferenceAddedDelta) {
             return completed<AddReferenceCommand>("AddReference", { // § 5.7.7.1
                 parent: delta.parent.id,
-                reference: metaPointerFor(delta.reference),
+                reference: metaPointerForFeature(delta.reference),
                 index: delta.index,
                 newReference: idFrom(delta.newReference),
                 newResolveInfo: nodeBaseReader.resolveInfoFor!(delta.newReference!, delta.reference)!
@@ -299,7 +299,7 @@ export const deltaToCommandTranslator = (
         if (delta instanceof ReferenceDeletedDelta) {
             return completed<DeleteReferenceCommand>("DeleteReference", { // § 5.7.7.2
                 parent: delta.parent.id,
-                reference: metaPointerFor(delta.reference),
+                reference: metaPointerForFeature(delta.reference),
                 index: delta.index,
                 deletedReference: idFrom(delta.deletedReference),
                 deletedResolveInfo: nodeBaseReader.resolveInfoFor!(delta.deletedReference!, delta.reference)!
@@ -308,7 +308,7 @@ export const deltaToCommandTranslator = (
         if (delta instanceof ReferenceChangedDelta) {
             return completed<ChangeReferenceCommand>("ChangeReference", { // § 5.7.7.3
                 parent: delta.parent.id,
-                reference: metaPointerFor(delta.reference),
+                reference: metaPointerForFeature(delta.reference),
                 index: delta.index,
                 oldReference: idFrom(delta.oldReference),
                 oldResolveInfo: nodeBaseReader.resolveInfoFor!(delta.oldReference!, delta.reference)!,

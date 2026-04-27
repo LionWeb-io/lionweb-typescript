@@ -1,5 +1,6 @@
 import { Language } from "@lionweb/core"
-import { measure, readSerializationChunk, tryReadAllAsLanguages, writeJsonAsFile } from "@lionweb/utilities"
+import { writeJsonAsFileSync } from "@lionweb/node-utils"
+import { measure, readSerializationChunk, tryReadAllAsLanguages } from "@lionweb/utilities"
 import { extname } from "path"
 import { separate } from "../language-aware-args.js"
 
@@ -15,6 +16,6 @@ const measureSerializationChunk = async (path: string, languages: Language[]) =>
     const chunk = await readSerializationChunk(path)
     const extLessPath = path.substring(0, path.length - extname(path).length)
     const metricsPath = extLessPath + ".metrics.json"
-    writeJsonAsFile(metricsPath, measure(chunk, languages))
+    writeJsonAsFileSync(metricsPath, measure(chunk, languages))
     console.log(`Wrote metrics for ${path} --> ${metricsPath}`)
 }
