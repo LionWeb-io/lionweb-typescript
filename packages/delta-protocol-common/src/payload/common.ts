@@ -52,9 +52,5 @@ export interface ContinuedChunkMessage extends Message {
     chunk: LionWebJsonChunk
     continuedChunkCompleted: boolean
     continuedChunkSequenceNumber: number
-    /*
-     * Note: named chunkedEventSequenceNumber in ChunkedEvent in the specification
-     *  — consider to adjust specification for consistency.
-     */
 }
 

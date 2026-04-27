@@ -155,8 +155,7 @@ const testChunkedEvent = (sequenceNumber: number, continuedChunkSequenceNumber: 
     continuedChunkSequenceNumber,
     chunkedEventSequenceNumber,
     sequenceNumber,
-    additionalInfos: [],
-    originCommands: []
+    additionalInfos: []
 })
 
 

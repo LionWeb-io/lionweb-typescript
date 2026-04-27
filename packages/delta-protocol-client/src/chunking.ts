@@ -23,7 +23,7 @@ import {
     Message,
     SplittableMessage
 } from "@lionweb/delta-protocol-common"
-import { LionWebJsonChunk } from "@lionweb/json"
+import { LionWebJsonChunk, LionWebJsonDeltaChunk } from "@lionweb/json"
 
 
 /**
@@ -36,7 +36,7 @@ export class ChunkedInfo {
     /**
      * The received chunks, indexed by their `continuedChunkSequenceNumber`.
      */
-    private readonly chunks: LionWebJsonChunk[] = []
+    private readonly chunks: LionWebJsonDeltaChunk[] = []
     /**
      * The number of unique received chunks.
      * Note can be different from `chunks.length` because of `undefined` entries and (theoretically) doubly-received chunks.
@@ -93,7 +93,6 @@ export class ChunkedInfo {
         this.chunks.forEach((continuedChunk) => {
             mergedChunk.nodes.push(...continuedChunk.nodes)
         })
-        // TODO  also do something with languages?
         return this.initialMessage
     }
 
