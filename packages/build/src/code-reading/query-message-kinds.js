@@ -16,13 +16,16 @@
 // SPDX-License-Identifier: Apache-2.0
 
 /**
- * Extracts the various message kinds from the type definitions of the **events** payloads.
+ * Extracts the various message kinds from the type definitions of the **query** payloads.
  */
 
 import { messageKindsExtractedFrom } from "./message-kinds-common.js"
 
-messageKindsExtractedFrom("../delta-protocol-common/src/payload/event-types.ts")
+const postfix = "Response"
+messageKindsExtractedFrom("../delta-protocol-common/src/payload/query-types.ts")
+    .filter((messageKind) => messageKind.endsWith(postfix))
+    .map((messageKind) => messageKind.substring(0, messageKind.length - postfix.length))
     .forEach((messageKind, index, messageKinds) => {
-        console.log(`        "${messageKind}"${index < messageKinds.length - 1 ? "," : ""}`)
+        console.log(`    "${messageKind}"${index < messageKinds.length - 1 ? "," : ""}`)
     })
 

@@ -87,3 +87,11 @@ export type LionWebJsonReferenceTarget =
         resolveInfo: string
     }
 
+
+/**
+ * Serialization chunk with only nodes, specifically for the delta protocol.
+ */
+export type LionWebJsonDeltaChunk = {
+    nodes: LionWebJsonNode[]
+}
+

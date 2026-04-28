@@ -15,12 +15,24 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { LionWebId } from "@lionweb/json"
+import { LionWebId, LionWebJsonChunk } from "@lionweb/json"
 
 export interface Message {
     messageKind: string
 }
 
+/**
+ * All messages containing a {@link LionWebJsonChunk serialization chunk}.
+ *
+ * (See § 3.7.1 of the specification of the delta protocol.)
+ */
+export interface SplittableMessage extends Message {
+    split?: boolean
+}
+
+/**
+ * (See § 3.7.2 of the specification of the delta protocol.)
+ */
 export interface AdditionalInfo {
     kind: LionWebId
     message: string
@@ -29,5 +41,16 @@ export interface AdditionalInfo {
 
 export interface DeltaAdditionalInfo extends Message {
     additionalInfos: AdditionalInfo[]
+}
+
+/**
+ * Continued chunks continue the chunk from the related splittable message.
+ *
+ * (See § 3.7.1 of the specification of the delta protocol.)
+ */
+export interface ContinuedChunkMessage extends Message {
+    chunk: LionWebJsonChunk
+    continuedChunkCompleted: boolean
+    continuedChunkSequenceNumber: number
 }
 

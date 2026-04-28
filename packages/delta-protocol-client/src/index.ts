@@ -15,6 +15,8 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
+export { ChunkedInfo, EventChunker } from "./chunking.js"
+
 export { LionWebClient } from "./client.js"
 export type { LionWebClientParameters } from "./client.js"
 
