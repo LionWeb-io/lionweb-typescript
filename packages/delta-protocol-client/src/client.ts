@@ -34,8 +34,8 @@ import {
     GetAvailableIdsRequest,
     GetAvailableIdsResponse,
     InformAboutChangingPartitionsRequest,
-    isChunkedEvent,
-    isChunkedQueryResponse,
+    isContinuedEvent,
+    isContinuedQueryResponse,
     isErrorResponse,
     isEvent,
     isQueryResponse,
@@ -62,7 +62,7 @@ import {
     SubscribeToPartitionContentsResponse,
     UnsubscribeFromPartitionContentsRequest
 } from "@lionweb/delta-protocol-common"
-import { ChunkedInfo } from "./chunking.js"
+import { ChunkingInfo } from "./chunking.js"
 import { LowLevelClient, LowLevelClientInstantiator } from "./low-level-client.js"
 import { priorityQueueAcceptor } from "./priority-queue.js"
 
@@ -117,9 +117,9 @@ export class LionWebClient {
     ) {}
 
     private readonly messageReceiversByQueryId: { [queryId: string]: MessageReceivers } = {}
-    private readonly chunkedInfoByQueryId: { [queryId: string]: ChunkedInfo } = {}
+    private readonly chunkingInfoByQueryId: { [queryId: string]: ChunkingInfo } = {}
 
-    private readonly chunkedInfoByEventSequenceNumber: { [sequenceNumber: number]: ChunkedInfo } = {}
+    private readonly chunkingInfoByEventSequenceNumber: { [sequenceNumber: number]: ChunkingInfo } = {}
 
     static async create({
         repositoryId,
@@ -200,13 +200,13 @@ export class LionWebClient {
                         delete lionWebClient.messageReceiversByQueryId[queryId]
                         return  // ~void
                     }
-                    if (isChunkedQueryResponse(message)) {
-                        const chunkedInfo = lionWebClient.chunkedInfoByQueryId[queryId]
-                        if (chunkedInfo === undefined) {
-                            log(new ClientHadProblem(clientId, `received a chunked query response for a previous message that wasn’t [declared as] split — ignoring the chunked message`))
+                    if (isContinuedQueryResponse(message)) {
+                        const chunkingInfo = lionWebClient.chunkingInfoByQueryId[queryId]
+                        if (chunkingInfo === undefined) {
+                            log(new ClientHadProblem(clientId, `received a continued query response for a previous message that wasn’t [declared as] split — ignoring the continued chunk`))
                             return  // ~void
                         }
-                        const completedMessage = chunkedInfo.maybeCompletedMessage(message)
+                        const completedMessage = chunkingInfo.maybeCompletedMessage(message)
                         if (completedMessage !== undefined) {
                             messageReceivers.resolve(completedMessage)
                             delete lionWebClient.messageReceiversByQueryId[queryId]
@@ -215,7 +215,7 @@ export class LionWebClient {
                     }
                     const chunkProperty = maybeChunkPropertyForSplittableQueryResponse(message)
                     if (chunkProperty !== undefined && (message as SplittableMessage).split) {  // chunkProperty is defined => message must be a SplittableMessage
-                        lionWebClient.chunkedInfoByQueryId[queryId] = new ChunkedInfo(message, chunkProperty)
+                        lionWebClient.chunkingInfoByQueryId[queryId] = new ChunkingInfo(message, chunkProperty)
                     } else {
                         messageReceivers.resolve(message)
                         delete lionWebClient.messageReceiversByQueryId[queryId]
@@ -226,23 +226,23 @@ export class LionWebClient {
                 return  // ~void
             }
             if (isEvent(message)) {
-                if (isChunkedEvent(message)) {
+                if (isContinuedEvent(message)) {
                     const { sequenceNumber } = message
-                    const chunkedInfo = lionWebClient.chunkedInfoByEventSequenceNumber[sequenceNumber]
-                    if (chunkedInfo === undefined) {
-                        log(new ClientHadProblem(clientId, `received a chunked event for a previous message that wasn’t [declared as] split — ignoring the chunked event`))
+                    const chunkingInfo = lionWebClient.chunkingInfoByEventSequenceNumber[sequenceNumber]
+                    if (chunkingInfo === undefined) {
+                        log(new ClientHadProblem(clientId, `received a continued event for a previous message that wasn’t [declared as] split — ignoring the continued event`))
                         return  // ~void
                     }
-                    const completedMessage = chunkedInfo.maybeCompletedMessage(message)
+                    const completedMessage = chunkingInfo.maybeCompletedMessage(message)
                     if (completedMessage !== undefined) {
                         acceptEvent(completedMessage as Event)
-                        delete lionWebClient.chunkedInfoByEventSequenceNumber[sequenceNumber]
+                        delete lionWebClient.chunkingInfoByEventSequenceNumber[sequenceNumber]
                     }
                     return  // ~void
                 }
                 const chunkProperty = maybeChunkPropertyForSplittableEvent(message)
                 if (chunkProperty !== undefined && (message as SplittableMessage).split) {
-                    lionWebClient.chunkedInfoByEventSequenceNumber[message.sequenceNumber] = new ChunkedInfo(message, chunkProperty)
+                    lionWebClient.chunkingInfoByEventSequenceNumber[message.sequenceNumber] = new ChunkingInfo(message, chunkProperty)
                 } else {
                     acceptEvent(message)
                 }
