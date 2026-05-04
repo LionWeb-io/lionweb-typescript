@@ -16,6 +16,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { LionWebId, LionWebJsonChunk } from "@lionweb/json"
+import { isValidIdentifier } from "@lionweb/core"
 
 export interface Message {
     messageKind: string
@@ -53,4 +54,22 @@ export interface ContinuedChunkMessage extends Message {
     continuedChunkCompleted: boolean
     continuedChunkSequenceNumber: number
 }
+
+
+/**
+ * Type def. for custom message kinds, meaning:
+ *  - MUST adhere to the same format as identifiers,
+ *  - MUST start with "custom_", and
+ *  - MUST have at least 8 characters.
+ * (See §5.3.)
+ *
+ * *Note*: use the {@link isValidCustomMessageKind} to actually check correctness.
+ */
+export type CustomMessageKind = `custom_${string}`
+
+/**
+ * @return Whether the given `messageKind` string is a valid message kind string.
+ */
+export const isValidCustomMessageKind = (messageKind: string): messageKind is CustomMessageKind =>
+    isValidIdentifier(messageKind) && messageKind.startsWith("custom_") && messageKind.length >= 8
 
