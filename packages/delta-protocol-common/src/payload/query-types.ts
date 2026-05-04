@@ -17,7 +17,7 @@
 
 import { LionWebId, LionWebJsonChunk } from "@lionweb/json"
 import { mapFrom } from "@lionweb/ts-utils"
-import { ContinuedChunkMessage, DeltaAdditionalInfo, Message, SplittableMessage } from "./common.js"
+import { ContinuedChunkMessage, CustomMessageKind, DeltaAdditionalInfo, Message, SplittableMessage } from "./common.js"
 
 /**
  * Super interface for both query request and response messages.
@@ -33,13 +33,7 @@ export interface QueryMessage extends DeltaAdditionalInfo {
  * § 5.3.1 (request)
  */
 export interface CustomQueryRequest extends QueryMessage {
-    /*
-     * messageKind to be specified:
-     *  - MUST adhere to the same format as identifiers,
-     *  - MUST start with "custom_", and
-     *  - MUST have at least 8 characters,
-     *  - SHOULD end in "Request".
-     */
+    messageKind: CustomMessageKind
 }
 
 /**

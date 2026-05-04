@@ -17,7 +17,7 @@
 
 import { LionWebId, LionWebJsonChunk, LionWebJsonMetaPointer } from "@lionweb/json"
 import { mapFrom } from "@lionweb/ts-utils"
-import { ContinuedChunkMessage, DeltaAdditionalInfo, Message, SplittableMessage } from "./common.js"
+import { ContinuedChunkMessage, CustomMessageKind, DeltaAdditionalInfo, Message, SplittableMessage } from "./common.js"
 
 export type CommandSource = {
     participationId: LionWebId
@@ -38,17 +38,12 @@ export interface OriginatedEvent extends Event {
 
 
 /**
- * “Abstract” interface for custom commands.
+ * “Abstract” interface for custom events.
  *
  * § 5.3.3
  */
 export interface CustomEvent extends Event {
-    /*
-     * messageKind to be specified:
-     *  - MUST adhere to the same format as identifiers,
-     *  - MUST start with "custom_", and
-     *  - MUST have at least 8 characters.
-     */
+    messageKind: CustomMessageKind
 }
 
 

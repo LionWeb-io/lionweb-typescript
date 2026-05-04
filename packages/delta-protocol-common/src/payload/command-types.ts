@@ -16,7 +16,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { LionWebId, LionWebJsonChunk, LionWebJsonMetaPointer } from "@lionweb/json"
-import { ContinuedChunkMessage, DeltaAdditionalInfo, SplittableMessage } from "./common.js"
+import { ContinuedChunkMessage, CustomMessageKind, DeltaAdditionalInfo, SplittableMessage } from "./common.js"
 
 export interface Command extends DeltaAdditionalInfo {
     commandId: LionWebId
@@ -29,12 +29,7 @@ export interface Command extends DeltaAdditionalInfo {
  * § 5.3.2
  */
 export interface CustomCommand extends Command {
-    /*
-     * messageKind to be specified:
-     *  - MUST adhere to the same format as identifiers,
-     *  - MUST start with "custom_", and
-     *  - MUST have at least 8 characters.
-     */
+    messageKind: CustomMessageKind
 }
 
 

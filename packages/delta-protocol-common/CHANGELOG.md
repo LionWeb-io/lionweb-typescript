@@ -4,7 +4,8 @@
 
 * Add “`old*`” properties to `Move[AndReplace]{Child|Annotation}*Command`s, and propagate to delta&rarr;command translator.
 * Implement splittable messages.
-* Implement types for custom messages.
+* Implement types for custom messages: `CustomMessageKind`, `Custom{Command|Event|Query{Response|Request}}`.
+  * Implement a `isValidCustomMessageKind` function to check validity of a custom message kind — usable as a type guard for `CustomMessageKind`.
 
 
 ## 0.9.0
