@@ -78,7 +78,11 @@ export abstract class SingleContainmentValueManager<T extends INodeBase> extends
     @action addDirectly(newChild: T) {
         const oldChild = this.getDirectly();
         if (oldChild !== undefined) {
-            throw new Error(`replacing a child using addDirectly on a value manager for a single-valued containment isn't allowed`);    // TODO  unit test this
+            if (oldChild !== newChild) {
+                throw new Error(`replacing a child using addDirectly on a value manager for a single-valued containment isn't allowed`);
+            }
+            // Note: adding the same child again (idempotently) is OK, regardless of whether the serialization format specification allows this at all.
+            return;
         }
         this.child.set(newChild);
     }
