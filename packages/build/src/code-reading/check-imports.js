@@ -20,7 +20,17 @@ import { join } from "path"
 
 const uniquesAmong = (ts) => [...new Set(ts)]
 
+/**
+ * Check the package at the given `packagePath`.
+ * @return {boolean} Whether an issue was reported for this package.
+ * Any issue is reported directly on the console (as a side effect).
+ */
 const checkPackage = (packagePath) => {
+    let hasIssue = false
+    const reportIssue = (message) => {
+        console.error(message)
+        hasIssue = true
+    }
     const packageJson = JSON.parse(readFileSync(join(packagePath, "package.json"), { encoding: "utf8" }))
     console.log(`checking imports vs. listed dependencies of package: ${packageJson.name}`)
     const sourcePath = join(packagePath, "src")
@@ -51,22 +61,27 @@ const checkPackage = (packagePath) => {
         .filter((dep) => !(dep in (packageJson.dependencies ?? {})))
         .filter((dep) => !isEnvironmental(dep))
     if (importDependenciesNotInPackageJson.length > 0) {
-        console.error(`\t\x1b[41m\x1b[37mthe following imported dependencies are *not* listed under the dependencies in package.json: ${importDependenciesNotInPackageJson.join(" ")}\x1b[0m`)
+        reportIssue(`\t\x1b[41m\x1b[37mthe following imported dependencies are *not* listed under the dependencies in package.json: ${importDependenciesNotInPackageJson.join(" ")}\x1b[0m`)
     }
 
     const unusedDependenciesInPackageJson = Object.keys(packageJson.dependencies ?? {})
         .filter((dep) => importedDependencies.indexOf(dep) === -1)
         .filter((dep) => !isEnvironmental(dep))
     if (unusedDependenciesInPackageJson.length > 0) {
-        console.error(`\t\x1b[43m\x1b[37mthe following dependencies listed under the dependencies in package.json are unused: ${unusedDependenciesInPackageJson.join(" ")}\x1b[0m`)
+        reportIssue(`\t\x1b[43m\x1b[37mthe following dependencies listed under the dependencies in package.json are unused: ${unusedDependenciesInPackageJson.join(" ")}\x1b[0m`)
     }
 
     console.log()
+    return hasIssue
 }
 
 const topLevelPackageJson = JSON.parse(readFileSync("package.json", { encoding: "utf8" }))
 
-topLevelPackageJson.workspaces.sort().forEach((packagePath) => {
-    checkPackage(packagePath)
-})
+const packagesWithIssues = topLevelPackageJson.workspaces
+    .sort()
+    .filter((packagePath) => checkPackage(packagePath))
+
+if (packagesWithIssues.length > 0) {
+    console.error(`\n\n\x1b[41m\x1b[37mthe following packages have issues reported on them: ${packagesWithIssues.map((packagePath) => packagePath.substring("./packages/".length)).join(", ")}\x1b[0m`)
+}
 
