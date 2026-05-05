@@ -170,6 +170,11 @@ export class SyntaxValidator {
             this.validationResult.issue(new Syntax_PropertyTypeIssue(jsonContext, propertyName, propDef.primitiveType, typeof object))
             return false
         }
+        // typof array is object in JS, so check for this special (weird) case
+        if (Array.isArray(object)) {
+            this.validationResult.issue(new Syntax_PropertyTypeIssue(jsonContext, propertyName, propDef.primitiveType, typeof object))
+            return false
+        }
         const validator = this.schema.getValidator(propDef.name)
         if (validator !== undefined) {
             validator(object, this.validationResult, jsonContext)

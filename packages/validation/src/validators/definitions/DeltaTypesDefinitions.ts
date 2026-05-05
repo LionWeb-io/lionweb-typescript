@@ -35,6 +35,10 @@ export const DeltaTypesDefinitions: TypeGroup = {
             name: "ClientId",
             primitiveType: "string",
         },
+        {
+            name: "Dictionary",
+            primitiveType: "object",
+        },
     ],
     structuredTypes: [
         {
@@ -56,8 +60,8 @@ export const DeltaTypesDefinitions: TypeGroup = {
                 },
                 {
                     name: "data",
-                    type: "KeyValuePair",
-                    isList: true,
+                    type: "Dictionary",
+                    isList: false,
                     isOptional: false,
                     mayBeNull: false,
                 },
