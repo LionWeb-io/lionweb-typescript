@@ -17,13 +17,38 @@
 
 import { LionWebId, LionWebJsonChunk } from "@lionweb/json"
 import { mapFrom } from "@lionweb/ts-utils"
-import { DeltaAdditionalInfo, Message } from "./common.js"
+import { ContinuedChunkMessage, CustomMessageKind, DeltaAdditionalInfo, Message, SplittableMessage } from "./common.js"
 
 /**
  * Super interface for both query request and response messages.
  */
 export interface QueryMessage extends DeltaAdditionalInfo {
     queryId: LionWebId
+}
+
+
+/**
+ * “Abstract” interface for custom queries’ requests.
+ *
+ * § 5.3.1 (request)
+ */
+export interface CustomQueryRequest extends QueryMessage {
+    messageKind: CustomMessageKind
+}
+
+/**
+ * “Abstract” interface for custom queries’ responses.
+ *
+ * § 5.3.1 (response)
+ */
+export interface CustomQueryResponse extends QueryMessage {
+    /*
+     * messageKind to be specified:
+     *  - MUST adhere to the same format as identifiers,
+     *  - MUST start with "custom_", and
+     *  - MUST have at least 8 characters,
+     *  - SHOULD end in "Response".
+     */
 }
 
 
@@ -38,11 +63,8 @@ export interface ErrorResponse extends QueryMessage {
 
 
 /** § 5.5.1.2 (response) */
-export interface ChunkedQueryResponse extends QueryMessage {
+export interface ChunkedQueryResponse extends QueryMessage, ContinuedChunkMessage {
     messageKind: "ChunkedQueryResponse"
-    chunk: LionWebJsonChunk
-    continuedChunkCompleted: boolean
-    continuedChunkSequenceNumber: number
 }
 
 
@@ -82,7 +104,7 @@ export interface SubscribeToPartitionContentsRequest extends QueryMessage {
 }
 
 /** § 5.5.2.3 (response) */
-export interface SubscribeToPartitionContentsResponse extends QueryMessage {
+export interface SubscribeToPartitionContentsResponse extends QueryMessage, SplittableMessage {
     messageKind: "SubscribeToPartitionContentsResponse"
     contents: LionWebJsonChunk
 }
@@ -163,7 +185,7 @@ export interface ListPartitionsRequest extends QueryMessage {
 }
 
 /** § 5.5.4.2 (response) */
-export interface ListPartitionsResponse extends QueryMessage {
+export interface ListPartitionsResponse extends QueryMessage, SplittableMessage {
     messageKind: "ListPartitionsResponse"
     partitions: LionWebJsonChunk
 }
@@ -175,11 +197,19 @@ export interface ListAndSubscribePartitionsRequest extends QueryMessage {
 }
 
 /** § 5.5.4.3 (response) */
-export interface ListAndSubscribePartitionsResponse extends QueryMessage {
+export interface ListAndSubscribePartitionsResponse extends QueryMessage, SplittableMessage {
     messageKind: "ListAndSubscribePartitionsResponse"
     partitions: LionWebJsonChunk
 }
 
+
+/*
+ * **DEV note**: run
+ *
+ *  $ node src/code-reading/query-message-kinds.js
+ *
+ * inside the build package to generate the contents of the following array.
+ */
 
 const queryMessageKinds = [
     "Error",
@@ -200,4 +230,24 @@ const queryResponseMessageKinds = mapFrom(queryMessageKinds, (str) => `${str}Res
 
 export const isQueryResponse = (message: Message): message is QueryMessage =>
     message.messageKind in queryResponseMessageKinds
+
+export const isErrorResponse = (message: Message): message is ErrorResponse =>
+    message.messageKind === "ErrorResponse"
+
+export const isChunkedQueryResponse = (message: Message): message is ChunkedQueryResponse =>
+    message.messageKind === "ChunkedQueryResponse"
+
+/**
+ * (See § 3.7.1 of the specification of the delta protocol.)
+ *
+ * @return the name of the property of the given {@link QueryMessage} that holds the chunk that may be split, or `undefined` if the given `message` isn’t splittable.
+ */
+export const maybeChunkPropertyForSplittableQueryResponse = (message: QueryMessage): (string | undefined) => {
+    switch (message.messageKind) {
+        case "SubscribeToPartitionContentsResponse": return "contents"
+        case "ListPartitions": return "partitions"
+        case "ListAndSubscribePartitions": return "partitions"
+        default: return undefined
+    }
+}
 

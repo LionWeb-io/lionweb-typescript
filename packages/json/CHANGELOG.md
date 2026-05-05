@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.10.
+
+* Add `LionWebJsonDeltaChunk` type, specifically for the delta protocol.
+
+
 ## 0.9.0
 
 (No changes)
