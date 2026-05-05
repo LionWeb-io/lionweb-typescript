@@ -12,17 +12,13 @@ This package is intentionally kept very lightweight, e.g. it uses types instead 
 
 It's tested by running the validators against the [test set in `lionweb-integration-testing/testset`](https://github.com/LionWeb-io/lionweb-integration-testing/tree/main/testset).
 
-To make the testset available in this propject, run
-```
-npm run setup
-```
-To build from soure:
+To build from source:
 ```
 npm run build
 ```
 To run the tests:
 ```
-npm run test
+npm run test-here
 ```
 
 This will run the tests in the respective folders in the `testset/` folder of `lionweb-integration-testing`.
