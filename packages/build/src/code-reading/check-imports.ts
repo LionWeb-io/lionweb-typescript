@@ -18,23 +18,23 @@
 import { readdirSync, readFileSync } from "fs"
 import { join } from "path"
 
-const uniquesAmong = (ts) => [...new Set(ts)]
+const uniquesAmong = <T>(ts: T[]) => [...new Set(ts)]
 
 /**
  * Check the package at the given `packagePath`.
  * @return {boolean} Whether an issue was reported for this package.
  * Any issue is reported directly on the console (as a side effect).
  */
-const checkPackage = (packagePath) => {
+const checkPackage = (packagePath: string) => {
     let hasIssue = false
-    const reportIssue = (message) => {
+    const reportIssue = (message: string) => {
         console.error(message)
         hasIssue = true
     }
     const packageJson = JSON.parse(readFileSync(join(packagePath, "package.json"), { encoding: "utf8" }))
     console.log(`checking imports vs. listed dependencies of package: ${packageJson.name}`)
     const sourcePath = join(packagePath, "src")
-    const harvestImportsFrom = (sourceFile) =>
+    const harvestImportsFrom = (sourceFile: string) =>
         readFileSync(sourceFile, { encoding: "utf8" })
             .split(/\r?\n/)
             .map((line) => line.match(/^.+?from "([^.].+)"[\s;]*$/))
@@ -49,12 +49,12 @@ const checkPackage = (packagePath) => {
 
     const importedDependencies = uniquesAmong(
             readdirSync(sourcePath, { recursive: true })
-                .filter((path) => path.endsWith(".ts"))
-                .flatMap((sourceFile) => harvestImportsFrom(join(sourcePath, sourceFile)))
-        ).toSorted()
+                .filter((path) => path.toString().endsWith(".ts"))
+                .flatMap((sourceFile) => harvestImportsFrom(join(sourcePath, sourceFile.toString())))
+        ).sort()
     console.log(`\timported dependencies: ${importedDependencies.join(" ")}`)
 
-    const isEnvironmental = (dep) => // Node.js, Mocha, Chai
+    const isEnvironmental = (dep: string) => // Node.js, Mocha, Chai
         ["@types/node", "assert", "chai", "crypto", "fs", "fs/promises", "http", "https", "mocha", "path", "process", "timers"].indexOf(dep) > -1
 
     const importDependenciesNotInPackageJson = importedDependencies
@@ -77,11 +77,13 @@ const checkPackage = (packagePath) => {
 
 const topLevelPackageJson = JSON.parse(readFileSync("package.json", { encoding: "utf8" }))
 
-const packagesWithIssues = topLevelPackageJson.workspaces
+const packagesWithIssues = (topLevelPackageJson.workspaces as string[])
     .sort()
     .filter((packagePath) => checkPackage(packagePath))
 
-if (packagesWithIssues.length > 0) {
-    console.error(`\n\n\x1b[41m\x1b[37mthe following packages have issues reported on them: ${packagesWithIssues.map((packagePath) => packagePath.substring("./packages/".length)).join(", ")}\x1b[0m`)
+if (packagesWithIssues.length === 0) {
+    console.log(`\n\x1b[43m\x1b[37mno issues reported (on any package)\x1b[0m`)
+} else {
+    console.error(`\n\x1b[41m\x1b[37mthe following packages have issues reported on them: ${packagesWithIssues.map((packagePath) => packagePath.substring("./packages/".length)).join(", ")}\x1b[0m`)
 }
 
