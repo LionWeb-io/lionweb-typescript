@@ -37,7 +37,7 @@ export const DeltaTypesDefinitions: TypeGroup = {
         },
         {
             name: "Dictionary",
-            primitiveType: "object",
+            primitiveType: "dictionary",
         },
     ],
     structuredTypes: [
