@@ -75,6 +75,25 @@ export const DeltaTypesDefinitions: TypeGroup = {
             ],
         },
         {
+            name: "KeyValuePair",
+            properties: [
+                {
+                    name: "key",
+                    type: "String",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "value",
+                    type: "String",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+            ],
+        },
+        {
             name: "CommandSource",
             properties: [
                 {
