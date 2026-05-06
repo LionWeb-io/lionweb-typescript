@@ -196,7 +196,7 @@ export class SyntaxValidator {
                     )
                     return false
                 }
-                const value = (object as any)[key]
+                const value = (object as { [index: string]: unknown })[key]
                 if (typeof value !== "string") {
                     this.validationResult.issue(
                         new GenericIssue(
