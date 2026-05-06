@@ -7,9 +7,8 @@ import {
     Syntax_PropertyTypeIssue,
     Syntax_PropertyUnknownIssue
 } from "../../issues/index.js"
-import { SyntaxDefinition, StructuredType, PrimitiveType } from "./schema/SyntaxDefinition.js"
 import { ValidationResult } from "./ValidationResult.js"
-import { UnknownObjectType } from "./schema/index.js"
+import { SyntaxDefinition, StructuredType, PrimitiveType, UnknownObjectType } from "./schema/index.js"
 
 /**
  * Syntax Validator checks whether objects are structurally conforming to the
@@ -217,7 +216,7 @@ export class SyntaxValidator {
     /**
      * Check whether there are extra properties that should not be there.
      * @param obj           Object to be validated
-     * @param properties    The names of the expected properties
+     * @param def           Definition to validate against
      * @param context       Location in JSON
      */
     checkStrayProperties(obj: UnknownObjectType, def: StructuredType, context: JsonContext) {
