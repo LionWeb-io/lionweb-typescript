@@ -533,6 +533,13 @@ export const EventDefinitions: MessageGroup = {
                     mayBeNull: false,
                 },
                 {
+                    name: "split",
+                    type: "Boolean",
+                    isList: false,
+                    isOptional: true,
+                    mayBeNull: false,
+                },
+                {
                     name: "messageKind",
                     type: "String",
                     isList: false,
@@ -1086,6 +1093,13 @@ export const EventDefinitions: MessageGroup = {
                     mayBeNull: false,
                 },
                 {
+                    name: "split",
+                    type: "Boolean",
+                    isList: false,
+                    isOptional: true,
+                    mayBeNull: false,
+                },
+                {
                     name: "messageKind",
                     type: "String",
                     isList: false,
@@ -1562,7 +1576,7 @@ export const EventDefinitions: MessageGroup = {
                     mayBeNull: false,
                 },
                 {
-                    name: "newTarget",
+                    name: "newReference",
                     type: "LionWebId",
                     isList: false,
                     isOptional: true,
@@ -1630,7 +1644,7 @@ export const EventDefinitions: MessageGroup = {
                     mayBeNull: false,
                 },
                 {
-                    name: "deletedTarget",
+                    name: "deletedReference",
                     type: "LionWebId",
                     isList: false,
                     isOptional: true,
@@ -1698,7 +1712,7 @@ export const EventDefinitions: MessageGroup = {
                     mayBeNull: false,
                 },
                 {
-                    name: "newTarget",
+                    name: "newReference",
                     type: "LionWebId",
                     isList: false,
                     isOptional: true,
@@ -1712,7 +1726,7 @@ export const EventDefinitions: MessageGroup = {
                     mayBeNull: true,
                 },
                 {
-                    name: "oldTarget",
+                    name: "oldReference",
                     type: "LionWebId",
                     isList: false,
                     isOptional: true,
@@ -1756,7 +1770,7 @@ export const EventDefinitions: MessageGroup = {
             ],
         },
         {
-            name: "ChunkedEvent",
+            name: "ContinuedEvent",
             properties: [
                 {
                     name: "chunk",
@@ -1774,6 +1788,13 @@ export const EventDefinitions: MessageGroup = {
                 },
                 {
                     name: "continuedChunkSequenceNumber",
+                    type: "Number",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "continuedEventSequenceNumber",
                     type: "Number",
                     isList: false,
                     isOptional: false,

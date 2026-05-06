@@ -146,7 +146,7 @@ export const ResponseDefinitions: MessageGroup = {
             ],
         },
         {
-            name: "ChunkedQueryResponse",
+            name: "ContinuedQueryResponse",
             properties: [
                 {
                     name: "chunk",
