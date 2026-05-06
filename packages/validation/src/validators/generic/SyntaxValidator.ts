@@ -7,6 +7,7 @@ import {
     Syntax_PropertyTypeIssue,
     Syntax_PropertyUnknownIssue
 } from "../../issues/index.js"
+import { validateId } from "../ValidationFunctions.js"
 import { ValidationResult } from "./ValidationResult.js"
 import { SyntaxDefinition, StructuredType, PrimitiveType, UnknownObjectType } from "./schema/index.js"
 
@@ -193,6 +194,10 @@ export class SyntaxValidator {
                     this.validationResult.issue(
                         new GenericIssue(jsonContext, `property '${propertyName}' key '${key}' should be a string, it is a '${typeof key}'`)
                     )
+                    return false
+                }
+                validateId(key, this.validationResult, jsonContext)
+                if (this.validationResult.hasErrors()) {
                     return false
                 }
                 const value = (object as { [index: string]: unknown })[key]
