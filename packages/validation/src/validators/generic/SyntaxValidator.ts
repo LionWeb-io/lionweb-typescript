@@ -1,5 +1,6 @@
 import { JsonContext } from "@lionweb/json-utils"
 import {
+    GenericIssue,
     Syntax_ArrayContainsNull_Issue,
     Syntax_PropertyMissingIssue,
     Syntax_PropertyNullIssue,
@@ -35,7 +36,7 @@ export class SyntaxValidator {
 
         if (primitiveTypeDef === undefined) {
             const objectTypeDef: StructuredType | undefined = this.schema.getStructuredType(expectedType)
-            if( objectTypeDef === undefined) {
+            if (objectTypeDef === undefined) {
                 throw new Error(`SyntaxValidator.validate: cannot find definition for '${expectedType}'`)
             } else {
                 // ObjectType found
@@ -114,11 +115,10 @@ export class SyntaxValidator {
                                 }
                             }
                         } else if (expectedMessageGroup !== undefined) {
-                                console.log(`+++++++++++++++++++ ${expectedMessageGroup.name}`)
-                                const messageKind = item[expectedMessageGroup.taggedUnionProperty] as string
-                                    const groupTypeDef = this.schema.getStructuredType(messageKind)!
-                                    this.validateObjectProperties(originalProperty, groupTypeDef, item as UnknownObjectType, newContext)
-                                
+                            console.log(`+++++++++++++++++++ ${expectedMessageGroup.name}`)
+                            const messageKind = item[expectedMessageGroup.taggedUnionProperty] as string
+                            const groupTypeDef = this.schema.getStructuredType(messageKind)!
+                            this.validateObjectProperties(originalProperty, groupTypeDef, item as UnknownObjectType, newContext)
                         } else {
                             throw new Error(`Expected type '${propertyDef.type} has neither property defs, nor a validator.`)
                         }
@@ -166,12 +166,10 @@ export class SyntaxValidator {
     }
 
     validatePrimitiveValue(propertyName: string, propDef: PrimitiveType, object: unknown, jsonContext: JsonContext): boolean {
-        if (typeof object !== propDef.primitiveType) {
-            this.validationResult.issue(new Syntax_PropertyTypeIssue(jsonContext, propertyName, propDef.primitiveType, typeof object))
-            return false
+        if (propDef.primitiveType === "dictionary") {
+            return this.validateDictionary(propertyName, propDef, object, jsonContext)
         }
-        // typof array is object in JS, so check for this special (weird) case
-        if (Array.isArray(object)) {
+        if (typeof object !== propDef.primitiveType) {
             this.validationResult.issue(new Syntax_PropertyTypeIssue(jsonContext, propertyName, propDef.primitiveType, typeof object))
             return false
         }
@@ -180,6 +178,40 @@ export class SyntaxValidator {
             validator(object, this.validationResult, jsonContext)
         }
         return true
+    }
+
+    /**
+     * Validate that `object` is an object with all keys and values of type string. 
+     * @param propertyName  Name of the property
+     * @param propDef       The property definition
+     * @param object        The object to validate
+     * @param jsonContext   The context in the JSON
+     */
+    validateDictionary(propertyName: string, propDef: PrimitiveType, object: unknown, jsonContext: JsonContext): boolean {
+        if (typeof object === "object" && !Array.isArray(object) && object !== null) {
+            for (const key of Object.keys(object)) {
+                if (typeof key !== "string") {
+                    this.validationResult.issue(
+                        new GenericIssue(jsonContext, `property '${propertyName}' key '${key}' should be a string, it is a '${typeof key}'`)
+                    )
+                    return false
+                }
+                const value = (object as any)[key]
+                if (typeof value !== "string") {
+                    this.validationResult.issue(
+                        new GenericIssue(
+                            jsonContext,
+                            `the value for property '${propertyName}.${key}' should be a string, it is a '${typeof value}'`
+                        )
+                    )
+                    return false
+                }
+            }
+            return true
+        } else {
+            this.validationResult.issue(new Syntax_PropertyTypeIssue(jsonContext, propertyName, propDef.primitiveType, typeof object))
+            return false
+        }
     }
 
     /**
