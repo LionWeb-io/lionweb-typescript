@@ -354,7 +354,7 @@ The NPM `lint` task doesn’t check whether `import` statements refer to depende
 Run the following on the command line, in the repo’s root, to see where there’s mismatches between `import` statements and the `dependencies` section in a package’s `package.json`.
 
 ```shell
-$ node packages/build/src/code-reading/check-imports.js
+$ node --no-warnings packages/build/src/code-reading/check-imports.ts
 ```
 
 Inspect the console output for mismatches, which are flagged with red or yellow backgrounds.

@@ -1,12 +1,11 @@
 # Changelog
 
 
-## 0.10.0
+## 0.10.0 — not yet released
 
-* Change key values pairs for additional info's to a dictionary and update
-the validator to be able to validate the dictionary. 
-* Update to latest spec. of delta protocol.
-Especially additional properties for all Move/Replace child and annotation commands.
+* Change key values pairs for additional info's to a dictionary and update the validator to be able to validate the dictionary.
+* Update to latest spec. of delta protocol, specifically: additional properties for all Move/Replace child and annotation commands.
+
 
 ## 0.9.0
 
