@@ -18,7 +18,7 @@
 import {
     ContinuedChunkMessage,
     Event,
-    isChunkedEvent,
+    isContinuedEvent,
     maybeChunkPropertyForSplittableEvent,
     Message,
     SplittableMessage
@@ -31,7 +31,7 @@ import { LionWebJsonChunk, LionWebJsonDeltaChunk } from "@lionweb/json"
  * (See § 3.7.1 of the specification of the delta protocol.)
  * Its state is updated through its {@link maybeCompletedMessage} method.
  */
-export class ChunkedInfo {
+export class ChunkingInfo {
 
     /**
      * The received chunks, indexed by their `continuedChunkSequenceNumber`.
@@ -43,7 +43,7 @@ export class ChunkedInfo {
      */
     private numberOfReceivedChunks: number = 0
     /**
-     * The sequence number of the continued chunked marked with `continuedChunkCompleted === true`,
+     * The sequence number of the continued chunk marked with `continuedChunkCompleted === true`,
      * or `-Infinity` initially, so this.numberOfReceivedChunks !== this.lastChunkSequenceNumber + 1,
      * and chunk is not deemed complete already.
      */
@@ -51,7 +51,7 @@ export class ChunkedInfo {
 
     constructor(
         /**
-         * The initial part of the chunked message.
+         * The initial part of the split message.
          * It will be returned from {@link completedMessage} in a modified state.
          */
         private readonly initialMessage: Message,
@@ -106,7 +106,7 @@ export class ChunkedInfo {
  */
 export class EventChunker {
 
-    chunkedInfoBySequenceNumber: { [sequenceNumber: number]: ChunkedInfo } = {}
+    chunkingInfoBySequenceNumber: { [sequenceNumber: number]: ChunkingInfo } = {}
 
     constructor(
         private readonly acceptCompletedEvent: (completedEvent: Event) => void
@@ -114,12 +114,12 @@ export class EventChunker {
     }
 
     handleEvent(event: Event) {
-        if (isChunkedEvent(event)) {
-            if (!(event.chunkedEventSequenceNumber in this.chunkedInfoBySequenceNumber)) {
-                throw new Error(`no (initial) split event with ID ${event.chunkedEventSequenceNumber} known`)
+        if (isContinuedEvent(event)) {
+            if (!(event.continuedEventSequenceNumber in this.chunkingInfoBySequenceNumber)) {
+                throw new Error(`no (initial) split event with ID ${event.continuedEventSequenceNumber} known`)
             }
-            const chunkedInfo = this.chunkedInfoBySequenceNumber[event.chunkedEventSequenceNumber]
-            const maybeCompletedEvent = chunkedInfo.maybeCompletedMessage(event)
+            const chunkingInfo = this.chunkingInfoBySequenceNumber[event.continuedEventSequenceNumber]
+            const maybeCompletedEvent = chunkingInfo.maybeCompletedMessage(event)
             if (maybeCompletedEvent !== undefined) {
                 this.acceptCompletedEvent(maybeCompletedEvent as Event)
             }
@@ -127,10 +127,10 @@ export class EventChunker {
         }
         const chunkProperty = maybeChunkPropertyForSplittableEvent(event)
         if (chunkProperty !== undefined && (event as SplittableMessage).split) {
-            if (event.sequenceNumber in this.chunkedInfoBySequenceNumber) {
+            if (event.sequenceNumber in this.chunkingInfoBySequenceNumber) {
                 throw new Error(`sequence number ${event.sequenceNumber} already associated with an earlier split event`)
             }
-            this.chunkedInfoBySequenceNumber[event.sequenceNumber] = new ChunkedInfo(event, chunkProperty)
+            this.chunkingInfoBySequenceNumber[event.sequenceNumber] = new ChunkingInfo(event, chunkProperty)
             return
         }
         this.acceptCompletedEvent(event)

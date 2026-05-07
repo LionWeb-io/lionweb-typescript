@@ -19,11 +19,11 @@ import { expect } from "chai"
 
 import { TestLanguageBase } from "@lionweb/class-core-test-language"
 import { Classifier, Containment, metaPointerForFeature } from "@lionweb/core"
-import { ChunkedInfo, EventChunker } from "@lionweb/delta-protocol-client"
+import { ChunkingInfo, EventChunker } from "@lionweb/delta-protocol-client"
 import {
     ChildAddedEvent,
-    ChunkedEvent,
     ContinuedChunkMessage,
+    ContinuedEvent,
     Event,
     PartitionAddedEvent,
     SplittableMessage
@@ -82,45 +82,45 @@ describe("chunking (in isolation)", () => {
 
     it("immediately finished, no merging", () => {
         const initialMessage: TestMessage = testMessageWith()
-        const chunkedInfo = new ChunkedInfo(initialMessage, "chunk")
-        expect(chunkedInfo.maybeCompletedMessage(testChunkMessage(0, true))).to.deep.equal(testMessageWith())
+        const chunkingInfo = new ChunkingInfo(initialMessage, "chunk")
+        expect(chunkingInfo.maybeCompletedMessage(testChunkMessage(0, true))).to.deep.equal(testMessageWith())
     })
 
     it("immediately finished, some merging", () => {
         const node1 = testNode("node1")
         const node2 = testNode("node2")
         const initialMessage: TestMessage = testMessageWith(node1)
-        const chunkedInfo = new ChunkedInfo(initialMessage, "chunk")
-        expect(chunkedInfo.maybeCompletedMessage(testChunkMessage(0, true, node2))).to.deep.equal(testMessageWith(node1, node2))
+        const chunkingInfo = new ChunkingInfo(initialMessage, "chunk")
+        expect(chunkingInfo.maybeCompletedMessage(testChunkMessage(0, true, node2))).to.deep.equal(testMessageWith(node1, node2))
     })
 
     it("multiple chunks, out of order, no merging", () => {
         const initialMessage: TestMessage = testMessageWith()
-        const chunkedInfo = new ChunkedInfo(initialMessage, "chunk")
-        expect(chunkedInfo.maybeCompletedMessage(testChunkMessage(2, true))).to.equal(undefined)
-        expect(chunkedInfo.maybeCompletedMessage(testChunkMessage(0, false))).to.equal(undefined)
-        expect(chunkedInfo.maybeCompletedMessage(testChunkMessage(1, false))).to.deep.equal(testMessageWith())
+        const chunkingInfo = new ChunkingInfo(initialMessage, "chunk")
+        expect(chunkingInfo.maybeCompletedMessage(testChunkMessage(2, true))).to.equal(undefined)
+        expect(chunkingInfo.maybeCompletedMessage(testChunkMessage(0, false))).to.equal(undefined)
+        expect(chunkingInfo.maybeCompletedMessage(testChunkMessage(1, false))).to.deep.equal(testMessageWith())
     })
 
     it("fault scenarios", () => {
         const initialMessage: TestMessage = testMessageWith()
-        const chunkedInfo = new ChunkedInfo(initialMessage, "chunk")
-        expect(chunkedInfo.maybeCompletedMessage(testChunkMessage(0, false))).to.equal(undefined)
+        const chunkingInfo = new ChunkingInfo(initialMessage, "chunk")
+        expect(chunkingInfo.maybeCompletedMessage(testChunkMessage(0, false))).to.equal(undefined)
         expect(
             () => {
-                chunkedInfo.maybeCompletedMessage(testChunkMessage(0, false))
+                chunkingInfo.maybeCompletedMessage(testChunkMessage(0, false))
             }
         ).to.throw("received continued chunk with sequence number 0 more than once")
-        expect(chunkedInfo.maybeCompletedMessage(testChunkMessage(2, true))).to.equal(undefined)
+        expect(chunkingInfo.maybeCompletedMessage(testChunkMessage(2, true))).to.equal(undefined)
         expect(
             () => {
-                chunkedInfo.maybeCompletedMessage(testChunkMessage(1, true))
+                chunkingInfo.maybeCompletedMessage(testChunkMessage(1, true))
             }
         ).to.throw("continued chunk sequence declared complete more than once")
-        expect(chunkedInfo.maybeCompletedMessage(testChunkMessage(1, false))).to.deep.equal(testMessageWith())
+        expect(chunkingInfo.maybeCompletedMessage(testChunkMessage(1, false))).to.deep.equal(testMessageWith())
         expect(
             () => {
-                chunkedInfo.maybeCompletedMessage(testChunkMessage(1, false))
+                chunkingInfo.maybeCompletedMessage(testChunkMessage(1, false))
             }
         ).to.throw("split message already completed")
     })
@@ -148,19 +148,19 @@ const childAddedEvent = (sequenceNumber: number, parent: LionWebId, newChild: Li
     originCommands: []
 })
 
-const testChunkedEvent = (sequenceNumber: number, continuedChunkSequenceNumber: number, continuedChunkCompleted: boolean, chunkedEventSequenceNumber: number, ...nodes: LionWebJsonNode[]): ChunkedEvent => ({
-    messageKind: "ChunkedEvent",
+const testContinuedEvent = (sequenceNumber: number, continuedChunkSequenceNumber: number, continuedChunkCompleted: boolean, continuedEventSequenceNumber: number, ...nodes: LionWebJsonNode[]): ContinuedEvent => ({
+    messageKind: "ContinuedEvent",
     chunk: testChunk(...nodes),
     continuedChunkCompleted,
     continuedChunkSequenceNumber,
-    chunkedEventSequenceNumber,
+    continuedEventSequenceNumber,
     sequenceNumber,
     additionalInfos: []
 })
 
 
 
-describe("handling chunked events", () => {
+describe("handling continued events", () => {
 
     const partition = testNode("partition", testLanguage.TestPartition)
     const node1 = testNode("node1")
@@ -174,9 +174,9 @@ describe("handling chunked events", () => {
 
     it("this is how it’s done for 1 initial event", () => {
         const initialEvent = partitionAddedEvent(0, true, partition, node1)
-        const chunkedInfo = new ChunkedInfo(initialEvent, "newPartition")
-        expect(chunkedInfo.maybeCompletedMessage(testChunkedEvent(1, 1, true, initialEvent.sequenceNumber, node2))).to.equal(undefined)
-        const combinedEvent = chunkedInfo.maybeCompletedMessage(testChunkedEvent(2, 0, false, initialEvent.sequenceNumber, node3)) as PartitionAddedEvent
+        const chunkingInfo = new ChunkingInfo(initialEvent, "newPartition")
+        expect(chunkingInfo.maybeCompletedMessage(testContinuedEvent(1, 1, true, initialEvent.sequenceNumber, node2))).to.equal(undefined)
+        const combinedEvent = chunkingInfo.maybeCompletedMessage(testContinuedEvent(2, 0, false, initialEvent.sequenceNumber, node3)) as PartitionAddedEvent
         expect(combinedEvent).to.deep.equal(partitionAddedEvent(0, true, partition, node1, node3, node2))
     })
 
@@ -190,14 +190,14 @@ describe("handling chunked events", () => {
         eventChunker.handleEvent(initialEvent)
         expect(completedEvents.length).to.equal(0)
 
-        eventChunker.handleEvent(testChunkedEvent(1, 1, true, initialEvent.sequenceNumber, node2))
+        eventChunker.handleEvent(testContinuedEvent(1, 1, true, initialEvent.sequenceNumber, node2))
         expect(completedEvents.length).to.equal(0)
 
         const event2 = childAddedEvent(2, "partition", testChunk(node4), testLanguage.TestPartition_links, 0)
         eventChunker.handleEvent(event2)
         expect(completedEvents).to.deep.equal([event2])
 
-        eventChunker.handleEvent(testChunkedEvent(3, 0, false, initialEvent.sequenceNumber, node3))
+        eventChunker.handleEvent(testContinuedEvent(3, 0, false, initialEvent.sequenceNumber, node3))
         const combinedEvent = completedEvents[1]
         expect(combinedEvent).to.deep.equal(partitionAddedEvent(0, true, partition, node1, node3, node2))
     })
@@ -207,7 +207,7 @@ describe("handling chunked events", () => {
 
         expect(
             () => {
-                eventChunker.handleEvent(testChunkedEvent(1, 0, false, 0))
+                eventChunker.handleEvent(testContinuedEvent(1, 0, false, 0))
             }
         ).to.throw("no (initial) split event with ID 0 known")
 

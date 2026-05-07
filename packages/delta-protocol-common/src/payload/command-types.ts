@@ -36,8 +36,8 @@ export interface CustomCommand extends Command {
 // in order of the specification (§ 5.7):
 
 /** § 5.7.1 */
-export interface ChunkedCommand extends Command, ContinuedChunkMessage {
-    messageKind: "ChunkedCommand"
+export interface ContinuedCommand extends Command, ContinuedChunkMessage {
+    messageKind: "ContinuedCommand"
 }
 
 /** § 5.7.2.1 */

@@ -63,8 +63,8 @@ export interface ErrorResponse extends QueryMessage {
 
 
 /** § 5.5.1.2 (response) */
-export interface ChunkedQueryResponse extends QueryMessage, ContinuedChunkMessage {
-    messageKind: "ChunkedQueryResponse"
+export interface ContinuedQueryResponse extends QueryMessage, ContinuedChunkMessage {
+    messageKind: "ContinuedQueryResponse"
 }
 
 
@@ -213,7 +213,7 @@ export interface ListAndSubscribePartitionsResponse extends QueryMessage, Splitt
 
 const queryMessageKinds = [
     "Error",
-    "ChunkedQuery",
+    "ContinuedQuery",
     "SubscribeToChangingPartitions",
     "InformAboutChangingPartitions",
     "SubscribeToPartitionContents",
@@ -234,8 +234,8 @@ export const isQueryResponse = (message: Message): message is QueryMessage =>
 export const isErrorResponse = (message: Message): message is ErrorResponse =>
     message.messageKind === "ErrorResponse"
 
-export const isChunkedQueryResponse = (message: Message): message is ChunkedQueryResponse =>
-    message.messageKind === "ChunkedQueryResponse"
+export const isContinuedQueryResponse = (message: Message): message is ContinuedQueryResponse =>
+    message.messageKind === "ContinuedQueryResponse"
 
 /**
  * (See § 3.7.1 of the specification of the delta protocol.)

@@ -1,9 +1,9 @@
 = Correspondence between commands, events, and deltas
 
 |===
-| command (technical name)                            |spec. §   | event (technical name)                                |spec. §    |delta?
+| command (technical name)                            |spec. §   | event (technical name)                                | spec. §  | delta?
 
-| ChunkedCommand                                      | 5.6.1    | ChunkedEvent                                          | 5.7.1    | &cross;
+| ContinuedCommand                                    | 5.6.1    | ContinuedEvent                                        | 5.7.1    | &cross;
 | AddPartition                                        | 5.6.2.1  | PartitionAdded                                        | 5.7.2.1  | &check;
 | DeletePartition                                     | 5.6.2.2  | PartitionDeleted                                      | 5.7.2.2  | &check;
 | ChangeClassifier                                    | 5.6.3.1  | ClassifierChanged                                     | 5.7.3.1  | &cross;

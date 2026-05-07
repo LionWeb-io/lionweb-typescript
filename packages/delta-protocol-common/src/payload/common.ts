@@ -15,7 +15,7 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { LionWebId, LionWebJsonChunk } from "@lionweb/json"
+import { LionWebId, LionWebJsonDeltaChunk } from "@lionweb/json"
 import { isValidIdentifier } from "@lionweb/core"
 
 export interface Message {
@@ -50,7 +50,7 @@ export interface DeltaAdditionalInfo extends Message {
  * (See § 3.7.1 of the specification of the delta protocol.)
  */
 export interface ContinuedChunkMessage extends Message {
-    chunk: LionWebJsonChunk
+    chunk: LionWebJsonDeltaChunk
     continuedChunkCompleted: boolean
     continuedChunkSequenceNumber: number
 }

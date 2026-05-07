@@ -30,7 +30,7 @@ export interface Event extends DeltaAdditionalInfo {
 
 /**
  * Super-interface for events which have the `originCommands` parameter,
- * which is every event *except* {@link ChunkedEvent}.
+ * which is every event *except* {@link ContinuedEvent}.
  */
 export interface OriginatedEvent extends Event {
     originCommands: CommandSource[]
@@ -52,11 +52,11 @@ export interface CustomEvent extends Event {
 /**
  * § 5.8.1
  *
- * (ChunkedEvent is the only event *not* to have an `originCommands` parameter.)
+ * (ContinuedEvent is the only event *not* to have an `originCommands` parameter.)
  */
-export interface ChunkedEvent extends Event, ContinuedChunkMessage {
-    messageKind: "ChunkedEvent"
-    chunkedEventSequenceNumber: number  // === sequence number of split event (i.e., the initial message)
+export interface ContinuedEvent extends Event, ContinuedChunkMessage {
+    messageKind: "ContinuedEvent"
+    continuedEventSequenceNumber: number  // === sequence number of split event (i.e., the initial message)
 }
 
 /** § 5.8.2.1 */
@@ -336,7 +336,7 @@ export interface ErrorEvent extends OriginatedEvent {
 
 const eventMessageKinds = mapFrom(
     [
-        "ChunkedEvent",
+        "ContinuedEvent",
         "PartitionAdded",
         "PartitionDeleted",
         "ClassifierChanged",
@@ -373,8 +373,8 @@ const eventMessageKinds = mapFrom(
 export const isEvent = (message: Message): message is Event =>
     message.messageKind in eventMessageKinds
 
-export const isChunkedEvent = (message: Message): message is ChunkedEvent =>
-    message.messageKind === "ChunkedEvent"
+export const isContinuedEvent = (message: Message): message is ContinuedEvent =>
+    message.messageKind === "ContinuedEvent"
 
 /**
  * (See § 3.7.1 of the specification of the delta protocol.)
@@ -396,5 +396,5 @@ export const maybeChunkPropertyForSplittableEvent = (event: Event): (string | un
  * @return the `originCommands` field from an {@link Event} if it has one, and `[]` otherwise.
  */
 export const originCommandsFrom = (event: Event): CommandSource[] =>
-    isChunkedEvent(event) ? [] : (event as OriginatedEvent).originCommands
+    isContinuedEvent(event) ? [] : (event as OriginatedEvent).originCommands
 
