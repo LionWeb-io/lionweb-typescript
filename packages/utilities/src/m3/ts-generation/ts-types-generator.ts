@@ -171,10 +171,8 @@ export const tsTypeDefsForLanguage = (language: Language, ...generationOptions: 
             ...inheritsDirectlyFrom(classifier),
             ...allFeaturesOf(classifier)
                 .filter((feature) => feature instanceof Link)
-                .map((feature) => feature as Link)
                 .flatMap(({type}) => type)
                 .filter((type) => type instanceof Classifier)
-                .map((classifier) => classifier as Classifier)
         ]
 
     const coreImports = [

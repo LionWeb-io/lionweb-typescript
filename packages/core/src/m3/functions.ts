@@ -303,7 +303,7 @@ const metaTypedBasedClassifierDeducerFor = <NT extends Node & IMetaTyped>(langua
  * @return all {@link Concept concepts} defined in the given {@link Language language}.
  */
 const conceptsOf = (language: Language): Concept[] =>
-    language.entities.filter((entity) => entity instanceof Concept) as Concept[]
+    language.entities.filter((entity) => entity instanceof Concept)
 
 
 const isInstantiableClassifier = (entity: LanguageEntity): boolean =>

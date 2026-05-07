@@ -54,7 +54,6 @@ export const referenceValues = <NT extends Node, RT extends Node = NT>(
         .flatMap((sourceNode) =>
             allFeaturesOf(reader.classifierOf(sourceNode))
                 .filter((feature) => feature instanceof Reference)
-                .map((feature) => feature as Reference)
                 .flatMap((reference) => visit(sourceNode, reference))
         )
 }
