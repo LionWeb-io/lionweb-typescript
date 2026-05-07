@@ -156,7 +156,6 @@ export const deserializerWith = <NT extends Node>(configuration: DeserializerCon
             if (properties !== undefined) {
                 allFeatures
                     .filter(feature => feature instanceof Property)
-                    .map(feature => feature as Property)
                     .forEach(property => {
                         if (property.key in serializedPropertiesPerKey) {
                             const value = serializedPropertiesPerKey[property.key][0].value
