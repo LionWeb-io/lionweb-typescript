@@ -1,4 +1,4 @@
-import { serializeLanguages, serializerWith } from "@lionweb/core"
+import { Language, serializeLanguages, serializerWith } from "@lionweb/core"
 import {
     deriveLikelyPropertyName,
     inferLanguagesFromSerializationChunk,
@@ -13,6 +13,10 @@ import { deepEqual, equal } from "../test-utils/assertions.js"
 
 
 describe("inferLanguagesFromChunk", () => {
+    const assertLanguagesAreEqual = (language1: Language, language2: Language) => {
+        const asSortedJson = (language: Language) => sortedSerializationChunk(serializeLanguages(language), true)
+        deepEqual(asSortedJson(language1), asSortedJson(language2))
+    }
     it("should correctly infer the minimal library language from the instance", () => {
         const serializationChunk = serializerWith({ reader: libraryReader })(libraryModel)
 
@@ -20,10 +24,7 @@ describe("inferLanguagesFromChunk", () => {
         equal(languages.length, 1)
         const inferredLanguage = languages[0]
 
-        deepEqual(
-            sortedSerializationChunk(serializeLanguages(inferredLanguage)),
-            sortedSerializationChunk(serializeLanguages(minimalLibraryLanguage))
-        )
+        assertLanguagesAreEqual(inferredLanguage, minimalLibraryLanguage)
     })
 
     it("should correctly infer the multi language from the instance", () => {
@@ -37,14 +38,8 @@ describe("inferLanguagesFromChunk", () => {
         // we can't infer the language dependency, so we (have to) do it manually:
         inferredMultiLanguage.dependingOn(inferredLibraryLanguage)
 
-        deepEqual(
-            sortedSerializationChunk(serializeLanguages(inferredLibraryLanguage)),
-            sortedSerializationChunk(serializeLanguages(minimalLibraryLanguage))
-        )
-        deepEqual(
-            sortedSerializationChunk(serializeLanguages(inferredMultiLanguage)),
-            sortedSerializationChunk(serializeLanguages(multiLanguage))
-        )
+        assertLanguagesAreEqual(inferredLibraryLanguage, minimalLibraryLanguage)
+        assertLanguagesAreEqual(inferredMultiLanguage, multiLanguage)
     })
 })
 

@@ -4,6 +4,7 @@
 
 * Deprecate the `readFileAsJson` and `writeJsonAsFile` functions in favor of the `readFileAsJsonSync` and `writeJsonAsFileSync` functions from `@lionweb/node-utils`.
   (This change has been propagated throughout the entire codebase.)
+* Give `sortedSerializationChunk` an additional, optional flag argument `sortConnections` that determines whether containments, references, and annotations are sorted by ID.
 
 
 ## 0.9.0
