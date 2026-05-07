@@ -19,15 +19,10 @@
  * Extracts the various message kinds from the type definitions of the **events** payloads.
  */
 
-import { readFileSync } from "fs"
+import { messageKindsExtractedFrom } from "./message-kinds-common.js"
 
-const messageKinds = readFileSync("../delta-protocol-common/src/payload/event-types.ts", { encoding: "utf8" })
-    .split(/\r*\n/)
-    .map((line) => line.match(/^ {4}messageKind: "(\w+)"$/))
-    .filter((matchOrUndefined) => !!matchOrUndefined)
-    .map((match) => match[1])
-
-messageKinds.forEach((messageKind, index) => {
-    console.log(`        "${messageKind}"${index < messageKinds.length - 1 ? "," : ""}`)
-})
+messageKindsExtractedFrom("../delta-protocol-common/src/payload/event-types.ts")
+    .forEach((messageKind, index, messageKinds) => {
+        console.log(`        "${messageKind}"${index < messageKinds.length - 1 ? "," : ""}`)
+    })
 

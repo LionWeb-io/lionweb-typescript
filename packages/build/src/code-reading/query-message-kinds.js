@@ -15,13 +15,17 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-export { ChunkingInfo, EventChunker } from "./chunking.js"
+/**
+ * Extracts the various message kinds from the type definitions of the **query** payloads.
+ */
 
-export { LionWebClient } from "./client.js"
-export type { LionWebClientParameters } from "./client.js"
+import { messageKindsExtractedFrom } from "./message-kinds-common.js"
 
-export { noOpLowLevelClientLogger } from "./log-types.js"
-export type { MessageReceivedOnClient, MessageSentToServer, TextualLogItem, LowLevelClientLogItem, LowLevelClientLogger } from "./log-types.js"
-
-export type { LowLevelClient, LowLevelClientInstantiator, LowLevelClientLoggingParameters, LowLevelClientParameters } from "./low-level-client.js"
+const postfix = "Response"
+messageKindsExtractedFrom("../delta-protocol-common/src/payload/query-types.ts")
+    .filter((messageKind) => messageKind.endsWith(postfix))
+    .map((messageKind) => messageKind.substring(0, messageKind.length - postfix.length))
+    .forEach((messageKind, index, messageKinds) => {
+        console.log(`    "${messageKind}"${index < messageKinds.length - 1 ? "," : ""}`)
+    })
 

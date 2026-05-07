@@ -28,17 +28,25 @@ import {
     Command,
     DeltaOccurredOnClient,
     deltaToCommandTranslator,
+    ErrorResponse,
     Event,
     eventToDeltaTranslator,
     GetAvailableIdsRequest,
     GetAvailableIdsResponse,
     InformAboutChangingPartitionsRequest,
+    isContinuedEvent,
+    isContinuedQueryResponse,
+    isErrorResponse,
     isEvent,
     isQueryResponse,
     ListAndSubscribePartitionsRequest,
     ListAndSubscribePartitionsResponse,
     ListPartitionsRequest,
     ListPartitionsResponse,
+    maybeChunkPropertyForSplittableEvent,
+    maybeChunkPropertyForSplittableQueryResponse,
+    Message,
+    originCommandsFrom,
     QueryMessage,
     ReconnectRequest,
     ReconnectResponse,
@@ -47,12 +55,14 @@ import {
     SignOffRequest,
     SignOnRequest,
     SignOnResponse,
+    SplittableMessage,
     SubscribeToChangingPartitionsRequest,
     SubscribeToPartitionChangesParameters,
     SubscribeToPartitionContentsRequest,
     SubscribeToPartitionContentsResponse,
     UnsubscribeFromPartitionContentsRequest
 } from "@lionweb/delta-protocol-common"
+import { ChunkingInfo } from "./chunking.js"
 import { LowLevelClient, LowLevelClientInstantiator } from "./low-level-client.js"
 import { priorityQueueAcceptor } from "./priority-queue.js"
 
@@ -71,6 +81,15 @@ export type LionWebClientParameters = {
     serializationChunk?: LionWebJsonChunk
     instantiateDeltaReceiverForwardingTo?: (commandSender: DeltaReceiver) => DeltaReceiver
     semanticLogger?: SemanticLogger
+}
+
+
+/**
+ * Internal type def. to store the resolve and reject callbacks of a {@link Promise}.
+ */
+type MessageReceivers = {
+    resolve: (value: Message) => void
+    reject: (error: ErrorResponse | Error) => void
 }
 
 
@@ -97,7 +116,10 @@ export class LionWebClient {
         private readonly lowLevelClient: LowLevelClient<Command | QueryMessage>
     ) {}
 
-    private readonly queryResolveById: { [queryId: string]: (value: QueryMessage) => void } = {}
+    private readonly messageReceiversByQueryId: { [queryId: string]: MessageReceivers } = {}
+    private readonly chunkingInfoByQueryId: { [queryId: string]: ChunkingInfo } = {}
+
+    private readonly chunkingInfoByEventSequenceNumber: { [sequenceNumber: number]: ChunkingInfo } = {}
 
     static async create({
         repositoryId,
@@ -144,7 +166,7 @@ export class LionWebClient {
 
         const processEvent = (event: Event) => {
             lionWebClient.lastReceivedSequenceNumber = event.sequenceNumber
-            const commandOriginatingFromSelf = event.originCommands.find(({ commandId }) => issuedCommandIds.indexOf(commandId) > -1)
+            const commandOriginatingFromSelf = originCommandsFrom(event).find(({ commandId }) => issuedCommandIds.indexOf(commandId) > -1)
             // Note: we can't remove members from issuedCommandIds because there may be multiple events originating fom a single command.
             if (commandOriginatingFromSelf === undefined) {
                 try {
@@ -171,18 +193,60 @@ export class LionWebClient {
             log(new ClientReceivedMessage(clientId, message))
             if (isQueryResponse(message)) {
                 const { queryId } = message
-                if (queryId in lionWebClient.queryResolveById) {
-                    const resolveResponse = lionWebClient.queryResolveById[queryId]
-                    resolveResponse(message)
-                    delete lionWebClient.queryResolveById[queryId]
+                if (queryId in lionWebClient.messageReceiversByQueryId) {
+                    const messageReceivers = lionWebClient.messageReceiversByQueryId[queryId]
+                    if (isErrorResponse(message)) {
+                        messageReceivers.reject(message)
+                        delete lionWebClient.messageReceiversByQueryId[queryId]
+                        return  // ~void
+                    }
+                    if (isContinuedQueryResponse(message)) {
+                        const chunkingInfo = lionWebClient.chunkingInfoByQueryId[queryId]
+                        if (chunkingInfo === undefined) {
+                            log(new ClientHadProblem(clientId, `received a continued query response for a previous message that wasn’t [declared as] split — ignoring the continued chunk`))
+                            return  // ~void
+                        }
+                        const completedMessage = chunkingInfo.maybeCompletedMessage(message)
+                        if (completedMessage !== undefined) {
+                            messageReceivers.resolve(completedMessage)
+                            delete lionWebClient.messageReceiversByQueryId[queryId]
+                        }
+                        return  // ~void
+                    }
+                    const chunkProperty = maybeChunkPropertyForSplittableQueryResponse(message)
+                    if (chunkProperty !== undefined && (message as SplittableMessage).split) {  // chunkProperty is defined => message must be a SplittableMessage
+                        lionWebClient.chunkingInfoByQueryId[queryId] = new ChunkingInfo(message, chunkProperty)
+                    } else {
+                        messageReceivers.resolve(message)
+                        delete lionWebClient.messageReceiversByQueryId[queryId]
+                    }
                     return  // ~void
                 }
                 console.log(clientWarning(`client received response for a query with ID="${queryId} without having sent a corresponding request - ignoring`))
-                return
+                return  // ~void
             }
             if (isEvent(message)) {
-                acceptEvent(message)
-                return
+                if (isContinuedEvent(message)) {
+                    const { sequenceNumber } = message
+                    const chunkingInfo = lionWebClient.chunkingInfoByEventSequenceNumber[sequenceNumber]
+                    if (chunkingInfo === undefined) {
+                        log(new ClientHadProblem(clientId, `received a continued event for a previous message that wasn’t [declared as] split — ignoring the continued event`))
+                        return  // ~void
+                    }
+                    const completedMessage = chunkingInfo.maybeCompletedMessage(message)
+                    if (completedMessage !== undefined) {
+                        acceptEvent(completedMessage as Event)
+                        delete lionWebClient.chunkingInfoByEventSequenceNumber[sequenceNumber]
+                    }
+                    return  // ~void
+                }
+                const chunkProperty = maybeChunkPropertyForSplittableEvent(message)
+                if (chunkProperty !== undefined && (message as SplittableMessage).split) {
+                    lionWebClient.chunkingInfoByEventSequenceNumber[message.sequenceNumber] = new ChunkingInfo(message, chunkProperty)
+                } else {
+                    acceptEvent(message)
+                }
+                return  // ~void
             }
         }
 
@@ -194,7 +258,7 @@ export class LionWebClient {
             clientId,
             forest,
             lowLevelClient
-        ) // Note: we need this `lionWebClient` constant non-inlined for write-access to lastReceivedSequenceNumber and queryResolveById.
+        ) // Note: we need this `lionWebClient` constant non-inlined for access to various private fields from the functions implemented above.
         return lionWebClient
     }
 
@@ -212,8 +276,11 @@ export class LionWebClient {
      * so that query call can be `await`ed.
      */
     private readonly makeQuery = (queryRequest: QueryMessage): Promise<QueryMessage> =>
-        new Promise((resolveResponse, rejectResponse) => {
-            this.queryResolveById[queryRequest.queryId] = resolveResponse
+        new Promise((resolveResponse: (value: QueryMessage) => void, rejectResponse) => {
+            this.messageReceiversByQueryId[queryRequest.queryId] = {
+                resolve: resolveResponse as (value: Message) => void,
+                reject: rejectResponse
+            }
             this.lowLevelClient.sendMessage(queryRequest)
                 .catch(rejectResponse)
         })

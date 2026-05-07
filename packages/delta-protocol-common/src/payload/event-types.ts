@@ -17,7 +17,7 @@
 
 import { LionWebId, LionWebJsonChunk, LionWebJsonMetaPointer } from "@lionweb/json"
 import { mapFrom } from "@lionweb/ts-utils"
-import { DeltaAdditionalInfo, Message } from "./common.js"
+import { ContinuedChunkMessage, CustomMessageKind, DeltaAdditionalInfo, Message, SplittableMessage } from "./common.js"
 
 export type CommandSource = {
     participationId: LionWebId
@@ -25,27 +25,54 @@ export type CommandSource = {
 }
 
 export interface Event extends DeltaAdditionalInfo {
-    originCommands: CommandSource[]
     sequenceNumber: number
+}
+
+/**
+ * Super-interface for events which have the `originCommands` parameter,
+ * which is every event *except* {@link ContinuedEvent}.
+ */
+export interface OriginatedEvent extends Event {
+    originCommands: CommandSource[]
+}
+
+
+/**
+ * “Abstract” interface for custom events.
+ *
+ * § 5.3.3
+ */
+export interface CustomEvent extends Event {
+    messageKind: CustomMessageKind
 }
 
 
 // in order of the specification (§ 5.8):
 
+/**
+ * § 5.8.1
+ *
+ * (ContinuedEvent is the only event *not* to have an `originCommands` parameter.)
+ */
+export interface ContinuedEvent extends Event, ContinuedChunkMessage {
+    messageKind: "ContinuedEvent"
+    continuedEventSequenceNumber: number  // === sequence number of split event (i.e., the initial message)
+}
+
 /** § 5.8.2.1 */
-export interface PartitionAddedEvent extends Event {
+export interface PartitionAddedEvent extends OriginatedEvent, SplittableMessage {
     messageKind: "PartitionAdded"
     newPartition: LionWebJsonChunk
 }
 
 /** § 5.8.2.2 */
-export interface PartitionDeletedEvent extends Event {
+export interface PartitionDeletedEvent extends OriginatedEvent {
     messageKind: "PartitionDeleted"
     deletedPartition: LionWebId
 }
 
 /** § 5.8.3.1 */
-export interface ClassifierChangedEvent extends Event {
+export interface ClassifierChangedEvent extends OriginatedEvent {
     messageKind: "ClassifierChanged"
     node: LionWebId
     newClassifier: LionWebJsonMetaPointer
@@ -53,7 +80,7 @@ export interface ClassifierChangedEvent extends Event {
 }
 
 /** § 5.8.4.1 */
-export interface PropertyAddedEvent extends Event {
+export interface PropertyAddedEvent extends OriginatedEvent {
     messageKind: "PropertyAdded"
     node: LionWebId
     property: LionWebJsonMetaPointer
@@ -61,7 +88,7 @@ export interface PropertyAddedEvent extends Event {
 }
 
 /** § 5.8.4.2 */
-export interface PropertyDeletedEvent extends Event {
+export interface PropertyDeletedEvent extends OriginatedEvent {
     messageKind: "PropertyDeleted"
     node: LionWebId
     property: LionWebJsonMetaPointer
@@ -69,7 +96,7 @@ export interface PropertyDeletedEvent extends Event {
 }
 
 /** § 5.8.4.3 */
-export interface PropertyChangedEvent extends Event {
+export interface PropertyChangedEvent extends OriginatedEvent {
     messageKind: "PropertyChanged"
     node: LionWebId
     property: LionWebJsonMetaPointer
@@ -78,7 +105,7 @@ export interface PropertyChangedEvent extends Event {
 }
 
 /** § 5.8.5.1 */
-export interface ChildAddedEvent extends Event {
+export interface ChildAddedEvent extends OriginatedEvent, SplittableMessage {
     messageKind: "ChildAdded"
     parent: LionWebId
     newChild: LionWebJsonChunk
@@ -87,7 +114,7 @@ export interface ChildAddedEvent extends Event {
 }
 
 /** § 5.8.5.2 */
-export interface ChildDeletedEvent extends Event {
+export interface ChildDeletedEvent extends OriginatedEvent {
     messageKind: "ChildDeleted"
     deletedChild: LionWebId
     deletedDescendants: LionWebId[]
@@ -97,7 +124,7 @@ export interface ChildDeletedEvent extends Event {
 }
 
 /** § 5.8.5.3 */
-export interface ChildReplacedEvent extends Event {
+export interface ChildReplacedEvent extends OriginatedEvent, SplittableMessage {
     messageKind: "ChildReplaced"
     newChild: LionWebJsonChunk
     replacedChild: LionWebId
@@ -108,7 +135,7 @@ export interface ChildReplacedEvent extends Event {
 }
 
 /** § 5.8.5.4 */
-export interface ChildMovedFromOtherContainmentEvent extends Event {
+export interface ChildMovedFromOtherContainmentEvent extends OriginatedEvent {
     messageKind: "ChildMovedFromOtherContainment"
     newParent: LionWebId
     newContainment: LionWebJsonMetaPointer
@@ -120,7 +147,7 @@ export interface ChildMovedFromOtherContainmentEvent extends Event {
 }
 
 /** § 5.8.5.5 */
-export interface ChildMovedFromOtherContainmentInSameParentEvent extends Event {
+export interface ChildMovedFromOtherContainmentInSameParentEvent extends OriginatedEvent {
     messageKind: "ChildMovedFromOtherContainmentInSameParent"
     newContainment: LionWebJsonMetaPointer
     newIndex: number
@@ -131,7 +158,7 @@ export interface ChildMovedFromOtherContainmentInSameParentEvent extends Event {
 }
 
 /** § 5.8.5.6 */
-export interface ChildMovedInSameContainmentEvent extends Event {
+export interface ChildMovedInSameContainmentEvent extends OriginatedEvent {
     messageKind: "ChildMovedInSameContainment"
     newIndex: number
     movedChild: LionWebId
@@ -141,7 +168,7 @@ export interface ChildMovedInSameContainmentEvent extends Event {
 }
 
 /** § 5.8.5.7 */
-export interface ChildMovedAndReplacedFromOtherContainmentEvent extends Event {
+export interface ChildMovedAndReplacedFromOtherContainmentEvent extends OriginatedEvent {
     messageKind: "ChildMovedAndReplacedFromOtherContainment"
     newParent: LionWebId
     newContainment: LionWebJsonMetaPointer
@@ -155,7 +182,7 @@ export interface ChildMovedAndReplacedFromOtherContainmentEvent extends Event {
 }
 
 /** § 5.8.5.8 */
-export interface ChildMovedAndReplacedFromOtherContainmentInSameParentEvent extends Event {
+export interface ChildMovedAndReplacedFromOtherContainmentInSameParentEvent extends OriginatedEvent {
     messageKind: "ChildMovedAndReplacedFromOtherContainmentInSameParent"
     newContainment: LionWebJsonMetaPointer
     newIndex: number
@@ -168,7 +195,7 @@ export interface ChildMovedAndReplacedFromOtherContainmentInSameParentEvent exte
 }
 
 /** § 5.8.5.9 */
-export interface ChildMovedAndReplacedInSameContainmentEvent extends Event {
+export interface ChildMovedAndReplacedInSameContainmentEvent extends OriginatedEvent {
     messageKind: "ChildMovedAndReplacedInSameContainment"
     newIndex: number
     movedChild: LionWebId
@@ -180,7 +207,7 @@ export interface ChildMovedAndReplacedInSameContainmentEvent extends Event {
 }
 
 /** § 5.8.6.1 */
-export interface AnnotationAddedEvent extends Event {
+export interface AnnotationAddedEvent extends OriginatedEvent, SplittableMessage {
     messageKind: "AnnotationAdded"
     parent: LionWebId
     newAnnotation: LionWebJsonChunk
@@ -188,7 +215,7 @@ export interface AnnotationAddedEvent extends Event {
 }
 
 /** § 5.8.6.2 */
-export interface AnnotationDeletedEvent extends Event {
+export interface AnnotationDeletedEvent extends OriginatedEvent {
     messageKind: "AnnotationDeleted"
     deletedAnnotation: LionWebId
     deletedDescendants: LionWebId[]
@@ -197,7 +224,7 @@ export interface AnnotationDeletedEvent extends Event {
 }
 
 /** § 5.8.6.3 */
-export interface AnnotationReplacedEvent extends Event {
+export interface AnnotationReplacedEvent extends OriginatedEvent, SplittableMessage {
     messageKind: "AnnotationReplaced"
     newAnnotation: LionWebJsonChunk
     replacedAnnotation: LionWebId
@@ -207,7 +234,7 @@ export interface AnnotationReplacedEvent extends Event {
 }
 
 /** § 5.8.6.4 */
-export interface AnnotationMovedFromOtherParentEvent extends Event {
+export interface AnnotationMovedFromOtherParentEvent extends OriginatedEvent {
     messageKind: "AnnotationMovedFromOtherParent"
     newParent: LionWebId
     newIndex: number
@@ -217,7 +244,7 @@ export interface AnnotationMovedFromOtherParentEvent extends Event {
 }
 
 /** § 5.8.6.5 */
-export interface AnnotationMovedInSameParentEvent extends Event {
+export interface AnnotationMovedInSameParentEvent extends OriginatedEvent {
     messageKind: "AnnotationMovedInSameParent"
     newIndex: number
     movedAnnotation: LionWebId
@@ -226,7 +253,7 @@ export interface AnnotationMovedInSameParentEvent extends Event {
 }
 
 /** § 5.8.6.6 */
-export interface AnnotationMovedAndReplacedFromOtherParentEvent extends Event {
+export interface AnnotationMovedAndReplacedFromOtherParentEvent extends OriginatedEvent {
     messageKind: "AnnotationMovedAndReplacedFromOtherParent"
     newParent: LionWebId
     newIndex: number
@@ -238,7 +265,7 @@ export interface AnnotationMovedAndReplacedFromOtherParentEvent extends Event {
 }
 
 /** § 5.8.6.7 */
-export interface AnnotationMovedAndReplacedInSameParentEvent extends Event {
+export interface AnnotationMovedAndReplacedInSameParentEvent extends OriginatedEvent {
     messageKind: "AnnotationMovedAndReplacedInSameParent"
     newIndex: number
     movedAnnotation: LionWebId
@@ -249,7 +276,7 @@ export interface AnnotationMovedAndReplacedInSameParentEvent extends Event {
 }
 
 /** § 5.8.7.1 */
-export interface ReferenceAddedEvent extends Event {
+export interface ReferenceAddedEvent extends OriginatedEvent {
     messageKind: "ReferenceAdded"
     parent: LionWebId
     reference: LionWebJsonMetaPointer
@@ -259,7 +286,7 @@ export interface ReferenceAddedEvent extends Event {
 }
 
 /** § 5.8.7.2 */
-export interface ReferenceDeletedEvent extends Event {
+export interface ReferenceDeletedEvent extends OriginatedEvent {
     messageKind: "ReferenceDeleted"
     parent: LionWebId
     reference: LionWebJsonMetaPointer
@@ -269,7 +296,7 @@ export interface ReferenceDeletedEvent extends Event {
 }
 
 /** § 5.8.7.3 */
-export interface ReferenceChangedEvent extends Event {
+export interface ReferenceChangedEvent extends OriginatedEvent {
     messageKind: "ReferenceChanged"
     parent: LionWebId
     reference: LionWebJsonMetaPointer
@@ -281,18 +308,18 @@ export interface ReferenceChangedEvent extends Event {
 }
 
 /** § 5.8.8.1 */
-export interface CompositeEvent extends Event {
+export interface CompositeEvent extends OriginatedEvent {
     messageKind: "CompositeEvent"
     parts: Event[]
 }
 
 /** § 5.8.8.2 */
-export interface NoOpEvent extends Event {
+export interface NoOpEvent extends OriginatedEvent {
     messageKind: "NoOp"
 }
 
 /** § 5.8.8.3 */
-export interface ErrorEvent extends Event {
+export interface ErrorEvent extends OriginatedEvent {
     messageKind: "ErrorEvent"
     errorCode: string
     message: string
@@ -309,6 +336,7 @@ export interface ErrorEvent extends Event {
 
 const eventMessageKinds = mapFrom(
     [
+        "ContinuedEvent",
         "PartitionAdded",
         "PartitionDeleted",
         "ClassifierChanged",
@@ -344,4 +372,29 @@ const eventMessageKinds = mapFrom(
 
 export const isEvent = (message: Message): message is Event =>
     message.messageKind in eventMessageKinds
+
+export const isContinuedEvent = (message: Message): message is ContinuedEvent =>
+    message.messageKind === "ContinuedEvent"
+
+/**
+ * (See § 3.7.1 of the specification of the delta protocol.)
+ *
+ * @return the name of the property of the given {@link Event} that holds the chunk that may be split, or `undefined` if the given `event` isn’t splittable.
+ */
+export const maybeChunkPropertyForSplittableEvent = (event: Event): (string | undefined) => {
+    switch (event.messageKind) {
+        case "PartitionAdded": return "newPartition"
+        case "ChildAdded": return "newChild"
+        case "ChildReplaced": return "newChild"
+        case "AnnotationAdded": return "newAnnotation"
+        case "AnnotationReplaced": return "newAnnotation"
+        default: return undefined
+    }
+}
+
+/**
+ * @return the `originCommands` field from an {@link Event} if it has one, and `[]` otherwise.
+ */
+export const originCommandsFrom = (event: Event): CommandSource[] =>
+    isContinuedEvent(event) ? [] : (event as OriginatedEvent).originCommands
 

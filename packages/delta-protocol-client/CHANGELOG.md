@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.10.0 — not yet released
+
+* Implement splittable messages.
+  * Handle `ErrorResponse` for queries.
+
+
 ## 0.9.0
 
 * Update the `LionWebClient` class to latest spec. of delta protocol:

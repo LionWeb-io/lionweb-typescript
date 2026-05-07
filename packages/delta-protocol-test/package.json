@@ -24,6 +24,7 @@
     "dependencies": {
         "@lionweb/class-core": "0.10.0-alpha.1",
         "@lionweb/class-core-test-language": "0.10.0-alpha.1",
+        "@lionweb/core": "0.10.0-alpha.1",
         "@lionweb/delta-protocol-client": "0.10.0-alpha.1",
         "@lionweb/delta-protocol-common": "0.10.0-alpha.1",
         "@lionweb/delta-protocol-low-level-client-ws": "0.10.0-alpha.1",

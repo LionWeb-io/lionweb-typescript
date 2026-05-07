@@ -4,6 +4,7 @@
 
 * Introduce `metaPointerFor{Classifier|Feature|Language}` functions, and deprecate the `metaPointerFor` function taking a `Feature`.
   (This change has been propagated throughout the entire codebase.)
+* Expose `isValidIdentifier` function.
 
 
 ## 0.9.0
