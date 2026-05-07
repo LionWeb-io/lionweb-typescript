@@ -1,8 +1,13 @@
 # Changelog
 
+## 0.10.0 — not yet released
+
+* Add a `--sort-connections` flag to the `sort` command — see [`README.md`](README.md) for more information.
+
+
 ## 0.9.0
 
-* Add a command `generate-class-core-types` to invoke the `@lionweb/class-core-generator`.
+* Add a `generate-class-core-types` command to invoke the `@lionweb/class-core-generator`.
 
 
 ## 0.8.0, 0.7.2
