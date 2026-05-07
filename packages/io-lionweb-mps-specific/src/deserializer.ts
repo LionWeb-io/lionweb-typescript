@@ -43,5 +43,5 @@ export const deserializeLanguagesWithIoLionWebMpsSpecific = (serializationChunk:
     })(
         serializationChunk,
         [v2023_1.lioncoreFacade.language, v2023_1.builtinsFacade.language].flatMap(nodesExtractorUsing(lioncoreReaderFor(v2023_1)))
-    ).filter((node) => node instanceof Language) as Language[]
+    ).filter((node) => node instanceof Language)
 
