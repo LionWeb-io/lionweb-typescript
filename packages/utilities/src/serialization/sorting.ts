@@ -1,12 +1,24 @@
-import { LionWebJsonChunk } from "@lionweb/json"
-import { sortByStringKey } from "@lionweb/ts-utils"
 import {
-    orderedMetaPointer,
-    orderedSerializedLanguageReference,
-    orderedSerializedProperty,
-    orderedSerializedReferenceTarget
-} from "./ordering.js"
+    LionWebJsonChunk,
+    LionWebJsonContainment,
+    LionWebJsonMetaPointer,
+    LionWebJsonNode,
+    LionWebJsonProperty,
+    LionWebJsonReference,
+    LionWebJsonReferenceTarget,
+    LionWebJsonUsedLanguage
+} from "@lionweb/json"
+import { mappedComparer, mappedLexiComparer, regularStringComparer, sorterWith } from "@lionweb/ts-utils"
+import { orderedMetaPointer, orderedSerializedLanguageReference, orderedSerializedReferenceTarget } from "./ordering.js"
 
+
+const sortedUsedLanguages = sorterWith<LionWebJsonUsedLanguage>(mappedLexiComparer([({key}) => key, ({version}) => version], regularStringComparer))
+const sortedNodes = sorterWith<LionWebJsonNode>(mappedComparer(({id}) => id, regularStringComparer))
+const metaPointerComparer = mappedLexiComparer<LionWebJsonMetaPointer, string>([({language}) => language, ({version}) => version, ({key}) => key], regularStringComparer)
+const sortedProperties = sorterWith<LionWebJsonProperty>(mappedComparer(({property}) => property, metaPointerComparer))
+const sortedContainments = sorterWith<LionWebJsonContainment>(mappedComparer(({containment}) => containment, metaPointerComparer))
+const sortedReferences = sorterWith<LionWebJsonReference>(mappedComparer(({reference}) => reference, metaPointerComparer))
+const sortedTargets = sorterWith<LionWebJsonReferenceTarget>(mappedComparer(({reference, resolveInfo}) => (reference ?? resolveInfo)!, regularStringComparer))
 
 /**
  * @return A sorted version of a {@link LionWebJsonChunk serialization chunk}, meaning:
@@ -22,22 +34,23 @@ import {
 export const sortedSerializationChunk = ({serializationFormatVersion, languages, nodes}: LionWebJsonChunk, sortConnections?: boolean): LionWebJsonChunk =>
     ({
         serializationFormatVersion,
-        languages: sortByStringKey(languages, ({key}) => key).map(orderedSerializedLanguageReference),
-        nodes: sortByStringKey(nodes, ({id}) => id)
+        languages: sortedUsedLanguages(languages)
+            .map(orderedSerializedLanguageReference),
+        nodes: sortedNodes(nodes)
             .map((node) => ({
                 id: node.id,
                 classifier: orderedMetaPointer(node.classifier),
-                properties: sortByStringKey(node.properties, ({property}) => property.key).map(orderedSerializedProperty),
-                containments: sortByStringKey(node.containments, ({containment}) => containment.key)
+                properties: sortedProperties(node.properties),
+                containments: sortedContainments(node.containments)
                         .map(({containment, children}) => ({
                             containment: orderedMetaPointer(containment),
                             children: sortConnections ? children.sort() : children
                         })),
-                references: sortByStringKey(node.references, ({reference}) => reference.key)
+                references: sortedReferences(node.references)
                         .map(({reference, targets}) => ({
                             reference: orderedMetaPointer(reference),
                             targets: sortConnections
-                                ? sortByStringKey(targets, ({reference, resolveInfo}) => (reference ?? resolveInfo)!).map(orderedSerializedReferenceTarget)
+                                ? sortedTargets(targets).map(orderedSerializedReferenceTarget)
                                 : targets
                         })),
                 annotations: sortConnections ? node.annotations.sort() : node.annotations,
