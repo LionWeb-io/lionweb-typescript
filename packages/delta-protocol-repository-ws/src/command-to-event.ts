@@ -183,15 +183,15 @@ export const commandAsEvent = (command: Command, participationId: string): Event
                 })
             }
             case "MoveChildFromOtherContainment": {
-                const {newParent, newContainment, newIndex, movedChild} = command as MoveChildFromOtherContainmentCommand // § 5.7.5.4
+                const {newParent, newContainment, newIndex, movedChild, oldParent, oldContainment, oldIndex} = command as MoveChildFromOtherContainmentCommand // § 5.7.5.4
                 return completed<ChildMovedFromOtherContainmentEvent>("ChildMovedFromOtherContainment", { // § 5.8.5.4
                     newParent,
                     newContainment,
                     newIndex,
                     movedChild,
-                    oldParent: "???",   // TODO  get from own model
-                    oldContainment: newContainment, // TODO  get from own model
-                    oldIndex: -1 // TODO  get from own model
+                    oldParent,
+                    oldContainment,
+                    oldIndex
                 })
             }
             case "MoveChildFromOtherContainmentInSameParent": {
@@ -206,50 +206,50 @@ export const commandAsEvent = (command: Command, participationId: string): Event
                 })
             }
             case "MoveChildInSameContainment": {
-                const {newIndex, movedChild} = command as MoveChildInSameContainmentCommand // § 5.7.5.6
+                const {newIndex, movedChild, parent, containment, oldIndex} = command as MoveChildInSameContainmentCommand // § 5.7.5.6
                 return completed<ChildMovedInSameContainmentEvent>("ChildMovedInSameContainment", { // § 5.8.5.6
                     newIndex,
                     movedChild,
-                    parent: "???",   // TODO  get from own model
-                    containment: { language: "???", version: "???", key: "???" },  // TODO  get from own model
-                    oldIndex: -1 // TODO  get from own model
+                    parent,
+                    containment,
+                    oldIndex
                 })
             }
             case "MoveAndReplaceChildFromOtherContainment": {
-                const {newParent, newContainment, newIndex, replacedChild, movedChild} = command as MoveAndReplaceChildFromOtherContainmentCommand // § 5.7.5.7
+                const {newParent, newContainment, newIndex, replacedChild, movedChild, oldParent, oldContainment, oldIndex} = command as MoveAndReplaceChildFromOtherContainmentCommand // § 5.7.5.7
                 return completed<ChildMovedAndReplacedFromOtherContainmentEvent>("ChildMovedAndReplacedFromOtherContainment", { // § 5.8.5.7
                     newParent,
                     newContainment,
                     newIndex,
                     movedChild,
-                    oldParent: newParent,   // TODO  get from own model
-                    oldContainment: newContainment,   // TODO  get from own model
-                    oldIndex: -1,   // TODO  get from own model
+                    oldParent,
+                    oldContainment,
+                    oldIndex,
                     replacedChild,
                     replacedDescendants: []   // TODO  get from own model
                 })
             }
             case "MoveAndReplaceChildFromOtherContainmentInSameParent": {
-                const {newContainment, newIndex, replacedChild, movedChild} = command as MoveAndReplaceChildFromOtherContainmentInSameParentCommand // § 5.7.5.8
+                const {newContainment, newIndex, replacedChild, movedChild, parent, oldContainment, oldIndex} = command as MoveAndReplaceChildFromOtherContainmentInSameParentCommand // § 5.7.5.8
                 return completed<ChildMovedAndReplacedFromOtherContainmentInSameParentEvent>("ChildMovedAndReplacedFromOtherContainmentInSameParent", { // § 5.8.5.8
+                    parent,
                     newContainment,
                     newIndex,
+                    oldContainment,
+                    oldIndex,
                     movedChild,
-                    parent: "???",   // TODO  get from own model
-                    oldContainment: newContainment,   // TODO  get from own model
-                    oldIndex: -1,   // TODO  get from own model
-                    replacedChild: replacedChild,
+                    replacedChild,
                     replacedDescendants: []   // TODO  get from own model
                 })
             }
             case "MoveAndReplaceChildInSameContainment": {
-                const {newIndex, replacedChild} = command as MoveAndReplaceChildInSameContainmentCommand // § 5.7.5.9
+                const {newIndex, replacedChild, movedChild, parent, containment, oldIndex} = command as MoveAndReplaceChildInSameContainmentCommand // § 5.7.5.9
                 return completed<ChildMovedAndReplacedInSameContainmentEvent>("ChildMovedAndReplacedInSameContainment", { // § 5.8.5.9
                     newIndex,
-                    movedChild: "???",   // TODO  get from own model
-                    parent: "???",   // TODO  get from own model
-                    containment: { language: "???", version: "???", key: "???" },   // TODO  get from own model
-                    oldIndex: -1,   // TODO  get from own model
+                    movedChild,
+                    parent,
+                    containment,
+                    oldIndex,
                     replacedChild,
                     replacedDescendants: []   // TODO  get from own model
                 })
@@ -282,43 +282,43 @@ export const commandAsEvent = (command: Command, participationId: string): Event
                 })
             }
             case "MoveAnnotationFromOtherParent": {
-                const {newParent, newIndex, movedAnnotation} = command as MoveAnnotationFromOtherParentCommand // § 5.7.6.4
+                const {newParent, newIndex, movedAnnotation, oldParent, oldIndex} = command as MoveAnnotationFromOtherParentCommand // § 5.7.6.4
                 return completed<AnnotationMovedFromOtherParentEvent>("AnnotationMovedFromOtherParent", { // § 5.8.6.4
                     newParent,
                     newIndex,
                     movedAnnotation,
-                    oldParent: "???",   // TODO  get from own model
-                    oldIndex: -1   // TODO  get from own model
+                    oldParent,
+                    oldIndex
                 })
             }
             case "MoveAnnotationInSameParent": {
-                const {newIndex, movedAnnotation} = command as MoveAnnotationInSameParentCommand // § 5.7.6.5
+                const {newIndex, movedAnnotation, parent, oldIndex} = command as MoveAnnotationInSameParentCommand // § 5.7.6.5
                 return completed<AnnotationMovedInSameParentEvent>("AnnotationMovedInSameParent", { // § 5.8.6.5
                     newIndex,
                     movedAnnotation,
-                    parent: "???",   // TODO  get from own model
-                    oldIndex: -1   // TODO  get from own model
+                    parent,
+                    oldIndex
                 })
             }
             case "MoveAndReplaceAnnotationFromOtherParent": {
-                const {newParent, newIndex, movedAnnotation, replacedAnnotation} = command as MoveAndReplaceAnnotationFromOtherParentCommand // § 5.7.6.6
+                const {newParent, newIndex, movedAnnotation, replacedAnnotation, oldParent, oldIndex} = command as MoveAndReplaceAnnotationFromOtherParentCommand // § 5.7.6.6
                 return completed<AnnotationMovedAndReplacedFromOtherParentEvent>("AnnotationMovedAndReplacedFromOtherParent", { // § 5.8.6.6
                     newParent,
                     newIndex,
                     movedAnnotation,
-                    oldParent: "???",   // TODO  get from own model
-                    oldIndex: -1,   // TODO  get from own model
+                    oldParent,
+                    oldIndex,
                     replacedAnnotation,
                     replacedDescendants: []   // TODO  get from own model
                 })
             }
             case "MoveAndReplaceAnnotationInSameParent": {
-                const {newIndex, movedAnnotation, replacedAnnotation} = command as MoveAndReplaceAnnotationInSameParentCommand // § 5.7.6.7
+                const {newIndex, movedAnnotation, replacedAnnotation, parent, oldIndex} = command as MoveAndReplaceAnnotationInSameParentCommand // § 5.7.6.7
                 return completed<AnnotationMovedAndReplacedInSameParentEvent>("AnnotationMovedAndReplacedInSameParent", { // § 5.8.6.7
                     newIndex,
                     movedAnnotation,
-                    parent: "???",   // TODO  get from own model
-                    oldIndex: -1,   // TODO  get from own model
+                    parent,
+                    oldIndex,
                     replacedAnnotation,
                     replacedDescendants: []   // TODO  get from own model
                 })

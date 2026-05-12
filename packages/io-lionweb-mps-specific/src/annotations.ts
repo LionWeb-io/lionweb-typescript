@@ -28,7 +28,7 @@ import { ioLionWebMpsSpecificLanguage } from "./definition.js"
 export const ioLionWebMpsSpecificAnnotationsFrom = (node: M3Concept): IoLionWebMpsSpecificAnnotation[] =>
     node
         .annotations
-        .filter((annotation) => annotation instanceof IoLionWebMpsSpecificAnnotation) as IoLionWebMpsSpecificAnnotation[]
+        .filter((annotation) => annotation instanceof IoLionWebMpsSpecificAnnotation)
 
 
 /**

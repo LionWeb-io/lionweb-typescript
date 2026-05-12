@@ -1,15 +1,13 @@
 import {
     AggregatingProblemReporter,
-    Concept,
     deserializerWith,
     dynamicWriter,
     Feature,
-    Language,
+    LanguageFactory,
     LionWebVersions,
     newPropertyValueDeserializerRegistry,
     propertyValueDeserializerFrom,
-    Reference,
-    unresolved,
+    UnresolvedReference,
     Writer
 } from "@lionweb/core"
 import { LionWebJsonChunk } from "@lionweb/json"
@@ -19,7 +17,8 @@ import { BaseNode } from "../instances/base.js"
 import { libraryWriter } from "../instances/library.js"
 import { libraryLanguage } from "../languages/library.js"
 import { dateDataType, libraryWithDatesLanguage } from "../languages/libraryWithDates.js"
-import { deepEqual, equal } from "../test-utils/assertions.js"
+import { deepEqual, equal, isTrue } from "../test-utils/assertions.js"
+import { StringsMapper } from "@lionweb/ts-utils"
 
 
 type NodeWithProperties = BaseNode & { properties: Record<string, unknown> }
@@ -41,6 +40,7 @@ export const libraryWithDatesWriter: Writer<BaseNode> = {
 
 
 describe("deserialization", () => {
+
     it("deserializes all nodes, also when there are effectively no root nodes", () => {
         const serializationChunk: LionWebJsonChunk = {
             serializationFormatVersion: LionWebVersions.v2023_1.serializationFormatVersion,
@@ -191,18 +191,14 @@ describe("deserialization", () => {
         deepEqual(deserializerWith({ writer: dynamicWriter, languages: [] })(serializationChunk), [])
     })
 
-    it("doesn't throw for unresolvable references", () => {
-        const someLanguage = new Language("someLanguage", "0", "someLanguage", "someLanguage")
-        const someConcept = new Concept(someLanguage, "someConcept", "someConcept", "someConcept", false)
-        someLanguage.havingEntities(someConcept)
-        const someConcept_aReference = new Reference(
-            someConcept,
-            "someConcept-aReference",
-            "someConcept-aReference",
-            "someConcept-aReference"
-        )
-        someConcept.havingFeatures(someConcept_aReference)
+    const idAndKeyGenerator: StringsMapper = (...names) => names.length === 1 ? names[0] : names.slice(1).join("-")
+    const factory = new LanguageFactory("someLanguage", "0", idAndKeyGenerator, idAndKeyGenerator)
+    const someLanguage = factory.language
+    const someConcept = factory.concept("someConcept", false)
+    const aContainment = factory.containment(someConcept, "aContainment")
+    const aReference = factory.reference(someConcept, "aReference")
 
+    it("doesn't throw for unresolvable references", () => {
         const serializationChunk: LionWebJsonChunk = {
             serializationFormatVersion: LionWebVersions.v2023_1.serializationFormatVersion,
             languages: [
@@ -242,9 +238,20 @@ describe("deserialization", () => {
             ]
         }
 
-        const model = deserializerWith({ writer: dynamicWriter, languages: [someLanguage] })(serializationChunk)
+        const problemReporter = new AggregatingProblemReporter()
+        const model = deserializerWith({ writer: dynamicWriter, languages: [someLanguage], problemReporter })(serializationChunk)
+        deepEqual(Object.entries(problemReporter.allProblems()), [
+            [
+                `couldn't resolve the target with id=bar of a "aReference" reference on the node with id=foo`,
+                1
+            ]
+        ])
         equal(model.length, 1)
-        deepEqual(model[0].settings, { [someConcept_aReference.key]: unresolved })
+        const ref = model[0].settings[aReference.key]
+        isTrue(ref instanceof UnresolvedReference)
+        const {targetId, resolveInfo} = ref as UnresolvedReference
+        equal(targetId, "bar")
+        equal(resolveInfo, "unresolvable bar")
     })
 
     it("aggregates problems", () => {
@@ -268,5 +275,52 @@ describe("deserialization", () => {
             ]
         ])
     })
+
+    it("reports on serialized nodes that can’t be deserialized, and doesn’t add/set `null`", () => {
+        const serializationChunk: LionWebJsonChunk = {
+            serializationFormatVersion: LionWebVersions.v2023_1.serializationFormatVersion,
+            languages: [
+                {
+                    key: "someLanguage",
+                    version: "0"
+                }
+            ],
+            nodes: [
+                {
+                    id: "foo",
+                    classifier: {
+                        language: "someLanguage",
+                        version: "0",
+                        key: "someConcept"
+                    },
+                    properties: [],
+                    containments: [
+                        {
+                            containment: {
+                                language: "someLanguage",
+                                version: "0",
+                                key: "someConcept-aContainment"
+                            },
+                            children: [ "bar" ] // no node with ID "bar" in this chunk
+                        }
+                    ],
+                    references: [],
+                    annotations: [],
+                    parent: null
+                }
+            ]
+        }
+
+        const problemReporter = new AggregatingProblemReporter()
+        const model = deserializerWith({ writer: dynamicWriter, languages: [someLanguage], problemReporter })(serializationChunk)
+        deepEqual(Object.entries(problemReporter.allProblems()), [
+            [
+                `child with id=bar doesn’t reside in this serialization chunk, so can’t add it to containment aContainment on node with id=foo`,
+                1
+            ]
+        ])
+        equal(model[0].settings[aContainment.key], undefined)
+    })
+
 })
 

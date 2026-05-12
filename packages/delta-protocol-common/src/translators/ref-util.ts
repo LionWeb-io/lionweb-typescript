@@ -15,19 +15,21 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { isRef, Node, SingleRef } from "@lionweb/core"
-import { LionWebId } from "@lionweb/json"
-
-
-/**
- * A type that expresses a value is either an {@link LionWebId} or a value to indicate that resolution to a node previously failed.
- */
-export type IdOrNull = LionWebId | null
-
+import { isReferenceToSet, isUnresolvedReference, Node, Reference, SingleRef } from "@lionweb/core"
+import { nodeBaseReader } from "@lionweb/class-core"
 
 /**
- * @return the ID of a given reference to a {@link Node}, or `null` if that reference was previously unresolved.
+ * @return a `resolveInfo` string for the given `ref` value of the given `reference`, or an attempt at that.
+ * *Note*: for internal use only!
  */
-export const idFrom = (ref: SingleRef<Node>): IdOrNull =>
-    isRef(ref) ? ref.id : null
+export const resolveInfoFrom = <T extends Node>(ref: SingleRef<T>, reference: Reference): (string | null) =>
+    (() => {
+        if (isReferenceToSet(ref)) {
+            return undefined
+        }
+        if (isUnresolvedReference(ref)) {
+            return ref.resolveInfo
+        }
+        return nodeBaseReader.resolveInfoFor!(ref, reference)
+    })() ?? null
 

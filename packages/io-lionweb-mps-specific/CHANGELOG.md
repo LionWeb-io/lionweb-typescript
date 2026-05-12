@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.10.0 — not yet released
+
+* Introduce a `IoLionWebMpsSpecificDeserializationData` type and a `deserializeLanguagesWithIoLionWebMpsSpecificFrom` function taking one argument of that type, and deprecate the `deserializeLanguagesWithIoLionWebMpsSpecific` function.
+  * Introduce a `combinedWriterFor` function, and deprecate the `combinedWriter` constant.
+
+
 ## 0.9.0
 
 (No changes)

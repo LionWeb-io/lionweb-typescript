@@ -78,8 +78,8 @@ export class IdMapping {
      */
     fromRefId = (idOrNull: IdOrNull): SingleRef<Node> =>
         idOrNull === null
-            ? referenceToSet()
-            : (this.nodesById[idOrNull] ?? referenceToSet());
+            ? referenceToSet
+            : (this.nodesById[idOrNull] ?? referenceToSet);
 
     /**
      * Updates this {@link IdMapping} with the given `node` *and all its descendants* (recursively).

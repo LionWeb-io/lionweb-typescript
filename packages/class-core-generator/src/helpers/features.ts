@@ -23,13 +23,12 @@ import {
     isBuiltinNodeConcept,
     isContainment,
     isProperty,
+    isRef,
     isReference,
-    isUnresolvedReference,
     LanguageEntity,
     Link,
     PrimitiveType,
     Property,
-    referenceToSet,
     SingleRef
 } from "@lionweb/core"
 import { Imports, tsTypeForPrimitiveType } from "./index.js"
@@ -42,12 +41,12 @@ export const typeOf = (feature: Feature): SingleRef<LanguageEntity> => {
     if (feature instanceof Link) {
         return feature.type
     }
-    return referenceToSet()
+    throw new Error(`can’t handle Feature sub type ${feature.constructor.name}`)
 }
 
 
 export const tsTypeForDataType = (dataType: SingleRef<DataType>, imports: Imports) => {
-    if (isUnresolvedReference(dataType)) {
+    if (!isRef(dataType)) {
         return `unknown /* [ERROR] can't compute a TS type for an unresolved data type */`
     }
     if (dataType instanceof PrimitiveType) {
@@ -61,15 +60,15 @@ export const tsTypeForDataType = (dataType: SingleRef<DataType>, imports: Import
 
 
 const isBuiltinNode = (type: SingleRef<LanguageEntity>): boolean => {
-    if (isUnresolvedReference(type)) {
+    if (!isRef(type)) {
         throw new Error(`can’t say whether an unresolved reference is the built-in Node concept`)
     }
     return type instanceof Classifier && isBuiltinNodeConcept(type)
 }
 
 export const tsTypeForClassifier = (classifier: SingleRef<Classifier>, imports: Imports, isReference = false) => {
-    if (isUnresolvedReference(classifier)) {
-        return `unknown /* [ERROR] can't compute a TS type for an unresolved classifier */`
+    if (!isRef(classifier)) {
+        return `unknown /* [ERROR] can't compute a TS type for an unresolved or to-set classifier */`
     }
     if (isBuiltinNode(classifier)) {
         return isReference
@@ -84,8 +83,8 @@ export const optionalityPostfix = (feature: Feature) => feature.optional ? " | u
 
 export const tsFieldTypeForFeature = (feature: Feature, imports: Imports): string => {
     const type = typeOf(feature)
-    if (isUnresolvedReference(type)) {
-        return `unknown /* [ERROR] can't compute a TS type for feature ${feature.name} on classifier ${feature.classifier.name} with unresolved type (${type}) */`
+    if (!isRef(type)) {
+        return `unknown /* [ERROR] can't compute a TS type for feature ${feature.name} on classifier ${feature.classifier.name} with unresolved type (${type.toString()}) */`
     }
     if (isProperty(feature)) {
         const typeId = (() => {
@@ -112,8 +111,8 @@ export const tsFieldTypeForFeature = (feature: Feature, imports: Imports): strin
 
 export const tsTypeForValueManager = (feature: Feature, imports: Imports): string => {
     const type = typeOf(feature)
-    if (isUnresolvedReference(type)) {
-        return `unknown /* [ERROR] can't compute a TS type for feature ${feature.name} on classifier ${feature.classifier.name} with unresolved type (${type}) */`
+    if (!isRef(type)) {
+        return `unknown /* [ERROR] can't compute a TS type for feature ${feature.name} on classifier ${feature.classifier.name} with unresolved type (${type.toString()}) */`
     }
     if (isProperty(feature)) {
         return (() => {

@@ -20,6 +20,7 @@ import {
     areSameLanguages,
     Classifier,
     lioncoreWriterFor,
+    LionWebVersion,
     LionWebVersions,
     M3Concept,
     M3Node,
@@ -38,8 +39,6 @@ import {
     ShortDescription,
     VirtualPackage
 } from "./implementation.js"
-
-const { v2023_1 } = LionWebVersions
 
 const ioLionWebMpsSpecificFactory = (parent: Node | undefined, classifier: Classifier, id: LionWebId, propertySettings: { [propertyKey: LionWebKey]: unknown }) => {
 
@@ -83,20 +82,30 @@ const ioLionWebMpsSpecificFactory = (parent: Node | undefined, classifier: Class
     throw new Error(`don't know how to instantiate a ${classifier.name}`)
 }
 
-
-export const combinedWriter: Writer<M3Node | IoLionWebMpsSpecificAnnotation, Node> = {
+/**
+ * @return a {@link Writer} that transparently adds support for the `io.lionweb.mps.specific` language.
+ * @param lionWebVersion the {@link LionWebVersion} to deserialize from.
+ */
+export const combinedWriterFor = (lionWebVersion: LionWebVersion): Writer<M3Node | IoLionWebMpsSpecificAnnotation, Node> => ({
     encodingOf: (_literal) => undefined,    // (there are no literals in either LionCore/M3 or io.lionweb.mps.specific)
     nodeFor: (parent, classifier, id, propertySettings) => {
         if (areSameLanguages(classifier.language, ioLionWebMpsSpecificLanguage)) {
             return ioLionWebMpsSpecificFactory(parent, classifier, id, propertySettings)
         }
-        if (areSameLanguages(classifier.language, v2023_1.lioncoreFacade.language)) {
-            return lioncoreWriterFor(v2023_1).nodeFor(parent as M3Concept, classifier, id, propertySettings)
+        if (areSameLanguages(classifier.language, lionWebVersion.lioncoreFacade.language)) {
+            return lioncoreWriterFor(lionWebVersion).nodeFor(parent as M3Concept, classifier, id, propertySettings)
         }
         throw new Error(`don't know how to instantiate a ${classifier.name} from language ${classifier.language.name} (${classifier.language.key}, ${classifier.language.version})`)
     },
     setFeatureValue: (node, feature, value) => {
         updateSettingsNameBased(node as unknown as Record<string, unknown>, feature, value)
     }
-}
+})
+
+/**
+ * Legacy version of {@link combinedWriterFor} that’s not parametrized with a {@link LionWebVersion}.
+ *
+ * @deprecated Use {@code combinedWriterFor(<LionWeb version>)} instead.
+ */
+export const combinedWriter: Writer<M3Node | IoLionWebMpsSpecificAnnotation, Node> = combinedWriterFor(LionWebVersions.v2023_1)
 
