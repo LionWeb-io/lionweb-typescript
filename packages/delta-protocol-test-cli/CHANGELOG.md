@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.10.0 — not yet released
+
+* Implement a `TryToWriteProtocolLog` task that actively/forcefully tries to write the protocol log — this is for debugging convenience.
+
+
 ## 0.9.0
 
 * Set ID of repository to connect to, to `myRepo`.

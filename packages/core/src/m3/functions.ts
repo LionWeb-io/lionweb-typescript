@@ -4,7 +4,13 @@
 
 
 import { LionWebId, LionWebKey } from "@lionweb/json"
-import { cycleWith, flatMapNonCyclingFollowing, sortByStringKey } from "@lionweb/ts-utils"
+import {
+    cycleWith,
+    flatMapNonCyclingFollowing,
+    mappedComparer,
+    regularStringComparer,
+    sorterWith
+} from "@lionweb/ts-utils"
 import { containmentChain } from "../functions.js"
 import { ClassifierDeducer } from "../reading.js"
 import { isRef, UnresolvedReference } from "../references.js"
@@ -156,7 +162,7 @@ const nameOf = <T extends INamed>({name}: T): string =>
  * @return the given named things sorted by name
  */
 export const nameSorted = <T extends INamed>(ts: T[]): T[] =>
-    sortByStringKey(ts, nameOf)
+    sorterWith<T>(mappedComparer(nameOf, regularStringComparer))(ts)
 
 
 /**

@@ -28,7 +28,7 @@ It does some implicit validation as it can error out on incorrect serializations
 
 ## Sorting a serialization chunk
 
-Run the following command to sort a serialization chunk (e.g.):
+Run the following command to sort one or more serialization chunks (e.g.):
 
 ```shell
 npx @lionweb/cli sort ../build/artifacts/core/v2023_1/lioncore.json
@@ -37,11 +37,12 @@ npx @lionweb/cli sort ../build/artifacts/core/v2023_1/lioncore.json
 Sorting a serialization chunk means the following:
 
 * All nodes sorted by ID.
-* For all nodes, their properties, containments, and references sorted by key (from the meta-pointer),
-* All containments and references sorted by ID.
+* For all nodes, their properties, containments, and references are sorted lexicographically by the tuple (language-key, feature-key, language-version) — essentially, by the meta-pointer.
+* If the `--sort-connections` flag is given as one (or more) of the arguments, then for every node, all containments, references, and contained annotations are sorted by ID.
+* All key-value pairs in the objects in the JSON produced, appear according to the specification of the LionWeb serialization format, with missing key-value pairs put in with their default values.
 
-The sorting produces a serialization chunk that's also aligned on JSON-level with the specification.
-That means that key-value pairs appear in precisely the same order as they do in the specification, and that missing key-value pairs are put in and get their default values.
+Sorted serialization chunks lean themselves well to being compared as text files.
+Setting the `--sort-connections` flag usually changes the meaning of the serialization chunk, but makes it easy to find out whether a list of items appearing in a containment, a reference, or the annotations of a node merely appear in a different order, or really differ.
 
 
 ## Development
