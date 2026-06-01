@@ -2,6 +2,14 @@
 
 ## 0.10.0 — not yet released
 
+
+## 0.9.2
+
+* Applying a composite delta no longer throws an exception with message "application of delta of class CompositeDelta not implemented", but works instead.
+
+
+## 0.9.1
+
 * Adding the same child twice using `SingleContainmentValueManager.addDirectly` – used exclusively and internally by the deserializer and duplicator – doesn’t throw an error (regardless of whether the serialization format specification allows this).
 
 
