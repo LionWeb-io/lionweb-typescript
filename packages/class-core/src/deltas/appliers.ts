@@ -345,6 +345,7 @@ const deltaApplier = (idMapping?: IdMapping, updatablePartitions?: () => INodeBa
             }
             if (delta instanceof CompositeDelta) {
                 delta.parts.forEach(applyDelta);
+                return;
             }
             if (delta instanceof NoOpDelta) {
                 return;
