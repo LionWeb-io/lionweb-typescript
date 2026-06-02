@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.10.0 — not yet released
+
+* Add a `suppressESLintIssueOnFeaturelessClassifiers` flag to the `GeneratorOptions` type to determine whether TypeScript types generated from concepts, interfaces, and annotations that have no direct – i.e., non-inherited – features are marked with a comment that suppresses the ESLint `@typescript-eslint/no-empty-object-type` rule.
+
+
 ## 0.9.0
 
 * Avoid name collisions between types in generated code and types imported from LionWeb itself.

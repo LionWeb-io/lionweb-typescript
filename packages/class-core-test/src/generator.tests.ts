@@ -33,7 +33,7 @@ describe(`class-core generator`, () => {
         factory.concept("ConceptExtendingNode", false, node)
         factory.concept("ConceptExtendingNothing", false)
 
-        const languageFile = languageFileFor(factory.language, { verbose: false, genericImportLocation: "@lionweb/class-core" })
+        const languageFile = languageFileFor(factory.language, { verbose: false, genericImportLocation: "@lionweb/class-core", suppressESLintIssueOnFeaturelessClassifiers: false })
         const matchExtendsNode = languageFile.match(/export class ConceptExtendingNode extends ([A-Za-z.$]+) \{/)
         isTrue(matchExtendsNode !== null && matchExtendsNode[1] === "$lwClassCore.NodeBase")
         const matchExtendsNothing = languageFile.match(/export class ConceptExtendingNothing extends ([A-Za-z.$]+) \{/)
@@ -49,7 +49,7 @@ describe(`class-core generator`, () => {
         const AnInterface = factory.interface("AnInterface")
         factory.reference(AnInterface, "ref").ofType(node)
 
-        const languageFile = languageFileFor(factory.language, { verbose: false, genericImportLocation: "@lionweb/class-core" })
+        const languageFile = languageFileFor(factory.language, { verbose: false, genericImportLocation: "@lionweb/class-core", suppressESLintIssueOnFeaturelessClassifiers: false })
         isTrue(languageFile.match(/<\$lwClassCore\.INodeBase>/) === null, "found <INodeBase>")
         isTrue(languageFile.match(/<\$lwCore\.Node>/) !== null, "didn’t find <Node>")
     })

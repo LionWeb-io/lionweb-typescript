@@ -47,7 +47,7 @@ export const languageFileFor = (language: Language, options: GeneratorOptions) =
         ``,
         orderedEntities
             .filter((entity) => entity.language === language)
-            .map(withNewlineAppended(typeForLanguageEntity(imports)))
+            .map(withNewlineAppended(typeForLanguageEntity(imports, options.suppressESLintIssueOnFeaturelessClassifiers)))
     ]
 
     return asString([

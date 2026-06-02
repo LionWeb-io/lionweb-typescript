@@ -76,7 +76,7 @@ const cardinalityPrefix = (feature: Feature) => {
 const valueManagerFor = (feature: Feature) =>
     `${cardinalityPrefix(feature)}${featureMetaType(feature)}ValueManager`
 
-export const typeForLanguageEntity = (imports: Imports) => {
+export const typeForLanguageEntity = (imports: Imports, suppressESLintIssueOnFeaturelessClassifiers: boolean) => {
 
     const classMembersForProperty = (property: Property) => {
         const {name, type} = property
@@ -193,6 +193,7 @@ export const typeForLanguageEntity = (imports: Imports) => {
                     : ("implements " + nameSorted(superInterfaces).map((t) => imports.entity(t)).join(", ") + " ")
         )(implementsFrom(classifier))
         return [
+            when(features.length === 0 && suppressESLintIssueOnFeaturelessClassifiers)(`// eslint-disable-next-line @typescript-eslint/no-empty-object-type`),
             `export ${isAbstract(classifier) ? "abstract " : ""}class ${classifier.name} ${extendsFragment}${implementsFragment}{`,
             indent([
                 when(!isAbstract(classifier))(

@@ -31,7 +31,7 @@ const properGenericImportLocation = "@lionweb/class-core"
 /**
  * A type def. for options objects configuring code generation.
  */
-export type GeneratorOptions = Partial<{
+export type GeneratorOptions = {
     /**
      * The `from`-part of the `import`-statement that imports the `class-core` package.
      * Default (which should always be used!): `@lionweb/class-core`.
@@ -40,18 +40,25 @@ export type GeneratorOptions = Partial<{
     /**
      * The optional header for generated files.
      */
-    header: string
+    header?: string
     /**
      * Whether to output logging on the `stdout`. Default: `true`.
      */
     verbose: boolean
-}>
+    /**
+     * Whether TypeScript types generated from concepts, interfaces, and annotations
+     * that have no direct – i.e., non-inherited – features
+     * are marked with a comment that suppresses the ESLint `@typescript-eslint/no-empty-object-type` rule.
+     */
+    suppressESLintIssueOnFeaturelessClassifiers: boolean
+}
 
 
 const withDefaults = (options?: Partial<GeneratorOptions>): GeneratorOptions => ({
     genericImportLocation: options?.genericImportLocation ?? properGenericImportLocation,
     header: options?.header,
-    verbose: options?.verbose ?? true
+    verbose: options?.verbose ?? true,
+    suppressESLintIssueOnFeaturelessClassifiers: options?.suppressESLintIssueOnFeaturelessClassifiers ?? false
 })
 
 
