@@ -15,7 +15,7 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { LanguageFactory, LionWebVersions } from "@lionweb/core"
+import { ClassModifier, LanguageFactory, LionWebVersions } from "@lionweb/core"
 import { concatenator } from "@lionweb/ts-utils"
 
 const { builtinsFacade } = LionWebVersions.v2023_1
@@ -25,11 +25,11 @@ const { stringDataType } = builtinsFacade.primitiveTypes
 const factory = new LanguageFactory("Deltas", "0", concatenator("-"), concatenator("-"))
 export const deltasLanguage = factory.language
 
-const Deltas = factory.concept("Deltas", false).isPartition()
+const Deltas = factory.concept("Deltas", ClassModifier.concrete).isPartition()
 
 const Type = factory.interface("Type")
 
-const Field = factory.concept("Field", false).implementing(inamed)
+const Field = factory.concept("Field", ClassModifier.concrete).implementing(inamed)
 factory.containment(Field, "type").ofType(Type)
 
 
@@ -41,31 +41,31 @@ FeatureKinds
         factory.enumerationLiteral(FeatureKinds, "reference")
     )
 
-const FeatureType = factory.concept("FeatureType", false).implementing(Type)
+const FeatureType = factory.concept("FeatureType", ClassModifier.concrete).implementing(Type)
 factory.property(FeatureType, "kind").ofType(FeatureKinds)
 factory.reference(FeatureType, "container").ofType(Field).isOptional()   // FIXME  make required later
 
 const NodeSerialization = factory.interface("NodeSerialization")
 
-const SerializeSubTree = factory.concept("SerializeSubTree", false).implementing(NodeSerialization)
+const SerializeSubTree = factory.concept("SerializeSubTree", ClassModifier.concrete).implementing(NodeSerialization)
 factory.property(SerializeSubTree, "fieldName").ofType(stringDataType)
 
-factory.concept("RefOnly", false).implementing(NodeSerialization)
+factory.concept("RefOnly", ClassModifier.concrete).implementing(NodeSerialization)
 
-const NodeType = factory.concept("NodeType", false).implementing(Type)
+const NodeType = factory.concept("NodeType", ClassModifier.concrete).implementing(Type)
 factory.containment(NodeType, "serialization").isOptional().ofType(NodeSerialization)
 
-factory.concept("IndexType", false).implementing(Type)
+factory.concept("IndexType", ClassModifier.concrete).implementing(Type)
 
-factory.concept("PrimitiveValueType", false).implementing(Type)
+factory.concept("PrimitiveValueType", ClassModifier.concrete).implementing(Type)
 
-const CustomType = factory.concept("CustomType", false).implementing(Type)
+const CustomType = factory.concept("CustomType", ClassModifier.concrete).implementing(Type)
 factory.property(CustomType, "type").ofType(stringDataType)
 factory.property(CustomType, "serializationType").ofType(stringDataType)
 factory.property(CustomType, "serializationExpr").ofType(stringDataType)
 factory.property(CustomType, "deserializationExpr").ofType(stringDataType)
 
-const Delta = factory.concept("Delta", false).implementing(inamed)
+const Delta = factory.concept("Delta", ClassModifier.concrete).implementing(inamed)
 factory.property(Delta, "documentation").isOptional().ofType(stringDataType)
 factory.containment(Delta, "fields").isOptional().isMultiple().ofType(Field)
 
