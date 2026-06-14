@@ -836,14 +836,14 @@ export const CommandDefinitions: MessageGroup = {
                     mayBeNull: false,
                 },
                 {
-                    name: "newIndex",
+                    name: "oldIndex",
                     type: "Number",
                     isList: false,
                     isOptional: false,
                     mayBeNull: false,
                 },
                 {
-                    name: "oldIndex",
+                    name: "indexOffset",
                     type: "Number",
                     isList: false,
                     isOptional: false,
@@ -1242,14 +1242,14 @@ export const CommandDefinitions: MessageGroup = {
                     mayBeNull: false,
                 },
                 {
-                    name: "newIndex",
+                    name: "oldIndex",
                     type: "Number",
                     isList: false,
                     isOptional: false,
                     mayBeNull: false,
                 },
                 {
-                    name: "oldIndex",
+                    name: "indexOffset",
                     type: "Number",
                     isList: false,
                     isOptional: false,
