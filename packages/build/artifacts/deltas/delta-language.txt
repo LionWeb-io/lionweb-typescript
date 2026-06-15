@@ -33,6 +33,8 @@ language Deltas
             features (↓name):
                 type: Type
 
+        concept IndexOffsetType implements Type
+
         concept IndexType implements Type
 
         interface NodeSerialization

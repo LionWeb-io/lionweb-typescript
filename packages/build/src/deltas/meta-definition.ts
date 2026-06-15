@@ -57,6 +57,8 @@ factory.containment(NodeType, "serialization").isOptional().ofType(NodeSerializa
 
 factory.concept("IndexType", ConceptModifier.concrete).implementing(Type)
 
+factory.concept("IndexOffsetType", ConceptModifier.concrete).implementing(Type)
+
 factory.concept("PrimitiveValueType", ConceptModifier.concrete).implementing(Type)
 
 const CustomType = factory.concept("CustomType", ConceptModifier.concrete).implementing(Type)
