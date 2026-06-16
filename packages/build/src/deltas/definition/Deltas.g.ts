@@ -39,7 +39,7 @@ export class DeltasBase implements $lwClassCore.ILanguageBase {
         return this._language;
     }
 
-    public readonly _Deltas = new $lwCore.Concept(this._language, "Deltas", "Deltas-Deltas", "Deltas-Deltas", false).isPartition();
+    public readonly _Deltas = new $lwCore.Concept(this._language, "Deltas", "Deltas-Deltas", "Deltas-Deltas", $lwCore.ConceptModifier.concrete).isPartition();
     get Deltas(): $lwCore.Concept {
         this.ensureWiredUp();
         return this._Deltas;
@@ -56,7 +56,7 @@ export class DeltasBase implements $lwClassCore.ILanguageBase {
         return this._Type;
     }
 
-    public readonly _Field = new $lwCore.Concept(this._language, "Field", "Deltas-Field", "Deltas-Field", false);
+    public readonly _Field = new $lwCore.Concept(this._language, "Field", "Deltas-Field", "Deltas-Field", $lwCore.ConceptModifier.concrete);
     get Field(): $lwCore.Concept {
         this.ensureWiredUp();
         return this._Field;
@@ -88,7 +88,7 @@ export class DeltasBase implements $lwClassCore.ILanguageBase {
         return this._FeatureKinds_reference;
     }
 
-    public readonly _FeatureType = new $lwCore.Concept(this._language, "FeatureType", "Deltas-FeatureType", "Deltas-FeatureType", false);
+    public readonly _FeatureType = new $lwCore.Concept(this._language, "FeatureType", "Deltas-FeatureType", "Deltas-FeatureType", $lwCore.ConceptModifier.concrete);
     get FeatureType(): $lwCore.Concept {
         this.ensureWiredUp();
         return this._FeatureType;
@@ -110,7 +110,7 @@ export class DeltasBase implements $lwClassCore.ILanguageBase {
         return this._NodeSerialization;
     }
 
-    public readonly _SerializeSubTree = new $lwCore.Concept(this._language, "SerializeSubTree", "Deltas-SerializeSubTree", "Deltas-SerializeSubTree", false);
+    public readonly _SerializeSubTree = new $lwCore.Concept(this._language, "SerializeSubTree", "Deltas-SerializeSubTree", "Deltas-SerializeSubTree", $lwCore.ConceptModifier.concrete);
     get SerializeSubTree(): $lwCore.Concept {
         this.ensureWiredUp();
         return this._SerializeSubTree;
@@ -121,13 +121,13 @@ export class DeltasBase implements $lwClassCore.ILanguageBase {
         return this._SerializeSubTree_fieldName;
     }
 
-    public readonly _RefOnly = new $lwCore.Concept(this._language, "RefOnly", "Deltas-RefOnly", "Deltas-RefOnly", false);
+    public readonly _RefOnly = new $lwCore.Concept(this._language, "RefOnly", "Deltas-RefOnly", "Deltas-RefOnly", $lwCore.ConceptModifier.concrete);
     get RefOnly(): $lwCore.Concept {
         this.ensureWiredUp();
         return this._RefOnly;
     }
 
-    public readonly _NodeType = new $lwCore.Concept(this._language, "NodeType", "Deltas-NodeType", "Deltas-NodeType", false);
+    public readonly _NodeType = new $lwCore.Concept(this._language, "NodeType", "Deltas-NodeType", "Deltas-NodeType", $lwCore.ConceptModifier.concrete);
     get NodeType(): $lwCore.Concept {
         this.ensureWiredUp();
         return this._NodeType;
@@ -138,19 +138,19 @@ export class DeltasBase implements $lwClassCore.ILanguageBase {
         return this._NodeType_serialization;
     }
 
-    public readonly _IndexType = new $lwCore.Concept(this._language, "IndexType", "Deltas-IndexType", "Deltas-IndexType", false);
+    public readonly _IndexType = new $lwCore.Concept(this._language, "IndexType", "Deltas-IndexType", "Deltas-IndexType", $lwCore.ConceptModifier.concrete);
     get IndexType(): $lwCore.Concept {
         this.ensureWiredUp();
         return this._IndexType;
     }
 
-    public readonly _PrimitiveValueType = new $lwCore.Concept(this._language, "PrimitiveValueType", "Deltas-PrimitiveValueType", "Deltas-PrimitiveValueType", false);
+    public readonly _PrimitiveValueType = new $lwCore.Concept(this._language, "PrimitiveValueType", "Deltas-PrimitiveValueType", "Deltas-PrimitiveValueType", $lwCore.ConceptModifier.concrete);
     get PrimitiveValueType(): $lwCore.Concept {
         this.ensureWiredUp();
         return this._PrimitiveValueType;
     }
 
-    public readonly _CustomType = new $lwCore.Concept(this._language, "CustomType", "Deltas-CustomType", "Deltas-CustomType", false);
+    public readonly _CustomType = new $lwCore.Concept(this._language, "CustomType", "Deltas-CustomType", "Deltas-CustomType", $lwCore.ConceptModifier.concrete);
     get CustomType(): $lwCore.Concept {
         this.ensureWiredUp();
         return this._CustomType;
@@ -176,7 +176,7 @@ export class DeltasBase implements $lwClassCore.ILanguageBase {
         return this._CustomType_deserializationExpr;
     }
 
-    public readonly _Delta = new $lwCore.Concept(this._language, "Delta", "Deltas-Delta", "Deltas-Delta", false);
+    public readonly _Delta = new $lwCore.Concept(this._language, "Delta", "Deltas-Delta", "Deltas-Delta", $lwCore.ConceptModifier.concrete);
     get Delta(): $lwCore.Concept {
         this.ensureWiredUp();
         return this._Delta;

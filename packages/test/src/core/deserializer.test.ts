@@ -1,5 +1,6 @@
 import {
     AggregatingProblemReporter,
+    ConceptModifier,
     deserializerWith,
     dynamicWriter,
     Feature,
@@ -194,7 +195,7 @@ describe("deserialization", () => {
     const idAndKeyGenerator: StringsMapper = (...names) => names.length === 1 ? names[0] : names.slice(1).join("-")
     const factory = new LanguageFactory("someLanguage", "0", idAndKeyGenerator, idAndKeyGenerator)
     const someLanguage = factory.language
-    const someConcept = factory.concept("someConcept", false)
+    const someConcept = factory.concept("someConcept", ConceptModifier.concrete)
     const aContainment = factory.containment(someConcept, "aContainment")
     const aReference = factory.reference(someConcept, "aReference")
 

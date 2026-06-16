@@ -3,8 +3,8 @@ import { SingleRef } from "../references.js"
 import {
     Annotation,
     Classifier,
-    ClassModifier,
     Concept,
+    ConceptModifier,
     Containment,
     Enumeration,
     EnumerationLiteral,
@@ -45,7 +45,7 @@ export class LanguageFactory {
         return annotation
     }
 
-    concept(name: string, abstract: boolean | ClassModifier, extends_?: SingleRef<Concept>): Concept {
+    concept(name: string, abstract: boolean | ConceptModifier, extends_?: SingleRef<Concept>): Concept {
         const concept = new Concept(
             this.language,
             name,
