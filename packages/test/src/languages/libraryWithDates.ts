@@ -1,4 +1,4 @@
-import { LanguageFactory, LionWebVersions } from "@lionweb/core"
+import { ConceptModifier, LanguageFactory, LionWebVersions } from "@lionweb/core"
 import { chain, concatenator, lastOf } from "@lionweb/ts-utils"
 import { hasher } from "@lionweb/utilities"
 
@@ -7,11 +7,11 @@ export const libraryWithDatesLanguage = factory.language
 
 const { integerDataType, stringDataType } = LionWebVersions.v2023_1.builtinsFacade.primitiveTypes
 
-export const libraryWithDates = factory.concept("LibraryWithDates", false)
-const book = factory.concept("Book", false)
-const writer = factory.concept("Writer", false)
-const guideBookWriter = factory.concept("GuideBookWriter", false, writer)
-const specialistBookWriter = factory.concept("SpecialistBookWriter", false, writer)
+export const libraryWithDates = factory.concept("LibraryWithDates", ConceptModifier.concrete)
+const book = factory.concept("Book", ConceptModifier.concrete)
+const writer = factory.concept("Writer", ConceptModifier.concrete)
+const guideBookWriter = factory.concept("GuideBookWriter", ConceptModifier.concrete, writer)
+const specialistBookWriter = factory.concept("SpecialistBookWriter", ConceptModifier.concrete, writer)
 const bookType = factory.enumeration("BookType")
 factory.enumerationLiteral(bookType, "Normal")
 factory.enumerationLiteral(bookType, "Special")

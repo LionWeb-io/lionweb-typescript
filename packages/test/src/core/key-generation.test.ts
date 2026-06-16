@@ -1,4 +1,4 @@
-import { LanguageFactory, LionWebVersions } from "@lionweb/core"
+import { ConceptModifier, LanguageFactory, LionWebVersions } from "@lionweb/core"
 import { concatenator } from "@lionweb/ts-utils"
 
 import { equal } from "../test-utils/assertions.js"
@@ -8,7 +8,7 @@ describe("key generation", () => {
     it("based on qualified name", () => {
         const factory = new LanguageFactory("FormLanguage", "1", concatenator("-"), concatenator("-"))
 
-        const form = factory.concept("Form", false)
+        const form = factory.concept("Form", ConceptModifier.concrete)
 
         equal(form.key, "FormLanguage-Form")
 
