@@ -19,7 +19,7 @@ export class Meta_testBase implements $lwClassCore.ILanguageBase {
         return this._language;
     }
 
-    public readonly _Class = new $lwCore.Concept(this._language, "Class", "Meta-test-Class", "Meta-test-Class", false);
+    public readonly _Class = new $lwCore.Concept(this._language, "Class", "Meta-test-Class", "Meta-test-Class", $lwCore.ConceptModifier.concrete);
     get Class(): $lwCore.Concept {
         this.ensureWiredUp();
         return this._Class;
@@ -30,7 +30,7 @@ export class Meta_testBase implements $lwClassCore.ILanguageBase {
         return this._Class_property;
     }
 
-    public readonly _Property = new $lwCore.Concept(this._language, "Property", "Meta-test-Property", "Meta-test-Property", false);
+    public readonly _Property = new $lwCore.Concept(this._language, "Property", "Meta-test-Property", "Meta-test-Property", $lwCore.ConceptModifier.concrete);
     get Property(): $lwCore.Concept {
         this.ensureWiredUp();
         return this._Property;

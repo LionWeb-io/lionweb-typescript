@@ -43,7 +43,7 @@ export class LionCore_builtinsBase implements $lwClassCore.ILanguageBase {
         return this._JSON;
     }
 
-    public readonly _Node = new $lwCore.Concept(this._language, "Node", "LionCore-builtins-Node", "LionCore-builtins-Node", true);
+    public readonly _Node = new $lwCore.Concept(this._language, "Node", "LionCore-builtins-Node", "LionCore-builtins-Node", $lwCore.ConceptModifier.abstract);
     get Node(): $lwCore.Concept {
         this.ensureWiredUp();
         return this._Node;

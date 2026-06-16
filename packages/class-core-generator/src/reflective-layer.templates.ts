@@ -62,7 +62,7 @@ export const reflectiveClassFor = (imports: Imports) => {
         const { name, key, id, features } = classifier
         const metaType = entityMetaType(classifier)
         return [
-            `public readonly _${name} = new ${imports.core(metaType)}(this._language, "${name}", "${key}", "${id}"${classifier instanceof Concept ? ", " + classifier.abstract : ""})${isPartition(classifier) ? ".isPartition()" : ""};`,
+            `public readonly _${name} = new ${imports.core(metaType)}(this._language, "${name}", "${key}", "${id}"${classifier instanceof Concept ? ", " + imports.core("ConceptModifier") + "." + (classifier.abstract ? "abstract" : "concrete") : ""})${isPartition(classifier) ? ".isPartition()" : ""};`,
             `get ${name}(): ${imports.core(metaType)} {`,
             indent([`this.ensureWiredUp();`, `return this._${name};`]),
             `}`,

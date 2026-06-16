@@ -81,7 +81,7 @@ export class TestLanguageBase implements $lwClassCore.ILanguageBase {
         return this._SecondTestEnumeration_literal3;
     }
 
-    public readonly _DataTypeTestConcept = new $lwCore.Concept(this._language, "DataTypeTestConcept", "DataTypeTestConcept", "DataTypeTestConcept", false);
+    public readonly _DataTypeTestConcept = new $lwCore.Concept(this._language, "DataTypeTestConcept", "DataTypeTestConcept", "DataTypeTestConcept", $lwCore.ConceptModifier.concrete);
     get DataTypeTestConcept(): $lwCore.Concept {
         this.ensureWiredUp();
         return this._DataTypeTestConcept;
@@ -127,7 +127,7 @@ export class TestLanguageBase implements $lwClassCore.ILanguageBase {
         return this._DataTypeTestConcept_enumValue_0_1;
     }
 
-    public readonly _LinkTestConcept = new $lwCore.Concept(this._language, "LinkTestConcept", "LinkTestConcept", "LinkTestConcept", false);
+    public readonly _LinkTestConcept = new $lwCore.Concept(this._language, "LinkTestConcept", "LinkTestConcept", "LinkTestConcept", $lwCore.ConceptModifier.concrete);
     get LinkTestConcept(): $lwCore.Concept {
         this.ensureWiredUp();
         return this._LinkTestConcept;
@@ -184,7 +184,7 @@ export class TestLanguageBase implements $lwClassCore.ILanguageBase {
         return this._TestAnnotation_ref;
     }
 
-    public readonly _TestPartition = new $lwCore.Concept(this._language, "TestPartition", "TestPartition", "TestPartition", false).isPartition();
+    public readonly _TestPartition = new $lwCore.Concept(this._language, "TestPartition", "TestPartition", "TestPartition", $lwCore.ConceptModifier.concrete).isPartition();
     get TestPartition(): $lwCore.Concept {
         this.ensureWiredUp();
         return this._TestPartition;
