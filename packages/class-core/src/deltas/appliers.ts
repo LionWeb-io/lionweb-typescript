@@ -424,6 +424,6 @@ export const updateIdMappingWithDelta = (idMapping: IdMapping, delta: IDelta) =>
     if (delta instanceof PartitionAddedDelta) {
         idMapping.updateWith(delta.newPartition);
     }
-    // (nothing to be done: no need –yet?- to take deleted child nodes out of the ID mapping)
+    // (nothing to be done: no need –yet?- to take deleted child nodes out of the ID mapping, but it does constitute a memory leak!)
 };
 
