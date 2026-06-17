@@ -737,7 +737,7 @@ export const EventDefinitions: MessageGroup = {
                     mayBeNull: false,
                 },
                 {
-                    name: "newIndex",
+                    name: "indexOffset",
                     type: "Number",
                     isList: false,
                     isOptional: false,
@@ -1337,7 +1337,7 @@ export const EventDefinitions: MessageGroup = {
                     mayBeNull: false,
                 },
                 {
-                    name: "newIndex",
+                    name: "indexOffset",
                     type: "Number",
                     isList: false,
                     isOptional: false,
