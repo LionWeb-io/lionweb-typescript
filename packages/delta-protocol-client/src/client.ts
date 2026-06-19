@@ -46,7 +46,6 @@ import {
     maybeChunkPropertyForSplittableEvent,
     maybeChunkPropertyForSplittableQueryResponse,
     Message,
-    originCommandsFrom,
     QueryMessage,
     ReconnectRequest,
     ReconnectResponse,
@@ -166,7 +165,7 @@ export class LionWebClient {
 
         const processEvent = (event: Event) => {
             lionWebClient.lastReceivedSequenceNumber = event.sequenceNumber
-            const commandOriginatingFromSelf = originCommandsFrom(event).find(({ commandId }) => issuedCommandIds.indexOf(commandId) > -1)
+            const commandOriginatingFromSelf = event.originCommands.find(({ commandId }) => issuedCommandIds.indexOf(commandId) > -1)
             // Note: we can't remove members from issuedCommandIds because there may be multiple events originating fom a single command.
             if (commandOriginatingFromSelf === undefined) {
                 try {

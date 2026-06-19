@@ -30,7 +30,7 @@ const metaPath = join(packagePath, "meta")
 const languageJsonPath = join(metaPath, "testLanguage.json")
 
 const externalRepoName = "lionweb-integration-testing"
-const pathWithinExternalRepo = "src/languages"
+const pathWithinExternalRepo = "testLanguage"
 const originalLanguageJsonFileName = "testLanguage.2023.1.json"
 
 const tryCopyFromLocalRepoClonse = () => {

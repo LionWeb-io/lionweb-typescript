@@ -36,7 +36,6 @@ import {
     deltaToCommandTranslator,
     Event,
     eventToDeltaTranslator,
-    originCommandsFrom,
     prefixedWith
 } from "@lionweb/delta-protocol-common"
 import { createWSLowLevelClient } from "@lionweb/delta-protocol-low-level-client-ws"
@@ -213,7 +212,7 @@ describe("WebSocket-driven client and repository including translation, without 
             loading = false
 
             const receiveMessageOnClient = (event: Event) => {
-                if (originCommandsFrom(event).every(({ commandId }) => commandIds.indexOf(commandId) === -1)) {
+                if (event.originCommands.every(({ commandId }) => commandIds.indexOf(commandId) === -1)) {
                     const delta = eventAsDelta(event, idMapping)
                     if (delta !== undefined) {
                         applyDelta(delta)

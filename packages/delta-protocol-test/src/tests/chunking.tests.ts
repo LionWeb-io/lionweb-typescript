@@ -154,6 +154,7 @@ const testContinuedEvent = (sequenceNumber: number, continuedChunkSequenceNumber
     continuedChunkCompleted,
     continuedChunkSequenceNumber,
     continuedEventSequenceNumber,
+    originCommands: [],
     sequenceNumber,
     additionalInfos: []
 })
