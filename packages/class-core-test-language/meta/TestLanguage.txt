@@ -33,6 +33,7 @@ language TestLanguage
         annotation TestAnnotation implements INamed
             annotates: Node
             features (↓name):
+                containedNode: Node?
                 ref -> Node
 
         enumeration TestEnumeration

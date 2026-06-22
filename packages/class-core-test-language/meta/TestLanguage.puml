@@ -49,6 +49,7 @@ LinkTestConcept "*" --> "*" LinkTestConcept: reference_0_n
 LinkTestConcept "*" --> "*" LinkTestConcept: reference_1_n
 
 TestAnnotation "*" --> "1" Node: ref
+TestAnnotation "1" o--> "0..1" Node: containedNode
 
 TestPartition "1" o--> "*" LinkTestConcept: links
 TestPartition "1" o--> "0..1" DataTypeTestConcept: data
