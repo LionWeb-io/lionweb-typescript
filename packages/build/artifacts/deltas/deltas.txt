@@ -307,9 +307,9 @@ Deltas (id: Deltas) {
                         IndexType (id: 96)
                 }
                 Field (id: 99) {
-                    name = 'newIndex'
+                    name = 'indexOffset'
                     type:
-                        IndexType (id: 98)
+                        IndexOffsetType (id: 98)
                 }
                 Field (id: 101) {
                     name = 'movedChild'
@@ -444,9 +444,9 @@ Deltas (id: Deltas) {
                         IndexType (id: 141)
                 }
                 Field (id: 144) {
-                    name = 'newIndex'
+                    name = 'indexOffset'
                     type:
-                        IndexType (id: 143)
+                        IndexOffsetType (id: 143)
                 }
                 Field (id: 146) {
                     name = 'movedChild'
@@ -589,9 +589,9 @@ Deltas (id: Deltas) {
                         IndexType (id: 191)
                 }
                 Field (id: 194) {
-                    name = 'newIndex'
+                    name = 'indexOffset'
                     type:
-                        IndexType (id: 193)
+                        IndexOffsetType (id: 193)
                 }
                 Field (id: 196) {
                     name = 'movedAnnotation'
@@ -652,9 +652,9 @@ Deltas (id: Deltas) {
                         IndexType (id: 214)
                 }
                 Field (id: 217) {
-                    name = 'newIndex'
+                    name = 'indexOffset'
                     type:
-                        IndexType (id: 216)
+                        IndexOffsetType (id: 216)
                 }
                 Field (id: 220) {
                     name = 'replacedAnnotation'

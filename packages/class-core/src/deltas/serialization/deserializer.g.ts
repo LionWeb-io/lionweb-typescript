@@ -130,9 +130,9 @@ export const deltaDeserializer = (languageBases: ILanguageBase[], idMapping: IdM
                 const parent = idMapping.nodeBaseFromId(delta.parent);
                 const containment = resolvedContainmentFrom(delta.containment, parent.classifier);
                 const oldIndex = delta.oldIndex;
-                const newIndex = delta.newIndex;
+                const indexOffset = delta.indexOffset;
                 const movedChild = idMapping.nodeBaseFromId(delta.movedChild);
-                return new ChildMovedInSameContainmentDelta(parent, containment, oldIndex, newIndex, movedChild);
+                return new ChildMovedInSameContainmentDelta(parent, containment, oldIndex, indexOffset, movedChild);
             }
             case "ChildMovedAndReplacedFromOtherContainment": {
                 const newParent = idMapping.nodeBaseFromId(delta.newParent);
@@ -159,10 +159,10 @@ export const deltaDeserializer = (languageBases: ILanguageBase[], idMapping: IdM
                 const parent = idMapping.nodeBaseFromId(delta.parent);
                 const containment = resolvedContainmentFrom(delta.containment, parent.classifier);
                 const oldIndex = delta.oldIndex;
-                const newIndex = delta.newIndex;
+                const indexOffset = delta.indexOffset;
                 const movedChild = idMapping.nodeBaseFromId(delta.movedChild);
                 const replacedChild = idMapping.nodeBaseFromId(delta.replacedChild);
-                return new ChildMovedAndReplacedInSameContainmentDelta(parent, containment, oldIndex, newIndex, movedChild, replacedChild);
+                return new ChildMovedAndReplacedInSameContainmentDelta(parent, containment, oldIndex, indexOffset, movedChild, replacedChild);
             }
             case "AnnotationAdded": {
                 const parent = idMapping.nodeBaseFromId(delta.parent);
@@ -194,9 +194,9 @@ export const deltaDeserializer = (languageBases: ILanguageBase[], idMapping: IdM
             case "AnnotationMovedInSameParent": {
                 const parent = idMapping.nodeBaseFromId(delta.parent);
                 const oldIndex = delta.oldIndex;
-                const newIndex = delta.newIndex;
+                const indexOffset = delta.indexOffset;
                 const movedAnnotation = idMapping.nodeBaseFromId(delta.movedAnnotation);
-                return new AnnotationMovedInSameParentDelta(parent, oldIndex, newIndex, movedAnnotation);
+                return new AnnotationMovedInSameParentDelta(parent, oldIndex, indexOffset, movedAnnotation);
             }
             case "AnnotationMovedAndReplacedFromOtherParent": {
                 const oldParent = idMapping.nodeBaseFromId(delta.oldParent);
@@ -210,10 +210,10 @@ export const deltaDeserializer = (languageBases: ILanguageBase[], idMapping: IdM
             case "AnnotationMovedAndReplacedInSameParent": {
                 const parent = idMapping.nodeBaseFromId(delta.parent);
                 const oldIndex = delta.oldIndex;
-                const newIndex = delta.newIndex;
+                const indexOffset = delta.indexOffset;
                 const replacedAnnotation = idMapping.nodeBaseFromId(delta.replacedAnnotation);
                 const movedAnnotation = idMapping.nodeBaseFromId(delta.movedAnnotation);
-                return new AnnotationMovedAndReplacedInSameParentDelta(parent, oldIndex, newIndex, replacedAnnotation, movedAnnotation);
+                return new AnnotationMovedAndReplacedInSameParentDelta(parent, oldIndex, indexOffset, replacedAnnotation, movedAnnotation);
             }
             case "ReferenceAdded": {
                 const parent = idMapping.nodeBaseFromId(delta.parent);

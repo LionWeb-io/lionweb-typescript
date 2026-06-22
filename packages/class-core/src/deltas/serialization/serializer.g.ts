@@ -192,7 +192,7 @@ export const serializeDelta = (delta: IDelta): SerializedDelta => {
             parent: delta.parent.id,
             containment: metaPointerForFeature(delta.containment),
             oldIndex: delta.oldIndex,
-            newIndex: delta.newIndex,
+            indexOffset: delta.indexOffset,
             movedChild: delta.movedChild.id
         } as ChildMovedInSameContainmentSerializedDelta;
     }
@@ -232,7 +232,7 @@ export const serializeDelta = (delta: IDelta): SerializedDelta => {
             parent: delta.parent.id,
             containment: metaPointerForFeature(delta.containment),
             oldIndex: delta.oldIndex,
-            newIndex: delta.newIndex,
+            indexOffset: delta.indexOffset,
             movedChild: delta.movedChild.id,
             replacedChild: delta.replacedChild.id,
             replacedChildAsNodes: serializeNodeBases([delta.replacedChild])
@@ -287,7 +287,7 @@ export const serializeDelta = (delta: IDelta): SerializedDelta => {
             kind: "AnnotationMovedInSameParent",
             parent: delta.parent.id,
             oldIndex: delta.oldIndex,
-            newIndex: delta.newIndex,
+            indexOffset: delta.indexOffset,
             movedAnnotation: delta.movedAnnotation.id
         } as AnnotationMovedInSameParentSerializedDelta;
     }
@@ -310,7 +310,7 @@ export const serializeDelta = (delta: IDelta): SerializedDelta => {
             kind: "AnnotationMovedAndReplacedInSameParent",
             parent: delta.parent.id,
             oldIndex: delta.oldIndex,
-            newIndex: delta.newIndex,
+            indexOffset: delta.indexOffset,
             replacedAnnotation: delta.replacedAnnotation.id,
             replacedAnnotationNodes: serializeNodeBases([delta.replacedAnnotation]),
             movedAnnotation: delta.movedAnnotation.id

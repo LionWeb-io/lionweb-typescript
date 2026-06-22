@@ -21,6 +21,7 @@ import {
     defineDelta,
     feature,
     index,
+    indexOffset,
     node,
     parentage,
     primitiveValue,
@@ -147,7 +148,7 @@ export const defineDeltas = () => {
         [
             ...parentage("parent", "containment", FeatureKinds.containment),
             index("oldIndex"),
-            index("newIndex"),
+            indexOffset(),
             node("movedChild")
         ]
     )
@@ -187,7 +188,7 @@ export const defineDeltas = () => {
         [
             ...parentage("parent", "containment", FeatureKinds.containment),
             index("oldIndex"),
-            index("newIndex"),
+            indexOffset(),
             node("movedChild"),
             node("replacedChild", serializeSubTreeAs("replacedChildAsNodes"))
         ]
@@ -242,7 +243,7 @@ export const defineDeltas = () => {
         [
             node("parent"),
             index("oldIndex"),
-            index("newIndex"),
+            indexOffset(),
             node("movedAnnotation")
         ]
     )
@@ -266,7 +267,7 @@ export const defineDeltas = () => {
         [
             node("parent"),
             index("oldIndex"),
-            index("newIndex"),
+            indexOffset(),
             node("replacedAnnotation", serializeSubTreeAs("replacedAnnotationNodes")),
             node("movedAnnotation")
         ]

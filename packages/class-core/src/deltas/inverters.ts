@@ -15,6 +15,7 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import { invertedMoveAndReplaceWithOffset, invertedMoveWithOffset } from "@lionweb/ts-utils"
 import {
     AnnotationAddedDelta,
     AnnotationDeletedDelta,
@@ -82,7 +83,8 @@ export const invertDelta = (delta: IDelta): IDelta => {
         return new ChildMovedFromOtherContainmentInSameParentDelta(delta.parent, delta.newContainment, delta.newIndex, delta.movedChild, delta.oldContainment, delta.oldIndex);
     }
     if (delta instanceof ChildMovedInSameContainmentDelta) {
-        return new ChildMovedInSameContainmentDelta(delta.parent, delta.containment, delta.newIndex, delta.oldIndex, delta.movedChild);
+        const [invertedOldIndex, invertedIndexOffset] = invertedMoveWithOffset(delta.oldIndex, delta.indexOffset);
+        return new ChildMovedInSameContainmentDelta(delta.parent, delta.containment, invertedOldIndex, invertedIndexOffset, delta.movedChild);
     }
     if (delta instanceof ChildMovedAndReplacedFromOtherContainmentDelta) {
         return new CompositeDelta([
@@ -97,9 +99,13 @@ export const invertDelta = (delta: IDelta): IDelta => {
         ]);
     }
     if (delta instanceof ChildMovedAndReplacedInSameContainmentDelta) {
+        const [insertionIndex, invertedOldIndex, invertedIndexOffset] = invertedMoveAndReplaceWithOffset(delta.oldIndex, delta.indexOffset);
+        if (invertedIndexOffset === 0) {
+            return new ChildAddedDelta(delta.parent, delta.containment, insertionIndex, delta.replacedChild);
+        }
         return new CompositeDelta([
-            new ChildMovedInSameContainmentDelta(delta.parent, delta.containment, delta.newIndex, delta.oldIndex, delta.movedChild),
-            new ChildAddedDelta(delta.parent, delta.containment, delta.newIndex, delta.replacedChild)
+            new ChildAddedDelta(delta.parent, delta.containment, insertionIndex, delta.replacedChild),
+            new ChildMovedInSameContainmentDelta(delta.parent, delta.containment, invertedOldIndex, invertedIndexOffset, delta.movedChild)
         ]);
     }
     if (delta instanceof AnnotationAddedDelta) {
@@ -115,7 +121,8 @@ export const invertDelta = (delta: IDelta): IDelta => {
         return new AnnotationMovedFromOtherParentDelta(delta.newParent, delta.newIndex, delta.oldParent, delta.oldIndex, delta.movedAnnotation);
     }
     if (delta instanceof AnnotationMovedInSameParentDelta) {
-        return new AnnotationMovedInSameParentDelta(delta.parent, delta.newIndex, delta.oldIndex, delta.movedAnnotation);
+        const [invertedOldIndex, invertedIndexOffset] = invertedMoveWithOffset(delta.oldIndex, delta.indexOffset);
+        return new AnnotationMovedInSameParentDelta(delta.parent, invertedOldIndex, invertedIndexOffset, delta.movedAnnotation);
     }
     if (delta instanceof AnnotationMovedAndReplacedFromOtherParentDelta) {
         return new CompositeDelta([
@@ -124,9 +131,13 @@ export const invertDelta = (delta: IDelta): IDelta => {
         ]);
     }
     if (delta instanceof AnnotationMovedAndReplacedInSameParentDelta) {
+        const [insertionIndex, invertedOldIndex, invertedIndexOffset] = invertedMoveAndReplaceWithOffset(delta.oldIndex, delta.indexOffset);
+        if (invertedIndexOffset === 0) {
+            return new AnnotationAddedDelta(delta.parent, insertionIndex, delta.replacedAnnotation);
+        }
         return new CompositeDelta([
-            new AnnotationMovedInSameParentDelta(delta.parent, delta.newIndex, delta.oldIndex, delta.movedAnnotation),
-            new AnnotationAddedDelta(delta.parent, delta.newIndex, delta.replacedAnnotation)
+            new AnnotationAddedDelta(delta.parent, insertionIndex, delta.replacedAnnotation),
+            new AnnotationMovedInSameParentDelta(delta.parent, invertedOldIndex, invertedIndexOffset, delta.movedAnnotation)
         ]);
     }
     if (delta instanceof ReferenceAddedDelta) {
