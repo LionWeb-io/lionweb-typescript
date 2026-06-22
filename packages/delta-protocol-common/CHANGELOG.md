@@ -6,6 +6,9 @@
 * Implement splittable messages.
 * Implement types for custom messages: `CustomMessageKind`, `Custom{Command|Event|Query{Response|Request}}`.
   * Implement a `isValidCustomMessageKind` function to check validity of a custom message kind — usable as a type guard for `CustomMessageKind`.
+* Update to latest spec. of delta protocol, specifically:
+  * Make all move[+replace] child in same containment and move[+replace] annotation in same parent commands and corresponding events offset-based.
+  * Update translators for that.
 
 
 ## 0.9.0

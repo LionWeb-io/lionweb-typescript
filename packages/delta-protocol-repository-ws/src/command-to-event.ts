@@ -206,9 +206,9 @@ export const commandAsEvent = (command: Command, participationId: string): Event
                 })
             }
             case "MoveChildInSameContainment": {
-                const {newIndex, movedChild, parent, containment, oldIndex} = command as MoveChildInSameContainmentCommand // § 5.7.5.6
+                const {indexOffset, movedChild, parent, containment, oldIndex} = command as MoveChildInSameContainmentCommand // § 5.7.5.6
                 return completed<ChildMovedInSameContainmentEvent>("ChildMovedInSameContainment", { // § 5.8.5.6
-                    newIndex,
+                    indexOffset,
                     movedChild,
                     parent,
                     containment,
@@ -243,9 +243,9 @@ export const commandAsEvent = (command: Command, participationId: string): Event
                 })
             }
             case "MoveAndReplaceChildInSameContainment": {
-                const {newIndex, replacedChild, movedChild, parent, containment, oldIndex} = command as MoveAndReplaceChildInSameContainmentCommand // § 5.7.5.9
+                const {indexOffset, replacedChild, movedChild, parent, containment, oldIndex} = command as MoveAndReplaceChildInSameContainmentCommand // § 5.7.5.9
                 return completed<ChildMovedAndReplacedInSameContainmentEvent>("ChildMovedAndReplacedInSameContainment", { // § 5.8.5.9
-                    newIndex,
+                    indexOffset,
                     movedChild,
                     parent,
                     containment,
@@ -292,9 +292,9 @@ export const commandAsEvent = (command: Command, participationId: string): Event
                 })
             }
             case "MoveAnnotationInSameParent": {
-                const {newIndex, movedAnnotation, parent, oldIndex} = command as MoveAnnotationInSameParentCommand // § 5.7.6.5
+                const {indexOffset, movedAnnotation, parent, oldIndex} = command as MoveAnnotationInSameParentCommand // § 5.7.6.5
                 return completed<AnnotationMovedInSameParentEvent>("AnnotationMovedInSameParent", { // § 5.8.6.5
-                    newIndex,
+                    indexOffset,
                     movedAnnotation,
                     parent,
                     oldIndex
@@ -313,9 +313,9 @@ export const commandAsEvent = (command: Command, participationId: string): Event
                 })
             }
             case "MoveAndReplaceAnnotationInSameParent": {
-                const {newIndex, movedAnnotation, replacedAnnotation, parent, oldIndex} = command as MoveAndReplaceAnnotationInSameParentCommand // § 5.7.6.7
+                const {indexOffset, movedAnnotation, replacedAnnotation, parent, oldIndex} = command as MoveAndReplaceAnnotationInSameParentCommand // § 5.7.6.7
                 return completed<AnnotationMovedAndReplacedInSameParentEvent>("AnnotationMovedAndReplacedInSameParent", { // § 5.8.6.7
-                    newIndex,
+                    indexOffset,
                     movedAnnotation,
                     parent,
                     oldIndex,

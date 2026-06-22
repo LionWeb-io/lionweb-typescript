@@ -246,7 +246,7 @@ export const deltaToEventTranslator = (
                     parent: delta.parent.id,
                     containment: metaPointerForFeature(delta.containment),
                     oldIndex: delta.oldIndex,
-                    newIndex: delta.newIndex,
+                    indexOffset: delta.indexOffset,
                     movedChild: delta.movedChild.id
                 })
             }
@@ -280,7 +280,7 @@ export const deltaToEventTranslator = (
                     parent: delta.parent.id,
                     containment: metaPointerForFeature(delta.containment),
                     oldIndex: delta.oldIndex,
-                    newIndex: delta.newIndex,
+                    indexOffset: delta.indexOffset,
                     movedChild: delta.movedChild.id,
                     replacedChild: delta.replacedChild.id,
                     replacedDescendants: allIdsOfDescendantsFrom(delta.replacedChild)
@@ -323,7 +323,7 @@ export const deltaToEventTranslator = (
                 return completed<AnnotationMovedInSameParentEvent>("AnnotationMovedInSameParent", { // § 5.8.6.5
                     parent: delta.parent.id,
                     oldIndex: delta.oldIndex,
-                    newIndex: delta.newIndex,
+                    indexOffset: delta.indexOffset,
                     movedAnnotation: delta.movedAnnotation.id
                 })
             }
@@ -342,7 +342,7 @@ export const deltaToEventTranslator = (
                 return completed<AnnotationMovedAndReplacedInSameParentEvent>("AnnotationMovedAndReplacedInSameParent", { // § 5.8.6.7
                     parent: delta.parent.id,
                     oldIndex: delta.oldIndex,
-                    newIndex: delta.newIndex,
+                    indexOffset: delta.indexOffset,
                     replacedAnnotation: delta.replacedAnnotation.id,
                     replacedDescendants: allIdsOfDescendantsFrom(delta.replacedAnnotation),
                     movedAnnotation: delta.movedAnnotation.id

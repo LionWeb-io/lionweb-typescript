@@ -151,11 +151,11 @@ export interface ChildMovedFromOtherContainmentInSameParentEvent extends Event {
 /** § 5.8.5.6 */
 export interface ChildMovedInSameContainmentEvent extends Event {
     messageKind: "ChildMovedInSameContainment"
-    newIndex: number
-    movedChild: LionWebId
     parent: LionWebId
     containment: LionWebJsonMetaPointer
     oldIndex: number
+    indexOffset: number
+    movedChild: LionWebId
 }
 
 /** § 5.8.5.7 */
@@ -188,11 +188,11 @@ export interface ChildMovedAndReplacedFromOtherContainmentInSameParentEvent exte
 /** § 5.8.5.9 */
 export interface ChildMovedAndReplacedInSameContainmentEvent extends Event {
     messageKind: "ChildMovedAndReplacedInSameContainment"
-    newIndex: number
-    movedChild: LionWebId
     parent: LionWebId
     containment: LionWebJsonMetaPointer
     oldIndex: number
+    indexOffset: number
+    movedChild: LionWebId
     replacedChild: LionWebId
     replacedDescendants: LionWebId[]
 }
@@ -237,10 +237,10 @@ export interface AnnotationMovedFromOtherParentEvent extends Event {
 /** § 5.8.6.5 */
 export interface AnnotationMovedInSameParentEvent extends Event {
     messageKind: "AnnotationMovedInSameParent"
-    newIndex: number
-    movedAnnotation: LionWebId
     parent: LionWebId
     oldIndex: number
+    indexOffset: number
+    movedAnnotation: LionWebId
 }
 
 /** § 5.8.6.6 */
@@ -258,10 +258,10 @@ export interface AnnotationMovedAndReplacedFromOtherParentEvent extends Event {
 /** § 5.8.6.7 */
 export interface AnnotationMovedAndReplacedInSameParentEvent extends Event {
     messageKind: "AnnotationMovedAndReplacedInSameParent"
-    newIndex: number
-    movedAnnotation: LionWebId
     parent: LionWebId
     oldIndex: number
+    indexOffset: number
+    movedAnnotation: LionWebId
     replacedAnnotation: LionWebId
     replacedDescendants: LionWebId[]
 }

@@ -188,11 +188,11 @@ export const eventToDeltaTranslator = (
                 return new ChildMovedFromOtherContainmentInSameParentDelta(resolvedParent, resolvedOldContainment, oldIndex, resolvedMovedChild, resolvedNewContainment, newIndex)
             }
             case "ChildMovedInSameContainment": { // § 5.8.5.6
-                const { parent, containment, oldIndex, newIndex, movedChild } = event as ChildMovedInSameContainmentEvent
+                const { parent, containment, oldIndex, indexOffset, movedChild } = event as ChildMovedInSameContainmentEvent
                 const resolvedParent = idMapping.nodeBaseFromId(parent)
                 const resolvedContainment = resolvedContainmentFrom(containment, resolvedParent.classifier)
                 const resolvedMovedChild = idMapping.nodeBaseFromId(movedChild)
-                return new ChildMovedInSameContainmentDelta(resolvedParent, resolvedContainment, oldIndex, newIndex, resolvedMovedChild)
+                return new ChildMovedInSameContainmentDelta(resolvedParent, resolvedContainment, oldIndex, indexOffset, resolvedMovedChild)
             }
             case "ChildMovedAndReplacedFromOtherContainment": { // § 5.8.5.7
                 const { newParent, newContainment, newIndex, movedChild, oldParent, oldContainment, oldIndex, replacedChild } = event as ChildMovedAndReplacedFromOtherContainmentEvent
@@ -214,12 +214,12 @@ export const eventToDeltaTranslator = (
                 return new ChildMovedAndReplacedFromOtherContainmentInSameParentDelta(resolvedParent, resolvedOldContainment, oldIndex, resolvedNewContainment, newIndex, resolvedMovedChild, resolvedReplacedChild)
             }
             case "ChildMovedAndReplacedInSameContainment": { // § 5.8.5.9
-                const { parent, containment, oldIndex, newIndex, movedChild, replacedChild } = event as ChildMovedAndReplacedInSameContainmentEvent
+                const { parent, containment, oldIndex, indexOffset, movedChild, replacedChild } = event as ChildMovedAndReplacedInSameContainmentEvent
                 const resolvedParent = idMapping.nodeBaseFromId(parent)
                 const resolvedContainment = resolvedContainmentFrom(containment, resolvedParent.classifier)
                 const resolvedMovedChild = idMapping.nodeBaseFromId(movedChild)
                 const resolvedReplacedChild = idMapping.nodeBaseFromId(replacedChild)
-                return new ChildMovedAndReplacedInSameContainmentDelta(resolvedParent, resolvedContainment, oldIndex, newIndex, resolvedMovedChild, resolvedReplacedChild)
+                return new ChildMovedAndReplacedInSameContainmentDelta(resolvedParent, resolvedContainment, oldIndex, indexOffset, resolvedMovedChild, resolvedReplacedChild)
             }
             case "AnnotationAdded": { // § 5.8.6.1
                 const { parent, index, newAnnotation } = event as AnnotationAddedEvent
@@ -246,10 +246,10 @@ export const eventToDeltaTranslator = (
                 return new AnnotationMovedFromOtherParentDelta(resolvedOldParent, oldIndex, resolvedNewParent, newIndex, resolvedMovedAnnotation)
             }
             case "AnnotationMovedInSameParent": { // § 5.8.6.5
-                const { parent, oldIndex, newIndex, movedAnnotation } = event as AnnotationMovedInSameParentEvent
+                const { parent, oldIndex, indexOffset, movedAnnotation } = event as AnnotationMovedInSameParentEvent
                 const resolvedParent = idMapping.nodeBaseFromId(parent)
                 const resolvedMovedAnnotation = idMapping.nodeBaseFromId(movedAnnotation)
-                return new AnnotationMovedInSameParentDelta(resolvedParent, oldIndex, newIndex, resolvedMovedAnnotation)
+                return new AnnotationMovedInSameParentDelta(resolvedParent, oldIndex, indexOffset, resolvedMovedAnnotation)
             }
             case "AnnotationMovedAndReplacedFromOtherParent": { // § 5.8.6.6
                 const { oldParent, oldIndex, replacedAnnotation, newParent, newIndex, movedAnnotation } = event as AnnotationMovedAndReplacedFromOtherParentEvent
@@ -260,11 +260,11 @@ export const eventToDeltaTranslator = (
                 return new AnnotationMovedAndReplacedFromOtherParentDelta(resolvedOldParent, oldIndex, resolvedReplacedAnnotation, resolvedNewParent, newIndex, resolvedMovedAnnotation)
             }
             case "AnnotationMovedAndReplacedInSameParent": { // § 5.8.6.7
-                const { parent, oldIndex, newIndex, replacedAnnotation, movedAnnotation } = event as AnnotationMovedAndReplacedInSameParentEvent
+                const { parent, oldIndex, indexOffset, replacedAnnotation, movedAnnotation } = event as AnnotationMovedAndReplacedInSameParentEvent
                 const resolvedParent = idMapping.nodeBaseFromId(parent)
                 const resolvedReplacedAnnotation = idMapping.nodeBaseFromId(replacedAnnotation)
                 const resolvedMovedAnnotation = idMapping.nodeBaseFromId(movedAnnotation)
-                return new AnnotationMovedAndReplacedInSameParentDelta(resolvedParent, oldIndex, newIndex, resolvedReplacedAnnotation, resolvedMovedAnnotation)
+                return new AnnotationMovedAndReplacedInSameParentDelta(resolvedParent, oldIndex, indexOffset, resolvedReplacedAnnotation, resolvedMovedAnnotation)
             }
             case "ReferenceAdded": { // § 5.8.7.1
                 const { parent, reference, index, newReference } = event as ReferenceAddedEvent

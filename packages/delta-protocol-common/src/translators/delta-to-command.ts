@@ -191,8 +191,8 @@ export const deltaToCommandTranslator = (
             return completed<MoveChildInSameContainmentCommand>("MoveChildInSameContainment", { // § 5.7.5.6
                 parent: delta.parent.id,
                 containment: metaPointerForFeature(delta.containment),
-                newIndex: delta.newIndex,
                 oldIndex: delta.oldIndex,
+                indexOffset: delta.indexOffset,
                 movedChild: delta.movedChild.id
             })
         }
@@ -223,8 +223,8 @@ export const deltaToCommandTranslator = (
             return completed<MoveAndReplaceChildInSameContainmentCommand>("MoveAndReplaceChildInSameContainment", { // § 5.7.5.9
                 parent: delta.parent.id,
                 containment: metaPointerForFeature(delta.containment),
-                newIndex: delta.newIndex,
                 oldIndex: delta.oldIndex,
+                indexOffset: delta.indexOffset,
                 replacedChild: delta.replacedChild.id,
                 movedChild: delta.movedChild.id
             })
@@ -263,8 +263,8 @@ export const deltaToCommandTranslator = (
         if (delta instanceof AnnotationMovedInSameParentDelta) {
             return completed<MoveAnnotationInSameParentCommand>("MoveAnnotationInSameParent", { // § 5.7.6.5
                 parent: delta.parent.id,
-                newIndex: delta.newIndex,
                 oldIndex: delta.oldIndex,
+                indexOffset: delta.indexOffset,
                 movedAnnotation: delta.movedAnnotation.id
             })
         }
@@ -281,8 +281,8 @@ export const deltaToCommandTranslator = (
         if (delta instanceof AnnotationMovedAndReplacedInSameParentDelta) {
             return completed<MoveAndReplaceAnnotationInSameParentCommand>("MoveAndReplaceAnnotationInSameParent", { // § 5.7.6.7
                 parent: delta.parent.id,
-                newIndex: delta.newIndex,
                 oldIndex: delta.oldIndex,
+                indexOffset: delta.indexOffset,
                 replacedAnnotation: delta.replacedAnnotation.id,
                 movedAnnotation: delta.movedAnnotation.id
             })
