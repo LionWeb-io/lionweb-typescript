@@ -253,11 +253,11 @@ export const typeForLanguageEntity = (imports: Imports) => {
 
     const jsDocFor = (entity: M3Concept) => {
         const annotations = ioLionWebMpsSpecificAnnotationsFrom(entity)
-        const conceptDescription = annotations.find((annotation) => annotation instanceof ConceptDescription) as ConceptDescription
-        const deprecated = annotations.find((annotation) => annotation instanceof Deprecated) as Deprecated
-        const keyedDescription = annotations.find((annotation) => annotation instanceof KeyedDescription) as KeyedDescription
-        const shortDescription = annotations.find((annotation) => annotation instanceof ShortDescription) as ShortDescription
-        const virtualPackage = annotations.find((annotation) => annotation instanceof VirtualPackage) as VirtualPackage
+        const conceptDescription = annotations.find((annotation) => annotation instanceof ConceptDescription)
+        const deprecated = annotations.find((annotation) => annotation instanceof Deprecated)
+        const keyedDescription = annotations.find((annotation) => annotation instanceof KeyedDescription)
+        const shortDescription = annotations.find((annotation) => annotation instanceof ShortDescription)
+        const virtualPackage = annotations.find((annotation) => annotation instanceof VirtualPackage)
         const requiresJsDoc =
                !!(conceptDescription?.conceptShortDescription)
             || !!(conceptDescription?.helpUrl)
@@ -272,25 +272,25 @@ export const typeForLanguageEntity = (imports: Imports) => {
         return when(requiresJsDoc)([
             `/**`,
             when(!!(conceptDescription?.conceptShortDescription))(
-                () => ` * ${conceptDescription.conceptShortDescription}`
+                () => ` * ${conceptDescription!.conceptShortDescription}`
             ),
             when(!!(conceptDescription?.helpUrl))(
-                () => ` * {@see} ${conceptDescription.helpUrl}`
+                () => ` * {@see} ${conceptDescription!.helpUrl}`
             ),
             when(!!(shortDescription?.description))(
-                () => ` * ${shortDescription.description}`
+                () => ` * ${shortDescription!.description}`
             ),
             when(keyedDescription !== undefined)(
                 () => [
-                    when(keyedDescription.documentation !== undefined)(` * ${keyedDescription.documentation}`),
-                    keyedDescription.seeAlso.map((seeAlso) => ` * {@see} {@link ${linkName(seeAlso)}}`)
+                    when(keyedDescription!.documentation !== undefined)(` * ${keyedDescription!.documentation}`),
+                    keyedDescription!.seeAlso.map((seeAlso) => ` * {@see} {@link ${linkName(seeAlso)}}`)
                 ]
             ),
             when(deprecated !== undefined)(
-                () => ` * @deprecated ${deprecated.comment ?? ""}${deprecated.build === undefined ? "" : ` (build: ${deprecated.build})`}`
+                () => ` * @deprecated ${deprecated!.comment ?? ""}${deprecated!.build === undefined ? "" : ` (build: ${deprecated!.build})`}`
             ),
             when(!!(virtualPackage?.name))(
-                () => `(virtual package: ${virtualPackage.name})`
+                () => `(virtual package: ${virtualPackage!.name})`
             ),
             ` */`
         ])
