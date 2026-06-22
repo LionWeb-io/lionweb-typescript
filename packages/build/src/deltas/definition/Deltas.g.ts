@@ -296,6 +296,12 @@ export class Deltas extends $lwClassCore.NodeBase {
     replaceDeltasAtIndex(movedChild: Delta, newIndex: number) {
         this._deltas.replaceAtIndex(movedChild, newIndex);
     }
+    moveDeltasOffsetBased(oldIndex: number, indexOffset: number) {
+        this._deltas.moveOffsetBased(oldIndex, indexOffset);
+    }
+    moveAndReplaceDeltasOffsetBased(oldIndex: number, indexOffset: number) {
+        this._deltas.moveAndReplaceOffsetBased(oldIndex, indexOffset);
+    }
 
     public constructor(classifier: $lwCore.Classifier, id: $lwJson.LionWebId, receiveDelta?: $lwClassCore.DeltaReceiver, parentInfo?: $lwClassCore.Parentage) {
         super(classifier, id, receiveDelta, parentInfo);
@@ -575,6 +581,12 @@ export class Delta extends $lwClassCore.NodeBase implements $lwClassCore.INamed 
     }
     replaceFieldsAtIndex(movedChild: Field, newIndex: number) {
         this._fields.replaceAtIndex(movedChild, newIndex);
+    }
+    moveFieldsOffsetBased(oldIndex: number, indexOffset: number) {
+        this._fields.moveOffsetBased(oldIndex, indexOffset);
+    }
+    moveAndReplaceFieldsOffsetBased(oldIndex: number, indexOffset: number) {
+        this._fields.moveAndReplaceOffsetBased(oldIndex, indexOffset);
     }
 
     private readonly _name: $lwClassCore.RequiredPropertyValueManager<string>;

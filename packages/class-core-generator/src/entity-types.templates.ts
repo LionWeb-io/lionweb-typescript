@@ -131,6 +131,12 @@ export const typeForLanguageEntity = (imports: Imports) => {
                 when(link instanceof Containment)([
                     `replace${nameWithFirstUpper}AtIndex(movedChild: ${tsTypeForClassifier_}, newIndex: number) {`,
                     indent(`this._${name}.replaceAtIndex(movedChild, newIndex);`),
+                    `}`,
+                    `move${nameWithFirstUpper}OffsetBased(oldIndex: number, indexOffset: number) {`,
+                    indent(`this._${name}.moveOffsetBased(oldIndex, indexOffset);`),
+                    `}`,
+                    `moveAndReplace${nameWithFirstUpper}OffsetBased(oldIndex: number, indexOffset: number) {`,
+                    indent(`this._${name}.moveAndReplaceOffsetBased(oldIndex, indexOffset);`),
                     `}`
                 ])
             ])
