@@ -2,6 +2,8 @@
 
 ## 0.10.0 — not yet released
 
+* Add `move[AndReplace]OffsetBased[Directly]` functions to value managers for (multi-valued) containments and annotations.
+
 
 ## 0.9.2
 
