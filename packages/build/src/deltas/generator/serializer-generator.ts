@@ -24,6 +24,7 @@ import {
     Delta,
     FeatureType,
     Field,
+    IndexOffsetType,
     IndexType,
     NodeType,
     PrimitiveValueType,
@@ -40,7 +41,7 @@ const serializationExpressionFor = (name: string, type: Type) => {
     if (type instanceof NodeType) {
         return type.serialization instanceof RefOnly ? `idFrom(delta.${name})` : `delta.${name}.id`
     }
-    if (type instanceof IndexType) {
+    if (type instanceof IndexType || type instanceof IndexOffsetType) {
         return `delta.${name}`
     }
     if (type instanceof PrimitiveValueType) {

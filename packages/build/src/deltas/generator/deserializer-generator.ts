@@ -24,6 +24,7 @@ import {
     CustomType,
     Delta,
     FeatureType,
+    IndexOffsetType,
     IndexType,
     NodeType,
     PrimitiveValueType,
@@ -40,7 +41,7 @@ const deserializationExpressionForField = (name: string, type: Type) => {
     if (type instanceof NodeType) {
         return type.serialization instanceof RefOnly ? `idMapping.fromRefId(delta.${name})` : `idMapping.nodeBaseFromId(delta.${name})`
     }
-    if (type instanceof IndexType || type instanceof PrimitiveValueType) {
+    if (type instanceof IndexType || type instanceof IndexOffsetType || type instanceof PrimitiveValueType) {
         return `delta.${name}`
     }
     if (type instanceof CustomType) {

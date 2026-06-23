@@ -1,11 +1,11 @@
 # Changelog
 
-
 ## 0.10.0 — not yet released
 
 * Change key values pairs for additional info's to a dictionary and update the validator to be able to validate the dictionary.
-* Update to latest spec. of delta protocol, specifically: additional properties for all Move/Replace child and annotation commands
-  and simplified properties for MoveAndReplaceInSame[containment|annotation] using an offset. 
+* Update to latest spec. of delta protocol, specifically:
+  make all move[+replace] child in same containment and move[+replace] annotation in same parent commands and corresponding events offset-based.
+  * Also: remove `split` property from `ChildMovedFromOtherContainment` event — it should not be there.
 
 
 ## 0.9.0

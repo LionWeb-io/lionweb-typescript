@@ -15,6 +15,7 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import { moveAndReplaceWithOffset, moveWithOffset } from "@lionweb/ts-utils"
 import { action, observable } from "mobx"
 
 import { INodeBase } from "../base-types.js"
@@ -158,6 +159,46 @@ export class AnnotationsValueManager extends ValueManager {
         const removeIndex = this.removeDirectly(annotationToRemove);
         if (removeIndex > -1) {
             this.emitDelta(() => new AnnotationDeletedDelta(this.container, removeIndex, annotationToRemove));
+        }
+    }
+
+
+    /**
+     * @return the moved annotation, or `undefined` if `indexOffset` = 0.
+     */
+    @action moveOffsetBasedDirectly(oldIndex: number, indexOffset: number): INodeBase | undefined {
+        if (indexOffset === 0) {
+            return undefined;
+        }
+        const [_newIndex, movedAnnotation] = moveWithOffset(this.annotations, oldIndex, indexOffset);
+        return movedAnnotation;
+    }
+
+    @action moveOffsetBased(oldIndex: number, indexOffset: number) {
+        const annotation = this.moveOffsetBasedDirectly(oldIndex, indexOffset);
+        if (annotation !== undefined) {
+            this.emitDelta(() => new AnnotationMovedInSameParentDelta(this.container, oldIndex, indexOffset, annotation));
+        }
+    }
+
+
+    /**
+     * @return a tuple with the (moved, replaced) annotations, or `undefined` if `indexOffset` = 0.
+     */
+    @action moveAndReplaceOffsetBasedDirectly(oldIndex: number, indexOffset: number): [movedAnnotation: INodeBase, replacedAnnotation: INodeBase] | undefined {
+        if (indexOffset === 0) {
+            return undefined;
+        }
+        const [_newIndex, movedAnnotation, replacedAnnotation] = moveAndReplaceWithOffset(this.annotations, oldIndex, indexOffset);
+        replacedAnnotation.detach();
+        return [movedAnnotation, replacedAnnotation];
+    }
+
+    @action moveAndReplaceOffsetBased(oldIndex: number, indexOffset: number) {
+        const participants = this.moveAndReplaceOffsetBasedDirectly(oldIndex, indexOffset);
+        if (participants !== undefined) {
+            const [movedAnnotation, replacedAnnotation] = participants;
+            this.emitDelta(() => new AnnotationMovedAndReplacedInSameParentDelta(this.container, oldIndex, indexOffset, replacedAnnotation, movedAnnotation));
         }
     }
 

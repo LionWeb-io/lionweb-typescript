@@ -144,6 +144,12 @@ export class DeltasBase implements $lwClassCore.ILanguageBase {
         return this._IndexType;
     }
 
+    public readonly _IndexOffsetType = new $lwCore.Concept(this._language, "IndexOffsetType", "Deltas-IndexOffsetType", "Deltas-IndexOffsetType", $lwCore.ConceptModifier.concrete);
+    get IndexOffsetType(): $lwCore.Concept {
+        this.ensureWiredUp();
+        return this._IndexOffsetType;
+    }
+
     public readonly _PrimitiveValueType = new $lwCore.Concept(this._language, "PrimitiveValueType", "Deltas-PrimitiveValueType", "Deltas-PrimitiveValueType", $lwCore.ConceptModifier.concrete);
     get PrimitiveValueType(): $lwCore.Concept {
         this.ensureWiredUp();
@@ -197,7 +203,7 @@ export class DeltasBase implements $lwClassCore.ILanguageBase {
         if (this._wiredUp) {
             return;
         }
-        this._language.havingEntities(this._Deltas, this._Type, this._Field, this._FeatureKinds, this._FeatureType, this._NodeSerialization, this._SerializeSubTree, this._RefOnly, this._NodeType, this._IndexType, this._PrimitiveValueType, this._CustomType, this._Delta);
+        this._language.havingEntities(this._Deltas, this._Type, this._Field, this._FeatureKinds, this._FeatureType, this._NodeSerialization, this._SerializeSubTree, this._RefOnly, this._NodeType, this._IndexType, this._IndexOffsetType, this._PrimitiveValueType, this._CustomType, this._Delta);
         this._Deltas.havingFeatures(this._Deltas_deltas);
         this._Deltas_deltas.ofType(this._Delta);
         this._Field.implementing($lwClassCore.LionCore_builtinsBase.INSTANCE._INamed);
@@ -216,6 +222,7 @@ export class DeltasBase implements $lwClassCore.ILanguageBase {
         this._NodeType.havingFeatures(this._NodeType_serialization);
         this._NodeType_serialization.ofType(this._NodeSerialization);
         this._IndexType.implementing(this._Type);
+        this._IndexOffsetType.implementing(this._Type);
         this._PrimitiveValueType.implementing(this._Type);
         this._CustomType.implementing(this._Type);
         this._CustomType.havingFeatures(this._CustomType_type, this._CustomType_serializationType, this._CustomType_serializationExpr, this._CustomType_deserializationExpr);
@@ -240,6 +247,7 @@ export class DeltasBase implements $lwClassCore.ILanguageBase {
                 case this._RefOnly.key: return RefOnly.create(id, receiveDelta);
                 case this._NodeType.key: return NodeType.create(id, receiveDelta);
                 case this._IndexType.key: return IndexType.create(id, receiveDelta);
+                case this._IndexOffsetType.key: return IndexOffsetType.create(id, receiveDelta);
                 case this._PrimitiveValueType.key: return PrimitiveValueType.create(id, receiveDelta);
                 case this._CustomType.key: return CustomType.create(id, receiveDelta);
                 case this._Delta.key: return Delta.create(id, receiveDelta);
@@ -287,6 +295,12 @@ export class Deltas extends $lwClassCore.NodeBase {
     }
     replaceDeltasAtIndex(movedChild: Delta, newIndex: number) {
         this._deltas.replaceAtIndex(movedChild, newIndex);
+    }
+    moveDeltasOffsetBased(oldIndex: number, indexOffset: number) {
+        this._deltas.moveOffsetBased(oldIndex, indexOffset);
+    }
+    moveAndReplaceDeltasOffsetBased(oldIndex: number, indexOffset: number) {
+        this._deltas.moveAndReplaceOffsetBased(oldIndex, indexOffset);
     }
 
     public constructor(classifier: $lwCore.Classifier, id: $lwJson.LionWebId, receiveDelta?: $lwClassCore.DeltaReceiver, parentInfo?: $lwClassCore.Parentage) {
@@ -468,6 +482,12 @@ export class IndexType extends $lwClassCore.NodeBase implements Type {
     }
 }
 
+export class IndexOffsetType extends $lwClassCore.NodeBase implements Type {
+    static create(id: $lwJson.LionWebId, receiveDelta?: $lwClassCore.DeltaReceiver, parentInfo?: $lwClassCore.Parentage): IndexOffsetType {
+        return new IndexOffsetType(DeltasBase.INSTANCE.IndexOffsetType, id, receiveDelta, parentInfo);
+    }
+}
+
 export class PrimitiveValueType extends $lwClassCore.NodeBase implements Type {
     static create(id: $lwJson.LionWebId, receiveDelta?: $lwClassCore.DeltaReceiver, parentInfo?: $lwClassCore.Parentage): PrimitiveValueType {
         return new PrimitiveValueType(DeltasBase.INSTANCE.PrimitiveValueType, id, receiveDelta, parentInfo);
@@ -561,6 +581,12 @@ export class Delta extends $lwClassCore.NodeBase implements $lwClassCore.INamed 
     }
     replaceFieldsAtIndex(movedChild: Field, newIndex: number) {
         this._fields.replaceAtIndex(movedChild, newIndex);
+    }
+    moveFieldsOffsetBased(oldIndex: number, indexOffset: number) {
+        this._fields.moveOffsetBased(oldIndex, indexOffset);
+    }
+    moveAndReplaceFieldsOffsetBased(oldIndex: number, indexOffset: number) {
+        this._fields.moveAndReplaceOffsetBased(oldIndex, indexOffset);
     }
 
     private readonly _name: $lwClassCore.RequiredPropertyValueManager<string>;

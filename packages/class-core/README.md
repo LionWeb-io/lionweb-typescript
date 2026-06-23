@@ -141,10 +141,18 @@ All multi-valued link value managers also expose the following methods:
 
 * `insertAtIndex[Directly]` — Inserts the given node at the specified index, shifting all already-present nodes “to the right” – i.e.: incrementing their indices.
   (It throws if the specified index is invalid.)
-* `removeDirectly[Directly]` — Removes the given node from the nodes in the managed value.
+* `removeDirectly` — Removes the given node from the nodes in the managed value.
   If the given node is not present, nothing happens.
   If the given node is present more than once, only the first one gets removed.
+* `removeAtIndexDirectly` — Removes the child at the given index.
+  (It throws if the specified index is invalid.)
 * `move[Directly]` — Moves the node at the given old index to the new index, shifting any remaining nodes accordingly.
+* `replaceAtIndex[Directly]` — Replaces the child at the specified index with the given child.
+  (It throws if the specified index is invalid.)
+* `moveOffsetBased[Directly]` — Moves the child at the given “old” index over the given relative index offset.
+  (It throws if the specified index or index offset is invalid.)
+* `moveAndReplaceOffsetBased[Directly]` — Moves the child at the given “old” index to replace the child at the relative index offset.
+  (It throws if the specified index or index offset is invalid.)
 
 There's only one class for annotation: `AnnotationsValueManager`.
 It exposes the following API:
@@ -156,9 +164,15 @@ It exposes the following API:
   (It throws if the specified index is invalid.)
 * `move[Directly]` — Moves the annotation at the given “old” index to the “new” index.
   (It throws if either of the specified indices are invalid.)
-* `replaceAtIndex[Directly]` - Replaces the annotation at the specified index with the given annotation.
+* `replaceAtIndex[Directly]` — Replaces the annotation at the specified index with the given annotation.
   (It throws if the specified index is invalid.)
+* `moveAndReplaceAtIndex[Directly]` — Moves the annotation at the given “old” index to replace the annotation at the given “new” index.
+  (It throws if either of the specified indices are invalid.)
 * `remove[Directly]` — Removes the given annotation from the managed annotations.
   If the given annotation is not present, nothing happens.
   If the given annotation is present more than once, only the first one gets removed.
+* `moveOffsetBased[Directly]` — Moves the annotation at the given “old” index over the given relative index offset.
+  (It throws if the specified index or index offset is invalid.)
+* `moveAndReplaceOffsetBased[Directly]` — Moves the annotation at the given “old” index to replace the annotation at the relative index offset.
+  (It throws if the specified index or index offset is invalid.)
 

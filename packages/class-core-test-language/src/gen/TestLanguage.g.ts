@@ -428,6 +428,12 @@ export class LinkTestConcept extends $lwClassCore.NodeBase implements $lwClassCo
     replaceContainment_0_nAtIndex(movedChild: LinkTestConcept, newIndex: number) {
         this._containment_0_n.replaceAtIndex(movedChild, newIndex);
     }
+    moveContainment_0_nOffsetBased(oldIndex: number, indexOffset: number) {
+        this._containment_0_n.moveOffsetBased(oldIndex, indexOffset);
+    }
+    moveAndReplaceContainment_0_nOffsetBased(oldIndex: number, indexOffset: number) {
+        this._containment_0_n.moveAndReplaceOffsetBased(oldIndex, indexOffset);
+    }
 
     private readonly _containment_1_n: $lwClassCore.RequiredMultiContainmentValueManager<LinkTestConcept>;
     get containment_1_n(): LinkTestConcept[] {
@@ -447,6 +453,12 @@ export class LinkTestConcept extends $lwClassCore.NodeBase implements $lwClassCo
     }
     replaceContainment_1_nAtIndex(movedChild: LinkTestConcept, newIndex: number) {
         this._containment_1_n.replaceAtIndex(movedChild, newIndex);
+    }
+    moveContainment_1_nOffsetBased(oldIndex: number, indexOffset: number) {
+        this._containment_1_n.moveOffsetBased(oldIndex, indexOffset);
+    }
+    moveAndReplaceContainment_1_nOffsetBased(oldIndex: number, indexOffset: number) {
+        this._containment_1_n.moveAndReplaceOffsetBased(oldIndex, indexOffset);
     }
 
     private readonly _reference_0_1: $lwClassCore.OptionalSingleReferenceValueManager<LinkTestConcept>;
@@ -632,6 +644,12 @@ export class TestPartition extends $lwClassCore.NodeBase implements $lwClassCore
     }
     replaceLinksAtIndex(movedChild: LinkTestConcept, newIndex: number) {
         this._links.replaceAtIndex(movedChild, newIndex);
+    }
+    moveLinksOffsetBased(oldIndex: number, indexOffset: number) {
+        this._links.moveOffsetBased(oldIndex, indexOffset);
+    }
+    moveAndReplaceLinksOffsetBased(oldIndex: number, indexOffset: number) {
+        this._links.moveAndReplaceOffsetBased(oldIndex, indexOffset);
     }
 
     private readonly _data: $lwClassCore.OptionalSingleContainmentValueManager<DataTypeTestConcept>;

@@ -5,6 +5,10 @@
 * Implement a small library for lexicographically comparisons (of strings, mainly): `Comparer` type, `{regular|locale}StringComparer` constants, and `mappedComparer`, `lexiComparer`, and `mappedLexiComparer` functions.
 * Expose a `Sorter` type, and `sorterWith` function for sorting.
 * Deprecate `StringSorter` type, `sortByStringKey` function, and replace its uses.
+* Implement moving an item, as well moving an item and replacing an item in one specific list —
+  offset-based, and according to [§ 3.8.2 of the delta protocol specification](https://github.com/LionWeb-io/specification/blob/main/delta/description.adoc#characteristics-of-manipulation-of-a-list).
+  * `move[AndReplace]WithOffset` functions;
+  * `invertedMove[AndReplace]WithOffset` functions to be able to invert the effects of `move[AndReplace]WithOffset`.
 
 
 ## 0.9.0

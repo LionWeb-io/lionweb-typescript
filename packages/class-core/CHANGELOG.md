@@ -2,6 +2,9 @@
 
 ## 0.10.0 — not yet released
 
+* Add `move[AndReplace]OffsetBased[Directly]` functions to value managers for (multi-valued) containments and annotations.
+* Update `ChildMoved[AndReplaced]InSameContainmentDelta` and `AnnotationMoved[AndReplaced]Delta` classes, as well as associated appliers and inverters, to align with latest, offset-based versions of those deltas.
+
 
 ## 0.9.2
 

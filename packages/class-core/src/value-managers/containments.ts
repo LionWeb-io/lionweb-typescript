@@ -16,10 +16,13 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { Containment } from "@lionweb/core"
+import { moveAndReplaceWithOffset, moveWithOffset } from "@lionweb/ts-utils"
 import { action, observable } from "mobx"
 
 import { INodeBase } from "../base-types.js"
 import {
+    AnnotationMovedAndReplacedInSameParentDelta,
+    AnnotationMovedInSameParentDelta,
     ChildAddedDelta,
     ChildDeletedDelta,
     ChildMovedAndReplacedFromOtherContainmentDelta,
@@ -354,6 +357,46 @@ export abstract class MultiContainmentValueManager<T extends INodeBase> extends 
                 this.emitDelta(() => new ChildReplacedDelta(this.container, this.containment, newIndex, replacedChild, movedChild));
             }
             movedChild.attachTo(this.container, this.containment);
+        }
+    }
+
+
+    /**
+     * @return the moved child, or `undefined` if `indexOffset` = 0.
+     */
+    @action moveOffsetBasedDirectly(oldIndex: number, indexOffset: number): INodeBase | undefined {
+        if (indexOffset === 0) {
+            return undefined;
+        }
+        const [_newIndex, movedChild] = moveWithOffset(this.children, oldIndex, indexOffset);
+        return movedChild;
+    }
+
+    @action moveOffsetBased(oldIndex: number, indexOffset: number) {
+        const child = this.moveDirectly(oldIndex, indexOffset);
+        if (child !== undefined) {
+            this.emitDelta(() => new AnnotationMovedInSameParentDelta(this.container, oldIndex, indexOffset, child));
+        }
+    }
+
+
+    /**
+     * @return a tuple with the (moved, replaced) children, or `undefined` if `indexOffset` = 0.
+     */
+    @action moveAndReplaceOffsetBasedDirectly(oldIndex: number, indexOffset: number): [movedChild: INodeBase, replacedChild: INodeBase] | undefined {
+        if (indexOffset === 0) {
+            return undefined;
+        }
+        const [_newIndex, movedChild, replacedChild] = moveAndReplaceWithOffset(this.children, oldIndex, indexOffset);
+        replacedChild.detach();
+        return [movedChild, replacedChild];
+    }
+
+    @action moveAndReplaceOffsetBased(oldIndex: number, indexOffset: number) {
+        const participants = this.moveAndReplaceOffsetBasedDirectly(oldIndex, indexOffset);
+        if (participants !== undefined) {
+            const [movedChild, replacedChild] = participants;
+            this.emitDelta(() => new AnnotationMovedAndReplacedInSameParentDelta(this.container, oldIndex, indexOffset, replacedChild, movedChild));
         }
     }
 

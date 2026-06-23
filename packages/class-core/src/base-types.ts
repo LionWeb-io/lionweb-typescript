@@ -330,6 +330,14 @@ export abstract class NodeBase implements INodeBase {
         this.annotationsValueManager.remove(annotation);
     }
 
+    moveAnnotationOffsetBased(oldIndex: number, indexOffset: number) {
+        this.annotationsValueManager.moveOffsetBased(oldIndex, indexOffset);
+    }
+
+    moveAndReplaceAnnotationOffsetBased(oldIndex: number, indexOffset: number) {
+        this.annotationsValueManager.moveAndReplaceOffsetBased(oldIndex, indexOffset);
+    }
+
 }
 
 
