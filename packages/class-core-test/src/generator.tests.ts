@@ -17,7 +17,7 @@
 
 import { languageFileFor } from "@lionweb/class-core-generator/dist/language-file.templates.js"
 import { generateApiFromLanguages, generateLanguage } from "@lionweb/class-core-generator"
-import { LanguageFactory, LionWebVersions } from "@lionweb/core"
+import { ConceptModifier, LanguageFactory, LionWebVersions } from "@lionweb/core"
 import { ioLionWebMpsSpecificLanguage } from "@lionweb/io-lionweb-mps-specific"
 import { concatenator } from "@lionweb/ts-utils"
 import { isTrue } from "./assertions.js"
@@ -30,8 +30,8 @@ describe(`class-core generator`, () => {
 
     it(`concept extends from Node or from nothing => class extends from NodeBase`, () => {
         const factory = new LanguageFactory("test", "0", dashSeparator, dashSeparator)
-        factory.concept("ConceptExtendingNode", false, node)
-        factory.concept("ConceptExtendingNothing", false)
+        factory.concept("ConceptExtendingNode", ConceptModifier.concrete, node)
+        factory.concept("ConceptExtendingNothing", ConceptModifier.concrete)
 
         const languageFile = languageFileFor(factory.language, { verbose: false, genericImportLocation: "@lionweb/class-core" })
         const matchExtendsNode = languageFile.match(/export class ConceptExtendingNode extends ([A-Za-z.$]+) \{/)
@@ -42,7 +42,7 @@ describe(`class-core generator`, () => {
 
     it(`reference on a classifier refers to Node => the Node type is used instead of INodeBase`, () => {
         const factory = new LanguageFactory("test", "0", dashSeparator, dashSeparator)
-        const AConcept = factory.concept("AConcept", false)
+        const AConcept = factory.concept("AConcept", ConceptModifier.concrete)
         factory.reference(AConcept, "ref").ofType(node)
         const AnAnnotation = factory.annotation("AnAnnotation").annotating(AConcept)
         factory.reference(AnAnnotation, "ref").ofType(node)
@@ -61,8 +61,8 @@ describe(`class-core generator`, () => {
     it(`generate code for language with concept named "Class"`, () => {
         const factory = new LanguageFactory("Meta-test", "1", dashSeparator, dashSeparator)
         const {inamed} = LionWebVersions.v2023_1.builtinsFacade.classifiers
-        const Class = factory.concept("Class", false).implementing(inamed)
-        const Property = factory.concept("Property", false).implementing(inamed)
+        const Class = factory.concept("Class", ConceptModifier.concrete).implementing(inamed)
+        const Property = factory.concept("Property", ConceptModifier.concrete).implementing(inamed)
         factory.containment(Class, "property").ofType(Property)
 
         generateLanguage(factory.language, "src/gen", { verbose: false })

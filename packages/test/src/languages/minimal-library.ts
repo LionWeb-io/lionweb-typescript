@@ -1,4 +1,4 @@
-import { LanguageFactory, LionWebVersions } from "@lionweb/core"
+import { ConceptModifier, LanguageFactory, LionWebVersions } from "@lionweb/core"
 import { chain, concatenator, lastOf } from "@lionweb/ts-utils"
 import { hasher } from "@lionweb/utilities"
 
@@ -12,9 +12,9 @@ export const minimalLibraryLanguage = factory.language
 
 const { integerDataType, stringDataType } = LionWebVersions.v2023_1.builtinsFacade.primitiveTypes
 
-const library = factory.concept("Library", false)
-const book = factory.concept("Book", false)
-const guideBookWriter = factory.concept("GuideBookWriter", false)
+const library = factory.concept("Library", ConceptModifier.concrete)
+const book = factory.concept("Book", ConceptModifier.concrete)
+const guideBookWriter = factory.concept("GuideBookWriter", ConceptModifier.concrete)
 
 factory.property(library, "name").ofType(stringDataType).havingKey("library_Library_name")
 factory.containment(library, "books").ofType(book).isMultiple()

@@ -81,7 +81,7 @@ export class TestLanguageBase implements $lwClassCore.ILanguageBase {
         return this._SecondTestEnumeration_literal3;
     }
 
-    public readonly _DataTypeTestConcept = new $lwCore.Concept(this._language, "DataTypeTestConcept", "DataTypeTestConcept", "DataTypeTestConcept", false);
+    public readonly _DataTypeTestConcept = new $lwCore.Concept(this._language, "DataTypeTestConcept", "DataTypeTestConcept", "DataTypeTestConcept", $lwCore.ConceptModifier.concrete);
     get DataTypeTestConcept(): $lwCore.Concept {
         this.ensureWiredUp();
         return this._DataTypeTestConcept;
@@ -127,7 +127,7 @@ export class TestLanguageBase implements $lwClassCore.ILanguageBase {
         return this._DataTypeTestConcept_enumValue_0_1;
     }
 
-    public readonly _LinkTestConcept = new $lwCore.Concept(this._language, "LinkTestConcept", "LinkTestConcept", "LinkTestConcept", false);
+    public readonly _LinkTestConcept = new $lwCore.Concept(this._language, "LinkTestConcept", "LinkTestConcept", "LinkTestConcept", $lwCore.ConceptModifier.concrete);
     get LinkTestConcept(): $lwCore.Concept {
         this.ensureWiredUp();
         return this._LinkTestConcept;
@@ -183,8 +183,13 @@ export class TestLanguageBase implements $lwClassCore.ILanguageBase {
         this.ensureWiredUp();
         return this._TestAnnotation_ref;
     }
+    private readonly _TestAnnotation_containedNode = new $lwCore.Containment(this._TestAnnotation, "containedNode", "TestAnnotation-containment", "TestAnnotation-containment").isOptional();
+    get TestAnnotation_containedNode(): $lwCore.Containment {
+        this.ensureWiredUp();
+        return this._TestAnnotation_containedNode;
+    }
 
-    public readonly _TestPartition = new $lwCore.Concept(this._language, "TestPartition", "TestPartition", "TestPartition", false).isPartition();
+    public readonly _TestPartition = new $lwCore.Concept(this._language, "TestPartition", "TestPartition", "TestPartition", $lwCore.ConceptModifier.concrete).isPartition();
     get TestPartition(): $lwCore.Concept {
         this.ensureWiredUp();
         return this._TestPartition;
@@ -228,8 +233,9 @@ export class TestLanguageBase implements $lwClassCore.ILanguageBase {
         this._LinkTestConcept_reference_0_n.ofType(this._LinkTestConcept);
         this._LinkTestConcept_reference_1_n.ofType(this._LinkTestConcept);
         this._TestAnnotation.implementing($lwClassCore.LionCore_builtinsBase.INSTANCE._INamed);
-        this._TestAnnotation.havingFeatures(this._TestAnnotation_ref);
+        this._TestAnnotation.havingFeatures(this._TestAnnotation_ref, this._TestAnnotation_containedNode);
         this._TestAnnotation_ref.ofType($lwClassCore.LionCore_builtinsBase.INSTANCE._Node);
+        this._TestAnnotation_containedNode.ofType($lwClassCore.LionCore_builtinsBase.INSTANCE._Node);
         this._TestPartition.implementing($lwClassCore.LionCore_builtinsBase.INSTANCE._INamed);
         this._TestPartition.havingFeatures(this._TestPartition_links, this._TestPartition_data);
         this._TestPartition_links.ofType(this._LinkTestConcept);
@@ -422,6 +428,12 @@ export class LinkTestConcept extends $lwClassCore.NodeBase implements $lwClassCo
     replaceContainment_0_nAtIndex(movedChild: LinkTestConcept, newIndex: number) {
         this._containment_0_n.replaceAtIndex(movedChild, newIndex);
     }
+    moveContainment_0_nOffsetBased(oldIndex: number, indexOffset: number) {
+        this._containment_0_n.moveOffsetBased(oldIndex, indexOffset);
+    }
+    moveAndReplaceContainment_0_nOffsetBased(oldIndex: number, indexOffset: number) {
+        this._containment_0_n.moveAndReplaceOffsetBased(oldIndex, indexOffset);
+    }
 
     private readonly _containment_1_n: $lwClassCore.RequiredMultiContainmentValueManager<LinkTestConcept>;
     get containment_1_n(): LinkTestConcept[] {
@@ -441,6 +453,12 @@ export class LinkTestConcept extends $lwClassCore.NodeBase implements $lwClassCo
     }
     replaceContainment_1_nAtIndex(movedChild: LinkTestConcept, newIndex: number) {
         this._containment_1_n.replaceAtIndex(movedChild, newIndex);
+    }
+    moveContainment_1_nOffsetBased(oldIndex: number, indexOffset: number) {
+        this._containment_1_n.moveOffsetBased(oldIndex, indexOffset);
+    }
+    moveAndReplaceContainment_1_nOffsetBased(oldIndex: number, indexOffset: number) {
+        this._containment_1_n.moveAndReplaceOffsetBased(oldIndex, indexOffset);
     }
 
     private readonly _reference_0_1: $lwClassCore.OptionalSingleReferenceValueManager<LinkTestConcept>;
@@ -555,6 +573,17 @@ export class TestAnnotation extends $lwClassCore.NodeBase implements $lwClassCor
         this._ref.set(newValue);
     }
 
+    private readonly _containedNode: $lwClassCore.OptionalSingleContainmentValueManager<$lwClassCore.INodeBase>;
+    get containedNode(): $lwClassCore.INodeBase | undefined {
+        return this._containedNode.get();
+    }
+    set containedNode(newValue: $lwClassCore.INodeBase | undefined) {
+        this._containedNode.set(newValue);
+    }
+    replaceContainedNodeWith(newValue: $lwClassCore.INodeBase) {
+        this._containedNode.replaceWith(newValue);
+    }
+
     private readonly _name: $lwClassCore.RequiredPropertyValueManager<string>;
     get name(): string {
         return this._name.get();
@@ -566,6 +595,7 @@ export class TestAnnotation extends $lwClassCore.NodeBase implements $lwClassCor
     public constructor(classifier: $lwCore.Classifier, id: $lwJson.LionWebId, receiveDelta?: $lwClassCore.DeltaReceiver, parentInfo?: $lwClassCore.Parentage) {
         super(classifier, id, receiveDelta, parentInfo);
         this._ref = new $lwClassCore.RequiredSingleReferenceValueManager<$lwCore.Node>(TestLanguageBase.INSTANCE.TestAnnotation_ref, this);
+        this._containedNode = new $lwClassCore.OptionalSingleContainmentValueManager<$lwClassCore.INodeBase>(TestLanguageBase.INSTANCE.TestAnnotation_containedNode, this);
         this._name = new $lwClassCore.RequiredPropertyValueManager<string>($lwClassCore.LionCore_builtinsBase.INSTANCE.INamed_name, this);
     }
 
@@ -574,6 +604,13 @@ export class TestAnnotation extends $lwClassCore.NodeBase implements $lwClassCor
             return this._name;
         }
         return super.getPropertyValueManager(property);
+    }
+
+    getContainmentValueManager(containment: $lwCore.Containment): $lwClassCore.ContainmentValueManager<$lwClassCore.INodeBase> {
+        if (containment.key === TestLanguageBase.INSTANCE.TestAnnotation_containedNode.key) {
+            return this._containedNode;
+        }
+        return super.getContainmentValueManager(containment);
     }
 
     getReferenceValueManager(reference: $lwCore.Reference): $lwClassCore.ReferenceValueManager<$lwCore.Node> {
@@ -607,6 +644,12 @@ export class TestPartition extends $lwClassCore.NodeBase implements $lwClassCore
     }
     replaceLinksAtIndex(movedChild: LinkTestConcept, newIndex: number) {
         this._links.replaceAtIndex(movedChild, newIndex);
+    }
+    moveLinksOffsetBased(oldIndex: number, indexOffset: number) {
+        this._links.moveOffsetBased(oldIndex, indexOffset);
+    }
+    moveAndReplaceLinksOffsetBased(oldIndex: number, indexOffset: number) {
+        this._links.moveAndReplaceOffsetBased(oldIndex, indexOffset);
     }
 
     private readonly _data: $lwClassCore.OptionalSingleContainmentValueManager<DataTypeTestConcept>;

@@ -34,9 +34,9 @@ const lexiCompare = <T>(l: T, r: T, comps: Comparer<T>[]): number => {
         throw new Error(`can’t (lexicographically) compare with 0 comparers`)
     }
     const acc = comps[0](l, r)
-    return (acc === 0 && comps.length > 1)
-        ? lexiCompare(l, r, comps.slice(1))
-        : acc
+    return (acc !== 0 || comps.length === 1)
+        ? acc
+        : lexiCompare(l, r, comps.slice(1))
 }
 
 /**

@@ -30,7 +30,7 @@ export class LionCore_M3Base implements $lwClassCore.ILanguageBase {
         return this._IKeyed_key;
     }
 
-    public readonly _Feature = new $lwCore.Concept(this._language, "Feature", "Feature", "-id-Feature", true);
+    public readonly _Feature = new $lwCore.Concept(this._language, "Feature", "Feature", "-id-Feature", $lwCore.ConceptModifier.abstract);
     get Feature(): $lwCore.Concept {
         this.ensureWiredUp();
         return this._Feature;
@@ -41,7 +41,7 @@ export class LionCore_M3Base implements $lwClassCore.ILanguageBase {
         return this._Feature_optional;
     }
 
-    public readonly _Property = new $lwCore.Concept(this._language, "Property", "Property", "-id-Property", false);
+    public readonly _Property = new $lwCore.Concept(this._language, "Property", "Property", "-id-Property", $lwCore.ConceptModifier.concrete);
     get Property(): $lwCore.Concept {
         this.ensureWiredUp();
         return this._Property;
@@ -52,7 +52,7 @@ export class LionCore_M3Base implements $lwClassCore.ILanguageBase {
         return this._Property_type;
     }
 
-    public readonly _Link = new $lwCore.Concept(this._language, "Link", "Link", "-id-Link", true);
+    public readonly _Link = new $lwCore.Concept(this._language, "Link", "Link", "-id-Link", $lwCore.ConceptModifier.abstract);
     get Link(): $lwCore.Concept {
         this.ensureWiredUp();
         return this._Link;
@@ -68,25 +68,25 @@ export class LionCore_M3Base implements $lwClassCore.ILanguageBase {
         return this._Link_type;
     }
 
-    public readonly _Containment = new $lwCore.Concept(this._language, "Containment", "Containment", "-id-Containment", false);
+    public readonly _Containment = new $lwCore.Concept(this._language, "Containment", "Containment", "-id-Containment", $lwCore.ConceptModifier.concrete);
     get Containment(): $lwCore.Concept {
         this.ensureWiredUp();
         return this._Containment;
     }
 
-    public readonly _Reference = new $lwCore.Concept(this._language, "Reference", "Reference", "-id-Reference", false);
+    public readonly _Reference = new $lwCore.Concept(this._language, "Reference", "Reference", "-id-Reference", $lwCore.ConceptModifier.concrete);
     get Reference(): $lwCore.Concept {
         this.ensureWiredUp();
         return this._Reference;
     }
 
-    public readonly _LanguageEntity = new $lwCore.Concept(this._language, "LanguageEntity", "LanguageEntity", "-id-LanguageEntity", true);
+    public readonly _LanguageEntity = new $lwCore.Concept(this._language, "LanguageEntity", "LanguageEntity", "-id-LanguageEntity", $lwCore.ConceptModifier.abstract);
     get LanguageEntity(): $lwCore.Concept {
         this.ensureWiredUp();
         return this._LanguageEntity;
     }
 
-    public readonly _Classifier = new $lwCore.Concept(this._language, "Classifier", "Classifier", "-id-Classifier", true);
+    public readonly _Classifier = new $lwCore.Concept(this._language, "Classifier", "Classifier", "-id-Classifier", $lwCore.ConceptModifier.abstract);
     get Classifier(): $lwCore.Concept {
         this.ensureWiredUp();
         return this._Classifier;
@@ -97,7 +97,7 @@ export class LionCore_M3Base implements $lwClassCore.ILanguageBase {
         return this._Classifier_features;
     }
 
-    public readonly _Annotation = new $lwCore.Concept(this._language, "Annotation", "Annotation", "-id-Annotation", false);
+    public readonly _Annotation = new $lwCore.Concept(this._language, "Annotation", "Annotation", "-id-Annotation", $lwCore.ConceptModifier.concrete);
     get Annotation(): $lwCore.Concept {
         this.ensureWiredUp();
         return this._Annotation;
@@ -118,7 +118,7 @@ export class LionCore_M3Base implements $lwClassCore.ILanguageBase {
         return this._Annotation_implements;
     }
 
-    public readonly _Concept = new $lwCore.Concept(this._language, "Concept", "Concept", "-id-Concept", false);
+    public readonly _Concept = new $lwCore.Concept(this._language, "Concept", "Concept", "-id-Concept", $lwCore.ConceptModifier.concrete);
     get Concept(): $lwCore.Concept {
         this.ensureWiredUp();
         return this._Concept;
@@ -144,7 +144,7 @@ export class LionCore_M3Base implements $lwClassCore.ILanguageBase {
         return this._Concept_implements;
     }
 
-    public readonly _Interface = new $lwCore.Concept(this._language, "Interface", "Interface", "-id-Interface", false);
+    public readonly _Interface = new $lwCore.Concept(this._language, "Interface", "Interface", "-id-Interface", $lwCore.ConceptModifier.concrete);
     get Interface(): $lwCore.Concept {
         this.ensureWiredUp();
         return this._Interface;
@@ -155,19 +155,19 @@ export class LionCore_M3Base implements $lwClassCore.ILanguageBase {
         return this._Interface_extends;
     }
 
-    public readonly _DataType = new $lwCore.Concept(this._language, "DataType", "DataType", "-id-DataType", true);
+    public readonly _DataType = new $lwCore.Concept(this._language, "DataType", "DataType", "-id-DataType", $lwCore.ConceptModifier.abstract);
     get DataType(): $lwCore.Concept {
         this.ensureWiredUp();
         return this._DataType;
     }
 
-    public readonly _PrimitiveType = new $lwCore.Concept(this._language, "PrimitiveType", "PrimitiveType", "-id-PrimitiveType", false);
+    public readonly _PrimitiveType = new $lwCore.Concept(this._language, "PrimitiveType", "PrimitiveType", "-id-PrimitiveType", $lwCore.ConceptModifier.concrete);
     get PrimitiveType(): $lwCore.Concept {
         this.ensureWiredUp();
         return this._PrimitiveType;
     }
 
-    public readonly _Enumeration = new $lwCore.Concept(this._language, "Enumeration", "Enumeration", "-id-Enumeration", false);
+    public readonly _Enumeration = new $lwCore.Concept(this._language, "Enumeration", "Enumeration", "-id-Enumeration", $lwCore.ConceptModifier.concrete);
     get Enumeration(): $lwCore.Concept {
         this.ensureWiredUp();
         return this._Enumeration;
@@ -178,13 +178,13 @@ export class LionCore_M3Base implements $lwClassCore.ILanguageBase {
         return this._Enumeration_literals;
     }
 
-    public readonly _EnumerationLiteral = new $lwCore.Concept(this._language, "EnumerationLiteral", "EnumerationLiteral", "-id-EnumerationLiteral", false);
+    public readonly _EnumerationLiteral = new $lwCore.Concept(this._language, "EnumerationLiteral", "EnumerationLiteral", "-id-EnumerationLiteral", $lwCore.ConceptModifier.concrete);
     get EnumerationLiteral(): $lwCore.Concept {
         this.ensureWiredUp();
         return this._EnumerationLiteral;
     }
 
-    public readonly _Language = new $lwCore.Concept(this._language, "Language", "Language", "-id-Language", false).isPartition();
+    public readonly _Language = new $lwCore.Concept(this._language, "Language", "Language", "-id-Language", $lwCore.ConceptModifier.concrete).isPartition();
     get Language(): $lwCore.Concept {
         this.ensureWiredUp();
         return this._Language;
@@ -467,6 +467,12 @@ export abstract class Classifier extends LanguageEntity {
     replaceFeaturesAtIndex(movedChild: Feature, newIndex: number) {
         this._features.replaceAtIndex(movedChild, newIndex);
     }
+    moveFeaturesOffsetBased(oldIndex: number, indexOffset: number) {
+        this._features.moveOffsetBased(oldIndex, indexOffset);
+    }
+    moveAndReplaceFeaturesOffsetBased(oldIndex: number, indexOffset: number) {
+        this._features.moveAndReplaceOffsetBased(oldIndex, indexOffset);
+    }
 
     protected constructor(classifier: $lwCore.Classifier, id: $lwJson.LionWebId, receiveDelta?: $lwClassCore.DeltaReceiver, parentInfo?: $lwClassCore.Parentage) {
         super(classifier, id, receiveDelta, parentInfo);
@@ -675,6 +681,12 @@ export class Enumeration extends DataType {
     replaceLiteralsAtIndex(movedChild: EnumerationLiteral, newIndex: number) {
         this._literals.replaceAtIndex(movedChild, newIndex);
     }
+    moveLiteralsOffsetBased(oldIndex: number, indexOffset: number) {
+        this._literals.moveOffsetBased(oldIndex, indexOffset);
+    }
+    moveAndReplaceLiteralsOffsetBased(oldIndex: number, indexOffset: number) {
+        this._literals.moveAndReplaceOffsetBased(oldIndex, indexOffset);
+    }
 
     public constructor(classifier: $lwCore.Classifier, id: $lwJson.LionWebId, receiveDelta?: $lwClassCore.DeltaReceiver, parentInfo?: $lwClassCore.Parentage) {
         super(classifier, id, receiveDelta, parentInfo);
@@ -756,6 +768,12 @@ export class Language extends $lwClassCore.NodeBase implements IKeyed {
     }
     replaceEntitiesAtIndex(movedChild: LanguageEntity, newIndex: number) {
         this._entities.replaceAtIndex(movedChild, newIndex);
+    }
+    moveEntitiesOffsetBased(oldIndex: number, indexOffset: number) {
+        this._entities.moveOffsetBased(oldIndex, indexOffset);
+    }
+    moveAndReplaceEntitiesOffsetBased(oldIndex: number, indexOffset: number) {
+        this._entities.moveAndReplaceOffsetBased(oldIndex, indexOffset);
     }
 
     private readonly _dependsOn: $lwClassCore.OptionalMultiReferenceValueManager<Language>;

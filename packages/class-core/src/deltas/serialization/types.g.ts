@@ -140,7 +140,7 @@ export type ChildMovedInSameContainmentSerializedDelta = {
     parent: LionWebId
     containment: LionWebJsonMetaPointer
     oldIndex: number
-    newIndex: number
+    indexOffset: number
     movedChild: LionWebId
 }
 
@@ -174,7 +174,7 @@ export type ChildMovedAndReplacedInSameContainmentSerializedDelta = {
     parent: LionWebId
     containment: LionWebJsonMetaPointer
     oldIndex: number
-    newIndex: number
+    indexOffset: number
     movedChild: LionWebId
     replacedChild: LionWebId
     replacedChildAsNodes: LionWebJsonChunk
@@ -219,7 +219,7 @@ export type AnnotationMovedInSameParentSerializedDelta = {
     kind: "AnnotationMovedInSameParent"
     parent: LionWebId
     oldIndex: number
-    newIndex: number
+    indexOffset: number
     movedAnnotation: LionWebId
 }
 
@@ -238,7 +238,7 @@ export type AnnotationMovedAndReplacedInSameParentSerializedDelta = {
     kind: "AnnotationMovedAndReplacedInSameParent"
     parent: LionWebId
     oldIndex: number
-    newIndex: number
+    indexOffset: number
     replacedAnnotation: LionWebId
     replacedAnnotationNodes: LionWebJsonChunk
     movedAnnotation: LionWebId

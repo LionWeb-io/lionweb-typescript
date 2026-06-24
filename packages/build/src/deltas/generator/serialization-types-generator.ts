@@ -23,6 +23,7 @@ import {
     Delta,
     FeatureType,
     Field,
+    IndexOffsetType,
     IndexType,
     NodeType,
     PrimitiveValueType,
@@ -39,7 +40,7 @@ const tsTypeForTypeOfSerializationField = (type: Type) => {
     if (type instanceof NodeType) {
         return type.serialization instanceof RefOnly ? "IdOrNull" : "LionWebId"
     }
-    if (type instanceof IndexType) {
+    if (type instanceof IndexType || type instanceof IndexOffsetType) {
         return "number"
     }
     if (type instanceof PrimitiveValueType) {

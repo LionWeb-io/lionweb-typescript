@@ -1436,7 +1436,8 @@
                         "key": "Classifier-features"
                     },
                     "children": [
-                        "TestAnnotation-ref"
+                        "TestAnnotation-ref",
+                        "TestAnnotation-containment"
                     ]
                 }
             ],
@@ -1518,6 +1519,66 @@
                         "key": "LionCore-builtins-INamed-name"
                     },
                     "value": "ref"
+                }
+            ],
+            "containments": [],
+            "references": [
+                {
+                    "reference": {
+                        "language": "LionCore-M3",
+                        "version": "2023.1",
+                        "key": "Link-type"
+                    },
+                    "targets": [
+                        {
+                            "resolveInfo": "Node",
+                            "reference": "LionCore-builtins-Node"
+                        }
+                    ]
+                }
+            ],
+            "annotations": [],
+            "parent": "TestAnnotation"
+        },
+        {
+            "id": "TestAnnotation-containment",
+            "classifier": {
+                "language": "LionCore-M3",
+                "version": "2023.1",
+                "key": "Containment"
+            },
+            "properties": [
+                {
+                    "property": {
+                        "language": "LionCore-M3",
+                        "version": "2023.1",
+                        "key": "Link-multiple"
+                    },
+                    "value": "false"
+                },
+                {
+                    "property": {
+                        "language": "LionCore-M3",
+                        "version": "2023.1",
+                        "key": "Feature-optional"
+                    },
+                    "value": "true"
+                },
+                {
+                    "property": {
+                        "language": "LionCore-M3",
+                        "version": "2023.1",
+                        "key": "IKeyed-key"
+                    },
+                    "value": "TestAnnotation-containment"
+                },
+                {
+                    "property": {
+                        "language": "LionCore-builtins",
+                        "version": "2023.1",
+                        "key": "LionCore-builtins-INamed-name"
+                    },
+                    "value": "containment"
                 }
             ],
             "containments": [],

@@ -4,6 +4,7 @@ import {
     Annotation,
     Classifier,
     Concept,
+    ConceptModifier,
     Containment,
     Enumeration,
     EnumerationLiteral,
@@ -44,8 +45,15 @@ export class LanguageFactory {
         return annotation
     }
 
-    concept(name: string, abstract: boolean, extends_?: SingleRef<Concept>): Concept {
-        const concept = new Concept(this.language, name, this.key(this.language.name, name), this.id(this.language.name, name), abstract, extends_)
+    concept(name: string, abstract: boolean | ConceptModifier, extends_?: SingleRef<Concept>): Concept {
+        const concept = new Concept(
+            this.language,
+            name,
+            this.key(this.language.name, name),
+            this.id(this.language.name, name),
+            abstract,
+            extends_
+        )
         this.language.havingEntities(concept)
         return concept
     }

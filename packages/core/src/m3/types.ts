@@ -145,6 +145,11 @@ abstract class Classifier extends LanguageEntity {
     }
 }
 
+enum ConceptModifier {
+    concrete,
+    abstract
+}
+
 class Concept extends Classifier {
     metaType(): string {
         return "Concept"
@@ -153,9 +158,9 @@ class Concept extends Classifier {
     partition: boolean
     extends?: SingleRef<Concept>    // (reference)
     readonly implements: MultiRef<Interface> = []  // (reference)
-    constructor(language: Language, name: string, key: LionWebKey, id: LionWebId, abstract: boolean, extends_?: SingleRef<Concept>) {
+    constructor(language: Language, name: string, key: LionWebKey, id: LionWebId, abstract: boolean | ConceptModifier, extends_?: SingleRef<Concept>) {
         super(language, name, key, id)
-        this.abstract = abstract
+        this.abstract = abstract === ConceptModifier.abstract || abstract === true
         this.extends = extends_
         this.partition = false
     }
@@ -291,6 +296,7 @@ export {
     Annotation,
     Classifier,
     Concept,
+    ConceptModifier,
     Containment,
     DataType,
     Datatype,

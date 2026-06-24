@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.10.0 — not yet released
+
+* Use a literal of `ConceptModifier` for the 5th of `new Concept(...)` in generated code.
+* Expose `move[AndReplace]<Name of containment>OffsetBased` methods for all multi-valued containments in generated code.
+
+
 ## 0.9.0
 
 * Avoid name collisions between types in generated code and types imported from LionWeb itself.

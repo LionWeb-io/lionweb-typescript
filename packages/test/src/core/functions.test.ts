@@ -1,6 +1,7 @@
 import {
     allContaineds,
     Concept,
+    ConceptModifier,
     containmentChain,
     directlyContaineds,
     Enumeration,
@@ -100,8 +101,8 @@ describe("flatMap function", () => {
 describe("directlyContaineds function", () => {
     it("should return entities for Language objects", () => {
         const language = new Language("ExampleLanguage", "1.0", "lang-001", "key-lang-001")
-        const entity1 = new Concept(language, "Entity1", "key-entity-001", "id-entity-001", false)
-        const entity2 = new Concept(language, "Entity2", "key-entity-002", "id-entity-002", false)
+        const entity1 = new Concept(language, "Entity1", "key-entity-001", "id-entity-001", ConceptModifier.concrete)
+        const entity2 = new Concept(language, "Entity2", "key-entity-002", "id-entity-002", ConceptModifier.concrete)
         language.havingEntities(entity1, entity2)
 
         const result = directlyContaineds(language)
@@ -110,7 +111,7 @@ describe("directlyContaineds function", () => {
 
     it("should return features for Classifier objects", () => {
         const language = new Language("ExampleLanguage", "1.0", "lang-001", "key-lang-001")
-        const classifier = new Concept(language, "Classifier1", "key-class1", "class-001", false)
+        const classifier = new Concept(language, "Classifier1", "key-class1", "class-001", ConceptModifier.concrete)
         const feature1 = new Property(classifier, "Feature1", "key-feat1", "feat-001")
         const feature2 = new Property(classifier, "Feature2", "key-feat2", "feat-002")
         classifier.havingFeatures(feature1, feature2)
@@ -132,7 +133,7 @@ describe("directlyContaineds function", () => {
 
     it("should return an empty array for non-matching M3Concepts", () => {
         const language = new Language("ExampleLanguage", "1.0", "lang-001", "key-lang-001")
-        const classifier = new Concept(language, "Classifier1", "key-class1", "class-001", false)
+        const classifier = new Concept(language, "Classifier1", "key-class1", "class-001", ConceptModifier.concrete)
         const nonMatchingConcept = new Property(classifier, "NonMatching", "key-nonmatch", "nonmatch-001")
 
         const result = directlyContaineds(nonMatchingConcept)

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.10.0 — not yet released
+
+* Update to latest spec. of delta protocol, specifically:
+  make all move[+replace] child in same containment and move[+replace] annotation in same parent commands and corresponding events offset-based.
+
+
 ## 0.9.0
 
 * (Update references to delta protocol specification document.)

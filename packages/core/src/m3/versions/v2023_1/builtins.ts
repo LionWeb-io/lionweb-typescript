@@ -9,6 +9,7 @@ import {
 } from "../../builtins-common.js"
 import { isBuiltinNodeConcept } from "../../builtins-function.js"
 import { LanguageFactory } from "../../factory.js"
+import { ConceptModifier } from "../../types.js"
 
 
 const factory = new LanguageFactory(
@@ -27,7 +28,7 @@ const booleanDataType = factory.primitiveType("Boolean")
 const integerDataType = factory.primitiveType("Integer")
 const jsonDataType = factory.primitiveType("JSON")
 
-const node = factory.concept("Node", true)
+const node = factory.concept("Node", ConceptModifier.abstract)
 
 const inamed = factory.interface("INamed")
 
