@@ -22,16 +22,16 @@
         "test": "mocha --recursive dist/tests/"
     },
     "dependencies": {
-        "@lionweb/class-core": "0.10.0-alpha.5",
-        "@lionweb/class-core-test-language": "0.10.0-alpha.5",
-        "@lionweb/core": "0.10.0-alpha.5",
-        "@lionweb/delta-protocol-client": "0.10.0-alpha.5",
-        "@lionweb/delta-protocol-common": "0.10.0-alpha.5",
-        "@lionweb/delta-protocol-low-level-client-ws": "0.10.0-alpha.5",
-        "@lionweb/delta-protocol-repository-ws": "0.10.0-alpha.5",
-        "@lionweb/delta-protocol-test-cli": "0.10.0-alpha.5",
-        "@lionweb/json": "0.10.0-alpha.5",
-        "@lionweb/ts-utils": "0.10.0-alpha.5"
+        "@lionweb/class-core": "0.10.0-alpha.6",
+        "@lionweb/class-core-test-language": "0.10.0-alpha.6",
+        "@lionweb/core": "0.10.0-alpha.6",
+        "@lionweb/delta-protocol-client": "0.10.0-alpha.6",
+        "@lionweb/delta-protocol-common": "0.10.0-alpha.6",
+        "@lionweb/delta-protocol-low-level-client-ws": "0.10.0-alpha.6",
+        "@lionweb/delta-protocol-repository-ws": "0.10.0-alpha.6",
+        "@lionweb/delta-protocol-test-cli": "0.10.0-alpha.6",
+        "@lionweb/json": "0.10.0-alpha.6",
+        "@lionweb/ts-utils": "0.10.0-alpha.6"
     },
     "devDependencies": {
         "@types/chai": "5.2.3",
