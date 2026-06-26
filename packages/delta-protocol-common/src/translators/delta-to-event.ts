@@ -385,7 +385,7 @@ export const deltaToEventTranslator = (
                 })
             }
             if (delta instanceof NoOpDelta) {
-                return completed<NoOpEvent>("NoOp", {})
+                return completed<NoOpEvent>("NoOpEvent", {})
             }
 
             throw new Error(`can't handle delta of type ${delta.constructor.name}`)

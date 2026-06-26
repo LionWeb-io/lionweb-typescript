@@ -296,7 +296,7 @@ export const eventToDeltaTranslator = (
                         .filter((deltaOrUndefined) => deltaOrUndefined !== undefined) as IDelta[]
                 )
             }
-            case "NoOp": { // § 5.8.8.1
+            case "NoOpEvent": { // § 5.8.8.1
                 return new NoOpDelta()
             }
             case "ErrorEvent": { // § 5.8.8.2

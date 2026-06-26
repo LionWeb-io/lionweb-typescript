@@ -56,20 +56,23 @@ export interface ContinuedChunkMessage extends Message {
 }
 
 
+const customPrefix = "Custom_"
+
 /**
  * Type def. for custom message kinds, meaning:
  *  - MUST adhere to the same format as identifiers,
- *  - MUST start with "custom_", and
+ *  - MUST start with "Custom_", and
  *  - MUST have at least 8 characters.
  * (See §5.3.)
  *
  * *Note*: use the {@link isValidCustomMessageKind} to actually check correctness.
  */
-export type CustomMessageKind = `custom_${string}`
+export type CustomMessageKind = `Custom_${string}`
+// Note: can’t use customPrefix constant in template literal type — see https://www.typescriptlang.org/docs/handbook/2/template-literal-types.html
 
 /**
  * @return Whether the given `messageKind` string is a valid message kind string.
  */
 export const isValidCustomMessageKind = (messageKind: string): messageKind is CustomMessageKind =>
-    isValidIdentifier(messageKind) && messageKind.startsWith("custom_") && messageKind.length >= 8
+    isValidIdentifier(messageKind) && messageKind.startsWith(customPrefix) && (messageKind.length > customPrefix.length)
 

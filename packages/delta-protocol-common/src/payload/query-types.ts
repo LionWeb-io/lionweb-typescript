@@ -45,7 +45,7 @@ export interface CustomQueryResponse extends QueryMessage {
     /*
      * messageKind to be specified:
      *  - MUST adhere to the same format as identifiers,
-     *  - MUST start with "custom_", and
+     *  - MUST start with "Custom_", and
      *  - MUST have at least 8 characters,
      *  - SHOULD end in "Response".
      */
