@@ -306,7 +306,7 @@ export interface CompositeEvent extends Event {
 
 /** § 5.8.8.2 */
 export interface NoOpEvent extends Event {
-    messageKind: "NoOp"
+    messageKind: "NoOpEvent"
 }
 
 /** § 5.8.8.3 */
@@ -354,7 +354,7 @@ const eventMessageKinds = mapFrom(
         "ReferenceDeleted",
         "ReferenceChanged",
         "CompositeEvent",
-        "NoOp",
+        "NoOpEvent",
         "ErrorEvent"
     ],
     (messageKind) => messageKind,

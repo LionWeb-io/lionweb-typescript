@@ -1864,7 +1864,7 @@ export const EventDefinitions: MessageGroup = {
             ],
         },
         {
-            name: "NoOp",
+            name: "NoOpEvent",
             properties: [
                 {
                     name: "messageKind",
