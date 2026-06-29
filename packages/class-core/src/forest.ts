@@ -38,15 +38,23 @@ import { combinedFactoryFor } from "./factory.js"
 import { IdMapping } from "./id-mapping.js"
 
 
-const containingRoot = (node: INodeBase): INodeBase =>
-    node.parent === undefined ? node : containingRoot(node.parent)
+const containingRoot = (node: INodeBase): INodeBase => {
+    let current = node
+    while (current.parent !== undefined) {
+        current = current.parent
+    }
+    return current
+}
 
-const participatingRoots = (delta: IDelta): INodeBase[] =>
+const participatingParents = (delta: IDelta): INodeBase[] =>
     ["node", "parent", "oldParent", "newParent"]
         .flatMap((key) =>
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            key in delta ? [containingRoot((delta as any)[key])] : []
+            key in delta ? [(delta as any)[key]] : []
         )
+
+const participatingRoots = (delta: IDelta): INodeBase[] =>
+    participatingParents(delta).map(containingRoot)
 
 
 /**
