@@ -186,10 +186,12 @@ describe("Forest", () => {
         const [forest, deltas] = fixture()
 
         const partition = forest.createNode(testLanguageBase.TestPartition, "ptc") as TestPartition
-        const ltc = forest.createNode(testLanguageBase.LinkTestConcept, "ltc") as LinkTestConcept
-        partition.addLinks(ltc)
+        const ltc1 = forest.createNode(testLanguageBase.LinkTestConcept, "ltc1") as LinkTestConcept
+        partition.addLinks(ltc1)
         const annotation = forest.createNode(testLanguageBase.TestAnnotation, "annotation") as TestAnnotation
         partition.addAnnotation(annotation)
+        const ltc2 = forest.createNode(testLanguageBase.LinkTestConcept, "ltc2") as LinkTestConcept // add a deeper node
+        ltc1.addContainment_1_n(ltc2)
 
         // pre-check:
         deepEqual(deltas, [])
