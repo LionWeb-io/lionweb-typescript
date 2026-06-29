@@ -38,6 +38,25 @@ import { combinedFactoryFor } from "./factory.js"
 import { IdMapping } from "./id-mapping.js"
 
 
+const containingRoot = (node: INodeBase): INodeBase => {
+    let current = node
+    while (current.parent !== undefined) {
+        current = current.parent
+    }
+    return current
+}
+
+const participatingParents = (delta: IDelta): INodeBase[] =>
+    ["node", "parent", "oldParent", "newParent"]
+        .flatMap((key) =>
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            key in delta ? [(delta as any)[key]] : []
+        )
+
+const participatingRoots = (delta: IDelta): INodeBase[] =>
+    participatingParents(delta).map(containingRoot)
+
+
 /**
  * An instance of this class encompasses a complete model (=“forest”), to conveniently encapsulate that.
  * (Essentially, it’s a sort of in-memory repository.)
@@ -76,11 +95,26 @@ export class Forest {
 
 
     constructor(configuration: FactoryConfiguration & DeserializerConfiguration) {
-        this.languageBases = configuration.languageBases
-        this.receiveDelta = configuration.receiveDelta
+        const { languageBases, receiveDelta } = configuration
+        this.languageBases = languageBases
+        this.receiveDelta = receiveDelta
         this.partitions = []
         this.idMapping = new IdMapping({})
-        this.createNode = combinedFactoryFor(this.languageBases, this.receiveDelta)
+        this.createNode = combinedFactoryFor(
+            this.languageBases,
+            receiveDelta === undefined
+                ? undefined
+                : (delta) => {
+                    // prevent that changes not involving any actually-registered partition emit deltas:
+                    if (participatingRoots(delta).some((root) => this.partitions.indexOf(root) > -1)) {
+                        receiveDelta(delta)
+                    }
+                }
+                /*
+                 * We want to receive a delta iff the nodes involved are contained in a partition that’s registered as such
+                 * _at/before_ the time the delta was emitted.
+                 */
+        )
         this.deserializeWithIdMapping = nodeBaseDeserializerWithIdMapping(configuration)
     }
 

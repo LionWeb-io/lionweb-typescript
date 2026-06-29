@@ -48,6 +48,7 @@
 * The type `Reader<INodeBase, Node>` is used everywhere, so references from an `INodeBase` can now target any type of `Node`s, rather than only `INodeBase`s.
   * The `IdMapping` class now maintains a mapping &rarr; `Node`, rather than `INodeBase.
   * Add a `nodeBaseFromId` method to this class to specifically return `INodeBase`s.
+* The `createNode` method of `Forest` prevents deltas from being emitted as long as they pertain to partitions that haven’t been registered in the forest yet.
 
 
 ## 0.7.2

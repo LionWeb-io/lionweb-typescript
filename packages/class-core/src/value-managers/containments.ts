@@ -21,8 +21,6 @@ import { action, observable } from "mobx"
 
 import { INodeBase } from "../base-types.js"
 import {
-    AnnotationMovedAndReplacedInSameParentDelta,
-    AnnotationMovedInSameParentDelta,
     ChildAddedDelta,
     ChildDeletedDelta,
     ChildMovedAndReplacedFromOtherContainmentDelta,
@@ -373,9 +371,9 @@ export abstract class MultiContainmentValueManager<T extends INodeBase> extends 
     }
 
     @action moveOffsetBased(oldIndex: number, indexOffset: number) {
-        const child = this.moveDirectly(oldIndex, indexOffset);
+        const child = this.moveOffsetBasedDirectly(oldIndex, indexOffset);
         if (child !== undefined) {
-            this.emitDelta(() => new AnnotationMovedInSameParentDelta(this.container, oldIndex, indexOffset, child));
+            this.emitDelta(() => new ChildMovedInSameContainmentDelta(this.container, this.containment, oldIndex, indexOffset, child));
         }
     }
 
@@ -396,7 +394,7 @@ export abstract class MultiContainmentValueManager<T extends INodeBase> extends 
         const participants = this.moveAndReplaceOffsetBasedDirectly(oldIndex, indexOffset);
         if (participants !== undefined) {
             const [movedChild, replacedChild] = participants;
-            this.emitDelta(() => new AnnotationMovedAndReplacedInSameParentDelta(this.container, oldIndex, indexOffset, replacedChild, movedChild));
+            this.emitDelta(() => new ChildMovedAndReplacedInSameContainmentDelta(this.container, this.containment, oldIndex, indexOffset, replacedChild, movedChild));
         }
     }
 
