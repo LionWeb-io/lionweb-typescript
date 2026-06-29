@@ -1,6 +1,6 @@
 {
     "lionweb": {
-        "publish-version": "0.10.0-alpha.6",
+        "publish-version": "0.10.0-alpha.7",
         "internal-version": "0.10.0-dev.0",
         "internal-packages": [
             "build",
