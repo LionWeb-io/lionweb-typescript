@@ -9,6 +9,8 @@
 * Update to latest spec. of delta protocol, specifically:
   * Make all move[+replace] child in same containment and move[+replace] annotation in same parent commands and corresponding events offset-based.
   * Update translators for that.
+  * Change message kind of `NoOpEvent` &rarr; `"NoOpEvent"`.
+  * Uppercase prefix for message kinds of custom messages: `custom_` &rarr; `Custom_`.
 
 
 ## 0.9.0
