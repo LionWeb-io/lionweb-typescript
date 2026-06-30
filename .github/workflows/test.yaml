@@ -6,14 +6,14 @@ jobs:
   test:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 24
       - name: Clean npm cache
         run: npm cache clean --force
       - name: Install dependencies
-        run: npm install --auth-type=legacy
+        run: npm install
       - name: Setup all packages
         run: npm run setup
       - name: Build all packages
