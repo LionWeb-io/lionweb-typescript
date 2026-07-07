@@ -84,7 +84,7 @@ export const nodeBaseDetailedDeserializerWith = (configuration: Omit<NodeBaseSer
     const propertyValueDeserializer = nodeBasePropertyValueDeserializerWith(configuration);
     const { languageBases, receiveDelta } = configuration;
     const languageBaseFor = combinedLanguageBaseLookupFor(configuration.languageBases);
-    const { problemReporter } = completeSerializationConfigurationWithDefaults(configuration);
+    const { lionWebVersion, problemReporter } = completeSerializationConfigurationWithDefaults(configuration);
 
     const symbolTable = new MemoisingSymbolTable(languageBases.map(({ language }) => language));
 
@@ -175,15 +175,23 @@ export const nodeBaseDetailedDeserializerWith = (configuration: Omit<NodeBaseSer
             }
             if (feature instanceof Reference) {
                 const valueManager = node.getReferenceValueManager(feature);
-                (targets as LionWebJsonReferenceTarget[]).forEach(({reference: targetId, resolveInfo}) => {
-                    const nodeToInstall = targetId === null ? undefined : lookupNodeById(targetId);
-                    // TODO  for LionWeb version 2024.1 and beyond, if reference === null, and resolveInfo has the built-in prefix, resolve to built-ins
-                    if (nodeToInstall === undefined) {
-                        problemReporter.reportProblem(`couldn't resolve the target with id=${targetId} of the "${feature.name}" reference feature on the node with id=${node.id}`);
-                        valueManager.addDirectly(new UnresolvedReference(targetId ?? undefined, resolveInfo ?? undefined));
-                    } else {
-                        valueManager.addDirectly(nodeToInstall);
+                (targets as LionWebJsonReferenceTarget[]).forEach(({ reference: refId, resolveInfo }) => {
+                    const target = (() => {
+                        if (refId === null) {
+                            return resolveInfo === null
+                                ? undefined
+                                : lionWebVersion.lookUpBuiltinLionCoreNodeBy(resolveInfo);
+                        } else {
+                            return lookupNodeById(refId);
+                        }
+                    })();
+                    if (target === undefined) {
+                        const metaTypeMessage = "concept" in node ? ` and (meta-)type ${node.concept}` : "";
+                        problemReporter.reportProblem(
+                            `couldn't resolve the target with id="${refId}" (and resolveInfo="${resolveInfo}") of a "${feature.name}" reference on the node with id=${node.id}${metaTypeMessage}`
+                        );
                     }
+                    valueManager.addDirectly(target ?? new UnresolvedReference(refId ?? undefined, resolveInfo ?? undefined));
                 });
                 return;
             }

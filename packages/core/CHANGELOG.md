@@ -77,6 +77,14 @@
 * *Breaking change!* Unexpose the – potentially confusing – `lioncoreKey` constant.
   (Internal change: improve generation of IDs and keys for LionCore [built-ins] languages.)
 
+* Add LionWeb version **2024.1**, including:
+  * A `lookUpBuiltinLionCoreNodeBy` method on the `LionWebVersion` class to look up nodes of the LionCore M3 or built-ins languages by a given `resolveInfo`.
+  * The (de-)serializer conforms to § 3.4.2 of the meta-metamodel specification.
+  * No `JSON` data type.
+  * Implementation of structured data types, including:
+    * Meta-concepts for structured data type and their fields, both in the self-definition of 2024.1, as in the meta-types.
+    * Methods for `StructuredDataType` and `Field` in `LanguageFactory` class.
+
 
 ## Restructure how property values get (de-)serialized
 

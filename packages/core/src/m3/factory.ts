@@ -8,11 +8,13 @@ import {
     Containment,
     Enumeration,
     EnumerationLiteral,
+    Field,
     Interface,
     Language,
     PrimitiveType,
     Property,
-    Reference
+    Reference,
+    StructuredDataType
 } from "./types.js"
 
 
@@ -100,6 +102,18 @@ export class LanguageFactory {
         const enumerationLiteral = new EnumerationLiteral(enumeration, name, this.key(this.language.name, enumeration.name, name), this.id(this.language.name, enumeration.name, name))
         enumeration.havingLiterals(enumerationLiteral)
         return enumerationLiteral
+    }
+
+    structuredDataType(name: string): StructuredDataType {
+        const structuredDataType = new StructuredDataType(this.language, name, this.key(this.language.name, name), this.id(this.language.name, name))
+        this.language.havingEntities(structuredDataType)
+        return structuredDataType
+    }
+
+    field(structuredDataType: StructuredDataType, name: string): Field {
+        const field = new Field(structuredDataType, name, this.key(this.language.name, structuredDataType.name, name), this.id(this.language.name, structuredDataType.name, name))
+        structuredDataType.havingFields(field)
+        return field
     }
 
 }

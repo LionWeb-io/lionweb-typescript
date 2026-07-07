@@ -34,11 +34,13 @@ export type LionCoreFacade = {
         containment: Concept
         enumeration: Concept
         enumerationLiteral: Concept
+        field: Concept
         ikeyed: Interface
         language: Concept
         primitiveType: Concept
         property: Concept
         reference: Concept
+        structuredDataType: Concept
     }
     metaFeatures: {
         concept_abstract: Property

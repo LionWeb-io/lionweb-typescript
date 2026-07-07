@@ -1,5 +1,6 @@
 import { metaTypedBasedClassifierDeducerFor, qualifiedNameOf } from "./functions.js"
 import { LionWebVersion } from "./version.js"
+import { LionWebVersions } from "./versions.js"
 import { Reader } from "../reading.js"
 import {
     Annotation,
@@ -8,12 +9,14 @@ import {
     Containment,
     Enumeration,
     EnumerationLiteral,
+    Field,
     Interface,
     Language,
     M3Concept,
     PrimitiveType,
     Property,
-    Reference
+    Reference,
+    StructuredDataType
 } from "./types.js"
 import { updateSettingsNameBased, Writer } from "../writing.js"
 
@@ -114,10 +117,30 @@ export const lioncoreWriterFor = (version: LionWebVersion): Writer<M3Concept> =>
                         propertySettings[ikeyed_key.key] as string,
                         id
                     )
-                default:
+                default: {
+                    if (version !== LionWebVersions.v2023_1) {
+                        switch (classifier.key) {
+                            case metaConcepts.field.key:
+                                return new Field(
+                                    parent as StructuredDataType,
+                                    propertySettings[inamed_name.key] as string,
+                                    propertySettings[ikeyed_key.key] as string,
+                                    id
+                                )
+                            case metaConcepts.structuredDataType.key:
+                                return new StructuredDataType(
+                                    parent as Language,
+                                    propertySettings[inamed_name.key] as string,
+                                    propertySettings[ikeyed_key.key] as string,
+                                    id
+                                )
+                            // fall-through to throw-statement below
+                        }
+                    }
                     throw new Error(
-                        `don't know a node of concept ${qualifiedNameOf(classifier)} with key ${classifier.key} that's not in LionCore M3`
+                        `don't know how to instantiate a node of concept ${qualifiedNameOf(classifier)} (key=${classifier.key}) in lioncoreWriterFor.nodeFor`
                     )
+                }
             }
         },
         setFeatureValue: (node, feature, value) => {

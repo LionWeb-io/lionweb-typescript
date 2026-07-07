@@ -69,5 +69,27 @@ describe("LionCore[-builtins] equivalence", () => {
         await checkEquivalences("2023.1", addBuiltinsFromUsedLanguages)
     })
 
+    it("2024.1", async () => {
+        await checkEquivalence(
+            "2024.1",
+            "lioncore",
+            // fix incorrect IDs on lioncore.json from specification:
+            ({ nodes }) => {
+                const replacements: { [original: string]: string } = {
+                    "-id-Classifier-feature-2024-1": "-id-Classifier-features-2024-1",
+                    "-id-IKeyed-key": "-id-IKeyed-key-2024-1",
+                    "-id-Language-dependsO-2024-1": "-id-Language-dependsOn-2024-1"
+                }
+                for (const node of nodes) {
+                    if (node.id in replacements) {
+                        node.id = replacements[node.id]
+                    }
+                }
+            }
+        )
+
+        await checkEquivalence("2024.1", "builtins")
+    })
+
 })
 
