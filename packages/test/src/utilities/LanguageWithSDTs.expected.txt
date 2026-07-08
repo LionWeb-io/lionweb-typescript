@@ -1,0 +1,30 @@
+language LanguageWithSDTs
+    version: 1
+    entities (↓name):
+
+        structured data type Amount
+            fields (↓name):
+                currency: Currency
+                digital: Boolean
+                value: Integer
+
+        structured data type ComplexNumber
+            fields (↓name):
+                imaginary: Decimal
+                real: Decimal
+
+        enumeration Currency
+            literals:
+                EUR
+                GBP
+
+        structured data type Decimal
+            fields (↓name):
+                frac: Integer
+                int: Integer
+
+        structured data type FaultySDT
+            fields (↓name):
+                typeless: ???
+
+

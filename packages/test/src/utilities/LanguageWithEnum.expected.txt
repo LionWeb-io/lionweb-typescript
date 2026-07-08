@@ -1,4 +1,4 @@
-language WithEnum
+language LanguageWithEnum
     version: 1
     entities (↓name):
 

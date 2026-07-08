@@ -16,6 +16,9 @@
 
 * Improve `looksLikeSerializedLanguages` function to check (against the correct) key and version of a version of the LionCore language.
 
+* Support structured data types:
+  * In the `language[s]AsText` textualizer functions.
+
 
 ## 0.10.0
 
