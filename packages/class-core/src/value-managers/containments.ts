@@ -394,7 +394,7 @@ export abstract class MultiContainmentValueManager<T extends INodeBase> extends 
         const participants = this.moveAndReplaceOffsetBasedDirectly(oldIndex, indexOffset);
         if (participants !== undefined) {
             const [movedChild, replacedChild] = participants;
-            this.emitDelta(() => new ChildMovedAndReplacedInSameContainmentDelta(this.container, this.containment, oldIndex, indexOffset, replacedChild, movedChild));
+            this.emitDelta(() => new ChildMovedAndReplacedInSameContainmentDelta(this.container, this.containment, oldIndex, indexOffset, movedChild, replacedChild));
         }
     }
 
