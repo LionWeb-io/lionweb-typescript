@@ -104,10 +104,6 @@ cd delta-protocol-repository-ws
 npm run build
 cd ..
 
-cd delta-protocol-test-cli
-npm run build
-cd ..
-
 cd delta-protocol-test
 npm test
 cd ..
