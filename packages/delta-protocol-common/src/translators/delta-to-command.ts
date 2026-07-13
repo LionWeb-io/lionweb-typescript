@@ -225,8 +225,8 @@ export const deltaToCommandTranslator = (
                 containment: metaPointerForFeature(delta.containment),
                 oldIndex: delta.oldIndex,
                 indexOffset: delta.indexOffset,
-                replacedChild: delta.replacedChild.id,
-                movedChild: delta.movedChild.id
+                movedChild: delta.movedChild.id,
+                replacedChild: delta.replacedChild.id
             })
         }
         if (delta instanceof AnnotationAddedDelta) {
