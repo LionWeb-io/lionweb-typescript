@@ -22,6 +22,7 @@
 * *Narrow* the type of the argument of the `asIds` function to `Node[]`.
   *Note* that this is technically a breaking change, but this function is essentially only used internally.
 * Widen the `abstract` argument to both the `new Concept` (5th argument) and `LanguageFactory.concept` (2nd argument) calls, to include the `ConceptModifier` enum with literals `concrete` and `abstract`.
+* Deprecate various functions: `deserializeSerializationChunk`, `deserializeChunk`.
 
 ### Improving references
 
