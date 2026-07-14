@@ -8,15 +8,16 @@ import {
     LanguageEntity,
     LionWebVersions,
     PrimitiveType,
-    SingleRef
+    SingleRef,
+    StructuredDataType
 } from "@lionweb/core"
 
 
 const { builtinsFacade } = LionWebVersions.v2023_1
 
-export const tsTypeFor = (datatype: SingleRef<DataType>): string => {
-    if (datatype instanceof PrimitiveType) {
-        switch (datatype.key) {
+export const tsTypeFor = (dataType: SingleRef<DataType>): string => {
+    if (dataType instanceof PrimitiveType) {
+        switch (dataType.key) {
             case builtinsFacade.primitiveTypes.booleanDataType.key: return `boolean`
             case builtinsFacade.primitiveTypes.stringDataType.key: return `string`
             case builtinsFacade.primitiveTypes.integerDataType.key: return `number`
@@ -25,10 +26,13 @@ export const tsTypeFor = (datatype: SingleRef<DataType>): string => {
                 return `string`
         }
     }
-    if (datatype instanceof Enumeration) {
-        return datatype.name
+    if (dataType instanceof Enumeration) {
+        return dataType.name
     }
-    return `unknown /* [ERROR] can't compute a TS type for this datatype: ${datatype.toString()} */`
+    if (dataType instanceof StructuredDataType) {
+        return dataType.name
+    }
+    return `unknown /* [ERROR] can't compute a TS type for this datatype: ${dataType.toString()} */`
 }
 
 export const isINamed = (entity: LanguageEntity): boolean =>

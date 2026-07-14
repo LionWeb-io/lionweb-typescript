@@ -18,6 +18,8 @@
 
 * Support structured data types:
   * In the `language[s]AsText` textualizer functions.
+  * In the PlantUML and Mermaid diagram generation functions.
+  * In the `tsTypeDefsForLanguage` TypeScript types generator function.
 
 
 ## 0.10.0
