@@ -7,15 +7,18 @@ import {
     Enumeration,
     EnumerationLiteral,
     flatMap,
+    isStructuredDataType,
     Language,
     M3Concept,
     Node,
-    Property
+    Property,
+    StructuredDataType
 } from "@lionweb/core"
 import { LionWebId } from "@lionweb/json"
 
-import { deepEqual, equal } from "../test-utils/assertions.js"
+import { deepEqual, equal, isTrue } from "../test-utils/assertions.js"
 import { TestLanguageBase } from "@lionweb/class-core-test-language"
+import { languageWithSDTs } from "../languages/with-SDTs.js"
 
 describe("containmentChain function", () => {
     const node = (id: LionWebId, parent?: Node): Node => ({
@@ -129,6 +132,14 @@ describe("directlyContaineds function", () => {
 
         const result = directlyContaineds(enumeration)
         deepEqual(result, [literal1, literal2])
+    })
+
+    it("should return fields for StructuredDataType objects", () => {
+        const Decimal = languageWithSDTs.entities
+            .find((entity) => entity.name === "Decimal")
+        isTrue(Decimal instanceof StructuredDataType)
+        isTrue(isStructuredDataType(Decimal!))
+        equal(directlyContaineds(Decimal!).length, 2)
     })
 
     it("should return an empty array for non-matching M3Concepts", () => {

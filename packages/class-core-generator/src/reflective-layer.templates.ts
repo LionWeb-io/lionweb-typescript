@@ -23,6 +23,7 @@ import {
     EnumerationLiteral,
     Feature,
     featureMetaType,
+    Field,
     Interface,
     isConcrete,
     isEnumeration,
@@ -35,7 +36,8 @@ import {
     nameOf,
     PrimitiveType,
     Property,
-    SingleRef
+    SingleRef,
+    StructuredDataType
 } from "@lionweb/core"
 import { indent, switchOrIf } from "@lionweb/textgen-utils"
 import { asArray } from "@lionweb/ts-utils"
@@ -91,12 +93,33 @@ export const reflectiveClassFor = (language: Language, imports: Imports) => {
         literals.map(reflectiveMemberForEnumerationLiteral)
     ]
 
+    // primitive type:
+
     const reflectiveMembersForPrimitiveType = ({ name, key, id }: PrimitiveType) => [
         `public readonly _${name} = new ${imports.core("PrimitiveType")}(this._language, "${name}", "${key}", "${id}");`,
         `get ${name}(): ${imports.core("PrimitiveType")} {`,
         indent([`this.ensureWiredUp();`, `return this._${name};`]),
         `}`
     ]
+
+    // structured data type:
+
+    const reflectiveMemberForField = ({ structuredDataType, name, key, id }: Field) => [
+        `public readonly _${structuredDataType.name}_${name} = new ${imports.core("Field")}(this._${structuredDataType.name}, "${name}", "${key}", "${id}");`,
+        `get ${structuredDataType.name}_${name}(): ${imports.core("Field")} {`,
+        indent([`this.ensureWiredUp();`, `return this._${structuredDataType.name}_${name};`]),
+        `}`,
+    ]
+
+    const reflectiveMembersForStructuredDataType = ({ name, key, id, fields }: StructuredDataType) => [
+        `public readonly _${name} = new ${imports.core("StructuredDataType")}(this._language, "${name}", "${key}", "${id}");`,
+        `get ${name}(): ${imports.core("StructuredDataType")} {`,
+        indent([`this.ensureWiredUp();`, `return this._${name};`]),
+        `}`,
+        fields.map(reflectiveMemberForField)
+    ]
+
+    // language entity:
 
     const reflectiveMembersForEntity = (entity: LanguageEntity) => {
         if (entity instanceof Classifier) {
@@ -107,6 +130,9 @@ export const reflectiveClassFor = (language: Language, imports: Imports) => {
         }
         if (entity instanceof PrimitiveType) {
             return reflectiveMembersForPrimitiveType(entity)
+        }
+        if (entity instanceof StructuredDataType) {
+            return reflectiveMembersForStructuredDataType(entity)
         }
         return `// unhandled language entity <${entityMetaType(entity)}>"${entity.name}"`
     }
@@ -171,6 +197,9 @@ export const reflectiveClassFor = (language: Language, imports: Imports) => {
         }
         if (entity instanceof PrimitiveType) {
             return [] // (nothing to do)
+        }
+        if (entity instanceof StructuredDataType) {
+            return entity.fields.map((field) => `this._${entity.name}_${field.name}.ofType(${refForType(field.type)});`)
         }
         return `// unhandled language entity <${entityMetaType(entity)}>"${name}"`
     }

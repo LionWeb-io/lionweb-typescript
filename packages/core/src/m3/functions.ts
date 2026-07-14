@@ -33,7 +33,8 @@ import {
     Link,
     M3Concept,
     Property,
-    Reference
+    Reference,
+    StructuredDataType
 } from "./types.js"
 
 
@@ -114,8 +115,11 @@ const relationsOf = (element: LanguageEntity): Link[] =>
 /**
  * @return The "things", i.e. {@link M3Concept}s, directly contained by the given "thing".
  *  These can be:
- *  {@link LanguageEntity language entities}, {@link Feature features}, and {@link EnumerationLiteral enumeration literals}
- *  (and all their sub types).
+ *
+ *  * {@link LanguageEntity language entities} (and all their sub types),
+ *  * {@link Feature features} (and all their sub types),
+ *  * {@link EnumerationLiteral enumeration literals},
+ *  * and {@link Field fields} of {@link StructuredDataType structured data types}.
  */
 const directlyContaineds = (thing: M3Concept): M3Concept[] => {
     if (thing instanceof Language) {
@@ -126,6 +130,9 @@ const directlyContaineds = (thing: M3Concept): M3Concept[] => {
     }
     if (thing instanceof Enumeration) {
         return thing.literals
+    }
+    if (thing instanceof StructuredDataType) {
+        return thing.fields
     }
     return []
 }
@@ -263,6 +270,13 @@ const isEnumeration = (element: LanguageEntity): element is Enumeration =>
 
 
 /**
+ * Determines whether the given {@link LanguageEntity language element} is an {@link StructuredDataType structured data type}.
+ */
+const isStructuredDataType = (element: LanguageEntity): element is StructuredDataType =>
+    element instanceof StructuredDataType
+
+
+/**
  * @return a function that looks up a classifier from the given {@link Language language} by its ID.
  */
 const idBasedClassifierDeducerFor = (language: Language) =>
@@ -374,6 +388,7 @@ export {
     isPartition,
     isProperty,
     isReference,
+    isStructuredDataType,
     keyOf,
     metaTypedBasedClassifierDeducerFor,
     nameBasedClassifierDeducerFor,
