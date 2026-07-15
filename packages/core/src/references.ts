@@ -73,6 +73,31 @@ export const tryToRenderAsText = <T extends Node & INamed>(ref?: SingleRef<T>): 
     return ref.name
 }
 
+/**
+ * @return either the referenced node,
+ * or throws an appropriate {@link Error} if `ref` is `undefined`, (still) to-be-set, or unresolved.
+ * @throws an appropriate {@link Error} if `ref` is `undefined`, (still) to-be-set, or unresolved.
+ */
+export const resolvedOrThrows = <T extends Node>(ref?: SingleRef<T>): T => {
+    if (ref === undefined) {
+        throw new Error(`reference is undefined`)
+    }
+    if (isReferenceToSet(ref)) {
+        throw new Error(`reference is to-be-set`)
+    }
+    if (isUnresolvedReference(ref)) {
+        throw new Error(ref.toString())
+    }
+    return ref
+}
+
+/**
+ * @return either the referenced node,
+ * or `undefined` if `ref` is `undefined`, (still) to-be-set, or unresolved.
+ */
+export const resolvedOrUndefined = <T extends Node>(ref?: SingleRef<T>): T | undefined =>
+    isRef(ref) ? ref : undefined
+
 
 /**
  * A type alias for a multi-valued reference, to make it look consistent with {@link SingleRef}.
