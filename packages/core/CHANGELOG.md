@@ -5,18 +5,84 @@
 * Introduce `metaPointerFor{Classifier|Feature|Language}` functions, and deprecate the `metaPointerFor` function taking a `Feature`.
   (This change has been propagated throughout the entire codebase.)
 * Expose `isValidIdentifier` function.
-* Change the `UnresolvedReference` type to be a class.
+* Change to the `SingleRef` type — see the separate section below for more explanation.
+    * Change the `UnresolvedReference` type to be a class.
     * Deserialization uses `UnresolvedReference` instances – including original `resolveInfo` – to represent unresolved references.
     * Deprecate the `unresolved` constant/“symbol”.
     * Change the `referenceToSet` function into a proper symbol constant.
       *Note* that this is technically a breaking change, but this function should essentially only be used internally.
     * Add a `isReferenceToSet` function which satisfies `isReferenceToSet(referenceToSet)`.
+    * Change the `SingleRef` type be a sum type that represents an actual reference, an `UnresolvedReference` instance, or a reference-to-set.
+      *Note* that this is a breaking change!
     * Add a `tryToRenderAsText` convenience function to nicely render a reference as text.
+    * Add `resolvedOrThrows` and `resolvedOrUndef` convenience functions, to help with the fallout of the change to the `SingleRef` type.
 * Deserialization now reports on serialized nodes that can’t be deserialized, and doesn’t add/set `null` anymore.
 * Serialization skips references that are unresolved and for which no `resolveInfo` can be obtained.
 * *Narrow* the type of the argument of the `asIds` function to `Node[]`.
   *Note* that this is technically a breaking change, but this function is essentially only used internally.
 * Widen the `abstract` argument to both the `new Concept` (5th argument) and `LanguageFactory.concept` (2nd argument) calls, to include the `ConceptModifier` enum with literals `concrete` and `abstract`.
+
+### Improving references
+
+Previously, the `SingleRef<NT extends Node>` type was the sum of the `NT` and `UnresolvedReference` types.
+The latter type had a *single* `unresolved` value representing *any* unresolved reference.
+Because `unresolved` equalled `null`, the type definition was effectively:
+
+```typescript
+type SingleRef<NT extends Node> = NT | null
+```
+
+This approach was somewhat crude, as it lost any information available on/for a reference.
+It also didn’t distinguish between an unresolved reference and a required unset reference.
+
+We want to be able to distinguish between unset references.
+We also want _“reify”_ unresolved references, by representing an unresolved reference as/by an object that contains all information that’s available on/for the reference, despite it remaining unresolved.
+In particular, a reference’s `resolveInfo` might be useful to resolve the reference.
+Often, it would allow a user of a modeling environment to select the correct reference target.
+
+So, we extended the `SingleRef` type as follows:
+
+```typescript
+type SingleRef<NT extends Node> = NT | UnresolvedReference | typeof referenceToSet
+const referenceToSet = Symbol("<unset reference>")
+```
+
+The `UnresolvedReference` type is now a *class* holding all that’s available on/for the unresolved reference.
+
+So, the `SingleRef` type has changed in a **breaking** way!
+In particular, `null` is no longer a valid value for it, which means that your code base probably needs to be changed/updated:
+
+* Handle an instance of the `UnresolvedReference` *class*.
+* Handle the `referenceToSet` value.
+* Not handle a `null === unresolved` value.
+
+Two examples for the latter point:
+
+1. `<expr> ?? undefined` doesn’t have the same executional semantics as before, as `<expr>` would never be a value that would trigger the right-hand side of the `??` operator.
+2. `<expr>?.<feature>` (using the “Elvis operator”) doesn’t compile anymore, because `<expr>` can also be an `UnresolvedReference` instance or the `referenceToSet` value, neither of which would have the specified `<feature>`.
+
+The added `resolvedOr{Undefined|EmptyList|Throws}` convenience functions help with dealing with this.
+These functions either return `undefined`, an empty list `[]`, or throw an `Error`, respectively.
+
+In most cases, you need to wrap every access to a single-valued reference feature *separately*.
+Cookbook:
+
+* Replace `<expr> ?? undefined` with `resolvedOrUndefined(<expr>)`.
+* Replace `<expr>?.<feature>` with `resolvedOrUndefined(<expr>)?.<feature>` (with the `?.` “Elvis operator”).
+* Replace `<expr>.<feature>.{map|filter|&c.}(...)` with `<feature>` being a multi-valued reference feature with `resolvedOrEmptyList(<expr>.<feature>).{map|filter|&c.}(...)`.
+
+Unfortunately, a chain of dereferences of reference features yields an expression with as many `resolvedOr{Undefined|EmptyList}` wrappings as there are dereferences:
+`<expr>.<feature_1>.<feature_2>.<feature_3>` would become `resolvedOrEmptyList(resolvedOrUndefined(resolvedOrUndefined(<expr>.<feature_1>).<feature_2>).<feature_3>)`,
+where `<feature_i>` are reference features, with `<feature_1>`, `<feature_2>` being single-valued, and `<feature_3>` multi-valued.
+
+The added `resolvedOrDefault` convenience function can be used for situations where neither `undefined` nor an empty list are appropriate, or just to avoid an extra `?? <default value>`.
+Finally, in situations where anything but a real reference is an error, you can use the added `resolvedOrThrows` convenience function.
+
+The following things have been added as well:
+
+* A `referenceToSet` value can be conveniently detected through the new `isReferenceToSet` function.
+* A `SingleRef` value is rendered textually through the `tryToRenderAsText` function.
+The “try” part of the function’s name pertains to it returning `undefined` if the given reference value is either `undefined` (in case the reference is optional), or is `referenceToSet`.
 
 
 ## 0.9.0
