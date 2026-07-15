@@ -9,6 +9,7 @@ import {
 } from "../../builtins-common.js"
 import { LanguageFactory } from "../../factory.js"
 import { ConceptModifier } from "../../types.js"
+import { standardDeserializers, standardSerializers } from "../../../data-types/standard-primitive-types.js"
 
 
 const factory = new LanguageFactory(
@@ -38,16 +39,16 @@ export const lioncoreBuiltinsFacade: LionCoreBuiltinsFacade = {
     language: factory.language,
     propertyValueDeserializer: propertyValueDeserializerFrom(
         newPropertyValueDeserializerRegistry()
-            .set(stringDataType, (value) => value)
-            .set(booleanDataType, (value) => JSON.parse(value))
-            .set(integerDataType, (value) => Number(value))
+            .set(stringDataType, standardDeserializers.string)
+            .set(booleanDataType, standardDeserializers.boolean)
+            .set(integerDataType, standardDeserializers.integer)
             .set(jsonDataType, (value) => JSON.parse(value as string))
     ),
     propertyValueSerializer: propertyValueSerializerFrom(
         newPropertyValueSerializerRegistry()
-            .set(stringDataType, (value) => value as string)
-            .set(booleanDataType, (value) => `${value as boolean}`)
-            .set(integerDataType, (value) => `${value as number}`)
+            .set(stringDataType, standardSerializers.string)
+            .set(booleanDataType, standardSerializers.boolean)
+            .set(integerDataType, standardSerializers.integer)
             .set(jsonDataType, (value) => asMinimalJsonString(value))
     ),
     classifiers: { node, inamed },
