@@ -162,6 +162,7 @@ describe("implementation of LionWeb client", async function() {
                     "cmd-2": {
                         messageKind: "PartitionDeleted",
                         deletedPartition: "partition-A",
+                        deletedDescendants: [], // (partition consists of only its root)
                         sequenceNumber: 1,
                         originCommands: [
                             {
