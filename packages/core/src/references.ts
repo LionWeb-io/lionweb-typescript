@@ -91,12 +91,36 @@ export const resolvedOrThrows = <T extends Node>(ref?: SingleRef<T>): T => {
     return ref
 }
 
+
+/**
+ * @return the given `ref` if that’s a real reference (and not `undefined`, (still) to-be-set, or unresolved),
+ * or the given `defaultValue` otherwise.
+ * (The type of `ref` is a sum type, because `?`-arguments must appear last in the arguments’ list.)
+ */
+export const resolvedOrDefault = <DVT, NT extends Node>(ref: SingleRef<NT> | undefined, defaultValue: DVT) =>
+    isRef(ref) ? ref : defaultValue
+
+/**
+ * @return a function that returns the `ref` it’s given if that’s a real reference (and not `undefined`, (still) to-be-set, or unresolved),
+ * or the given `defaultValue` otherwise.
+ */
+const resolvedOrWithSelector = <NT extends Node, DVT>(defaultValue: DVT) =>
+    (ref?: SingleRef<NT>): NT | DVT =>
+        resolvedOrDefault(ref, defaultValue)
+
 /**
  * @return either the referenced node,
  * or `undefined` if `ref` is `undefined`, (still) to-be-set, or unresolved.
  */
-export const resolvedOrUndefined = <T extends Node>(ref?: SingleRef<T>): T | undefined =>
-    isRef(ref) ? ref : undefined
+export const resolvedOrUndefined = resolvedOrWithSelector(undefined)
+
+/**
+ * @return either the referenced node,
+ * or an empty list if `ref` is `undefined`, (still) to-be-set, or unresolved.
+ * This is specifically useful for migrating to version 0.10.0 of this package
+ * when “an Elvis chain” is continued with functions from {@link Array} such as `filter`, `map`, etc.
+ */
+export const resolvedOrEmptyList = resolvedOrWithSelector([])
 
 
 /**
