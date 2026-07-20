@@ -75,7 +75,7 @@ Unfortunately, a chain of dereferences of reference features yields an expressio
 `<expr>.<feature_1>.<feature_2>.<feature_3>` would become `resolvedOrEmptyList(resolvedOrUndefined(resolvedOrUndefined(<expr>.<feature_1>).<feature_2>).<feature_3>)`,
 where `<feature_i>` are reference features, with `<feature_1>`, `<feature_2>` being single-valued, and `<feature_3>` multi-valued.
 
-The added `resolvedOrDefault` convenience function (and its functional counterpart, `resolvedOrWithSelector`) can be used for situations where neither `undefined` nor an empty list are appropriate, or just to avoid an extra `?? <default value>`.
+The added `resolvedOrDefault` convenience function can be used for situations where neither `undefined` nor an empty list are appropriate, or just to avoid an extra `?? <default value>`.
 Finally, in situations where anything but a real reference is an error, you can use the added `resolvedOrThrows` convenience function.
 
 The following things have been added as well:

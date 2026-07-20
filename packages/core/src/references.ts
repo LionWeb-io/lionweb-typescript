@@ -101,18 +101,11 @@ export const resolvedOrDefault = <DVT, NT extends Node>(ref: SingleRef<NT> | und
     isRef(ref) ? ref : defaultValue
 
 /**
- * @return a function that returns the `ref` it’s given if that’s a real reference (and not `undefined`, (still) to-be-set, or unresolved),
- * or the given `defaultValue` otherwise.
- */
-const resolvedOrWithSelector = <NT extends Node, DVT>(defaultValue: DVT) =>
-    (ref?: SingleRef<NT>): NT | DVT =>
-        resolvedOrDefault(ref, defaultValue)
-
-/**
  * @return either the referenced node,
  * or `undefined` if `ref` is `undefined`, (still) to-be-set, or unresolved.
  */
-export const resolvedOrUndefined = resolvedOrWithSelector(undefined)
+export const resolvedOrUndefined = <NT extends Node>(ref?: SingleRef<NT>): NT | undefined =>
+    isRef(ref) ? ref : undefined
 
 /**
  * @return either the referenced node,
@@ -120,7 +113,8 @@ export const resolvedOrUndefined = resolvedOrWithSelector(undefined)
  * This is specifically useful for migrating to version 0.10.0 of this package
  * when “an Elvis chain” is continued with functions from {@link Array} such as `filter`, `map`, etc.
  */
-export const resolvedOrEmptyList = resolvedOrWithSelector([])
+export const resolvedOrEmptyList = <NT extends Node>(ref?: SingleRef<NT>): NT | [] =>
+    isRef(ref) ? ref : []
 
 
 /**
