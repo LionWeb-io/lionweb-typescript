@@ -57,8 +57,16 @@ export const isUnresolvedReference = <NT extends Node>(ref?: SingleRef<NT>): ref
 /**
  * @return whether a given (at most) single-valued reference actually refers to something.
  */
-export const isRef = <NT extends Node>(ref?: SingleRef<NT>): ref is NT =>
+export const isResolvedReference = <NT extends Node>(ref?: SingleRef<NT>): ref is NT =>
     ref !== undefined && !isReferenceToSet(ref) && !isUnresolvedReference(ref)
+
+/**
+ * @return whether a given (at most) single-valued reference actually refers to something.
+ *
+ * This is the version of {@link isResolvedReference} with a too short name.
+ * It will be deprecated and removed in later versions.
+ */
+export const isRef = isResolvedReference;
 
 /**
  * @return either the referenced node’s name, or the `resolveInfo` if the reference is unresolved, or `undefined`.
@@ -98,14 +106,14 @@ export const resolvedOrThrows = <T extends Node>(ref?: SingleRef<T>): T => {
  * (The type of `ref` is a sum type, because `?`-arguments must appear last in the arguments’ list.)
  */
 export const resolvedOrDefault = <DVT, NT extends Node>(ref: SingleRef<NT> | undefined, defaultValue: DVT) =>
-    isRef(ref) ? ref : defaultValue
+    isResolvedReference(ref) ? ref : defaultValue
 
 /**
  * @return either the referenced node,
  * or `undefined` if `ref` is `undefined`, (still) to-be-set, or unresolved.
  */
 export const resolvedOrUndefined = <NT extends Node>(ref?: SingleRef<NT>): NT | undefined =>
-    isRef(ref) ? ref : undefined
+    isResolvedReference(ref) ? ref : undefined
 
 /**
  * @return either the referenced node,
@@ -114,7 +122,7 @@ export const resolvedOrUndefined = <NT extends Node>(ref?: SingleRef<NT>): NT | 
  * when “an Elvis chain” is continued with functions from {@link Array} such as `filter`, `map`, etc.
  */
 export const resolvedOrEmptyList = <NT extends Node>(ref?: SingleRef<NT>): NT | [] =>
-    isRef(ref) ? ref : []
+    isResolvedReference(ref) ? ref : []
 
 
 /**

@@ -23,8 +23,8 @@ import {
     isBuiltinNodeConcept,
     isContainment,
     isProperty,
-    isRef,
     isReference,
+    isResolvedReference,
     LanguageEntity,
     Link,
     PrimitiveType,
@@ -46,7 +46,7 @@ export const typeOf = (feature: Feature): SingleRef<LanguageEntity> => {
 
 
 export const tsTypeForDataType = (dataType: SingleRef<DataType>, imports: Imports) => {
-    if (!isRef(dataType)) {
+    if (!isResolvedReference(dataType)) {
         return `unknown /* [ERROR] can't compute a TS type for an unresolved data type */`
     }
     if (dataType instanceof PrimitiveType) {
@@ -60,14 +60,14 @@ export const tsTypeForDataType = (dataType: SingleRef<DataType>, imports: Import
 
 
 const isBuiltinNode = (type: SingleRef<LanguageEntity>): boolean => {
-    if (!isRef(type)) {
+    if (!isResolvedReference(type)) {
         throw new Error(`can’t say whether an unresolved reference is the built-in Node concept`)
     }
     return type instanceof Classifier && isBuiltinNodeConcept(type)
 }
 
 export const tsTypeForClassifier = (classifier: SingleRef<Classifier>, imports: Imports, isReference = false) => {
-    if (!isRef(classifier)) {
+    if (!isResolvedReference(classifier)) {
         return `unknown /* [ERROR] can't compute a TS type for an unresolved or to-set classifier */`
     }
     if (isBuiltinNode(classifier)) {
@@ -83,7 +83,7 @@ export const optionalityPostfix = (feature: Feature) => feature.optional ? " | u
 
 export const tsFieldTypeForFeature = (feature: Feature, imports: Imports): string => {
     const type = typeOf(feature)
-    if (!isRef(type)) {
+    if (!isResolvedReference(type)) {
         return `unknown /* [ERROR] can't compute a TS type for feature ${feature.name} on classifier ${feature.classifier.name} with unresolved type (${type.toString()}) */`
     }
     if (isProperty(feature)) {
@@ -111,7 +111,7 @@ export const tsFieldTypeForFeature = (feature: Feature, imports: Imports): strin
 
 export const tsTypeForValueManager = (feature: Feature, imports: Imports): string => {
     const type = typeOf(feature)
-    if (!isRef(type)) {
+    if (!isResolvedReference(type)) {
         return `unknown /* [ERROR] can't compute a TS type for feature ${feature.name} on classifier ${feature.classifier.name} with unresolved type (${type.toString()}) */`
     }
     if (isProperty(feature)) {

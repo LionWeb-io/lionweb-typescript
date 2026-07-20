@@ -2,7 +2,7 @@ import { LionWebId, LionWebJsonChunk, LionWebJsonNode, LionWebJsonReferenceTarge
 import { asArray, keepDefineds, lazyMapGet, Nested3Map, uniquesAmong } from "@lionweb/ts-utils"
 import { asIds, metaPointerForFeature } from "./functions.js"
 import { Reader } from "./reading.js"
-import { isRef, isReferenceToSet, SingleRef, UnresolvedReference } from "./references.js"
+import { isReferenceToSet, isResolvedReference, SingleRef, UnresolvedReference } from "./references.js"
 import { Node } from "./types.js"
 import { inheritsDirectlyFrom } from "./m3/functions.js"
 import {
@@ -218,7 +218,7 @@ export const serializerWith = <NT extends Node, RT extends Node = NT>(configurat
                 }
                 if (feature instanceof Reference) {
                     const targets = (asArray(value) as SingleRef<RT>[]).filter((ref) => {
-                        if (isRef(ref)) {
+                        if (isResolvedReference(ref)) {
                             return true // (1) ref is a node, having an ID
                         }
                         if (isReferenceToSet(ref)) {
