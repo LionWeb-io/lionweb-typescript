@@ -116,7 +116,8 @@ export const commandAsEvent = (command: Command, participationId: string): Event
             case "DeletePartition": {
                 const {deletedPartition} = command as DeletePartitionCommand // § 5.7.2.2
                 return completed<PartitionDeletedEvent>("PartitionDeleted", { // § 5.8.2.2
-                    deletedPartition
+                    deletedPartition,
+                    deletedDescendants: []  // TODO  get from own model
                 })
             }
             case "ChangeClassifier": {
