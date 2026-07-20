@@ -1,6 +1,6 @@
 {
     "name": "@lionweb/delta-protocol-common",
-    "version": "0.10.0-alpha.8",
+    "version": "0.10.0-alpha.9",
     "description": "Implementation of the delta protocol (using the WebSocket protocol)",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -27,9 +27,9 @@
         "release": "npm publish"
     },
     "dependencies": {
-        "@lionweb/class-core": "0.10.0-alpha.8",
-        "@lionweb/core": "0.10.0-alpha.8",
-        "@lionweb/json": "0.10.0-alpha.8",
-        "@lionweb/ts-utils": "0.10.0-alpha.8"
+        "@lionweb/class-core": "0.10.0-alpha.9",
+        "@lionweb/core": "0.10.0-alpha.9",
+        "@lionweb/json": "0.10.0-alpha.9",
+        "@lionweb/ts-utils": "0.10.0-alpha.9"
     }
 }
