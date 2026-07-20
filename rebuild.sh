@@ -80,7 +80,7 @@ npm test
 cd ..
 
 cd test
-mkdir -p metrics
+mkdir -p artifacts/metrics
 npm test
 cd ..
 
