@@ -7,6 +7,7 @@ import {
     Interface,
     isBuiltinNodeConcept,
     isRef,
+    isResolvedReference,
     isUnresolvedReference,
     Language,
     LanguageEntity,
@@ -58,7 +59,7 @@ const generateForEnumeration = ({ name, literals }: Enumeration) => [
 const generateForAnnotation = ({ name, features, extends: extends_, implements: implements_, annotates }: Annotation) => {
     const fragments: string[] = []
     fragments.push(`annotation`, name)
-    if (isRef(extends_) && !isBuiltinNodeConcept(extends_)) {
+    if (isResolvedReference(extends_) && !isBuiltinNodeConcept(extends_)) {
         fragments.push(`extends`, extends_.name)
     }
     if (implements_.length > 0) {
@@ -66,7 +67,7 @@ const generateForAnnotation = ({ name, features, extends: extends_, implements: 
     }
     const nonRelationalFeatures_ = nonRelationalFeatures(features)
     return nonRelationalFeatures_.length === 0
-        ? [`${fragments.join(" ")}`, isRef(annotates) ? `${name} ..# ${annotates.name} : <i>annotates</i>` : [], ``]
+        ? [`${fragments.join(" ")}`, isResolvedReference(annotates) ? `${name} ..# ${annotates.name} : <i>annotates</i>` : [], ``]
         : [`${fragments.join(" ")} {`, indented(nonRelationalFeatures_.map(generateForNonRelationalFeature)), `}`, ``]
 }
 
@@ -79,7 +80,7 @@ const generateForConcept = ({ name, features, abstract: abstract_, extends: exte
     if (partition) {
         fragments.push(`<<partition>>`)
     }
-    if (isRef(extends_) && !isBuiltinNodeConcept(extends_)) {
+    if (isResolvedReference(extends_) && !isBuiltinNodeConcept(extends_)) {
         fragments.push(`extends`, extends_.name)
     }
     if (implements_.length > 0) {
@@ -140,7 +141,7 @@ const generateForRelationsOf = (entity: LanguageEntity) => {
 
 const generateForRelation = ({ name: leftName }: LanguageEntity, relation: Link) => {
     const { name: relationName, type, optional, multiple } = relation
-    const rightName = isRef(type) ? type.name : isUnresolvedReference(type) ? `<unresolved>` : `<null>`
+    const rightName = isResolvedReference(type) ? type.name : isUnresolvedReference(type) ? `<unresolved>` : `<null>`
     const isContainment = relation instanceof Containment
     const leftMultiplicity = isContainment ? `1` : `*`
     const rightMultiplicity = multiple ? "*" : optional ? "0..1" : "1"
