@@ -54,3 +54,18 @@ export const expectError = <T>(action: () => Promise<T>, expectedErrorMessage: s
             expect((error as Error).message).to.equal(expectedErrorMessage)
         })
 
+
+/**
+ * @return a {@link Promise} that resolves after the given `conditionThunk` evaluates to `true`, checking every `ms` milliseconds.
+ */
+export const waitUntil = (ms: number, conditionThunk: () => boolean): Promise<void> => {
+    return new Promise((resolve) => {
+        const intervalID = setInterval(() => {
+            if (conditionThunk()) {
+                clearInterval(intervalID)
+                resolve()
+            }
+        }, ms)
+    })
+}
+

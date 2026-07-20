@@ -80,7 +80,7 @@ npm test
 cd ..
 
 cd test
-mkdir -p metrics
+mkdir -p artifacts/metrics
 npm test
 cd ..
 
@@ -101,10 +101,6 @@ npm run build
 cd ..
 
 cd delta-protocol-repository-ws
-npm run build
-cd ..
-
-cd delta-protocol-test-cli
 npm run build
 cd ..
 

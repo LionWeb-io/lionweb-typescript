@@ -2,7 +2,7 @@ import { asMinimalJsonString } from "@lionweb/ts-utils"
 import { shouldBeIdentical } from "../../builtins-common.js"
 import { DataType, Property } from "../../types.js"
 import { PropertyValueDeserializer } from "../../../deserializer.js"
-import { isRef } from "../../../references.js"
+import { isResolvedReference } from "../../../references.js"
 import { PropertyValueSerializer } from "../../../serializer.js"
 import { v2023_1 } from "./version.js"
 
@@ -62,7 +62,7 @@ export class BuiltinPropertyValueDeserializer
             throw new Error(`can't deserialize undefined as the value of required property "${property.name}" (on classifier "${property.classifier.name}" in language "${property.classifier.language.name}")`)
         }
         const { type } = property
-        if (!isRef(type)) {
+        if (!isResolvedReference(type)) {
             throw new Error(`can't deserialize property "${property.name}" (on classifier "${property.classifier.name}" in language "${property.classifier.language.name}") with unspecified type`)
         }
         const specificDeserializer = this.byType(type)
@@ -104,7 +104,7 @@ export class BuiltinPropertyValueSerializer extends DataTypeRegistry<(value: unk
             throw new Error(`can't serialize undefined as the value of required property "${property.name}" (on classifier "${property.classifier.name}" in language "${property.classifier.language.name}")`)
         }
         const { type } = property
-        if (!isRef(type)) {
+        if (!isResolvedReference(type)) {
             throw new Error(`can't serialize property "${property.name}" (on classifier "${property.classifier.name}" in language "${property.classifier.language.name}") with unspecified type`)
         }
         const specificSerializer = this.byType(type)

@@ -20,14 +20,7 @@
         "build": "tsc",
         "lint": "eslint src",
         "start-client": "npm run build && node --trace-uncaught dist/cli-client.js 40000 client-A LinkTestConcept Bogus,SignOn,AddDocs,SetDocs,SignOff,Wait",
-        "start-repository": "npm run build && node --trace-uncaught dist/cli-repository.js 40000",
-        "prep:pre-release": "npm run clean && npm install && npm run build",
-        "prerelease-alpha": "npm run prep:pre-release",
-        "release-alpha": "npm publish --tag alpha",
-        "prerelease-beta": "npm run prep:pre-release",
-        "release-beta": "npm publish --tag beta",
-        "prerelease": "npm run prep:pre-release",
-        "release": "npm publish"
+        "start-repository": "npm run build && node --trace-uncaught dist/cli-repository.js 40000"
     },
     "dependencies": {
         "@lionweb/class-core-test-language": "0.10.0-beta.3",

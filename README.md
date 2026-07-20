@@ -28,8 +28,6 @@
 ](https://www.npmjs.com/package/@lionweb/delta-protocol-low-level-client-ws)
 [![npm](https://img.shields.io/npm/v/%40lionweb%2Fdelta-protocol-repository-ws?label=%40lionweb%2Fdelta-protocol-repository-ws)
 ](https://www.npmjs.com/package/@lionweb/delta-protocol-repository-ws)
-[![npm](https://img.shields.io/npm/v/%40lionweb%2Fdelta-protocol-test-cli?label=%40lionweb%2Fdelta-protocol-test-cli)
-](https://www.npmjs.com/package/@lionweb/delta-protocol-test-cli)
 [![npm](https://img.shields.io/npm/v/%40lionweb%2Fio-lionweb-mps-specific?label=%40lionweb%2Fio-lionweb-mps-specific)
 ](https://www.npmjs.com/package/@lionweb/io-lionweb-mps-specific)
 [![npm](https://img.shields.io/npm/v/%40lionweb%2Fjson?label=%40lionweb%2Fjson)
@@ -108,9 +106,6 @@ The implementation is divided up in a number of NPM packages in the directory [`
 
 - `delta-protocol-test`
   Tests for the delta protocol implementation.
-
-- `delta-protocol-test-cli`
-  CLI programs for starting a client and repository *for testing purposes*.
 
 - `io-lionweb-mps-specific`
   An implementation of the `io.lionweb.mps.specific` language, together with some utilities and convenience.

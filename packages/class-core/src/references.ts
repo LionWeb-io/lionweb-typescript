@@ -15,7 +15,7 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { isRef, Node, SingleRef } from "@lionweb/core"
+import { isResolvedReference, Node, SingleRef } from "@lionweb/core"
 import { LionWebId } from "@lionweb/json"
 
 
@@ -29,5 +29,5 @@ export type IdOrNull = LionWebId | null
  * @return the ID of a given reference to a {@link Node}, or `null` if that reference was previously unresolved.
  */
 export const idFrom = (ref: SingleRef<Node>): IdOrNull =>
-    isRef(ref) ? ref.id : null
+    isResolvedReference(ref) ? ref.id : null
 
