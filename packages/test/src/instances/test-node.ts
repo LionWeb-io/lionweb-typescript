@@ -39,7 +39,7 @@ export class TestNodeReader implements Reader<TestNode> {
             .map((language) =>
                 language.entities.find(entity => entity instanceof Classifier && entity.name == node.classifier) as Classifier
             )
-            .find((c) => c != null)
+            .find((c) => c !== null)
         if (classifier == null) {
             throw new Error(`Cannot find Classifier with given name ${node.classifier}`)
         }
