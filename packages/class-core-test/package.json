@@ -20,14 +20,14 @@
         "lint": "eslint src"
     },
     "dependencies": {
-        "@lionweb/class-core": "0.10.0-alpha.8",
-        "@lionweb/class-core-generator": "0.10.0-alpha.8",
-        "@lionweb/class-core-test-language": "0.10.0-alpha.8",
-        "@lionweb/core": "0.10.0-alpha.8",
-        "@lionweb/io-lionweb-mps-specific": "0.10.0-alpha.8",
-        "@lionweb/json": "0.10.0-alpha.8",
-        "@lionweb/node-utils": "0.10.0-alpha.8",
-        "@lionweb/ts-utils": "0.10.0-alpha.8",
+        "@lionweb/class-core": "0.10.0-alpha.9",
+        "@lionweb/class-core-generator": "0.10.0-alpha.9",
+        "@lionweb/class-core-test-language": "0.10.0-alpha.9",
+        "@lionweb/core": "0.10.0-alpha.9",
+        "@lionweb/io-lionweb-mps-specific": "0.10.0-alpha.9",
+        "@lionweb/json": "0.10.0-alpha.9",
+        "@lionweb/node-utils": "0.10.0-alpha.9",
+        "@lionweb/ts-utils": "0.10.0-alpha.9",
         "chai": "6.2.2",
         "mobx": "6.15.0",
         "mocha": "11.7.5"
