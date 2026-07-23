@@ -15,10 +15,12 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import { INodeBase, NodeBase } from "@lionweb/class-core"
 import { LinkTestConcept } from "@lionweb/class-core-test-language"
 import { sameMembers } from "./assertions.js"
 
 describe("internals of base types", () => {
+
     it("children", () => {
         const parent = LinkTestConcept.create("parent")
         const child1 = LinkTestConcept.create("child1")
@@ -46,5 +48,13 @@ describe("internals of base types", () => {
         parent.addReference_1_n(child4)
         sameMembers(parent.referenceTargets, [child1, child2, child3, child4])
     })
+
+    it("NodeBase and INodeBase are assignment-compatible", () => {
+        const nodeBase = LinkTestConcept.create("ltc")
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const nodeBase2: NodeBase = (nodeBase as INodeBase)
+        // ^^^ compiles, so an INodeBase can be assigned as a NodeBase
+    })
+
 })
 
