@@ -19,10 +19,14 @@ language TestLanguage
                 containment_0_n: LinkTestConcept[0..*]
                 containment_1: LinkTestConcept
                 containment_1_n: LinkTestConcept[1..*]
+                otherContainment_0_1: LinkTestConcept?
                 reference_0_1 -> LinkTestConcept?
                 reference_0_n -> LinkTestConcept[0..*]
                 reference_1 -> LinkTestConcept
                 reference_1_n -> LinkTestConcept[1..*]
+
+        annotation RestrictedTestAnnotation implements INamed
+            annotates: LinkTestConcept
 
         enumeration SecondTestEnumeration
             literals:

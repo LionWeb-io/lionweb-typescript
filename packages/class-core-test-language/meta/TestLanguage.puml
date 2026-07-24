@@ -17,6 +17,9 @@ class DataTypeTestConcept {
 
 class LinkTestConcept implements INamed
 
+annotation RestrictedTestAnnotation implements INamed
+RestrictedTestAnnotation ..# LinkTestConcept : <i>annotates</i>
+
 enum SecondTestEnumeration {
   literal1
   literal2
@@ -47,6 +50,8 @@ LinkTestConcept "*" --> "0..1" LinkTestConcept: reference_0_1
 LinkTestConcept "*" --> "1" LinkTestConcept: reference_1
 LinkTestConcept "*" --> "*" LinkTestConcept: reference_0_n
 LinkTestConcept "*" --> "*" LinkTestConcept: reference_1_n
+LinkTestConcept "1" o--> "0..1" LinkTestConcept: otherContainment_0_1
+
 
 TestAnnotation "*" --> "1" Node: ref
 TestAnnotation "1" o--> "0..1" Node: containedNode
