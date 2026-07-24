@@ -6,6 +6,8 @@
   * Add `move[AndReplace]OffsetBased[Directly]` functions to value managers for (multi-valued) containments and annotations.
   * Add `move[AndReplace]AnnotationOffsetBased` methods to both `NodeBase` and `INodeBase` (so instances are assignment-compatible).
   * Update `ChildMoved[AndReplaced]InSameContainmentDelta` and `AnnotationMoved[AndReplaced]Delta` classes, as well as associated appliers and inverters, to align with latest, offset-based versions of those deltas.
+* Fix (and rework) `asTreeTextWith` textualizer function to deal with the widened `SingleRef` type.
+* The deserializer now returns `UnresolvedReference` instances for unresolved references instead of `referenceToSet`.
 
 
 ## 0.9.2

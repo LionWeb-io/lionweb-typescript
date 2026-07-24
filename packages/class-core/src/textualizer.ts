@@ -19,13 +19,15 @@ import {
     allFeaturesOf,
     Containment,
     Feature,
+    isReferenceToSet,
     isUnresolvedReference,
     Link,
     Node,
     Property,
     Reference,
-    UnresolvedReference
+    SingleRef
 } from "@lionweb/core"
+import { asArray, keepDefineds } from "@lionweb/ts-utils"
 import { asString, indentWith, Template } from "littoral-templates"
 
 import { INodeBase } from "./base-types.js"
@@ -35,41 +37,6 @@ const indent = indentWith("    ")(1)
 
 const prependWith = (template: Template, prefix: string): Template =>
     prefix + asString(template)
-
-
-type INodeBaseOrNotThere = INodeBase | UnresolvedReference | undefined
-
-const asINodeBases = (value: INodeBaseOrNotThere | INodeBaseOrNotThere[]): INodeBase[] => {
-    const isINodeBase = (value: INodeBaseOrNotThere): value is INodeBase =>
-        !(value === undefined || isUnresolvedReference(value))
-
-    if (Array.isArray(value)) {
-        return value
-            .filter((subValue) => isINodeBase(subValue))
-            .map((subValue) => subValue as INodeBase)
-    }
-    if (isINodeBase(value)) {
-        return [value]
-    }
-    return []
-}
-
-type NodeOrNotThere = Node | UnresolvedReference | undefined
-
-const asNodes = (value: NodeOrNotThere | NodeOrNotThere[]): Node[] => {
-    const isNode = (value: NodeOrNotThere): value is Node =>
-        !(value === undefined || isUnresolvedReference(value))
-
-    if (Array.isArray(value)) {
-        return value
-            .filter((subValue) => isNode(subValue))
-            .map((subValue) => subValue as Node)
-    }
-    if (isNode(value)) {
-        return [value]
-    }
-    return []
-}
 
 
 /**
@@ -97,7 +64,7 @@ export const asTreeTextWith = (identificationFor: (node: Node) => string): ((nod
             const nothing = `<${(feature as Link).multiple ? "none" : "not set"}>`
             if (feature instanceof Containment) {
                 const valueManager = node.getContainmentValueManager(feature)
-                const children = asINodeBases(valueManager.getDirectly())
+                const children = keepDefineds(asArray<INodeBase | undefined>(valueManager.getDirectly()))
                 return [
                     `${feature.name}:${children.length === 0 ? ` ${nothing}` : ""}`,
                     indent(children.map(asText))
@@ -105,9 +72,18 @@ export const asTreeTextWith = (identificationFor: (node: Node) => string): ((nod
             }
             if (feature instanceof Reference) {
                 const valueManager= node.getReferenceValueManager(feature)
-                const references = asNodes(valueManager.getDirectly())
+                const references = keepDefineds(asArray<SingleRef<Node>>(valueManager.getDirectly()))
+                const singleRefAsText = (ref: SingleRef<Node>): string => {
+                    if (isReferenceToSet(ref)) {
+                        return "<not set>"
+                    }
+                    if (isUnresolvedReference(ref)) {
+                        return ref.toString()
+                    }
+                    return identificationFor(ref)
+                }
                 return [
-                    `${feature.name} -> ${references.length === 0 ? nothing : references.map(identificationFor).join(", ")}`
+                    `${feature.name} -> ${references.length === 0 ? nothing : references.map(singleRefAsText).join(", ")}`
                 ]
             }
             return `!!! can't handle feature ${feature.name} (of meta type ${feature.metaType()})`
