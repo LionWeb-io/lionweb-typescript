@@ -29,6 +29,10 @@
     * The `primitiveTypeSerializer` property of the `SerializationOptions` type.
     * The `problemsHandler` property of the `DeserializerConfiguration` type.
 
+* **Breaking changes inside!** Restructure how property values get (de-)serialized:
+    * Expose a `EnumerationLiteralDecoder` type for functions that deduce an `EnumerationLiteral` of an `Enumeration` from a runtime encoding of the former.
+    * Expose a `EnumerationLiteralEncoder` type for functions that produce a runtime encoding of an `EnumerationLiteral` of an `Enumeration`.
+
 
 ## 0.10.0
 
@@ -54,6 +58,7 @@
 * Widen the `abstract` argument to both the `new Concept` (5th argument) and `LanguageFactory.concept` (2nd argument) calls, to include the `ConceptModifier` enum with literals `concrete` and `abstract`.
 * Deprecate various functions: `deserializeSerializationChunk`, `deserializeChunk`.
 * Add a `dynamicReaderFor` function that’s parametrized in `LionWebVersion`.
+
 
 ### Improving references
 

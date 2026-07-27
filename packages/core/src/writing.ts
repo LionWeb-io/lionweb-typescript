@@ -5,6 +5,12 @@ import { Node } from "./types.js"
 
 
 /**
+ * Type def. for functions that return the runtime encoding of a given {@link EnumerationLiteral}.
+ */
+export type EnumerationLiteralEncoder<T> = (literal: EnumerationLiteral) => T
+
+
+/**
  * An interface that's used to parametrize generic deserialization of serialization chunks to
  * (in-memory) nodes of the given type (parameter).
  * Implementations of these interfaces {w|c}ould be:
@@ -31,7 +37,7 @@ export interface Writer<NT extends Node, PNT extends Node = NT> {
     /**
      * @return The runtime encoding of the given {@link EnumerationLiteral}.
      */
-    encodingOf: (literal: EnumerationLiteral) => unknown
+    encodingOf: EnumerationLiteralEncoder<unknown>
 
 }
 
