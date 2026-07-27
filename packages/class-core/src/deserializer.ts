@@ -27,9 +27,9 @@ import {
     Property,
     PropertyValueDeserializer,
     Reference,
-    referenceToSet
+    UnresolvedReference
 } from "@lionweb/core"
-import { LionWebId, LionWebJsonChunk, LionWebJsonNode } from "@lionweb/json"
+import { LionWebId, LionWebJsonChunk, LionWebJsonNode, LionWebJsonReferenceTarget } from "@lionweb/json"
 import { byIdMap, keepDefineds } from "@lionweb/ts-utils"
 
 import { DeltaReceiver, FactoryConfiguration, IdMapping, ILanguageBase, INodeBase } from "./index.js"
@@ -149,9 +149,6 @@ function nodeBaseDeserializerWithIdMapping(languageBasesOrConfiguration: ILangua
                             node,
                             feature,
                             targets
-                                .map(({reference}) => reference)
-                                .filter((reference) => reference !== null)
-                                    // TODO  for LionWeb version 2024.1 and beyond, if reference === null, and resolveInfo has the built-in prefix, resolve to built-ins
                         ]
                     );
                 } else {
@@ -177,13 +174,13 @@ function nodeBaseDeserializerWithIdMapping(languageBasesOrConfiguration: ILangua
         const lookupNodeById = (id: LionWebId): (INodeBase | undefined) =>
             nodesById[id] ?? idMapping?.tryFromId(id);
 
-        nodesToInstall.forEach(([node, feature, ids]) => {
+        nodesToInstall.forEach(([node, feature, targets]) => {
             if (feature instanceof Containment) {
                 const valueManager = node.getContainmentValueManager(feature);
-                ids.forEach((id) => {
-                    const nodeToInstall = lookupNodeById(id);
+                (targets as LionWebId[]).forEach((childId) => {
+                    const nodeToInstall = lookupNodeById(childId);
                     if (nodeToInstall === undefined) {
-                        problemReporter.reportProblem(`couldn't resolve the child with id=${id} of the "${feature.name}" containment feature on the node with id=${node.id}`);
+                        problemReporter.reportProblem(`couldn't resolve the child with id=${childId} of the "${feature.name}" containment feature on the node with id=${node.id}`);
                     } else {
                         valueManager.addDirectly(nodeToInstall);
                         nodeToInstall.attachTo(node, feature);
@@ -193,11 +190,12 @@ function nodeBaseDeserializerWithIdMapping(languageBasesOrConfiguration: ILangua
             }
             if (feature instanceof Reference) {
                 const valueManager = node.getReferenceValueManager(feature);
-                ids.forEach((id) => {
-                    const nodeToInstall = lookupNodeById(id);
+                (targets as LionWebJsonReferenceTarget[]).forEach(({reference: targetId, resolveInfo}) => {
+                    const nodeToInstall = targetId === null ? undefined : lookupNodeById(targetId);
+                    // TODO  for LionWeb version 2024.1 and beyond, if reference === null, and resolveInfo has the built-in prefix, resolve to built-ins
                     if (nodeToInstall === undefined) {
-                        problemReporter.reportProblem(`couldn't resolve the target with id=${id} of the "${feature.name}" reference feature on the node with id=${node.id}`);
-                        valueManager.addDirectly(referenceToSet);
+                        problemReporter.reportProblem(`couldn't resolve the target with id=${targetId} of the "${feature.name}" reference feature on the node with id=${node.id}`);
+                        valueManager.addDirectly(new UnresolvedReference(targetId ?? undefined, resolveInfo ?? undefined));
                     } else {
                         valueManager.addDirectly(nodeToInstall);
                     }
@@ -206,10 +204,10 @@ function nodeBaseDeserializerWithIdMapping(languageBasesOrConfiguration: ILangua
             }
             if (feature === null) {
                 const valueManager = node.annotationsValueManager;
-                ids.forEach((id) => {
-                    const nodeToInstall = lookupNodeById(id);
+                (targets as LionWebId[]).forEach((annoId) => {
+                    const nodeToInstall = lookupNodeById(annoId);
                     if (nodeToInstall === undefined) {
-                        problemReporter.reportProblem(`couldn't resolve the annotation with id=${id} on the node with id=${node.id}`);
+                        problemReporter.reportProblem(`couldn't resolve the annotation with id=${annoId} on the node with id=${node.id}`);
                     } else {
                         valueManager.addDirectly(nodeToInstall);
                         nodeToInstall.attachTo(node, feature);

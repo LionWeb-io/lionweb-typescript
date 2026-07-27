@@ -9,6 +9,7 @@
   offset-based, and according to [§ 3.8.2 of the delta protocol specification](https://github.com/LionWeb-io/specification/blob/main/delta/description.adoc#characteristics-of-manipulation-of-a-list).
   * `move[AndReplace]WithOffset` functions;
   * `invertedMove[AndReplace]WithOffset` functions to be able to invert the effects of `move[AndReplace]WithOffset`.
+* Add a 2nd, optional argument to the `asPrettyJsonString` function: the number of spaces per indentation, defaulting to 4.
 
 
 ## 0.9.0

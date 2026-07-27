@@ -18,12 +18,11 @@
 import { Annotation, deserializeLanguages } from "@lionweb/core"
 import { defaultTrumpfOriginatingApache2_0LicensedHeader, generateLanguage } from "@lionweb/class-core-generator"
 import { LionWebJsonChunk } from "@lionweb/json"
-import { readFileAsJsonSync } from "@lionweb/node-utils"
+import { getFromHttps, readFileAsJsonSync } from "@lionweb/node-utils"
 import { generatePlantUmlForLanguage, languageAsText } from "@lionweb/utilities"
 import { copyFileSync, lstatSync, writeFileSync } from "fs"
 import { join } from "path"
 import { argv } from "process"
-import { getFromHttps } from "./curl.js"
 
 const packagePath = "../class-core-test-language"
 const metaPath = join(packagePath, "meta")

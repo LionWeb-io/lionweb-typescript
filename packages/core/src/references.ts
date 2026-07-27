@@ -25,7 +25,7 @@ export const unresolved = null
 export class UnresolvedReference {
     constructor(public readonly targetId?: LionWebId, public resolveInfo?: string) {}
     toString = () =>
-        `unresolved reference to target:` + stringifyPropertiesOf(this, "targetId", "resolveInfo")
+        `unresolved reference to target: ` + stringifyPropertiesOf(this, "targetId", "resolveInfo")
 }
 
 /**
