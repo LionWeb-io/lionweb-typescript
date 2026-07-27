@@ -1,6 +1,6 @@
 {
     "name": "@lionweb/ts-utils",
-    "version": "0.10.0-alpha.10",
+    "version": "0.10.0-alpha.11",
     "description": "Utilities for LionWeb JSON",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
