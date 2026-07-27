@@ -3,8 +3,11 @@ import { LionWebKey } from "@lionweb/json"
 import { readFileAsJsonSync, writeJsonAsFileSync } from "@lionweb/node-utils"
 import { asMinimalJsonString } from "@lionweb/ts-utils"
 import {
-    aggregateMetrics, ClassifierInstantiationMetric, ClassifierPointer,
-    LanguageMetric, LanguagePointer,
+    aggregateMetrics,
+    ClassifierInstantiationMetric,
+    ClassifierPointer,
+    LanguageMetric,
+    LanguagePointer,
     measure,
     mergeMetrics
 } from "@lionweb/utilities"

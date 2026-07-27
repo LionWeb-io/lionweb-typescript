@@ -60,6 +60,7 @@ export interface PartitionAddedEvent extends Event, SplittableMessage {
 export interface PartitionDeletedEvent extends Event {
     messageKind: "PartitionDeleted"
     deletedPartition: LionWebId
+    deletedDescendants: LionWebId[]
 }
 
 /** § 5.8.3.1 */

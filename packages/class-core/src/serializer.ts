@@ -21,8 +21,8 @@ import {
     Containment,
     Enumeration,
     Feature,
-    isRef,
     isReferenceToSet,
+    isResolvedReference,
     isUnresolvedReference,
     LionWebVersions,
     Node,
@@ -122,7 +122,7 @@ export const propertyValueSerializerWith = (configuration?: PropertyValueSeriali
     return {
         serializeValue: (value: unknown, property: Property) => {
             const { type } = property
-            if (!isRef(type)) {
+            if (!isResolvedReference(type)) {
                 reportIssue(`can't serialize value of property "${property.name}" (on classifier "${property.classifier.name}" in language "${property.classifier.language.name}") having ${isReferenceToSet(type) ? `an unset type` : `unresolved type: ${value}${isUnresolvedReference(type) && type.resolveInfo !== undefined ? ` -> ${type.resolveInfo}` : ``}`}`)
                 return null
             }

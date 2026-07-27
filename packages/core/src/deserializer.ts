@@ -270,21 +270,22 @@ export const deserializerWith = <NT extends Node>(configuration: DeserializerCon
  * @param propertyValueDeserializer - a deserializer for values of properties (by default `LionWebVersions.v2023_1.builtinsFacade.propertyValueDeserializer`)
  * @param problemReporter - an object for reporting problems (by default a {@link consoleProblemReporter})
  *
- * This is a legacy variant of {@link deserializerWith}, kept for backward compatibility, and to be deprecated and removed later.
+ * @deprecated Use {@link deserializerWith} instead, which makes configuration easier through a Parameter Object.
+ * This is a legacy variant of {@link deserializerWith}, kept (for now) for backward compatibility, and to be removed later.
  */
 export const deserializeSerializationChunk = <NT extends Node>(
     serializationChunk: LionWebJsonChunk,
     writer: Writer<NT>,
     languages: Language[],
-    // TODO  facades <--> languages, so it's weird that it looks split up like this
     dependentNodes: Node[],
-    // TODO (#13)  see if you can turn this into [nodes: Node[], writer: Writer<Node>][] after all
     propertyValueDeserializer: PropertyValueDeserializer = LionWebVersions.v2023_1.builtinsFacade.propertyValueDeserializer,
     problemReporter: ProblemReporter = consoleProblemReporter
 ): NT[] => deserializerWith({ writer, languages, propertyValueDeserializer, problemReporter: problemReporter })(serializationChunk, dependentNodes)
 
 /**
  * Alias for {@link deserializeSerializationChunk}.
+ *
+ * @deprecated Use {@link deserializerWith} instead, which makes configuration easier through a Parameter Object.
  */
 export const deserializeChunk = deserializeSerializationChunk
 

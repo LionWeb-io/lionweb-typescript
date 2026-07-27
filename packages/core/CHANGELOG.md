@@ -16,6 +16,7 @@
       *Note* that this is a breaking change!
     * Add a `tryToRenderAsText` convenience function to nicely render a reference as text.
     * Add `resolvedOrThrows` and `resolvedOrUndef` convenience functions, to help with the fallout of the change to the `SingleRef` type.
+    * Rename the `isRef` function to `isResolvedReference` (keeping an alias for backward compatibility).
 * Deserialization now reports on serialized nodes that can’t be deserialized, and doesn’t add/set `null` anymore.
 * Serialization skips references that are unresolved and for which no `resolveInfo` can be obtained.
 * *Narrow* the type of the argument of the `asIds` function to `Node[]`.

@@ -2,6 +2,9 @@
 
 ## 0.10.0 — not yet released
 
+* Update all definitions to latest spec 
+* change all custom messages to start with `Custom_`.
+* Add monitor deltas for use with admin ui.
 * Change key values pairs for additional info's to a dictionary and update the validator to be able to validate the dictionary.
 * Update to latest spec. of delta protocol, specifically:
   make all move[+replace] child in same containment and move[+replace] annotation in same parent commands and corresponding events offset-based.

@@ -11,6 +11,7 @@
   * Update translators for that.
   * Change message kind of `NoOpEvent` &rarr; `"NoOpEvent"`.
   * Uppercase prefix for message kinds of custom messages: `custom_` &rarr; `Custom_`.
+* Add `deletedDescendants` property to the `PartitionDeletedEvent` type (and propagate to downstream packages as well).
 
 
 ## 0.9.0

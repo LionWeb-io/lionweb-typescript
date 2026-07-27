@@ -7,6 +7,7 @@ import {
     Interface,
     isBuiltinNodeConcept,
     isRef,
+    isResolvedReference,
     isUnresolvedReference,
     Language,
     LanguageEntity,
@@ -57,8 +58,8 @@ const generateForAnnotation = ({ name, features, extends: extends_, implements: 
         nonRelationalFeatures(features).map(generateForNonRelationalFeature)
     ),
     `<<Annotation>> ${name}`,
-    isRef(annotates) ? `${name} ..> ${annotates.name} : <i>annotates</i>` : [],
-    isRef(extends_) && !isBuiltinNodeConcept(extends_) ? `${extends_.name} <|-- ${name}` : [],
+    isResolvedReference(annotates) ? `${name} ..> ${annotates.name} : <i>annotates</i>` : [],
+    isResolvedReference(extends_) && !isBuiltinNodeConcept(extends_) ? `${extends_.name} <|-- ${name}` : [],
     implements_.filter(isRef).map(interface_ => `${interface_.name} <|.. ${name}`),
     ``
 ]
@@ -73,7 +74,7 @@ const generateForConcept = ({
     block(`class ${name}`, nonRelationalFeatures(features).map(generateForNonRelationalFeature)),
     abstract_ ? `<<Abstract>> ${name}` : [],
     partition ? `<<Partition>> ${name}` : [],
-    isRef(extends_) && !isBuiltinNodeConcept(extends_) ? `${extends_.name} <|-- ${name}` : [],
+    isResolvedReference(extends_) && !isBuiltinNodeConcept(extends_) ? `${extends_.name} <|-- ${name}` : [],
     ``
 ]
 
@@ -124,7 +125,7 @@ const generateForRelationsOf = (entity: LanguageEntity) => {
 
 const generateForRelation = ({ name: leftName }: LanguageEntity, relation: Link) => {
     const { name: relationName, optional, multiple, type } = relation
-    const rightName = isRef(type) ? type.name : isUnresolvedReference(type) ? `<unresolved>` : `<null>`
+    const rightName = isResolvedReference(type) ? type.name : isUnresolvedReference(type) ? `<unresolved>` : `<null>`
     const isContainment = relation instanceof Containment
     const leftMultiplicity = isContainment ? `1` : `*`
     const rightMultiplicity = (() => {

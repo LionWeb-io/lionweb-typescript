@@ -84,6 +84,9 @@ import {
 import { resolveInfoFrom } from "./ref-util.js"
 
 
+/**
+ * @return all descendants hanging off of the given `node` — (excluding `node` itself).
+ */
 const allIdsOfDescendantsFrom = (node: INodeBase) =>
     allNodesFrom(node).slice(1).map(idOf)
 
@@ -168,7 +171,8 @@ export const deltaToEventTranslator = (
             }
             if (delta instanceof PartitionDeletedDelta) {
                 return completed<PartitionDeletedEvent>("PartitionDeleted", { // § 5.8.2.2
-                    deletedPartition: delta.deletedPartition.id
+                    deletedPartition: delta.deletedPartition.id,
+                    deletedDescendants: allIdsOfDescendantsFrom(delta.deletedPartition)
                 })
             }
             if (delta instanceof PropertyAddedDelta) {

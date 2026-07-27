@@ -13,7 +13,7 @@ import {
 } from "@lionweb/ts-utils"
 import { containmentChain } from "../functions.js"
 import { ClassifierDeducer } from "../reading.js"
-import { isRef, UnresolvedReference } from "../references.js"
+import { isRef, isResolvedReference, UnresolvedReference } from "../references.js"
 import { Node } from "../types.js"
 import {
     Annotation,
@@ -221,7 +221,7 @@ const inheritsDirectlyFrom = (classifier: Classifier): Classifier[] => {
     if (classifier instanceof Concept || classifier instanceof Annotation) {
         return [
             ...(
-                isRef(classifier.extends)
+                isResolvedReference(classifier.extends)
                     ? [classifier.extends as Classifier]
                     : []
             ),

@@ -28,7 +28,7 @@ import {
     isEnumeration,
     isMultiple,
     isPartition,
-    isRef,
+    isResolvedReference,
     Language,
     LanguageEntity,
     Link,
@@ -111,7 +111,7 @@ export const reflectiveClassFor = (imports: Imports) => {
     }
 
     const refForType = (type: SingleRef<LanguageEntity>) => {
-        if (!isRef(type)) {
+        if (!isResolvedReference(type)) {
             return `???`
         }
         if (type.language === imports.thisLanguage) {
