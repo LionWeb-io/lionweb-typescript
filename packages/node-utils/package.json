@@ -1,6 +1,6 @@
 {
     "name": "@lionweb/node-utils",
-    "version": "0.10.0-beta.5",
+    "version": "0.10.0-beta.6",
     "description": "Utilities that depend on Node.js",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -27,7 +27,7 @@
         "release": "npm publish"
     },
     "dependencies": {
-        "@lionweb/ts-utils": "0.10.0-beta.5"
+        "@lionweb/ts-utils": "0.10.0-beta.6"
     },
     "devDependencies": {
         "@types/node": "25.2.2"
