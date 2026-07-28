@@ -85,6 +85,11 @@
     * Meta-concepts for structured data type and their fields, both in the self-definition of 2024.1, as in the meta-types.
     * Methods for `StructuredDataType` and `Field` in `LanguageFactory` class.
     * Constraint on `StructuredDataType` that checks for cyclicity.
+    * An `isStructuredDataType` type predicate (function).
+    * An `identificationForField` function to conveniently verbose a `Field`’s identification.
+    * `StructuredData`, `SimpleData{Des|S}erializer`, and `StructuredData{Des|S}erializer` types.
+    * `structuredData{Des|s}erializer` functions that, given an instance of `SimpleData{Des|S}erializer`, return an instance of `StructuredData{Des|s}erializer`.
+    * Integrate the `structuredData{Des|s}erializer` functions into the `propertyValue{Des|S}erializerWith` functions.
 
 
 ## Restructure how property values get (de-)serialized

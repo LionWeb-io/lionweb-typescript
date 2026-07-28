@@ -1,3 +1,4 @@
+export { identificationForField } from "./aux-functions.js"
 export { type LionCoreBuiltinsFacade } from "./builtins-common.js"
 export { isBuiltinNodeConcept } from "./builtins-function.js"
 export * from "./constraints.js"
