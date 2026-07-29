@@ -16,6 +16,7 @@
     },
     "scripts": {
         "clean": "npx rimraf dist node_modules -g delta-protocol-test-*.tgz",
+        "prebuild": "npx rimraf dist",
         "build": "tsc",
         "lint": "eslint src",
         "pretest": "npm run build",
