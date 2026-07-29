@@ -66,9 +66,10 @@ const generateForAnnotation = ({ name, features, extends: extends_, implements: 
         fragments.push(`implements`, implements_.filter(isRef).map(nameOf).sort().join(", "))
     }
     const nonRelationalFeatures_ = nonRelationalFeatures(features)
+    const annotatesLine = isResolvedReference(annotates) ? `${name} ..# ${annotates.name} : <i>annotates</i>` : []
     return nonRelationalFeatures_.length === 0
-        ? [`${fragments.join(" ")}`, isResolvedReference(annotates) ? `${name} ..# ${annotates.name} : <i>annotates</i>` : [], ``]
-        : [`${fragments.join(" ")} {`, indented(nonRelationalFeatures_.map(generateForNonRelationalFeature)), `}`, ``]
+        ? [`${fragments.join(" ")}`, annotatesLine, ``]
+        : [`${fragments.join(" ")} {`, indented(nonRelationalFeatures_.map(generateForNonRelationalFeature)), `}`, annotatesLine, ``]
 }
 
 const generateForConcept = ({ name, features, abstract: abstract_, extends: extends_, implements: implements_, partition }: Concept) => {
