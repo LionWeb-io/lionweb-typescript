@@ -84,6 +84,7 @@
   * Implementation of structured data types, including:
     * Meta-concepts for structured data type and their fields, both in the self-definition of 2024.1, as in the meta-types.
     * Methods for `StructuredDataType` and `Field` in `LanguageFactory` class.
+    * Constraint on `StructuredDataType` that checks for cyclicity.
 
 
 ## Restructure how property values get (de-)serialized

@@ -2,13 +2,13 @@ import { Concept, ConceptModifier, issuesLanguage, Language, LanguageFactory } f
 import { chain, concatenator, lastOf } from "@lionweb/ts-utils"
 import { nanoIdGen } from "@lionweb/utilities"
 
-import { deepEqual, fail } from "../test-utils/assertions.js"
+import { deepEqual, equal, fail, isFalse } from "../test-utils/assertions.js"
 
 describe("general LionCore constraints - name/version", () => {
     it("should (name) be non-empty", () => {
         const language = new Language("", "0", "x", "x")
         const issues = issuesLanguage(language)
-        // deepEqual(issues.length, 1)
+        equal(issues.length, 1)
         deepEqual(issues[0], {
             location: language,
             message: "A Language's name must not be empty",
@@ -19,7 +19,7 @@ describe("general LionCore constraints - name/version", () => {
     it("should (name) not start with a number", () => {
         const language = new Language("1myLang", "0", "x", "x")
         const issues = issuesLanguage(language)
-        // deepEqual(issues.length, 1)
+        equal(issues.length, 1)
         deepEqual(issues[0], {
             location: language,
             message: "A Language's name cannot start with a number",
@@ -30,7 +30,7 @@ describe("general LionCore constraints - name/version", () => {
     it("should (version) be non-empty", () => {
         const language = new Language("myLang", "", "x", "x")
         const issues = issuesLanguage(language)
-        // deepEqual(issues.length, 1)
+        equal(issues.length, 1)
         deepEqual(issues[0], {
             location: language,
             message: "A Language's version must be a non-empty string",
@@ -41,7 +41,7 @@ describe("general LionCore constraints - name/version", () => {
     it("should not contain whitespace characters", () => {
         const language = new Language("my Lang", "0", "x", "x")
         const issues = issuesLanguage(language)
-        // deepEqual(issues.length, 1)
+        equal(issues.length, 1)
         deepEqual(issues[0], {
             location: language,
             message: "A Language's name cannot contain whitespace characters",
@@ -53,7 +53,7 @@ describe("general LionCore constraints - name/version", () => {
         const languageName = "myLang_123_𝟜𝟝𝟞"
         const language = new Language(languageName, "0", "x", "x")
         const issues = issuesLanguage(language)
-        deepEqual(issues.length, 0)
+        equal(issues.length, 0)
     })
 })
 
@@ -125,7 +125,7 @@ describe("Language constraints", () => {
         const concept = new Concept(language, " my lang  ", "y", "y", ConceptModifier.concrete)
         language.havingEntities(concept)
         const issues = issuesLanguage(language)
-        deepEqual(issues.length, 2)
+        equal(issues.length, 2)
         deepEqual(issues[0], {
             location: language,
             message: "A Language's name must not be empty",
@@ -150,7 +150,7 @@ describe("Concept constraints", () => {
         cis[0].extends.push(cis[2])
 
         const issues = issuesLanguage(language)
-        deepEqual(issues.length, 3)
+        equal(issues.length, 3)
         const message1 = issues?.find(({ location }) => location === cis[0])?.message
         deepEqual(
             message1,
@@ -165,7 +165,7 @@ describe("Concept constraints", () => {
         ci.extends.push(ci)
 
         const issues = issuesLanguage(language)
-        deepEqual(issues.length, 1)
+        equal(issues.length, 1)
         const { location, message } = issues[0]
         deepEqual(location, ci)
         deepEqual(
@@ -230,3 +230,67 @@ describe("Namespace constraints", () => {
 
 // TODO  this is a model-level constraint: why is it in the M3 specification?
 // it.skip("should have root nodes with the partition flag set to true", () => { fail("not yet implemented") })
+
+
+describe("StructuredDataTypes constraints", () => {
+
+    it("detect direct cycles", () => {
+        const factory = new LanguageFactory("SDTlang", "0", concatenator("-"), lastOf)
+        const MySDT = factory.structuredDataType("MySDT")
+        const directCycle = factory.field(MySDT, "directCycle").ofType(MySDT)
+        // MySDT.directCycle -> MySDT
+
+        deepEqual(
+            issuesLanguage(factory.language),
+            [
+                {
+                    location: MySDT,
+                    message: "A StructuredDataType can't have nested fields who have itself as type, but SDTlang.MySDT does so through the following cycle: SDTlang.MySDT -> SDTlang.MySDT.directCycle",
+                    secondaries: [directCycle]
+                }
+            ]
+        )
+    })
+
+    it("detect indirect cycles", () => {
+        const factory = new LanguageFactory("SDTlang", "0", concatenator("-"), lastOf)
+        const SDT1 = factory.structuredDataType("SDT1")
+        const SDT2 = factory.structuredDataType("SDT2")
+        const field1 = factory.field(SDT1, "field1").ofType(SDT2)
+        const field2 = factory.field(SDT2, "field2").ofType(SDT1)
+        // SDT1.field1 -> SDT2.field2 -> SDT1
+
+        deepEqual(
+            issuesLanguage(factory.language),
+            [
+                {
+                    location: SDT1,
+                    message: "A StructuredDataType can't have nested fields who have itself as type, but SDTlang.SDT1 does so through the following cycle: SDTlang.SDT1 -> SDTlang.SDT1.field1 -> SDTlang.SDT2.field2",
+                    secondaries: [field1, field2]
+                },
+                {
+                    location: SDT2,
+                    message: "A StructuredDataType can't have nested fields who have itself as type, but SDTlang.SDT2 does so through the following cycle: SDTlang.SDT2 -> SDTlang.SDT2.field2 -> SDTlang.SDT1.field1",
+                    secondaries: [field2, field1]
+                }
+            ]
+        )
+    })
+
+    it("detect cycles not coming back to the SDT itself", () => {
+        const factory = new LanguageFactory("SDTlang", "0", concatenator("-"), lastOf)
+        const SDT1 = factory.structuredDataType("SDT1")
+        const SDT2 = factory.structuredDataType("SDT2")
+        const SDT3 = factory.structuredDataType("SDT3")
+        factory.field(SDT1, "field1").ofType(SDT2)
+        factory.field(SDT2, "field2").ofType(SDT3)
+        factory.field(SDT3, "field3").ofType(SDT2)
+        // SDT1.field1 -> SDT2.field2 -> SDT3.field3 -> SDT2
+
+        const issues = issuesLanguage(factory.language)
+        isFalse(issues.some(({ location }) => location === SDT1))
+        equal(issues.length, 2) // the issues on SDT2, SDT3
+    })
+
+})
+

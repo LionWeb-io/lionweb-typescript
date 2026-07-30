@@ -1,7 +1,8 @@
 import { duplicatesAmong } from "@lionweb/ts-utils"
 import { idOf } from "../functions.js"
 import { allContaineds, flatMap, inheritanceCycleWith, keyOf, namedsOf, qualifiedNameOf } from "./functions.js"
-import { Classifier, isINamed, Language, M3Concept } from "./types.js"
+import { Classifier, Field, isINamed, Language, M3Concept, StructuredDataType } from "./types.js"
+import { isResolvedReference } from "../references.js"
 
 
 /**
@@ -27,6 +28,29 @@ export const isValidIdentifier = (str: string): boolean =>
 
 
 /**
+ * Determines all (full) self-referential cycles of a {@link StructuredDataType},
+ * represented through their “fields trace”, in which the first field is a field of the given `structuredDataType`,
+ * and the last field is a field whose type is the given `structuredDataType` again.
+ */
+const selfReferencesWithinStructuredDataType = (structuredDataType: StructuredDataType): Field[][] => {
+    const cycles: Field[][] = []
+    const recurse = (fieldsTrace: Field[], othersVisited: StructuredDataType[]) => {
+        const field = fieldsTrace[fieldsTrace.length - 1]
+        const nextSDT = field.type
+        if (isResolvedReference(nextSDT) && nextSDT instanceof StructuredDataType) {
+            if (nextSDT === structuredDataType) {
+                cycles.push(fieldsTrace)
+            } else if (othersVisited.indexOf(nextSDT) === -1) {
+                nextSDT.fields.forEach((subField) => recurse([...fieldsTrace, subField], [...othersVisited, nextSDT]))
+            }
+        }
+    }
+    structuredDataType.fields.forEach((field) => recurse([field], []))
+    return cycles.filter((cycle) => cycle.length > 0)
+}
+
+
+/**
  * Computes the {@link Issue issues} (i.e., constraint violations) for the given language.
  * (This computation is resilient against e.g. inheritance cycles.)
  */
@@ -47,36 +71,43 @@ export const issuesLanguage = (language: Language): Issue[] =>
 
                 // The id consists only of latin characters (upper/lowercase), numbers, underscores, and hyphens
                 const id = t.id.trim()
-                !isValidIdentifier(id) && issue(`An ID must consist only of latin characters (upper/lowercase), numbers, underscores, and hyphens`)
+                ;(!isValidIdentifier(id)) && issue(`An ID must consist only of latin characters (upper/lowercase), numbers, underscores, and hyphens`)
 
                 // The key consists only of latin characters (upper/lowercase), numbers, underscores, and hyphens
                 const key = t.key.trim()
-                !isValidIdentifier(key) && issue(`A KEY must consist only of latin characters (upper/lowercase), numbers, underscores, and hyphens`)
+                ;(!isValidIdentifier(key)) && issue(`A KEY must consist only of latin characters (upper/lowercase), numbers, underscores, and hyphens`)
 
                 if(isINamed(t)) {
                     const trimmedName = t.name.trim()
                     // The name should be a non-empty string
-                    trimmedName.length === 0 && issue(`A ${t.constructor.name}'s name must not be empty`)
+                    ;(trimmedName.length === 0) && issue(`A ${t.constructor.name}'s name must not be empty`)
 
                     // The name should not contain whitespace characters
-                    trimmedName.includes(" ") && issue(`A ${t.constructor.name}'s name cannot contain whitespace characters`)
+                    ;(trimmedName.includes(" ")) && issue(`A ${t.constructor.name}'s name cannot contain whitespace characters`)
                 }
 
                 if (t instanceof Language) {
                     // The name should not start with a number
                     const name = t.name.trim()
-                    !isNaN(parseInt(name[0])) && issue(`A Language's name cannot start with a number`)
+                    ;(!isNaN(parseInt(name[0]))) && issue(`A Language's name cannot start with a number`)
 
                    // The version is a non-empty string
-                    const version = t.version.trim();
-                    version.length === 0 && issue(`A Language's version must be a non-empty string`)
+                    const version = t.version.trim()
+                    ;(version.length === 0) && issue(`A Language's version must be a non-empty string`)
                 }
 
                 // The classifier should not inherit from itself (directly or indirectly)
                 if (t instanceof Classifier) {
-                    const cycle = inheritanceCycleWith(t);
-                    (cycle.length > 0) && issue(`A ${t.constructor.name} can't inherit (directly or indirectly) from itself, but ${qualifiedNameOf(t)} does so through the following cycle: ${cycle.map((t) => qualifiedNameOf(t)).join(" -> ")}`)
-                            // TODO  check whether it needs to be "a" or "an", or just say "An instance of ..."
+                    const cycle = inheritanceCycleWith(t)
+                    const metaTypeName = t.constructor.name
+                    ;(cycle.length > 0) && issue(`A${["a", "e", "i", "o"].indexOf(metaTypeName.charAt(0)) > -1 ? "n" : ""} ${metaTypeName} can't inherit (directly or indirectly) from itself, but ${qualifiedNameOf(t)} does so through the following cycle: ${cycle.map((t) => qualifiedNameOf(t)).join(" -> ")}`)
+                }
+
+                if (t instanceof StructuredDataType) {
+                    selfReferencesWithinStructuredDataType(t)
+                        .forEach((cycle) => {
+                            issue(`A StructuredDataType can't have nested fields who have itself as type, but ${qualifiedNameOf(t)} does so through the following cycle: ${[t, ...cycle].map((t) => qualifiedNameOf(t)).join(" -> ")}`, cycle)
+                        })
                 }
 
                 return issues
