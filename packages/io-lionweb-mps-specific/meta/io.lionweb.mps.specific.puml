@@ -9,19 +9,23 @@ annotation ConceptDescription {
   conceptShortDescription: String?
   helpUrl: String?
 }
+ConceptDescription ..# Classifier : <i>annotates</i>
 
 annotation Deprecated {
   comment: String?
   build: String?
 }
+Deprecated ..# IKeyed : <i>annotates</i>
 
 annotation KeyedDescription {
   documentation: String?
 }
+KeyedDescription ..# IKeyed : <i>annotates</i>
 
 annotation ShortDescription {
   description: String?
 }
+ShortDescription ..# Node : <i>annotates</i>
 
 annotation VirtualPackage implements INamed
 VirtualPackage ..# Node : <i>annotates</i>
