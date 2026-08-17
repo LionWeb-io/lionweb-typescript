@@ -51,7 +51,7 @@ import {
     RootsWithIdMapping
 } from "@lionweb/class-core"
 import { featureResolversFor, LionWebVersions, PropertyValueDeserializer, referenceToSet } from "@lionweb/core"
-import { LionWebJsonChunk } from "@lionweb/json"
+import { LionWebJsonDeltaChunk } from "@lionweb/json"
 import {
     AnnotationAddedEvent,
     AnnotationDeletedEvent,
@@ -99,7 +99,7 @@ export const eventToDeltaTranslator = (
 
     const eventAsDelta = (event: Event, idMapping: IdMapping): IDelta | undefined => {
 
-        const deserializedNodeFrom = (chunk: LionWebJsonChunk): INodeBase => {
+        const deserializedNodeFrom = (chunk: LionWebJsonDeltaChunk): INodeBase => {
             const { roots, idMapping: newIdMapping } = deserializeWithIdMapping(chunk, idMapping)    // (deserializer should take care of installing delta receiver)
             if (roots.length !== 1) {
                 throw new Error(`expected exactly 1 root node in deserialization of chunk in event, but got ${roots.length}`)

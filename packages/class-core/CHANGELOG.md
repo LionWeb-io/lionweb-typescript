@@ -8,6 +8,7 @@
   * Update `ChildMoved[AndReplaced]InSameContainmentDelta` and `AnnotationMoved[AndReplaced]Delta` classes, as well as associated appliers and inverters, to align with latest, offset-based versions of those deltas.
 * Fix (and rework) `asTreeTextWith` textualizer function to deal with the widened `SingleRef` type.
 * The deserializer now returns `UnresolvedReference` instances for unresolved references instead of `referenceToSet`.
+* Change the type of the `Deserializer` type to `NodesOfLionWebJsonChunk` to radiate that deserializers produced by this package only require the `nodes` field, but not the `serializationFormatVersion` and `languages` fields.
 
 
 ## 0.9.2

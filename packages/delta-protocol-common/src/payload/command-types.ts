@@ -15,7 +15,7 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { LionWebId, LionWebJsonChunk, LionWebJsonMetaPointer } from "@lionweb/json"
+import { LionWebId, LionWebJsonDeltaChunk, LionWebJsonMetaPointer } from "@lionweb/json"
 import { ContinuedChunkMessage, CustomMessageKind, DeltaAdditionalInfo, SplittableMessage } from "./common.js"
 
 export interface Command extends DeltaAdditionalInfo {
@@ -43,7 +43,7 @@ export interface ContinuedCommand extends Command, ContinuedChunkMessage {
 /** § 5.7.2.1 */
 export interface AddPartitionCommand extends Command, SplittableMessage {
     messageKind: "AddPartition"
-    newPartition: LionWebJsonChunk
+    newPartition: /* single */ LionWebJsonDeltaChunk
 }
 
 /** § 5.7.2.2 */
@@ -86,7 +86,7 @@ export interface ChangePropertyCommand extends Command {
 export interface AddChildCommand extends Command, SplittableMessage {
     messageKind: "AddChild"
     parent: LionWebId
-    newChild: LionWebJsonChunk
+    newChild: /* single */ LionWebJsonDeltaChunk
     containment: LionWebJsonMetaPointer
     index: number
 }
@@ -103,7 +103,7 @@ export interface DeleteChildCommand extends Command {
 /** § 5.7.5.3 */
 export interface ReplaceChildCommand extends Command, SplittableMessage {
     messageKind: "ReplaceChild"
-    newChild: LionWebJsonChunk
+    newChild: /* single */ LionWebJsonDeltaChunk
     parent: LionWebId
     containment: LionWebJsonMetaPointer
     index: number
@@ -183,7 +183,7 @@ export interface MoveAndReplaceChildInSameContainmentCommand extends Command {
 export interface AddAnnotationCommand extends Command, SplittableMessage {
     messageKind: "AddAnnotation"
     parent: LionWebId
-    newAnnotation: LionWebJsonChunk
+    newAnnotation: /* single */ LionWebJsonDeltaChunk
     index: number
 }
 
@@ -198,7 +198,7 @@ export interface DeleteAnnotationCommand extends Command {
 /** § 5.7.6.3 */
 export interface ReplaceAnnotationCommand extends Command, SplittableMessage {
     messageKind: "ReplaceAnnotation"
-    newAnnotation: LionWebJsonChunk
+    newAnnotation: /* single */ LionWebJsonDeltaChunk
     parent: LionWebId
     index: number
     replacedAnnotation: LionWebId

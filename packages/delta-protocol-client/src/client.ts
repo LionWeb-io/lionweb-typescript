@@ -16,7 +16,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { DeltaReceiver, Forest, ILanguageBase, INodeBase, serializeDelta } from "@lionweb/class-core"
-import { LionWebId, LionWebJsonChunk } from "@lionweb/json"
+import { LionWebId, LionWebJsonChunk, LionWebJsonDeltaChunk } from "@lionweb/json"
 
 import {
     ansi,
@@ -306,7 +306,7 @@ export class LionWebClient {
     }
 
     /** § 5.5.2.3 */
-    async subscribeToPartitionContents(queryId: LionWebId, partition: LionWebId): Promise<LionWebJsonChunk> {   // TODO  already deserialize, because we've got everything we need
+    async subscribeToPartitionContents(queryId: LionWebId, partition: LionWebId): Promise<LionWebJsonDeltaChunk> {   // TODO  already deserialize, because we've got everything we need
         const response = await this.makeQuery({
             messageKind: "SubscribeToPartitionContentsRequest",
             queryId,
@@ -380,7 +380,7 @@ export class LionWebClient {
     }
 
     /** § 5.5.4.2 */
-    async listPartitions(queryId: LionWebId, depthLimit: number): Promise<LionWebJsonChunk> {
+    async listPartitions(queryId: LionWebId, depthLimit: number): Promise<LionWebJsonDeltaChunk> {
         const response = await this.makeQuery({
             messageKind: "ListPartitionsRequest",
             depthLimit,
@@ -391,7 +391,7 @@ export class LionWebClient {
     }
 
     /** § 5.5.4.3 */
-    async listAndSubscribePartitions(queryId: LionWebId): Promise<LionWebJsonChunk> {
+    async listAndSubscribePartitions(queryId: LionWebId): Promise<LionWebJsonDeltaChunk> {
         const response = await this.makeQuery({
             messageKind: "ListAndSubscribePartitionsRequest",
             queryId,
