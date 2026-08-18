@@ -39,11 +39,11 @@ export type LionWebJsonMetaPointer = {
 /**
  * A type to DRY {@link LionWebJsonChunk} and {@link LionWebJsonDeltaChunk}.
  */
-export type NodesOfLionWebJsonChunk = {
+export type OnlyNodesOfLionWebJsonChunk = {
     nodes: LionWebJsonNode[]
 }
 
-export type LionWebJsonChunk = NodesOfLionWebJsonChunk & {
+export type LionWebJsonChunk = OnlyNodesOfLionWebJsonChunk & {
     serializationFormatVersion: LionWebSerializationFormatVersion
     languages: LionWebJsonUsedLanguage[]
 }
@@ -99,5 +99,5 @@ export type LionWebJsonReferenceTarget =
  *
  * Comes in the variants *single*, *multi*, *shallow*, but that’s not expressed type-wise.
  */
-export type LionWebJsonDeltaChunk = NodesOfLionWebJsonChunk
+export type LionWebJsonDeltaChunk = OnlyNodesOfLionWebJsonChunk
 

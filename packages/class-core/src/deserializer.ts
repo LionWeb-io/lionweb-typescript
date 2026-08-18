@@ -35,7 +35,7 @@ import {
     LionWebJsonChunk,
     LionWebJsonNode,
     LionWebJsonReferenceTarget,
-    NodesOfLionWebJsonChunk
+    OnlyNodesOfLionWebJsonChunk
 } from "@lionweb/json"
 import { byIdMap, keepDefineds } from "@lionweb/ts-utils"
 
@@ -50,9 +50,9 @@ import { NodesToInstall } from "./linking.js"
 export type Deserializer<T> = (
     /**
      * The {@link LionWebJsonChunk serialization chunk} to deserialize.
-     * **Note** that we only need the nodes for deserialization, hence the use of the {@link NodesOfLionWebJsonChunk}.
+     * **Note** that we only need the nodes for deserialization, hence the use of the {@link OnlyNodesOfLionWebJsonChunk}.
      */
-    serializationChunk: NodesOfLionWebJsonChunk,
+    serializationChunk: OnlyNodesOfLionWebJsonChunk,
     /**
      * The {@link IdMapping ID mapping} of existing nodes that the given `serializationChunk` may link to.
      */
