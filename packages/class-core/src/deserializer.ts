@@ -29,7 +29,14 @@ import {
     Reference,
     UnresolvedReference
 } from "@lionweb/core"
-import { LionWebId, LionWebJsonChunk, LionWebJsonNode, LionWebJsonReferenceTarget } from "@lionweb/json"
+import {
+    LionWebId,
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+    LionWebJsonChunk,
+    LionWebJsonNode,
+    LionWebJsonReferenceTarget,
+    OnlyNodesOfLionWebJsonChunk
+} from "@lionweb/json"
 import { byIdMap, keepDefineds } from "@lionweb/ts-utils"
 
 import { DeltaReceiver, FactoryConfiguration, IdMapping, ILanguageBase, INodeBase } from "./index.js"
@@ -41,9 +48,14 @@ import { NodesToInstall } from "./linking.js"
  * A type for deserializer functions that are parametrized in their return type.
  */
 export type Deserializer<T> = (
-    /** The {@link LionWebJsonChunk serialization chunk} to deserialize. */
-    serializationChunk: LionWebJsonChunk,
-    /** The {@link IdMapping ID mapping} of existing nodes that the given `serializationChunk` may link to. */
+    /**
+     * The {@link LionWebJsonChunk serialization chunk} to deserialize.
+     * **Note** that we only need the nodes for deserialization, hence the use of the {@link OnlyNodesOfLionWebJsonChunk}.
+     */
+    serializationChunk: OnlyNodesOfLionWebJsonChunk,
+    /**
+     * The {@link IdMapping ID mapping} of existing nodes that the given `serializationChunk` may link to.
+     */
     idMapping?: IdMapping
 ) => T;
 

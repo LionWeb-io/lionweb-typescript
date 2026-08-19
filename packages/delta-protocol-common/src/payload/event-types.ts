@@ -15,7 +15,7 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { LionWebId, LionWebJsonChunk, LionWebJsonMetaPointer } from "@lionweb/json"
+import { LionWebId, LionWebJsonDeltaChunk, LionWebJsonMetaPointer } from "@lionweb/json"
 import { mapFrom } from "@lionweb/ts-utils"
 import { ContinuedChunkMessage, CustomMessageKind, DeltaAdditionalInfo, Message, SplittableMessage } from "./common.js"
 
@@ -53,7 +53,7 @@ export interface ContinuedEvent extends Event, ContinuedChunkMessage {
 /** § 5.8.2.1 */
 export interface PartitionAddedEvent extends Event, SplittableMessage {
     messageKind: "PartitionAdded"
-    newPartition: LionWebJsonChunk
+    newPartition: /* single */ LionWebJsonDeltaChunk
 }
 
 /** § 5.8.2.2 */
@@ -100,7 +100,7 @@ export interface PropertyChangedEvent extends Event {
 export interface ChildAddedEvent extends Event, SplittableMessage {
     messageKind: "ChildAdded"
     parent: LionWebId
-    newChild: LionWebJsonChunk
+    newChild: /* single */ LionWebJsonDeltaChunk
     containment: LionWebJsonMetaPointer
     index: number
 }
@@ -118,7 +118,7 @@ export interface ChildDeletedEvent extends Event {
 /** § 5.8.5.3 */
 export interface ChildReplacedEvent extends Event, SplittableMessage {
     messageKind: "ChildReplaced"
-    newChild: LionWebJsonChunk
+    newChild: /* single */ LionWebJsonDeltaChunk
     replacedChild: LionWebId
     replacedDescendants: LionWebId[]
     parent: LionWebId
@@ -202,7 +202,7 @@ export interface ChildMovedAndReplacedInSameContainmentEvent extends Event {
 export interface AnnotationAddedEvent extends Event, SplittableMessage {
     messageKind: "AnnotationAdded"
     parent: LionWebId
-    newAnnotation: LionWebJsonChunk
+    newAnnotation: /* single */ LionWebJsonDeltaChunk
     index: number
 }
 
@@ -218,7 +218,7 @@ export interface AnnotationDeletedEvent extends Event {
 /** § 5.8.6.3 */
 export interface AnnotationReplacedEvent extends Event, SplittableMessage {
     messageKind: "AnnotationReplaced"
-    newAnnotation: LionWebJsonChunk
+    newAnnotation: /* single */ LionWebJsonDeltaChunk
     replacedAnnotation: LionWebId
     replacedDescendants: LionWebId[]
     parent: LionWebId

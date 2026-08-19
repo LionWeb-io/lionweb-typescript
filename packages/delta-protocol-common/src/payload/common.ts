@@ -23,7 +23,7 @@ export interface Message {
 }
 
 /**
- * All messages containing a {@link LionWebJsonChunk serialization chunk}.
+ * All messages containing a {@link LionWebJsonDeltaChunk DeltaChunk}.
  *
  * (See § 3.7.1 of the specification of the delta protocol.)
  */
