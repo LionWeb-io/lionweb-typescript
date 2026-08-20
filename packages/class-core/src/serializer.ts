@@ -24,6 +24,7 @@ import {
     isReferenceToSet,
     isResolvedReference,
     isUnresolvedReference,
+    LionWebVersion,
     LionWebVersions,
     Node,
     PrimitiveType,
@@ -107,6 +108,7 @@ export const serializeNodeBases = serializerWith({ reader: nodeBaseReader, seria
  * Type def. to capture the configuration to pass to {@link propertyValueSerializerWith}.
  */
 type PropertyValueSerializerConfiguration = Partial<{
+    lionWebVersion: LionWebVersion
     primitiveValueSerializer: PropertyValueSerializer
     reportIssue: (message: string) => void | never
 }>
@@ -117,7 +119,8 @@ type PropertyValueSerializerConfiguration = Partial<{
  * Unrecoverable issues are passed to the optional `reportIssue` argument, and
  */
 export const propertyValueSerializerWith = (configuration?: PropertyValueSerializerConfiguration) => {
-    const primitiveValueSerializer = configuration?.primitiveValueSerializer ?? LionWebVersions.v2023_1.builtinsFacade.propertyValueSerializer
+    const lionWebVersion = configuration?.lionWebVersion ?? LionWebVersions.v2023_1
+    const primitiveValueSerializer = configuration?.primitiveValueSerializer ?? lionWebVersion.builtinsFacade.propertyValueSerializer
     const reportIssue = configuration?.reportIssue ?? ((message) => { throw new Error(message) })
     return {
         serializeValue: (value: unknown, property: Property) => {

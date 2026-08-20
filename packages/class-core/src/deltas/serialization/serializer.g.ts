@@ -18,7 +18,7 @@
 // Warning: this file is generated!
 // Modifying it by hand is useless at best, and sabotage at worst.
 
-import { metaPointerForFeature } from "@lionweb/core";
+import { LionWebVersions, metaPointerForFeature } from "@lionweb/core";
 import { IDelta } from "../base.js";
 import {
     AnnotationAddedDelta,
@@ -77,289 +77,302 @@ import {
     ReferenceDeletedSerializedDelta,
     SerializedDelta
 } from "./types.g.js";
-import { defaultPropertyValueSerializer } from "./base.js";
 import { idFrom } from "../../references.js";
-import { serializeNodeBases } from "../../serializer.js";
+import { propertyValueSerializerWith, serializeNodeBases } from "../../serializer.js";
 
 
-export const serializeDelta = (delta: IDelta): SerializedDelta => {
-    if (delta instanceof PartitionAddedDelta) {
-        return {
-            kind: "PartitionAdded",
-            newPartition: delta.newPartition.id,
-            newNodes: serializeNodeBases([delta.newPartition])
-        } as PartitionAddedSerializedDelta;
+export const deltaSerializer = (lionWebVersion = LionWebVersions.v2023_1) => {
+    const propertyValueSerializer = propertyValueSerializerWith({ primitiveValueSerializer: lionWebVersion.builtinsFacade.propertyValueSerializer });
+
+    const serializeDelta = (delta: IDelta): SerializedDelta => {
+        if (delta instanceof PartitionAddedDelta) {
+            return {
+                kind: "PartitionAdded",
+                newPartition: delta.newPartition.id,
+                newNodes: serializeNodeBases([delta.newPartition])
+            } as PartitionAddedSerializedDelta;
+        }
+
+        if (delta instanceof PartitionDeletedDelta) {
+            return {
+                kind: "PartitionDeleted",
+                deletedPartition: delta.deletedPartition.id
+            } as PartitionDeletedSerializedDelta;
+        }
+
+        if (delta instanceof PropertyAddedDelta) {
+            return {
+                kind: "PropertyAdded",
+                node: delta.node.id,
+                property: metaPointerForFeature(delta.property),
+                value: propertyValueSerializer.serializeValue(delta.value, delta.property)
+            } as PropertyAddedSerializedDelta;
+        }
+
+        if (delta instanceof PropertyDeletedDelta) {
+            return {
+                kind: "PropertyDeleted",
+                node: delta.node.id,
+                property: metaPointerForFeature(delta.property),
+                oldValue: propertyValueSerializer.serializeValue(delta.oldValue, delta.property)
+            } as PropertyDeletedSerializedDelta;
+        }
+
+        if (delta instanceof PropertyChangedDelta) {
+            return {
+                kind: "PropertyChanged",
+                node: delta.node.id,
+                property: metaPointerForFeature(delta.property),
+                oldValue: propertyValueSerializer.serializeValue(delta.oldValue, delta.property),
+                newValue: propertyValueSerializer.serializeValue(delta.newValue, delta.property)
+            } as PropertyChangedSerializedDelta;
+        }
+
+        if (delta instanceof ChildAddedDelta) {
+            return {
+                kind: "ChildAdded",
+                parent: delta.parent.id,
+                containment: metaPointerForFeature(delta.containment),
+                index: delta.index,
+                newChild: delta.newChild.id,
+                newNodes: serializeNodeBases([delta.newChild])
+            } as ChildAddedSerializedDelta;
+        }
+
+        if (delta instanceof ChildDeletedDelta) {
+            return {
+                kind: "ChildDeleted",
+                parent: delta.parent.id,
+                containment: metaPointerForFeature(delta.containment),
+                index: delta.index,
+                deletedChild: delta.deletedChild.id,
+                deletedNodes: serializeNodeBases([delta.deletedChild])
+            } as ChildDeletedSerializedDelta;
+        }
+
+        if (delta instanceof ChildReplacedDelta) {
+            return {
+                kind: "ChildReplaced",
+                parent: delta.parent.id,
+                containment: metaPointerForFeature(delta.containment),
+                index: delta.index,
+                replacedChild: delta.replacedChild.id,
+                replacedNodes: serializeNodeBases([delta.replacedChild]),
+                newChild: delta.newChild.id,
+                newNodes: serializeNodeBases([delta.newChild])
+            } as ChildReplacedSerializedDelta;
+        }
+
+        if (delta instanceof ChildMovedFromOtherContainmentDelta) {
+            return {
+                kind: "ChildMovedFromOtherContainment",
+                oldParent: delta.oldParent.id,
+                oldContainment: metaPointerForFeature(delta.oldContainment),
+                oldIndex: delta.oldIndex,
+                newParent: delta.newParent.id,
+                newContainment: metaPointerForFeature(delta.newContainment),
+                newIndex: delta.newIndex,
+                movedChild: delta.movedChild.id
+            } as ChildMovedFromOtherContainmentSerializedDelta;
+        }
+
+        if (delta instanceof ChildMovedFromOtherContainmentInSameParentDelta) {
+            return {
+                kind: "ChildMovedFromOtherContainmentInSameParent",
+                parent: delta.parent.id,
+                oldContainment: metaPointerForFeature(delta.oldContainment),
+                oldIndex: delta.oldIndex,
+                movedChild: delta.movedChild.id,
+                newContainment: metaPointerForFeature(delta.newContainment),
+                newIndex: delta.newIndex
+            } as ChildMovedFromOtherContainmentInSameParentSerializedDelta;
+        }
+
+        if (delta instanceof ChildMovedInSameContainmentDelta) {
+            return {
+                kind: "ChildMovedInSameContainment",
+                parent: delta.parent.id,
+                containment: metaPointerForFeature(delta.containment),
+                oldIndex: delta.oldIndex,
+                indexOffset: delta.indexOffset,
+                movedChild: delta.movedChild.id
+            } as ChildMovedInSameContainmentSerializedDelta;
+        }
+
+        if (delta instanceof ChildMovedAndReplacedFromOtherContainmentDelta) {
+            return {
+                kind: "ChildMovedAndReplacedFromOtherContainment",
+                newParent: delta.newParent.id,
+                newContainment: metaPointerForFeature(delta.newContainment),
+                newIndex: delta.newIndex,
+                movedChild: delta.movedChild.id,
+                oldParent: delta.oldParent.id,
+                oldContainment: metaPointerForFeature(delta.oldContainment),
+                oldIndex: delta.oldIndex,
+                replacedChild: delta.replacedChild.id,
+                replacedChildAsNodes: serializeNodeBases([delta.replacedChild])
+            } as ChildMovedAndReplacedFromOtherContainmentSerializedDelta;
+        }
+
+        if (delta instanceof ChildMovedAndReplacedFromOtherContainmentInSameParentDelta) {
+            return {
+                kind: "ChildMovedAndReplacedFromOtherContainmentInSameParent",
+                parent: delta.parent.id,
+                oldContainment: metaPointerForFeature(delta.oldContainment),
+                oldIndex: delta.oldIndex,
+                newContainment: metaPointerForFeature(delta.newContainment),
+                newIndex: delta.newIndex,
+                movedChild: delta.movedChild.id,
+                replacedChild: delta.replacedChild.id,
+                replacedChildAsNodes: serializeNodeBases([delta.replacedChild])
+            } as ChildMovedAndReplacedFromOtherContainmentInSameParentSerializedDelta;
+        }
+
+        if (delta instanceof ChildMovedAndReplacedInSameContainmentDelta) {
+            return {
+                kind: "ChildMovedAndReplacedInSameContainment",
+                parent: delta.parent.id,
+                containment: metaPointerForFeature(delta.containment),
+                oldIndex: delta.oldIndex,
+                indexOffset: delta.indexOffset,
+                movedChild: delta.movedChild.id,
+                replacedChild: delta.replacedChild.id,
+                replacedChildAsNodes: serializeNodeBases([delta.replacedChild])
+            } as ChildMovedAndReplacedInSameContainmentSerializedDelta;
+        }
+
+        if (delta instanceof AnnotationAddedDelta) {
+            return {
+                kind: "AnnotationAdded",
+                parent: delta.parent.id,
+                index: delta.index,
+                newAnnotation: delta.newAnnotation.id,
+                newAnnotationNodes: serializeNodeBases([delta.newAnnotation])
+            } as AnnotationAddedSerializedDelta;
+        }
+
+        if (delta instanceof AnnotationDeletedDelta) {
+            return {
+                kind: "AnnotationDeleted",
+                parent: delta.parent.id,
+                index: delta.index,
+                deletedAnnotation: delta.deletedAnnotation.id,
+                deletedAnnotationNodes: serializeNodeBases([delta.deletedAnnotation])
+            } as AnnotationDeletedSerializedDelta;
+        }
+
+        if (delta instanceof AnnotationReplacedDelta) {
+            return {
+                kind: "AnnotationReplaced",
+                parent: delta.parent.id,
+                index: delta.index,
+                replacedAnnotation: delta.replacedAnnotation.id,
+                replacedAnnotationNodes: serializeNodeBases([delta.replacedAnnotation]),
+                newAnnotation: delta.newAnnotation.id,
+                newAnnotationNodes: serializeNodeBases([delta.newAnnotation])
+            } as AnnotationReplacedSerializedDelta;
+        }
+
+        if (delta instanceof AnnotationMovedFromOtherParentDelta) {
+            return {
+                kind: "AnnotationMovedFromOtherParent",
+                oldParent: delta.oldParent.id,
+                oldIndex: delta.oldIndex,
+                newParent: delta.newParent.id,
+                newIndex: delta.newIndex,
+                movedAnnotation: delta.movedAnnotation.id
+            } as AnnotationMovedFromOtherParentSerializedDelta;
+        }
+
+        if (delta instanceof AnnotationMovedInSameParentDelta) {
+            return {
+                kind: "AnnotationMovedInSameParent",
+                parent: delta.parent.id,
+                oldIndex: delta.oldIndex,
+                indexOffset: delta.indexOffset,
+                movedAnnotation: delta.movedAnnotation.id
+            } as AnnotationMovedInSameParentSerializedDelta;
+        }
+
+        if (delta instanceof AnnotationMovedAndReplacedFromOtherParentDelta) {
+            return {
+                kind: "AnnotationMovedAndReplacedFromOtherParent",
+                oldParent: delta.oldParent.id,
+                oldIndex: delta.oldIndex,
+                replacedAnnotation: delta.replacedAnnotation.id,
+                replacedAnnotationNodes: serializeNodeBases([delta.replacedAnnotation]),
+                newParent: delta.newParent.id,
+                newIndex: delta.newIndex,
+                movedAnnotation: delta.movedAnnotation.id
+            } as AnnotationMovedAndReplacedFromOtherParentSerializedDelta;
+        }
+
+        if (delta instanceof AnnotationMovedAndReplacedInSameParentDelta) {
+            return {
+                kind: "AnnotationMovedAndReplacedInSameParent",
+                parent: delta.parent.id,
+                oldIndex: delta.oldIndex,
+                indexOffset: delta.indexOffset,
+                replacedAnnotation: delta.replacedAnnotation.id,
+                replacedAnnotationNodes: serializeNodeBases([delta.replacedAnnotation]),
+                movedAnnotation: delta.movedAnnotation.id
+            } as AnnotationMovedAndReplacedInSameParentSerializedDelta;
+        }
+
+        if (delta instanceof ReferenceAddedDelta) {
+            return {
+                kind: "ReferenceAdded",
+                parent: delta.parent.id,
+                reference: metaPointerForFeature(delta.reference),
+                index: delta.index,
+                newReference: idFrom(delta.newReference)
+            } as ReferenceAddedSerializedDelta;
+        }
+
+        if (delta instanceof ReferenceDeletedDelta) {
+            return {
+                kind: "ReferenceDeleted",
+                parent: delta.parent.id,
+                reference: metaPointerForFeature(delta.reference),
+                index: delta.index,
+                deletedReference: idFrom(delta.deletedReference)
+            } as ReferenceDeletedSerializedDelta;
+        }
+
+        if (delta instanceof ReferenceChangedDelta) {
+            return {
+                kind: "ReferenceChanged",
+                parent: delta.parent.id,
+                reference: metaPointerForFeature(delta.reference),
+                index: delta.index,
+                newReference: idFrom(delta.newReference),
+                oldReference: idFrom(delta.oldReference)
+            } as ReferenceChangedSerializedDelta;
+        }
+
+        if (delta instanceof CompositeDelta) {
+            return {
+                kind: "Composite",
+                parts: delta.parts.map(serializeDelta)
+            } as CompositeSerializedDelta;
+        }
+
+        if (delta instanceof NoOpDelta) {
+            return {
+                kind: "NoOp"
+            } as NoOpSerializedDelta;
+        }
+
+        throw new Error(`serialization of delta of class ${delta.constructor.name} not implemented`);
     }
 
-    if (delta instanceof PartitionDeletedDelta) {
-        return {
-            kind: "PartitionDeleted",
-            deletedPartition: delta.deletedPartition.id
-        } as PartitionDeletedSerializedDelta;
-    }
-
-    if (delta instanceof PropertyAddedDelta) {
-        return {
-            kind: "PropertyAdded",
-            node: delta.node.id,
-            property: metaPointerForFeature(delta.property),
-            value: defaultPropertyValueSerializer.serializeValue(delta.value, delta.property)
-        } as PropertyAddedSerializedDelta;
-    }
-
-    if (delta instanceof PropertyDeletedDelta) {
-        return {
-            kind: "PropertyDeleted",
-            node: delta.node.id,
-            property: metaPointerForFeature(delta.property),
-            oldValue: defaultPropertyValueSerializer.serializeValue(delta.oldValue, delta.property)
-        } as PropertyDeletedSerializedDelta;
-    }
-
-    if (delta instanceof PropertyChangedDelta) {
-        return {
-            kind: "PropertyChanged",
-            node: delta.node.id,
-            property: metaPointerForFeature(delta.property),
-            oldValue: defaultPropertyValueSerializer.serializeValue(delta.oldValue, delta.property),
-            newValue: defaultPropertyValueSerializer.serializeValue(delta.newValue, delta.property)
-        } as PropertyChangedSerializedDelta;
-    }
-
-    if (delta instanceof ChildAddedDelta) {
-        return {
-            kind: "ChildAdded",
-            parent: delta.parent.id,
-            containment: metaPointerForFeature(delta.containment),
-            index: delta.index,
-            newChild: delta.newChild.id,
-            newNodes: serializeNodeBases([delta.newChild])
-        } as ChildAddedSerializedDelta;
-    }
-
-    if (delta instanceof ChildDeletedDelta) {
-        return {
-            kind: "ChildDeleted",
-            parent: delta.parent.id,
-            containment: metaPointerForFeature(delta.containment),
-            index: delta.index,
-            deletedChild: delta.deletedChild.id,
-            deletedNodes: serializeNodeBases([delta.deletedChild])
-        } as ChildDeletedSerializedDelta;
-    }
-
-    if (delta instanceof ChildReplacedDelta) {
-        return {
-            kind: "ChildReplaced",
-            parent: delta.parent.id,
-            containment: metaPointerForFeature(delta.containment),
-            index: delta.index,
-            replacedChild: delta.replacedChild.id,
-            replacedNodes: serializeNodeBases([delta.replacedChild]),
-            newChild: delta.newChild.id,
-            newNodes: serializeNodeBases([delta.newChild])
-        } as ChildReplacedSerializedDelta;
-    }
-
-    if (delta instanceof ChildMovedFromOtherContainmentDelta) {
-        return {
-            kind: "ChildMovedFromOtherContainment",
-            oldParent: delta.oldParent.id,
-            oldContainment: metaPointerForFeature(delta.oldContainment),
-            oldIndex: delta.oldIndex,
-            newParent: delta.newParent.id,
-            newContainment: metaPointerForFeature(delta.newContainment),
-            newIndex: delta.newIndex,
-            movedChild: delta.movedChild.id
-        } as ChildMovedFromOtherContainmentSerializedDelta;
-    }
-
-    if (delta instanceof ChildMovedFromOtherContainmentInSameParentDelta) {
-        return {
-            kind: "ChildMovedFromOtherContainmentInSameParent",
-            parent: delta.parent.id,
-            oldContainment: metaPointerForFeature(delta.oldContainment),
-            oldIndex: delta.oldIndex,
-            movedChild: delta.movedChild.id,
-            newContainment: metaPointerForFeature(delta.newContainment),
-            newIndex: delta.newIndex
-        } as ChildMovedFromOtherContainmentInSameParentSerializedDelta;
-    }
-
-    if (delta instanceof ChildMovedInSameContainmentDelta) {
-        return {
-            kind: "ChildMovedInSameContainment",
-            parent: delta.parent.id,
-            containment: metaPointerForFeature(delta.containment),
-            oldIndex: delta.oldIndex,
-            indexOffset: delta.indexOffset,
-            movedChild: delta.movedChild.id
-        } as ChildMovedInSameContainmentSerializedDelta;
-    }
-
-    if (delta instanceof ChildMovedAndReplacedFromOtherContainmentDelta) {
-        return {
-            kind: "ChildMovedAndReplacedFromOtherContainment",
-            newParent: delta.newParent.id,
-            newContainment: metaPointerForFeature(delta.newContainment),
-            newIndex: delta.newIndex,
-            movedChild: delta.movedChild.id,
-            oldParent: delta.oldParent.id,
-            oldContainment: metaPointerForFeature(delta.oldContainment),
-            oldIndex: delta.oldIndex,
-            replacedChild: delta.replacedChild.id,
-            replacedChildAsNodes: serializeNodeBases([delta.replacedChild])
-        } as ChildMovedAndReplacedFromOtherContainmentSerializedDelta;
-    }
-
-    if (delta instanceof ChildMovedAndReplacedFromOtherContainmentInSameParentDelta) {
-        return {
-            kind: "ChildMovedAndReplacedFromOtherContainmentInSameParent",
-            parent: delta.parent.id,
-            oldContainment: metaPointerForFeature(delta.oldContainment),
-            oldIndex: delta.oldIndex,
-            newContainment: metaPointerForFeature(delta.newContainment),
-            newIndex: delta.newIndex,
-            movedChild: delta.movedChild.id,
-            replacedChild: delta.replacedChild.id,
-            replacedChildAsNodes: serializeNodeBases([delta.replacedChild])
-        } as ChildMovedAndReplacedFromOtherContainmentInSameParentSerializedDelta;
-    }
-
-    if (delta instanceof ChildMovedAndReplacedInSameContainmentDelta) {
-        return {
-            kind: "ChildMovedAndReplacedInSameContainment",
-            parent: delta.parent.id,
-            containment: metaPointerForFeature(delta.containment),
-            oldIndex: delta.oldIndex,
-            indexOffset: delta.indexOffset,
-            movedChild: delta.movedChild.id,
-            replacedChild: delta.replacedChild.id,
-            replacedChildAsNodes: serializeNodeBases([delta.replacedChild])
-        } as ChildMovedAndReplacedInSameContainmentSerializedDelta;
-    }
-
-    if (delta instanceof AnnotationAddedDelta) {
-        return {
-            kind: "AnnotationAdded",
-            parent: delta.parent.id,
-            index: delta.index,
-            newAnnotation: delta.newAnnotation.id,
-            newAnnotationNodes: serializeNodeBases([delta.newAnnotation])
-        } as AnnotationAddedSerializedDelta;
-    }
-
-    if (delta instanceof AnnotationDeletedDelta) {
-        return {
-            kind: "AnnotationDeleted",
-            parent: delta.parent.id,
-            index: delta.index,
-            deletedAnnotation: delta.deletedAnnotation.id,
-            deletedAnnotationNodes: serializeNodeBases([delta.deletedAnnotation])
-        } as AnnotationDeletedSerializedDelta;
-    }
-
-    if (delta instanceof AnnotationReplacedDelta) {
-        return {
-            kind: "AnnotationReplaced",
-            parent: delta.parent.id,
-            index: delta.index,
-            replacedAnnotation: delta.replacedAnnotation.id,
-            replacedAnnotationNodes: serializeNodeBases([delta.replacedAnnotation]),
-            newAnnotation: delta.newAnnotation.id,
-            newAnnotationNodes: serializeNodeBases([delta.newAnnotation])
-        } as AnnotationReplacedSerializedDelta;
-    }
-
-    if (delta instanceof AnnotationMovedFromOtherParentDelta) {
-        return {
-            kind: "AnnotationMovedFromOtherParent",
-            oldParent: delta.oldParent.id,
-            oldIndex: delta.oldIndex,
-            newParent: delta.newParent.id,
-            newIndex: delta.newIndex,
-            movedAnnotation: delta.movedAnnotation.id
-        } as AnnotationMovedFromOtherParentSerializedDelta;
-    }
-
-    if (delta instanceof AnnotationMovedInSameParentDelta) {
-        return {
-            kind: "AnnotationMovedInSameParent",
-            parent: delta.parent.id,
-            oldIndex: delta.oldIndex,
-            indexOffset: delta.indexOffset,
-            movedAnnotation: delta.movedAnnotation.id
-        } as AnnotationMovedInSameParentSerializedDelta;
-    }
-
-    if (delta instanceof AnnotationMovedAndReplacedFromOtherParentDelta) {
-        return {
-            kind: "AnnotationMovedAndReplacedFromOtherParent",
-            oldParent: delta.oldParent.id,
-            oldIndex: delta.oldIndex,
-            replacedAnnotation: delta.replacedAnnotation.id,
-            replacedAnnotationNodes: serializeNodeBases([delta.replacedAnnotation]),
-            newParent: delta.newParent.id,
-            newIndex: delta.newIndex,
-            movedAnnotation: delta.movedAnnotation.id
-        } as AnnotationMovedAndReplacedFromOtherParentSerializedDelta;
-    }
-
-    if (delta instanceof AnnotationMovedAndReplacedInSameParentDelta) {
-        return {
-            kind: "AnnotationMovedAndReplacedInSameParent",
-            parent: delta.parent.id,
-            oldIndex: delta.oldIndex,
-            indexOffset: delta.indexOffset,
-            replacedAnnotation: delta.replacedAnnotation.id,
-            replacedAnnotationNodes: serializeNodeBases([delta.replacedAnnotation]),
-            movedAnnotation: delta.movedAnnotation.id
-        } as AnnotationMovedAndReplacedInSameParentSerializedDelta;
-    }
-
-    if (delta instanceof ReferenceAddedDelta) {
-        return {
-            kind: "ReferenceAdded",
-            parent: delta.parent.id,
-            reference: metaPointerForFeature(delta.reference),
-            index: delta.index,
-            newReference: idFrom(delta.newReference)
-        } as ReferenceAddedSerializedDelta;
-    }
-
-    if (delta instanceof ReferenceDeletedDelta) {
-        return {
-            kind: "ReferenceDeleted",
-            parent: delta.parent.id,
-            reference: metaPointerForFeature(delta.reference),
-            index: delta.index,
-            deletedReference: idFrom(delta.deletedReference)
-        } as ReferenceDeletedSerializedDelta;
-    }
-
-    if (delta instanceof ReferenceChangedDelta) {
-        return {
-            kind: "ReferenceChanged",
-            parent: delta.parent.id,
-            reference: metaPointerForFeature(delta.reference),
-            index: delta.index,
-            newReference: idFrom(delta.newReference),
-            oldReference: idFrom(delta.oldReference)
-        } as ReferenceChangedSerializedDelta;
-    }
-
-    if (delta instanceof CompositeDelta) {
-        return {
-            kind: "Composite",
-            parts: delta.parts.map(serializeDelta)
-        } as CompositeSerializedDelta;
-    }
-
-    if (delta instanceof NoOpDelta) {
-        return {
-            kind: "NoOp"
-        } as NoOpSerializedDelta;
-    }
-
-    throw new Error(`serialization of delta of class ${delta.constructor.name} not implemented`);
+    return serializeDelta;
 }
+
+
+/**
+ * Legacy version of {@link deltaSerializer} for the default {@LionWebVersion LionWeb version} 2023.1.
+ * @deprecated Use {@link deltaSerializer} instead.
+ */
+export const serializeDelta = deltaSerializer(LionWebVersions.v2023_1);
+

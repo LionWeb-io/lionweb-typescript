@@ -25,13 +25,15 @@ import { defineDeltas, deltas, deltasLanguage, generateDeltaCode } from "./delta
 
 const artifactsPath = "artifacts/deltas"
 
+const lionWebVersion = LionWebVersions.v2023_1
+
 // generate LionCore-builtins:
-generateLanguage(LionWebVersions.v2023_1.builtinsFacade.language, "../class-core/src", { genericImportLocation: "./index.js", header: defaultTrumpfOriginatingApache2_0LicensedHeader })
+generateLanguage(lionWebVersion.builtinsFacade.language, "../class-core/src", lionWebVersion, { genericImportLocation: "./index.js", header: defaultTrumpfOriginatingApache2_0LicensedHeader })
 
 // generate artifacts for deltas definition language:
 writeFileSync(join(artifactsPath, "delta-language.txt"), languageAsText(deltasLanguage))
 writeFileSync(join(artifactsPath, "delta-language.puml"), defaultTrumpfOriginatingApache2_0LicensedHeader + "\n" + generatePlantUmlForLanguage(deltasLanguage))
-generateLanguage(deltasLanguage, "src/deltas/definition", { header: defaultTrumpfOriginatingApache2_0LicensedHeader })
+generateLanguage(deltasLanguage, "src/deltas/definition", lionWebVersion, { header: defaultTrumpfOriginatingApache2_0LicensedHeader })
 
 // generate artifacts for specification of deltas expressed in that language:
 defineDeltas()

@@ -15,7 +15,7 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { Concept, isResolvedReference, Language } from "@lionweb/core"
+import { Concept, isResolvedReference, Language, LionWebVersion } from "@lionweb/core"
 import { indent } from "@lionweb/textgen-utils"
 import { dependencyOrderOf, sortedStringsByUppercase } from "@lionweb/ts-utils"
 import { asString, commaSeparated, when, withNewlineAppended } from "littoral-templates"
@@ -25,11 +25,11 @@ import { GeneratorOptions } from "./generator.js"
 import { Imports } from "./helpers/index.js"
 import { reflectiveClassFor } from "./reflective-layer.templates.js"
 
-export const languageFileFor = (language: Language, options: GeneratorOptions) => {
+export const languageFileFor = (language: Language, lionWebVersion: LionWebVersion, options: GeneratorOptions) => {
 
     const {name, version, key, id, entities} = language
 
-    const imports = new Imports(language)
+    const imports = new Imports(language, lionWebVersion.builtinsFacade)
 
     const orderedEntities = dependencyOrderOf(
         entities,

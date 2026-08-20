@@ -94,7 +94,8 @@ export type DeltaToCommandTranslator = (delta: IDelta, commandId: LionWebId) => 
  * which has a default `LionWebVersions.v2023_1.builtinsFacade.propertyValueSerializer`.
  */
 export const deltaToCommandTranslator = (
-    primitiveValueSerializer: PropertyValueSerializer = LionWebVersions.v2023_1.builtinsFacade.propertyValueSerializer
+    lionWebVersion = LionWebVersions.v2023_1,
+    primitiveValueSerializer: PropertyValueSerializer = lionWebVersion.builtinsFacade.propertyValueSerializer
 ) => {
     const propertyValueSerializer = propertyValueSerializerWith({ primitiveValueSerializer })
 

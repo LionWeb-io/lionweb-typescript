@@ -31,6 +31,8 @@ export type DeltaDeserializer = (delta: SerializedDelta) => IDelta;
  * A function that serializes the given value of the given {@link Property property},
  * using the same {@link PropertyValueSerializer} instance as the {@link serializeNodeBases} function,
  * and the same treatment of enumeration values.
+ *
+ * @deprecated Not parametrized in {@link LionWebVersion}.
  */
 export const defaultPropertyValueSerializer = propertyValueSerializerWith({ primitiveValueSerializer: LionWebVersions.v2023_1.builtinsFacade.propertyValueSerializer })
 

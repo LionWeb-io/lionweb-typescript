@@ -15,7 +15,7 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { deserializeLanguages, Language, LionWebVersions } from "@lionweb/core"
+import { deserializeLanguages, Language, LionWebVersion } from "@lionweb/core"
 import { LionWebJsonChunk } from "@lionweb/json"
 import { readFileAsJsonSync } from "@lionweb/node-utils"
 import { writeFileSync } from "fs"
@@ -61,10 +61,10 @@ const withDefaults = (options?: Partial<GeneratorOptions>): GeneratorOptions => 
  * @param generationPath The path (relative to the current execution) to generate to/in.
  * @param mayBeOptions Optionally-given {@link GeneratorOptions options}.
  */
-export const generateLanguage = (language: Language, generationPath: string, mayBeOptions?: Partial<GeneratorOptions>): string => {
+export const generateLanguage = (language: Language, generationPath: string, lionWebVersion: LionWebVersion, mayBeOptions?: Partial<GeneratorOptions>): string => {
     const {name} = language
     const fileName = `${name}.g.ts`
-    writeFileSync(join(generationPath, fileName), languageFileFor(language, withDefaults(mayBeOptions)))
+    writeFileSync(join(generationPath, fileName), languageFileFor(language, lionWebVersion, withDefaults(mayBeOptions)))
     return fileName
 }
 
@@ -81,15 +81,15 @@ const logger = (verbose?: boolean): ((text?: string) => void) =>
  * @param generationPath The path (relative to the current execution) to generate to/in.
  * @param mayBeOptions Optionally-given {@link GeneratorOptions options}.
  */
-export const generateApiFromLanguagesJson = (languagesJsonPath: string, generationPath: string, mayBeOptions?: Partial<GeneratorOptions>) => {
+export const generateApiFromLanguagesJson = (languagesJsonPath: string, generationPath: string, lionWebVersion: LionWebVersion, mayBeOptions?: Partial<GeneratorOptions>) => {
     const log = logger(mayBeOptions?.verbose)
     log(`Running API generator with cwd: ${cwd()}`)
     log(`   Path to languages: ${languagesJsonPath}`)
     log(`   Generation path:   ${generationPath}`)
 
     const languagesJson = readFileAsJsonSync(languagesJsonPath) as LionWebJsonChunk
-    const languages = deserializeLanguages(languagesJson, LionWebVersions.v2023_1.lioncoreFacade.language)
-    generateApiFromLanguages(languages, generationPath, mayBeOptions)
+    const languages = deserializeLanguages(languagesJson, lionWebVersion.lioncoreFacade.language)
+    generateApiFromLanguages(languages, generationPath, lionWebVersion, mayBeOptions)
 }
 
 
@@ -99,7 +99,7 @@ export const generateApiFromLanguagesJson = (languagesJsonPath: string, generati
  * @param generationPath The path (relative to the current execution) to generate to/in.
  * @param mayBeOptions Optionally-given {@link GeneratorOptions options}.
  */
-export const generateApiFromLanguages = (languages: Language[], generationPath: string, maybeOptions?: Partial<GeneratorOptions>) => {
+export const generateApiFromLanguages = (languages: Language[], generationPath: string, lionWebVersion: LionWebVersion, maybeOptions?: Partial<GeneratorOptions>) => {
     const log = logger(maybeOptions?.verbose)
     log(`   Generated:`)
 
@@ -112,7 +112,7 @@ export const generateApiFromLanguages = (languages: Language[], generationPath: 
 
     languages.forEach((language) => {
         const {name, version, key, id} = language
-        const fileName = generateLanguage(language, generationPath, options)
+        const fileName = generateLanguage(language, generationPath, lionWebVersion, options)
         log(`       ${fileName} -> language: ${name} (version=${version}, key=${key}, id=${id})`)
     })
 
