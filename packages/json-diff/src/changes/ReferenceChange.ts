@@ -1,6 +1,6 @@
 import { LionWebJsonNode, LionWebJsonReference, LionWebJsonReferenceTarget } from "@lionweb/json"
 import { JsonContext } from "@lionweb/json-utils"
-import { Change, Missing } from "./Change.js"
+import { Change, FeatureMissing } from "./Change.js"
 
 export abstract class ReferenceChange extends Change {
     constructor(
@@ -9,7 +9,7 @@ export abstract class ReferenceChange extends Change {
         public beforeReference: LionWebJsonReference | undefined,
         public afterReference: LionWebJsonReference | undefined,
         public target: LionWebJsonReferenceTarget,
-        public missing = Missing.NotMissing
+        public missing = FeatureMissing.NotMissing
     ) {
         super(context)
     }

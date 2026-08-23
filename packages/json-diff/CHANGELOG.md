@@ -2,6 +2,10 @@
 
 ## 0.10.0
 
+Rename Missing to FeatureMissing
+Split PropertyChanged intop three types: Changed, Added, Deleted
+Refactor LionWebJsonDiff with above changes.
+
 Fixing bug in diffing references.
 
 ## 0.9.0, 0.8.0, 0.7.2
