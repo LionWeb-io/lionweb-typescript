@@ -22,7 +22,6 @@
 * *Narrow* the type of the argument of the `asIds` function to `Node[]`.
   *Note* that this is technically a breaking change, but this function is essentially only used internally.
 * Widen the `abstract` argument to both the `new Concept` (5th argument) and `LanguageFactory.concept` (2nd argument) calls, to include the `ConceptModifier` enum with literals `concrete` and `abstract`.
-* Deprecate various functions: `deserializeSerializationChunk`, `deserializeChunk`.
 
 ### Improving references
 
@@ -69,9 +68,9 @@ These functions either return `undefined`, an empty list `[]`, or throw an `Erro
 In most cases, you need to wrap every access to a single-valued reference feature *separately*.
 Cookbook:
 
-* Replace `<expr> ?? undefined` with `resolvedOrUndefined(<expr>)`.
-* Replace `<expr>?.<feature>` with `resolvedOrUndefined(<expr>)?.<feature>` (with the `?.` “Elvis operator”).
-* Replace `<expr>.<feature>.{map|filter|&c.}(...)` with `<feature>` being a multi-valued reference feature with `resolvedOrEmptyList(<expr>.<feature>).{map|filter|&c.}(...)`.
+* replace `<expr> ?? undefined` with `resolvedOrUndefined(<expr>)`
+* replace `<expr>?.<feature>` with `resolvedOrUndefined(<expr>)?.<feature>` (with the `?.` “Elvis operator”)
+* replace `<expr>.<feature>.{map|filter|&c.}(...)` with `<feature>` being a multi-valued reference feature with `resolvedOrEmptyList(<expr>.<feature>).{map|filter|&c.}(...)`
 
 Unfortunately, a chain of dereferences of reference features yields an expression with as many `resolvedOr{Undefined|EmptyList}` wrappings as there are dereferences:
 `<expr>.<feature_1>.<feature_2>.<feature_3>` would become `resolvedOrEmptyList(resolvedOrUndefined(resolvedOrUndefined(<expr>.<feature_1>).<feature_2>).<feature_3>)`,
