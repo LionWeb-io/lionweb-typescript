@@ -255,7 +255,7 @@ export const typeForLanguageEntity = (imports: Imports) => {
 
 
     const typeForPrimitiveType = (primitiveType: PrimitiveType) =>
-        `export type ${primitiveType.name} = ${tsTypeForPrimitiveType(primitiveType)};`
+        `export type ${primitiveType.name} = ${tsTypeForPrimitiveType(primitiveType, imports.lioncoreBuiltinsFacade)};`
 
     const jsDocFor = (entity: M3Concept) => {
         const annotations = ioLionWebMpsSpecificAnnotationsFrom(entity)

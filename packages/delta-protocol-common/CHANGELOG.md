@@ -12,6 +12,8 @@
   * Change message kind of `NoOpEvent` &rarr; `"NoOpEvent"`.
   * Uppercase prefix for message kinds of custom messages: `custom_` &rarr; `Custom_`.
 * Add `deletedDescendants` property to the `PartitionDeletedEvent` type (and propagate to downstream packages as well).
+* Add a `lionWebVersion` property – which defaults to v2023.1 – to the `DeltaToEventTranslatorConfiguration` configuration.
+* Add a `lionWebVersion` parameter – which defaults to v2023.1 – as *1st* parameter to the `deltaToCommandTranslator` function.
 
 
 ## 0.9.0

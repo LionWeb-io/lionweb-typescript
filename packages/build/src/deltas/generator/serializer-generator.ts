@@ -45,7 +45,7 @@ const serializationExpressionFor = (name: string, type: Type) => {
         return `delta.${name}`
     }
     if (type instanceof PrimitiveValueType) {
-        return `defaultPropertyValueSerializer.serializeValue(delta.${name}, delta.property)`
+        return `propertyValueSerializer.serializeValue(delta.${name}, delta.property)`
     }
     if (type instanceof CustomType) {
         return type.serializationExpr
@@ -82,7 +82,7 @@ const serializationOf = ({name, fields}: Delta) =>
 export const serializerForDeltas = (deltas: Delta[], header?: string) =>
     asString([
         header ?? [],
-        `import { metaPointerForFeature } from "@lionweb/core";`,
+        `import { LionWebVersions, metaPointerForFeature } from "@lionweb/core";`,
         `import { IDelta } from "../base.js";`,
         `import {`,
         indent(
@@ -94,16 +94,31 @@ export const serializerForDeltas = (deltas: Delta[], header?: string) =>
             commaSeparated(sortedStrings([...(deltas.map(({name}) => `${name}SerializedDelta`)), `SerializedDelta`]))
         ),
         `} from "./types.g.js";`,
-        `import { defaultPropertyValueSerializer } from "./base.js";`,
         `import { idFrom } from "../../references.js";`,
-        `import { serializeNodeBases } from "../../serializer.js";`,
+        `import { propertyValueSerializerWith, serializeNodeBases } from "../../serializer.js";`,
         ``,
         ``,
-        `export const serializeDelta = (delta: IDelta): SerializedDelta => {`,
+        `export const deltaSerializer = (lionWebVersion = LionWebVersions.v2023_1) => {`,
         indent([
-            deltas.map(serializationOf),
-            "throw new Error(`serialization of delta of class ${delta.constructor.name} not implemented`);"
+            `const propertyValueSerializer = propertyValueSerializerWith({ primitiveValueSerializer: lionWebVersion.builtinsFacade.propertyValueSerializer });`,
+            ``,
+            `const serializeDelta = (delta: IDelta): SerializedDelta => {`,
+            indent([
+                deltas.map(serializationOf),
+                "throw new Error(`serialization of delta of class ${delta.constructor.name} not implemented`);"
+            ]),
+            `}`,
+            ``,
+            `return serializeDelta;`
         ]),
-        `}`
+        `}`,
+        ``,
+        ``,
+        `/**`,
+        ` * Legacy version of {@link deltaSerializer} for the default {@LionWebVersion LionWeb version} 2023.1.`,
+        ` * @deprecated Use {@link deltaSerializer} instead.`,
+        ` */`,
+        `export const serializeDelta = deltaSerializer(LionWebVersions.v2023_1);`,
+        ``
     ])
 

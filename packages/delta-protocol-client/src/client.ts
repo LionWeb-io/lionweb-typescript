@@ -15,7 +15,7 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { DeltaReceiver, Forest, ILanguageBase, INodeBase, serializeDelta } from "@lionweb/class-core"
+import { DeltaReceiver, deltaSerializer, Forest, ILanguageBase, INodeBase } from "@lionweb/class-core"
 import { LionWebId, LionWebJsonChunk, LionWebJsonDeltaChunk } from "@lionweb/json"
 
 import {
@@ -133,6 +133,7 @@ export class LionWebClient {
         const log = semanticLoggerFunctionFrom(semanticLogger)
 
         const deltaAsCommand = deltaToCommandTranslator()
+        const serializeDelta = deltaSerializer()
 
         let loading = true
         let commandNumber = 0

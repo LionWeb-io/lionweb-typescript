@@ -20,6 +20,7 @@ import {
     consoleProblemReporter,
     Containment,
     Enumeration,
+    LionWebVersion,
     LionWebVersions,
     MemoisingSymbolTable,
     PrimitiveType,
@@ -72,7 +73,8 @@ export type RootsWithIdMapping = { roots: INodeBase[], idMapping: IdMapping };
  * (and partially optional).
  */
 export type DeserializerConfiguration = {
-    // FIXME  parametrize (optionally) in LionWebVersion
+    /** Default: `LionWebVersions.v2023_1`. */
+    lionWebVersion?: LionWebVersion
     /** Default: `lioncoreBuiltinsFacade.propertyValueDeserializer`. */
     propertyValueDeserializer?: PropertyValueDeserializer,
     /** Default: {@link consoleProblemReporter}. */
@@ -94,9 +96,10 @@ function nodeBaseDeserializerWithIdMapping(languageBases: ILanguageBase[], recei
  */
 function nodeBaseDeserializerWithIdMapping(configuration: FactoryConfiguration & DeserializerConfiguration): Deserializer<RootsWithIdMapping>;
 function nodeBaseDeserializerWithIdMapping(languageBasesOrConfiguration: ILanguageBase[] | (FactoryConfiguration & DeserializerConfiguration), mayBeReceiveDelta?: DeltaReceiver): Deserializer<RootsWithIdMapping> {
+    const lionWebVersion = (Array.isArray(languageBasesOrConfiguration) ? undefined : languageBasesOrConfiguration.lionWebVersion) ?? LionWebVersions.v2023_1
     const [languageBases, receiveDelta, propertyValueDeserializer, problemReporter] = Array.isArray(languageBasesOrConfiguration)
-        ? [languageBasesOrConfiguration, mayBeReceiveDelta, LionWebVersions.v2023_1.builtinsFacade.propertyValueDeserializer, consoleProblemReporter]
-        : [languageBasesOrConfiguration.languageBases, languageBasesOrConfiguration.receiveDelta, languageBasesOrConfiguration.propertyValueDeserializer ?? LionWebVersions.v2023_1.builtinsFacade.propertyValueDeserializer, languageBasesOrConfiguration.problemReporter ?? languageBasesOrConfiguration.problemsHandler ?? consoleProblemReporter];
+        ? [languageBasesOrConfiguration, mayBeReceiveDelta, lionWebVersion.builtinsFacade.propertyValueDeserializer, consoleProblemReporter]
+        : [languageBasesOrConfiguration.languageBases, languageBasesOrConfiguration.receiveDelta, languageBasesOrConfiguration.propertyValueDeserializer ?? lionWebVersion.builtinsFacade.propertyValueDeserializer, languageBasesOrConfiguration.problemReporter ?? languageBasesOrConfiguration.problemsHandler ?? consoleProblemReporter];
 
     const symbolTable = new MemoisingSymbolTable(languageBases.map(({language}) => language));
     const languageBaseFor = combinedLanguageBaseLookupFor(languageBases);

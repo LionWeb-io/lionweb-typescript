@@ -1,5 +1,5 @@
 import { LionWebKey } from "@lionweb/json"
-import { Classifier, LionWebVersions } from "./m3/index.js"
+import { Classifier, LionWebVersion, LionWebVersions } from "./m3/index.js"
 import { Reader, ResolveInfoDeducer } from "./reading.js"
 import { Node } from "./types.js"
 import { updateSettingsKeyBased, Writer } from "./writing.js"
@@ -11,8 +11,8 @@ import { updateSettingsKeyBased, Writer } from "./writing.js"
 export type DynamicNode = Node & {
     classifier: Classifier
     settings: Record<string, unknown>
+    // (could also have properties, containments, references - mimicking the serialization)
 }
-// TODO  could also have properties, containments, references - mimicking the serialization
 
 
 const propertyGetterFor = (key: LionWebKey): ResolveInfoDeducer<DynamicNode> =>
@@ -22,9 +22,9 @@ const propertyGetterFor = (key: LionWebKey): ResolveInfoDeducer<DynamicNode> =>
             : undefined
 
 /**
- * An implementation of {@link Reader} for {@link DynamicNode dynamic nodes}.
+ * @return a {@link Reader} implementation for {@link DynamicNode dynamic nodes} w.r.t. the given {@link LionWebVersion}.
  */
-export const dynamicReader: Reader<DynamicNode> = ({
+export const dynamicReaderFor = (lionWebVersion: LionWebVersion): Reader<DynamicNode> => ({
     classifierOf: (node) => node.classifier,
     getFeatureValue: (node, feature) =>
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -32,9 +32,15 @@ export const dynamicReader: Reader<DynamicNode> = ({
     enumerationLiteralFrom: (value, enumeration) =>
         enumeration.literals.find(({key}) => key === value)
         ?? null,    // (undefined -> null)
-    resolveInfoFor: propertyGetterFor(LionWebVersions.v2023_1.builtinsFacade.features.inamed_name.key)
-        // TODO  have this parametrized in the LionWeb version, instead of relying on keys not changing between versions
+    resolveInfoFor: propertyGetterFor(lionWebVersion.builtinsFacade.features.inamed_name.key)
 })
+
+/**
+ * A {@link Reader} implementation for {@link DynamicNode dynamic nodes} for {@link LionWebVersion} 2023.1.
+ * This constant is kept for backward compatibility, and is to be deprecated and removed later.
+ */
+export const dynamicReader = dynamicReaderFor(LionWebVersions.v2023_1)
+
 
 /**
  * Alias for {@link Reader}, kept for backward compatibility, and to be deprecated and removed later.
@@ -57,7 +63,7 @@ export const dynamicWriter: Writer<DynamicNode> = ({
 })
 
 /**
- * Alias for {@link Reader}, kept for backward compatibility, and to be deprecated and removed later.
+ * Alias for {@link Reader}, kept for backward compatibility, and is to be deprecated and removed later.
  */
 export const dynamicInstantiationFacade = dynamicReader
 

@@ -23,6 +23,7 @@
   *Note* that this is technically a breaking change, but this function is essentially only used internally.
 * Widen the `abstract` argument to both the `new Concept` (5th argument) and `LanguageFactory.concept` (2nd argument) calls, to include the `ConceptModifier` enum with literals `concrete` and `abstract`.
 * Deprecate various functions: `deserializeSerializationChunk`, `deserializeChunk`.
+* Add a `dynamicReaderFor` function that’s parametrized in `LionWebVersion`.
 
 ### Improving references
 
@@ -52,7 +53,7 @@ const referenceToSet = Symbol("<unset reference>")
 The `UnresolvedReference` type is now a *class* holding all that’s available on/for the unresolved reference.
 
 So, the `SingleRef` type has changed in a **breaking** way!
-In particular, `null` is no longer a valid value for it, which means that your code base probably needs to be changed/updated:
+In particular, `null` is no longer a valid value for it, which means that your codebase probably needs to be changed/updated:
 
 * Handle an instance of the `UnresolvedReference` *class*.
 * Handle the `referenceToSet` value.
