@@ -1,7 +1,7 @@
-import { LionWebId, LionWebJsonMetaPointer, LionWebJsonNode } from "@lionweb/json"
+import { LionWebId, LionWebJsonMetaPointer } from "@lionweb/json"
 import { JsonContext } from "@lionweb/json-utils"
 import { asMinimalJsonString } from "@lionweb/ts-utils"
-import { Change, FeatureMissing } from "./Change.js"
+import { Change } from "./Change.js"
 
 export abstract class PropertyChange extends Change {
     constructor(
