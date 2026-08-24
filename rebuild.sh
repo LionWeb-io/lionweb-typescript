@@ -76,11 +76,13 @@ npm run build
 cd ..
 
 cd class-core-test
+rm -rf dist/
 npm test
 cd ..
 
 cd test
 mkdir -p artifacts/metrics
+rm -rf dist/
 npm test
 cd ..
 
@@ -105,6 +107,7 @@ npm run build
 cd ..
 
 cd delta-protocol-test
+rm -rf dist/
 npm test
 cd ..
 
