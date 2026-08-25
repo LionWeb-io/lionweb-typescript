@@ -1,21 +1,15 @@
 import { StringsMapper } from "@lionweb/ts-utils"
-import { PropertyValueDeserializer } from "../deserializer.js"
+import { areSameEntities } from "./functions.js"
 import { Concept, DataType, Interface, Language, PrimitiveType, Property } from "./types.js"
+import { PropertyValueDeserializer } from "../deserializer.js"
 import { isResolvedReference } from "../references.js"
 import { PropertyValueSerializer } from "../serializer.js"
-
-
-/**
- * Determines whether two data types should be structurally equal based on equality of: meta type, key, and language's key.
- */
-export const shouldBeIdentical = (left: DataType, right: DataType): boolean =>
-    left.key === right.key && left.language.key === right.language.key && left.metaType() === right.metaType()
 
 
 const lookupFrom = <T>(registry: Map<DataType, T>) =>
     (targetDataType: DataType) => {
         for (const [dataType, t] of registry.entries()) {
-            if (shouldBeIdentical(targetDataType, dataType)) {
+            if (areSameEntities(targetDataType, dataType)) {
                 return t
             }
         }
