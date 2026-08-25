@@ -86,7 +86,7 @@ export const asTreeTextWith = (identificationFor: (node: Node) => string): ((nod
                     `${feature.name} -> ${references.length === 0 ? nothing : references.map(singleRefAsText).join(", ")}`
                 ]
             }
-            return `!!! can't handle feature ${feature.name} (of meta type ${feature.metaType()})`
+            return `!!! can't handle feature ${feature.name} (of meta-type ${feature.metaType()})`
         }
 
         const annotationAsText = (annotation: INodeBase) =>

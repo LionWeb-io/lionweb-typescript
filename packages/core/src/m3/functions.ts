@@ -315,14 +315,6 @@ const instantiableClassifiersOf = (language: Language): Classifier[] =>
 
 
 /**
- * @return whether the two given {@link Classifiers classifiers} are the same (/identical by meta-pointer).
- */
-const areSameClassifiers = (left: Classifier, right: Classifier) =>
-    (left === right) || (
-        areSameLanguages(left.language, right.language) && left.key === right.key
-    )
-
-/**
  * @return whether the two given {@link Language languages} are the same (/identical by meta-pointer).
  */
 const areSameLanguages = (left: Language, right: Language) =>
@@ -331,11 +323,28 @@ const areSameLanguages = (left: Language, right: Language) =>
     )
 
 
+/**
+ * Determines whether the two given things are the same, either because they’re the same object,
+ * or because they have identical meta-pointers and meta-types.
+ */
+const areSameEntities = <T extends LanguageEntity>(left: T, right: T): boolean =>
+    (left === right) || (
+        left.key === right.key && areSameLanguages(left.language, right.language) && left.metaType() === right.metaType()
+    )
+
+
+/**
+ * @return whether the two given {@link Classifiers classifiers} are the same (/identical by meta-pointer).
+ */
+const areSameClassifiers = areSameEntities<Classifier>
+
+
 export {
     allContaineds,
     allFeaturesOf,
     allSuperTypesOf,
     areSameClassifiers,
+    areSameEntities,
     areSameLanguages,
     classBasedClassifierDeducerFor,
     concatenateNamesOf,

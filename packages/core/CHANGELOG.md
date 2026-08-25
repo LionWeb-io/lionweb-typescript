@@ -34,6 +34,8 @@
     * Expose a `EnumerationLiteralEncoder` type for functions that produce a runtime encoding of an `EnumerationLiteral` of an `Enumeration`.
     * Expose `standard{Des|S}erializers` constants that are maps [name of standard primitive type] &rarr; [its corresponding (de-)serializing function], and use these in the implementation of the 2023.1 version.
 
+* **Breaking change** (although this is effectively internal API): Replace the (use of the) `shouldBeIdentical` function with a `areSameEntities` function that checks for structural equality of two `LanguageEntity`-s.
+
 
 ## 0.10.0
 
@@ -262,7 +264,7 @@ The “try” part of the function’s name pertains to it returning `undefined`
 ## 0.6.10
 
 * Make `DefaultPrimitiveTypeDeserializer` and `DefaultPrimitiveTypeSerializer` be able to deal with duplicate definitions of data types.
-    * Expose a function `shouldBeIdentical` that determines whether two data types should be structurally equal based on equality of: meta type, key, and language's key.
+    * Expose a function `shouldBeIdentical` that determines whether two data types should be structurally equal based on equality of: meta-type, key, and language's key.
 * Make serializer more resilient against unresolved (i.e., `null`-valued) children.
 * Fix that `resolveInfo` of a serialized reference must be `null`, not `undefined`.
 
