@@ -15,6 +15,8 @@
 // SPDX-FileCopyrightText: 2026 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import { ValueDeserializer, ValueSerializer } from "./base-types.js"
+
 const parsedAsBoolean = (value: string): boolean | undefined => {
     switch (value) {
         case "true":
@@ -34,7 +36,7 @@ const parsedAsInteger = (value: string): number | undefined => {
 /**
  * Standard serializers for boolean-, integer-, and string-typed values.
  */
-export const standardSerializers = {
+export const standardSerializers: { [typeKey: string]: ValueSerializer<unknown>} = {
     string: (value: unknown) => value as string,
     boolean: (value: unknown) => `${value as boolean}`,
     integer: (value: unknown) => `${value as number}`
@@ -43,7 +45,7 @@ export const standardSerializers = {
 /**
  * Standard deserializers for boolean-, integer-, and string-typed values.
  */
-export const standardDeserializers = {
+export const standardDeserializers: { [typeKey: string]: ValueDeserializer<unknown>} = {
     string: (value: string) => value,
     boolean: (value: string) => parsedAsBoolean(value),
     integer: (value: string) => parsedAsInteger(value)

@@ -15,5 +15,6 @@
 // SPDX-FileCopyrightText: 2026 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
+export type { ValueDeserializer, ValueSerializer} from "./base-types.js"
 export { standardDeserializers, standardSerializers } from "./standard-primitive-types.js"
 

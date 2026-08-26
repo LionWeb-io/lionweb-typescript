@@ -33,6 +33,7 @@
     * Expose a `EnumerationLiteralDecoder` type for functions that deduce an `EnumerationLiteral` of an `Enumeration` from a runtime encoding of the former.
     * Expose a `EnumerationLiteralEncoder` type for functions that produce a runtime encoding of an `EnumerationLiteral` of an `Enumeration`.
     * Expose `standard{Des|S}erializers` constants that are maps [name of standard primitive type] &rarr; [its corresponding (de-)serializing function], and use these in the implementation of the 2023.1 version.
+    * Add (generic) `Value{Des|S}erializer` types (and use them).
 
 * **Breaking change** (although this is effectively internal API): Replace the (use of the) `shouldBeIdentical` function with a `areSameEntities` function that checks for structural equality of two `LanguageEntity`-s.
 
