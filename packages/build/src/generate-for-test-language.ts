@@ -15,7 +15,7 @@
 // SPDX-FileCopyrightText: 2026 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { Annotation, deserializeLanguages } from "@lionweb/core"
+import { Annotation, deserializeLanguages, LionWebVersions } from "@lionweb/core"
 import { defaultTrumpfOriginatingApache2_0LicensedHeader, generateLanguage } from "@lionweb/class-core-generator"
 import { LionWebJsonChunk } from "@lionweb/json"
 import { getFromHttps, readFileAsJsonSync } from "@lionweb/node-utils"
@@ -66,7 +66,7 @@ const TestAnnotation = TestLanguage.entities.find((entity) => entity.name === "T
 const TestAnnotation_containment = TestAnnotation.features.find((feature) => feature.name === "containment")!
 TestAnnotation_containment.name = "containedNode"
 
-generateLanguage(TestLanguage, join(packagePath, "src/gen"), { header: defaultTrumpfOriginatingApache2_0LicensedHeader })
+generateLanguage(TestLanguage, join(packagePath, "src/gen"), LionWebVersions.v2023_1, { header: defaultTrumpfOriginatingApache2_0LicensedHeader })
 // (the same content as in the lionweb-integration-testing repository:)
 writeFileSync(join(metaPath, "TestLanguage.txt"), languageAsText(TestLanguage))
 writeFileSync(join(metaPath, "TestLanguage.puml"), generatePlantUmlForLanguage(TestLanguage))

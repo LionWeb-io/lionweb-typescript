@@ -4,6 +4,8 @@
 
 * Implement splittable messages.
   * Handle `ErrorResponse` for queries.
+* Expose a `LionWebDeltaProtocolLowLevelClientInstantiator` convenience type.
+* `LionWebClient` now expects first event-to-receive to have sequence number 1 (instead of 0).
 
 
 ## 0.9.0

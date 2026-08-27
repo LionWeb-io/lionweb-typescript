@@ -38,9 +38,10 @@ import {
 import { deepEqual, equal, isTrue, throws } from "./assertions.js"
 
 
-describe("TestConcept", () => {
+const testLanguageBase = TestLanguageBase.INSTANCE
 
-    const testLanguageBase = TestLanguageBase.INSTANCE
+
+describe("instantiation", () => {
 
     it("direct instantiation", () => {
         const instance = DataTypeTestConcept.create("foo")
@@ -57,6 +58,11 @@ describe("TestConcept", () => {
         equal(instance.parent, undefined)
         equal(instance.containment, undefined)
     })
+
+})
+
+
+describe("getting and setting", () => {
 
     it("getting and setting .stringValue_1", () => {
         const instance = DataTypeTestConcept.create("foo")
@@ -117,6 +123,11 @@ describe("TestConcept", () => {
 
         done()
     })
+
+})
+
+
+describe(`(de-)serialization (also "vs." ∂s)`, () => {
 
     const artifactsPath = "artifacts"
 

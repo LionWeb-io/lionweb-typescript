@@ -15,7 +15,7 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { Language, LanguageEntity, LionWebVersions } from "@lionweb/core"
+import { Language, LanguageEntity, LionCoreBuiltinsFacade } from "@lionweb/core"
 import { asJSIdentifier, withFirstUpper } from "@lionweb/textgen-utils"
 
 export const importRenamingForLanguage = (language: Language) => asJSIdentifier(language.name)
@@ -24,15 +24,12 @@ export const nameOfBaseClassForLanguage = (language: Language) =>
     asJSIdentifier(language.name) + "Base"
 
 
-const lioncoreBuiltins = LionWebVersions.v2023_1.builtinsFacade.language
-
-const lioncoreBuiltinsIdentifier = nameOfBaseClassForLanguage(lioncoreBuiltins)
-
-
 export class Imports {
 
-    constructor(public readonly thisLanguage: Language) {
+    constructor(public readonly thisLanguage: Language, public readonly lioncoreBuiltinsFacade: LionCoreBuiltinsFacade) {
     }
+
+    private lioncoreBuiltinsIdentifier = nameOfBaseClassForLanguage(this.lioncoreBuiltinsFacade.language)
 
     get thisLanguageNameAsJsIdentifier() {
         return asJSIdentifier(this.thisLanguage.name)
@@ -65,9 +62,8 @@ export class Imports {
         return this.aliased("classCore", identifier)
     }
 
-    private readonly _indexImports = new Set<string>()
     entity(entity: LanguageEntity) {
-        if (entity.language === lioncoreBuiltins) {
+        if (entity.language === this.lioncoreBuiltinsFacade.language) {
             return this.generic(entity.name)
         }
         if (entity.language === this.thisLanguage) {
@@ -82,8 +78,8 @@ export class Imports {
         return [...this._languageImports]
     }
     language(language: Language) {
-        if (language === lioncoreBuiltins) {
-            return this.generic(lioncoreBuiltinsIdentifier)
+        if (language === this.lioncoreBuiltinsFacade.language) {
+            return this.generic(this.lioncoreBuiltinsIdentifier)
         }
         const externalName = importRenamingForLanguage(language)
         if (language === this.thisLanguage) {

@@ -28,7 +28,7 @@ export const AdminResponseDefinitions: MessageGroup = {
     ],
     messages: [
         {
-            name: "ListRepositoriesAdminResponse",
+            name: "Custom_ListRepositoriesAdminResponse",
             properties: [
                 {
                     name: "repositories",
@@ -61,7 +61,7 @@ export const AdminResponseDefinitions: MessageGroup = {
             ],
         },
         {
-            name: "CreateRepositoryAdminResponse",
+            name: "Custom_CreateRepositoryAdminResponse",
             properties: [
                 {
                     name: "newRepositoryName",
@@ -94,7 +94,7 @@ export const AdminResponseDefinitions: MessageGroup = {
             ],
         },
         {
-            name: "DeleteRepositoryAdminResponse",
+            name: "Custom_DeleteRepositoryAdminResponse",
             properties: [
                 {
                     name: "deletedRepositoryName",
@@ -127,7 +127,7 @@ export const AdminResponseDefinitions: MessageGroup = {
             ],
         },
         {
-            name: "RenameRepositoryAdminResponse",
+            name: "Custom_RenameRepositoryAdminResponse",
             properties: [
                 {
                     name: "oldRepositoryName",

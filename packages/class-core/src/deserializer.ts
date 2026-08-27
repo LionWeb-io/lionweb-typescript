@@ -20,6 +20,7 @@ import {
     consoleProblemReporter,
     Containment,
     Enumeration,
+    LionWebVersion,
     LionWebVersions,
     MemoisingSymbolTable,
     PrimitiveType,
@@ -29,7 +30,14 @@ import {
     Reference,
     UnresolvedReference
 } from "@lionweb/core"
-import { LionWebId, LionWebJsonChunk, LionWebJsonNode, LionWebJsonReferenceTarget } from "@lionweb/json"
+import {
+    LionWebId,
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+    LionWebJsonChunk,
+    LionWebJsonNode,
+    LionWebJsonReferenceTarget,
+    OnlyNodesOfLionWebJsonChunk
+} from "@lionweb/json"
 import { byIdMap, keepDefineds } from "@lionweb/ts-utils"
 
 import { DeltaReceiver, FactoryConfiguration, IdMapping, ILanguageBase, INodeBase } from "./index.js"
@@ -41,9 +49,14 @@ import { NodesToInstall } from "./linking.js"
  * A type for deserializer functions that are parametrized in their return type.
  */
 export type Deserializer<T> = (
-    /** The {@link LionWebJsonChunk serialization chunk} to deserialize. */
-    serializationChunk: LionWebJsonChunk,
-    /** The {@link IdMapping ID mapping} of existing nodes that the given `serializationChunk` may link to. */
+    /**
+     * The {@link LionWebJsonChunk serialization chunk} to deserialize.
+     * **Note** that we only need the nodes for deserialization, hence the use of the {@link OnlyNodesOfLionWebJsonChunk}.
+     */
+    serializationChunk: OnlyNodesOfLionWebJsonChunk,
+    /**
+     * The {@link IdMapping ID mapping} of existing nodes that the given `serializationChunk` may link to.
+     */
     idMapping?: IdMapping
 ) => T;
 
@@ -60,7 +73,8 @@ export type RootsWithIdMapping = { roots: INodeBase[], idMapping: IdMapping };
  * (and partially optional).
  */
 export type DeserializerConfiguration = {
-    // FIXME  parametrize (optionally) in LionWebVersion
+    /** Default: `LionWebVersions.v2023_1`. */
+    lionWebVersion?: LionWebVersion
     /** Default: `lioncoreBuiltinsFacade.propertyValueDeserializer`. */
     propertyValueDeserializer?: PropertyValueDeserializer,
     /** Default: {@link consoleProblemReporter}. */
@@ -82,9 +96,10 @@ function nodeBaseDeserializerWithIdMapping(languageBases: ILanguageBase[], recei
  */
 function nodeBaseDeserializerWithIdMapping(configuration: FactoryConfiguration & DeserializerConfiguration): Deserializer<RootsWithIdMapping>;
 function nodeBaseDeserializerWithIdMapping(languageBasesOrConfiguration: ILanguageBase[] | (FactoryConfiguration & DeserializerConfiguration), mayBeReceiveDelta?: DeltaReceiver): Deserializer<RootsWithIdMapping> {
+    const lionWebVersion = (Array.isArray(languageBasesOrConfiguration) ? undefined : languageBasesOrConfiguration.lionWebVersion) ?? LionWebVersions.v2023_1
     const [languageBases, receiveDelta, propertyValueDeserializer, problemReporter] = Array.isArray(languageBasesOrConfiguration)
-        ? [languageBasesOrConfiguration, mayBeReceiveDelta, LionWebVersions.v2023_1.builtinsFacade.propertyValueDeserializer, consoleProblemReporter]
-        : [languageBasesOrConfiguration.languageBases, languageBasesOrConfiguration.receiveDelta, languageBasesOrConfiguration.propertyValueDeserializer ?? LionWebVersions.v2023_1.builtinsFacade.propertyValueDeserializer, languageBasesOrConfiguration.problemReporter ?? languageBasesOrConfiguration.problemsHandler ?? consoleProblemReporter];
+        ? [languageBasesOrConfiguration, mayBeReceiveDelta, lionWebVersion.builtinsFacade.propertyValueDeserializer, consoleProblemReporter]
+        : [languageBasesOrConfiguration.languageBases, languageBasesOrConfiguration.receiveDelta, languageBasesOrConfiguration.propertyValueDeserializer ?? lionWebVersion.builtinsFacade.propertyValueDeserializer, languageBasesOrConfiguration.problemReporter ?? languageBasesOrConfiguration.problemsHandler ?? consoleProblemReporter];
 
     const symbolTable = new MemoisingSymbolTable(languageBases.map(({language}) => language));
     const languageBaseFor = combinedLanguageBaseLookupFor(languageBases);
@@ -217,9 +232,19 @@ function nodeBaseDeserializerWithIdMapping(languageBasesOrConfiguration: ILangua
             }
         });
 
+        const orphanedNodes = serializationChunk
+            .nodes
+            .filter(({id, parent}) => nodesById[id] !== undefined && parent !== null && lookupNodeById(parent) === undefined)
+        if (orphanedNodes.length > 0) {
+            const multiple = orphanedNodes.length > 1
+            problemReporter.reportProblem(`${multiple ? `${orphanedNodes.length} ` : ``}orphaned node${multiple ? "s" : ""} encountered, with ID${multiple ? "s" : ""}: ${orphanedNodes.map(({id}) => id).join(", ")}`)
+        }
+
         return {
-            roots: Object.values(nodesById)
-                .filter(({parent}) => parent === undefined),
+            roots: serializationChunk
+                .nodes
+                .filter(({ parent }) => parent === null)
+                .map(({id}) => nodesById[id]),
             idMapping: new IdMapping(nodesById)
         };
 

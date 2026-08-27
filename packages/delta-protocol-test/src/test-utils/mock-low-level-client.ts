@@ -15,6 +15,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import {
+    LionWebDeltaProtocolLowLevelClientInstantiator,
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
     LowLevelClientInstantiator,
     LowLevelClientLogger,
     LowLevelClientParameters,
@@ -33,8 +35,8 @@ export const mockLowLevelClientInstantiator = (
     commandResponsesById: { [commandId: string]: Event },
     queryResponsesById: { [queryId: string]: QueryMessage },
     optionalClientLogger?: LowLevelClientLogger<Event | QueryMessage, Command | QueryMessage>
-): LowLevelClientInstantiator<Event | QueryMessage, Command | QueryMessage> => {
-    return ({ receiveMessageOnClient }: LowLevelClientParameters<(Event | QueryMessage)>) => {
+): LionWebDeltaProtocolLowLevelClientInstantiator =>
+    ({ receiveMessageOnClient }: LowLevelClientParameters<Event | QueryMessage>) => {
         const log = optionalClientLogger ?? noOpLowLevelClientLogger
         let connected = true
         return Promise.resolve({
@@ -71,5 +73,4 @@ export const mockLowLevelClientInstantiator = (
             }
         })
     }
-}
 

@@ -81,7 +81,7 @@ export const commandAsEvent = (command: Command, participationId: string): Event
     const participation2nextSequenceNumber: { [participationId: string]: number } = {}
     const nextSequenceNumber = () => {
         if (!(participationId in participation2nextSequenceNumber)) {
-            participation2nextSequenceNumber[participationId] = -1
+            participation2nextSequenceNumber[participationId] = 0
         }
         return ++participation2nextSequenceNumber[participationId]
     }

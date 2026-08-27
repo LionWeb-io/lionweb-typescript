@@ -49,7 +49,7 @@ import {
     ReferenceDeletedDelta,
     serializeNodeBases
 } from "@lionweb/class-core"
-import { idOf, LionWebVersions, metaPointerForFeature, PropertyValueSerializer } from "@lionweb/core"
+import { idOf, LionWebVersion, LionWebVersions, metaPointerForFeature, PropertyValueSerializer } from "@lionweb/core"
 import {
     AdditionalInfo,
     AnnotationAddedEvent,
@@ -122,6 +122,10 @@ export type AdditionalInfosGenerator = (delta: IDelta, sequenceNumber: number) =
  */
 export type DeltaToEventTranslatorConfiguration = Partial<{
     /**
+     * A {@link LionWebVersion} — defaults to `LionWebVersions.v2023_1`.
+     */
+    lionWebVersion: LionWebVersion,
+    /**
      * A {@link PropertyValueSerializer} that's *only* used to serialize *primitive* values.
      * Defaults to the `lioncoreBuiltinsFacade.propertyValueSerializer`.
      */
@@ -141,10 +145,11 @@ export type DeltaToEventTranslatorConfiguration = Partial<{
  * @return a {@link DeltaToEventTranslator} instance using the given {@link DeltaToEventTranslatorConfiguration}.
  */
 export const deltaToEventTranslator = (
-    { primitiveValueSerializer, originCommandsGenerator, additionalInfosGenerator }: DeltaToEventTranslatorConfiguration
+    { lionWebVersion: maybeLionWebVersion, primitiveValueSerializer, originCommandsGenerator, additionalInfosGenerator }: DeltaToEventTranslatorConfiguration
 ): DeltaToEventTranslator => {
+    const lionWebVersion = maybeLionWebVersion ?? LionWebVersions.v2023_1
     const propertyValueSerializer = primitiveValueSerializer === undefined
-        ? LionWebVersions.v2023_1.builtinsFacade.propertyValueSerializer
+        ? lionWebVersion.builtinsFacade.propertyValueSerializer
         : propertyValueSerializerWith({ primitiveValueSerializer })
     return (delta, lastUsedSequenceNumber) => {
 

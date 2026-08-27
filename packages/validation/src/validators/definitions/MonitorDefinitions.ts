@@ -1,7 +1,7 @@
 import type { MessageGroup } from "../generic/schema/SyntaxDefinition.js";
 
-export const AdminRequestDefinitions: MessageGroup = {
-    name: "AdminRequest",
+export const MonitorDefinitions: MessageGroup = {
+    name: "Monitor",
     taggedUnionProperty: "messageKind",
     sharedProperties: [
         {
@@ -28,80 +28,7 @@ export const AdminRequestDefinitions: MessageGroup = {
     ],
     messages: [
         {
-            name: "Custom_ListRepositoriesAdminRequest",
-            properties: [
-                {
-                    name: "queryId",
-                    type: "QueryId",
-                    isList: false,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
-                {
-                    name: "messageKind",
-                    type: "String",
-                    isList: false,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
-                {
-                    name: "additionalInfos",
-                    type: "AdditionalInfo",
-                    isList: true,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
-            ],
-        },
-        {
-            name: "Custom_CreateRepositoryAdminRequest",
-            properties: [
-                {
-                    name: "repositoryName",
-                    type: "String",
-                    isList: false,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
-                {
-                    name: "lionWebVersion",
-                    type: "String",
-                    isList: false,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
-                {
-                    name: "history",
-                    type: "Boolean",
-                    isList: false,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
-                {
-                    name: "queryId",
-                    type: "QueryId",
-                    isList: false,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
-                {
-                    name: "messageKind",
-                    type: "String",
-                    isList: false,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
-                {
-                    name: "additionalInfos",
-                    type: "AdditionalInfo",
-                    isList: true,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
-            ],
-        },
-        {
-            name: "Custom_DeleteRepositoryAdminRequest",
+            name: "Custom_MonitorStart",
             properties: [
                 {
                     name: "repositoryName",
@@ -134,7 +61,7 @@ export const AdminRequestDefinitions: MessageGroup = {
             ],
         },
         {
-            name: "Custom_RenameRepositoryAdminRequest",
+            name: "Custom_MonitorEnd",
             properties: [
                 {
                     name: "repositoryName",

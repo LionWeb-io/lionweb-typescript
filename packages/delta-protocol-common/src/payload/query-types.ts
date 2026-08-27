@@ -15,7 +15,7 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { LionWebId, LionWebJsonChunk } from "@lionweb/json"
+import { LionWebId, LionWebJsonDeltaChunk } from "@lionweb/json"
 import { mapFrom } from "@lionweb/ts-utils"
 import { ContinuedChunkMessage, CustomMessageKind, DeltaAdditionalInfo, Message, SplittableMessage } from "./common.js"
 
@@ -106,7 +106,7 @@ export interface SubscribeToPartitionContentsRequest extends QueryMessage {
 /** § 5.5.2.3 (response) */
 export interface SubscribeToPartitionContentsResponse extends QueryMessage, SplittableMessage {
     messageKind: "SubscribeToPartitionContentsResponse"
-    contents: LionWebJsonChunk
+    contents: /* single */ LionWebJsonDeltaChunk
 }
 
 
@@ -187,7 +187,7 @@ export interface ListPartitionsRequest extends QueryMessage {
 /** § 5.5.4.2 (response) */
 export interface ListPartitionsResponse extends QueryMessage, SplittableMessage {
     messageKind: "ListPartitionsResponse"
-    partitions: LionWebJsonChunk
+    partitions: /* shallow */ LionWebJsonDeltaChunk
 }
 
 
@@ -199,7 +199,7 @@ export interface ListAndSubscribePartitionsRequest extends QueryMessage {
 /** § 5.5.4.3 (response) */
 export interface ListAndSubscribePartitionsResponse extends QueryMessage, SplittableMessage {
     messageKind: "ListAndSubscribePartitionsResponse"
-    partitions: LionWebJsonChunk
+    partitions: /* multi */ LionWebJsonDeltaChunk
 }
 
 

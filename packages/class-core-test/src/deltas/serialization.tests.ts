@@ -17,15 +17,16 @@
 
 import {
     collectingDeltaReceiver,
+    deltaSerializer,
     PropertyAddedDelta,
-    PropertyAddedSerializedDelta,
-    serializeDelta
+    PropertyAddedSerializedDelta
 } from "@lionweb/class-core"
 
 import { attachedDataTypeTestConcept, TestEnumeration, TestLanguageBase } from "@lionweb/class-core-test-language"
-import { deepEqual, equal } from "./assertions.js"
+import { deepEqual, equal } from "../assertions.js"
 
 const testLanguageBase = TestLanguageBase.INSTANCE
+const serializeDelta = deltaSerializer()
 
 
 describe("serializing a delta", () => {

@@ -7,7 +7,16 @@
   * Add `move[AndReplace]AnnotationOffsetBased` methods to both `NodeBase` and `INodeBase` (so instances are assignment-compatible).
   * Update `ChildMoved[AndReplaced]InSameContainmentDelta` and `AnnotationMoved[AndReplaced]Delta` classes, as well as associated appliers and inverters, to align with latest, offset-based versions of those deltas.
 * Fix (and rework) `asTreeTextWith` textualizer function to deal with the widened `SingleRef` type.
-* The deserializer now returns `UnresolvedReference` instances for unresolved references instead of `referenceToSet`.
+* W.r.t. the deserializer:
+  * It now returns `UnresolvedReference` instances for unresolved references instead of `referenceToSet`.
+  * Change the type of the `Deserializer` type to `OnlyNodesOfLionWebJsonChunk` to radiate that deserializers produced by this package only require the `nodes` field, but not the `serializationFormatVersion` and `languages` fields.
+  * It no longer returns orphaned nodes – i.e. nodes that are contained by nodes that are neither in the chunk-to-deserialize nor provided through an ID mapping – as root nodes, and reports (about) those orphaned nodes.
+    (This made for confusing textualizations, a.o. problems.)
+  * Add an optional `lionWebVersion` property (of type `LionWebVersion`) to the `DeserializerConfiguration` and `PropertyValueSerializerConfiguration` types.
+* Deprecate the `serializeDelta` function in favor of the `deltaSerializer` function which takes a `LionWebVersion` version as its 1st (and so far only) argument, which defaults to the 2023.1 version.
+  As part of that: 
+  * Deprecate the `defaultPropertyValueSerializer` constant, which was only used in the `serializeDelta` function anyway.
+  * Replace usage of the deprecated `serializeDelta` function with `deltaSerializer()` throughout the codebase.
 
 
 ## 0.9.2

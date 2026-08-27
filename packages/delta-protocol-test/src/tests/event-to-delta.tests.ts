@@ -46,7 +46,7 @@ describe("event-to-delta translator", () => {
         const event: PartitionAddedEvent = {
             messageKind: "PartitionAdded",
             newPartition: newPartitionChunk,
-            sequenceNumber: 0,
+            sequenceNumber: 1,
             originCommands: [],
             additionalInfos: []
         }

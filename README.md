@@ -335,7 +335,7 @@ We use prettier with parameters defined in `.prettierrc`.
 
 ### Generate code metrics
 
-Run the following on the command line, in the repo’s root, to get some idea of the size of the code base:
+Run the following on the command line, in the repo’s root, to get some idea of the size of the codebase:
 
 ```shell
 $ find packages -name "*.ts*" \! -name "*.d.ts*" -print | grep -v -e "test" | xargs wc | sort > metrics.txt

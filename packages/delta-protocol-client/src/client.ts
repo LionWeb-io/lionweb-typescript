@@ -15,8 +15,8 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { DeltaReceiver, Forest, ILanguageBase, INodeBase, serializeDelta } from "@lionweb/class-core"
-import { LionWebId, LionWebJsonChunk } from "@lionweb/json"
+import { DeltaReceiver, deltaSerializer, Forest, ILanguageBase, INodeBase } from "@lionweb/class-core"
+import { LionWebId, LionWebJsonChunk, LionWebJsonDeltaChunk } from "@lionweb/json"
 
 import {
     ansi,
@@ -69,6 +69,12 @@ const { clientWarning } = ansi
 
 
 /**
+ * Type def. for a {@link LowLevelClientInstantiator} with type arguments suitable for a LionWeb delta protocol-compliant client.
+ */
+export type LionWebDeltaProtocolLowLevelClientInstantiator = LowLevelClientInstantiator<Event | QueryMessage, Command | QueryMessage>
+
+
+/**
  * Type def. for parameters – required and optional – for instantiating a {@link LionWebClient LionWeb delta protocol client}.
  */
 export type LionWebClientParameters = {
@@ -76,7 +82,7 @@ export type LionWebClientParameters = {
     clientId: LionWebId
     url: string
     languageBases: ILanguageBase[]
-    lowLevelClientInstantiator: LowLevelClientInstantiator<Event | QueryMessage, Command | QueryMessage>
+    lowLevelClientInstantiator: LionWebDeltaProtocolLowLevelClientInstantiator
     serializationChunk?: LionWebJsonChunk
     instantiateDeltaReceiverForwardingTo?: (commandSender: DeltaReceiver) => DeltaReceiver
     semanticLogger?: SemanticLogger
@@ -133,6 +139,7 @@ export class LionWebClient {
         const log = semanticLoggerFunctionFrom(semanticLogger)
 
         const deltaAsCommand = deltaToCommandTranslator()
+        const serializeDelta = deltaSerializer()
 
         let loading = true
         let commandNumber = 0
@@ -186,7 +193,8 @@ export class LionWebClient {
             }
         }
 
-        const acceptEvent = priorityQueueAcceptor<Event>(({sequenceNumber}) => sequenceNumber, 0, processEvent)
+        const acceptEvent = priorityQueueAcceptor<Event>(({sequenceNumber}) => sequenceNumber, 1, processEvent)
+        // Note: sequenceNumber must be a POSITIVE integer according to the specification, so >= 1.
 
         const receiveMessageOnClient = (message: Event | QueryMessage) => {
             log(new ClientReceivedMessage(clientId, message))
@@ -306,7 +314,7 @@ export class LionWebClient {
     }
 
     /** § 5.5.2.3 */
-    async subscribeToPartitionContents(queryId: LionWebId, partition: LionWebId): Promise<LionWebJsonChunk> {   // TODO  already deserialize, because we've got everything we need
+    async subscribeToPartitionContents(queryId: LionWebId, partition: LionWebId): Promise<LionWebJsonDeltaChunk> {   // TODO  already deserialize, because we've got everything we need
         const response = await this.makeQuery({
             messageKind: "SubscribeToPartitionContentsRequest",
             queryId,
@@ -380,7 +388,7 @@ export class LionWebClient {
     }
 
     /** § 5.5.4.2 */
-    async listPartitions(queryId: LionWebId, depthLimit: number): Promise<LionWebJsonChunk> {
+    async listPartitions(queryId: LionWebId, depthLimit: number): Promise<LionWebJsonDeltaChunk> {
         const response = await this.makeQuery({
             messageKind: "ListPartitionsRequest",
             depthLimit,
@@ -391,7 +399,7 @@ export class LionWebClient {
     }
 
     /** § 5.5.4.3 */
-    async listAndSubscribePartitions(queryId: LionWebId): Promise<LionWebJsonChunk> {
+    async listAndSubscribePartitions(queryId: LionWebId): Promise<LionWebJsonDeltaChunk> {
         const response = await this.makeQuery({
             messageKind: "ListAndSubscribePartitionsRequest",
             queryId,

@@ -151,7 +151,7 @@ describe(`scenarios (${ansi.colorSchemeExplanationString})`, async function() {
                     messageKind: "PartitionAdded",
                     newPartition: serializationOfNewPartition,
                     originCommands: [{ participationId: "participation-a", commandId: "cmd-1" }],
-                    sequenceNumber: 0,
+                    sequenceNumber: 1,
                     additionalInfos: []
                 }
             ),

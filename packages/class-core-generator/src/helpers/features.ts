@@ -50,7 +50,7 @@ export const tsTypeForDataType = (dataType: SingleRef<DataType>, imports: Import
         return `unknown /* [ERROR] can't compute a TS type for an unresolved data type */`
     }
     if (dataType instanceof PrimitiveType) {
-        return tsTypeForPrimitiveType(dataType)
+        return tsTypeForPrimitiveType(dataType, imports.lioncoreBuiltinsFacade)
     }
     if (dataType instanceof Enumeration) {
         return imports.entity(dataType)
@@ -89,7 +89,7 @@ export const tsFieldTypeForFeature = (feature: Feature, imports: Imports): strin
     if (isProperty(feature)) {
         const typeId = (() => {
             if (type instanceof PrimitiveType) {
-                return tsTypeForPrimitiveType(type)
+                return tsTypeForPrimitiveType(type, imports.lioncoreBuiltinsFacade)
             }
             if (type instanceof Enumeration) {
                 return type.name
@@ -117,7 +117,7 @@ export const tsTypeForValueManager = (feature: Feature, imports: Imports): strin
     if (isProperty(feature)) {
         return (() => {
             if (type instanceof PrimitiveType) {
-                return tsTypeForPrimitiveType(type)
+                return tsTypeForPrimitiveType(type, imports.lioncoreBuiltinsFacade)
             }
             if (type instanceof Enumeration) {
                 return type.name

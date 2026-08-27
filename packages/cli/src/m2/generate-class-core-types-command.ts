@@ -1,6 +1,6 @@
-import { exit } from "process"
+import { exit } from "node:process"
 import { generateApiFromLanguages } from "@lionweb/class-core-generator"
-import { deserializeLanguages } from "@lionweb/core"
+import { deserializeLanguages, lionWebVersionFrom, LionWebVersions } from "@lionweb/core"
 import { readSerializationChunk } from "@lionweb/utilities"
 import { ensurePathSync, tryReadFileAsText } from "../fs-utils.js"
 
@@ -71,6 +71,13 @@ export const generateClassCoreTypes = async (args: string[]) => {
         : await tryReadFileAsText(headerPath)
 
     const languages = deserializeLanguages(jsonOrError)
-    generateApiFromLanguages(languages, genPath, { header, verbose: !notVerbose })
+    const maybeLionWebVersion = lionWebVersionFrom(jsonOrError.serializationFormatVersion)
+    if (maybeLionWebVersion === undefined) {
+        console.error(`Couldn’t determine known LionWeb version from serialization chunk with path = ${chunkPath}.`)
+        console.log(`(Known LionWeb versions: ${Object.keys(LionWebVersions).join(", ")}.`)
+        exit(2)
+    }
+
+    generateApiFromLanguages(languages, genPath, maybeLionWebVersion, { header, verbose: !notVerbose })
 }
 
