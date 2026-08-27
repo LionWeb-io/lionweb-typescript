@@ -4,6 +4,7 @@
 
 * Implement splittable messages.
   * Handle `ErrorResponse` for queries.
+* Expose a `LionWebDeltaProtocolLowLevelClientInstantiator` convenience type.
 
 
 ## 0.9.0

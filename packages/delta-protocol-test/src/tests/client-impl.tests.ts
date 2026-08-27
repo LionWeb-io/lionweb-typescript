@@ -19,7 +19,7 @@ import { throws } from "assert"
 import { expect } from "chai"
 import { expectError } from "../test-utils/async.js"
 
-import { LionWebClient, LowLevelClientInstantiator } from "@lionweb/delta-protocol-client"
+import { LionWebClient, LionWebDeltaProtocolLowLevelClientInstantiator } from "@lionweb/delta-protocol-client"
 import {
     Command,
     Event,
@@ -212,7 +212,7 @@ describe("implementation of LionWeb client", async function() {
 
     it("partition gets added to the client’s forest after receiving a PartitionAdded event", async function() {
         let receiveMessageOnClientIntercepted: (message: Event | QueryMessage) => void
-        const lowLevelClientInstantiator: LowLevelClientInstantiator<Event | QueryMessage, Command | QueryMessage> = ({ receiveMessageOnClient }) => {
+        const lowLevelClientInstantiator: LionWebDeltaProtocolLowLevelClientInstantiator = ({ receiveMessageOnClient }) => {
             receiveMessageOnClientIntercepted = receiveMessageOnClient
             return Promise.resolve({
                 sendMessage: (_: Command | QueryMessage) => Promise.resolve(),
