@@ -19,6 +19,8 @@
   * Replace usage of the deprecated `serializeDelta` function with `deltaSerializer()` throughout the codebase.
 * Rename (and document) the `RootsWithIdMapping` type to `DetailedDeserialization` and the `nodeBaseDeserializerWithIdMapping` function to `nodeBaseDetailedDeserializer`, keeping aliases for backward compatibility.
   * Also add a `nodes` field to `DetailedDeserialization`, containing *all* deserialized nodes.
+* Change all occurrences of `LionWebJsonChunk` type in delta serialization types to `LionWebJsonDeltaChunk`.
+* Expose a `serializeAsDeltaChunk` function — and propagate its use to the delta protocol packages.
 
 
 ## 0.9.2
