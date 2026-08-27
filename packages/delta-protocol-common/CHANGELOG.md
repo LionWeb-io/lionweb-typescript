@@ -14,6 +14,7 @@
 * Add `deletedDescendants` property to the `PartitionDeletedEvent` type (and propagate to downstream packages as well).
 * Add a `lionWebVersion` property – which defaults to v2023.1 – to the `DeltaToEventTranslatorConfiguration` configuration.
 * Add a `lionWebVersion` parameter – which defaults to v2023.1 – as *1st* parameter to the `deltaToCommandTranslator` function.
+* Fix a bug where single delta chunks where deserialized as if they should be partitions.
 
 
 ## 0.9.0

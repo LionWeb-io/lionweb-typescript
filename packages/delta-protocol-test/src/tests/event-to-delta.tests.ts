@@ -17,14 +17,11 @@
 
 import { expect } from "chai"
 
-import {
-    IdMapping,
-    nodeBaseDetailedDeserializer,
-    PartitionAddedDelta,
-    serializeNodeBases
-} from "@lionweb/class-core"
+import { IdMapping, nodeBaseDetailedDeserializer, PartitionAddedDelta, serializeNodeBases } from "@lionweb/class-core"
+import { metaPointerForFeature } from "@lionweb/core"
 import { DataTypeTestConcept, TestLanguageBase, TestPartition } from "@lionweb/class-core-test-language"
-import { eventToDeltaTranslator, PartitionAddedEvent } from "@lionweb/delta-protocol-common"
+import { ChildAddedEvent, eventToDeltaTranslator, PartitionAddedEvent } from "@lionweb/delta-protocol-common"
+import { LionWebId, LionWebJsonNode } from "@lionweb/json"
 
 
 describe("event-to-delta translator", () => {
@@ -58,6 +55,56 @@ describe("event-to-delta translator", () => {
         expect(delta instanceof PartitionAddedDelta).to.be.true
         expect(idMapping.fromId(rootId) instanceof TestPartition).to.be.true
         expect(idMapping.fromId(childId) instanceof DataTypeTestConcept).to.be.true
+    })
+
+    it("detects when a single delta chunk doesn’t have exactly 1 anchor node", () => {
+        const base = TestLanguageBase.INSTANCE
+        const languageBases = [base]
+        const factory = base.factory()
+
+        const parentId = "parent"
+        const partition = factory(base.TestPartition, parentId) as TestPartition
+        const eventAsDelta = eventToDeltaTranslator(languageBases, nodeBaseDetailedDeserializer(languageBases))
+        const idMapping = new IdMapping({ [parentId]: partition })
+
+        expect(() => {
+            eventAsDelta({
+                messageKind: "ChildAdded",
+                newChild: {
+                    nodes: []
+                },
+                parent: "parent",
+                containment: metaPointerForFeature(base.TestPartition_links),
+                index: 0,
+                sequenceNumber: 1,
+                originCommands: [],
+                additionalInfos: []
+            } as ChildAddedEvent, idMapping)
+        }).to.throw("expected exactly 1 (candidate) anchor node in deserialization of newChild chunk in ChildAdded event, but got 0")
+
+        const newChild = (id: LionWebId): LionWebJsonNode => ({
+            id,
+            classifier: base.LinkTestConcept.metaPointer(),
+            properties: [],
+            containments: [],
+            references: [],
+            annotations: [],
+            parent: null
+        })
+        expect(() => {
+            eventAsDelta({
+                messageKind: "ChildAdded",
+                newChild: {
+                    nodes: [newChild("child1"), newChild("child2")]
+                },
+                parent: "parent",
+                containment: metaPointerForFeature(base.TestPartition_links),
+                index: 0,
+                sequenceNumber: 1,
+                originCommands: [],
+                additionalInfos: []
+            } as ChildAddedEvent, idMapping)
+        }).to.throw("expected exactly 1 (candidate) anchor node in deserialization of newChild chunk in ChildAdded event, but got 2")
     })
 
 })
