@@ -260,10 +260,10 @@ function nodeBaseDetailedDeserializer(languageBasesOrConfiguration: ILanguageBas
 
         const orphanedNodes = serializationChunk
             .nodes
-            .filter(({id, parent}) => nodesById[id] !== undefined && parent !== null && lookupNodeById(parent) === undefined)
+            .filter(({id, parent}) => nodesById[id] !== undefined && parent !== null && lookupNodeById(parent) === undefined);
         if (orphanedNodes.length > 0) {
-            const multiple = orphanedNodes.length > 1
-            problemReporter.reportProblem(`${multiple ? `${orphanedNodes.length} ` : ``}orphaned node${multiple ? "s" : ""} encountered, with ID${multiple ? "s" : ""}: ${orphanedNodes.map(({id}) => id).join(", ")}`)
+            const multiple = orphanedNodes.length > 1;
+            problemReporter.reportProblem(`${multiple ? `${orphanedNodes.length} ` : ``}orphaned node${multiple ? "s" : ""} encountered, with ID${multiple ? "s" : ""}: ${orphanedNodes.map(({id}) => id).join(", ")}`);
         }
 
         return {
@@ -282,7 +282,7 @@ function nodeBaseDetailedDeserializer(languageBasesOrConfiguration: ILanguageBas
 /**
  * Legacy alias for {@link nodeBaseDetailedDeserializer}, kept for backward compatibility, and to be deprecated and removed later.
  */
-const nodeBaseDeserializerWithIdMapping = nodeBaseDetailedDeserializer
+const nodeBaseDeserializerWithIdMapping = nodeBaseDetailedDeserializer;
 
 /**
  * @return a {@link Deserializer} function for the languages (given as {@link ILanguageBase}s) that returns the roots (of type {@link INodeBase}) of the deserialized model.
@@ -302,7 +302,7 @@ function nodeBaseDeserializer(languageBasesOrConfiguration: ILanguageBase[] | (F
     ): INodeBase[] =>
         Array.isArray(languageBasesOrConfiguration)
             ? nodeBaseDetailedDeserializer(languageBasesOrConfiguration, receiveDelta)(serializationChunk, idMapping).roots
-            : nodeBaseDetailedDeserializer(languageBasesOrConfiguration)(serializationChunk, idMapping).roots
+            : nodeBaseDetailedDeserializer(languageBasesOrConfiguration)(serializationChunk, idMapping).roots;
 }
 
 

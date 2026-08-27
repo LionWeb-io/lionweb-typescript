@@ -15,16 +15,16 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import { expect } from "chai"
+
 import {
     IdMapping,
     nodeBaseDetailedDeserializer,
     PartitionAddedDelta,
     serializeNodeBases
 } from "@lionweb/class-core"
-import { eventToDeltaTranslator, PartitionAddedEvent } from "@lionweb/delta-protocol-common"
-import { expect } from "chai"
-
 import { DataTypeTestConcept, TestLanguageBase, TestPartition } from "@lionweb/class-core-test-language"
+import { eventToDeltaTranslator, PartitionAddedEvent } from "@lionweb/delta-protocol-common"
 
 
 describe("event-to-delta translator", () => {

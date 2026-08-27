@@ -17,7 +17,6 @@
 
 import { expect } from "chai"
 
-
 import { LionWebClient } from "@lionweb/delta-protocol-client"
 import {
     ansi,
