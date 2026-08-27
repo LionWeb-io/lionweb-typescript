@@ -136,20 +136,20 @@ describe("implementation of LionWeb client", async function() {
                     "cmd-1": {
                         messageKind: "PartitionAdded",
                         newPartition: {
-                            "serializationFormatVersion": "2023.1",
-                            "languages": [
-                                { "key": "TestLanguage", "version": "0" },
-                                { "key": "LionCore-builtins", "version": "2023.1" }
+                            serializationFormatVersion: "2023.1",
+                            languages: [
+                                { key: "TestLanguage", version: "0" },
+                                { key: "LionCore-builtins", version: "2023.1" }
                             ],
-                            "nodes": [
+                            nodes: [
                                 {
-                                    "id": "partition-A",
-                                    "classifier": { "language": "TestLanguage", "version": "0", "key": "TestPartition" },
-                                    "properties": [],
-                                    "containments": [],
-                                    "references": [],
-                                    "annotations": [],
-                                    "parent": null
+                                    id: "partition-A",
+                                    classifier: testLanguageBase.TestPartition.metaPointer(),
+                                    properties: [],
+                                    containments: [],
+                                    references: [],
+                                    annotations: [],
+                                    parent: null
                                 }
                             ]
                         },

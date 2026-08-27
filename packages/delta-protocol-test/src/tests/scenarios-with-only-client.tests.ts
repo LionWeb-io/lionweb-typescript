@@ -60,20 +60,20 @@ describe(`scenarios where TypeScript client is the only system under test (using
                     messageKind: "PartitionAdded",
                     sequenceNumber: 0,
                     newPartition: {
-                        "serializationFormatVersion": "2023.1",
-                        "languages": [
-                            { "key": "TestLanguage", "version": "0" },
-                            { "key": "LionCore-builtins", "version": "2023.1" }
+                        serializationFormatVersion: "2023.1",
+                        languages: [
+                            { key: "TestLanguage", version: "0" },
+                            { key: "LionCore-builtins", version: "2023.1" }
                             ],
-                        "nodes": [
+                        nodes: [
                             {
-                                "id": "partition-A",
-                                "classifier": { "language": "TestLanguage", "version": "0", "key": "TestPartition" },
-                                "properties": [],
-                                "containments": [],
-                                "references": [],
-                                "annotations": [],
-                                "parent": null
+                                id: "partition-A",
+                                classifier: { language: "TestLanguage", version: "0", key: "TestPartition" },
+                                properties: [],
+                                containments: [],
+                                references: [],
+                                annotations: [],
+                                parent: null
                             }
                         ]
                     },
