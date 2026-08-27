@@ -19,10 +19,13 @@ import { throws } from "assert"
 import { expect } from "chai"
 import { expectError } from "../test-utils/async.js"
 
-import { LionWebClient } from "@lionweb/delta-protocol-client"
+import { LionWebClient, LowLevelClientInstantiator } from "@lionweb/delta-protocol-client"
 import {
+    Command,
+    Event,
     PartitionAddedEvent,
     PartitionDeletedEvent,
+    QueryMessage,
     semanticConsoleLogger,
     SignOffResponse,
     SignOnResponse,
@@ -205,6 +208,50 @@ describe("implementation of LionWeb client", async function() {
         lionWebClient.deletePartition(partitionA)
 
         expect(lionWebClient.forest.partitions).to.deep.equal([])
+    })
+
+    it("partition gets added to the client’s forest after receiving a PartitionAdded event", async function() {
+        let receiveMessageOnClientIntercepted: (message: Event | QueryMessage) => void
+        const lowLevelClientInstantiator: LowLevelClientInstantiator<Event | QueryMessage, Command | QueryMessage> = ({ receiveMessageOnClient }) => {
+            receiveMessageOnClientIntercepted = receiveMessageOnClient
+            return Promise.resolve({
+                sendMessage: (_: Command | QueryMessage) => Promise.resolve(),
+                disconnect: () => Promise.resolve()
+            })
+        }
+        const lionWebClient = await LionWebClient.create({
+            repositoryId: "myRepo",
+            clientId: "A",
+            url: "",
+            languageBases: [testLanguageBase],
+            lowLevelClientInstantiator
+        })
+        expect(lionWebClient.forest.partitions.length).to.equal(0)
+
+        expect(receiveMessageOnClientIntercepted!).to.not.equal(undefined)
+        const receiveMessageOnClient = receiveMessageOnClientIntercepted!
+
+        receiveMessageOnClient({
+            messageKind: "PartitionAdded",
+            newPartition: {
+                nodes: [
+                    {
+                        id: "testPartition",
+                        classifier: testLanguageBase.TestPartition.metaPointer(),
+                        properties: [],
+                        containments: [],
+                        references: [],
+                        annotations: [],
+                        parent: null
+                    }
+                ]
+            },
+            sequenceNumber: 0,
+            originCommands: [],
+            additionalInfos: []
+        } as PartitionAddedEvent)
+
+        expect(lionWebClient.forest.partitions.length).to.equal(1)
     })
 
 })
