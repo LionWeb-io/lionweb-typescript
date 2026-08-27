@@ -74,7 +74,7 @@ describe("mock low-level client", async function() {
         const partitionAddedEvent: PartitionAddedEvent = {
             messageKind: "PartitionAdded",
             newPartition: emptySerializationChunk,
-            sequenceNumber: 0,
+            sequenceNumber: 1,
             originCommands: [
                 {
                     participationId: "participation-1",
@@ -123,7 +123,7 @@ describe("mock low-level client", async function() {
                         languages: [],
                         nodes: []
                     },
-                    sequenceNumber: 0,
+                    sequenceNumber: 1,
                     originCommands: [
                         {
                             participationId: "participation-1",

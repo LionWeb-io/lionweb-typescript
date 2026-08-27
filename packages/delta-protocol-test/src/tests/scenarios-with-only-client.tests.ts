@@ -58,7 +58,7 @@ describe(`scenarios where TypeScript client is the only system under test (using
             lowLevelClientInstantiator: mockLowLevelClientInstantiator({
                 [commandId]: {
                     messageKind: "PartitionAdded",
-                    sequenceNumber: 0,
+                    sequenceNumber: 1,
                     newPartition: {
                         serializationFormatVersion: "2023.1",
                         languages: [

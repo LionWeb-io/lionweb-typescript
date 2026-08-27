@@ -193,7 +193,8 @@ export class LionWebClient {
             }
         }
 
-        const acceptEvent = priorityQueueAcceptor<Event>(({sequenceNumber}) => sequenceNumber, 0, processEvent)
+        const acceptEvent = priorityQueueAcceptor<Event>(({sequenceNumber}) => sequenceNumber, 1, processEvent)
+        // Note: sequenceNumber must be a POSITIVE integer according to the specification, so >= 1.
 
         const receiveMessageOnClient = (message: Event | QueryMessage) => {
             log(new ClientReceivedMessage(clientId, message))

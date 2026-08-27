@@ -153,7 +153,7 @@ describe("implementation of LionWeb client", async function() {
                                 }
                             ]
                         },
-                        sequenceNumber: 0,
+                        sequenceNumber: 1,
                         originCommands: [
                             {
                                 participationId: "participation-a",
@@ -166,7 +166,7 @@ describe("implementation of LionWeb client", async function() {
                         messageKind: "PartitionDeleted",
                         deletedPartition: "partition-A",
                         deletedDescendants: [], // (partition consists of only its root)
-                        sequenceNumber: 1,
+                        sequenceNumber: 2,
                         originCommands: [
                             {
                                 participationId: "participation-a",
@@ -246,7 +246,7 @@ describe("implementation of LionWeb client", async function() {
                     }
                 ]
             },
-            sequenceNumber: 0,
+            sequenceNumber: 1,
             originCommands: [],
             additionalInfos: []
         } as PartitionAddedEvent)

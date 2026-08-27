@@ -4,6 +4,7 @@
 
 * Update to latest spec. of delta protocol, specifically:
   make all move[+replace] child in same containment and move[+replace] annotation in same parent commands and corresponding events offset-based.
+* Emit events with sequence numbers starting from 1 (instead of 0).
 
 
 ## 0.9.0
