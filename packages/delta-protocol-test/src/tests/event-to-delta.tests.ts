@@ -17,7 +17,7 @@
 
 import {
     IdMapping,
-    nodeBaseDeserializerWithIdMapping,
+    nodeBaseDetailedDeserializer,
     PartitionAddedDelta,
     serializeNodeBases
 } from "@lionweb/class-core"
@@ -51,7 +51,7 @@ describe("event-to-delta translator", () => {
             additionalInfos: []
         }
 
-        const eventAsDelta = eventToDeltaTranslator(languageBases, nodeBaseDeserializerWithIdMapping(languageBases))
+        const eventAsDelta = eventToDeltaTranslator(languageBases, nodeBaseDetailedDeserializer(languageBases))
         const idMapping = new IdMapping({})
 
         const delta = eventAsDelta(event, idMapping)

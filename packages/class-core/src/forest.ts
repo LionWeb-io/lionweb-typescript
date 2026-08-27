@@ -31,8 +31,8 @@ import {
 import {
     Deserializer,
     DeserializerConfiguration,
-    nodeBaseDeserializerWithIdMapping,
-    RootsWithIdMapping
+    DetailedDeserialization,
+    nodeBaseDetailedDeserializer
 } from "./deserializer.js"
 import { combinedFactoryFor } from "./factory.js"
 import { IdMapping } from "./id-mapping.js"
@@ -91,7 +91,12 @@ export class Forest {
      * (That translator uses type from `delta-protocol-common` so we don’t want to have it here.)
      * Using this method does *not* change `this` forest’s state.
      */
-    readonly deserializeWithIdMapping: Deserializer<RootsWithIdMapping>
+    readonly deserialize: Deserializer<DetailedDeserialization>
+
+    /**
+     * Legacy alias for {@link deserialize}, kept for backward compatibility, and to be deprecated and removed later.
+     */
+    readonly deserializeWithIdMapping: Deserializer<DetailedDeserialization>
 
 
     constructor(configuration: FactoryConfiguration & DeserializerConfiguration) {
@@ -115,7 +120,8 @@ export class Forest {
                  * _at/before_ the time the delta was emitted.
                  */
         )
-        this.deserializeWithIdMapping = nodeBaseDeserializerWithIdMapping(configuration)
+        this.deserialize = nodeBaseDetailedDeserializer(configuration)
+        this.deserializeWithIdMapping = this.deserialize
     }
 
 
@@ -159,7 +165,7 @@ export class Forest {
      * It also updates the ID mapping, including with mappings for deserialized unattached nodes.
      */
     deserializeInto = (serializationChunk: LionWebJsonChunk): INodeBase[] => {
-        const { roots: newRoots, idMapping: newIdMapping } = this.deserializeWithIdMapping(serializationChunk, this.idMapping)
+        const { roots: newRoots, idMapping: newIdMapping } = this.deserialize(serializationChunk, this.idMapping)
         this.partitions.push(...newRoots.filter((newRoot) => isPartition(newRoot.classifier)))
         this.idMapping.mergeIn(newIdMapping)    // also merge in new unattached, non-partition roots
         return newRoots

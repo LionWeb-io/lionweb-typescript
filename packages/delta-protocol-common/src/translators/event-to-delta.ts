@@ -34,6 +34,7 @@ import {
     ChildReplacedDelta,
     CompositeDelta,
     Deserializer,
+    DetailedDeserialization,
     IDelta,
     IdMapping,
     IdOrNull,
@@ -47,8 +48,7 @@ import {
     PropertyDeletedDelta,
     ReferenceAddedDelta,
     ReferenceChangedDelta,
-    ReferenceDeletedDelta,
-    RootsWithIdMapping
+    ReferenceDeletedDelta
 } from "@lionweb/class-core"
 import { featureResolversFor, LionWebVersions, PropertyValueDeserializer, referenceToSet } from "@lionweb/core"
 import { LionWebJsonDeltaChunk } from "@lionweb/json"
@@ -89,18 +89,18 @@ export type EventToDeltaTranslator = (event: Event, idMapping: IdMapping) => IDe
 
 /**
  * @return a {@link EventToDeltaTranslator} for the languages given as {@link ILanguageBase language bases},
- * with the given {@link IdMapping `idMapping`} and {@link Deserializer `deserializeWithIdMapping` deserializer function}.
+ * with the given {@link IdMapping `idMapping`} and {@link Deserializer `deserializer` deserializer function}.
  */
 export const eventToDeltaTranslator = (
     languageBases: ILanguageBase[],
-    deserializeWithIdMapping: Deserializer<RootsWithIdMapping>,
+    deserializer: Deserializer<DetailedDeserialization>,
     propertyValueDeserializer: PropertyValueDeserializer = LionWebVersions.v2023_1.builtinsFacade.propertyValueDeserializer
 ): EventToDeltaTranslator => {
 
     const eventAsDelta = (event: Event, idMapping: IdMapping): IDelta | undefined => {
 
         const deserializedNodeFrom = (chunk: LionWebJsonDeltaChunk): INodeBase => {
-            const { roots, idMapping: newIdMapping } = deserializeWithIdMapping(chunk, idMapping)    // (deserializer should take care of installing delta receiver)
+            const { roots, idMapping: newIdMapping } = deserializer(chunk, idMapping)    // (deserializer should take care of installing delta receiver)
             if (roots.length !== 1) {
                 throw new Error(`expected exactly 1 root node in deserialization of chunk in event, but got ${roots.length}`)
             }

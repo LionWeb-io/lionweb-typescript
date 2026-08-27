@@ -17,6 +17,8 @@
   As part of that: 
   * Deprecate the `defaultPropertyValueSerializer` constant, which was only used in the `serializeDelta` function anyway.
   * Replace usage of the deprecated `serializeDelta` function with `deltaSerializer()` throughout the codebase.
+* Rename (and document) the `RootsWithIdMapping` type to `DetailedDeserialization` and the `nodeBaseDeserializerWithIdMapping` function to `nodeBaseDetailedDeserializer`, keeping aliases for backward compatibility.
+  * Also add a `nodes` field to `DetailedDeserialization`, containing *all* deserialized nodes.
 
 
 ## 0.9.2
