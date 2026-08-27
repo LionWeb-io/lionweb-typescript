@@ -69,6 +69,12 @@ const { clientWarning } = ansi
 
 
 /**
+ * Type def. for a {@link LowLevelClientInstantiator} with type arguments suitable for a LionWeb delta protocol-compliant client.
+ */
+export type LionWebDeltaProtocolLowLevelClientInstantiator = LowLevelClientInstantiator<Event | QueryMessage, Command | QueryMessage>
+
+
+/**
  * Type def. for parameters – required and optional – for instantiating a {@link LionWebClient LionWeb delta protocol client}.
  */
 export type LionWebClientParameters = {
@@ -76,7 +82,7 @@ export type LionWebClientParameters = {
     clientId: LionWebId
     url: string
     languageBases: ILanguageBase[]
-    lowLevelClientInstantiator: LowLevelClientInstantiator<Event | QueryMessage, Command | QueryMessage>
+    lowLevelClientInstantiator: LionWebDeltaProtocolLowLevelClientInstantiator
     serializationChunk?: LionWebJsonChunk
     instantiateDeltaReceiverForwardingTo?: (commandSender: DeltaReceiver) => DeltaReceiver
     semanticLogger?: SemanticLogger
@@ -187,7 +193,8 @@ export class LionWebClient {
             }
         }
 
-        const acceptEvent = priorityQueueAcceptor<Event>(({sequenceNumber}) => sequenceNumber, 0, processEvent)
+        const acceptEvent = priorityQueueAcceptor<Event>(({sequenceNumber}) => sequenceNumber, 1, processEvent)
+        // Note: sequenceNumber must be a POSITIVE integer according to the specification, so >= 1.
 
         const receiveMessageOnClient = (message: Event | QueryMessage) => {
             log(new ClientReceivedMessage(clientId, message))

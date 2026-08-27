@@ -95,7 +95,7 @@ const deltaApplier = (idMapping?: IdMapping, updatablePartitions?: () => INodeBa
                     const partitions = updatablePartitions();
                     const { newPartition } = delta
                     if (partitions.indexOf(newPartition) === -1) {
-                        updatablePartitions().push(newPartition);
+                        partitions.push(newPartition);
                     }
                     idMapping?.updateWith(newPartition);
                 }

@@ -74,7 +74,7 @@ describe("mock low-level client", async function() {
         const partitionAddedEvent: PartitionAddedEvent = {
             messageKind: "PartitionAdded",
             newPartition: emptySerializationChunk,
-            sequenceNumber: 0,
+            sequenceNumber: 1,
             originCommands: [
                 {
                     participationId: "participation-1",
@@ -105,32 +105,32 @@ describe("mock low-level client", async function() {
         expect(logItems).to.deep.equal([
             {
                 sentToServer: {
-                    "messageKind": "AddPartition",
-                    "commandId": "command-1",
-                    "newPartition": {
-                        "serializationFormatVersion": "2023.1",
-                        "languages": [],
-                        "nodes": []
+                    messageKind: "AddPartition",
+                    commandId: "command-1",
+                    newPartition: {
+                        serializationFormatVersion: "2023.1",
+                        languages: [],
+                        nodes: []
                     },
-                    "additionalInfos": []
+                    additionalInfos: []
                 }
             },
             {
                 receivedOnClient: {
-                    "messageKind": "PartitionAdded",
-                    "newPartition": {
-                        "serializationFormatVersion": "2023.1",
-                        "languages": [],
-                        "nodes": []
+                    messageKind: "PartitionAdded",
+                    newPartition: {
+                        serializationFormatVersion: "2023.1",
+                        languages: [],
+                        nodes: []
                     },
-                    "sequenceNumber": 0,
-                    "originCommands": [
+                    sequenceNumber: 1,
+                    originCommands: [
                         {
-                            "participationId": "participation-1",
-                            "commandId": "command-1"
+                            participationId: "participation-1",
+                            commandId: "command-1"
                         }
                     ],
-                    "additionalInfos": []
+                    additionalInfos: []
                 }
             }
         ])
