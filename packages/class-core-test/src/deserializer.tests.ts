@@ -15,7 +15,7 @@
 // SPDX-FileCopyrightText: 2026 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { nodeBaseDeserializerWithIdMapping, serializeNodeBases } from "@lionweb/class-core"
+import { nodeBaseDetailedDeserializer, serializeNodeBases } from "@lionweb/class-core"
 import { LinkTestConcept, TestLanguageBase, TestPartition } from "@lionweb/class-core-test-language"
 import { AggregatingProblemReporter, idOf } from "@lionweb/core"
 
@@ -36,7 +36,7 @@ describe("deserializer", () => {
         chunk.nodes = chunk.nodes.filter(({id}) => id !== "partitionToRemove")  // => linkTestConcept2 is now an orphan
 
         const aggregator = new AggregatingProblemReporter()
-        const {roots, idMapping} = nodeBaseDeserializerWithIdMapping({ languageBases: [TestLanguageBase.INSTANCE], problemReporter: aggregator })(chunk)
+        const {roots, idMapping} = nodeBaseDetailedDeserializer({ languageBases: [TestLanguageBase.INSTANCE], problemReporter: aggregator })(chunk)
         deepEqual(roots.map(idOf), ["partitionToKeep"])
         deepEqual(aggregator.allProblems(), { "orphaned node encountered, with ID: linkTestConcept2": 1 })
         const deserializedLinkTestConcept2 = idMapping.tryFromId("linkTestConcept2")

@@ -16,9 +16,11 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { LionWebVersions } from "@lionweb/core"
-import { IDelta } from "../base.js"
+import { LionWebJsonDeltaChunk } from "@lionweb/json"
 import { SerializedDelta } from "./types.g.js"
-import { propertyValueSerializerWith } from "../../serializer.js"
+import { IDelta } from "../base.js"
+import { INodeBase } from "../../base-types.js"
+import { propertyValueSerializerWith, serializeNodeBases } from "../../serializer.js"
 
 
 /**
@@ -35,4 +37,16 @@ export type DeltaDeserializer = (delta: SerializedDelta) => IDelta;
  * @deprecated Not parametrized in {@link LionWebVersion}.
  */
 export const defaultPropertyValueSerializer = propertyValueSerializerWith({ primitiveValueSerializer: LionWebVersions.v2023_1.builtinsFacade.propertyValueSerializer })
+
+
+/**
+ * @return the serialization of the given {@link INodeBase `node`} as a {@link LionWebJsonDeltaChunk delta chunk}
+ *  — supposedly of *single* type.
+ */
+export const serializeAsDeltaChunk = (node: INodeBase): LionWebJsonDeltaChunk => {
+    const { nodes } = serializeNodeBases([node])
+    return {
+        nodes
+    }
+}
 
