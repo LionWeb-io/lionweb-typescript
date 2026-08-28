@@ -57,7 +57,7 @@ const serializationExpressionFor = (name: string, type: Type) => {
 const serializationsForField = ({name, type}: Field) => [
     `${name}: ${serializationExpressionFor(name, type)}`,
     ...(isSerializingAsChunk(type)
-            ? [`${(type.serialization as SerializeSubTree).fieldName}: serializeNodeBases([delta.${name}])`]
+            ? [`${(type.serialization as SerializeSubTree).fieldName}: serializeAsDeltaChunk(delta.${name})`]
             : []
     )
 ]
@@ -95,7 +95,8 @@ export const serializerForDeltas = (deltas: Delta[], header?: string) =>
         ),
         `} from "./types.g.js";`,
         `import { idFrom } from "../../references.js";`,
-        `import { propertyValueSerializerWith, serializeNodeBases } from "../../serializer.js";`,
+        `import { propertyValueSerializerWith } from "../../serializer.js";`,
+        `import { serializeAsDeltaChunk } from "./base.js"`,
         ``,
         ``,
         `export const deltaSerializer = (lionWebVersion = LionWebVersions.v2023_1) => {`,

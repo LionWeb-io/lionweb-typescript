@@ -18,7 +18,7 @@
 // Warning: this file is generated!
 // Modifying it by hand is useless at best, and sabotage at worst.
 
-import { LionWebId, LionWebJsonMetaPointer, LionWebJsonChunk } from "@lionweb/json";
+import { LionWebId, LionWebJsonMetaPointer, LionWebJsonDeltaChunk } from "@lionweb/json";
 import { IdOrNull } from "../../references.js";
 
 
@@ -55,7 +55,7 @@ export type SerializedDelta =
 export type PartitionAddedSerializedDelta = {
     kind: "PartitionAdded"
     newPartition: LionWebId
-    newNodes: LionWebJsonChunk
+    newNodes: LionWebJsonDeltaChunk
 }
 
 export type PartitionDeletedSerializedDelta = {
@@ -91,7 +91,7 @@ export type ChildAddedSerializedDelta = {
     containment: LionWebJsonMetaPointer
     index: number
     newChild: LionWebId
-    newNodes: LionWebJsonChunk
+    newNodes: LionWebJsonDeltaChunk
 }
 
 export type ChildDeletedSerializedDelta = {
@@ -100,7 +100,7 @@ export type ChildDeletedSerializedDelta = {
     containment: LionWebJsonMetaPointer
     index: number
     deletedChild: LionWebId
-    deletedNodes: LionWebJsonChunk
+    deletedNodes: LionWebJsonDeltaChunk
 }
 
 export type ChildReplacedSerializedDelta = {
@@ -109,9 +109,9 @@ export type ChildReplacedSerializedDelta = {
     containment: LionWebJsonMetaPointer
     index: number
     replacedChild: LionWebId
-    replacedNodes: LionWebJsonChunk
+    replacedNodes: LionWebJsonDeltaChunk
     newChild: LionWebId
-    newNodes: LionWebJsonChunk
+    newNodes: LionWebJsonDeltaChunk
 }
 
 export type ChildMovedFromOtherContainmentSerializedDelta = {
@@ -154,7 +154,7 @@ export type ChildMovedAndReplacedFromOtherContainmentSerializedDelta = {
     oldContainment: LionWebJsonMetaPointer
     oldIndex: number
     replacedChild: LionWebId
-    replacedChildAsNodes: LionWebJsonChunk
+    replacedChildAsNodes: LionWebJsonDeltaChunk
 }
 
 export type ChildMovedAndReplacedFromOtherContainmentInSameParentSerializedDelta = {
@@ -166,7 +166,7 @@ export type ChildMovedAndReplacedFromOtherContainmentInSameParentSerializedDelta
     newIndex: number
     movedChild: LionWebId
     replacedChild: LionWebId
-    replacedChildAsNodes: LionWebJsonChunk
+    replacedChildAsNodes: LionWebJsonDeltaChunk
 }
 
 export type ChildMovedAndReplacedInSameContainmentSerializedDelta = {
@@ -177,7 +177,7 @@ export type ChildMovedAndReplacedInSameContainmentSerializedDelta = {
     indexOffset: number
     movedChild: LionWebId
     replacedChild: LionWebId
-    replacedChildAsNodes: LionWebJsonChunk
+    replacedChildAsNodes: LionWebJsonDeltaChunk
 }
 
 export type AnnotationAddedSerializedDelta = {
@@ -185,7 +185,7 @@ export type AnnotationAddedSerializedDelta = {
     parent: LionWebId
     index: number
     newAnnotation: LionWebId
-    newAnnotationNodes: LionWebJsonChunk
+    newAnnotationNodes: LionWebJsonDeltaChunk
 }
 
 export type AnnotationDeletedSerializedDelta = {
@@ -193,7 +193,7 @@ export type AnnotationDeletedSerializedDelta = {
     parent: LionWebId
     index: number
     deletedAnnotation: LionWebId
-    deletedAnnotationNodes: LionWebJsonChunk
+    deletedAnnotationNodes: LionWebJsonDeltaChunk
 }
 
 export type AnnotationReplacedSerializedDelta = {
@@ -201,9 +201,9 @@ export type AnnotationReplacedSerializedDelta = {
     parent: LionWebId
     index: number
     replacedAnnotation: LionWebId
-    replacedAnnotationNodes: LionWebJsonChunk
+    replacedAnnotationNodes: LionWebJsonDeltaChunk
     newAnnotation: LionWebId
-    newAnnotationNodes: LionWebJsonChunk
+    newAnnotationNodes: LionWebJsonDeltaChunk
 }
 
 export type AnnotationMovedFromOtherParentSerializedDelta = {
@@ -228,7 +228,7 @@ export type AnnotationMovedAndReplacedFromOtherParentSerializedDelta = {
     oldParent: LionWebId
     oldIndex: number
     replacedAnnotation: LionWebId
-    replacedAnnotationNodes: LionWebJsonChunk
+    replacedAnnotationNodes: LionWebJsonDeltaChunk
     newParent: LionWebId
     newIndex: number
     movedAnnotation: LionWebId
@@ -240,7 +240,7 @@ export type AnnotationMovedAndReplacedInSameParentSerializedDelta = {
     oldIndex: number
     indexOffset: number
     replacedAnnotation: LionWebId
-    replacedAnnotationNodes: LionWebJsonChunk
+    replacedAnnotationNodes: LionWebJsonDeltaChunk
     movedAnnotation: LionWebId
 }
 

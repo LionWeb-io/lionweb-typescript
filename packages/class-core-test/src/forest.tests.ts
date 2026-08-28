@@ -148,7 +148,7 @@ describe("Forest", () => {
         const nonPartition = forest.createNode(testLanguageBase.LinkTestConcept, "nptc")
         const serializationChunk = serializeNodeBases([partition, nonPartition])
 
-        const { roots } = forest.deserializeWithIdMapping(serializationChunk)
+        const { roots } = forest.deserialize(serializationChunk)
         equal(roots.length, 2)
         deepEqual(forest.partitions, [])
         equal(forest.idMapping.tryFromId("ptc"), undefined)

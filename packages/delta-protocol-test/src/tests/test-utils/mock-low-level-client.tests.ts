@@ -20,15 +20,13 @@ import { expectError } from "../../test-utils/async.js"
 
 import { LowLevelClientLogItem, LowLevelClientParameters } from "@lionweb/delta-protocol-client"
 import { AddPartitionCommand, PartitionAddedEvent, SignOnRequest, SignOnResponse } from "@lionweb/delta-protocol-common"
-import { LionWebJsonChunk } from "@lionweb/json"
+import { LionWebJsonDeltaChunk } from "@lionweb/json"
 import { mockLowLevelClientInstantiator } from "../../test-utils/mock-low-level-client.js"
 
 
 describe("mock low-level client", async function() {
 
-    const emptySerializationChunk: LionWebJsonChunk = {
-        serializationFormatVersion: "2023.1",
-        languages: [],
+    const emptySerializationChunk: LionWebJsonDeltaChunk = {
         nodes: []
     }
 
@@ -108,8 +106,6 @@ describe("mock low-level client", async function() {
                     messageKind: "AddPartition",
                     commandId: "command-1",
                     newPartition: {
-                        serializationFormatVersion: "2023.1",
-                        languages: [],
                         nodes: []
                     },
                     additionalInfos: []
@@ -119,8 +115,6 @@ describe("mock low-level client", async function() {
                 receivedOnClient: {
                     messageKind: "PartitionAdded",
                     newPartition: {
-                        serializationFormatVersion: "2023.1",
-                        languages: [],
                         nodes: []
                     },
                     sequenceNumber: 1,

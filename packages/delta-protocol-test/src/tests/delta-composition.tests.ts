@@ -91,25 +91,10 @@ describe("combining delta protocol and an “adjacent” delta receiver", () => 
                             messageKind: "AddPartition",
                             commandId: "cmd-1-0",
                             newPartition: {
-                                serializationFormatVersion: "2023.1",
-                                languages: [
-                                    {
-                                        key: "TestLanguage",
-                                        version: "0"
-                                    },
-                                    {
-                                        key: "LionCore-builtins",
-                                        version: "2023.1"
-                                    }
-                                ],
                                 nodes: [
                                     {
                                         id: "partition-A",
-                                        classifier: {
-                                            language: "TestLanguage",
-                                            version: "0",
-                                            key: "TestPartition"
-                                        },
+                                        classifier: testLanguageBase.TestPartition.metaPointer(),
                                         properties: [],
                                         containments: [],
                                         references: [],

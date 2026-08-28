@@ -53,7 +53,7 @@ export interface ContinuedEvent extends Event, ContinuedChunkMessage {
 /** § 5.8.2.1 */
 export interface PartitionAddedEvent extends Event, SplittableMessage {
     messageKind: "PartitionAdded"
-    newPartition: /* single */ LionWebJsonDeltaChunk
+    newPartition: /* single or shallow */ LionWebJsonDeltaChunk
 }
 
 /** § 5.8.2.2 */

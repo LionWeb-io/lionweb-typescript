@@ -167,7 +167,7 @@ export class LionWebClient {
         if (serializationChunk !== undefined) {
             forest.deserializeInto(serializationChunk)
         }
-        const eventAsDelta = eventToDeltaTranslator(languageBases, forest.deserializeWithIdMapping)
+        const eventAsDelta = eventToDeltaTranslator(languageBases, forest.deserialize)
         loading = false
 
         const processEvent = (event: Event) => {

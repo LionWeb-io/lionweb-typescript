@@ -47,7 +47,7 @@ import {
     ReferenceAddedDelta,
     ReferenceChangedDelta,
     ReferenceDeletedDelta,
-    serializeNodeBases
+    serializeAsDeltaChunk
 } from "@lionweb/class-core"
 import { idOf, LionWebVersion, LionWebVersions, metaPointerForFeature, PropertyValueSerializer } from "@lionweb/core"
 import {
@@ -171,7 +171,7 @@ export const deltaToEventTranslator = (
         const translated = (delta: IDelta): Event => {
             if (delta instanceof PartitionAddedDelta) {
                 return completed<PartitionAddedEvent>("PartitionAdded", { // § 5.8.2.1
-                    newPartition: serializeNodeBases([delta.newPartition])
+                    newPartition: serializeAsDeltaChunk(delta.newPartition)
                 })
             }
             if (delta instanceof PartitionDeletedDelta) {
@@ -205,7 +205,7 @@ export const deltaToEventTranslator = (
             if (delta instanceof ChildAddedDelta) {
                 return completed<ChildAddedEvent>("ChildAdded", { // § 5.8.5.1
                     parent: delta.parent.id,
-                    newChild: serializeNodeBases([delta.newChild]),
+                    newChild: serializeAsDeltaChunk(delta.newChild),
                     containment: metaPointerForFeature(delta.containment),
                     index: delta.index
                 })
@@ -221,7 +221,7 @@ export const deltaToEventTranslator = (
             }
             if (delta instanceof ChildReplacedDelta) {
                 return completed<ChildReplacedEvent>("ChildReplaced", { // § 5.8.5.3
-                    newChild: serializeNodeBases([delta.newChild]),
+                    newChild: serializeAsDeltaChunk(delta.newChild),
                     parent: delta.parent.id,
                     containment: metaPointerForFeature(delta.containment),
                     index: delta.index,
@@ -299,7 +299,7 @@ export const deltaToEventTranslator = (
                 return completed<AnnotationAddedEvent>("AnnotationAdded", { // § 5.8.6.1
                     parent: delta.parent.id,
                     index: delta.index,
-                    newAnnotation: serializeNodeBases([delta.newAnnotation])
+                    newAnnotation: serializeAsDeltaChunk(delta.newAnnotation)
                 })
             }
             if (delta instanceof AnnotationDeletedDelta) {
@@ -312,7 +312,7 @@ export const deltaToEventTranslator = (
             }
             if (delta instanceof AnnotationReplacedDelta) {
                 return completed<AnnotationReplacedEvent>("AnnotationReplaced", { // § 5.8.6.3
-                    newAnnotation: serializeNodeBases([delta.newAnnotation]),
+                    newAnnotation: serializeAsDeltaChunk(delta.newAnnotation),
                     parent: delta.parent.id,
                     index: delta.index,
                     replacedAnnotation: delta.replacedAnnotation.id,

@@ -45,7 +45,7 @@ import {
     ReferenceAddedDelta,
     ReferenceChangedDelta,
     ReferenceDeletedDelta,
-    serializeNodeBases
+    serializeAsDeltaChunk
 } from "@lionweb/class-core"
 import { LionWebVersions, metaPointerForFeature, PropertyValueSerializer } from "@lionweb/core"
 import { LionWebId } from "@lionweb/json"
@@ -114,7 +114,7 @@ export const deltaToCommandTranslator = (
 
         if (delta instanceof PartitionAddedDelta) {
             return completed<AddPartitionCommand>("AddPartition", { // § 5.7.2.1
-                newPartition: serializeNodeBases([delta.newPartition])
+                newPartition: serializeAsDeltaChunk(delta.newPartition)
             })
         }
         if (delta instanceof PartitionDeletedDelta) {
@@ -145,7 +145,7 @@ export const deltaToCommandTranslator = (
         if (delta instanceof ChildAddedDelta) {
             return completed<AddChildCommand>("AddChild", { // § 5.7.5.1
                 parent: delta.parent.id,
-                newChild: serializeNodeBases([delta.newChild]),
+                newChild: serializeAsDeltaChunk(delta.newChild),
                 containment: metaPointerForFeature(delta.containment),
                 index: delta.index
             })
@@ -160,7 +160,7 @@ export const deltaToCommandTranslator = (
         }
         if (delta instanceof ChildReplacedDelta) {
             return completed<ReplaceChildCommand>("ReplaceChild", { // § 5.7.5.3
-                newChild: serializeNodeBases([delta.newChild]),
+                newChild: serializeAsDeltaChunk(delta.newChild),
                 parent: delta.parent.id,
                 containment: metaPointerForFeature(delta.containment),
                 index: delta.index,
@@ -234,7 +234,7 @@ export const deltaToCommandTranslator = (
             return completed<AddAnnotationCommand>("AddAnnotation", { // § 5.7.6.1
                 parent: delta.parent.id,
                 index: delta.index,
-                newAnnotation: serializeNodeBases([delta.newAnnotation])
+                newAnnotation: serializeAsDeltaChunk(delta.newAnnotation)
             })
         }
         if (delta instanceof AnnotationDeletedDelta) {
@@ -246,7 +246,7 @@ export const deltaToCommandTranslator = (
         }
         if (delta instanceof AnnotationReplacedDelta) {
             return completed<ReplaceAnnotationCommand>("ReplaceAnnotation", { // § 5.7.6.3
-                newAnnotation: serializeNodeBases([delta.newAnnotation]),
+                newAnnotation: serializeAsDeltaChunk(delta.newAnnotation),
                 parent: delta.parent.id,
                 index: delta.index,
                 replacedAnnotation: delta.replacedAnnotation.id

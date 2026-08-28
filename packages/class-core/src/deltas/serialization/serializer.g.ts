@@ -78,7 +78,8 @@ import {
     SerializedDelta
 } from "./types.g.js";
 import { idFrom } from "../../references.js";
-import { propertyValueSerializerWith, serializeNodeBases } from "../../serializer.js";
+import { propertyValueSerializerWith } from "../../serializer.js";
+import { serializeAsDeltaChunk } from "./base.js"
 
 
 export const deltaSerializer = (lionWebVersion = LionWebVersions.v2023_1) => {
@@ -89,7 +90,7 @@ export const deltaSerializer = (lionWebVersion = LionWebVersions.v2023_1) => {
             return {
                 kind: "PartitionAdded",
                 newPartition: delta.newPartition.id,
-                newNodes: serializeNodeBases([delta.newPartition])
+                newNodes: serializeAsDeltaChunk(delta.newPartition)
             } as PartitionAddedSerializedDelta;
         }
 
@@ -135,7 +136,7 @@ export const deltaSerializer = (lionWebVersion = LionWebVersions.v2023_1) => {
                 containment: metaPointerForFeature(delta.containment),
                 index: delta.index,
                 newChild: delta.newChild.id,
-                newNodes: serializeNodeBases([delta.newChild])
+                newNodes: serializeAsDeltaChunk(delta.newChild)
             } as ChildAddedSerializedDelta;
         }
 
@@ -146,7 +147,7 @@ export const deltaSerializer = (lionWebVersion = LionWebVersions.v2023_1) => {
                 containment: metaPointerForFeature(delta.containment),
                 index: delta.index,
                 deletedChild: delta.deletedChild.id,
-                deletedNodes: serializeNodeBases([delta.deletedChild])
+                deletedNodes: serializeAsDeltaChunk(delta.deletedChild)
             } as ChildDeletedSerializedDelta;
         }
 
@@ -157,9 +158,9 @@ export const deltaSerializer = (lionWebVersion = LionWebVersions.v2023_1) => {
                 containment: metaPointerForFeature(delta.containment),
                 index: delta.index,
                 replacedChild: delta.replacedChild.id,
-                replacedNodes: serializeNodeBases([delta.replacedChild]),
+                replacedNodes: serializeAsDeltaChunk(delta.replacedChild),
                 newChild: delta.newChild.id,
-                newNodes: serializeNodeBases([delta.newChild])
+                newNodes: serializeAsDeltaChunk(delta.newChild)
             } as ChildReplacedSerializedDelta;
         }
 
@@ -210,7 +211,7 @@ export const deltaSerializer = (lionWebVersion = LionWebVersions.v2023_1) => {
                 oldContainment: metaPointerForFeature(delta.oldContainment),
                 oldIndex: delta.oldIndex,
                 replacedChild: delta.replacedChild.id,
-                replacedChildAsNodes: serializeNodeBases([delta.replacedChild])
+                replacedChildAsNodes: serializeAsDeltaChunk(delta.replacedChild)
             } as ChildMovedAndReplacedFromOtherContainmentSerializedDelta;
         }
 
@@ -224,7 +225,7 @@ export const deltaSerializer = (lionWebVersion = LionWebVersions.v2023_1) => {
                 newIndex: delta.newIndex,
                 movedChild: delta.movedChild.id,
                 replacedChild: delta.replacedChild.id,
-                replacedChildAsNodes: serializeNodeBases([delta.replacedChild])
+                replacedChildAsNodes: serializeAsDeltaChunk(delta.replacedChild)
             } as ChildMovedAndReplacedFromOtherContainmentInSameParentSerializedDelta;
         }
 
@@ -237,7 +238,7 @@ export const deltaSerializer = (lionWebVersion = LionWebVersions.v2023_1) => {
                 indexOffset: delta.indexOffset,
                 movedChild: delta.movedChild.id,
                 replacedChild: delta.replacedChild.id,
-                replacedChildAsNodes: serializeNodeBases([delta.replacedChild])
+                replacedChildAsNodes: serializeAsDeltaChunk(delta.replacedChild)
             } as ChildMovedAndReplacedInSameContainmentSerializedDelta;
         }
 
@@ -247,7 +248,7 @@ export const deltaSerializer = (lionWebVersion = LionWebVersions.v2023_1) => {
                 parent: delta.parent.id,
                 index: delta.index,
                 newAnnotation: delta.newAnnotation.id,
-                newAnnotationNodes: serializeNodeBases([delta.newAnnotation])
+                newAnnotationNodes: serializeAsDeltaChunk(delta.newAnnotation)
             } as AnnotationAddedSerializedDelta;
         }
 
@@ -257,7 +258,7 @@ export const deltaSerializer = (lionWebVersion = LionWebVersions.v2023_1) => {
                 parent: delta.parent.id,
                 index: delta.index,
                 deletedAnnotation: delta.deletedAnnotation.id,
-                deletedAnnotationNodes: serializeNodeBases([delta.deletedAnnotation])
+                deletedAnnotationNodes: serializeAsDeltaChunk(delta.deletedAnnotation)
             } as AnnotationDeletedSerializedDelta;
         }
 
@@ -267,9 +268,9 @@ export const deltaSerializer = (lionWebVersion = LionWebVersions.v2023_1) => {
                 parent: delta.parent.id,
                 index: delta.index,
                 replacedAnnotation: delta.replacedAnnotation.id,
-                replacedAnnotationNodes: serializeNodeBases([delta.replacedAnnotation]),
+                replacedAnnotationNodes: serializeAsDeltaChunk(delta.replacedAnnotation),
                 newAnnotation: delta.newAnnotation.id,
-                newAnnotationNodes: serializeNodeBases([delta.newAnnotation])
+                newAnnotationNodes: serializeAsDeltaChunk(delta.newAnnotation)
             } as AnnotationReplacedSerializedDelta;
         }
 
@@ -300,7 +301,7 @@ export const deltaSerializer = (lionWebVersion = LionWebVersions.v2023_1) => {
                 oldParent: delta.oldParent.id,
                 oldIndex: delta.oldIndex,
                 replacedAnnotation: delta.replacedAnnotation.id,
-                replacedAnnotationNodes: serializeNodeBases([delta.replacedAnnotation]),
+                replacedAnnotationNodes: serializeAsDeltaChunk(delta.replacedAnnotation),
                 newParent: delta.newParent.id,
                 newIndex: delta.newIndex,
                 movedAnnotation: delta.movedAnnotation.id
@@ -314,7 +315,7 @@ export const deltaSerializer = (lionWebVersion = LionWebVersions.v2023_1) => {
                 oldIndex: delta.oldIndex,
                 indexOffset: delta.indexOffset,
                 replacedAnnotation: delta.replacedAnnotation.id,
-                replacedAnnotationNodes: serializeNodeBases([delta.replacedAnnotation]),
+                replacedAnnotationNodes: serializeAsDeltaChunk(delta.replacedAnnotation),
                 movedAnnotation: delta.movedAnnotation.id
             } as AnnotationMovedAndReplacedInSameParentSerializedDelta;
         }
