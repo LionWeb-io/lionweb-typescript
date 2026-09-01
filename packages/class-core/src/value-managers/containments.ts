@@ -275,7 +275,7 @@ export abstract class MultiContainmentValueManager<T extends INodeBase> extends 
                 if (newChild.containment === this.containment) {
                     const oldIndex = this.children.indexOf(newChild);
                     this.moveDirectly(oldIndex, newIndex);
-                    this.emitDelta(() => new ChildMovedInSameContainmentDelta(this.container, this.containment, oldIndex, newIndex, newChild));
+                    this.emitDelta(() => new ChildMovedInSameContainmentDelta(this.container, this.containment, oldIndex, newIndex - oldIndex, newChild));
                 } else {
                     const oldIndex = removeFromContainment(newChild);
                     checkIndex(newIndex, this.children.length, true);

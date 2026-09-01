@@ -152,7 +152,7 @@ describe("write access to a [0..1] containment through .set", () => {
         deepEqual(deltas[2], new ChildMovedFromOtherContainmentInSameParentDelta(parent, testLanguageBase.LinkTestConcept_containment_1, 0, child, testLanguageBase.LinkTestConcept_containment_0_1, 0));
     });
 
-    it("moving a child within same containment (no ChildMovedInSameContainmentDelta)", () => {
+    it("assigning a child idempotently", () => {
         const [receiveDelta, deltas] = collectingDeltaReceiver();
         const parent = attachedLinkTestConcept("parent", receiveDelta);
         const child = LinkTestConcept.create("child", receiveDelta);
