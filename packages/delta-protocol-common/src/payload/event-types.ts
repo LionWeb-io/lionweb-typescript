@@ -151,7 +151,7 @@ export interface ChildMovedFromOtherContainmentInSameParentEvent extends Event {
 
 /** § 5.8.5.6 */
 export interface ChildMovedInSameContainmentEvent extends Event {
-    messageKind: "ChildMovedInSameContainment"
+    messageKind: "ChildMovedInSameContainmentInSameParent"
     parent: LionWebId
     containment: LionWebJsonMetaPointer
     oldIndex: number
@@ -188,7 +188,7 @@ export interface ChildMovedAndReplacedFromOtherContainmentInSameParentEvent exte
 
 /** § 5.8.5.9 */
 export interface ChildMovedAndReplacedInSameContainmentEvent extends Event {
-    messageKind: "ChildMovedAndReplacedInSameContainment"
+    messageKind: "ChildMovedAndReplacedInSameContainmentInSameParent"
     parent: LionWebId
     containment: LionWebJsonMetaPointer
     oldIndex: number
@@ -340,10 +340,10 @@ const eventMessageKinds = mapFrom(
         "ChildReplaced",
         "ChildMovedFromContainmentInOtherParent",
         "ChildMovedFromOtherContainmentInSameParent",
-        "ChildMovedInSameContainment",
+        "ChildMovedInSameContainmentInSameParent",
         "ChildMovedAndReplacedFromContainmentInOtherParent",
         "ChildMovedAndReplacedFromOtherContainmentInSameParent",
-        "ChildMovedAndReplacedInSameContainment",
+        "ChildMovedAndReplacedInSameContainmentInSameParent",
         "AnnotationAdded",
         "AnnotationDeleted",
         "AnnotationReplaced",

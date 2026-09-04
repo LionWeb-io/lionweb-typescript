@@ -33,10 +33,10 @@ export type SerializedDelta =
     | ChildReplacedSerializedDelta
     | ChildMovedFromContainmentInOtherParentSerializedDelta
     | ChildMovedFromOtherContainmentInSameParentSerializedDelta
-    | ChildMovedInSameContainmentSerializedDelta
+    | ChildMovedInSameContainmentInSameParentSerializedDelta
     | ChildMovedAndReplacedFromContainmentInOtherParentSerializedDelta
     | ChildMovedAndReplacedFromOtherContainmentInSameParentSerializedDelta
-    | ChildMovedAndReplacedInSameContainmentSerializedDelta
+    | ChildMovedAndReplacedInSameContainmentInSameParentSerializedDelta
     | AnnotationAddedSerializedDelta
     | AnnotationDeletedSerializedDelta
     | AnnotationReplacedSerializedDelta
@@ -135,8 +135,8 @@ export type ChildMovedFromOtherContainmentInSameParentSerializedDelta = {
     newIndex: number
 }
 
-export type ChildMovedInSameContainmentSerializedDelta = {
-    kind: "ChildMovedInSameContainment"
+export type ChildMovedInSameContainmentInSameParentSerializedDelta = {
+    kind: "ChildMovedInSameContainmentInSameParent"
     parent: LionWebId
     containment: LionWebJsonMetaPointer
     oldIndex: number
@@ -169,8 +169,8 @@ export type ChildMovedAndReplacedFromOtherContainmentInSameParentSerializedDelta
     replacedChildAsNodes: LionWebJsonDeltaChunk
 }
 
-export type ChildMovedAndReplacedInSameContainmentSerializedDelta = {
-    kind: "ChildMovedAndReplacedInSameContainment"
+export type ChildMovedAndReplacedInSameContainmentInSameParentSerializedDelta = {
+    kind: "ChildMovedAndReplacedInSameContainmentInSameParent"
     parent: LionWebId
     containment: LionWebJsonMetaPointer
     oldIndex: number

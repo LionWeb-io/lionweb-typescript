@@ -15,10 +15,10 @@
 | ReplaceChild                                        | 5.6.5.3  | ChildReplaced                                         | 5.7.5.3  | &check;
 | MoveChildFromContainmentInOtherParent               | 5.6.5.4  | ChildMovedFromContainmentInOtherParent                | 5.7.5.4  | &check;
 | MoveChildFromOtherContainmentInSameParent           | 5.6.5.5  | ChildMovedFromOtherContainmentInSameParent            | 5.7.5.5  | &check;
-| MoveChildInSameContainment                          | 5.6.5.6  | ChildMovedInSameContainment                           | 5.7.5.6  | &check;
+| MoveChildInSameContainmentInSameParent              | 5.6.5.6  | ChildMovedInSameContainmentInSameParent               | 5.7.5.6  | &check;
 | MoveAndReplaceChildFromContainmentInOtherParent     | 5.6.5.7  | ChildMovedAndReplacedFromContainmentInOtherParent     | 5.7.5.7  | &check;
 | MoveAndReplaceChildFromOtherContainmentInSameParent | 5.6.5.8  | ChildMovedAndReplacedFromOtherContainmentInSameParent | 5.7.5.8  | &check;
-| MoveAndReplaceChildInSameContainment                | 5.6.5.9  | ChildMovedAndReplacedInSameContainment                | 5.7.5.9  | &check;
+| MoveAndReplaceChildInSameContainmentInSameParent    | 5.6.5.9  | ChildMovedAndReplacedInSameContainmentInSameParent    | 5.7.5.9  | &check;
 | AddAnnotation                                       | 5.6.6.1  | AnnotationAdded                                       | 5.7.6.1  | &check;
 | DeleteAnnotation                                    | 5.6.6.2  | AnnotationDeleted                                     | 5.7.6.2  | &check;
 | ReplaceAnnotation                                   | 5.6.6.3  | AnnotationReplaced                                    | 5.7.6.3  | &check;

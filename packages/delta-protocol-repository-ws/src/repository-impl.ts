@@ -101,10 +101,10 @@ export class LionWebRepository {
                 case "ReplaceChild":
                 case "MoveChildFromContainmentInOtherParent":
                 case "MoveChildFromOtherContainmentInSameParent":
-                case "MoveChildInSameContainment":
+                case "MoveChildInSameContainmentInSameParent":
                 case "MoveAndReplaceChildFromContainmentInOtherParent":
                 case "MoveAndReplaceChildFromOtherContainmentInSameParent":
-                case "MoveAndReplaceChildInSameContainment":
+                case "MoveAndReplaceChildInSameContainmentInSameParent":
                 case "AddAnnotation":
                 case "DeleteAnnotation":
                 case "ReplaceAnnotation":

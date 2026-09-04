@@ -25,10 +25,10 @@ import {
     ChildDeletedDelta,
     ChildMovedAndReplacedFromContainmentInOtherParentDelta,
     ChildMovedAndReplacedFromOtherContainmentInSameParentDelta,
-    ChildMovedAndReplacedInSameContainmentDelta,
+    ChildMovedAndReplacedInSameContainmentInSameParentDelta,
     ChildMovedFromContainmentInOtherParentDelta,
     ChildMovedFromOtherContainmentInSameParentDelta,
-    ChildMovedInSameContainmentDelta,
+    ChildMovedInSameContainmentInSameParentDelta,
     ChildReplacedDelta
 } from "../deltas/index.js"
 import { checkIndex, FeatureValueManager } from "./base.js"
@@ -102,7 +102,7 @@ export abstract class SingleContainmentValueManager<T extends INodeBase> extends
                     const oldIndex = removeFromContainment(newChild);
                     if (oldParent === this.container) {
                         if (oldContainment === this.containment) {
-                            this.emitDelta(() => new ChildMovedInSameContainmentDelta(this.container, this.containment, oldIndex, 0, newChild));
+                            this.emitDelta(() => new ChildMovedInSameContainmentInSameParentDelta(this.container, this.containment, oldIndex, 0, newChild));
                         } else {
                             this.emitDelta(() => new ChildMovedFromOtherContainmentInSameParentDelta(this.container, oldContainment, oldIndex, newChild, this.containment, 0));
                         }
@@ -138,7 +138,7 @@ export abstract class SingleContainmentValueManager<T extends INodeBase> extends
                         const oldIndex = removeFromContainment(newChild);
                         if (oldParent === this.container) {
                             if (oldContainment === this.containment) {
-                                this.emitDelta(() => new ChildMovedAndReplacedInSameContainmentDelta(this.container, this.containment, 0, 0, newChild, oldChild));
+                                this.emitDelta(() => new ChildMovedAndReplacedInSameContainmentInSameParentDelta(this.container, this.containment, 0, 0, newChild, oldChild));
                             } else {
                                 this.emitDelta(() => new ChildMovedAndReplacedFromOtherContainmentInSameParentDelta(this.container, oldContainment, oldIndex, this.containment, 0, newChild, oldChild));
                             }
@@ -171,7 +171,7 @@ export abstract class SingleContainmentValueManager<T extends INodeBase> extends
                 } else {
                     if (movedChild.parent === this.container) {
                         if (movedChild.containment === this.containment) {
-                            this.emitDelta(() => new ChildMovedAndReplacedInSameContainmentDelta(this.container, this.containment, 0, 0, movedChild, replacedChild));
+                            this.emitDelta(() => new ChildMovedAndReplacedInSameContainmentInSameParentDelta(this.container, this.containment, 0, 0, movedChild, replacedChild));
                         } else {
                             const oldIndex = removeFromContainment(replacedChild);
                             this.emitDelta(() => new ChildMovedAndReplacedFromOtherContainmentInSameParentDelta(this.container, movedChild.containment!, oldIndex, this.containment, 0, movedChild, replacedChild));
@@ -275,7 +275,7 @@ export abstract class MultiContainmentValueManager<T extends INodeBase> extends 
                 if (newChild.containment === this.containment) {
                     const oldIndex = this.children.indexOf(newChild);
                     this.moveDirectly(oldIndex, newIndex);
-                    this.emitDelta(() => new ChildMovedInSameContainmentDelta(this.container, this.containment, oldIndex, newIndex - oldIndex, newChild));
+                    this.emitDelta(() => new ChildMovedInSameContainmentInSameParentDelta(this.container, this.containment, oldIndex, newIndex - oldIndex, newChild));
                 } else {
                     const oldIndex = removeFromContainment(newChild);
                     checkIndex(newIndex, this.children.length, true);
@@ -321,7 +321,7 @@ export abstract class MultiContainmentValueManager<T extends INodeBase> extends 
     @action move(oldIndex: number, newIndex: number) {
         const child = this.moveDirectly(oldIndex, newIndex);
         if (child !== undefined) {
-            this.emitDelta(() => new ChildMovedInSameContainmentDelta(this.container, this.containment, oldIndex, newIndex, child));
+            this.emitDelta(() => new ChildMovedInSameContainmentInSameParentDelta(this.container, this.containment, oldIndex, newIndex, child));
         }
     }
 
@@ -342,7 +342,7 @@ export abstract class MultiContainmentValueManager<T extends INodeBase> extends 
                     : (oldValueManager as MultiContainmentValueManager<INodeBase>).children.indexOf(replacedChild);
                 if (replacedChild.parent === movedChild.parent) {
                     if (replacedChild.containment === movedChild.containment) {
-                        this.emitDelta(() => new ChildMovedAndReplacedInSameContainmentDelta(this.container, this.containment, oldIndex, newIndex, movedChild, replacedChild));
+                        this.emitDelta(() => new ChildMovedAndReplacedInSameContainmentInSameParentDelta(this.container, this.containment, oldIndex, newIndex, movedChild, replacedChild));
                     } else {
                         this.emitDelta(() => new ChildMovedAndReplacedFromOtherContainmentInSameParentDelta(this.container, replacedChild.containment!, oldIndex, this.containment, newIndex, movedChild, replacedChild));
                     }
@@ -373,7 +373,7 @@ export abstract class MultiContainmentValueManager<T extends INodeBase> extends 
     @action moveOffsetBased(oldIndex: number, indexOffset: number) {
         const child = this.moveOffsetBasedDirectly(oldIndex, indexOffset);
         if (child !== undefined) {
-            this.emitDelta(() => new ChildMovedInSameContainmentDelta(this.container, this.containment, oldIndex, indexOffset, child));
+            this.emitDelta(() => new ChildMovedInSameContainmentInSameParentDelta(this.container, this.containment, oldIndex, indexOffset, child));
         }
     }
 
@@ -394,7 +394,7 @@ export abstract class MultiContainmentValueManager<T extends INodeBase> extends 
         const participants = this.moveAndReplaceOffsetBasedDirectly(oldIndex, indexOffset);
         if (participants !== undefined) {
             const [movedChild, replacedChild] = participants;
-            this.emitDelta(() => new ChildMovedAndReplacedInSameContainmentDelta(this.container, this.containment, oldIndex, indexOffset, movedChild, replacedChild));
+            this.emitDelta(() => new ChildMovedAndReplacedInSameContainmentInSameParentDelta(this.container, this.containment, oldIndex, indexOffset, movedChild, replacedChild));
         }
     }
 

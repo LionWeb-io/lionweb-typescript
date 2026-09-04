@@ -144,7 +144,7 @@ export const defineDeltas = () => {
 
     /* ~ § 5.8.5.6 */
     defineDelta(
-        "ChildMovedInSameContainment",
+        "ChildMovedInSameContainmentInSameParent",
         [
             ...parentage("parent", "containment", FeatureKinds.containment),
             index("oldIndex"),
@@ -184,7 +184,7 @@ export const defineDeltas = () => {
 
     /* ~ § 5.8.5.9 */
     defineDelta(
-        "ChildMovedAndReplacedInSameContainment",
+        "ChildMovedAndReplacedInSameContainmentInSameParent",
         [
             ...parentage("parent", "containment", FeatureKinds.containment),
             index("oldIndex"),

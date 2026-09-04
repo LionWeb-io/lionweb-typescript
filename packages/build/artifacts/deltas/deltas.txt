@@ -286,7 +286,7 @@ Deltas (id: Deltas) {
                 }
         }
         Delta (id: 102) {
-            name = 'ChildMovedInSameContainment'
+            name = 'ChildMovedInSameContainmentInSameParent'
             fields:
                 Field (id: 93) {
                     name = 'parent'
@@ -423,7 +423,7 @@ Deltas (id: Deltas) {
                 }
         }
         Delta (id: 150) {
-            name = 'ChildMovedAndReplacedInSameContainment'
+            name = 'ChildMovedAndReplacedInSameContainmentInSameParent'
             fields:
                 Field (id: 138) {
                     name = 'parent'

@@ -32,10 +32,10 @@ import {
     ChildDeletedDelta,
     ChildMovedAndReplacedFromContainmentInOtherParentDelta,
     ChildMovedAndReplacedFromOtherContainmentInSameParentDelta,
-    ChildMovedAndReplacedInSameContainmentDelta,
+    ChildMovedAndReplacedInSameContainmentInSameParentDelta,
     ChildMovedFromContainmentInOtherParentDelta,
     ChildMovedFromOtherContainmentInSameParentDelta,
-    ChildMovedInSameContainmentDelta,
+    ChildMovedInSameContainmentInSameParentDelta,
     ChildReplacedDelta,
     CompositeDelta,
     NoOpDelta,
@@ -60,10 +60,10 @@ import {
     ChildDeletedSerializedDelta,
     ChildMovedAndReplacedFromContainmentInOtherParentSerializedDelta,
     ChildMovedAndReplacedFromOtherContainmentInSameParentSerializedDelta,
-    ChildMovedAndReplacedInSameContainmentSerializedDelta,
+    ChildMovedAndReplacedInSameContainmentInSameParentSerializedDelta,
     ChildMovedFromContainmentInOtherParentSerializedDelta,
     ChildMovedFromOtherContainmentInSameParentSerializedDelta,
-    ChildMovedInSameContainmentSerializedDelta,
+    ChildMovedInSameContainmentInSameParentSerializedDelta,
     ChildReplacedSerializedDelta,
     CompositeSerializedDelta,
     NoOpSerializedDelta,
@@ -189,15 +189,15 @@ export const deltaSerializer = (lionWebVersion = LionWebVersions.v2023_1) => {
             } as ChildMovedFromOtherContainmentInSameParentSerializedDelta;
         }
 
-        if (delta instanceof ChildMovedInSameContainmentDelta) {
+        if (delta instanceof ChildMovedInSameContainmentInSameParentDelta) {
             return {
-                kind: "ChildMovedInSameContainment",
+                kind: "ChildMovedInSameContainmentInSameParent",
                 parent: delta.parent.id,
                 containment: metaPointerForFeature(delta.containment),
                 oldIndex: delta.oldIndex,
                 indexOffset: delta.indexOffset,
                 movedChild: delta.movedChild.id
-            } as ChildMovedInSameContainmentSerializedDelta;
+            } as ChildMovedInSameContainmentInSameParentSerializedDelta;
         }
 
         if (delta instanceof ChildMovedAndReplacedFromContainmentInOtherParentDelta) {
@@ -229,9 +229,9 @@ export const deltaSerializer = (lionWebVersion = LionWebVersions.v2023_1) => {
             } as ChildMovedAndReplacedFromOtherContainmentInSameParentSerializedDelta;
         }
 
-        if (delta instanceof ChildMovedAndReplacedInSameContainmentDelta) {
+        if (delta instanceof ChildMovedAndReplacedInSameContainmentInSameParentDelta) {
             return {
-                kind: "ChildMovedAndReplacedInSameContainment",
+                kind: "ChildMovedAndReplacedInSameContainmentInSameParent",
                 parent: delta.parent.id,
                 containment: metaPointerForFeature(delta.containment),
                 oldIndex: delta.oldIndex,
@@ -239,7 +239,7 @@ export const deltaSerializer = (lionWebVersion = LionWebVersions.v2023_1) => {
                 movedChild: delta.movedChild.id,
                 replacedChild: delta.replacedChild.id,
                 replacedChildAsNodes: serializeAsDeltaChunk(delta.replacedChild)
-            } as ChildMovedAndReplacedInSameContainmentSerializedDelta;
+            } as ChildMovedAndReplacedInSameContainmentInSameParentSerializedDelta;
         }
 
         if (delta instanceof AnnotationAddedDelta) {

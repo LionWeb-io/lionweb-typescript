@@ -20,7 +20,7 @@ import {
     ChildDeletedDelta,
     ChildMovedFromContainmentInOtherParentDelta,
     ChildMovedFromOtherContainmentInSameParentDelta,
-    ChildMovedInSameContainmentDelta,
+    ChildMovedInSameContainmentInSameParentDelta,
     collectingDeltaReceiver
 } from "@lionweb/class-core"
 
@@ -237,7 +237,7 @@ describe("[0..n] containment", () => {
         equal(child1.containment, testLanguageBase.LinkTestConcept_containment_0_n);
         equal(child2.parent, parent1);
         equal(child2.containment, testLanguageBase.LinkTestConcept_containment_0_n);
-        assertDeltaEmitted(new ChildMovedInSameContainmentDelta(parent1, testLanguageBase.LinkTestConcept_containment_0_n, 1, -1, child1));
+        assertDeltaEmitted(new ChildMovedInSameContainmentInSameParentDelta(parent1, testLanguageBase.LinkTestConcept_containment_0_n, 1, -1, child1));
 
         // action+check:
         parent1.addContainment_1_nAtIndex(child2, 0);   // child2 moved from parent1.containment_0_n[1] to parent1.containment_1_n[0]

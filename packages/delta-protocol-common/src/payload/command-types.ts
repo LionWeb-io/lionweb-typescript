@@ -135,7 +135,7 @@ export interface MoveChildFromOtherContainmentInSameParentCommand extends Comman
 
 /** § 5.7.5.6 */
 export interface MoveChildInSameContainmentCommand extends Command {
-    messageKind: "MoveChildInSameContainment"
+    messageKind: "MoveChildInSameContainmentInSameParent"
     parent: LionWebId
     containment: LionWebJsonMetaPointer
     oldIndex: number
@@ -170,7 +170,7 @@ export interface MoveAndReplaceChildFromOtherContainmentInSameParentCommand exte
 
 /** § 5.7.5.9 */
 export interface MoveAndReplaceChildInSameContainmentCommand extends Command {
-    messageKind: "MoveAndReplaceChildInSameContainment"
+    messageKind: "MoveAndReplaceChildInSameContainmentInSameParent"
     parent: LionWebId
     containment: LionWebJsonMetaPointer
     oldIndex: number

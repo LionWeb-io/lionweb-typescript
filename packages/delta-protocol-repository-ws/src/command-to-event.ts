@@ -206,9 +206,9 @@ export const commandAsEvent = (command: Command, participationId: string): Event
                     movedChild
                 })
             }
-            case "MoveChildInSameContainment": {
+            case "MoveChildInSameContainmentInSameParent": {
                 const {indexOffset, movedChild, parent, containment, oldIndex} = command as MoveChildInSameContainmentCommand // § 5.7.5.6
-                return completed<ChildMovedInSameContainmentEvent>("ChildMovedInSameContainment", { // § 5.8.5.6
+                return completed<ChildMovedInSameContainmentEvent>("ChildMovedInSameContainmentInSameParent", { // § 5.8.5.6
                     indexOffset,
                     movedChild,
                     parent,
@@ -243,9 +243,9 @@ export const commandAsEvent = (command: Command, participationId: string): Event
                     replacedDescendants: []   // TODO  get from own model
                 })
             }
-            case "MoveAndReplaceChildInSameContainment": {
+            case "MoveAndReplaceChildInSameContainmentInSameParent": {
                 const {indexOffset, replacedChild, movedChild, parent, containment, oldIndex} = command as MoveAndReplaceChildInSameContainmentCommand // § 5.7.5.9
-                return completed<ChildMovedAndReplacedInSameContainmentEvent>("ChildMovedAndReplacedInSameContainment", { // § 5.8.5.9
+                return completed<ChildMovedAndReplacedInSameContainmentEvent>("ChildMovedAndReplacedInSameContainmentInSameParent", { // § 5.8.5.9
                     indexOffset,
                     movedChild,
                     parent,
