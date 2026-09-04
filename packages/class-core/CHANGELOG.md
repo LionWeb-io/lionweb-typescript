@@ -24,6 +24,7 @@
   * Fix a bug in the value managers for multi-valued containments:
     a call to `insertAtIndex` with a child that’s already in the managed multi-valued containment now results in a `ChildMovedInSameContainment` delta with a correct `indexOffset`
     (instead of the effective `newIndex`).
+* Rename `ChildMoved[AndReplaced]FromOtherContainment[Serialized]Delta` &rarr; `ChildMoved[AndReplaced]FromContainmentInOtherParent[Serialized]Delta`.
 
 
 ## 0.9.2

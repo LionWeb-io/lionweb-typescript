@@ -26,10 +26,10 @@ import {
     AnnotationReplacedDelta,
     ChildAddedDelta,
     ChildDeletedDelta,
-    ChildMovedAndReplacedFromOtherContainmentDelta,
+    ChildMovedAndReplacedFromContainmentInOtherParentDelta,
     ChildMovedAndReplacedFromOtherContainmentInSameParentDelta,
     ChildMovedAndReplacedInSameContainmentDelta,
-    ChildMovedFromOtherContainmentDelta,
+    ChildMovedFromContainmentInOtherParentDelta,
     ChildMovedFromOtherContainmentInSameParentDelta,
     ChildMovedInSameContainmentDelta,
     ChildReplacedDelta,
@@ -229,8 +229,8 @@ export const deltaToEventTranslator = (
                     replacedDescendants: allIdsOfDescendantsFrom(delta.replacedChild)
                 })
             }
-            if (delta instanceof ChildMovedFromOtherContainmentDelta) {
-                return completed<ChildMovedFromOtherContainmentEvent>("ChildMovedFromOtherContainment", { // § 5.8.5.4
+            if (delta instanceof ChildMovedFromContainmentInOtherParentDelta) {
+                return completed<ChildMovedFromOtherContainmentEvent>("ChildMovedFromContainmentInOtherParent", { // § 5.8.5.4
                     newParent: delta.newParent.id,
                     newContainment: metaPointerForFeature(delta.newContainment),
                     newIndex: delta.newIndex,
@@ -259,8 +259,8 @@ export const deltaToEventTranslator = (
                     movedChild: delta.movedChild.id
                 })
             }
-            if (delta instanceof ChildMovedAndReplacedFromOtherContainmentDelta) {
-                return completed<ChildMovedAndReplacedFromOtherContainmentEvent>("ChildMovedAndReplacedFromOtherContainment", { // § 5.8.5.7
+            if (delta instanceof ChildMovedAndReplacedFromContainmentInOtherParentDelta) {
+                return completed<ChildMovedAndReplacedFromOtherContainmentEvent>("ChildMovedAndReplacedFromContainmentInOtherParent", { // § 5.8.5.7
                     newParent: delta.newParent.id,
                     newContainment: metaPointerForFeature(delta.newContainment),
                     newIndex: delta.newIndex,

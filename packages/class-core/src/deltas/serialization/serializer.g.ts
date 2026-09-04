@@ -30,10 +30,10 @@ import {
     AnnotationReplacedDelta,
     ChildAddedDelta,
     ChildDeletedDelta,
-    ChildMovedAndReplacedFromOtherContainmentDelta,
+    ChildMovedAndReplacedFromContainmentInOtherParentDelta,
     ChildMovedAndReplacedFromOtherContainmentInSameParentDelta,
     ChildMovedAndReplacedInSameContainmentDelta,
-    ChildMovedFromOtherContainmentDelta,
+    ChildMovedFromContainmentInOtherParentDelta,
     ChildMovedFromOtherContainmentInSameParentDelta,
     ChildMovedInSameContainmentDelta,
     ChildReplacedDelta,
@@ -58,11 +58,11 @@ import {
     AnnotationReplacedSerializedDelta,
     ChildAddedSerializedDelta,
     ChildDeletedSerializedDelta,
+    ChildMovedAndReplacedFromContainmentInOtherParentSerializedDelta,
     ChildMovedAndReplacedFromOtherContainmentInSameParentSerializedDelta,
-    ChildMovedAndReplacedFromOtherContainmentSerializedDelta,
     ChildMovedAndReplacedInSameContainmentSerializedDelta,
+    ChildMovedFromContainmentInOtherParentSerializedDelta,
     ChildMovedFromOtherContainmentInSameParentSerializedDelta,
-    ChildMovedFromOtherContainmentSerializedDelta,
     ChildMovedInSameContainmentSerializedDelta,
     ChildReplacedSerializedDelta,
     CompositeSerializedDelta,
@@ -164,9 +164,9 @@ export const deltaSerializer = (lionWebVersion = LionWebVersions.v2023_1) => {
             } as ChildReplacedSerializedDelta;
         }
 
-        if (delta instanceof ChildMovedFromOtherContainmentDelta) {
+        if (delta instanceof ChildMovedFromContainmentInOtherParentDelta) {
             return {
-                kind: "ChildMovedFromOtherContainment",
+                kind: "ChildMovedFromContainmentInOtherParent",
                 oldParent: delta.oldParent.id,
                 oldContainment: metaPointerForFeature(delta.oldContainment),
                 oldIndex: delta.oldIndex,
@@ -174,7 +174,7 @@ export const deltaSerializer = (lionWebVersion = LionWebVersions.v2023_1) => {
                 newContainment: metaPointerForFeature(delta.newContainment),
                 newIndex: delta.newIndex,
                 movedChild: delta.movedChild.id
-            } as ChildMovedFromOtherContainmentSerializedDelta;
+            } as ChildMovedFromContainmentInOtherParentSerializedDelta;
         }
 
         if (delta instanceof ChildMovedFromOtherContainmentInSameParentDelta) {
@@ -200,9 +200,9 @@ export const deltaSerializer = (lionWebVersion = LionWebVersions.v2023_1) => {
             } as ChildMovedInSameContainmentSerializedDelta;
         }
 
-        if (delta instanceof ChildMovedAndReplacedFromOtherContainmentDelta) {
+        if (delta instanceof ChildMovedAndReplacedFromContainmentInOtherParentDelta) {
             return {
-                kind: "ChildMovedAndReplacedFromOtherContainment",
+                kind: "ChildMovedAndReplacedFromContainmentInOtherParent",
                 newParent: delta.newParent.id,
                 newContainment: metaPointerForFeature(delta.newContainment),
                 newIndex: delta.newIndex,
@@ -212,7 +212,7 @@ export const deltaSerializer = (lionWebVersion = LionWebVersions.v2023_1) => {
                 oldIndex: delta.oldIndex,
                 replacedChild: delta.replacedChild.id,
                 replacedChildAsNodes: serializeAsDeltaChunk(delta.replacedChild)
-            } as ChildMovedAndReplacedFromOtherContainmentSerializedDelta;
+            } as ChildMovedAndReplacedFromContainmentInOtherParentSerializedDelta;
         }
 
         if (delta instanceof ChildMovedAndReplacedFromOtherContainmentInSameParentDelta) {

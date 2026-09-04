@@ -128,7 +128,7 @@ export interface ChildReplacedEvent extends Event, SplittableMessage {
 
 /** § 5.8.5.4 */
 export interface ChildMovedFromOtherContainmentEvent extends Event {
-    messageKind: "ChildMovedFromOtherContainment"
+    messageKind: "ChildMovedFromContainmentInOtherParent"
     newParent: LionWebId
     newContainment: LionWebJsonMetaPointer
     newIndex: number
@@ -161,7 +161,7 @@ export interface ChildMovedInSameContainmentEvent extends Event {
 
 /** § 5.8.5.7 */
 export interface ChildMovedAndReplacedFromOtherContainmentEvent extends Event {
-    messageKind: "ChildMovedAndReplacedFromOtherContainment"
+    messageKind: "ChildMovedAndReplacedFromContainmentInOtherParent"
     newParent: LionWebId
     newContainment: LionWebJsonMetaPointer
     newIndex: number
@@ -338,10 +338,10 @@ const eventMessageKinds = mapFrom(
         "ChildAdded",
         "ChildDeleted",
         "ChildReplaced",
-        "ChildMovedFromOtherContainment",
+        "ChildMovedFromContainmentInOtherParent",
         "ChildMovedFromOtherContainmentInSameParent",
         "ChildMovedInSameContainment",
-        "ChildMovedAndReplacedFromOtherContainment",
+        "ChildMovedAndReplacedFromContainmentInOtherParent",
         "ChildMovedAndReplacedFromOtherContainmentInSameParent",
         "ChildMovedAndReplacedInSameContainment",
         "AnnotationAdded",

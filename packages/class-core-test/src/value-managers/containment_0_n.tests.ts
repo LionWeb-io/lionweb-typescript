@@ -18,7 +18,7 @@
 import {
     ChildAddedDelta,
     ChildDeletedDelta,
-    ChildMovedFromOtherContainmentDelta,
+    ChildMovedFromContainmentInOtherParentDelta,
     ChildMovedFromOtherContainmentInSameParentDelta,
     ChildMovedInSameContainmentDelta,
     collectingDeltaReceiver
@@ -153,7 +153,7 @@ describe("[0..n] containment", () => {
         equal(child.parent, dstParent);
         equal(child.containment, testLanguageBase.LinkTestConcept_containment_0_n);
         equal(srcParent.containment_0_1, undefined);
-        assertDeltaEmitted(new ChildMovedFromOtherContainmentDelta(srcParent, testLanguageBase.LinkTestConcept_containment_0_1, 0, dstParent, testLanguageBase.LinkTestConcept_containment_0_n, 0, child));
+        assertDeltaEmitted(new ChildMovedFromContainmentInOtherParentDelta(srcParent, testLanguageBase.LinkTestConcept_containment_0_1, 0, dstParent, testLanguageBase.LinkTestConcept_containment_0_n, 0, child));
     });
 
     it("moving a child between parents ([0..n] -> [0..n])", () => {
@@ -176,7 +176,7 @@ describe("[0..n] containment", () => {
         equal(child.parent, dstParent);
         equal(child.containment, testLanguageBase.LinkTestConcept_containment_0_n);
         deepEqual(srcParent.containment_0_n, []);
-        assertDeltaEmitted(new ChildMovedFromOtherContainmentDelta(srcParent, testLanguageBase.LinkTestConcept_containment_0_n, 0, dstParent, testLanguageBase.LinkTestConcept_containment_0_n, 0, child));
+        assertDeltaEmitted(new ChildMovedFromContainmentInOtherParentDelta(srcParent, testLanguageBase.LinkTestConcept_containment_0_n, 0, dstParent, testLanguageBase.LinkTestConcept_containment_0_n, 0, child));
     });
 
     it("addAtIndex", () => {
@@ -255,7 +255,7 @@ describe("[0..n] containment", () => {
         deepEqual(parent2.containment_1_n, [child1]);
         equal(child1.parent, parent2);
         equal(child1.containment, testLanguageBase.LinkTestConcept_containment_1_n);
-        assertDeltaEmitted(new ChildMovedFromOtherContainmentDelta(parent1, testLanguageBase.LinkTestConcept_containment_0_n, 0, parent2, testLanguageBase.LinkTestConcept_containment_1_n, 0, child1));
+        assertDeltaEmitted(new ChildMovedFromContainmentInOtherParentDelta(parent1, testLanguageBase.LinkTestConcept_containment_0_n, 0, parent2, testLanguageBase.LinkTestConcept_containment_1_n, 0, child1));
     });
 
 });

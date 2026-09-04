@@ -103,7 +103,7 @@ export class ChildReplacedDelta implements IDelta {
     }
 }
 
-export class ChildMovedFromOtherContainmentDelta implements IDelta {
+export class ChildMovedFromContainmentInOtherParentDelta implements IDelta {
     constructor(
         public readonly oldParent: INodeBase,
         public readonly oldContainment: Containment,
@@ -139,7 +139,7 @@ export class ChildMovedInSameContainmentDelta implements IDelta {
     }
 }
 
-export class ChildMovedAndReplacedFromOtherContainmentDelta implements IDelta {
+export class ChildMovedAndReplacedFromContainmentInOtherParentDelta implements IDelta {
     constructor(
         public readonly newParent: INodeBase,
         public readonly newContainment: Containment,

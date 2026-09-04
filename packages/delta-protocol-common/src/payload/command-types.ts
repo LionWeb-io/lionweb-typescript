@@ -112,7 +112,7 @@ export interface ReplaceChildCommand extends Command, SplittableMessage {
 
 /** § 5.7.5.4 */
 export interface MoveChildFromOtherContainmentCommand extends Command {
-    messageKind: "MoveChildFromOtherContainment"
+    messageKind: "MoveChildFromContainmentInOtherParent"
     newParent: LionWebId
     newContainment: LionWebJsonMetaPointer
     newIndex: number
@@ -145,7 +145,7 @@ export interface MoveChildInSameContainmentCommand extends Command {
 
 /** § 5.7.5.7 */
 export interface MoveAndReplaceChildFromOtherContainmentCommand extends Command {
-    messageKind: "MoveAndReplaceChildFromOtherContainment"
+    messageKind: "MoveAndReplaceChildFromContainmentInOtherParent"
     newParent: LionWebId
     newContainment: LionWebJsonMetaPointer
     newIndex: number
