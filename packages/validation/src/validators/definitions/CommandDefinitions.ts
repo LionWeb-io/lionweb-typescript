@@ -458,7 +458,7 @@ export const CommandDefinitions: MessageGroup = {
             ],
         },
         {
-            name: "MoveChildFromOtherContainment",
+            name: "MoveChildFromContainmentInOtherParent",
             properties: [
                 {
                     name: "newParent",
@@ -601,7 +601,7 @@ export const CommandDefinitions: MessageGroup = {
             ],
         },
         {
-            name: "MoveChildInSameContainment",
+            name: "MoveChildInSameContainmentInSameParent",
             properties: [
                 {
                     name: "parent",
@@ -662,7 +662,7 @@ export const CommandDefinitions: MessageGroup = {
             ],
         },
         {
-            name: "MoveAndReplaceChildFromOtherContainment",
+            name: "MoveAndReplaceChildFromContainmentInOtherParent",
             properties: [
                 {
                     name: "newParent",
@@ -819,7 +819,7 @@ export const CommandDefinitions: MessageGroup = {
             ],
         },
         {
-            name: "MoveAndReplaceChildInSameContainment",
+            name: "MoveAndReplaceChildInSameContainmentInSameParent",
             properties: [
                 {
                     name: "parent",

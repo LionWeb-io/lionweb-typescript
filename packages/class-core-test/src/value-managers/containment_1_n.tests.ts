@@ -18,7 +18,7 @@
 import {
     ChildAddedDelta,
     ChildDeletedDelta,
-    ChildMovedFromOtherContainmentDelta,
+    ChildMovedFromContainmentInOtherParentDelta,
     collectingDeltaReceiver
 } from "@lionweb/class-core"
 
@@ -185,7 +185,7 @@ describe("[1..n] containment", () => {
         equal(child.containment, testLanguageBase.LinkTestConcept_containment_1_n);
         equal(srcParent.containment_0_1, undefined);
         equal(deltas.length, 4);
-        deepEqual(deltas[3], new ChildMovedFromOtherContainmentDelta(srcParent, testLanguageBase.LinkTestConcept_containment_0_1, 0, dstParent, testLanguageBase.LinkTestConcept_containment_1_n, 0, child));
+        deepEqual(deltas[3], new ChildMovedFromContainmentInOtherParentDelta(srcParent, testLanguageBase.LinkTestConcept_containment_0_1, 0, dstParent, testLanguageBase.LinkTestConcept_containment_1_n, 0, child));
     });
 
     it("moving a child between parents ([0..n] -> [1..n])", () => {
@@ -216,7 +216,7 @@ describe("[1..n] containment", () => {
         deepEqual(srcParent.containment_0_n, []);
         deepEqual(dstParent.containment_1_n, [child]);
         equal(deltas.length, 4);
-        deepEqual(deltas[3], new ChildMovedFromOtherContainmentDelta(srcParent, testLanguageBase.LinkTestConcept_containment_0_n, 0, dstParent, testLanguageBase.LinkTestConcept_containment_1_n, 0, child));
+        deepEqual(deltas[3], new ChildMovedFromContainmentInOtherParentDelta(srcParent, testLanguageBase.LinkTestConcept_containment_0_n, 0, dstParent, testLanguageBase.LinkTestConcept_containment_1_n, 0, child));
     });
 
     it("moving a child between parents ([1..n] -> [1..n])", () => {
@@ -251,7 +251,7 @@ describe("[1..n] containment", () => {
             `can't read required containment "containment_1_n" that's unset on instance of TestLanguage.LinkTestConcept with id=srcParent`
         );
         equal(deltas.length, 4);
-        deepEqual(deltas[3], new ChildMovedFromOtherContainmentDelta(srcParent, testLanguageBase.LinkTestConcept_containment_1_n, 0, dstParent, testLanguageBase.LinkTestConcept_containment_1_n, 0, child));
+        deepEqual(deltas[3], new ChildMovedFromContainmentInOtherParentDelta(srcParent, testLanguageBase.LinkTestConcept_containment_1_n, 0, dstParent, testLanguageBase.LinkTestConcept_containment_1_n, 0, child));
     });
 
 });

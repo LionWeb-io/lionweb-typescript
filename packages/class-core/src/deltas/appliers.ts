@@ -25,12 +25,12 @@ import {
     AnnotationReplacedDelta,
     ChildAddedDelta,
     ChildDeletedDelta,
-    ChildMovedAndReplacedFromOtherContainmentDelta,
+    ChildMovedAndReplacedFromContainmentInOtherParentDelta,
     ChildMovedAndReplacedFromOtherContainmentInSameParentDelta,
-    ChildMovedAndReplacedInSameContainmentDelta,
-    ChildMovedFromOtherContainmentDelta,
+    ChildMovedAndReplacedInSameContainmentInSameParentDelta,
+    ChildMovedFromContainmentInOtherParentDelta,
     ChildMovedFromOtherContainmentInSameParentDelta,
-    ChildMovedInSameContainmentDelta,
+    ChildMovedInSameContainmentInSameParentDelta,
     ChildReplacedDelta,
     CompositeDelta,
     NoOpDelta,
@@ -161,7 +161,7 @@ const deltaApplier = (idMapping?: IdMapping, updatablePartitions?: () => INodeBa
                 newChild.attachTo(parent, delta.containment);
                 return;
             }
-            if (delta instanceof ChildMovedFromOtherContainmentDelta) {
+            if (delta instanceof ChildMovedFromContainmentInOtherParentDelta) {
                 const oldValueManager = lookupNodeFrom(delta.oldParent).getContainmentValueManager(delta.oldContainment);
                 const movedChild = lookupNodeFrom(delta.movedChild);
                 if (delta.oldContainment.multiple) {
@@ -197,12 +197,12 @@ const deltaApplier = (idMapping?: IdMapping, updatablePartitions?: () => INodeBa
                 }
                 return;
             }
-            if (delta instanceof ChildMovedInSameContainmentDelta) {
+            if (delta instanceof ChildMovedInSameContainmentInSameParentDelta) {
                 const valueManager = lookupNodeFrom(delta.parent).getContainmentValueManager(delta.containment) as MultiContainmentValueManager<INodeBase>;
                 valueManager.moveOffsetBasedDirectly(delta.oldIndex, delta.indexOffset);
                 return;
             }
-            if (delta instanceof ChildMovedAndReplacedFromOtherContainmentDelta) {
+            if (delta instanceof ChildMovedAndReplacedFromContainmentInOtherParentDelta) {
                 const oldValueManager = delta.oldParent.getContainmentValueManager(delta.oldContainment);
                 const movedChild = lookupNodeFrom(delta.movedChild);
                 if (delta.oldContainment.multiple) {
@@ -243,7 +243,7 @@ const deltaApplier = (idMapping?: IdMapping, updatablePartitions?: () => INodeBa
                 }
                 return;
             }
-            if (delta instanceof ChildMovedAndReplacedInSameContainmentDelta) {
+            if (delta instanceof ChildMovedAndReplacedInSameContainmentInSameParentDelta) {
                 const valueManager = delta.parent.getContainmentValueManager(delta.containment);
                 if (delta.containment.multiple) {
                     (valueManager as MultiContainmentValueManager<INodeBase>).moveAndReplaceOffsetBasedDirectly(delta.oldIndex, delta.indexOffset);

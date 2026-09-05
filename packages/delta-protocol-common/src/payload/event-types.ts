@@ -128,7 +128,7 @@ export interface ChildReplacedEvent extends Event, SplittableMessage {
 
 /** § 5.8.5.4 */
 export interface ChildMovedFromOtherContainmentEvent extends Event {
-    messageKind: "ChildMovedFromOtherContainment"
+    messageKind: "ChildMovedFromContainmentInOtherParent"
     newParent: LionWebId
     newContainment: LionWebJsonMetaPointer
     newIndex: number
@@ -151,7 +151,7 @@ export interface ChildMovedFromOtherContainmentInSameParentEvent extends Event {
 
 /** § 5.8.5.6 */
 export interface ChildMovedInSameContainmentEvent extends Event {
-    messageKind: "ChildMovedInSameContainment"
+    messageKind: "ChildMovedInSameContainmentInSameParent"
     parent: LionWebId
     containment: LionWebJsonMetaPointer
     oldIndex: number
@@ -161,7 +161,7 @@ export interface ChildMovedInSameContainmentEvent extends Event {
 
 /** § 5.8.5.7 */
 export interface ChildMovedAndReplacedFromOtherContainmentEvent extends Event {
-    messageKind: "ChildMovedAndReplacedFromOtherContainment"
+    messageKind: "ChildMovedAndReplacedFromContainmentInOtherParent"
     newParent: LionWebId
     newContainment: LionWebJsonMetaPointer
     newIndex: number
@@ -188,7 +188,7 @@ export interface ChildMovedAndReplacedFromOtherContainmentInSameParentEvent exte
 
 /** § 5.8.5.9 */
 export interface ChildMovedAndReplacedInSameContainmentEvent extends Event {
-    messageKind: "ChildMovedAndReplacedInSameContainment"
+    messageKind: "ChildMovedAndReplacedInSameContainmentInSameParent"
     parent: LionWebId
     containment: LionWebJsonMetaPointer
     oldIndex: number
@@ -338,12 +338,12 @@ const eventMessageKinds = mapFrom(
         "ChildAdded",
         "ChildDeleted",
         "ChildReplaced",
-        "ChildMovedFromOtherContainment",
+        "ChildMovedFromContainmentInOtherParent",
         "ChildMovedFromOtherContainmentInSameParent",
-        "ChildMovedInSameContainment",
-        "ChildMovedAndReplacedFromOtherContainment",
+        "ChildMovedInSameContainmentInSameParent",
+        "ChildMovedAndReplacedFromContainmentInOtherParent",
         "ChildMovedAndReplacedFromOtherContainmentInSameParent",
-        "ChildMovedAndReplacedInSameContainment",
+        "ChildMovedAndReplacedInSameContainmentInSameParent",
         "AnnotationAdded",
         "AnnotationDeleted",
         "AnnotationReplaced",

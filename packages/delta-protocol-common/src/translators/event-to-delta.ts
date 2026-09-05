@@ -25,12 +25,12 @@ import {
     AnnotationReplacedDelta,
     ChildAddedDelta,
     ChildDeletedDelta,
-    ChildMovedAndReplacedFromOtherContainmentDelta,
+    ChildMovedAndReplacedFromContainmentInOtherParentDelta,
     ChildMovedAndReplacedFromOtherContainmentInSameParentDelta,
-    ChildMovedAndReplacedInSameContainmentDelta,
-    ChildMovedFromOtherContainmentDelta,
+    ChildMovedAndReplacedInSameContainmentInSameParentDelta,
+    ChildMovedFromContainmentInOtherParentDelta,
     ChildMovedFromOtherContainmentInSameParentDelta,
-    ChildMovedInSameContainmentDelta,
+    ChildMovedInSameContainmentInSameParentDelta,
     ChildReplacedDelta,
     CompositeDelta,
     Deserializer,
@@ -187,14 +187,14 @@ export const eventToDeltaTranslator = (
                 const resolvedReplacedChild = idMapping.nodeBaseFromId(replacedChild)
                 return new ChildReplacedDelta(resolvedParent, resolvedContainment, index, resolvedReplacedChild, deserializeAsSingleDeltaChunk<ChildReplacedEvent>("newChild"))
             }
-            case "ChildMovedFromOtherContainment": { // § 5.8.5.4
+            case "ChildMovedFromContainmentInOtherParent": { // § 5.8.5.4
                 const { newParent, newContainment, newIndex, movedChild, oldParent, oldContainment, oldIndex } = event as ChildMovedFromOtherContainmentEvent
                 const resolvedOldParent = idMapping.nodeBaseFromId(oldParent)
                 const resolvedOldContainment = resolvedContainmentFrom(oldContainment, resolvedOldParent.classifier)
                 const resolvedNewParent = idMapping.nodeBaseFromId(newParent)
                 const resolvedNewContainment = resolvedContainmentFrom(newContainment, resolvedOldParent.classifier)
                 const resolvedMovedChild = idMapping.nodeBaseFromId(movedChild)
-                return new ChildMovedFromOtherContainmentDelta(resolvedOldParent, resolvedOldContainment, oldIndex, resolvedNewParent, resolvedNewContainment, newIndex, resolvedMovedChild)
+                return new ChildMovedFromContainmentInOtherParentDelta(resolvedOldParent, resolvedOldContainment, oldIndex, resolvedNewParent, resolvedNewContainment, newIndex, resolvedMovedChild)
             }
             case "ChildMovedFromOtherContainmentInSameParent": { // § 5.8.5.5
                 const { parent, oldContainment, oldIndex, newContainment, newIndex, movedChild } = event as ChildMovedFromOtherContainmentInSameParentEvent
@@ -204,14 +204,14 @@ export const eventToDeltaTranslator = (
                 const resolvedMovedChild = idMapping.nodeBaseFromId(movedChild)
                 return new ChildMovedFromOtherContainmentInSameParentDelta(resolvedParent, resolvedOldContainment, oldIndex, resolvedMovedChild, resolvedNewContainment, newIndex)
             }
-            case "ChildMovedInSameContainment": { // § 5.8.5.6
+            case "ChildMovedInSameContainmentInSameParent": { // § 5.8.5.6
                 const { parent, containment, oldIndex, indexOffset, movedChild } = event as ChildMovedInSameContainmentEvent
                 const resolvedParent = idMapping.nodeBaseFromId(parent)
                 const resolvedContainment = resolvedContainmentFrom(containment, resolvedParent.classifier)
                 const resolvedMovedChild = idMapping.nodeBaseFromId(movedChild)
-                return new ChildMovedInSameContainmentDelta(resolvedParent, resolvedContainment, oldIndex, indexOffset, resolvedMovedChild)
+                return new ChildMovedInSameContainmentInSameParentDelta(resolvedParent, resolvedContainment, oldIndex, indexOffset, resolvedMovedChild)
             }
-            case "ChildMovedAndReplacedFromOtherContainment": { // § 5.8.5.7
+            case "ChildMovedAndReplacedFromContainmentInOtherParent": { // § 5.8.5.7
                 const { newParent, newContainment, newIndex, movedChild, oldParent, oldContainment, oldIndex, replacedChild } = event as ChildMovedAndReplacedFromOtherContainmentEvent
                 const resolvedNewParent = idMapping.nodeBaseFromId(newParent)
                 const resolvedNewContainment = resolvedContainmentFrom(newContainment, resolvedNewParent.classifier)
@@ -219,7 +219,7 @@ export const eventToDeltaTranslator = (
                 const resolvedOldParent = idMapping.nodeBaseFromId(oldParent)
                 const resolvedOldContainment = resolvedContainmentFrom(oldContainment, resolvedOldParent.classifier)
                 const resolvedReplacedChild = idMapping.nodeBaseFromId(replacedChild)
-                return new ChildMovedAndReplacedFromOtherContainmentDelta(resolvedNewParent, resolvedNewContainment, newIndex, resolvedMovedChild, resolvedOldParent, resolvedOldContainment, oldIndex, resolvedReplacedChild)
+                return new ChildMovedAndReplacedFromContainmentInOtherParentDelta(resolvedNewParent, resolvedNewContainment, newIndex, resolvedMovedChild, resolvedOldParent, resolvedOldContainment, oldIndex, resolvedReplacedChild)
             }
             case "ChildMovedAndReplacedFromOtherContainmentInSameParent": { // § 5.8.5.8
                 const { parent, oldContainment, oldIndex, newContainment, newIndex, movedChild, replacedChild } = event as ChildMovedAndReplacedFromOtherContainmentInSameParentEvent
@@ -230,13 +230,13 @@ export const eventToDeltaTranslator = (
                 const resolvedReplacedChild = idMapping.nodeBaseFromId(replacedChild)
                 return new ChildMovedAndReplacedFromOtherContainmentInSameParentDelta(resolvedParent, resolvedOldContainment, oldIndex, resolvedNewContainment, newIndex, resolvedMovedChild, resolvedReplacedChild)
             }
-            case "ChildMovedAndReplacedInSameContainment": { // § 5.8.5.9
+            case "ChildMovedAndReplacedInSameContainmentInSameParent": { // § 5.8.5.9
                 const { parent, containment, oldIndex, indexOffset, movedChild, replacedChild } = event as ChildMovedAndReplacedInSameContainmentEvent
                 const resolvedParent = idMapping.nodeBaseFromId(parent)
                 const resolvedContainment = resolvedContainmentFrom(containment, resolvedParent.classifier)
                 const resolvedMovedChild = idMapping.nodeBaseFromId(movedChild)
                 const resolvedReplacedChild = idMapping.nodeBaseFromId(replacedChild)
-                return new ChildMovedAndReplacedInSameContainmentDelta(resolvedParent, resolvedContainment, oldIndex, indexOffset, resolvedMovedChild, resolvedReplacedChild)
+                return new ChildMovedAndReplacedInSameContainmentInSameParentDelta(resolvedParent, resolvedContainment, oldIndex, indexOffset, resolvedMovedChild, resolvedReplacedChild)
             }
             case "AnnotationAdded": { // § 5.8.6.1
                 const { parent, index } = event as AnnotationAddedEvent

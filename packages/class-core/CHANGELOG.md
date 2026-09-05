@@ -22,8 +22,11 @@
 * Change all occurrences of `LionWebJsonChunk` type in delta serialization types to `LionWebJsonDeltaChunk`.
 * Expose a `serializeAsDeltaChunk` function — and propagate its use to the delta protocol packages.
   * Fix a bug in the value managers for multi-valued containments:
-    a call to `insertAtIndex` with a child that’s already in the managed multi-valued containment now results in a `ChildMovedInSameContainment` delta with a correct `indexOffset`
+    a call to `insertAtIndex` with a child that’s already in the managed multi-valued containment now results in a `ChildMovedInSameContainmentInSameParent` delta with a correct `indexOffset`
     (instead of the effective `newIndex`).
+* Perform **breaking** renamings of types:
+  * `ChildMoved[AndReplaced]FromOtherContainment[Serialized]Delta` &rarr; `ChildMoved[AndReplaced]FromContainmentInOtherParent[Serialized]Delta`
+  * `ChildMoved[AndReplaced]InSameContainment[Serialized]Delta` &rarr; `ChildMoved[AndReplaced]InSameContainmentInSameParent[Serialized]Delta`
 
 
 ## 0.9.2

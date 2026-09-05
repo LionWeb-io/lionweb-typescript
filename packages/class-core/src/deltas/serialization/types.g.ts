@@ -31,12 +31,12 @@ export type SerializedDelta =
     | ChildAddedSerializedDelta
     | ChildDeletedSerializedDelta
     | ChildReplacedSerializedDelta
-    | ChildMovedFromOtherContainmentSerializedDelta
+    | ChildMovedFromContainmentInOtherParentSerializedDelta
     | ChildMovedFromOtherContainmentInSameParentSerializedDelta
-    | ChildMovedInSameContainmentSerializedDelta
-    | ChildMovedAndReplacedFromOtherContainmentSerializedDelta
+    | ChildMovedInSameContainmentInSameParentSerializedDelta
+    | ChildMovedAndReplacedFromContainmentInOtherParentSerializedDelta
     | ChildMovedAndReplacedFromOtherContainmentInSameParentSerializedDelta
-    | ChildMovedAndReplacedInSameContainmentSerializedDelta
+    | ChildMovedAndReplacedInSameContainmentInSameParentSerializedDelta
     | AnnotationAddedSerializedDelta
     | AnnotationDeletedSerializedDelta
     | AnnotationReplacedSerializedDelta
@@ -114,8 +114,8 @@ export type ChildReplacedSerializedDelta = {
     newNodes: LionWebJsonDeltaChunk
 }
 
-export type ChildMovedFromOtherContainmentSerializedDelta = {
-    kind: "ChildMovedFromOtherContainment"
+export type ChildMovedFromContainmentInOtherParentSerializedDelta = {
+    kind: "ChildMovedFromContainmentInOtherParent"
     oldParent: LionWebId
     oldContainment: LionWebJsonMetaPointer
     oldIndex: number
@@ -135,8 +135,8 @@ export type ChildMovedFromOtherContainmentInSameParentSerializedDelta = {
     newIndex: number
 }
 
-export type ChildMovedInSameContainmentSerializedDelta = {
-    kind: "ChildMovedInSameContainment"
+export type ChildMovedInSameContainmentInSameParentSerializedDelta = {
+    kind: "ChildMovedInSameContainmentInSameParent"
     parent: LionWebId
     containment: LionWebJsonMetaPointer
     oldIndex: number
@@ -144,8 +144,8 @@ export type ChildMovedInSameContainmentSerializedDelta = {
     movedChild: LionWebId
 }
 
-export type ChildMovedAndReplacedFromOtherContainmentSerializedDelta = {
-    kind: "ChildMovedAndReplacedFromOtherContainment"
+export type ChildMovedAndReplacedFromContainmentInOtherParentSerializedDelta = {
+    kind: "ChildMovedAndReplacedFromContainmentInOtherParent"
     newParent: LionWebId
     newContainment: LionWebJsonMetaPointer
     newIndex: number
@@ -169,8 +169,8 @@ export type ChildMovedAndReplacedFromOtherContainmentInSameParentSerializedDelta
     replacedChildAsNodes: LionWebJsonDeltaChunk
 }
 
-export type ChildMovedAndReplacedInSameContainmentSerializedDelta = {
-    kind: "ChildMovedAndReplacedInSameContainment"
+export type ChildMovedAndReplacedInSameContainmentInSameParentSerializedDelta = {
+    kind: "ChildMovedAndReplacedInSameContainmentInSameParent"
     parent: LionWebId
     containment: LionWebJsonMetaPointer
     oldIndex: number
