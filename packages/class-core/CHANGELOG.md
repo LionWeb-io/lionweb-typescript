@@ -25,8 +25,14 @@
     a call to `insertAtIndex` with a child that’s already in the managed multi-valued containment now results in a `ChildMovedInSameContainmentInSameParent` delta with a correct `indexOffset`
     (instead of the effective `newIndex`).
 * Perform **breaking** renamings of types:
-  * `ChildMoved[AndReplaced]FromOtherContainment[Serialized]Delta` &rarr; `ChildMoved[AndReplaced]FromContainmentInOtherParent[Serialized]Delta`
-  * `ChildMoved[AndReplaced]InSameContainment[Serialized]Delta` &rarr; `ChildMoved[AndReplaced]InSameContainmentInSameParent[Serialized]Delta`
+  * `ChildMovedFromOtherContainmentDelta` &rarr; `ChildMovedFromContainmentInOtherParentDelta`
+  * `ChildMovedFromOtherContainmentSerializedDelta` &rarr; `ChildMovedFromContainmentInOtherParentSerializedDelta`
+  * `ChildMovedAndReplacedFromOtherContainmentDelta` &rarr; `ChildMovedAndReplacedFromContainmentInOtherParentDelta`
+  * `ChildMovedAndReplacedFromOtherContainmentSerializedDelta` &rarr; `ChildMovedAndReplacedFromContainmentInOtherParentSerializedDelta`
+  * `ChildMovedInSameContainmentDelta` &rarr; `ChildMovedInSameContainmentInSameParentDelta`
+  * `ChildMovedInSameContainmentSerializedDelta` &rarr; `ChildMovedInSameContainmentInSameParentSerializedDelta`
+  * `ChildMovedAndReplacedInSameContainmentDelta` &rarr; `ChildMovedAndReplacedInSameContainmentInSameParentDelta`
+  * `ChildMovedAndReplacedInSameContainmentSerializedDelta` &rarr; `ChildMovedAndReplacedInSameContainmentInSameParentSerializedDelta`
 
 
 ## 0.9.2

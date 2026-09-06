@@ -16,8 +16,10 @@
 * Add a `lionWebVersion` parameter – which defaults to v2023.1 – as *1st* parameter to the `deltaToCommandTranslator` function.
 * Fix a bug where single delta chunks where deserialized as if they should be partitions.
 * Perform **breaking** renamings, in both command and event message types, and the technical names in `messageKind` properties:
-  * `Move[AndReplace]ChildFromOtherContainment` &rarr; `Move[AndReplace]ChildFromContainmentInOtherParent`, `ChildMoved[AndReplaced]FromOtherContainment` &rarr; `ChildMoved[AndReplaced]FromContainmentInOtherParent`
-  * `Move[AndReplace]ChildInSameContainment` &rarr; `Move[AndReplace]ChildInSameContainmentInSameParent`, `ChildMoved[AndReplaced]InSameContainment` &rarr; `ChildMoved[AndReplaced]InSameContainmentInSameParent`
+  * `MoveChildFromOtherContainment` &rarr; `MoveChildFromContainmentInOtherParent`, `ChildMovedFromOtherContainment` &rarr; `ChildMovedFromContainmentInOtherParent`
+  * `MoveAndReplaceChildFromOtherContainment` &rarr; `MoveAndReplaceChildFromContainmentInOtherParent`, `ChildMovedAndReplacedFromOtherContainment` &rarr; `ChildMovedAndReplacedFromContainmentInOtherParent`
+  * `MoveChildInSameContainment` &rarr; `MoveChildInSameContainmentInSameParent`, `ChildMovedInSameContainment` &rarr; `ChildMovedInSameContainmentInSameParent`
+  * `MoveAndReplaceChildInSameContainment` &rarr; `MoveAndReplaceChildInSameContainmentInSameParent`, `ChildMovedAndReplacedInSameContainment` &rarr; `ChildMovedAndReplacedInSameContainmentInSameParent`
 
 
 ## 0.9.0
