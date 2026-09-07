@@ -15,6 +15,11 @@
 * Add a `lionWebVersion` property – which defaults to v2023.1 – to the `DeltaToEventTranslatorConfiguration` configuration.
 * Add a `lionWebVersion` parameter – which defaults to v2023.1 – as *1st* parameter to the `deltaToCommandTranslator` function.
 * Fix a bug where single delta chunks where deserialized as if they should be partitions.
+* Perform **breaking** renamings, in both command and event message types, and the technical names in `messageKind` properties:
+  * `MoveChildFromOtherContainment` &rarr; `MoveChildFromContainmentInOtherParent`, `ChildMovedFromOtherContainment` &rarr; `ChildMovedFromContainmentInOtherParent`
+  * `MoveAndReplaceChildFromOtherContainment` &rarr; `MoveAndReplaceChildFromContainmentInOtherParent`, `ChildMovedAndReplacedFromOtherContainment` &rarr; `ChildMovedAndReplacedFromContainmentInOtherParent`
+  * `MoveChildInSameContainment` &rarr; `MoveChildInSameContainmentInSameParent`, `ChildMovedInSameContainment` &rarr; `ChildMovedInSameContainmentInSameParent`
+  * `MoveAndReplaceChildInSameContainment` &rarr; `MoveAndReplaceChildInSameContainmentInSameParent`, `ChildMovedAndReplacedInSameContainment` &rarr; `ChildMovedAndReplacedInSameContainmentInSameParent`
 
 
 ## 0.9.0

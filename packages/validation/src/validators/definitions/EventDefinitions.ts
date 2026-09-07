@@ -570,7 +570,7 @@ export const EventDefinitions: MessageGroup = {
             ],
         },
         {
-            name: "ChildMovedFromOtherContainment",
+            name: "ChildMovedFromContainmentInOtherParent",
             properties: [
                 {
                     name: "newParent",
@@ -727,7 +727,7 @@ export const EventDefinitions: MessageGroup = {
             ],
         },
         {
-            name: "ChildMovedInSameContainment",
+            name: "ChildMovedInSameContainmentInSameParent",
             properties: [
                 {
                     name: "parent",
@@ -795,7 +795,7 @@ export const EventDefinitions: MessageGroup = {
             ],
         },
         {
-            name: "ChildMovedAndReplacedFromOtherContainment",
+            name: "ChildMovedAndReplacedFromContainmentInOtherParent",
             properties: [
                 {
                     name: "newParent",
@@ -980,7 +980,7 @@ export const EventDefinitions: MessageGroup = {
             ],
         },
         {
-            name: "ChildMovedAndReplacedInSameContainment",
+            name: "ChildMovedAndReplacedInSameContainmentInSameParent",
             properties: [
                 {
                     name: "parent",

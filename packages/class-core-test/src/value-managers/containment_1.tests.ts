@@ -17,9 +17,9 @@
 
 import {
     ChildAddedDelta,
-    ChildMovedAndReplacedFromOtherContainmentDelta,
+    ChildMovedAndReplacedFromContainmentInOtherParentDelta,
     ChildMovedAndReplacedFromOtherContainmentInSameParentDelta,
-    ChildMovedFromOtherContainmentDelta,
+    ChildMovedFromContainmentInOtherParentDelta,
     ChildMovedFromOtherContainmentInSameParentDelta,
     ChildReplacedDelta,
     collectingDeltaReceiver,
@@ -114,7 +114,7 @@ describe("write access to a [1] containment through .set", () => {
         deepEqual(deltas[2], new ChildReplacedDelta(parent, testLanguageBase.LinkTestConcept_containment_1, 0, childAlreadyAssigned, childToAssign));
     });
 
-    it("moving a child between different parents (ChildMovedFromOtherContainmentDelta)", () => {
+    it("moving a child between different parents (ChildMovedFromContainmentInOtherParentDelta)", () => {
         const [receiveDelta, deltas] = collectingDeltaReceiver();
         const child = LinkTestConcept.create("child", receiveDelta);
         const srcParent = attachedLinkTestConcept("srcParent", receiveDelta);
@@ -145,7 +145,7 @@ describe("write access to a [1] containment through .set", () => {
             `can't read required containment "containment_1" that's unset on instance of TestLanguage.LinkTestConcept with id=srcParent`
         );
         equal(deltas.length, 4);
-        deepEqual(deltas[3], new ChildMovedFromOtherContainmentDelta(srcParent, testLanguageBase.LinkTestConcept_containment_1, 0, dstParent, testLanguageBase.LinkTestConcept_containment_1, 0, child));
+        deepEqual(deltas[3], new ChildMovedFromContainmentInOtherParentDelta(srcParent, testLanguageBase.LinkTestConcept_containment_1, 0, dstParent, testLanguageBase.LinkTestConcept_containment_1, 0, child));
     });
 
     it("moving a child between different containments in same parent (ChildMovedFromOtherContainmentInSameParentDelta)", () => {
@@ -197,7 +197,7 @@ describe("write access to a [1] containment through .set", () => {
         equal(deltas.length, 2);
     });
 
-    it("moving a child between different parents, replacing an already-present child (ChildMovedAndReplacedFromOtherContainmentDelta)", () => {
+    it("moving a child between different parents, replacing an already-present child (ChildMovedAndReplacedFromContainmentInOtherParentDelta)", () => {
         const [receiveDelta, deltas] = collectingDeltaReceiver();
         const dstParent = attachedLinkTestConcept("dstParent", receiveDelta);
         const childAlreadyAssigned = LinkTestConcept.create("childAlreadyAssigned", receiveDelta);
@@ -222,7 +222,7 @@ describe("write access to a [1] containment through .set", () => {
         equal(childToMove.parent, dstParent);
         equal(childAlreadyAssigned.parent, undefined);
         equal(deltas.length, 5);
-        deepEqual(deltas[4], new ChildMovedAndReplacedFromOtherContainmentDelta(dstParent, testLanguageBase.LinkTestConcept_containment_1, 0, childToMove, srcParent, testLanguageBase.LinkTestConcept_containment_1, 0, childAlreadyAssigned));
+        deepEqual(deltas[4], new ChildMovedAndReplacedFromContainmentInOtherParentDelta(dstParent, testLanguageBase.LinkTestConcept_containment_1, 0, childToMove, srcParent, testLanguageBase.LinkTestConcept_containment_1, 0, childAlreadyAssigned));
     });
 
     it("moving a child between different containments in same parent, replacing an already-present child (ChildMovedAndReplacedFromOtherContainmentInSameParentDelta)", () => {

@@ -21,7 +21,7 @@ import {
     applyDelta,
     ChildAddedDelta,
     ChildDeletedDelta,
-    ChildMovedFromOtherContainmentDelta,
+    ChildMovedFromContainmentInOtherParentDelta,
     ChildReplacedDelta,
     CompositeDelta,
     NoOpDelta,
@@ -58,7 +58,7 @@ describe("delta application sets parentage correctly", () => {
         const child = LinkTestConcept.create("child");
         parent.containment_0_1 = child;
         const dstLtc = LinkTestConcept.create("dstLtc");
-        const delta = new ChildMovedFromOtherContainmentDelta(parent, testLanguageBase.LinkTestConcept_containment_0_1, 0, dstLtc, testLanguageBase.LinkTestConcept_containment_0_1, 0, child);
+        const delta = new ChildMovedFromContainmentInOtherParentDelta(parent, testLanguageBase.LinkTestConcept_containment_0_1, 0, dstLtc, testLanguageBase.LinkTestConcept_containment_0_1, 0, child);
 
         applyDelta(delta);
 

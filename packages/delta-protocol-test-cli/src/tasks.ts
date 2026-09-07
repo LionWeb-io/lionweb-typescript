@@ -68,7 +68,7 @@ export const recognizedTasks: Record<string, boolean> = {
     "MoveAndReplaceChildFromOtherContainment_Single": true,
     "MoveAndReplaceChildFromOtherContainmentInSameParent_Single": true,
     "MoveAndReplaceChildFromOtherContainment_Multiple": true,
-    "MoveChildInSameContainment": true,
+    "MoveChildInSameContainmentInSameParent": true,
     "MoveChildFromOtherContainment_Single": true,
     "MoveChildFromOtherContainment_Multiple": true,
     "MoveChildFromOtherContainmentInSameParent_Single": true,
@@ -267,7 +267,7 @@ export const taskExecutor = (lionWebClient: LionWebClient, semanticLogItems: ISe
                 )
                 return waitForReceivedMessages(1)
 
-            case "MoveChildInSameContainment": {
+            case "MoveChildInSameContainmentInSameParent": {
                 const indexLastChild = linkTestConcept().containment_0_n.length - 1
                 linkTestConcept().moveContainment_0_nOffsetBased(indexLastChild, -indexLastChild)   // -> index 0
                 // Note: this is effectively a move rather than an insert — hence the name of the task.

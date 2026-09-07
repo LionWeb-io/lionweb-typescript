@@ -17,7 +17,7 @@
 
 import {
     ChildAddedDelta,
-    ChildMovedAndReplacedFromOtherContainmentDelta,
+    ChildMovedAndReplacedFromContainmentInOtherParentDelta,
     ChildReplacedDelta,
     collectingDeltaReceiver,
     SingleContainmentValueManager
@@ -63,7 +63,7 @@ describe("containment (mixed)", () => {
         // 5] ~MoveAndReplaceChildFromOtherContainment_Single: topLTC.containment_1.containment_0_1.replaceWith({ topLTC.containment_0_1.containment_0_1 === LTC("containment_0_1_containment_0_1") })
         equal(topLTC.containment_0_1.containment_0_1, containment_0_1_containment_0_1);
         topLTC.containment_1.replaceContainment_0_1With(topLTC.containment_0_1.containment_0_1);
-        assertDeltaEmitted(new ChildMovedAndReplacedFromOtherContainmentDelta(topLTC.containment_1, testLanguageBase.LinkTestConcept_containment_0_1, 0, topLTC.containment_0_1.containment_0_1, containment_0_1, testLanguageBase.LinkTestConcept_containment_0_1, 0, containment_1_containment_0_1));
+        assertDeltaEmitted(new ChildMovedAndReplacedFromContainmentInOtherParentDelta(topLTC.containment_1, testLanguageBase.LinkTestConcept_containment_0_1, 0, topLTC.containment_0_1.containment_0_1, containment_0_1, testLanguageBase.LinkTestConcept_containment_0_1, 0, containment_1_containment_0_1));
     });
 
     it(`integration test: "ReplaceChild"`, () => {

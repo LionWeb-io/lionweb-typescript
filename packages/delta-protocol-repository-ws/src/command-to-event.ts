@@ -183,9 +183,9 @@ export const commandAsEvent = (command: Command, participationId: string): Event
                     index
                 })
             }
-            case "MoveChildFromOtherContainment": {
+            case "MoveChildFromContainmentInOtherParent": {
                 const {newParent, newContainment, newIndex, movedChild, oldParent, oldContainment, oldIndex} = command as MoveChildFromOtherContainmentCommand // § 5.7.5.4
-                return completed<ChildMovedFromOtherContainmentEvent>("ChildMovedFromOtherContainment", { // § 5.8.5.4
+                return completed<ChildMovedFromOtherContainmentEvent>("ChildMovedFromContainmentInOtherParent", { // § 5.8.5.4
                     newParent,
                     newContainment,
                     newIndex,
@@ -206,9 +206,9 @@ export const commandAsEvent = (command: Command, participationId: string): Event
                     movedChild
                 })
             }
-            case "MoveChildInSameContainment": {
+            case "MoveChildInSameContainmentInSameParent": {
                 const {indexOffset, movedChild, parent, containment, oldIndex} = command as MoveChildInSameContainmentCommand // § 5.7.5.6
-                return completed<ChildMovedInSameContainmentEvent>("ChildMovedInSameContainment", { // § 5.8.5.6
+                return completed<ChildMovedInSameContainmentEvent>("ChildMovedInSameContainmentInSameParent", { // § 5.8.5.6
                     indexOffset,
                     movedChild,
                     parent,
@@ -216,9 +216,9 @@ export const commandAsEvent = (command: Command, participationId: string): Event
                     oldIndex
                 })
             }
-            case "MoveAndReplaceChildFromOtherContainment": {
+            case "MoveAndReplaceChildFromContainmentInOtherParent": {
                 const {newParent, newContainment, newIndex, replacedChild, movedChild, oldParent, oldContainment, oldIndex} = command as MoveAndReplaceChildFromOtherContainmentCommand // § 5.7.5.7
-                return completed<ChildMovedAndReplacedFromOtherContainmentEvent>("ChildMovedAndReplacedFromOtherContainment", { // § 5.8.5.7
+                return completed<ChildMovedAndReplacedFromOtherContainmentEvent>("ChildMovedAndReplacedFromContainmentInOtherParent", { // § 5.8.5.7
                     newParent,
                     newContainment,
                     newIndex,
@@ -243,9 +243,9 @@ export const commandAsEvent = (command: Command, participationId: string): Event
                     replacedDescendants: []   // TODO  get from own model
                 })
             }
-            case "MoveAndReplaceChildInSameContainment": {
+            case "MoveAndReplaceChildInSameContainmentInSameParent": {
                 const {indexOffset, replacedChild, movedChild, parent, containment, oldIndex} = command as MoveAndReplaceChildInSameContainmentCommand // § 5.7.5.9
-                return completed<ChildMovedAndReplacedInSameContainmentEvent>("ChildMovedAndReplacedInSameContainment", { // § 5.8.5.9
+                return completed<ChildMovedAndReplacedInSameContainmentEvent>("ChildMovedAndReplacedInSameContainmentInSameParent", { // § 5.8.5.9
                     indexOffset,
                     movedChild,
                     parent,

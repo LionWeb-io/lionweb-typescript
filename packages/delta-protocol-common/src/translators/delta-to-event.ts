@@ -26,12 +26,12 @@ import {
     AnnotationReplacedDelta,
     ChildAddedDelta,
     ChildDeletedDelta,
-    ChildMovedAndReplacedFromOtherContainmentDelta,
+    ChildMovedAndReplacedFromContainmentInOtherParentDelta,
     ChildMovedAndReplacedFromOtherContainmentInSameParentDelta,
-    ChildMovedAndReplacedInSameContainmentDelta,
-    ChildMovedFromOtherContainmentDelta,
+    ChildMovedAndReplacedInSameContainmentInSameParentDelta,
+    ChildMovedFromContainmentInOtherParentDelta,
     ChildMovedFromOtherContainmentInSameParentDelta,
-    ChildMovedInSameContainmentDelta,
+    ChildMovedInSameContainmentInSameParentDelta,
     ChildReplacedDelta,
     CompositeDelta,
     IDelta,
@@ -229,8 +229,8 @@ export const deltaToEventTranslator = (
                     replacedDescendants: allIdsOfDescendantsFrom(delta.replacedChild)
                 })
             }
-            if (delta instanceof ChildMovedFromOtherContainmentDelta) {
-                return completed<ChildMovedFromOtherContainmentEvent>("ChildMovedFromOtherContainment", { // § 5.8.5.4
+            if (delta instanceof ChildMovedFromContainmentInOtherParentDelta) {
+                return completed<ChildMovedFromOtherContainmentEvent>("ChildMovedFromContainmentInOtherParent", { // § 5.8.5.4
                     newParent: delta.newParent.id,
                     newContainment: metaPointerForFeature(delta.newContainment),
                     newIndex: delta.newIndex,
@@ -250,8 +250,8 @@ export const deltaToEventTranslator = (
                     oldIndex: delta.oldIndex
                 })
             }
-            if (delta instanceof ChildMovedInSameContainmentDelta) {
-                return completed<ChildMovedInSameContainmentEvent>("ChildMovedInSameContainment", { // § 5.8.5.6
+            if (delta instanceof ChildMovedInSameContainmentInSameParentDelta) {
+                return completed<ChildMovedInSameContainmentEvent>("ChildMovedInSameContainmentInSameParent", { // § 5.8.5.6
                     parent: delta.parent.id,
                     containment: metaPointerForFeature(delta.containment),
                     oldIndex: delta.oldIndex,
@@ -259,8 +259,8 @@ export const deltaToEventTranslator = (
                     movedChild: delta.movedChild.id
                 })
             }
-            if (delta instanceof ChildMovedAndReplacedFromOtherContainmentDelta) {
-                return completed<ChildMovedAndReplacedFromOtherContainmentEvent>("ChildMovedAndReplacedFromOtherContainment", { // § 5.8.5.7
+            if (delta instanceof ChildMovedAndReplacedFromContainmentInOtherParentDelta) {
+                return completed<ChildMovedAndReplacedFromOtherContainmentEvent>("ChildMovedAndReplacedFromContainmentInOtherParent", { // § 5.8.5.7
                     newParent: delta.newParent.id,
                     newContainment: metaPointerForFeature(delta.newContainment),
                     newIndex: delta.newIndex,
@@ -284,8 +284,8 @@ export const deltaToEventTranslator = (
                     movedChild: delta.movedChild.id
                 })
             }
-            if (delta instanceof ChildMovedAndReplacedInSameContainmentDelta) {
-                return completed<ChildMovedAndReplacedInSameContainmentEvent>("ChildMovedAndReplacedInSameContainment", { // § 5.8.5.9
+            if (delta instanceof ChildMovedAndReplacedInSameContainmentInSameParentDelta) {
+                return completed<ChildMovedAndReplacedInSameContainmentEvent>("ChildMovedAndReplacedInSameContainmentInSameParent", { // § 5.8.5.9
                     parent: delta.parent.id,
                     containment: metaPointerForFeature(delta.containment),
                     oldIndex: delta.oldIndex,
