@@ -23,7 +23,7 @@ import {
     Concept,
     Feature,
     Interface,
-    isRef,
+    isResolvedReference,
     SingleRef
 } from "@lionweb/core"
 import { uniquesAmong } from "@lionweb/ts-utils"
@@ -46,10 +46,10 @@ export const extendsFrom = (classifier: Classifier): SingleRef<Classifier> | und
 
 export const implementsFrom = (classifier: Classifier): Classifier[] => {
     if (classifier instanceof Annotation) {
-        return classifier.implements.filter(isRef)
+        return classifier.implements.filter(isResolvedReference)
     }
     if (classifier instanceof Concept) {
-        return classifier.implements.filter(isRef)
+        return classifier.implements.filter(isResolvedReference)
     }
     return []
 }

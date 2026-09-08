@@ -6,7 +6,6 @@ import {
     Feature,
     Interface,
     isBuiltinNodeConcept,
-    isRef,
     isResolvedReference,
     isUnresolvedReference,
     Language,
@@ -60,7 +59,7 @@ const generateForAnnotation = ({ name, features, extends: extends_, implements: 
     `<<Annotation>> ${name}`,
     isResolvedReference(annotates) ? `${name} ..> ${annotates.name} : <i>annotates</i>` : [],
     isResolvedReference(extends_) && !isBuiltinNodeConcept(extends_) ? `${extends_.name} <|-- ${name}` : [],
-    implements_.filter(isRef).map(interface_ => `${interface_.name} <|.. ${name}`),
+    implements_.filter(isResolvedReference).map(interface_ => `${interface_.name} <|.. ${name}`),
     ``
 ]
 
@@ -81,7 +80,7 @@ const generateForConcept = ({
 const generateForInterface = ({ name, features, extends: extends_ }: Interface) => [
     block(`class ${name}`, nonRelationalFeatures(features).map(generateForNonRelationalFeature)),
     `<<Interface>> ${name}`,
-    extends_.filter(isRef).map(({ name: extendsName }) => `${extendsName} <|-- ${name}`),
+    extends_.filter(isResolvedReference).map(({ name: extendsName }) => `${extendsName} <|-- ${name}`),
     ``
 ]
 

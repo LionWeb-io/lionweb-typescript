@@ -4,7 +4,7 @@ import {
     Datatype,
     Enumeration,
     Interface,
-    isRef,
+    isResolvedReference,
     LanguageEntity,
     LionWebVersions,
     PrimitiveType,
@@ -39,13 +39,13 @@ export const isINamed = (entity: LanguageEntity): boolean =>
 
 export const usesINamedDirectly = (entity: LanguageEntity): boolean => {
     if (entity instanceof Annotation) {
-        return entity.implements.filter(isRef).some(isINamed)
+        return entity.implements.filter(isResolvedReference).some(isINamed)
     }
     if (entity instanceof Concept) {
-        return entity.implements.filter(isRef).some(isINamed)
+        return entity.implements.filter(isResolvedReference).some(isINamed)
     }
     if (entity instanceof Interface) {
-        return entity.extends.filter(isRef).some(isINamed)
+        return entity.extends.filter(isResolvedReference).some(isINamed)
     }
     return false
 }
