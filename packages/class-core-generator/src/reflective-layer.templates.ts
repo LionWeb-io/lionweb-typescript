@@ -187,11 +187,13 @@ export const reflectiveClassFor = (language: Language, imports: Imports, directS
             sub instanceof Interface
                 ? `${nameOfBaseClassForLanguage(sub.language)}.is${sub.name}(node)`
                 : `node instanceof ${imports.entity(sub)}`
+        const subs = nameSorted(directSubsPerClassifier.get(interface_)!)
         return [
             `public static is${interface_.name}(node: ${imports.generic("INodeBase")}): node is ${interface_.name} {`,
-            indent(
-                `return ${nameSorted(directSubsPerClassifier.get(interface_) ?? []).map(instanceCheck).join(" || ")};`
-            ),
+            indent([
+                `return ${instanceCheck(subs[0])}${subs.length === 1 ? ";" : ""}`,
+                indent(subs.slice(1).map((sub, index) => `|| ${instanceCheck(sub)}${index === subs.length - 2 ? ";" : ""}`))
+            ]),
             `}`
         ]
     }

@@ -288,7 +288,10 @@ export class LionCore_M3Base implements $lwClassCore.ILanguageBase {
     public static readonly INSTANCE = new LionCore_M3Base();
 
     public static isIKeyed(node: $lwClassCore.INodeBase): node is IKeyed {
-        return node instanceof EnumerationLiteral || node instanceof Feature || node instanceof Language || node instanceof LanguageEntity;
+        return node instanceof EnumerationLiteral
+            || node instanceof Feature
+            || node instanceof Language
+            || node instanceof LanguageEntity;
     }
 }
 
