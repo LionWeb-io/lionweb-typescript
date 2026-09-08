@@ -2,6 +2,9 @@
 
 ## 0.11.0 — not yet released
 
+* Generator produces type guard functions (in the language’s reflective `Base` class) for every interface having more than zero classifiers that inherit from it.
+  This is convenient because you can’t say `node instanceof <interface>` in TypeScript, but now you can say `<language>Base.is<interface>(node)`.
+
 
 ## 0.10.0
 
