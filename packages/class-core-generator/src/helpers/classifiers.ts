@@ -22,8 +22,10 @@ import {
     Classifier,
     Concept,
     Feature,
+    inheritsDirectlyFrom,
     Interface,
     isResolvedReference,
+    Language,
     SingleRef
 } from "@lionweb/core"
 import { uniquesAmong } from "@lionweb/ts-utils"
@@ -61,5 +63,35 @@ export const featuresToConcretelyImplementOf = (classifier: Classifier): Feature
     const implementedFeatures = uniquesAmong(allSuperTypesOf(classifier).flatMap(featuresToConcretelyImplementOf))
     return allFeaturesOf(classifier)
         .filter((feature) => implementedFeatures.indexOf(feature) === -1)
+}
+
+
+/**
+ * A type alias for a {@link Map} mapping {@link Classifier classifiers} to their sub classifiers.
+ */
+export type DirectSubsPerClassifier = Map<Classifier, Classifier[]>
+
+/**
+ * @return a {@link DirectSubsPerClassifier} mapping {@link Classifier classifiers} in the given {@link Language `languages`} having one or more sub classifiers,
+ * to those sub classifiers.
+ */
+export const directSubsPerClassifier = (languages: Language[]): DirectSubsPerClassifier => {
+    const map: DirectSubsPerClassifier = new Map()
+    const addLazily = (key: Classifier, valueToAdd: Classifier) => {
+        if (!map.has(key)) {
+            map.set(key, [])
+        }
+        map.get(key)!.push(valueToAdd)
+    }
+
+    for (const language of languages) {
+        for (const classifier of language.entities.filter((entity) => entity instanceof Classifier)) {
+            inheritsDirectlyFrom(classifier).forEach((superType) => {
+                addLazily(superType, classifier)
+            })
+        }
+    }
+
+    return map
 }
 

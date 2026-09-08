@@ -21,6 +21,7 @@ import { ConceptModifier, LanguageFactory, LionWebVersions } from "@lionweb/core
 import { ioLionWebMpsSpecificLanguage } from "@lionweb/io-lionweb-mps-specific"
 import { concatenator } from "@lionweb/ts-utils"
 import { isTrue } from "./assertions.js"
+import { directSubsPerClassifier } from "@lionweb/class-core-generator/dist/helpers/index.js"
 
 describe(`class-core generator`, () => {
 
@@ -35,7 +36,7 @@ describe(`class-core generator`, () => {
         factory.concept("ConceptExtendingNode", ConceptModifier.concrete, node)
         factory.concept("ConceptExtendingNothing", ConceptModifier.concrete)
 
-        const languageFile = languageFileFor(factory.language, lionWebVersion, { verbose: false, genericImportLocation: "@lionweb/class-core" })
+        const languageFile = languageFileFor(factory.language, lionWebVersion, { verbose: false, genericImportLocation: "@lionweb/class-core" }, directSubsPerClassifier([factory.language]))
         const matchExtendsNode = languageFile.match(/export class ConceptExtendingNode extends ([A-Za-z.$]+) \{/)
         isTrue(matchExtendsNode !== null && matchExtendsNode[1] === "$lwClassCore.NodeBase")
         const matchExtendsNothing = languageFile.match(/export class ConceptExtendingNothing extends ([A-Za-z.$]+) \{/)
@@ -51,7 +52,7 @@ describe(`class-core generator`, () => {
         const AnInterface = factory.interface("AnInterface")
         factory.reference(AnInterface, "ref").ofType(node)
 
-        const languageFile = languageFileFor(factory.language, lionWebVersion, { verbose: false, genericImportLocation: "@lionweb/class-core" })
+        const languageFile = languageFileFor(factory.language, lionWebVersion, { verbose: false, genericImportLocation: "@lionweb/class-core" }, directSubsPerClassifier([factory.language]))
         isTrue(languageFile.match(/<\$lwClassCore\.INodeBase>/) === null, "found <INodeBase>")
         isTrue(languageFile.match(/<\$lwCore\.Node>/) !== null, "didn’t find <Node>")
     })

@@ -269,6 +269,14 @@ export class DeltasBase implements $lwClassCore.ILanguageBase {
     }
 
     public static readonly INSTANCE = new DeltasBase();
+
+    public static isNodeSerialization(node: $lwClassCore.INodeBase): node is NodeSerialization {
+        return node instanceof RefOnly || node instanceof SerializeSubTree;
+    }
+
+    public static isType(node: $lwClassCore.INodeBase): node is Type {
+        return node instanceof CustomType || node instanceof FeatureType || node instanceof IndexOffsetType || node instanceof IndexType || node instanceof NodeType || node instanceof PrimitiveValueType;
+    }
 }
 
 
