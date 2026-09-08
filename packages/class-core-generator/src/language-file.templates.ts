@@ -42,7 +42,7 @@ export const languageFileFor = (language: Language, lionWebVersion: LionWebVersi
 
     const postImportsPart = [
         ``,
-        reflectiveClassFor(imports)(language),
+        reflectiveClassFor(language, imports),
         ``,
         ``,
         orderedEntities
