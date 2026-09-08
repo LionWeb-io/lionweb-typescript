@@ -24,6 +24,7 @@ import { cwd } from "process"
 
 import { indexTsFor } from "./index-ts.js"
 import { languageFileFor } from "./language-file.templates.js"
+import { directSpecializationsPerClassifier } from "./helpers/index.js"
 
 const properGenericImportLocation = "@lionweb/class-core"
 
@@ -64,7 +65,7 @@ const withDefaults = (options?: Partial<GeneratorOptions>): GeneratorOptions => 
 export const generateLanguage = (language: Language, generationPath: string, lionWebVersion: LionWebVersion, mayBeOptions?: Partial<GeneratorOptions>): string => {
     const {name} = language
     const fileName = `${name}.g.ts`
-    writeFileSync(join(generationPath, fileName), languageFileFor(language, lionWebVersion, withDefaults(mayBeOptions)))
+    writeFileSync(join(generationPath, fileName), languageFileFor(language, lionWebVersion, withDefaults(mayBeOptions), directSpecializationsPerClassifier([language])))
     return fileName
 }
 
