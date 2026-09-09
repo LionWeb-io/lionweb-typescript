@@ -33,6 +33,7 @@ import {
     LanguageEntity,
     Link,
     nameOf,
+    nameSorted,
     PrimitiveType,
     Property,
     SingleRef
@@ -41,9 +42,16 @@ import { indent, switchOrIf } from "@lionweb/textgen-utils"
 import { asArray } from "@lionweb/ts-utils"
 import { when, withNewlineAppended } from "littoral-templates"
 
-import { entityMetaType, extendsFrom, Imports, nameOfBaseClassForLanguage } from "./helpers/index.js"
+import {
+    DirectSpecializationsPerClassifier,
+    entityMetaType,
+    extendsFrom,
+    Imports,
+    nameOfBaseClassForLanguage
+} from "./helpers/index.js"
 
-export const reflectiveClassFor = (imports: Imports) => {
+export const reflectiveClassFor = (language: Language, imports: Imports, directSpecializationsPerClassifier: DirectSpecializationsPerClassifier) => {
+
     // classifier:
 
     const reflectiveMembersForFeature = (feature: Feature) => {
@@ -174,76 +182,100 @@ export const reflectiveClassFor = (imports: Imports) => {
         return `// unhandled language entity <${entityMetaType(entity)}>"${name}"`
     }
 
-    return (language: Language) => {
-        const { version, id, key, entities } = language
-        const enumerations = entities.filter(isEnumeration)
-        const concreteClassifiers = entities.filter(isConcrete)
-        const parameterPrefix = concreteClassifiers.length === 0 ? "_" : ""
-        const thisLocalName = (localName: string) => `this._${localName}`
+    const typeGuardFunctionForInterface = (interface_: Interface) => {
+        const instanceCheck = (specialization: Classifier) =>
+            specialization instanceof Interface
+                ? `${nameOfBaseClassForLanguage(specialization.language)}.is${specialization.name}(node)`
+                : `node instanceof ${imports.entity(specialization)}`
+        const specializations = nameSorted(directSpecializationsPerClassifier.get(interface_)!)
         return [
-            `export class ${imports.thisBaseClassName} implements ${imports.generic("ILanguageBase")} {`,
-            ``,
+            `public static is${interface_.name}(node: ${imports.generic("INodeBase")}): node is ${interface_.name} {`,
             indent([
-                `private readonly _language: ${imports.core("Language")} = new ${imports.core("Language")}("${imports.thisLanguageNameAsJsIdentifier}", "${version}", "${id}", "${key}");`,
-                `get language(): ${imports.core("Language")} {`,
-                indent([`this.ensureWiredUp();`, `return this._language;`]),
-                `}`,
-                ``,
-                entities.map(withNewlineAppended(reflectiveMembersForEntity)),
-                `private _wiredUp: boolean = false;`,
-                `private ensureWiredUp() {`,
-                indent([
-                    `if (this._wiredUp) {`,
-                    indent(`return;`),
-                    `}`,
-                    `this._language.havingEntities(${entities.map(nameOf).map(thisLocalName).join(", ")});`,
-                    entities.map(wireUpStatementsForEntity),
-                    `this._wiredUp = true;`
-                ]),
-                `}`,
-                ``,
-                `factory(${parameterPrefix}receiveDelta?: ${imports.generic("DeltaReceiver")}): ${imports.generic("NodeBaseFactory")} {`,
-                indent([
-                    `return (classifier: ${imports.core("Classifier")}, ${parameterPrefix}id: ${imports.json("LionWebId")}) => {`,
-                    indent(
-                        switchOrIf(
-                            "classifier.key",
-                            concreteClassifiers
-                                .map((classifier) => [
-                                    // case's key:
-                                    `this._${classifier.name}.key`,
-                                    // return value:
-                                    `${classifier.name}.create(id, ${parameterPrefix}receiveDelta)`
-                                ]),
-                            [
-                                `const {language} = classifier;`,
-                                `throw new Error(\`can't instantiate \${classifier.name} (key=\${classifier.key}): classifier is not known in language \${language.name} (key=\${language.key}, version=\${language.version})\`);`
-                            ]
-                        )
-                    ),
-                    `}`
-                ]),
-                `}`,
-                ``,
-                `enumLiteralFrom<EnumType>(enumerationLiteral: ${imports.core("EnumerationLiteral")}): EnumType {`,
-                // (Why can this work?! EnumType is an unsatisfied generic parameter!)
-                indent([
-                    `const {enumeration} = enumerationLiteral;`,
-                    switchOrIf(
-                        "enumeration.key",
-                        enumerations.map(nameOf).map(name => [`this._${name}.key`, "enumerationLiteral.key as EnumType"]),
-                        [
-                            `const {language} = enumeration;`,
-                            `throw new Error(\`enumeration with key \${enumeration.key} is not known in language \${language.name} (key=\${language.key}, version=\${language.version})\`);`
-                        ]
-                    )
-                ]),
-                `}`,
-                ``,
-                `public static readonly INSTANCE = new ${nameOfBaseClassForLanguage(language)}();`
+                `return ${instanceCheck(specializations[0])}${specializations.length === 1 ? ";" : ""}`,
+                indent(specializations.slice(1).map((specialization, index) => `|| ${instanceCheck(specialization)}${index === specializations.length - 2 ? ";" : ""}`))
             ]),
             `}`
         ]
     }
+
+    const { version, id, key, entities } = language
+    const enumerations = entities.filter(isEnumeration)
+    const concreteClassifiers = entities.filter(isConcrete)
+    const parameterPrefix = concreteClassifiers.length === 0 ? "_" : ""
+    const thisLocalName = (localName: string) => `this._${localName}`
+    const interfacesHavingSpecializations = language.entities
+        .filter((entity) => entity instanceof Interface)
+        .filter((interface_) => directSpecializationsPerClassifier.has(interface_))
+
+    return [
+        `export class ${imports.thisBaseClassName} implements ${imports.generic("ILanguageBase")} {`,
+        ``,
+        indent([
+            `private readonly _language: ${imports.core("Language")} = new ${imports.core("Language")}("${imports.thisLanguageNameAsJsIdentifier}", "${version}", "${id}", "${key}");`,
+            `get language(): ${imports.core("Language")} {`,
+            indent([`this.ensureWiredUp();`, `return this._language;`]),
+            `}`,
+            ``,
+            entities.map(withNewlineAppended(reflectiveMembersForEntity)),
+            `private _wiredUp: boolean = false;`,
+            `private ensureWiredUp() {`,
+            indent([
+                `if (this._wiredUp) {`,
+                indent(`return;`),
+                `}`,
+                `this._language.havingEntities(${entities.map(nameOf).map(thisLocalName).join(", ")});`,
+                entities.map(wireUpStatementsForEntity),
+                `this._wiredUp = true;`
+            ]),
+            `}`,
+            ``,
+            `factory(${parameterPrefix}receiveDelta?: ${imports.generic("DeltaReceiver")}): ${imports.generic("NodeBaseFactory")} {`,
+            indent([
+                `return (classifier: ${imports.core("Classifier")}, ${parameterPrefix}id: ${imports.json("LionWebId")}) => {`,
+                indent(
+                    switchOrIf(
+                        "classifier.key",
+                        concreteClassifiers
+                            .map((classifier) => [
+                                // case's key:
+                                `this._${classifier.name}.key`,
+                                // return value:
+                                `${classifier.name}.create(id, ${parameterPrefix}receiveDelta)`
+                            ]),
+                        [
+                            `const {language} = classifier;`,
+                            `throw new Error(\`can't instantiate \${classifier.name} (key=\${classifier.key}): classifier is not known in language \${language.name} (key=\${language.key}, version=\${language.version})\`);`
+                        ]
+                    )
+                ),
+                `}`
+            ]),
+            `}`,
+            ``,
+            `enumLiteralFrom<EnumType>(enumerationLiteral: ${imports.core("EnumerationLiteral")}): EnumType {`,
+            // (Why can this work?! EnumType is an unsatisfied generic parameter!)
+            indent([
+                `const {enumeration} = enumerationLiteral;`,
+                switchOrIf(
+                    "enumeration.key",
+                    enumerations.map(nameOf).map(name => [`this._${name}.key`, "enumerationLiteral.key as EnumType"]),
+                    [
+                        `const {language} = enumeration;`,
+                        `throw new Error(\`enumeration with key \${enumeration.key} is not known in language \${language.name} (key=\${language.key}, version=\${language.version})\`);`
+                    ]
+                )
+            ]),
+            `}`,
+            ``,
+            `public static readonly INSTANCE = new ${nameOfBaseClassForLanguage(language)}();`,
+            nameSorted(interfacesHavingSpecializations)
+                .map((interface_) => [
+                    ``,
+                    typeGuardFunctionForInterface(interface_)
+                ])
+        ]),
+        `}`
+    ]
+
 }
 

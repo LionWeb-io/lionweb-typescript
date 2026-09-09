@@ -13,7 +13,7 @@ import {
 } from "@lionweb/ts-utils"
 import { containmentChain } from "../functions.js"
 import { ClassifierDeducer } from "../reading.js"
-import { isRef, isResolvedReference, UnresolvedReference } from "../references.js"
+import { isResolvedReference, UnresolvedReference } from "../references.js"
 import { Node } from "../types.js"
 import {
     Annotation,
@@ -225,11 +225,11 @@ const inheritsDirectlyFrom = (classifier: Classifier): Classifier[] => {
                     ? [classifier.extends as Classifier]
                     : []
             ),
-            ...classifier.implements.filter(isRef)
+            ...classifier.implements.filter(isResolvedReference)
         ]
     }
     if (classifier instanceof Interface) {
-        return classifier.extends.filter(isRef)
+        return classifier.extends.filter(isResolvedReference)
     }
     throw new Error(`classifier type ${typeof classifier} not handled`)
 }

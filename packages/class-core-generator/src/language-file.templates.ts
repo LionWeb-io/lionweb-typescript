@@ -22,10 +22,10 @@ import { asString, commaSeparated, when, withNewlineAppended } from "littoral-te
 
 import { typeForLanguageEntity } from "./entity-types.templates.js"
 import { GeneratorOptions } from "./generator.js"
-import { Imports } from "./helpers/index.js"
 import { reflectiveClassFor } from "./reflective-layer.templates.js"
+import { DirectSpecializationsPerClassifier, Imports } from "./helpers/index.js"
 
-export const languageFileFor = (language: Language, lionWebVersion: LionWebVersion, options: GeneratorOptions) => {
+export const languageFileFor = (language: Language, lionWebVersion: LionWebVersion, options: GeneratorOptions, directSpecializationsPerClassifier: DirectSpecializationsPerClassifier) => {
 
     const {name, version, key, id, entities} = language
 
@@ -42,7 +42,7 @@ export const languageFileFor = (language: Language, lionWebVersion: LionWebVersi
 
     const postImportsPart = [
         ``,
-        reflectiveClassFor(imports)(language),
+        reflectiveClassFor(language, imports, directSpecializationsPerClassifier),
         ``,
         ``,
         orderedEntities
@@ -61,7 +61,7 @@ export const languageFileFor = (language: Language, lionWebVersion: LionWebVersi
  */`,
         ``,
         ``,
-        `import * as ${Imports.importAlias("classCore")} from "${options.genericImportLocation}";`,
+        `import * as ${Imports.importAlias("class-core")} from "${options.genericImportLocation}";`,
         `import * as ${Imports.importAlias("core")} from "@lionweb/core";`,
         `import * as ${Imports.importAlias("json")} from "@lionweb/json";`,
         when(imports.languageImports.length > 0)(

@@ -6,6 +6,8 @@
 * Expose `move[AndReplace]<Name of containment>OffsetBased` methods for all multi-valued containments in generated code.
 * Parametrize generator with `lionWebVersion` argument of type `LionWebVersion`: `generateLanguage`, `generateApiFromLanguages`, `generateApiFromLanguagesJson`.
   The new argument is inserted at position 3, before the optional `maybeOptions` argument.
+* Generator produces type guard functions (in the language’s reflective `Base` class) for every interface having more than zero classifiers that inherit from it.
+  This is convenient because you can’t say `node instanceof <interface>` in TypeScript, but now you can say `<language>Base.is<interface>(node)`.
 
 
 ## 0.9.0

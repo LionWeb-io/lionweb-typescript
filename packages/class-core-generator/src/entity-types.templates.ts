@@ -25,9 +25,9 @@ import {
     isBuiltinNodeConcept,
     isContainment,
     isProperty,
-    isRef,
     isReference,
     isReferenceToSet,
+    isResolvedReference,
     isUnresolvedReference,
     LanguageEntity,
     Link,
@@ -246,7 +246,7 @@ export const typeForLanguageEntity = (imports: Imports) => {
 
     const interfaceFor = (interface_: Interface) =>
         [
-            `export interface ${interface_.name} extends ${interface_.extends.length > 0 ? interface_.extends.filter(isRef).map((superInterface) => imports.entity(superInterface)).join(", ") : imports.generic("INodeBase")} {`,
+            `export interface ${interface_.name} extends ${interface_.extends.length > 0 ? interface_.extends.filter(isResolvedReference).map((superInterface) => imports.entity(superInterface)).join(", ") : imports.generic("INodeBase")} {`,
             indent(
                 interface_.features.map((feature) => `${feature.name}: ${tsFieldTypeForFeature(feature, imports)};`)
             ),
