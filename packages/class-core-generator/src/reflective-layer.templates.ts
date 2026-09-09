@@ -43,14 +43,14 @@ import { asArray } from "@lionweb/ts-utils"
 import { when, withNewlineAppended } from "littoral-templates"
 
 import {
-    DirectSubsPerClassifier,
+    DirectSpecializationsPerClassifier,
     entityMetaType,
     extendsFrom,
     Imports,
     nameOfBaseClassForLanguage
 } from "./helpers/index.js"
 
-export const reflectiveClassFor = (language: Language, imports: Imports, directSubsPerClassifier: DirectSubsPerClassifier) => {
+export const reflectiveClassFor = (language: Language, imports: Imports, directSpecializationsPerClassifier: DirectSpecializationsPerClassifier) => {
 
     // classifier:
 
@@ -183,16 +183,16 @@ export const reflectiveClassFor = (language: Language, imports: Imports, directS
     }
 
     const typeGuardFunctionForInterface = (interface_: Interface) => {
-        const instanceCheck = (sub: Classifier) =>
-            sub instanceof Interface
-                ? `${nameOfBaseClassForLanguage(sub.language)}.is${sub.name}(node)`
-                : `node instanceof ${imports.entity(sub)}`
-        const subs = nameSorted(directSubsPerClassifier.get(interface_)!)
+        const instanceCheck = (specialization: Classifier) =>
+            specialization instanceof Interface
+                ? `${nameOfBaseClassForLanguage(specialization.language)}.is${specialization.name}(node)`
+                : `node instanceof ${imports.entity(specialization)}`
+        const specializations = nameSorted(directSpecializationsPerClassifier.get(interface_)!)
         return [
             `public static is${interface_.name}(node: ${imports.generic("INodeBase")}): node is ${interface_.name} {`,
             indent([
-                `return ${instanceCheck(subs[0])}${subs.length === 1 ? ";" : ""}`,
-                indent(subs.slice(1).map((sub, index) => `|| ${instanceCheck(sub)}${index === subs.length - 2 ? ";" : ""}`))
+                `return ${instanceCheck(specializations[0])}${specializations.length === 1 ? ";" : ""}`,
+                indent(specializations.slice(1).map((specialization, index) => `|| ${instanceCheck(specialization)}${index === specializations.length - 2 ? ";" : ""}`))
             ]),
             `}`
         ]
@@ -203,9 +203,9 @@ export const reflectiveClassFor = (language: Language, imports: Imports, directS
     const concreteClassifiers = entities.filter(isConcrete)
     const parameterPrefix = concreteClassifiers.length === 0 ? "_" : ""
     const thisLocalName = (localName: string) => `this._${localName}`
-    const interfacesHavingSubs = language.entities
+    const interfacesHavingSpecializations = language.entities
         .filter((entity) => entity instanceof Interface)
-        .filter((interface_) => directSubsPerClassifier.has(interface_))
+        .filter((interface_) => directSpecializationsPerClassifier.has(interface_))
 
     return [
         `export class ${imports.thisBaseClassName} implements ${imports.generic("ILanguageBase")} {`,
@@ -268,7 +268,7 @@ export const reflectiveClassFor = (language: Language, imports: Imports, directS
             `}`,
             ``,
             `public static readonly INSTANCE = new ${nameOfBaseClassForLanguage(language)}();`,
-            nameSorted(interfacesHavingSubs)
+            nameSorted(interfacesHavingSpecializations)
                 .map((interface_) => [
                     ``,
                     typeGuardFunctionForInterface(interface_)

@@ -67,16 +67,16 @@ export const featuresToConcretelyImplementOf = (classifier: Classifier): Feature
 
 
 /**
- * A type alias for a {@link Map} mapping {@link Classifier classifiers} to their sub classifiers.
+ * A type alias for a {@link Map} mapping {@link Classifier classifiers} to their specializations.
  */
-export type DirectSubsPerClassifier = Map<Classifier, Classifier[]>
+export type DirectSpecializationsPerClassifier = Map<Classifier, Classifier[]>
 
 /**
- * @return a {@link DirectSubsPerClassifier} mapping {@link Classifier classifiers} in the given {@link Language `languages`} having one or more sub classifiers,
- * to those sub classifiers.
+ * @return a {@link DirectSpecializationsPerClassifier} mapping {@link Classifier classifiers} in the given {@link Language `languages`} having one or more specializations,
+ * to those specializations.
  */
-export const directSubsPerClassifier = (languages: Language[]): DirectSubsPerClassifier => {
-    const map: DirectSubsPerClassifier = new Map()
+export const directSpecializationsPerClassifier = (languages: Language[]): DirectSpecializationsPerClassifier => {
+    const map: DirectSpecializationsPerClassifier = new Map()
     const addLazily = (key: Classifier, valueToAdd: Classifier) => {
         if (!map.has(key)) {
             map.set(key, [])
