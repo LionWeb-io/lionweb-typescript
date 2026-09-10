@@ -1,6 +1,5 @@
 import { metaTypedBasedClassifierDeducerFor, qualifiedNameOf } from "./functions.js"
 import { LionWebVersion } from "./version.js"
-import { LionWebVersions } from "./versions.js"
 import { Reader } from "../reading.js"
 import {
     Annotation,
@@ -30,21 +29,6 @@ export const lioncoreReaderFor = (version: LionWebVersion): Reader<M3Concept> =>
         (node as any)[feature.name], // (mirrors name-based update of settings)
     enumerationLiteralFrom: (value, _) => value as EnumerationLiteral | null
 })
-
-/**
- * An instance of {@link Reader} to read instances of the LionCore M3 (so M2s),
- * according to the 2023.1 version of LionWeb.
- *
- * @deprecated Use {@link lioncoreReaderFor} instead.
- */
-export const lioncoreReader: Reader<M3Concept> = lioncoreReaderFor(LionWebVersions.v2023_1)
-
-/**
- * Alias for {@link lioncoreReader}, kept for backward compatibility, and to be removed later.
- *
- * @deprecated Use {@link lioncoreReaderFor} instead (skipping `lioncoreReader`).
- */
-export const lioncoreExtractionFacade = lioncoreReader
 
 
 /**
@@ -142,19 +126,4 @@ export const lioncoreWriterFor = (version: LionWebVersion): Writer<M3Concept> =>
         encodingOf: literal => literal
     }
 }
-
-/**
- * An instance of {@link Writer} for instances of the LionCore M3 (so M2s),
- * according to the 2023.1 LionWeb version.
- *
- * @deprecated Use {@link lioncoreWriterFor} instead.
- */
-export const lioncoreWriter: Writer<M3Concept> = lioncoreWriterFor(LionWebVersions.v2023_1)
-
-/**
- * Alias for {@link lioncoreWriter}, kept for backward compatibility, and to be deprecated and removed later.
- *
- * @deprecated Use {@link lioncoreWriterFor} instead (skipping `lioncoreWrite` altogether).
- */
-export const lioncoreInstantationFacade = lioncoreWriter
 

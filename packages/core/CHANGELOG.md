@@ -2,6 +2,25 @@
 
 ## 0.11.0 — not yet released
 
+* **Breaking changes!** Remove _all_ items marked as `@deprecated` or as being “legacy” (but not yet `@deprecated`) in their JSDocumentation.
+  * The `BuiltinPropertyValue{Des|S}erializer` and `DefaultPrimitiveType{Des|S}erializer` classes, without direct replacements.
+  * The `lioncoreBuiltins`, `builtinPrimitives`, `builtinClassifiers`, `builtinFeatures`, `isBuiltinConcept` concepts: instead, use the corresponding properties of a `<LionWeb version>.builtinFacade`, obtainable via `LionWebVersions`.
+  * The `lioncore`, `metaConcepts`, and `metaFeatures` constants: instead, use the respective `language`, `metaConcepts`, `metaFeatures` properties of `<LionWeb version>.lioncoreFacade`.
+
+  For convenience, in the following removals are given in the form “`<deprecated/legacy item>` &rarr; `<use instead>`”:
+    * `deserializeLanguagesWithReporter`, `deserializeLanguagesWithHandler` &rarr; `deserializeLanguagesFrom`
+    * `lioncore{Reader|Writer}` &rarr; `lioncore{Reader|Writer}For` (which is parametrized in the LionWeb version)
+    * `lioncoreExtractionFacade` &rarr; `lioncoreReader`, `lioncoreInstantationFacade` &rarr; `lioncoreWriter`
+    * `currentReleaseVersion` &rarr; `LionWebVersions.v2023_1.serializationFormatVersion` (when applicable and correct)
+    * `PrimitiveType{Des|S}erializer` &rarr; `PropertyValue{Des|S}erializer`
+    * `deserializeSerializationChunk`, `deserializeChunk` &rarr; `deserializerWith(serializationChunk, dependentNodes)`
+    * `metaPointerFor` &rarr; `metaPointerForFeature`
+    * `ExtractionFacade` &rarr; `Reader`, `InstantiationFacade` &rarr; `Writer`
+    * `unresolved` &rarr; `referenceToSet` or `UnresolvedReference`, depending on the situation
+
+  Also remove usages of these items:
+    * The `primitiveTypeSerializer` property of the `SerializationOptions` type.
+
 
 ## 0.10.0
 

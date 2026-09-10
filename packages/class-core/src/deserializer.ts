@@ -86,13 +86,6 @@ export type DetailedDeserialization = {
 
 };
 
-/**
- * Legacy alias for {@link DetailedDeserialization}, kept for backward compatibility, and to be removed later.
- *
- * @deprecated Use {@link DetailedDeserialization} instead.
- */
-export type RootsWithIdMapping = DetailedDeserialization;
-
 
 /**
  * Configuration parameters for a deserializer that are unchanging per invocation of the deserializer

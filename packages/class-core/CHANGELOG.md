@@ -2,6 +2,10 @@
 
 ## 0.11.0 — not yet released
 
+* **Breaking changes!** Remove _all_ items marked as `@deprecated` or as being “legacy” (but not yet `@deprecated`) in their JSDocumentation.
+  * Remove the `defaultPropertyValueSerializer` function: replace with `LionWebVersions.<version>.builtinsFacade.propertyValueSerializer`.
+  * Remove the `serializeDelta` function: use `deltaSerializer` instead.
+
 
 ## 0.10.0
 

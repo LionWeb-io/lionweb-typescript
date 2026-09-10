@@ -2,6 +2,11 @@
 
 ## 0.11.0 — not yet released
 
+* **Breaking changes!** Remove _all_ items marked as `@deprecated`.
+
+  * Replace usage of the `sortByStringKey` function with `<T>(ts: T[], stringFunction: (t: T) => string) => sorterWith(mappedComparer(stringFunction, regularStringComparer))(ts)`.
+  * The `StringSorter` type is removed, without direct replacement, because that’s not really necessary.
+
 
 ## 0.10.0
 

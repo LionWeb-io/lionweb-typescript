@@ -113,13 +113,6 @@ export const serializerForDeltas = (deltas: Delta[], header?: string) =>
             `return serializeDelta;`
         ]),
         `}`,
-        ``,
-        ``,
-        `/**`,
-        ` * Legacy version of {@link deltaSerializer} for the default {@LionWebVersion LionWeb version} 2023.1.`,
-        ` * @deprecated Use {@link deltaSerializer} instead.`,
-        ` */`,
-        `export const serializeDelta = deltaSerializer(LionWebVersions.v2023_1);`,
         ``
     ])
 
