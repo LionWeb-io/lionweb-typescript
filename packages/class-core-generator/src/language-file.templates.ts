@@ -42,7 +42,7 @@ export const languageFileFor = (language: Language, lionWebVersion: LionWebVersi
 
     const postImportsPart = [
         ``,
-        reflectiveClassFor(imports)(language),
+        reflectiveClassFor(language, imports),
         ``,
         ``,
         orderedEntities
@@ -61,7 +61,7 @@ export const languageFileFor = (language: Language, lionWebVersion: LionWebVersi
  */`,
         ``,
         ``,
-        `import * as ${Imports.importAlias("classCore")} from "${options.genericImportLocation}";`,
+        `import * as ${Imports.importAlias("class-core")} from "${options.genericImportLocation}";`,
         `import * as ${Imports.importAlias("core")} from "@lionweb/core";`,
         `import * as ${Imports.importAlias("json")} from "@lionweb/json";`,
         when(imports.languageImports.length > 0)(

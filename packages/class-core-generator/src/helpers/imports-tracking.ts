@@ -24,6 +24,10 @@ export const nameOfBaseClassForLanguage = (language: Language) =>
     asJSIdentifier(language.name) + "Base"
 
 
+export type LibName = "class-core" | "core" | "json"
+const libNameAsIdentifier = (libName: LibName) =>
+    libName === "class-core" ? "classCore" : libName
+
 export class Imports {
 
     constructor(public readonly thisLanguage: Language, public readonly lioncoreBuiltinsFacade: LionCoreBuiltinsFacade) {
@@ -39,9 +43,9 @@ export class Imports {
         return this.thisLanguageNameAsJsIdentifier + "Base"
     }
 
-    public static importAlias = (libName: string) =>
-        `$lw${withFirstUpper(libName)}`
-    private aliased = (libName: string, identifier: string) =>
+    public static importAlias = (libName: LibName) =>
+        `$lw${withFirstUpper(libNameAsIdentifier(libName))}`
+    private aliased = (libName: LibName, identifier: string) =>
         `${Imports.importAlias(libName)}.${identifier}`
 
     private readonly _jsonImports = new Set<string>()
@@ -59,7 +63,7 @@ export class Imports {
     private readonly _genericImports = new Set<string>()
     generic(identifier: string) {
         this._genericImports.add(identifier)
-        return this.aliased("classCore", identifier)
+        return this.aliased("class-core", identifier)
     }
 
     entity(entity: LanguageEntity) {
