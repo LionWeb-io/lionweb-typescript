@@ -6,6 +6,13 @@
   * Remove the `defaultPropertyValueSerializer` function: replace with `LionWebVersions.<version>.builtinsFacade.propertyValueSerializer`.
   * Remove the `serializeDelta` function: use `deltaSerializer` instead.
 
+  This is documented in the following in the form “`<deprecated/legacy item>` &rarr; `<use instead>`”:
+    * `DeltaHandler` &rarr; `DeltaReceiver`, `collectingDeltaHandler` &rarr; `collectingDeltaReceiver`, `LatchingDeltaHandler` &rarr; `LatchingDeltaReceiver`
+    * `nodeBaseDeserializerWithIdMapping` &rarr; `nodeBaseDetailedDeserializer`
+
+  Also remove usages of these items:
+    * The `deserializeWithIdMapping` property of the `Forest` class.
+
 
 ## 0.10.0
 

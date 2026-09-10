@@ -2,7 +2,7 @@
 
 ## 0.11.0 — not yet released
 
-* **Breaking changes!** Remove _all_ items marked as `@deprecated` or as being “legacy” (but not yet `@deprecated`) in their JSDocumentation.
+* **Breaking changes!** Remove _all_ items marked as `@deprecated` or as being “legacy” (but not necessarily/yet `@deprecated`) in their JSDocumentation.
   * The `BuiltinPropertyValue{Des|S}erializer` and `DefaultPrimitiveType{Des|S}erializer` classes, without direct replacements.
   * The `lioncoreBuiltins`, `builtinPrimitives`, `builtinClassifiers`, `builtinFeatures`, `isBuiltinConcept` concepts: instead, use the corresponding properties of a `<LionWeb version>.builtinFacade`, obtainable via `LionWebVersions`.
   * The `lioncore`, `metaConcepts`, and `metaFeatures` constants: instead, use the respective `language`, `metaConcepts`, `metaFeatures` properties of `<LionWeb version>.lioncoreFacade`.
@@ -17,9 +17,12 @@
     * `metaPointerFor` &rarr; `metaPointerForFeature`
     * `ExtractionFacade` &rarr; `Reader`, `InstantiationFacade` &rarr; `Writer`
     * `unresolved` &rarr; `referenceToSet` or `UnresolvedReference`, depending on the situation
+    * `SimplisticHandler` &rarr; `ProblemReporter`, `AccumulatingSimplisticHandler` &rarr; `AccumulatingProblemReporter`, `AggregatingSimplisticHandler` &rarr; `AggregatingProblemReporter`, `defaultSimplisticHandler` &rarr; `consoleProblemReporter`,
+    * `nodeSerializer` &rarr; `serializerWith`
 
   Also remove usages of these items:
     * The `primitiveTypeSerializer` property of the `SerializationOptions` type.
+    * The `problemsHandler` property of the `DeserializerConfiguration` type.
 
 
 ## 0.10.0

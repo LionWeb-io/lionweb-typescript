@@ -78,17 +78,6 @@ export type SerializerConfiguration<NT extends Node, RT extends Node = NT> = {
 
 /**
  * @return a {@link Serializer} function that serializes the {@link Node nodes} passed to it,
- * configured through a `reader` {@link Reader} instance,
- * and (optionally) a `serializationOptions` {@link SerializationOptions} object.
- *
- * This is a legacy version of {@link serializerWith}, kept for backward compatibility, and to be deprecated and removed later.
- */
-export const nodeSerializer = <NT extends Node, RT extends Node = NT>(reader: Reader<NT, RT>, serializationOptions?: SerializationOptions): Serializer<NT> =>
-    serializerWith({ reader, ...serializationOptions })
-
-
-/**
- * @return a {@link Serializer} function that serializes the {@link Node nodes} passed to it,
  * configured through a `configuration` {@link SerializerConfiguration} object.
  */
 export const serializerWith = <NT extends Node, RT extends Node = NT>(configuration: SerializerConfiguration<NT, RT>): Serializer<NT> => {
