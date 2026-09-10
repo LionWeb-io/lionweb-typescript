@@ -26,6 +26,7 @@ import {
     Interface,
     isResolvedReference,
     Language,
+    nameOf,
     SingleRef
 } from "@lionweb/core"
 import { uniquesAmong } from "@lionweb/ts-utils"
@@ -93,5 +94,15 @@ export const directSpecializationsPerClassifier = (languages: Language[]): Direc
     }
 
     return map
+}
+
+
+export const displayDirectSpecializationsPerClassifierOnConsole = (map: DirectSpecializationsPerClassifier) => {
+    const displayMap: Record<string, string> = {}
+    const mapIterator = map.entries()
+    for (const [superType, specializations] of mapIterator) {
+        displayMap[superType.name] = specializations.map(nameOf).sort().join(" ")
+    }
+    console.table(displayMap)
 }
 
