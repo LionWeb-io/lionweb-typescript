@@ -458,7 +458,7 @@ export const CommandDefinitions: MessageGroup = {
             ],
         },
         {
-            name: "MoveChildFromOtherContainment",
+            name: "MoveChildFromContainmentInOtherParent",
             properties: [
                 {
                     name: "newParent",
@@ -476,6 +476,27 @@ export const CommandDefinitions: MessageGroup = {
                 },
                 {
                     name: "newIndex",
+                    type: "Number",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "oldParent",
+                    type: "LionWebId",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "oldContainment",
+                    type: "LionWebJsonMetaPointer",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "oldIndex",
                     type: "Number",
                     isList: false,
                     isOptional: false,
@@ -515,6 +536,13 @@ export const CommandDefinitions: MessageGroup = {
             name: "MoveChildFromOtherContainmentInSameParent",
             properties: [
                 {
+                    name: "parent",
+                    type: "LionWebId",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
                     name: "newContainment",
                     type: "LionWebJsonMetaPointer",
                     isList: false,
@@ -529,40 +557,14 @@ export const CommandDefinitions: MessageGroup = {
                     mayBeNull: false,
                 },
                 {
-                    name: "movedChild",
-                    type: "LionWebId",
+                    name: "oldContainment",
+                    type: "LionWebJsonMetaPointer",
                     isList: false,
                     isOptional: false,
                     mayBeNull: false,
                 },
                 {
-                    name: "commandId",
-                    type: "CommandId",
-                    isList: false,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
-                {
-                    name: "messageKind",
-                    type: "String",
-                    isList: false,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
-                {
-                    name: "additionalInfos",
-                    type: "AdditionalInfo",
-                    isList: true,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
-            ],
-        },
-        {
-            name: "MoveChildInSameContainment",
-            properties: [
-                {
-                    name: "newIndex",
+                    name: "oldIndex",
                     type: "Number",
                     isList: false,
                     isOptional: false,
@@ -599,7 +601,68 @@ export const CommandDefinitions: MessageGroup = {
             ],
         },
         {
-            name: "MoveAndReplaceChildFromOtherContainment",
+            name: "MoveChildInSameContainmentInSameParent",
+            properties: [
+                {
+                    name: "parent",
+                    type: "LionWebId",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "containment",
+                    type: "LionWebJsonMetaPointer",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "oldIndex",
+                    type: "Number",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "indexOffset",
+                    type: "Number",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "movedChild",
+                    type: "LionWebId",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "commandId",
+                    type: "CommandId",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "messageKind",
+                    type: "String",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "additionalInfos",
+                    type: "AdditionalInfo",
+                    isList: true,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+            ],
+        },
+        {
+            name: "MoveAndReplaceChildFromContainmentInOtherParent",
             properties: [
                 {
                     name: "newParent",
@@ -617,6 +680,27 @@ export const CommandDefinitions: MessageGroup = {
                 },
                 {
                     name: "newIndex",
+                    type: "Number",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "oldParent",
+                    type: "LionWebId",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "oldContainment",
+                    type: "LionWebJsonMetaPointer",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "oldIndex",
                     type: "Number",
                     isList: false,
                     isOptional: false,
@@ -663,6 +747,13 @@ export const CommandDefinitions: MessageGroup = {
             name: "MoveAndReplaceChildFromOtherContainmentInSameParent",
             properties: [
                 {
+                    name: "parent",
+                    type: "LionWebId",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
                     name: "newContainment",
                     type: "LionWebJsonMetaPointer",
                     isList: false,
@@ -671,6 +762,20 @@ export const CommandDefinitions: MessageGroup = {
                 },
                 {
                     name: "newIndex",
+                    type: "Number",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "oldContainment",
+                    type: "LionWebJsonMetaPointer",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "oldIndex",
                     type: "Number",
                     isList: false,
                     isOptional: false,
@@ -714,10 +819,31 @@ export const CommandDefinitions: MessageGroup = {
             ],
         },
         {
-            name: "MoveAndReplaceChildInSameContainment",
+            name: "MoveAndReplaceChildInSameContainmentInSameParent",
             properties: [
                 {
-                    name: "newIndex",
+                    name: "parent",
+                    type: "LionWebId",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "containment",
+                    type: "LionWebJsonMetaPointer",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "oldIndex",
+                    type: "Number",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "indexOffset",
                     type: "Number",
                     isList: false,
                     isOptional: false,
@@ -940,6 +1066,20 @@ export const CommandDefinitions: MessageGroup = {
                     mayBeNull: false,
                 },
                 {
+                    name: "oldParent",
+                    type: "LionWebId",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "oldIndex",
+                    type: "Number",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
                     name: "movedAnnotation",
                     type: "LionWebId",
                     isList: false,
@@ -973,7 +1113,21 @@ export const CommandDefinitions: MessageGroup = {
             name: "MoveAnnotationInSameParent",
             properties: [
                 {
-                    name: "newIndex",
+                    name: "parent",
+                    type: "LionWebId",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "oldIndex",
+                    type: "Number",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "indexOffset",
                     type: "Number",
                     isList: false,
                     isOptional: false,
@@ -1027,6 +1181,20 @@ export const CommandDefinitions: MessageGroup = {
                     mayBeNull: false,
                 },
                 {
+                    name: "oldParent",
+                    type: "LionWebId",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "oldIndex",
+                    type: "Number",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
                     name: "replacedAnnotation",
                     type: "LionWebId",
                     isList: false,
@@ -1067,7 +1235,21 @@ export const CommandDefinitions: MessageGroup = {
             name: "MoveAndReplaceAnnotationInSameParent",
             properties: [
                 {
-                    name: "newIndex",
+                    name: "parent",
+                    type: "LionWebId",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "oldIndex",
+                    type: "Number",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "indexOffset",
                     type: "Number",
                     isList: false,
                     isOptional: false,
@@ -1135,7 +1317,7 @@ export const CommandDefinitions: MessageGroup = {
                     mayBeNull: false,
                 },
                 {
-                    name: "newTarget",
+                    name: "newReference",
                     type: "LionWebId",
                     isList: false,
                     isOptional: true,
@@ -1196,7 +1378,7 @@ export const CommandDefinitions: MessageGroup = {
                     mayBeNull: false,
                 },
                 {
-                    name: "deletedTarget",
+                    name: "deletedReference",
                     type: "LionWebId",
                     isList: false,
                     isOptional: true,
@@ -1257,7 +1439,7 @@ export const CommandDefinitions: MessageGroup = {
                     mayBeNull: false,
                 },
                 {
-                    name: "oldTarget",
+                    name: "oldReference",
                     type: "LionWebId",
                     isList: false,
                     isOptional: true,
@@ -1271,7 +1453,7 @@ export const CommandDefinitions: MessageGroup = {
                     mayBeNull: true,
                 },
                 {
-                    name: "newTarget",
+                    name: "newReference",
                     type: "LionWebId",
                     isList: false,
                     isOptional: true,
@@ -1308,7 +1490,7 @@ export const CommandDefinitions: MessageGroup = {
             ],
         },
         {
-            name: "ChunkedCommand",
+            name: "ContinuedCommand",
             properties: [
                 {
                     name: "chunk",

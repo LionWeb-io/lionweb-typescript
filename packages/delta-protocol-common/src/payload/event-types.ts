@@ -15,9 +15,9 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { LionWebId, LionWebJsonChunk, LionWebJsonMetaPointer } from "@lionweb/json"
+import { LionWebId, LionWebJsonDeltaChunk, LionWebJsonMetaPointer } from "@lionweb/json"
 import { mapFrom } from "@lionweb/ts-utils"
-import { DeltaAdditionalInfo, Message } from "./common.js"
+import { ContinuedChunkMessage, CustomMessageKind, DeltaAdditionalInfo, Message, SplittableMessage } from "./common.js"
 
 export type CommandSource = {
     participationId: LionWebId
@@ -25,23 +25,42 @@ export type CommandSource = {
 }
 
 export interface Event extends DeltaAdditionalInfo {
-    originCommands: CommandSource[]
     sequenceNumber: number
+    originCommands: CommandSource[]
+}
+
+
+/**
+ * “Abstract” interface for custom events.
+ *
+ * § 5.3.3
+ */
+export interface CustomEvent extends Event {
+    messageKind: CustomMessageKind
 }
 
 
 // in order of the specification (§ 5.8):
 
+/**
+ * § 5.8.1
+ */
+export interface ContinuedEvent extends Event, ContinuedChunkMessage {
+    messageKind: "ContinuedEvent"
+    continuedEventSequenceNumber: number  // === sequence number of split event (i.e., the initial message)
+}
+
 /** § 5.8.2.1 */
-export interface PartitionAddedEvent extends Event {
+export interface PartitionAddedEvent extends Event, SplittableMessage {
     messageKind: "PartitionAdded"
-    newPartition: LionWebJsonChunk
+    newPartition: /* single or shallow */ LionWebJsonDeltaChunk
 }
 
 /** § 5.8.2.2 */
 export interface PartitionDeletedEvent extends Event {
     messageKind: "PartitionDeleted"
     deletedPartition: LionWebId
+    deletedDescendants: LionWebId[]
 }
 
 /** § 5.8.3.1 */
@@ -78,10 +97,10 @@ export interface PropertyChangedEvent extends Event {
 }
 
 /** § 5.8.5.1 */
-export interface ChildAddedEvent extends Event {
+export interface ChildAddedEvent extends Event, SplittableMessage {
     messageKind: "ChildAdded"
     parent: LionWebId
-    newChild: LionWebJsonChunk
+    newChild: /* single */ LionWebJsonDeltaChunk
     containment: LionWebJsonMetaPointer
     index: number
 }
@@ -97,9 +116,9 @@ export interface ChildDeletedEvent extends Event {
 }
 
 /** § 5.8.5.3 */
-export interface ChildReplacedEvent extends Event {
+export interface ChildReplacedEvent extends Event, SplittableMessage {
     messageKind: "ChildReplaced"
-    newChild: LionWebJsonChunk
+    newChild: /* single */ LionWebJsonDeltaChunk
     replacedChild: LionWebId
     replacedDescendants: LionWebId[]
     parent: LionWebId
@@ -109,7 +128,7 @@ export interface ChildReplacedEvent extends Event {
 
 /** § 5.8.5.4 */
 export interface ChildMovedFromOtherContainmentEvent extends Event {
-    messageKind: "ChildMovedFromOtherContainment"
+    messageKind: "ChildMovedFromContainmentInOtherParent"
     newParent: LionWebId
     newContainment: LionWebJsonMetaPointer
     newIndex: number
@@ -132,17 +151,17 @@ export interface ChildMovedFromOtherContainmentInSameParentEvent extends Event {
 
 /** § 5.8.5.6 */
 export interface ChildMovedInSameContainmentEvent extends Event {
-    messageKind: "ChildMovedInSameContainment"
-    newIndex: number
-    movedChild: LionWebId
+    messageKind: "ChildMovedInSameContainmentInSameParent"
     parent: LionWebId
     containment: LionWebJsonMetaPointer
     oldIndex: number
+    indexOffset: number
+    movedChild: LionWebId
 }
 
 /** § 5.8.5.7 */
 export interface ChildMovedAndReplacedFromOtherContainmentEvent extends Event {
-    messageKind: "ChildMovedAndReplacedFromOtherContainment"
+    messageKind: "ChildMovedAndReplacedFromContainmentInOtherParent"
     newParent: LionWebId
     newContainment: LionWebJsonMetaPointer
     newIndex: number
@@ -169,21 +188,21 @@ export interface ChildMovedAndReplacedFromOtherContainmentInSameParentEvent exte
 
 /** § 5.8.5.9 */
 export interface ChildMovedAndReplacedInSameContainmentEvent extends Event {
-    messageKind: "ChildMovedAndReplacedInSameContainment"
-    newIndex: number
-    movedChild: LionWebId
+    messageKind: "ChildMovedAndReplacedInSameContainmentInSameParent"
     parent: LionWebId
     containment: LionWebJsonMetaPointer
     oldIndex: number
+    indexOffset: number
+    movedChild: LionWebId
     replacedChild: LionWebId
     replacedDescendants: LionWebId[]
 }
 
 /** § 5.8.6.1 */
-export interface AnnotationAddedEvent extends Event {
+export interface AnnotationAddedEvent extends Event, SplittableMessage {
     messageKind: "AnnotationAdded"
     parent: LionWebId
-    newAnnotation: LionWebJsonChunk
+    newAnnotation: /* single */ LionWebJsonDeltaChunk
     index: number
 }
 
@@ -197,9 +216,9 @@ export interface AnnotationDeletedEvent extends Event {
 }
 
 /** § 5.8.6.3 */
-export interface AnnotationReplacedEvent extends Event {
+export interface AnnotationReplacedEvent extends Event, SplittableMessage {
     messageKind: "AnnotationReplaced"
-    newAnnotation: LionWebJsonChunk
+    newAnnotation: /* single */ LionWebJsonDeltaChunk
     replacedAnnotation: LionWebId
     replacedDescendants: LionWebId[]
     parent: LionWebId
@@ -219,10 +238,10 @@ export interface AnnotationMovedFromOtherParentEvent extends Event {
 /** § 5.8.6.5 */
 export interface AnnotationMovedInSameParentEvent extends Event {
     messageKind: "AnnotationMovedInSameParent"
-    newIndex: number
-    movedAnnotation: LionWebId
     parent: LionWebId
     oldIndex: number
+    indexOffset: number
+    movedAnnotation: LionWebId
 }
 
 /** § 5.8.6.6 */
@@ -240,10 +259,10 @@ export interface AnnotationMovedAndReplacedFromOtherParentEvent extends Event {
 /** § 5.8.6.7 */
 export interface AnnotationMovedAndReplacedInSameParentEvent extends Event {
     messageKind: "AnnotationMovedAndReplacedInSameParent"
-    newIndex: number
-    movedAnnotation: LionWebId
     parent: LionWebId
     oldIndex: number
+    indexOffset: number
+    movedAnnotation: LionWebId
     replacedAnnotation: LionWebId
     replacedDescendants: LionWebId[]
 }
@@ -288,7 +307,7 @@ export interface CompositeEvent extends Event {
 
 /** § 5.8.8.2 */
 export interface NoOpEvent extends Event {
-    messageKind: "NoOp"
+    messageKind: "NoOpEvent"
 }
 
 /** § 5.8.8.3 */
@@ -309,6 +328,7 @@ export interface ErrorEvent extends Event {
 
 const eventMessageKinds = mapFrom(
     [
+        "ContinuedEvent",
         "PartitionAdded",
         "PartitionDeleted",
         "ClassifierChanged",
@@ -318,12 +338,12 @@ const eventMessageKinds = mapFrom(
         "ChildAdded",
         "ChildDeleted",
         "ChildReplaced",
-        "ChildMovedFromOtherContainment",
+        "ChildMovedFromContainmentInOtherParent",
         "ChildMovedFromOtherContainmentInSameParent",
-        "ChildMovedInSameContainment",
-        "ChildMovedAndReplacedFromOtherContainment",
+        "ChildMovedInSameContainmentInSameParent",
+        "ChildMovedAndReplacedFromContainmentInOtherParent",
         "ChildMovedAndReplacedFromOtherContainmentInSameParent",
-        "ChildMovedAndReplacedInSameContainment",
+        "ChildMovedAndReplacedInSameContainmentInSameParent",
         "AnnotationAdded",
         "AnnotationDeleted",
         "AnnotationReplaced",
@@ -335,7 +355,7 @@ const eventMessageKinds = mapFrom(
         "ReferenceDeleted",
         "ReferenceChanged",
         "CompositeEvent",
-        "NoOp",
+        "NoOpEvent",
         "ErrorEvent"
     ],
     (messageKind) => messageKind,
@@ -344,4 +364,23 @@ const eventMessageKinds = mapFrom(
 
 export const isEvent = (message: Message): message is Event =>
     message.messageKind in eventMessageKinds
+
+export const isContinuedEvent = (message: Message): message is ContinuedEvent =>
+    message.messageKind === "ContinuedEvent"
+
+/**
+ * (See § 3.7.1 of the specification of the delta protocol.)
+ *
+ * @return the name of the property of the given {@link Event} that holds the chunk that may be split, or `undefined` if the given `event` isn’t splittable.
+ */
+export const maybeChunkPropertyForSplittableEvent = (event: Event): (string | undefined) => {
+    switch (event.messageKind) {
+        case "PartitionAdded": return "newPartition"
+        case "ChildAdded": return "newChild"
+        case "ChildReplaced": return "newChild"
+        case "AnnotationAdded": return "newAnnotation"
+        case "AnnotationReplaced": return "newAnnotation"
+        default: return undefined
+    }
+}
 

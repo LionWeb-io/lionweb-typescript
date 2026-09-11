@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.10.0
+
+* Deprecate the `readFileAsJson` and `writeJsonAsFile` functions in favor of the `readFileAsJsonSync` and `writeJsonAsFileSync` functions from `@lionweb/node-utils`.
+  (This change has been propagated throughout the entire codebase.)
+* W.r.t. the `sortedSerializationChunk` function:
+  * Give it an additional, optional flag argument `sortConnections` that determines whether containments, references, and annotations are sorted by ID.
+  * It now sorts used languages and features by full meta-pointer, not just its key (language’s key for used language, feature’s key for feature).
+* Bump `nanoid` dependency to version 5.1.16 because version 5.1.6 was marked/deemed vulnerable.
+
+
 ## 0.9.0
 
 * Expose types associated with the `measure` function — m.n. `Metrics`.
@@ -59,7 +69,7 @@ Dependencies: `@lionweb/core` version 0.6.11
 
 Dependencies: `@lionweb/core` version 0.6.10
 
-(no changes)
+(No changes)
 
 
 ## 0.6.9

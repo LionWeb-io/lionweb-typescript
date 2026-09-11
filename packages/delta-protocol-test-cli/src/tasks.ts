@@ -16,7 +16,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { LionWebClient } from "@lionweb/delta-protocol-client"
-import { ansi, ClientReceivedMessage, ISemanticLogItem } from "@lionweb/delta-protocol-common"
+import { ansi, ClientReceivedMessage, ISemanticLogItem, Procedure } from "@lionweb/delta-protocol-common"
 import { LionWebId } from "@lionweb/json"
 import { lastOfArray } from "@lionweb/ts-utils"
 import {
@@ -68,20 +68,21 @@ export const recognizedTasks: Record<string, boolean> = {
     "MoveAndReplaceChildFromOtherContainment_Single": true,
     "MoveAndReplaceChildFromOtherContainmentInSameParent_Single": true,
     "MoveAndReplaceChildFromOtherContainment_Multiple": true,
-    "MoveChildInSameContainment": true,
+    "MoveChildInSameContainmentInSameParent": true,
     "MoveChildFromOtherContainment_Single": true,
     "MoveChildFromOtherContainment_Multiple": true,
     "MoveChildFromOtherContainmentInSameParent_Single": true,
     "AddPartition": true,
     "MoveChildFromOtherContainmentInSameParent_Multiple": true,
-    "SubscribeToChangingPartitions": true
+    "SubscribeToChangingPartitions": true,
+    "TryToWriteProtocolLog": true
 }
 
 
 const testLanguageBase = TestLanguageBase.INSTANCE
 
 
-export const taskExecutor = (lionWebClient: LionWebClient, semanticLogItems: ISemanticLogItem[]) => {
+export const taskExecutor = (lionWebClient: LionWebClient, semanticLogItems: ISemanticLogItem[], tryToWriteProtocolLog: Procedure<void>) => {
 
     const numberOfReceivedMessages = () =>
         semanticLogItems.filter((item) => item instanceof ClientReceivedMessage).length
@@ -266,10 +267,12 @@ export const taskExecutor = (lionWebClient: LionWebClient, semanticLogItems: ISe
                 )
                 return waitForReceivedMessages(1)
 
-            case "MoveChildInSameContainment":
-                linkTestConcept().addContainment_0_nAtIndex(lastOfArray(linkTestConcept().containment_0_n), 0)
+            case "MoveChildInSameContainmentInSameParent": {
+                const indexLastChild = linkTestConcept().containment_0_n.length - 1
+                linkTestConcept().moveContainment_0_nOffsetBased(indexLastChild, -indexLastChild)   // -> index 0
                 // Note: this is effectively a move rather than an insert — hence the name of the task.
                 return waitForReceivedMessages(1)
+            }
 
             case "MoveChildFromOtherContainment_Single":
                 linkTestConcept().containment_1 = linkTestConcept().containment_0_1!.containment_0_1!
@@ -286,6 +289,9 @@ export const taskExecutor = (lionWebClient: LionWebClient, semanticLogItems: ISe
             case "MoveChildFromOtherContainmentInSameParent_Multiple":
                 linkTestConcept().addContainment_1_nAtIndex(lastOfArray(linkTestConcept().containment_0_n), 1)
                 return waitForReceivedMessages(1)
+
+            case "TryToWriteProtocolLog":
+                return tryToWriteProtocolLog()
 
             default: {
                 // (shouldn't happen because of upfront validation of tasks)

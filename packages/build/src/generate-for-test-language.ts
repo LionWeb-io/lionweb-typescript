@@ -15,21 +15,21 @@
 // SPDX-FileCopyrightText: 2026 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { deserializeLanguages } from "@lionweb/core"
+import { Annotation, deserializeLanguages, LionWebVersions } from "@lionweb/core"
 import { defaultTrumpfOriginatingApache2_0LicensedHeader, generateLanguage } from "@lionweb/class-core-generator"
 import { LionWebJsonChunk } from "@lionweb/json"
-import { generatePlantUmlForLanguage, languageAsText, readFileAsJson } from "@lionweb/utilities"
+import { getFromHttps, readFileAsJsonSync } from "@lionweb/node-utils"
+import { generatePlantUmlForLanguage, languageAsText } from "@lionweb/utilities"
 import { copyFileSync, lstatSync, writeFileSync } from "fs"
 import { join } from "path"
 import { argv } from "process"
-import { getFromHttps } from "./curl.js"
 
 const packagePath = "../class-core-test-language"
 const metaPath = join(packagePath, "meta")
 const languageJsonPath = join(metaPath, "testLanguage.json")
 
 const externalRepoName = "lionweb-integration-testing"
-const pathWithinExternalRepo = "src/languages"
+const pathWithinExternalRepo = "testLanguage"
 const originalLanguageJsonFileName = "testLanguage.2023.1.json"
 
 const tryCopyFromLocalRepoClonse = () => {
@@ -58,8 +58,15 @@ if (argv.length > 2 && argv[2] === "--force-local") {
 }
 console.log()
 
-const TestLanguage = deserializeLanguages(readFileAsJson(languageJsonPath) as LionWebJsonChunk)[0]
-generateLanguage(TestLanguage, join(packagePath, "src/gen"), { header: defaultTrumpfOriginatingApache2_0LicensedHeader })
+
+const TestLanguage = deserializeLanguages(readFileAsJsonSync(languageJsonPath) as LionWebJsonChunk)[0]
+
+// modify name of TestAnnotation.containment because of clash with NodeBase.containment:
+const TestAnnotation = TestLanguage.entities.find((entity) => entity.name === "TestAnnotation") as Annotation
+const TestAnnotation_containment = TestAnnotation.features.find((feature) => feature.name === "containment")!
+TestAnnotation_containment.name = "containedNode"
+
+generateLanguage(TestLanguage, join(packagePath, "src/gen"), LionWebVersions.v2023_1, { header: defaultTrumpfOriginatingApache2_0LicensedHeader })
 // (the same content as in the lionweb-integration-testing repository:)
 writeFileSync(join(metaPath, "TestLanguage.txt"), languageAsText(TestLanguage))
 writeFileSync(join(metaPath, "TestLanguage.puml"), generatePlantUmlForLanguage(TestLanguage))

@@ -1,5 +1,5 @@
 import { asPrettyJsonString } from "@lionweb/ts-utils"
-import { readFileSync, writeFileSync } from "fs"
+import { readFileSync, writeFileSync } from "node:fs"
 
 
 /**
@@ -7,8 +7,7 @@ import { readFileSync, writeFileSync } from "fs"
  *
  * @param path The path to a JSON file.
  *
- * This is the same function as in the utilities package, but that one’s going to be deprecated later on,
- * so that the utilities package doesn’t need to rely on Node.js.
+ * This is the same function as in the utilities package, but that one’s deprecated.
  */
 export const readFileAsJsonSync = (path: string): unknown =>
     JSON.parse(readFileSync(path).toString())
@@ -19,10 +18,10 @@ export const readFileAsJsonSync = (path: string): unknown =>
  *
  * @param path The path for the JSON file to write — which doesn’t need to exist, but the path towards it does.
  * @param json The JSON to write.
+ * @param nSpacesPerIndentation The number of spaces per indentation — defaults to 4.
  *
- * This is the same function as in the utilities package, but that one’s going to be deprecated later on,
- * so that the utilities package doesn’t need to rely on Node.js.
+ * This is the same function as in the utilities package, but that one’s deprecated.
  */
-export const writeJsonAsFileSync = (path: string, json: unknown) =>
-    writeFileSync(path, asPrettyJsonString(json))
+export const writeJsonAsFileSync = (path: string, json: unknown, nSpacesPerIndentation: number = 4) =>
+    writeFileSync(path, asPrettyJsonString(json, nSpacesPerIndentation))
 

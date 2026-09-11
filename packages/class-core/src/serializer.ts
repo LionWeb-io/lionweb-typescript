@@ -21,7 +21,10 @@ import {
     Containment,
     Enumeration,
     Feature,
+    isReferenceToSet,
+    isResolvedReference,
     isUnresolvedReference,
+    LionWebVersion,
     LionWebVersions,
     Node,
     PrimitiveType,
@@ -105,6 +108,7 @@ export const serializeNodeBases = serializerWith({ reader: nodeBaseReader, seria
  * Type def. to capture the configuration to pass to {@link propertyValueSerializerWith}.
  */
 type PropertyValueSerializerConfiguration = Partial<{
+    lionWebVersion: LionWebVersion
     primitiveValueSerializer: PropertyValueSerializer
     reportIssue: (message: string) => void | never
 }>
@@ -115,13 +119,14 @@ type PropertyValueSerializerConfiguration = Partial<{
  * Unrecoverable issues are passed to the optional `reportIssue` argument, and
  */
 export const propertyValueSerializerWith = (configuration?: PropertyValueSerializerConfiguration) => {
-    const primitiveValueSerializer = configuration?.primitiveValueSerializer ?? LionWebVersions.v2023_1.builtinsFacade.propertyValueSerializer
+    const lionWebVersion = configuration?.lionWebVersion ?? LionWebVersions.v2023_1
+    const primitiveValueSerializer = configuration?.primitiveValueSerializer ?? lionWebVersion.builtinsFacade.propertyValueSerializer
     const reportIssue = configuration?.reportIssue ?? ((message) => { throw new Error(message) })
     return {
         serializeValue: (value: unknown, property: Property) => {
             const { type } = property
-            if (isUnresolvedReference(type)) {
-                reportIssue(`can't serialize value of property "${property.name}" (on classifier "${property.classifier.name}" in language "${property.classifier.language.name}") having unresolved type: ${value}`)
+            if (!isResolvedReference(type)) {
+                reportIssue(`can't serialize value of property "${property.name}" (on classifier "${property.classifier.name}" in language "${property.classifier.language.name}") having ${isReferenceToSet(type) ? `an unset type` : `unresolved type: ${value}${isUnresolvedReference(type) && type.resolveInfo !== undefined ? ` -> ${type.resolveInfo}` : ``}`}`)
                 return null
             }
             if (type instanceof PrimitiveType) {

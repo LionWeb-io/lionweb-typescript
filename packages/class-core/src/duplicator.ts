@@ -89,10 +89,10 @@ export const deepDuplicateWith = (duplicateNode: NodeDuplicator): Duplicator =>
             nodes.flatMap(allNodesFrom).map(visit)
         );
 
-        nodesToInstall.forEach(([copiedNode, feature, ids, originalReferenceTargets]) => {
+        nodesToInstall.forEach(([copiedNode, feature, targetIds, originalReferenceTargets]) => {
             if (feature instanceof Containment) {
                 const valueManager = copiedNode.getContainmentValueManager(feature);
-                ids.forEach((id) => {
+                (targetIds as LionWebId[]).forEach((id) => {
                     const nodeToInstall = duplicatedNodesByOriginalId[id];
                     valueManager.addDirectly(nodeToInstall);
                     nodeToInstall.attachTo(copiedNode, feature);
@@ -101,7 +101,7 @@ export const deepDuplicateWith = (duplicateNode: NodeDuplicator): Duplicator =>
             }
             if (feature instanceof Reference) {
                 const valueManager = copiedNode.getReferenceValueManager(feature);
-                ids.forEach((id, index) => {
+                (targetIds as LionWebId[]).forEach((id, index) => {
                     const nodeToInstall = duplicatedNodesByOriginalId[id] ?? originalReferenceTargets![index];
                     valueManager.addDirectly(nodeToInstall);
                 });
@@ -109,7 +109,7 @@ export const deepDuplicateWith = (duplicateNode: NodeDuplicator): Duplicator =>
             }
             if (feature === null) {
                 const valueManager = copiedNode.annotationsValueManager;
-                ids.forEach((id) => {
+                (targetIds as LionWebId[]).forEach((id) => {
                     const nodeToInstall = duplicatedNodesByOriginalId[id];
                     valueManager.addDirectly(nodeToInstall);
                 })

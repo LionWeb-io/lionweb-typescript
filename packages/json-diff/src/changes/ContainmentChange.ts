@@ -1,6 +1,6 @@
 import { LionWebId, LionWebJsonContainment, LionWebJsonMetaPointer, LionWebJsonNode } from "@lionweb/json"
 import { JsonContext } from "@lionweb/json-utils"
-import { Change, Missing } from "./Change.js"
+import { Change, FeatureMissing } from "./Change.js"
 
 export abstract class ContainmentChange extends Change {
     constructor(
@@ -9,7 +9,7 @@ export abstract class ContainmentChange extends Change {
         public containment: LionWebJsonMetaPointer,
         public afterContainment: LionWebJsonContainment | undefined,
         public childId: LionWebId,
-        public missing = Missing.NotMissing
+        public missing = FeatureMissing.NotMissing
     ) {
         super(context)
     }

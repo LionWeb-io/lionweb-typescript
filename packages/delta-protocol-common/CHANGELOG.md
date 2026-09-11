@@ -1,13 +1,35 @@
 # Changelog
 
+## 0.10.0
+
+* Add “`old*`” properties to `Move[AndReplace]{Child|Annotation}*Command`s, and propagate to delta&rarr;command translator.
+* Implement splittable messages.
+* Implement types for custom messages: `CustomMessageKind`, `Custom{Command|Event|Query{Response|Request}}`.
+  * Implement a `isValidCustomMessageKind` function to check validity of a custom message kind — usable as a type guard for `CustomMessageKind`.
+* Update to latest spec. of delta protocol, specifically:
+  * Make all move[+replace] child in same containment and move[+replace] annotation in same parent commands and corresponding events offset-based.
+  * Update translators for that.
+  * Change message kind of `NoOpEvent` &rarr; `"NoOpEvent"`.
+  * Uppercase prefix for message kinds of custom messages: `custom_` &rarr; `Custom_`.
+* Add `deletedDescendants` property to the `PartitionDeletedEvent` type (and propagate to downstream packages as well).
+* Add a `lionWebVersion` property – which defaults to v2023.1 – to the `DeltaToEventTranslatorConfiguration` configuration.
+* Add a `lionWebVersion` parameter – which defaults to v2023.1 – as *1st* parameter to the `deltaToCommandTranslator` function.
+* Fix a bug where single delta chunks where deserialized as if they should be partitions.
+* Perform **breaking** renamings, in both command and event message types, and the technical names in `messageKind` properties:
+  * `MoveChildFromOtherContainment` &rarr; `MoveChildFromContainmentInOtherParent`, `ChildMovedFromOtherContainment` &rarr; `ChildMovedFromContainmentInOtherParent`
+  * `MoveAndReplaceChildFromOtherContainment` &rarr; `MoveAndReplaceChildFromContainmentInOtherParent`, `ChildMovedAndReplacedFromOtherContainment` &rarr; `ChildMovedAndReplacedFromContainmentInOtherParent`
+  * `MoveChildInSameContainment` &rarr; `MoveChildInSameContainmentInSameParent`, `ChildMovedInSameContainment` &rarr; `ChildMovedInSameContainmentInSameParent`
+  * `MoveAndReplaceChildInSameContainment` &rarr; `MoveAndReplaceChildInSameContainmentInSameParent`, `ChildMovedAndReplacedInSameContainment` &rarr; `ChildMovedAndReplacedInSameContainmentInSameParent`
+
+
 ## 0.9.0
 
 * Update to latest spec. of delta protocol:
-    * Implement missing query types.
-    * Update `Reconnect*` types.
-    * Change/replace delta protocol version 2025.1 &rarr; 2026.1.
-    * Update references to delta protocol specification document.
-    * Annotate query types with paragraph in specification.
+  * Implement missing query types.
+  * Update `Reconnect*` types.
+  * Change/replace delta protocol version 2025.1 &rarr; 2026.1.
+  * Update references to delta protocol specification document.
+  * Annotate query types with paragraph in specification.
 
 
 ## 0.8.0

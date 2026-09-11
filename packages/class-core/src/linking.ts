@@ -16,7 +16,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { Link } from "@lionweb/core"
-import { LionWebId } from "@lionweb/json"
+import { LionWebId, LionWebJsonReferenceTarget } from "@lionweb/json"
 import { INodeBase } from "./index.js"
 
 
@@ -36,5 +36,5 @@ import { INodeBase } from "./index.js"
  * Note: **DON'T** export this types from the package,
  * as these are only used to align the deserializer and deep-duplicator.
  */
-export type NodesToInstall = [ container: INodeBase, feature: Link | null, nodesIds: LionWebId[], originalReferenceTargets?: INodeBase[] ];
+export type NodesToInstall = [ container: INodeBase, feature: Link | null, nodesIds: LionWebId[] | LionWebJsonReferenceTarget[], originalReferenceTargets?: INodeBase[] ];
 

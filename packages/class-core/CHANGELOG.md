@@ -1,5 +1,50 @@
 # Changelog
 
+## 0.10.0
+
+* Add support for offset-based move and move+replace actions:
+  * Add `move[AndReplace]OffsetBased[Directly]` functions to value managers for (multi-valued) containments and annotations.
+  * Add `move[AndReplace]AnnotationOffsetBased` methods to both `NodeBase` and `INodeBase` (so instances are assignment-compatible).
+  * Update `ChildMoved[AndReplaced]InSameContainmentDelta` and `AnnotationMoved[AndReplaced]Delta` classes, as well as associated appliers and inverters, to align with latest, offset-based versions of those deltas.
+* Fix (and rework) `asTreeTextWith` textualizer function to deal with the widened `SingleRef` type.
+* W.r.t. the deserializer:
+  * It now returns `UnresolvedReference` instances for unresolved references instead of `referenceToSet`.
+  * Change the type of the `Deserializer` type to `OnlyNodesOfLionWebJsonChunk` to radiate that deserializers produced by this package only require the `nodes` field, but not the `serializationFormatVersion` and `languages` fields.
+  * It no longer returns orphaned nodes – i.e. nodes that are contained by nodes that are neither in the chunk-to-deserialize nor provided through an ID mapping – as root nodes, and reports (about) those orphaned nodes.
+    (This made for confusing textualizations, a.o. problems.)
+  * Add an optional `lionWebVersion` property (of type `LionWebVersion`) to the `DeserializerConfiguration` and `PropertyValueSerializerConfiguration` types.
+* Deprecate the `serializeDelta` function in favor of the `deltaSerializer` function which takes a `LionWebVersion` version as its 1st (and so far only) argument, which defaults to the 2023.1 version.
+  As part of that: 
+  * Deprecate the `defaultPropertyValueSerializer` constant, which was only used in the `serializeDelta` function anyway.
+  * Replace usage of the deprecated `serializeDelta` function with `deltaSerializer()` throughout the codebase.
+* Rename (and document) the `RootsWithIdMapping` type to `DetailedDeserialization` and the `nodeBaseDeserializerWithIdMapping` function to `nodeBaseDetailedDeserializer`, keeping aliases for backward compatibility.
+  * Also add a `nodes` field to `DetailedDeserialization`, containing *all* deserialized nodes.
+* Change all occurrences of `LionWebJsonChunk` type in delta serialization types to `LionWebJsonDeltaChunk`.
+* Expose a `serializeAsDeltaChunk` function — and propagate its use to the delta protocol packages.
+  * Fix a bug in the value managers for multi-valued containments:
+    a call to `insertAtIndex` with a child that’s already in the managed multi-valued containment now results in a `ChildMovedInSameContainmentInSameParent` delta with a correct `indexOffset`
+    (instead of the effective `newIndex`).
+* Perform **breaking** renamings of types:
+  * `ChildMovedFromOtherContainmentDelta` &rarr; `ChildMovedFromContainmentInOtherParentDelta`
+  * `ChildMovedFromOtherContainmentSerializedDelta` &rarr; `ChildMovedFromContainmentInOtherParentSerializedDelta`
+  * `ChildMovedAndReplacedFromOtherContainmentDelta` &rarr; `ChildMovedAndReplacedFromContainmentInOtherParentDelta`
+  * `ChildMovedAndReplacedFromOtherContainmentSerializedDelta` &rarr; `ChildMovedAndReplacedFromContainmentInOtherParentSerializedDelta`
+  * `ChildMovedInSameContainmentDelta` &rarr; `ChildMovedInSameContainmentInSameParentDelta`
+  * `ChildMovedInSameContainmentSerializedDelta` &rarr; `ChildMovedInSameContainmentInSameParentSerializedDelta`
+  * `ChildMovedAndReplacedInSameContainmentDelta` &rarr; `ChildMovedAndReplacedInSameContainmentInSameParentDelta`
+  * `ChildMovedAndReplacedInSameContainmentSerializedDelta` &rarr; `ChildMovedAndReplacedInSameContainmentInSameParentSerializedDelta`
+
+
+## 0.9.2
+
+* Applying a composite delta no longer throws an exception with message "application of delta of class CompositeDelta not implemented", but works instead.
+
+
+## 0.9.1
+
+* Adding the same child twice using `SingleContainmentValueManager.addDirectly` – used exclusively and internally by the deserializer and duplicator – doesn’t throw an error (regardless of whether the serialization format specification allows this).
+
+
 ## 0.9.0
 
 * (Regenerate built-ins language implementation after changes to `class-core-generator`.)
@@ -32,6 +77,7 @@
 * The type `Reader<INodeBase, Node>` is used everywhere, so references from an `INodeBase` can now target any type of `Node`s, rather than only `INodeBase`s.
   * The `IdMapping` class now maintains a mapping &rarr; `Node`, rather than `INodeBase.
   * Add a `nodeBaseFromId` method to this class to specifically return `INodeBase`s.
+* The `createNode` method of `Forest` prevents deltas from being emitted as long as they pertain to partitions that haven’t been registered in the forest yet.
 
 
 ## 0.7.2

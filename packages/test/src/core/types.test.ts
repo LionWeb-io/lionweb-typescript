@@ -1,4 +1,4 @@
-import { LanguageFactory } from "@lionweb/core"
+import { ConceptModifier, LanguageFactory } from "@lionweb/core"
 import { concatenator, lastOf } from "@lionweb/ts-utils"
 
 import { equal } from "../test-utils/assertions.js"
@@ -8,7 +8,7 @@ describe("M3 types", () => {
         const factory = new LanguageFactory("TestLanguage", "0", concatenator("-"), lastOf)
         const { language } = factory
 
-        const concept = factory.concept("Concept", false)
+        const concept = factory.concept("Concept", ConceptModifier.concrete)
         equal(language.entities.length, 1)
         language.havingEntities(concept)
         equal(language.entities.length, 1)

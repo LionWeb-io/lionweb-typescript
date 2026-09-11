@@ -20,6 +20,7 @@ import {
     consoleProblemReporter,
     Containment,
     Enumeration,
+    LionWebVersion,
     LionWebVersions,
     MemoisingSymbolTable,
     PrimitiveType,
@@ -27,9 +28,16 @@ import {
     Property,
     PropertyValueDeserializer,
     Reference,
-    referenceToSet
+    UnresolvedReference
 } from "@lionweb/core"
-import { LionWebId, LionWebJsonChunk, LionWebJsonNode } from "@lionweb/json"
+import {
+    LionWebId,
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+    LionWebJsonChunk,
+    LionWebJsonNode,
+    LionWebJsonReferenceTarget,
+    OnlyNodesOfLionWebJsonChunk
+} from "@lionweb/json"
 import { byIdMap, keepDefineds } from "@lionweb/ts-utils"
 
 import { DeltaReceiver, FactoryConfiguration, IdMapping, ILanguageBase, INodeBase } from "./index.js"
@@ -41,18 +49,49 @@ import { NodesToInstall } from "./linking.js"
  * A type for deserializer functions that are parametrized in their return type.
  */
 export type Deserializer<T> = (
-    /** The {@link LionWebJsonChunk serialization chunk} to deserialize. */
-    serializationChunk: LionWebJsonChunk,
-    /** The {@link IdMapping ID mapping} of existing nodes that the given `serializationChunk` may link to. */
+    /**
+     * The {@link LionWebJsonChunk serialization chunk} to deserialize.
+     * **Note** that we only need the nodes for deserialization, hence the use of the {@link OnlyNodesOfLionWebJsonChunk}.
+     */
+    serializationChunk: OnlyNodesOfLionWebJsonChunk,
+    /**
+     * The {@link IdMapping ID mapping} of existing nodes that the given `serializationChunk` may link to.
+     */
     idMapping?: IdMapping
 ) => T;
 
 
 /**
- * A quasi-tuple of the roots (of type {@link INodeBase}) of a model,
+ * A quasi-tuple of the deserialized nodes and roots (both of type {@link INodeBase}) of a model,
  * and its {@link IdMapping} instance.
  */
-export type RootsWithIdMapping = { roots: INodeBase[], idMapping: IdMapping };
+export type DetailedDeserialization = {
+
+    /**
+     * All nodes deserialized by a {@link Deserializer}.
+     */
+    nodes: INodeBase[],
+
+    /**
+     * All root nodes among the deserialized {@link nodes}.
+     * A node is a root node if its serialization did not declare a parent.
+     * *Note* that the parent of a root node might not be actually resolved during this deserialization.
+     */
+    roots: INodeBase[],
+
+    /**
+     * A {@link IdMapping} corresponding to {@link nodes}.
+     */
+    idMapping: IdMapping
+
+};
+
+/**
+ * Legacy alias for {@link DetailedDeserialization}, kept for backward compatibility, and to be removed later.
+ *
+ * @deprecated Use {@link DetailedDeserialization} instead.
+ */
+export type RootsWithIdMapping = DetailedDeserialization;
 
 
 /**
@@ -60,7 +99,8 @@ export type RootsWithIdMapping = { roots: INodeBase[], idMapping: IdMapping };
  * (and partially optional).
  */
 export type DeserializerConfiguration = {
-    // FIXME  parametrize (optionally) in LionWebVersion
+    /** Default: `LionWebVersions.v2023_1`. */
+    lionWebVersion?: LionWebVersion
     /** Default: `lioncoreBuiltinsFacade.propertyValueDeserializer`. */
     propertyValueDeserializer?: PropertyValueDeserializer,
     /** Default: {@link consoleProblemReporter}. */
@@ -71,20 +111,21 @@ export type DeserializerConfiguration = {
 
 
 /**
- * @return a {@link Deserializer} function for the given languages (given as {@link ILanguageBase}s) that returns a {@link RootsWithIdMapping}.
+ * @return a {@link Deserializer} function for the given languages (given as {@link ILanguageBase}s) that returns a {@link DetailedDeserialization}.
  * Deprecated:
  * @param languageBases the {@link ILanguageBase}s for (at least) all the languages used in the {@link LionWebJsonChunk} to deserialize, minus LionCore M3 and built-ins.
  * @param receiveDelta an optional {@link DeltaReceiver} that will be injected in all {@link INodeBase nodes} created.
  */
-function nodeBaseDeserializerWithIdMapping(languageBases: ILanguageBase[], receiveDelta?: DeltaReceiver): Deserializer<RootsWithIdMapping>;
+function nodeBaseDetailedDeserializer(languageBases: ILanguageBase[], receiveDelta?: DeltaReceiver): Deserializer<DetailedDeserialization>;
 /**
  * @param configuration a {@link DeserializerConfiguration configuration object} for the deserializer.
  */
-function nodeBaseDeserializerWithIdMapping(configuration: FactoryConfiguration & DeserializerConfiguration): Deserializer<RootsWithIdMapping>;
-function nodeBaseDeserializerWithIdMapping(languageBasesOrConfiguration: ILanguageBase[] | (FactoryConfiguration & DeserializerConfiguration), mayBeReceiveDelta?: DeltaReceiver): Deserializer<RootsWithIdMapping> {
+function nodeBaseDetailedDeserializer(configuration: FactoryConfiguration & DeserializerConfiguration): Deserializer<DetailedDeserialization>;
+function nodeBaseDetailedDeserializer(languageBasesOrConfiguration: ILanguageBase[] | (FactoryConfiguration & DeserializerConfiguration), mayBeReceiveDelta?: DeltaReceiver): Deserializer<DetailedDeserialization> {
+    const lionWebVersion = (Array.isArray(languageBasesOrConfiguration) ? undefined : languageBasesOrConfiguration.lionWebVersion) ?? LionWebVersions.v2023_1
     const [languageBases, receiveDelta, propertyValueDeserializer, problemReporter] = Array.isArray(languageBasesOrConfiguration)
-        ? [languageBasesOrConfiguration, mayBeReceiveDelta, LionWebVersions.v2023_1.builtinsFacade.propertyValueDeserializer, consoleProblemReporter]
-        : [languageBasesOrConfiguration.languageBases, languageBasesOrConfiguration.receiveDelta, languageBasesOrConfiguration.propertyValueDeserializer ?? LionWebVersions.v2023_1.builtinsFacade.propertyValueDeserializer, languageBasesOrConfiguration.problemReporter ?? languageBasesOrConfiguration.problemsHandler ?? consoleProblemReporter];
+        ? [languageBasesOrConfiguration, mayBeReceiveDelta, lionWebVersion.builtinsFacade.propertyValueDeserializer, consoleProblemReporter]
+        : [languageBasesOrConfiguration.languageBases, languageBasesOrConfiguration.receiveDelta, languageBasesOrConfiguration.propertyValueDeserializer ?? lionWebVersion.builtinsFacade.propertyValueDeserializer, languageBasesOrConfiguration.problemReporter ?? languageBasesOrConfiguration.problemsHandler ?? consoleProblemReporter];
 
     const symbolTable = new MemoisingSymbolTable(languageBases.map(({language}) => language));
     const languageBaseFor = combinedLanguageBaseLookupFor(languageBases);
@@ -92,7 +133,7 @@ function nodeBaseDeserializerWithIdMapping(languageBasesOrConfiguration: ILangua
     return (
         serializationChunk,
         idMapping
-    ): RootsWithIdMapping => {
+    ): DetailedDeserialization => {
 
         const nodesToInstall: NodesToInstall[] = [];
 
@@ -149,9 +190,6 @@ function nodeBaseDeserializerWithIdMapping(languageBasesOrConfiguration: ILangua
                             node,
                             feature,
                             targets
-                                .map(({reference}) => reference)
-                                .filter((reference) => reference !== null)
-                                    // TODO  for LionWeb version 2024.1 and beyond, if reference === null, and resolveInfo has the built-in prefix, resolve to built-ins
                         ]
                     );
                 } else {
@@ -177,13 +215,13 @@ function nodeBaseDeserializerWithIdMapping(languageBasesOrConfiguration: ILangua
         const lookupNodeById = (id: LionWebId): (INodeBase | undefined) =>
             nodesById[id] ?? idMapping?.tryFromId(id);
 
-        nodesToInstall.forEach(([node, feature, ids]) => {
+        nodesToInstall.forEach(([node, feature, targets]) => {
             if (feature instanceof Containment) {
                 const valueManager = node.getContainmentValueManager(feature);
-                ids.forEach((id) => {
-                    const nodeToInstall = lookupNodeById(id);
+                (targets as LionWebId[]).forEach((childId) => {
+                    const nodeToInstall = lookupNodeById(childId);
                     if (nodeToInstall === undefined) {
-                        problemReporter.reportProblem(`couldn't resolve the child with id=${id} of the "${feature.name}" containment feature on the node with id=${node.id}`);
+                        problemReporter.reportProblem(`couldn't resolve the child with id=${childId} of the "${feature.name}" containment feature on the node with id=${node.id}`);
                     } else {
                         valueManager.addDirectly(nodeToInstall);
                         nodeToInstall.attachTo(node, feature);
@@ -193,11 +231,12 @@ function nodeBaseDeserializerWithIdMapping(languageBasesOrConfiguration: ILangua
             }
             if (feature instanceof Reference) {
                 const valueManager = node.getReferenceValueManager(feature);
-                ids.forEach((id) => {
-                    const nodeToInstall = lookupNodeById(id);
+                (targets as LionWebJsonReferenceTarget[]).forEach(({reference: targetId, resolveInfo}) => {
+                    const nodeToInstall = targetId === null ? undefined : lookupNodeById(targetId);
+                    // TODO  for LionWeb version 2024.1 and beyond, if reference === null, and resolveInfo has the built-in prefix, resolve to built-ins
                     if (nodeToInstall === undefined) {
-                        problemReporter.reportProblem(`couldn't resolve the target with id=${id} of the "${feature.name}" reference feature on the node with id=${node.id}`);
-                        valueManager.addDirectly(referenceToSet());
+                        problemReporter.reportProblem(`couldn't resolve the target with id=${targetId} of the "${feature.name}" reference feature on the node with id=${node.id}`);
+                        valueManager.addDirectly(new UnresolvedReference(targetId ?? undefined, resolveInfo ?? undefined));
                     } else {
                         valueManager.addDirectly(nodeToInstall);
                     }
@@ -206,10 +245,10 @@ function nodeBaseDeserializerWithIdMapping(languageBasesOrConfiguration: ILangua
             }
             if (feature === null) {
                 const valueManager = node.annotationsValueManager;
-                ids.forEach((id) => {
-                    const nodeToInstall = lookupNodeById(id);
+                (targets as LionWebId[]).forEach((annoId) => {
+                    const nodeToInstall = lookupNodeById(annoId);
                     if (nodeToInstall === undefined) {
-                        problemReporter.reportProblem(`couldn't resolve the annotation with id=${id} on the node with id=${node.id}`);
+                        problemReporter.reportProblem(`couldn't resolve the annotation with id=${annoId} on the node with id=${node.id}`);
                     } else {
                         valueManager.addDirectly(nodeToInstall);
                         nodeToInstall.attachTo(node, feature);
@@ -219,15 +258,31 @@ function nodeBaseDeserializerWithIdMapping(languageBasesOrConfiguration: ILangua
             }
         });
 
+        const orphanedNodes = serializationChunk
+            .nodes
+            .filter(({id, parent}) => nodesById[id] !== undefined && parent !== null && lookupNodeById(parent) === undefined);
+        if (orphanedNodes.length > 0) {
+            const multiple = orphanedNodes.length > 1;
+            problemReporter.reportProblem(`${multiple ? `${orphanedNodes.length} ` : ``}orphaned node${multiple ? "s" : ""} encountered, with ID${multiple ? "s" : ""}: ${orphanedNodes.map(({id}) => id).join(", ")}`);
+        }
+
         return {
-            roots: Object.values(nodesById)
-                .filter(({parent}) => parent === undefined),
+            nodes: Object.values(nodesById),
+            roots: serializationChunk
+                .nodes
+                .filter(({ parent }) => parent === null)
+                .map(({id}) => nodesById[id]),
             idMapping: new IdMapping(nodesById)
         };
 
     };
 }
 
+
+/**
+ * Legacy alias for {@link nodeBaseDetailedDeserializer}, kept for backward compatibility, and to be deprecated and removed later.
+ */
+const nodeBaseDeserializerWithIdMapping = nodeBaseDetailedDeserializer;
 
 /**
  * @return a {@link Deserializer} function for the languages (given as {@link ILanguageBase}s) that returns the roots (of type {@link INodeBase}) of the deserialized model.
@@ -246,10 +301,10 @@ function nodeBaseDeserializer(languageBasesOrConfiguration: ILanguageBase[] | (F
         idMapping
     ): INodeBase[] =>
         Array.isArray(languageBasesOrConfiguration)
-            ? nodeBaseDeserializerWithIdMapping(languageBasesOrConfiguration, receiveDelta)(serializationChunk, idMapping).roots
-            : nodeBaseDeserializerWithIdMapping(languageBasesOrConfiguration)(serializationChunk, idMapping).roots
+            ? nodeBaseDetailedDeserializer(languageBasesOrConfiguration, receiveDelta)(serializationChunk, idMapping).roots
+            : nodeBaseDetailedDeserializer(languageBasesOrConfiguration)(serializationChunk, idMapping).roots;
 }
 
 
-export { nodeBaseDeserializerWithIdMapping, nodeBaseDeserializer };
+export { nodeBaseDeserializer, nodeBaseDetailedDeserializer, nodeBaseDeserializerWithIdMapping };
 

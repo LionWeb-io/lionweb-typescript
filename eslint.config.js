@@ -45,10 +45,12 @@ module.exports = defineConfig([{
             "ignoreRestSiblings": true
         }],
 
-        "@typescript-eslint/ban-ts-ignore": "off",
+        "@typescript-eslint/ban-ts-ignore": ["off"],
         "@typescript-eslint/prefer-spread": ["off"],
 
-        "@typescript-eslint/no-empty-object-type": "off",
-        "@typescript-eslint/no-unused-expressions": "off"
+        "@typescript-eslint/no-empty-object-type": ["off"],
+        "@typescript-eslint/no-unused-expressions": ["off"],
+
+        "no-fallthrough": ["error"]
     },
 }]);

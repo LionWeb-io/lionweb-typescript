@@ -1,7 +1,7 @@
 import { LionWebJsonMetaPointer, LionWebJsonReferenceTarget } from "./types.js"
 
 /**
- * Tests whether all the properties of the two meta pointers are identical.
+ * Tests whether all the properties of the two meta-pointers are identical.
  * @param p1
  * @param p2
  */

@@ -17,7 +17,8 @@
 
 export { ioLionWebMpsSpecificAnnotationsFrom, repairIoLionWebMpsSpecificAnnotations } from "./annotations.js"
 export { ioLionWebMpsSpecificClassifiers, ioLionWebMpsSpecificLanguage } from "./definition.js"
-export { deserializeLanguagesWithIoLionWebMpsSpecific } from "./deserializer.js"
+export { deserializeLanguagesWithIoLionWebMpsSpecific, deserializeLanguagesWithIoLionWebMpsSpecificFrom } from "./deserializer.js"
+export type { IoLionWebMpsSpecificDeserializationData } from "./deserializer.js"
 export { ConceptDescription, Deprecated, IoLionWebMpsSpecificAnnotation, KeyedDescription, ShortDescription, VirtualPackage } from "./implementation.js"
 export { textualizationOfAnnotationsIn } from "./textualizer.js"
 

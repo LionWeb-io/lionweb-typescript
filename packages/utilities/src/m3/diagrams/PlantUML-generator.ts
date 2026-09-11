@@ -6,7 +6,7 @@ import {
     Feature,
     Interface,
     isBuiltinNodeConcept,
-    isRef,
+    isResolvedReference,
     isUnresolvedReference,
     Language,
     LanguageEntity,
@@ -58,16 +58,17 @@ const generateForEnumeration = ({ name, literals }: Enumeration) => [
 const generateForAnnotation = ({ name, features, extends: extends_, implements: implements_, annotates }: Annotation) => {
     const fragments: string[] = []
     fragments.push(`annotation`, name)
-    if (isRef(extends_) && !isBuiltinNodeConcept(extends_)) {
+    if (isResolvedReference(extends_) && !isBuiltinNodeConcept(extends_)) {
         fragments.push(`extends`, extends_.name)
     }
     if (implements_.length > 0) {
-        fragments.push(`implements`, implements_.filter(isRef).map(nameOf).sort().join(", "))
+        fragments.push(`implements`, implements_.filter(isResolvedReference).map(nameOf).sort().join(", "))
     }
     const nonRelationalFeatures_ = nonRelationalFeatures(features)
+    const annotatesLine = isResolvedReference(annotates) ? `${name} ..# ${annotates.name} : <i>annotates</i>` : []
     return nonRelationalFeatures_.length === 0
-        ? [`${fragments.join(" ")}`, isRef(annotates) ? `${name} ..# ${annotates.name} : <i>annotates</i>` : [], ``]
-        : [`${fragments.join(" ")} {`, indented(nonRelationalFeatures_.map(generateForNonRelationalFeature)), `}`, ``]
+        ? [`${fragments.join(" ")}`, annotatesLine, ``]
+        : [`${fragments.join(" ")} {`, indented(nonRelationalFeatures_.map(generateForNonRelationalFeature)), `}`, annotatesLine, ``]
 }
 
 const generateForConcept = ({ name, features, abstract: abstract_, extends: extends_, implements: implements_, partition }: Concept) => {
@@ -79,11 +80,11 @@ const generateForConcept = ({ name, features, abstract: abstract_, extends: exte
     if (partition) {
         fragments.push(`<<partition>>`)
     }
-    if (isRef(extends_) && !isBuiltinNodeConcept(extends_)) {
+    if (isResolvedReference(extends_) && !isBuiltinNodeConcept(extends_)) {
         fragments.push(`extends`, extends_.name)
     }
     if (implements_.length > 0) {
-        fragments.push(`implements`, implements_.filter(isRef).map(nameOf).sort().join(", "))
+        fragments.push(`implements`, implements_.filter(isResolvedReference).map(nameOf).sort().join(", "))
     }
     const nonRelationalFeatures_ = nonRelationalFeatures(features)
     return nonRelationalFeatures_.length === 0
@@ -94,7 +95,7 @@ const generateForConcept = ({ name, features, abstract: abstract_, extends: exte
 const generateForInterface = ({ name, extends: extends_, features }: Interface) => {
     const fragments: string[] = [`interface`, name]
     if (extends_.length > 0) {
-        fragments.push(`extends`, extends_.filter(isRef).map(superInterface => superInterface.name).join(", "))
+        fragments.push(`extends`, extends_.filter(isResolvedReference).map(superInterface => superInterface.name).join(", "))
     }
     const nonRelationalFeatures_ = nonRelationalFeatures(features)
     return nonRelationalFeatures_.length === 0
@@ -140,7 +141,7 @@ const generateForRelationsOf = (entity: LanguageEntity) => {
 
 const generateForRelation = ({ name: leftName }: LanguageEntity, relation: Link) => {
     const { name: relationName, type, optional, multiple } = relation
-    const rightName = isRef(type) ? type.name : isUnresolvedReference(type) ? `<unresolved>` : `<null>`
+    const rightName = isResolvedReference(type) ? type.name : isUnresolvedReference(type) ? `<unresolved>` : `<null>`
     const isContainment = relation instanceof Containment
     const leftMultiplicity = isContainment ? `1` : `*`
     const rightMultiplicity = multiple ? "*" : optional ? "0..1" : "1"

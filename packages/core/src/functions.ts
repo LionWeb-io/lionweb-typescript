@@ -1,7 +1,7 @@
-import { LionWebId, LionWebJsonMetaPointer } from "@lionweb/json"
+import { LionWebId, LionWebJsonMetaPointer, LionWebJsonUsedLanguage } from "@lionweb/json"
 import { flatMapNonCyclingFollowing, trivialFlatMapper } from "@lionweb/ts-utils"
 import { Node } from "./types.js"
-import { Feature } from "./m3/index.js"
+import { Classifier, Feature, Language } from "./m3/index.js"
 
 
 /**
@@ -14,11 +14,10 @@ export const containmentChain = (node: Node): Node[] => {
 
 
 /**
- * Maps an array of {@link Node AST nodes} or `null`s to their IDs.
- * These `null`s might be the result of unresolved children.
+ * Maps an array of {@link Node AST nodes} to their IDs.
  */
-export const asIds = (nodeOrNulls: (Node | null)[]): (LionWebId | null)[] =>
-    nodeOrNulls.map((nodeOrNull) => nodeOrNull === null ? null : nodeOrNull.id)
+export const asIds = (nodes: Node[]): LionWebId[] =>
+    nodes.map(idOf)
 
 
 /**
@@ -31,7 +30,7 @@ export const idOf = <T extends Node>({id}: T): LionWebId =>
 /**
  * @return the {@link LionWebJsonMetaPointer} for the given {@link Feature}.
  */
-export const metaPointerFor = (feature: Feature): LionWebJsonMetaPointer => {
+export const metaPointerForFeature = (feature: Feature): LionWebJsonMetaPointer => {
     const { language } = feature.classifier
     return {
         language: language.key,
@@ -39,4 +38,24 @@ export const metaPointerFor = (feature: Feature): LionWebJsonMetaPointer => {
         key: feature.key
     }
 }
+
+/**
+ * Legacy version of {@link metaPointerForFeature} that wasn’t name-distinguished from other `metaPointerFor{Classifier|Feature|Language}` yet.
+ *
+ * @deprecated Use {@link metaPointerForFeature} instead.
+ */
+export const metaPointerFor = metaPointerForFeature
+
+/**
+ * @return the {@link LionWebJsonMetaPointer} for the given {@link Classifier}.
+ */
+export const metaPointerForClassifier = (classifier: Classifier): LionWebJsonMetaPointer =>
+    classifier.metaPointer()
+
+/**
+ * @return the {@link LionWebJsonUsedLanguage meta-pointer} for the given {@link Language}.
+ */
+export const metaPointerForLanguage = ({ key, version }: Language): LionWebJsonUsedLanguage => ({
+        key, version
+    })
 

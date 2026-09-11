@@ -25,8 +25,9 @@ import {
     isBuiltinNodeConcept,
     isContainment,
     isProperty,
-    isRef,
     isReference,
+    isReferenceToSet,
+    isResolvedReference,
     isUnresolvedReference,
     LanguageEntity,
     Link,
@@ -130,6 +131,12 @@ export const typeForLanguageEntity = (imports: Imports) => {
                 when(link instanceof Containment)([
                     `replace${nameWithFirstUpper}AtIndex(movedChild: ${tsTypeForClassifier_}, newIndex: number) {`,
                     indent(`this._${name}.replaceAtIndex(movedChild, newIndex);`),
+                    `}`,
+                    `move${nameWithFirstUpper}OffsetBased(oldIndex: number, indexOffset: number) {`,
+                    indent(`this._${name}.moveOffsetBased(oldIndex, indexOffset);`),
+                    `}`,
+                    `moveAndReplace${nameWithFirstUpper}OffsetBased(oldIndex: number, indexOffset: number) {`,
+                    indent(`this._${name}.moveAndReplaceOffsetBased(oldIndex, indexOffset);`),
                     `}`
                 ])
             ])
@@ -181,7 +188,7 @@ export const typeForLanguageEntity = (imports: Imports) => {
             if (isUnresolvedReference(superConcept)) {
                 return `/* unresolved reference to super concept */`
             }
-            if (superConcept === undefined || isBuiltinNodeConcept(superConcept)) {
+            if (superConcept === undefined || isReferenceToSet(superConcept) || isBuiltinNodeConcept(superConcept)) {
                 return imports.generic("NodeBase")
             }
             return imports.entity(superConcept)
@@ -239,7 +246,7 @@ export const typeForLanguageEntity = (imports: Imports) => {
 
     const interfaceFor = (interface_: Interface) =>
         [
-            `export interface ${interface_.name} extends ${interface_.extends.length > 0 ? interface_.extends.filter(isRef).map((superInterface) => imports.entity(superInterface)).join(", ") : imports.generic("INodeBase")} {`,
+            `export interface ${interface_.name} extends ${interface_.extends.length > 0 ? interface_.extends.filter(isResolvedReference).map((superInterface) => imports.entity(superInterface)).join(", ") : imports.generic("INodeBase")} {`,
             indent(
                 interface_.features.map((feature) => `${feature.name}: ${tsFieldTypeForFeature(feature, imports)};`)
             ),
@@ -248,15 +255,15 @@ export const typeForLanguageEntity = (imports: Imports) => {
 
 
     const typeForPrimitiveType = (primitiveType: PrimitiveType) =>
-        `export type ${primitiveType.name} = ${tsTypeForPrimitiveType(primitiveType)};`
+        `export type ${primitiveType.name} = ${tsTypeForPrimitiveType(primitiveType, imports.lioncoreBuiltinsFacade)};`
 
     const jsDocFor = (entity: M3Concept) => {
         const annotations = ioLionWebMpsSpecificAnnotationsFrom(entity)
-        const conceptDescription = annotations.find((annotation) => annotation instanceof ConceptDescription) as ConceptDescription
-        const deprecated = annotations.find((annotation) => annotation instanceof Deprecated) as Deprecated
-        const keyedDescription = annotations.find((annotation) => annotation instanceof KeyedDescription) as KeyedDescription
-        const shortDescription = annotations.find((annotation) => annotation instanceof ShortDescription) as ShortDescription
-        const virtualPackage = annotations.find((annotation) => annotation instanceof VirtualPackage) as VirtualPackage
+        const conceptDescription = annotations.find((annotation) => annotation instanceof ConceptDescription)
+        const deprecated = annotations.find((annotation) => annotation instanceof Deprecated)
+        const keyedDescription = annotations.find((annotation) => annotation instanceof KeyedDescription)
+        const shortDescription = annotations.find((annotation) => annotation instanceof ShortDescription)
+        const virtualPackage = annotations.find((annotation) => annotation instanceof VirtualPackage)
         const requiresJsDoc =
                !!(conceptDescription?.conceptShortDescription)
             || !!(conceptDescription?.helpUrl)
@@ -271,25 +278,25 @@ export const typeForLanguageEntity = (imports: Imports) => {
         return when(requiresJsDoc)([
             `/**`,
             when(!!(conceptDescription?.conceptShortDescription))(
-                () => ` * ${conceptDescription.conceptShortDescription}`
+                () => ` * ${conceptDescription!.conceptShortDescription}`
             ),
             when(!!(conceptDescription?.helpUrl))(
-                () => ` * {@see} ${conceptDescription.helpUrl}`
+                () => ` * {@see} ${conceptDescription!.helpUrl}`
             ),
             when(!!(shortDescription?.description))(
-                () => ` * ${shortDescription.description}`
+                () => ` * ${shortDescription!.description}`
             ),
             when(keyedDescription !== undefined)(
                 () => [
-                    when(keyedDescription.documentation !== undefined)(` * ${keyedDescription.documentation}`),
-                    keyedDescription.seeAlso.map((seeAlso) => ` * {@see} {@link ${linkName(seeAlso)}}`)
+                    when(keyedDescription!.documentation !== undefined)(` * ${keyedDescription!.documentation}`),
+                    keyedDescription!.seeAlso.map((seeAlso) => ` * {@see} {@link ${linkName(seeAlso)}}`)
                 ]
             ),
             when(deprecated !== undefined)(
-                () => ` * @deprecated ${deprecated.comment ?? ""}${deprecated.build === undefined ? "" : ` (build: ${deprecated.build})`}`
+                () => ` * @deprecated ${deprecated!.comment ?? ""}${deprecated!.build === undefined ? "" : ` (build: ${deprecated!.build})`}`
             ),
             when(!!(virtualPackage?.name))(
-                () => `(virtual package: ${virtualPackage.name})`
+                () => `(virtual package: ${virtualPackage!.name})`
             ),
             ` */`
         ])

@@ -16,6 +16,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 export * from "./command-types.js"
+export * from "./common.js"
 export type * from "./common.js"
 export * from "./event-types.js"
 export * from "./query-types.js"

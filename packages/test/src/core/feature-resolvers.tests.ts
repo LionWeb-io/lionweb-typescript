@@ -15,7 +15,7 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { featureResolversFor, metaPointerFor } from "@lionweb/core"
+import { featureResolversFor, metaPointerForFeature } from "@lionweb/core"
 
 import { equal, throws } from "../test-utils/assertions.js"
 import { TestLanguageBase } from "@lionweb/class-core-test-language"
@@ -31,17 +31,17 @@ describe("feature resolvers", () => {
         const { resolvedPropertyFrom, resolvedContainmentFrom, resolvedReferenceFrom } = featureResolvers()
 
         equal(
-            resolvedPropertyFrom(metaPointerFor(base.DataTypeTestConcept_stringValue_1), base.DataTypeTestConcept),
+            resolvedPropertyFrom(metaPointerForFeature(base.DataTypeTestConcept_stringValue_1), base.DataTypeTestConcept),
             base.DataTypeTestConcept_stringValue_1
         )
 
         equal(
-            resolvedContainmentFrom(metaPointerFor(base.LinkTestConcept_containment_1), base.LinkTestConcept),
+            resolvedContainmentFrom(metaPointerForFeature(base.LinkTestConcept_containment_1), base.LinkTestConcept),
             base.LinkTestConcept_containment_1
         )
 
         equal(
-            resolvedReferenceFrom(metaPointerFor(base.LinkTestConcept_reference_1), base.LinkTestConcept),
+            resolvedReferenceFrom(metaPointerForFeature(base.LinkTestConcept_reference_1), base.LinkTestConcept),
             base.LinkTestConcept_reference_1
         )
     })
@@ -51,21 +51,21 @@ describe("feature resolvers", () => {
 
         throws(
             () => {
-                resolvedPropertyFrom(metaPointerFor(base.LinkTestConcept_containment_1), base.LinkTestConcept)
+                resolvedPropertyFrom(metaPointerForFeature(base.LinkTestConcept_containment_1), base.LinkTestConcept)
             },
             `feature with meta-pointer {"language":"TestLanguage","version":"0","key":"LinkTestConcept-containment_1"} on classifier with meta-pointer {"language":"TestLanguage","version":"0","key":"LinkTestConcept"} is not a Property but a Containment`
         )
 
         throws(
             () => {
-                resolvedContainmentFrom(metaPointerFor(base.LinkTestConcept_reference_1), base.LinkTestConcept)
+                resolvedContainmentFrom(metaPointerForFeature(base.LinkTestConcept_reference_1), base.LinkTestConcept)
             },
             `feature with meta-pointer {"language":"TestLanguage","version":"0","key":"LinkTestConcept-reference_1"} on classifier with meta-pointer {"language":"TestLanguage","version":"0","key":"LinkTestConcept"} is not a Containment but a Reference`
         )
 
         throws(
             () => {
-                resolvedReferenceFrom(metaPointerFor(base.DataTypeTestConcept_stringValue_1), base.DataTypeTestConcept)
+                resolvedReferenceFrom(metaPointerForFeature(base.DataTypeTestConcept_stringValue_1), base.DataTypeTestConcept)
             },
             `feature with meta-pointer {"language":"TestLanguage","version":"0","key":"DataTypeTestConcept-stringValue_1"} on classifier with meta-pointer {"language":"TestLanguage","version":"0","key":"DataTypeTestConcept"} is not a Reference but a Property`
         )
@@ -76,21 +76,21 @@ describe("feature resolvers", () => {
 
         throws(
             () => {
-                resolvedPropertyFrom(metaPointerFor(base.DataTypeTestConcept_stringValue_1), base.TestAnnotation)
+                resolvedPropertyFrom(metaPointerForFeature(base.DataTypeTestConcept_stringValue_1), base.TestAnnotation)
             },
             `couldn't resolve feature with meta-pointer {"language":"TestLanguage","version":"0","key":"DataTypeTestConcept-stringValue_1"} on classifier with meta-pointer {"language":"TestLanguage","version":"0","key":"TestAnnotation"}`
         )
 
         throws(
             () => {
-                resolvedContainmentFrom(metaPointerFor(base.LinkTestConcept_containment_1), base.TestAnnotation)
+                resolvedContainmentFrom(metaPointerForFeature(base.LinkTestConcept_containment_1), base.TestAnnotation)
             },
             `couldn't resolve feature with meta-pointer {"language":"TestLanguage","version":"0","key":"LinkTestConcept-containment_1"} on classifier with meta-pointer {"language":"TestLanguage","version":"0","key":"TestAnnotation"}`
         )
 
         throws(
             () => {
-                resolvedReferenceFrom(metaPointerFor(base.LinkTestConcept_reference_1), base.TestAnnotation)
+                resolvedReferenceFrom(metaPointerForFeature(base.LinkTestConcept_reference_1), base.TestAnnotation)
             },
             `couldn't resolve feature with meta-pointer {"language":"TestLanguage","version":"0","key":"LinkTestConcept-reference_1"} on classifier with meta-pointer {"language":"TestLanguage","version":"0","key":"TestAnnotation"}`
         )

@@ -21,6 +21,7 @@ import {
     defineDelta,
     feature,
     index,
+    indexOffset,
     node,
     parentage,
     primitiveValue,
@@ -116,7 +117,7 @@ export const defineDeltas = () => {
 
     /* ~ § 5.8.5.4 */
     defineDelta(
-        "ChildMovedFromOtherContainment",
+        "ChildMovedFromContainmentInOtherParent",
         [
             ...parentage("oldParent", "oldContainment", FeatureKinds.containment),
             index("oldIndex"),
@@ -143,18 +144,18 @@ export const defineDeltas = () => {
 
     /* ~ § 5.8.5.6 */
     defineDelta(
-        "ChildMovedInSameContainment",
+        "ChildMovedInSameContainmentInSameParent",
         [
             ...parentage("parent", "containment", FeatureKinds.containment),
             index("oldIndex"),
-            index("newIndex"),
+            indexOffset(),
             node("movedChild")
         ]
     )
 
     /* ~ § 5.8.5.7 */
     defineDelta(
-        "ChildMovedAndReplacedFromOtherContainment",
+        "ChildMovedAndReplacedFromContainmentInOtherParent",
         [
             ...parentage("newParent", "newContainment", FeatureKinds.containment),
             index("newIndex"),
@@ -183,11 +184,11 @@ export const defineDeltas = () => {
 
     /* ~ § 5.8.5.9 */
     defineDelta(
-        "ChildMovedAndReplacedInSameContainment",
+        "ChildMovedAndReplacedInSameContainmentInSameParent",
         [
             ...parentage("parent", "containment", FeatureKinds.containment),
             index("oldIndex"),
-            index("newIndex"),
+            indexOffset(),
             node("movedChild"),
             node("replacedChild", serializeSubTreeAs("replacedChildAsNodes"))
         ]
@@ -242,7 +243,7 @@ export const defineDeltas = () => {
         [
             node("parent"),
             index("oldIndex"),
-            index("newIndex"),
+            indexOffset(),
             node("movedAnnotation")
         ]
     )
@@ -266,7 +267,7 @@ export const defineDeltas = () => {
         [
             node("parent"),
             index("oldIndex"),
-            index("newIndex"),
+            indexOffset(),
             node("replacedAnnotation", serializeSubTreeAs("replacedAnnotationNodes")),
             node("movedAnnotation")
         ]

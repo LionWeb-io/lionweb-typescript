@@ -8,7 +8,7 @@ describe("annotation remover", () => {
     it("removes annotation instances and references to it", () => {
         /*
         const annoLanguage = new Language("annoLanguage", "0", "annoLanguage", "annoLanguage")
-        const aConcept = new Concept(annoLanguage, "aConcept", "aConcept", "aConcept", false)
+        const aConcept = new Concept(annoLanguage, "aConcept", "aConcept", "aConcept", ConceptModifier.concrete)
         const aConcept_subConcepts = new Containment(aConcept, "subConcepts", "aConcept-subConcepts", "aConcept-subConcepts")
             .ofType(aConcept).isOptional()
         aConcept.havingFeatures(aConcept_subConcepts)

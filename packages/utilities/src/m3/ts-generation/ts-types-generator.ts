@@ -11,8 +11,7 @@ import {
     inheritsDirectlyFrom,
     Interface,
     isConcrete,
-    isRef,
-    isUnresolvedReference,
+    isResolvedReference,
     Language,
     LanguageEntity,
     Link,
@@ -20,7 +19,8 @@ import {
     nameOf,
     nameSorted,
     PrimitiveType,
-    Property
+    Property,
+    tryToRenderAsText
 } from "@lionweb/core"
 import { indent } from "@lionweb/textgen-utils"
 import { groupBy, mapValues, uniquesAmong } from "@lionweb/ts-utils"
@@ -43,12 +43,11 @@ const fieldForFeature = (feature: Feature) => {
     }
 }
 
-
 const fieldForLink = ({name, type, optional, multiple}: Link): Field =>
     ({
         name,
         optional: optional && !multiple,
-        type: `${isUnresolvedReference(type) ? `unknown` : type.name}${multiple ? `[]` : ``}`
+        type: `${(tryToRenderAsText(type) ?? `unknown`)}${multiple ? `[]` : ``}`
     })
 
 
@@ -141,7 +140,7 @@ export const tsTypeDefsForLanguage = (language: Language, ...generationOptions: 
         tsFromTypeDef({
             modifier: TypeDefModifier.interface,
             name: intface.name,
-            mixinNames: intface.extends.length === 0 ? [`DynamicNode`] : intface.extends.filter(isRef).map(nameOf),
+            mixinNames: intface.extends.length === 0 ? [`DynamicNode`] : intface.extends.filter(isResolvedReference).map(nameOf),
             fields: fieldsForClassifier(intface)
         })
 
@@ -172,10 +171,8 @@ export const tsTypeDefsForLanguage = (language: Language, ...generationOptions: 
             ...inheritsDirectlyFrom(classifier),
             ...allFeaturesOf(classifier)
                 .filter((feature) => feature instanceof Link)
-                .map((feature) => feature as Link)
                 .flatMap(({type}) => type)
                 .filter((type) => type instanceof Classifier)
-                .map((classifier) => classifier as Classifier)
         ]
 
     const coreImports = [

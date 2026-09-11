@@ -1,6 +1,6 @@
 {
     "name": "@lionweb/validation",
-    "version": "0.9.0",
+    "version": "0.10.0",
     "license": "Apache 2.0",
     "description": "LionWeb Serialization validation",
     "author": "jos.warmer@openmodeling.nl",
@@ -27,8 +27,8 @@
         "release-beta": "npm publish --tag beta",
         "prerelease": "npm run prep:pre-release",
         "release": "npm publish",
-        "testValid": "node dist/runners/RunCheckFolder.js ../test/testset/valid",
-        "testInvalid": "node dist/runners/RunCheckFolder.js ../test/testset/invalid",
+        "testInvalid": "node dist/runners/RunCheckFolder.js ../test/testset/withoutLanguage/invalid",
+        "testValid": "node dist/runners/RunCheckFolder.js ../test/testset/withoutLanguage/valid",
         "testInvalidWithLanguage": "node dist/runners/RunCheckFolderWithLanguage.js ../test/testset/withLanguage/invalid/ ../test/testset/withLanguage/myLang.language.json",
         "testValidWithLanguage": "node dist/runners/RunCheckFolderWithLanguage.js ../test/testset/withLanguage/valid/ ../test/testset/withLanguage/myLang.language.json",
         "publish-local": "npm publish --registry http://localhost:4873 --tag local",
@@ -36,8 +36,9 @@
         "republish-local": "npm unpublish-local && npm publish-local"
     },
     "dependencies": {
-        "@lionweb/json": "0.9.0",
-        "@lionweb/ts-utils": "0.9.0",
-        "@lionweb/json-utils": "0.9.0"
+        "@lionweb/json": "0.10.0",
+        "@lionweb/ts-utils": "0.10.0",
+        "@lionweb/json-diff": "0.10.0",
+        "@lionweb/json-utils": "0.10.0"
     }
 }

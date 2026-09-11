@@ -31,11 +31,30 @@ import {
 import {
     Deserializer,
     DeserializerConfiguration,
-    nodeBaseDeserializerWithIdMapping,
-    RootsWithIdMapping
+    DetailedDeserialization,
+    nodeBaseDetailedDeserializer
 } from "./deserializer.js"
 import { combinedFactoryFor } from "./factory.js"
 import { IdMapping } from "./id-mapping.js"
+
+
+const containingRoot = (node: INodeBase): INodeBase => {
+    let current = node
+    while (current.parent !== undefined) {
+        current = current.parent
+    }
+    return current
+}
+
+const participatingParents = (delta: IDelta): INodeBase[] =>
+    ["node", "parent", "oldParent", "newParent"]
+        .flatMap((key) =>
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            key in delta ? [(delta as any)[key]] : []
+        )
+
+const participatingRoots = (delta: IDelta): INodeBase[] =>
+    participatingParents(delta).map(containingRoot)
 
 
 /**
@@ -72,16 +91,37 @@ export class Forest {
      * (That translator uses type from `delta-protocol-common` so we don’t want to have it here.)
      * Using this method does *not* change `this` forest’s state.
      */
-    readonly deserializeWithIdMapping: Deserializer<RootsWithIdMapping>
+    readonly deserialize: Deserializer<DetailedDeserialization>
+
+    /**
+     * Legacy alias for {@link deserialize}, kept for backward compatibility, and to be deprecated and removed later.
+     */
+    readonly deserializeWithIdMapping: Deserializer<DetailedDeserialization>
 
 
     constructor(configuration: FactoryConfiguration & DeserializerConfiguration) {
-        this.languageBases = configuration.languageBases
-        this.receiveDelta = configuration.receiveDelta
+        const { languageBases, receiveDelta } = configuration
+        this.languageBases = languageBases
+        this.receiveDelta = receiveDelta
         this.partitions = []
         this.idMapping = new IdMapping({})
-        this.createNode = combinedFactoryFor(this.languageBases, this.receiveDelta)
-        this.deserializeWithIdMapping = nodeBaseDeserializerWithIdMapping(configuration)
+        this.createNode = combinedFactoryFor(
+            this.languageBases,
+            receiveDelta === undefined
+                ? undefined
+                : (delta) => {
+                    // prevent that changes not involving any actually-registered partition emit deltas:
+                    if (participatingRoots(delta).some((root) => this.partitions.indexOf(root) > -1)) {
+                        receiveDelta(delta)
+                    }
+                }
+                /*
+                 * We want to receive a delta iff the nodes involved are contained in a partition that’s registered as such
+                 * _at/before_ the time the delta was emitted.
+                 */
+        )
+        this.deserialize = nodeBaseDetailedDeserializer(configuration)
+        this.deserializeWithIdMapping = this.deserialize
     }
 
 
@@ -125,7 +165,7 @@ export class Forest {
      * It also updates the ID mapping, including with mappings for deserialized unattached nodes.
      */
     deserializeInto = (serializationChunk: LionWebJsonChunk): INodeBase[] => {
-        const { roots: newRoots, idMapping: newIdMapping } = this.deserializeWithIdMapping(serializationChunk, this.idMapping)
+        const { roots: newRoots, idMapping: newIdMapping } = this.deserialize(serializationChunk, this.idMapping)
         this.partitions.push(...newRoots.filter((newRoot) => isPartition(newRoot.classifier)))
         this.idMapping.mergeIn(newIdMapping)    // also merge in new unattached, non-partition roots
         return newRoots

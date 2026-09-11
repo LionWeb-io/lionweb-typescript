@@ -1,9 +1,8 @@
 {
     "name": "@lionweb/test",
-    "version": "0.9.0-dev.0",
+    "version": "0.10.0-dev.0",
     "description": "LionWeb test for {Java|Type}Script",
     "private": true,
-    "main": "dist/lioncore-cli.js",
     "type": "module",
     "license": "Apache-2.0",
     "repository": {
@@ -27,14 +26,19 @@
         "@types/chai": "5.2.3",
         "@types/mocha": "10.0.10",
         "chai": "6.2.2",
-        "degit": "2.8.4",
+        "degit": "2.8.6",
         "mocha": "11.7.5"
     },
     "dependencies": {
-        "@lionweb/core": "0.9.0",
-        "@lionweb/json": "0.9.0",
-        "@lionweb/ts-utils": "0.9.0",
-        "@lionweb/utilities": "0.9.0",
-        "@lionweb/validation": "0.9.0"
+        "@lionweb/class-core": "0.10.0",
+        "@lionweb/class-core-test-language": "0.10.0",
+        "@lionweb/core": "0.10.0",
+        "@lionweb/io-lionweb-mps-specific": "0.10.0",
+        "@lionweb/json": "0.10.0",
+        "@lionweb/json-diff": "0.10.0",
+        "@lionweb/node-utils": "0.10.0",
+        "@lionweb/ts-utils": "0.10.0",
+        "@lionweb/utilities": "0.10.0",
+        "@lionweb/validation": "0.10.0"
     }
 }

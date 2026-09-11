@@ -17,7 +17,7 @@ export class Language_PropertyValue_Issue extends ValidationIssue {
     msg = (): string => `Property "${this.property}" with value "${this.value}" is not of type "${this.expectedType}"`
 }
 
-// Incorrect Meta Pointers
+// Incorrect Meta-Pointers
 export abstract class Language_IncorrectMetaPointerType_Issue extends ValidationIssue {
     abstract readonly metaType: string
 
@@ -76,7 +76,7 @@ export class Language_IncorrectContainmentMetaPointer_Issue extends Language_Inc
     readonly metaType = "Containment"
 }
 
-// Unknown Meta Pointers
+// Unknown Meta-Pointers
 export abstract class Language_UnknownMetaPointer_Issue extends ValidationIssue {
     abstract readonly metaType: string
 

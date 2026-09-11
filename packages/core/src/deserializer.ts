@@ -6,7 +6,7 @@ import { MemoisingSymbolTable } from "./m3/symbol-table.js"
 import { Classifier, Containment, Enumeration, Language, PrimitiveType, Property, Reference } from "./m3/types.js"
 import { LionWebVersion } from "./m3/version.js"
 import { LionWebVersions } from "./m3/versions.js"
-import { unresolved } from "./references.js"
+import { UnresolvedReference } from "./references.js"
 import { Node } from "./types.js"
 
 /**
@@ -105,7 +105,7 @@ export const deserializerWith = <NT extends Node>(configuration: DeserializerCon
             return node
         }
 
-        type ReferenceToInstall = [node: NT, feature: Reference, refId: LionWebId]
+        type ReferenceToInstall = [node: NT, feature: Reference, refId: LionWebId, resolveInfo?: string]
         const referencesToInstall: ReferenceToInstall[] = []
 
         const tryInstantiate = (
@@ -156,7 +156,6 @@ export const deserializerWith = <NT extends Node>(configuration: DeserializerCon
             if (properties !== undefined) {
                 allFeatures
                     .filter(feature => feature instanceof Property)
-                    .map(feature => feature as Property)
                     .forEach(property => {
                         if (property.key in serializedPropertiesPerKey) {
                             const value = serializedPropertiesPerKey[property.key][0].value
@@ -190,29 +189,33 @@ export const deserializerWith = <NT extends Node>(configuration: DeserializerCon
                     writer.setFeatureValue(node, feature, propertySettings[feature.key])
                 } else if (feature instanceof Containment && containments !== undefined && feature.key in serializedContainmentsPerKey) {
                     const childIds = serializedContainmentsPerKey[feature.key].flatMap(serChildren => serChildren.children) as LionWebId[]
-                    if (feature.multiple) {
-                        childIds.forEach(childId => {
-                            if (childId in serializedNodeById) {
-                                writer.setFeatureValue(node, feature, instantiateMemoised(serializedNodeById[childId], node))
+                    const deserializeChild = (childId: LionWebId) => {
+                        if (childId in serializedNodeById) {
+                            const child = instantiateMemoised(serializedNodeById[childId], node)
+                            if (child !== null) {
+                                writer.setFeatureValue(node, feature, child)
+                            } else {
+                                problemReporter.reportProblem(`child with id=${childId} is not instantiable, so can’t add it to containment ${feature.name} on node with id=${node.id}`)
+                                // TODO  set/add an UnresolvedContainment?
                             }
-                        })
-                    } else {
-                        if (childIds.length > 0) {
-                            // just set the 1st one:
-                            const firstChildId = childIds[0]
-                            if (firstChildId in serializedNodeById) {
-                                writer.setFeatureValue(node, feature, instantiateMemoised(serializedNodeById[firstChildId], node))
-                            }
+                        } else {
+                            problemReporter.reportProblem(`child with id=${childId} doesn’t reside in this serialization chunk, so can’t add it to containment ${feature.name} on node with id=${node.id}`)
                         }
+                    }
+                    if (feature.multiple) {
+                        childIds.forEach(deserializeChild)
+                    } else if (childIds.length > 0) {
+                        // just set the 1st one:
+                        deserializeChild(childIds[0])
                     }
                 } else if (feature instanceof Reference && references !== undefined && feature.key in serializedReferencesPerKey) {
                     const serRefs = (serializedReferencesPerKey[feature.key] ?? []).flatMap(serReferences =>
-                        serReferences.targets.map(t => t.reference)
+                        serReferences.targets
                     )
                     referencesToInstall.push(
-                        ...(serRefs.filter(serRef => typeof serRef === "string") as LionWebId[]).map(
-                            refId => [node, feature, refId] as ReferenceToInstall
-                        )
+                        ...(serRefs.map(
+                            ({reference, resolveInfo}) => [node, feature, reference, resolveInfo] as ReferenceToInstall
+                        ))
                     )
                 }
             })
@@ -236,17 +239,17 @@ export const deserializerWith = <NT extends Node>(configuration: DeserializerCon
 
         const dependentNodesById = byIdMap(dependentNodes)
 
-        referencesToInstall.forEach(([node, reference, refId]) => {
+        referencesToInstall.forEach(([node, reference, refId, resolveInfo]) => {
             const target = deserializedNodeById[refId] ?? dependentNodesById[refId]
             const value = (() => {
-                if (target === undefined) {
-                    const metaTypeMessage = "concept" in node ? ` and (meta-)type ${node.concept}` : ""
-                    problemReporter.reportProblem(
-                        `couldn't resolve the target with id=${refId} of a "${reference.name}" reference on the node with id=${node.id}${metaTypeMessage}`
-                    )
-                    return unresolved
+                if (target !== undefined) {
+                    return target
                 }
-                return target
+                const metaTypeMessage = "concept" in node ? ` and (meta-)type ${node.concept}` : ""
+                problemReporter.reportProblem(
+                    `couldn't resolve the target with id=${refId} of a "${reference.name}" reference on the node with id=${node.id}${metaTypeMessage}`
+                )
+                return new UnresolvedReference(refId, resolveInfo)
             })()
             writer.setFeatureValue(node, reference, value)
         })
@@ -267,21 +270,22 @@ export const deserializerWith = <NT extends Node>(configuration: DeserializerCon
  * @param propertyValueDeserializer - a deserializer for values of properties (by default `LionWebVersions.v2023_1.builtinsFacade.propertyValueDeserializer`)
  * @param problemReporter - an object for reporting problems (by default a {@link consoleProblemReporter})
  *
- * This is a legacy variant of {@link deserializerWith}, kept for backward compatibility, and to be deprecated and removed later.
+ * @deprecated Use {@link deserializerWith} instead, which makes configuration easier through a Parameter Object.
+ * This is a legacy variant of {@link deserializerWith}, kept (for now) for backward compatibility, and to be removed later.
  */
 export const deserializeSerializationChunk = <NT extends Node>(
     serializationChunk: LionWebJsonChunk,
     writer: Writer<NT>,
     languages: Language[],
-    // TODO  facades <--> languages, so it's weird that it looks split up like this
     dependentNodes: Node[],
-    // TODO (#13)  see if you can turn this into [nodes: Node[], writer: Writer<Node>][] after all
     propertyValueDeserializer: PropertyValueDeserializer = LionWebVersions.v2023_1.builtinsFacade.propertyValueDeserializer,
     problemReporter: ProblemReporter = consoleProblemReporter
 ): NT[] => deserializerWith({ writer, languages, propertyValueDeserializer, problemReporter: problemReporter })(serializationChunk, dependentNodes)
 
 /**
  * Alias for {@link deserializeSerializationChunk}.
+ *
+ * @deprecated Use {@link deserializerWith} instead, which makes configuration easier through a Parameter Object.
  */
 export const deserializeChunk = deserializeSerializationChunk
 

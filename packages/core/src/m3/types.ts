@@ -88,7 +88,7 @@ class Property extends Feature {
     metaType(): string {
         return "Property"
     }
-    type: SingleRef<DataType> = referenceToSet()   // (reference)
+    type: SingleRef<DataType> = referenceToSet   // (reference)
     ofType(type: DataType): Property {
         this.type = type
         return this
@@ -97,7 +97,7 @@ class Property extends Feature {
 
 abstract class Link extends Feature {
     multiple /*: boolean */ = false
-    type: SingleRef<Classifier> = referenceToSet()   // (reference)
+    type: SingleRef<Classifier> = referenceToSet   // (reference)
     isMultiple() {
         this.multiple = true
         return this
@@ -145,6 +145,11 @@ abstract class Classifier extends LanguageEntity {
     }
 }
 
+enum ConceptModifier {
+    concrete,
+    abstract
+}
+
 class Concept extends Classifier {
     metaType(): string {
         return "Concept"
@@ -153,9 +158,9 @@ class Concept extends Classifier {
     partition: boolean
     extends?: SingleRef<Concept>    // (reference)
     readonly implements: MultiRef<Interface> = []  // (reference)
-    constructor(language: Language, name: string, key: LionWebKey, id: LionWebId, abstract: boolean, extends_?: SingleRef<Concept>) {
+    constructor(language: Language, name: string, key: LionWebKey, id: LionWebId, abstract: boolean | ConceptModifier, extends_?: SingleRef<Concept>) {
         super(language, name, key, id)
-        this.abstract = abstract
+        this.abstract = abstract === ConceptModifier.abstract || abstract === true
         this.extends = extends_
         this.partition = false
     }
@@ -176,7 +181,7 @@ class Annotation extends Classifier {
     }
     extends?: SingleRef<Annotation> // (reference)
     readonly implements: MultiRef<Interface> = [] // (reference)
-    annotates: SingleRef<Classifier> = referenceToSet()   // (reference)
+    annotates: SingleRef<Classifier> = referenceToSet   // (reference)
     constructor(language: Language, name: string, key: LionWebKey, id: LionWebId, extends_?: SingleRef<Annotation>) {
         super(language, name, key, id)
         this.extends = extends_
@@ -291,6 +296,7 @@ export {
     Annotation,
     Classifier,
     Concept,
+    ConceptModifier,
     Containment,
     DataType,
     Datatype,

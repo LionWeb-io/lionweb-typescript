@@ -21,8 +21,10 @@ import {
     applyDelta,
     ChildAddedDelta,
     ChildDeletedDelta,
-    ChildMovedFromOtherContainmentDelta,
+    ChildMovedFromContainmentInOtherParentDelta,
     ChildReplacedDelta,
+    CompositeDelta,
+    NoOpDelta,
     ReferenceDeletedDelta
 } from "@lionweb/class-core"
 
@@ -56,7 +58,7 @@ describe("delta application sets parentage correctly", () => {
         const child = LinkTestConcept.create("child");
         parent.containment_0_1 = child;
         const dstLtc = LinkTestConcept.create("dstLtc");
-        const delta = new ChildMovedFromOtherContainmentDelta(parent, testLanguageBase.LinkTestConcept_containment_0_1, 0, dstLtc, testLanguageBase.LinkTestConcept_containment_0_1, 0, child);
+        const delta = new ChildMovedFromContainmentInOtherParentDelta(parent, testLanguageBase.LinkTestConcept_containment_0_1, 0, dstLtc, testLanguageBase.LinkTestConcept_containment_0_1, 0, child);
 
         applyDelta(delta);
 
@@ -132,6 +134,16 @@ describe("delta application sets parentage correctly", () => {
 
         applyDelta(new ReferenceDeletedDelta(srcNode, testLanguageBase.LinkTestConcept_reference_0_n, 0, targetNode1));
         deepEqual(srcNode.reference_0_n, [targetNode1, targetNode2]);
+    });
+
+});
+
+
+describe("application of composite deltas", () => {
+
+    it("works (and doesn’t throw) in a trivial case", () => {
+        const composite = new CompositeDelta([new NoOpDelta()]);
+        applyDelta(composite);  // shouldn’t throw (but also shouldn’t do anything else)
     });
 
 });

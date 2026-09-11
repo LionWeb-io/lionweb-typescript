@@ -28,7 +28,7 @@ export const AdminRequestDefinitions: MessageGroup = {
     ],
     messages: [
         {
-            name: "ListRepositoriesAdminRequest",
+            name: "Custom_ListRepositoriesAdminRequest",
             properties: [
                 {
                     name: "queryId",
@@ -54,7 +54,54 @@ export const AdminRequestDefinitions: MessageGroup = {
             ],
         },
         {
-            name: "CreateRepositoryAdminRequest",
+            name: "Custom_CreateRepositoryAdminRequest",
+            properties: [
+                {
+                    name: "repositoryName",
+                    type: "String",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "lionWebVersion",
+                    type: "String",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "history",
+                    type: "Boolean",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "queryId",
+                    type: "QueryId",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "messageKind",
+                    type: "String",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "additionalInfos",
+                    type: "AdditionalInfo",
+                    isList: true,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+            ],
+        },
+        {
+            name: "Custom_DeleteRepositoryAdminRequest",
             properties: [
                 {
                     name: "repositoryName",
@@ -87,40 +134,7 @@ export const AdminRequestDefinitions: MessageGroup = {
             ],
         },
         {
-            name: "DeleteRepositoryAdminRequest",
-            properties: [
-                {
-                    name: "repositoryName",
-                    type: "String",
-                    isList: false,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
-                {
-                    name: "queryId",
-                    type: "QueryId",
-                    isList: false,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
-                {
-                    name: "messageKind",
-                    type: "String",
-                    isList: false,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
-                {
-                    name: "additionalInfos",
-                    type: "AdditionalInfo",
-                    isList: true,
-                    isOptional: false,
-                    mayBeNull: false,
-                },
-            ],
-        },
-        {
-            name: "RenameRepositoryAdminRequest",
+            name: "Custom_RenameRepositoryAdminRequest",
             properties: [
                 {
                     name: "repositoryName",

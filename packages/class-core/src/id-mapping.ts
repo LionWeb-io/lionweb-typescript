@@ -31,7 +31,7 @@ type NodesById = { [id: LionWebId]: Node }
 /**
  * Maintains a mapping ID &rarr; node,
  * which is primarily used for efficiently applying {@link IDelta deltas}.
- * Instances are produced by the {@link nodeBaseDeserializerWithIdMapping} function.
+ * Instances are produced by the {@link nodeBaseDetailedDeserializer} function.
  */
 export class IdMapping {
 
@@ -78,8 +78,8 @@ export class IdMapping {
      */
     fromRefId = (idOrNull: IdOrNull): SingleRef<Node> =>
         idOrNull === null
-            ? referenceToSet()
-            : (this.nodesById[idOrNull] ?? referenceToSet());
+            ? referenceToSet
+            : (this.nodesById[idOrNull] ?? referenceToSet);
 
     /**
      * Updates this {@link IdMapping} with the given `node` *and all its descendants* (recursively).

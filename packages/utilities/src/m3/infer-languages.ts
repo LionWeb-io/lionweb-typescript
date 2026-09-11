@@ -1,5 +1,6 @@
 import {
     Concept,
+    ConceptModifier,
     Containment,
     Language,
     Link,
@@ -41,7 +42,7 @@ export const inferLanguagesFromSerializationChunk = (chunk: LionWebJsonChunk): L
             continue
         }
 
-        const concept = new Concept(language, entityName, key(language.name, entityName), id(language.name, entityName), false)
+        const concept = new Concept(language, entityName, key(language.name, entityName), id(language.name, entityName), ConceptModifier.concrete)
         language.havingEntities(concept)
         concepts.set(node.id, concept)
 

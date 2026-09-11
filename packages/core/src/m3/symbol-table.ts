@@ -5,7 +5,7 @@ import { Classifier, Feature, Language, LanguageEntity } from "./types.js"
 
 
 /**
- * Interface for objects that can look up within languages, based on given {@link LionWebJsonMetaPointer meta pointers}.
+ * Interface for objects that can look up within languages, based on given {@link LionWebJsonMetaPointer meta-pointers}.
  * This is meant to be able to properly encapsulate performance optimizations, also outside of the context
  * of deserialization.
  */

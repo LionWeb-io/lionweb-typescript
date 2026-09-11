@@ -1,14 +1,15 @@
 import { JsonContext } from "@lionweb/json-utils"
 import {
+    GenericIssue,
     Syntax_ArrayContainsNull_Issue,
     Syntax_PropertyMissingIssue,
     Syntax_PropertyNullIssue,
     Syntax_PropertyTypeIssue,
     Syntax_PropertyUnknownIssue
 } from "../../issues/index.js"
-import { SyntaxDefinition, StructuredType, PrimitiveType } from "./schema/SyntaxDefinition.js"
+import { validateId } from "../ValidationFunctions.js"
 import { ValidationResult } from "./ValidationResult.js"
-import { UnknownObjectType } from "./schema/index.js"
+import { SyntaxDefinition, StructuredType, PrimitiveType, UnknownObjectType } from "./schema/index.js"
 
 /**
  * Syntax Validator checks whether objects are structurally conforming to the
@@ -35,7 +36,7 @@ export class SyntaxValidator {
 
         if (primitiveTypeDef === undefined) {
             const objectTypeDef: StructuredType | undefined = this.schema.getStructuredType(expectedType)
-            if( objectTypeDef === undefined) {
+            if (objectTypeDef === undefined) {
                 throw new Error(`SyntaxValidator.validate: cannot find definition for '${expectedType}'`)
             } else {
                 // ObjectType found
@@ -114,11 +115,10 @@ export class SyntaxValidator {
                                 }
                             }
                         } else if (expectedMessageGroup !== undefined) {
-                                console.log(`+++++++++++++++++++ ${expectedMessageGroup.name}`)
-                                const messageKind = item[expectedMessageGroup.taggedUnionProperty] as string
-                                    const groupTypeDef = this.schema.getStructuredType(messageKind)!
-                                    this.validateObjectProperties(originalProperty, groupTypeDef, item as UnknownObjectType, newContext)
-                                
+                            console.log(`+++++++++++++++++++ ${expectedMessageGroup.name}`)
+                            const messageKind = item[expectedMessageGroup.taggedUnionProperty] as string
+                            const groupTypeDef = this.schema.getStructuredType(messageKind)!
+                            this.validateObjectProperties(originalProperty, groupTypeDef, item as UnknownObjectType, newContext)
                         } else {
                             throw new Error(`Expected type '${propertyDef.type} has neither property defs, nor a validator.`)
                         }
@@ -166,6 +166,9 @@ export class SyntaxValidator {
     }
 
     validatePrimitiveValue(propertyName: string, propDef: PrimitiveType, object: unknown, jsonContext: JsonContext): boolean {
+        if (propDef.primitiveType === "dictionary") {
+            return this.validateDictionary(propertyName, propDef, object, jsonContext)
+        }
         if (typeof object !== propDef.primitiveType) {
             this.validationResult.issue(new Syntax_PropertyTypeIssue(jsonContext, propertyName, propDef.primitiveType, typeof object))
             return false
@@ -178,9 +181,47 @@ export class SyntaxValidator {
     }
 
     /**
+     * Validate that `object` is an object with all keys and values of type string. 
+     * @param propertyName  Name of the property
+     * @param propDef       The property definition
+     * @param object        The object to validate
+     * @param jsonContext   The context in the JSON
+     */
+    validateDictionary(propertyName: string, propDef: PrimitiveType, object: unknown, jsonContext: JsonContext): boolean {
+        if (typeof object === "object" && !Array.isArray(object) && object !== null) {
+            for (const key of Object.keys(object)) {
+                if (typeof key !== "string") {
+                    this.validationResult.issue(
+                        new GenericIssue(jsonContext, `property '${propertyName}' key '${key}' should be a string, it is a '${typeof key}'`)
+                    )
+                    return false
+                }
+                validateId(key, this.validationResult, jsonContext)
+                if (this.validationResult.hasErrors()) {
+                    return false
+                }
+                const value = (object as { [index: string]: unknown })[key]
+                if (typeof value !== "string") {
+                    this.validationResult.issue(
+                        new GenericIssue(
+                            jsonContext,
+                            `the value for property '${propertyName}.${key}' should be a string, it is a '${typeof value}'`
+                        )
+                    )
+                    return false
+                }
+            }
+            return true
+        } else {
+            this.validationResult.issue(new Syntax_PropertyTypeIssue(jsonContext, propertyName, propDef.primitiveType, typeof object))
+            return false
+        }
+    }
+
+    /**
      * Check whether there are extra properties that should not be there.
      * @param obj           Object to be validated
-     * @param properties    The names of the expected properties
+     * @param def           Definition to validate against
      * @param context       Location in JSON
      */
     checkStrayProperties(obj: UnknownObjectType, def: StructuredType, context: JsonContext) {

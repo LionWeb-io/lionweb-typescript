@@ -26,18 +26,17 @@ import {
     AnnotationReplacedDelta,
     ChildAddedDelta,
     ChildDeletedDelta,
-    ChildMovedAndReplacedFromOtherContainmentDelta,
+    ChildMovedAndReplacedFromContainmentInOtherParentDelta,
     ChildMovedAndReplacedFromOtherContainmentInSameParentDelta,
-    ChildMovedAndReplacedInSameContainmentDelta,
-    ChildMovedFromOtherContainmentDelta,
+    ChildMovedAndReplacedInSameContainmentInSameParentDelta,
+    ChildMovedFromContainmentInOtherParentDelta,
     ChildMovedFromOtherContainmentInSameParentDelta,
-    ChildMovedInSameContainmentDelta,
+    ChildMovedInSameContainmentInSameParentDelta,
     ChildReplacedDelta,
     CompositeDelta,
     IDelta,
     idFrom,
     INodeBase,
-    nodeBaseReader,
     NoOpDelta,
     PartitionAddedDelta,
     PartitionDeletedDelta,
@@ -48,9 +47,9 @@ import {
     ReferenceAddedDelta,
     ReferenceChangedDelta,
     ReferenceDeletedDelta,
-    serializeNodeBases
+    serializeAsDeltaChunk
 } from "@lionweb/class-core"
-import { idOf, LionWebVersions, metaPointerFor, PropertyValueSerializer } from "@lionweb/core"
+import { idOf, LionWebVersion, LionWebVersions, metaPointerForFeature, PropertyValueSerializer } from "@lionweb/core"
 import {
     AdditionalInfo,
     AnnotationAddedEvent,
@@ -82,8 +81,12 @@ import {
     ReferenceChangedEvent,
     ReferenceDeletedEvent
 } from "../payload/index.js"
+import { resolveInfoFrom } from "./ref-util.js"
 
 
+/**
+ * @return all descendants hanging off of the given `node` — (excluding `node` itself).
+ */
 const allIdsOfDescendantsFrom = (node: INodeBase) =>
     allNodesFrom(node).slice(1).map(idOf)
 
@@ -119,6 +122,10 @@ export type AdditionalInfosGenerator = (delta: IDelta, sequenceNumber: number) =
  */
 export type DeltaToEventTranslatorConfiguration = Partial<{
     /**
+     * A {@link LionWebVersion} — defaults to `LionWebVersions.v2023_1`.
+     */
+    lionWebVersion: LionWebVersion,
+    /**
      * A {@link PropertyValueSerializer} that's *only* used to serialize *primitive* values.
      * Defaults to the `lioncoreBuiltinsFacade.propertyValueSerializer`.
      */
@@ -138,10 +145,11 @@ export type DeltaToEventTranslatorConfiguration = Partial<{
  * @return a {@link DeltaToEventTranslator} instance using the given {@link DeltaToEventTranslatorConfiguration}.
  */
 export const deltaToEventTranslator = (
-    { primitiveValueSerializer, originCommandsGenerator, additionalInfosGenerator }: DeltaToEventTranslatorConfiguration
+    { lionWebVersion: maybeLionWebVersion, primitiveValueSerializer, originCommandsGenerator, additionalInfosGenerator }: DeltaToEventTranslatorConfiguration
 ): DeltaToEventTranslator => {
+    const lionWebVersion = maybeLionWebVersion ?? LionWebVersions.v2023_1
     const propertyValueSerializer = primitiveValueSerializer === undefined
-        ? LionWebVersions.v2023_1.builtinsFacade.propertyValueSerializer
+        ? lionWebVersion.builtinsFacade.propertyValueSerializer
         : propertyValueSerializerWith({ primitiveValueSerializer })
     return (delta, lastUsedSequenceNumber) => {
 
@@ -163,32 +171,33 @@ export const deltaToEventTranslator = (
         const translated = (delta: IDelta): Event => {
             if (delta instanceof PartitionAddedDelta) {
                 return completed<PartitionAddedEvent>("PartitionAdded", { // § 5.8.2.1
-                    newPartition: serializeNodeBases([delta.newPartition])
+                    newPartition: serializeAsDeltaChunk(delta.newPartition)
                 })
             }
             if (delta instanceof PartitionDeletedDelta) {
                 return completed<PartitionDeletedEvent>("PartitionDeleted", { // § 5.8.2.2
-                    deletedPartition: delta.deletedPartition.id
+                    deletedPartition: delta.deletedPartition.id,
+                    deletedDescendants: allIdsOfDescendantsFrom(delta.deletedPartition)
                 })
             }
             if (delta instanceof PropertyAddedDelta) {
                 return completed<PropertyAddedEvent>("PropertyAdded", { // § 5.8.4.1
                     node: delta.node.id,
-                    property: metaPointerFor(delta.property),
+                    property: metaPointerForFeature(delta.property),
                     newValue: propertyValueSerializer.serializeValue(delta.value, delta.property)!
                 })
             }
             if (delta instanceof PropertyDeletedDelta) {
                 return completed<PropertyDeletedEvent>("PropertyDeleted", { // § 5.8.4.2
                     node: delta.node.id,
-                    property: metaPointerFor(delta.property),
+                    property: metaPointerForFeature(delta.property),
                     oldValue: propertyValueSerializer.serializeValue(delta.oldValue, delta.property)!
                 })
             }
             if (delta instanceof PropertyChangedDelta) {
                 return completed<PropertyChangedEvent>("PropertyChanged", { // § 5.8.4.3
                     node: delta.node.id,
-                    property: metaPointerFor(delta.property),
+                    property: metaPointerForFeature(delta.property),
                     newValue: propertyValueSerializer.serializeValue(delta.newValue, delta.property)!,
                     oldValue: propertyValueSerializer.serializeValue(delta.oldValue, delta.property)!
                 })
@@ -196,15 +205,15 @@ export const deltaToEventTranslator = (
             if (delta instanceof ChildAddedDelta) {
                 return completed<ChildAddedEvent>("ChildAdded", { // § 5.8.5.1
                     parent: delta.parent.id,
-                    newChild: serializeNodeBases([delta.newChild]),
-                    containment: metaPointerFor(delta.containment),
+                    newChild: serializeAsDeltaChunk(delta.newChild),
+                    containment: metaPointerForFeature(delta.containment),
                     index: delta.index
                 })
             }
             if (delta instanceof ChildDeletedDelta) {
                 return completed<ChildDeletedEvent>("ChildDeleted", { // § 5.8.5.2
                     parent: delta.parent.id,
-                    containment: metaPointerFor(delta.containment),
+                    containment: metaPointerForFeature(delta.containment),
                     index: delta.index,
                     deletedChild: delta.deletedChild.id,
                     deletedDescendants: allIdsOfDescendantsFrom(delta.deletedChild)
@@ -212,51 +221,51 @@ export const deltaToEventTranslator = (
             }
             if (delta instanceof ChildReplacedDelta) {
                 return completed<ChildReplacedEvent>("ChildReplaced", { // § 5.8.5.3
-                    newChild: serializeNodeBases([delta.newChild]),
+                    newChild: serializeAsDeltaChunk(delta.newChild),
                     parent: delta.parent.id,
-                    containment: metaPointerFor(delta.containment),
+                    containment: metaPointerForFeature(delta.containment),
                     index: delta.index,
                     replacedChild: delta.replacedChild.id,
                     replacedDescendants: allIdsOfDescendantsFrom(delta.replacedChild)
                 })
             }
-            if (delta instanceof ChildMovedFromOtherContainmentDelta) {
-                return completed<ChildMovedFromOtherContainmentEvent>("ChildMovedFromOtherContainment", { // § 5.8.5.4
+            if (delta instanceof ChildMovedFromContainmentInOtherParentDelta) {
+                return completed<ChildMovedFromOtherContainmentEvent>("ChildMovedFromContainmentInOtherParent", { // § 5.8.5.4
                     newParent: delta.newParent.id,
-                    newContainment: metaPointerFor(delta.newContainment),
+                    newContainment: metaPointerForFeature(delta.newContainment),
                     newIndex: delta.newIndex,
                     movedChild: delta.movedChild.id,
                     oldParent: delta.oldParent.id,
-                    oldContainment: metaPointerFor(delta.oldContainment),
+                    oldContainment: metaPointerForFeature(delta.oldContainment),
                     oldIndex: delta.oldIndex
                 })
             }
             if (delta instanceof ChildMovedFromOtherContainmentInSameParentDelta) {
                 return completed<ChildMovedFromOtherContainmentInSameParentEvent>("ChildMovedFromOtherContainmentInSameParent", { // § 5.8.5.5
-                    newContainment: metaPointerFor(delta.newContainment),
+                    newContainment: metaPointerForFeature(delta.newContainment),
                     newIndex: delta.newIndex,
                     movedChild: delta.movedChild.id,
                     parent: delta.parent.id,
-                    oldContainment: metaPointerFor(delta.oldContainment),
+                    oldContainment: metaPointerForFeature(delta.oldContainment),
                     oldIndex: delta.oldIndex
                 })
             }
-            if (delta instanceof ChildMovedInSameContainmentDelta) {
-                return completed<ChildMovedInSameContainmentEvent>("ChildMovedInSameContainment", { // § 5.8.5.6
+            if (delta instanceof ChildMovedInSameContainmentInSameParentDelta) {
+                return completed<ChildMovedInSameContainmentEvent>("ChildMovedInSameContainmentInSameParent", { // § 5.8.5.6
                     parent: delta.parent.id,
-                    containment: metaPointerFor(delta.containment),
+                    containment: metaPointerForFeature(delta.containment),
                     oldIndex: delta.oldIndex,
-                    newIndex: delta.newIndex,
+                    indexOffset: delta.indexOffset,
                     movedChild: delta.movedChild.id
                 })
             }
-            if (delta instanceof ChildMovedAndReplacedFromOtherContainmentDelta) {
-                return completed<ChildMovedAndReplacedFromOtherContainmentEvent>("ChildMovedAndReplacedFromOtherContainment", { // § 5.8.5.7
+            if (delta instanceof ChildMovedAndReplacedFromContainmentInOtherParentDelta) {
+                return completed<ChildMovedAndReplacedFromOtherContainmentEvent>("ChildMovedAndReplacedFromContainmentInOtherParent", { // § 5.8.5.7
                     newParent: delta.newParent.id,
-                    newContainment: metaPointerFor(delta.newContainment),
+                    newContainment: metaPointerForFeature(delta.newContainment),
                     newIndex: delta.newIndex,
                     oldParent: delta.oldParent.id,
-                    oldContainment: metaPointerFor(delta.oldContainment),
+                    oldContainment: metaPointerForFeature(delta.oldContainment),
                     oldIndex: delta.oldIndex,
                     movedChild: delta.movedChild.id,
                     replacedChild: delta.replacedChild.id,
@@ -266,21 +275,21 @@ export const deltaToEventTranslator = (
             if (delta instanceof ChildMovedAndReplacedFromOtherContainmentInSameParentDelta) {
                 return completed<ChildMovedAndReplacedFromOtherContainmentInSameParentEvent>("ChildMovedAndReplacedFromOtherContainmentInSameParent", { // § 5.8.5.8
                     parent: delta.parent.id,
-                    oldContainment: metaPointerFor(delta.oldContainment),
+                    oldContainment: metaPointerForFeature(delta.oldContainment),
                     oldIndex: delta.oldIndex,
-                    newContainment: metaPointerFor(delta.newContainment),
+                    newContainment: metaPointerForFeature(delta.newContainment),
                     newIndex: delta.newIndex,
                     replacedChild: delta.replacedChild.id,
                     replacedDescendants: allIdsOfDescendantsFrom(delta.replacedChild),
                     movedChild: delta.movedChild.id
                 })
             }
-            if (delta instanceof ChildMovedAndReplacedInSameContainmentDelta) {
-                return completed<ChildMovedAndReplacedInSameContainmentEvent>("ChildMovedAndReplacedInSameContainment", { // § 5.8.5.9
+            if (delta instanceof ChildMovedAndReplacedInSameContainmentInSameParentDelta) {
+                return completed<ChildMovedAndReplacedInSameContainmentEvent>("ChildMovedAndReplacedInSameContainmentInSameParent", { // § 5.8.5.9
                     parent: delta.parent.id,
-                    containment: metaPointerFor(delta.containment),
+                    containment: metaPointerForFeature(delta.containment),
                     oldIndex: delta.oldIndex,
-                    newIndex: delta.newIndex,
+                    indexOffset: delta.indexOffset,
                     movedChild: delta.movedChild.id,
                     replacedChild: delta.replacedChild.id,
                     replacedDescendants: allIdsOfDescendantsFrom(delta.replacedChild)
@@ -290,7 +299,7 @@ export const deltaToEventTranslator = (
                 return completed<AnnotationAddedEvent>("AnnotationAdded", { // § 5.8.6.1
                     parent: delta.parent.id,
                     index: delta.index,
-                    newAnnotation: serializeNodeBases([delta.newAnnotation])
+                    newAnnotation: serializeAsDeltaChunk(delta.newAnnotation)
                 })
             }
             if (delta instanceof AnnotationDeletedDelta) {
@@ -303,7 +312,7 @@ export const deltaToEventTranslator = (
             }
             if (delta instanceof AnnotationReplacedDelta) {
                 return completed<AnnotationReplacedEvent>("AnnotationReplaced", { // § 5.8.6.3
-                    newAnnotation: serializeNodeBases([delta.newAnnotation]),
+                    newAnnotation: serializeAsDeltaChunk(delta.newAnnotation),
                     parent: delta.parent.id,
                     index: delta.index,
                     replacedAnnotation: delta.replacedAnnotation.id,
@@ -323,7 +332,7 @@ export const deltaToEventTranslator = (
                 return completed<AnnotationMovedInSameParentEvent>("AnnotationMovedInSameParent", { // § 5.8.6.5
                     parent: delta.parent.id,
                     oldIndex: delta.oldIndex,
-                    newIndex: delta.newIndex,
+                    indexOffset: delta.indexOffset,
                     movedAnnotation: delta.movedAnnotation.id
                 })
             }
@@ -342,7 +351,7 @@ export const deltaToEventTranslator = (
                 return completed<AnnotationMovedAndReplacedInSameParentEvent>("AnnotationMovedAndReplacedInSameParent", { // § 5.8.6.7
                     parent: delta.parent.id,
                     oldIndex: delta.oldIndex,
-                    newIndex: delta.newIndex,
+                    indexOffset: delta.indexOffset,
                     replacedAnnotation: delta.replacedAnnotation.id,
                     replacedDescendants: allIdsOfDescendantsFrom(delta.replacedAnnotation),
                     movedAnnotation: delta.movedAnnotation.id
@@ -351,30 +360,30 @@ export const deltaToEventTranslator = (
             if (delta instanceof ReferenceAddedDelta) {
                 return completed<ReferenceAddedEvent>("ReferenceAdded", { // § 5.8.7.1
                     parent: delta.parent.id,
-                    reference: metaPointerFor(delta.reference),
+                    reference: metaPointerForFeature(delta.reference),
                     index: delta.index,
                     newReference: idFrom(delta.newReference),
-                    newResolveInfo: nodeBaseReader.resolveInfoFor!(delta.newReference!, delta.reference)!
+                    newResolveInfo: resolveInfoFrom(delta.newReference, delta.reference)
                 })
             }
             if (delta instanceof ReferenceDeletedDelta) {
                 return completed<ReferenceDeletedEvent>("ReferenceDeleted", { // § 5.8.7.2
                     parent: delta.parent.id,
-                    reference: metaPointerFor(delta.reference),
+                    reference: metaPointerForFeature(delta.reference),
                     index: delta.index,
                     deletedReference: idFrom(delta.deletedReference),
-                    deletedResolveInfo: nodeBaseReader.resolveInfoFor!(delta.deletedReference!, delta.reference)!
+                    deletedResolveInfo: resolveInfoFrom(delta.deletedReference, delta.reference)
                 })
             }
             if (delta instanceof ReferenceChangedDelta) {
                 return completed<ReferenceChangedEvent>("ReferenceChanged", { // § 5.8.7.3
                     parent: delta.parent.id,
-                    reference: metaPointerFor(delta.reference),
+                    reference: metaPointerForFeature(delta.reference),
                     index: delta.index,
                     oldReference: idFrom(delta.oldReference),
-                    oldResolveInfo: nodeBaseReader.resolveInfoFor!(delta.oldReference!, delta.reference)!,
+                    oldResolveInfo: resolveInfoFrom(delta.oldReference, delta.reference),
                     newReference: idFrom(delta.newReference),
-                    newResolveInfo: nodeBaseReader.resolveInfoFor!(delta.newReference!, delta.reference)!
+                    newResolveInfo: resolveInfoFrom(delta.newReference, delta.reference)
                 })
             }
             if (delta instanceof CompositeDelta) {
@@ -385,7 +394,7 @@ export const deltaToEventTranslator = (
                 })
             }
             if (delta instanceof NoOpDelta) {
-                return completed<NoOpEvent>("NoOp", {})
+                return completed<NoOpEvent>("NoOpEvent", {})
             }
 
             throw new Error(`can't handle delta of type ${delta.constructor.name}`)

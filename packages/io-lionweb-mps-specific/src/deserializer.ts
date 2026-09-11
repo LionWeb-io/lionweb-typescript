@@ -18,30 +18,64 @@
 import { LionWebJsonChunk } from "@lionweb/json"
 import {
     consoleProblemReporter,
+    deserializeLanguagesFrom,
     deserializerWith,
     Language,
     lioncoreReaderFor,
+    LionWebVersion,
     LionWebVersions,
     nodesExtractorUsing,
     ProblemReporter
 } from "@lionweb/core"
 import { ioLionWebMpsSpecificLanguage } from "./definition.js"
-import { combinedWriter } from "./facade.js"
+import { combinedWriterFor } from "./facade.js"
 
-const { v2023_1 } = LionWebVersions
+
+/**
+ * Type def. for objects that contain all necessary data to deserialize a {@link LionWebJsonChunk serialization chunk}
+ * that potentially contains nodes that are annotated with annotations from the `io.lionweb.mps.specific` language.
+ */
+export type IoLionWebMpsSpecificDeserializationData = {
+    /**
+     * The {@link LionWebJsonChunk serialization chunk} to deserialize.
+     */
+    serializationChunk: LionWebJsonChunk
+    /**
+     * The version of the LionWeb serialization format to deserialize from.
+     * Default = {@link LionWebVersions.v2023_1}.
+     */
+    lionWebVersion?: LionWebVersion
+    /**
+     * A {@link ProblemReporter} to report problems with.
+     * Default = {@link consoleProblemReporter}.
+     */
+    problemReporter?: ProblemReporter
+}
+
 
 /**
  * @return the deserialization of the given {@link LionWebJsonChunk serialization chunk} as an array of {@link Language languages}.
  * Any LionCore/M3 node can be annotated using annotations from the `io.lionweb.mps.specific` language.
- * Problems are reported through the given {@link ProblemReporter} which defaults to {@link consoleProblemReporter}.
+ * Deserialization happens according to the optionally given {@link LionWebVersion}, which defaults to {@link LionWebVersions.v2023_1}.
+ * Problems are reported through the optionally given {@link ProblemReporter}, which defaults to {@link consoleProblemReporter}.
  */
-export const deserializeLanguagesWithIoLionWebMpsSpecific = (serializationChunk: LionWebJsonChunk, problemHandler: ProblemReporter = consoleProblemReporter) =>
+export const deserializeLanguagesWithIoLionWebMpsSpecificFrom = ({serializationChunk, lionWebVersion = LionWebVersions.v2023_1, problemReporter = consoleProblemReporter}: IoLionWebMpsSpecificDeserializationData) =>
     deserializerWith({
-        writer: combinedWriter,
-        languages: [v2023_1.lioncoreFacade.language, ioLionWebMpsSpecificLanguage],
-        problemReporter: problemHandler
+        writer: combinedWriterFor(lionWebVersion),
+        languages: [lionWebVersion.lioncoreFacade.language, ioLionWebMpsSpecificLanguage],
+        problemReporter
     })(
         serializationChunk,
-        [v2023_1.lioncoreFacade.language, v2023_1.builtinsFacade.language].flatMap(nodesExtractorUsing(lioncoreReaderFor(v2023_1)))
-    ).filter((node) => node instanceof Language) as Language[]
+        [lionWebVersion.lioncoreFacade.language, lionWebVersion.builtinsFacade.language].flatMap(nodesExtractorUsing(lioncoreReaderFor(lionWebVersion)))
+    ).filter((node) => node instanceof Language)
+
+
+/**
+ * Legacy version of {@link deserializeLanguagesWithIoLionWebMpsSpecificFrom} that’s not parametrized with a {@link LionWebVersion},
+ * but uses the {@link LionWebVersions.v2023_1}.
+ *
+ * @deprecated Use {@link deserializeLanguagesWithIoLionWebMpsSpecificFrom} instead.
+ */
+export const deserializeLanguagesWithIoLionWebMpsSpecific = (serializationChunk: LionWebJsonChunk, problemReporter: ProblemReporter = consoleProblemReporter) =>
+    deserializeLanguagesFrom({serializationChunk, problemReporter})
 

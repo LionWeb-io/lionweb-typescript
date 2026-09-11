@@ -7,7 +7,7 @@ const { join } = require("path")
 const { EOL } = require("os")
 
 
-const versions = require("./versions.json")
+const versions = require("../versions.json")
 
 const {
     "publish-version": publishVersion,
@@ -57,7 +57,9 @@ const writeJsonAsFile = (path, json) => {
     writeFileSync(path, JSON.stringify(json, null, 4) + EOL)
 }
 
-readFileAsJson("package.json")
+const mainPackageJson = readFileAsJson("./package.json")
+
+mainPackageJson
     .workspaces
     .map((path) => path.substring("./packages/".length))
     .forEach((pkg) => {
@@ -76,9 +78,8 @@ readFileAsJson("package.json")
         console.log()
     })
 
-const mainPackageJson = readFileAsJson("package.json")
 replaceVersionsIn(mainPackageJson.devDependencies, true)
-writeJsonAsFile("package.json", mainPackageJson)
+writeJsonAsFile("../package.json", mainPackageJson)
 
 console.log(`updating package-lock.json...`)
 exec("npm install")

@@ -1,4 +1,4 @@
-import { LanguageEntity, LanguageFactory, LionWebVersions } from "@lionweb/core"
+import { ConceptModifier, LanguageEntity, LanguageFactory, LionWebVersions } from "@lionweb/core"
 import { chain, concatenator, lastOf } from "@lionweb/ts-utils"
 import { DiagramRenderer, generateMermaidForLanguage, generatePlantUmlForLanguage, hasher } from "@lionweb/utilities"
 import { readFileSync, writeFileSync } from "fs"
@@ -33,7 +33,7 @@ const testLanguage = (() => {
 
     const { node } = LionWebVersions.v2023_1.builtinsFacade.classifiers
 
-    const concept1 = factory.concept("Concept1", false, node)
+    const concept1 = factory.concept("Concept1", ConceptModifier.concrete, node)
     factory.property(concept1, "prop1").isOptional().ofType(primitive1)
     factory.reference(concept1, "selfRefs").isMultiple().isOptional().ofType(concept1)
     factory.reference(concept1, "nodeTargets").ofType(node)

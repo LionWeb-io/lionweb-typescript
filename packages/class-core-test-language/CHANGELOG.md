@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.10
+
+* Propagate expansion of TestLanguage:
+  * Add a `containedNode` optional containment of `Node` to `TestAnnotation`.
+  * Add a `RestrictedTestAnnotation` annotation that annotates `LinkTestConcept` (rather than `Node`).
+  * Add a `otherContainment_0_1` optional containment of `LinkTestConcept` to `LinkTestConcept`.
+* (Propagate changes to `class-core-generator`.)
+
+
 ## 0.9.0
 
 * (Regenerate language implementation after changes to `class-core-generator`.)

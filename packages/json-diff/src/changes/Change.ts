@@ -9,7 +9,7 @@ export type ChangeType =
     | "ParentChanged"
     | "PropertyValueChanged"
     | "SerializationFormatChange"
-    | "PropertyRemoved"
+    | "PropertyDeleted"
     | "PropertyAdded"
     | "NodeClassifierChanged"
     | "ContainmentAdded"
@@ -27,10 +27,10 @@ export type ChangeType =
     | "TargetOrderChanged"
 
 /**
- * Additionbal property in property, contauinment and reference changes to state
- * that the whole property/ containment / reference definition is missing.
+ * Additional property in property, containment and reference changes to state
+ * that the whole property/ containment / reference definition is missing either before or after.
  */
-export enum Missing {
+export enum FeatureMissing {
     /**
      * Both before and after have a definition for the property / containment / reference
      */
@@ -45,6 +45,9 @@ export enum Missing {
     MissingAfter
 }
 
+/**
+ * A `Change` describes something that is different in the after chunk compared to the before chunk.
+ */
 export abstract class Change {
     abstract readonly changeType: ChangeType
     context: JsonContext

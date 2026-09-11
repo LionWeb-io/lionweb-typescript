@@ -10,7 +10,7 @@ import { generateTsTypesWith } from "./m2/generate-ts-types-command.js"
 import { diffSerializationChunks } from "./serialization/diff-command.js"
 import { executeMeasureCommand } from "./serialization/measure-command.js"
 import { repairSerializationChunkAt } from "./serialization/repair-command.js"
-import { sortSerializationChunkAt } from "./serialization/sort-command.js"
+import { executeSortCommand } from "./serialization/sort-command.js"
 import { executeTextualizeCommand } from "./serialization/textualize-command.js"
 import { runValidationOnSerializationChunkAt } from "./validate-command.js"
 
@@ -126,7 +126,7 @@ Missing key-value pairs are put in and get their default values.`
 (See the README.md for more information.)`
                 )
             } else {
-                commandArgs.forEach(sortSerializationChunkAt)
+                await executeSortCommand(commandArgs)
             }
             break
         }

@@ -209,7 +209,7 @@ describe("annotations", () => {
         equal(deltas.length, nAnnotations + 1)
 
         // action:
-        ltc.moveAnnotation(3, 5)
+        ltc.moveAnnotationOffsetBased(3, 2)
 
         deepEqual(ltc.annotations, [
             annotations[0],
@@ -221,7 +221,7 @@ describe("annotations", () => {
             annotations[6]
         ])
         equal(deltas.length, nAnnotations + 2)
-        deepEqual(deltas[deltas.length - 1], new AnnotationMovedInSameParentDelta(ltc, 3, 5, annotations[3]))
+        deepEqual(deltas[deltas.length - 1], new AnnotationMovedInSameParentDelta(ltc, 3, 2, annotations[3]))
     })
 
 })

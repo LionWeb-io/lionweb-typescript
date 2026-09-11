@@ -1,4 +1,4 @@
-import { LanguageFactory, LionWebVersions } from "@lionweb/core"
+import { ConceptModifier, LanguageFactory, LionWebVersions } from "@lionweb/core"
 import { chain, concatenator, lastOf } from "@lionweb/ts-utils"
 import { hasher } from "@lionweb/utilities"
 
@@ -7,15 +7,15 @@ export const libraryLanguage = factory.language
 
 const { integerDataType, stringDataType } = LionWebVersions.v2023_1.builtinsFacade.primitiveTypes
 
-const book = factory.concept("Book", false)
+const book = factory.concept("Book", ConceptModifier.concrete)
 const bookType = factory.enumeration("BookType")
 factory.enumerationLiteral(bookType, "Normal")
 factory.enumerationLiteral(bookType, "Special")
 
-export const library = factory.concept("Library", false)
-const writer = factory.concept("Writer", false)
-const guideBookWriter = factory.concept("GuideBookWriter", false, writer)
-const specialistBookWriter = factory.concept("SpecialistBookWriter", false, writer)
+export const library = factory.concept("Library", ConceptModifier.concrete)
+const writer = factory.concept("Writer", ConceptModifier.concrete)
+const guideBookWriter = factory.concept("GuideBookWriter", ConceptModifier.concrete, writer)
+const specialistBookWriter = factory.concept("SpecialistBookWriter", ConceptModifier.concrete, writer)
 
 factory.property(library, "name").ofType(stringDataType).havingKey("library_Library_name")
 factory.containment(library, "books").ofType(book).isMultiple()

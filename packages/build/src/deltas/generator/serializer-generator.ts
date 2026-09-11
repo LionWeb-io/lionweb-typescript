@@ -24,6 +24,7 @@ import {
     Delta,
     FeatureType,
     Field,
+    IndexOffsetType,
     IndexType,
     NodeType,
     PrimitiveValueType,
@@ -35,16 +36,16 @@ import { isSerializingAsChunk } from "./helpers.js"
 
 const serializationExpressionFor = (name: string, type: Type) => {
     if (type instanceof FeatureType) {
-        return `metaPointerFor(delta.${name})`
+        return `metaPointerForFeature(delta.${name})`
     }
     if (type instanceof NodeType) {
         return type.serialization instanceof RefOnly ? `idFrom(delta.${name})` : `delta.${name}.id`
     }
-    if (type instanceof IndexType) {
+    if (type instanceof IndexType || type instanceof IndexOffsetType) {
         return `delta.${name}`
     }
     if (type instanceof PrimitiveValueType) {
-        return `defaultPropertyValueSerializer.serializeValue(delta.${name}, delta.property)`
+        return `propertyValueSerializer.serializeValue(delta.${name}, delta.property)`
     }
     if (type instanceof CustomType) {
         return type.serializationExpr
@@ -56,7 +57,7 @@ const serializationExpressionFor = (name: string, type: Type) => {
 const serializationsForField = ({name, type}: Field) => [
     `${name}: ${serializationExpressionFor(name, type)}`,
     ...(isSerializingAsChunk(type)
-            ? [`${(type.serialization as SerializeSubTree).fieldName}: serializeNodeBases([delta.${name}])`]
+            ? [`${(type.serialization as SerializeSubTree).fieldName}: serializeAsDeltaChunk(delta.${name})`]
             : []
     )
 ]
@@ -81,7 +82,7 @@ const serializationOf = ({name, fields}: Delta) =>
 export const serializerForDeltas = (deltas: Delta[], header?: string) =>
     asString([
         header ?? [],
-        `import { metaPointerFor } from "@lionweb/core";`,
+        `import { LionWebVersions, metaPointerForFeature } from "@lionweb/core";`,
         `import { IDelta } from "../base.js";`,
         `import {`,
         indent(
@@ -93,16 +94,32 @@ export const serializerForDeltas = (deltas: Delta[], header?: string) =>
             commaSeparated(sortedStrings([...(deltas.map(({name}) => `${name}SerializedDelta`)), `SerializedDelta`]))
         ),
         `} from "./types.g.js";`,
-        `import { defaultPropertyValueSerializer } from "./base.js";`,
         `import { idFrom } from "../../references.js";`,
-        `import { serializeNodeBases } from "../../serializer.js";`,
+        `import { propertyValueSerializerWith } from "../../serializer.js";`,
+        `import { serializeAsDeltaChunk } from "./base.js"`,
         ``,
         ``,
-        `export const serializeDelta = (delta: IDelta): SerializedDelta => {`,
+        `export const deltaSerializer = (lionWebVersion = LionWebVersions.v2023_1) => {`,
         indent([
-            deltas.map(serializationOf),
-            "throw new Error(`serialization of delta of class ${delta.constructor.name} not implemented`);"
+            `const propertyValueSerializer = propertyValueSerializerWith({ primitiveValueSerializer: lionWebVersion.builtinsFacade.propertyValueSerializer });`,
+            ``,
+            `const serializeDelta = (delta: IDelta): SerializedDelta => {`,
+            indent([
+                deltas.map(serializationOf),
+                "throw new Error(`serialization of delta of class ${delta.constructor.name} not implemented`);"
+            ]),
+            `}`,
+            ``,
+            `return serializeDelta;`
         ]),
-        `}`
+        `}`,
+        ``,
+        ``,
+        `/**`,
+        ` * Legacy version of {@link deltaSerializer} for the default {@LionWebVersion LionWeb version} 2023.1.`,
+        ` * @deprecated Use {@link deltaSerializer} instead.`,
+        ` */`,
+        `export const serializeDelta = deltaSerializer(LionWebVersions.v2023_1);`,
+        ``
     ])
 

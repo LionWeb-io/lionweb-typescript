@@ -49,6 +49,8 @@ class FeatureType implements Type {
 
 class Field implements INamed
 
+class IndexOffsetType implements Type
+
 class IndexType implements Type
 
 interface NodeSerialization
@@ -73,6 +75,7 @@ Deltas "1" o--> "*" Delta: deltas
 
 FeatureType "*" --> "0..1" Field: container
 Field "1" o--> "1" Type: type
+
 
 
 NodeType "1" o--> "0..1" NodeSerialization: serialization

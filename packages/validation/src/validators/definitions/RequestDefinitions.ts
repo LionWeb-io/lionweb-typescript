@@ -271,6 +271,27 @@ export const RequestDefinitions: MessageGroup = {
                     mayBeNull: false,
                 },
                 {
+                    name: "deltaProtocolVersion",
+                    type: "String",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "clientId",
+                    type: "ClientId",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
+                    name: "repositoryId",
+                    type: "String",
+                    isList: false,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+                {
                     name: "queryId",
                     type: "QueryId",
                     isList: false,

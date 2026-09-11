@@ -4,10 +4,16 @@
 
 
 import { LionWebId, LionWebKey } from "@lionweb/json"
-import { cycleWith, flatMapNonCyclingFollowing, sortByStringKey } from "@lionweb/ts-utils"
+import {
+    cycleWith,
+    flatMapNonCyclingFollowing,
+    mappedComparer,
+    regularStringComparer,
+    sorterWith
+} from "@lionweb/ts-utils"
 import { containmentChain } from "../functions.js"
 import { ClassifierDeducer } from "../reading.js"
-import { isRef, UnresolvedReference } from "../references.js"
+import { isResolvedReference, UnresolvedReference } from "../references.js"
 import { Node } from "../types.js"
 import {
     Annotation,
@@ -156,7 +162,7 @@ const nameOf = <T extends INamed>({name}: T): string =>
  * @return the given named things sorted by name
  */
 export const nameSorted = <T extends INamed>(ts: T[]): T[] =>
-    sortByStringKey(ts, nameOf)
+    sorterWith<T>(mappedComparer(nameOf, regularStringComparer))(ts)
 
 
 /**
@@ -215,15 +221,15 @@ const inheritsDirectlyFrom = (classifier: Classifier): Classifier[] => {
     if (classifier instanceof Concept || classifier instanceof Annotation) {
         return [
             ...(
-                isRef(classifier.extends)
+                isResolvedReference(classifier.extends)
                     ? [classifier.extends as Classifier]
                     : []
             ),
-            ...classifier.implements.filter(isRef)
+            ...classifier.implements.filter(isResolvedReference)
         ]
     }
     if (classifier instanceof Interface) {
-        return classifier.extends.filter(isRef)
+        return classifier.extends.filter(isResolvedReference)
     }
     throw new Error(`classifier type ${typeof classifier} not handled`)
 }
@@ -303,7 +309,7 @@ const metaTypedBasedClassifierDeducerFor = <NT extends Node & IMetaTyped>(langua
  * @return all {@link Concept concepts} defined in the given {@link Language language}.
  */
 const conceptsOf = (language: Language): Concept[] =>
-    language.entities.filter((entity) => entity instanceof Concept) as Concept[]
+    language.entities.filter((entity) => entity instanceof Concept)
 
 
 const isInstantiableClassifier = (entity: LanguageEntity): boolean =>

@@ -23,6 +23,7 @@ import {
     Delta,
     FeatureType,
     Field,
+    IndexOffsetType,
     IndexType,
     NodeType,
     PrimitiveValueType,
@@ -39,7 +40,7 @@ const tsTypeForTypeOfSerializationField = (type: Type) => {
     if (type instanceof NodeType) {
         return type.serialization instanceof RefOnly ? "IdOrNull" : "LionWebId"
     }
-    if (type instanceof IndexType) {
+    if (type instanceof IndexType || type instanceof IndexOffsetType) {
         return "number"
     }
     if (type instanceof PrimitiveValueType) {
@@ -54,7 +55,7 @@ const tsTypeForTypeOfSerializationField = (type: Type) => {
 const fieldsForSerializationType = ({name, type}: Field) => [
     `${name}: ${tsTypeForTypeOfSerializationField(type)}`,
     when(isSerializingAsChunk(type))(() =>
-        `${((type as NodeType).serialization as SerializeSubTree).fieldName}: LionWebJsonChunk`
+        `${((type as NodeType).serialization as SerializeSubTree).fieldName}: LionWebJsonDeltaChunk`
     )
 ]
 
@@ -73,7 +74,7 @@ const typeForDelta = ({name, fields}: Delta) =>
 export const serializationTypesForDeltas = (deltas: Delta[], header?: string) =>
     asString([
         header ?? [],
-        `import { LionWebId, LionWebJsonMetaPointer, LionWebJsonChunk } from "@lionweb/json";`,
+        `import { LionWebId, LionWebJsonMetaPointer, LionWebJsonDeltaChunk } from "@lionweb/json";`,
         `import { IdOrNull } from "../../references.js";`,
         ``,
         ``,

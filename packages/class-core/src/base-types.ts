@@ -152,6 +152,21 @@ export interface INodeBase extends Node {
      */
     removeAnnotation(annotation: INodeBase): void;
 
+    /**
+     * Moves the annotation that’s initially at index `oldIndex` by `indexOffset` positions
+     * to index `oldIndex + indexOffset`, shifting the other annotations as necessary.
+     */
+    moveAnnotationOffsetBased(oldIndex: number, indexOffset: number): void;
+
+    /**
+     * Moves the annotation that’s initially at index `oldIndex` by `indexOffset` positions
+     * to index `oldIndex + indexOffset`,
+     * replacing the annotation that was at that index initially.
+     * This deletes the replaced annotation, including all its descendants,
+     * but does NOT change references to any of the deleted nodes.
+     */
+    moveAndReplaceAnnotationOffsetBased(oldIndex: number, indexOffset: number): void;
+
 
     /**
      * @return the {@link Feature features} of the {@link Classifier} that is this node's meta-type,
@@ -328,6 +343,14 @@ export abstract class NodeBase implements INodeBase {
 
     removeAnnotation(annotation: INodeBase) {
         this.annotationsValueManager.remove(annotation);
+    }
+
+    moveAnnotationOffsetBased(oldIndex: number, indexOffset: number) {
+        this.annotationsValueManager.moveOffsetBased(oldIndex, indexOffset);
+    }
+
+    moveAndReplaceAnnotationOffsetBased(oldIndex: number, indexOffset: number) {
+        this.annotationsValueManager.moveAndReplaceOffsetBased(oldIndex, indexOffset);
     }
 
 }

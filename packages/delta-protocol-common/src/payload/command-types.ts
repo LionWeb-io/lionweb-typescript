@@ -15,20 +15,35 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { LionWebId, LionWebJsonChunk, LionWebJsonMetaPointer } from "@lionweb/json"
-import { DeltaAdditionalInfo } from "./common.js"
+import { LionWebId, LionWebJsonDeltaChunk, LionWebJsonMetaPointer } from "@lionweb/json"
+import { ContinuedChunkMessage, CustomMessageKind, DeltaAdditionalInfo, SplittableMessage } from "./common.js"
 
 export interface Command extends DeltaAdditionalInfo {
     commandId: LionWebId
 }
 
 
+/**
+ * “Abstract” interface for custom commands.
+ *
+ * § 5.3.2
+ */
+export interface CustomCommand extends Command {
+    messageKind: CustomMessageKind
+}
+
+
 // in order of the specification (§ 5.7):
 
+/** § 5.7.1 */
+export interface ContinuedCommand extends Command, ContinuedChunkMessage {
+    messageKind: "ContinuedCommand"
+}
+
 /** § 5.7.2.1 */
-export interface AddPartitionCommand extends Command {
+export interface AddPartitionCommand extends Command, SplittableMessage {
     messageKind: "AddPartition"
-    newPartition: LionWebJsonChunk
+    newPartition: /* single */ LionWebJsonDeltaChunk
 }
 
 /** § 5.7.2.2 */
@@ -68,10 +83,10 @@ export interface ChangePropertyCommand extends Command {
 }
 
 /** § 5.7.5.1 */
-export interface AddChildCommand extends Command {
+export interface AddChildCommand extends Command, SplittableMessage {
     messageKind: "AddChild"
     parent: LionWebId
-    newChild: LionWebJsonChunk
+    newChild: /* single */ LionWebJsonDeltaChunk
     containment: LionWebJsonMetaPointer
     index: number
 }
@@ -86,9 +101,9 @@ export interface DeleteChildCommand extends Command {
 }
 
 /** § 5.7.5.3 */
-export interface ReplaceChildCommand extends Command {
+export interface ReplaceChildCommand extends Command, SplittableMessage {
     messageKind: "ReplaceChild"
-    newChild: LionWebJsonChunk
+    newChild: /* single */ LionWebJsonDeltaChunk
     parent: LionWebId
     containment: LionWebJsonMetaPointer
     index: number
@@ -97,37 +112,46 @@ export interface ReplaceChildCommand extends Command {
 
 /** § 5.7.5.4 */
 export interface MoveChildFromOtherContainmentCommand extends Command {
-    messageKind: "MoveChildFromOtherContainment"
+    messageKind: "MoveChildFromContainmentInOtherParent"
     newParent: LionWebId
     newContainment: LionWebJsonMetaPointer
     newIndex: number
+    oldParent: LionWebId
+    oldContainment: LionWebJsonMetaPointer
+    oldIndex: number
     movedChild: LionWebId
 }
 
 /** § 5.7.5.5 */
 export interface MoveChildFromOtherContainmentInSameParentCommand extends Command {
     messageKind: "MoveChildFromOtherContainmentInSameParent"
+    parent: LionWebId
     newContainment: LionWebJsonMetaPointer
     newIndex: number
-    movedChild: LionWebId
-    parent: LionWebId
     oldContainment: LionWebJsonMetaPointer
     oldIndex: number
+    movedChild: LionWebId
 }
 
 /** § 5.7.5.6 */
 export interface MoveChildInSameContainmentCommand extends Command {
-    messageKind: "MoveChildInSameContainment"
-    newIndex: number
+    messageKind: "MoveChildInSameContainmentInSameParent"
+    parent: LionWebId
+    containment: LionWebJsonMetaPointer
+    oldIndex: number
+    indexOffset: number
     movedChild: LionWebId
 }
 
 /** § 5.7.5.7 */
 export interface MoveAndReplaceChildFromOtherContainmentCommand extends Command {
-    messageKind: "MoveAndReplaceChildFromOtherContainment"
+    messageKind: "MoveAndReplaceChildFromContainmentInOtherParent"
     newParent: LionWebId
     newContainment: LionWebJsonMetaPointer
     newIndex: number
+    oldParent: LionWebId
+    oldContainment: LionWebJsonMetaPointer
+    oldIndex: number
     replacedChild: LionWebId
     movedChild: LionWebId
 }
@@ -135,24 +159,31 @@ export interface MoveAndReplaceChildFromOtherContainmentCommand extends Command 
 /** § 5.7.5.8 */
 export interface MoveAndReplaceChildFromOtherContainmentInSameParentCommand extends Command {
     messageKind: "MoveAndReplaceChildFromOtherContainmentInSameParent"
+    parent: LionWebId
     newContainment: LionWebJsonMetaPointer
     newIndex: number
+    oldContainment: LionWebJsonMetaPointer
+    oldIndex: number
     replacedChild: LionWebId
     movedChild: LionWebId
 }
 
 /** § 5.7.5.9 */
 export interface MoveAndReplaceChildInSameContainmentCommand extends Command {
-    messageKind: "MoveAndReplaceChildInSameContainment"
-    newIndex: number
+    messageKind: "MoveAndReplaceChildInSameContainmentInSameParent"
+    parent: LionWebId
+    containment: LionWebJsonMetaPointer
+    oldIndex: number
+    indexOffset: number
+    movedChild: LionWebId
     replacedChild: LionWebId
 }
 
 /** § 5.7.6.1 */
-export interface AddAnnotationCommand extends Command {
+export interface AddAnnotationCommand extends Command, SplittableMessage {
     messageKind: "AddAnnotation"
     parent: LionWebId
-    newAnnotation: LionWebJsonChunk
+    newAnnotation: /* single */ LionWebJsonDeltaChunk
     index: number
 }
 
@@ -165,9 +196,9 @@ export interface DeleteAnnotationCommand extends Command {
 }
 
 /** § 5.7.6.3 */
-export interface ReplaceAnnotationCommand extends Command {
+export interface ReplaceAnnotationCommand extends Command, SplittableMessage {
     messageKind: "ReplaceAnnotation"
-    newAnnotation: LionWebJsonChunk
+    newAnnotation: /* single */ LionWebJsonDeltaChunk
     parent: LionWebId
     index: number
     replacedAnnotation: LionWebId
@@ -178,13 +209,17 @@ export interface MoveAnnotationFromOtherParentCommand extends Command {
     messageKind: "MoveAnnotationFromOtherParent"
     newParent: LionWebId
     newIndex: number
+    oldParent: LionWebId
+    oldIndex: number
     movedAnnotation: LionWebId
 }
 
 /** § 5.7.6.5 */
 export interface MoveAnnotationInSameParentCommand extends Command {
     messageKind: "MoveAnnotationInSameParent"
-    newIndex: number
+    parent: LionWebId
+    oldIndex: number
+    indexOffset: number
     movedAnnotation: LionWebId
 }
 
@@ -193,6 +228,8 @@ export interface MoveAndReplaceAnnotationFromOtherParentCommand extends Command 
     messageKind: "MoveAndReplaceAnnotationFromOtherParent"
     newParent: LionWebId
     newIndex: number
+    oldParent: LionWebId
+    oldIndex: number
     replacedAnnotation: LionWebId
     movedAnnotation: LionWebId
 }
@@ -200,9 +237,11 @@ export interface MoveAndReplaceAnnotationFromOtherParentCommand extends Command 
 /** § 5.7.6.7 */
 export interface MoveAndReplaceAnnotationInSameParentCommand extends Command {
     messageKind: "MoveAndReplaceAnnotationInSameParent"
-    newIndex: number
-    replacedAnnotation: LionWebId
+    parent: LionWebId
+    oldIndex: number
+    indexOffset: number
     movedAnnotation: LionWebId
+    replacedAnnotation: LionWebId
 }
 
 /** § 5.7.7.1 */

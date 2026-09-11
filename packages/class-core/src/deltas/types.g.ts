@@ -103,7 +103,7 @@ export class ChildReplacedDelta implements IDelta {
     }
 }
 
-export class ChildMovedFromOtherContainmentDelta implements IDelta {
+export class ChildMovedFromContainmentInOtherParentDelta implements IDelta {
     constructor(
         public readonly oldParent: INodeBase,
         public readonly oldContainment: Containment,
@@ -128,18 +128,18 @@ export class ChildMovedFromOtherContainmentInSameParentDelta implements IDelta {
     }
 }
 
-export class ChildMovedInSameContainmentDelta implements IDelta {
+export class ChildMovedInSameContainmentInSameParentDelta implements IDelta {
     constructor(
         public readonly parent: INodeBase,
         public readonly containment: Containment,
         public readonly oldIndex: number,
-        public readonly newIndex: number,
+        public readonly indexOffset: number,
         public readonly movedChild: INodeBase
     ) {
     }
 }
 
-export class ChildMovedAndReplacedFromOtherContainmentDelta implements IDelta {
+export class ChildMovedAndReplacedFromContainmentInOtherParentDelta implements IDelta {
     constructor(
         public readonly newParent: INodeBase,
         public readonly newContainment: Containment,
@@ -166,12 +166,12 @@ export class ChildMovedAndReplacedFromOtherContainmentInSameParentDelta implemen
     }
 }
 
-export class ChildMovedAndReplacedInSameContainmentDelta implements IDelta {
+export class ChildMovedAndReplacedInSameContainmentInSameParentDelta implements IDelta {
     constructor(
         public readonly parent: INodeBase,
         public readonly containment: Containment,
         public readonly oldIndex: number,
-        public readonly newIndex: number,
+        public readonly indexOffset: number,
         public readonly movedChild: INodeBase,
         public readonly replacedChild: INodeBase
     ) {
@@ -221,7 +221,7 @@ export class AnnotationMovedInSameParentDelta implements IDelta {
     constructor(
         public readonly parent: INodeBase,
         public readonly oldIndex: number,
-        public readonly newIndex: number,
+        public readonly indexOffset: number,
         public readonly movedAnnotation: INodeBase
     ) {
     }
@@ -243,7 +243,7 @@ export class AnnotationMovedAndReplacedInSameParentDelta implements IDelta {
     constructor(
         public readonly parent: INodeBase,
         public readonly oldIndex: number,
-        public readonly newIndex: number,
+        public readonly indexOffset: number,
         public readonly replacedAnnotation: INodeBase,
         public readonly movedAnnotation: INodeBase
     ) {

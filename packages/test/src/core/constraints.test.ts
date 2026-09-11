@@ -1,4 +1,4 @@
-import { Concept, issuesLanguage, Language, LanguageFactory } from "@lionweb/core"
+import { Concept, ConceptModifier, issuesLanguage, Language, LanguageFactory } from "@lionweb/core"
 import { chain, concatenator, lastOf } from "@lionweb/ts-utils"
 import { nanoIdGen } from "@lionweb/utilities"
 
@@ -60,8 +60,8 @@ describe("general LionCore constraints - name/version", () => {
 describe("Identifiers and Keys", () => {
     it("should (Key) be unique within its id-space", () => {
         const language = new Language("myLang", "0", "x", "x")
-        const concept1 = new Concept(language, "myConcept1", "key_y", "id_1", false)
-        const concept2 = new Concept(language, "myConcept2", "key_y", "id_2", false)
+        const concept1 = new Concept(language, "myConcept1", "key_y", "id_1", ConceptModifier.concrete)
+        const concept2 = new Concept(language, "myConcept2", "key_y", "id_2", ConceptModifier.concrete)
         language.havingEntities(concept1, concept2)
 
         const issues = issuesLanguage(language)
@@ -80,8 +80,8 @@ describe("Identifiers and Keys", () => {
 
     it("should (Identifiers) be unique within its id-space", () => {
         const language = new Language("myLang", "0", "x", "x")
-        const concept1 = new Concept(language, "myConcept1", "key_1", "id_y", false)
-        const concept2 = new Concept(language, "myConcept2", "key_2", "id_y", false)
+        const concept1 = new Concept(language, "myConcept1", "key_1", "id_y", ConceptModifier.concrete)
+        const concept2 = new Concept(language, "myConcept2", "key_2", "id_y", ConceptModifier.concrete)
         language.havingEntities(concept1, concept2)
 
         const issues = issuesLanguage(language)
@@ -122,7 +122,7 @@ describe("Identifiers and Keys", () => {
 describe("Language constraints", () => {
     it("should (entities, concept,...) have names", () => {
         const language = new Language("", "0", "x", "x")
-        const concept = new Concept(language, " my lang  ", "y", "y", false)
+        const concept = new Concept(language, " my lang  ", "y", "y", ConceptModifier.concrete)
         language.havingEntities(concept)
         const issues = issuesLanguage(language)
         deepEqual(issues.length, 2)

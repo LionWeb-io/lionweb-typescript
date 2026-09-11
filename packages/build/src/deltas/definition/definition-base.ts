@@ -22,6 +22,7 @@ import {
     FeatureKinds,
     FeatureType,
     Field,
+    IndexOffsetType,
     IndexType,
     NodeSerialization,
     NodeType,
@@ -82,6 +83,9 @@ export const primitiveValue = (fieldName: string) =>
 
 export const index = (fieldName: string) =>
     field(fieldName, IndexType.create(newId()))
+
+export const indexOffset = () =>
+    field("indexOffset", IndexOffsetType.create(newId()))
 
 export const parentage = (containerName: string, featureName: string, featureKind: FeatureKinds): Field[] => {
     const nodeField = node(containerName)

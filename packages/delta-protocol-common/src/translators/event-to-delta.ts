@@ -25,20 +25,20 @@ import {
     AnnotationReplacedDelta,
     ChildAddedDelta,
     ChildDeletedDelta,
-    ChildMovedAndReplacedFromOtherContainmentDelta,
+    ChildMovedAndReplacedFromContainmentInOtherParentDelta,
     ChildMovedAndReplacedFromOtherContainmentInSameParentDelta,
-    ChildMovedAndReplacedInSameContainmentDelta,
-    ChildMovedFromOtherContainmentDelta,
+    ChildMovedAndReplacedInSameContainmentInSameParentDelta,
+    ChildMovedFromContainmentInOtherParentDelta,
     ChildMovedFromOtherContainmentInSameParentDelta,
-    ChildMovedInSameContainmentDelta,
+    ChildMovedInSameContainmentInSameParentDelta,
     ChildReplacedDelta,
     CompositeDelta,
     Deserializer,
+    DetailedDeserialization,
     IDelta,
     IdMapping,
     IdOrNull,
     ILanguageBase,
-    INodeBase,
     NoOpDelta,
     PartitionAddedDelta,
     PartitionDeletedDelta,
@@ -47,11 +47,10 @@ import {
     PropertyDeletedDelta,
     ReferenceAddedDelta,
     ReferenceChangedDelta,
-    ReferenceDeletedDelta,
-    RootsWithIdMapping
+    ReferenceDeletedDelta
 } from "@lionweb/class-core"
 import { featureResolversFor, LionWebVersions, PropertyValueDeserializer, referenceToSet } from "@lionweb/core"
-import { LionWebJsonChunk } from "@lionweb/json"
+import { LionWebJsonDeltaChunk } from "@lionweb/json"
 import {
     AnnotationAddedEvent,
     AnnotationDeletedEvent,
@@ -89,27 +88,44 @@ export type EventToDeltaTranslator = (event: Event, idMapping: IdMapping) => IDe
 
 /**
  * @return a {@link EventToDeltaTranslator} for the languages given as {@link ILanguageBase language bases},
- * with the given {@link IdMapping `idMapping`} and {@link Deserializer `deserializeWithIdMapping` deserializer function}.
+ * with the given {@link IdMapping `idMapping`} and {@link Deserializer `deserializer` deserializer function}.
  */
 export const eventToDeltaTranslator = (
     languageBases: ILanguageBase[],
-    deserializeWithIdMapping: Deserializer<RootsWithIdMapping>,
+    deserializer: Deserializer<DetailedDeserialization>,
     propertyValueDeserializer: PropertyValueDeserializer = LionWebVersions.v2023_1.builtinsFacade.propertyValueDeserializer
 ): EventToDeltaTranslator => {
 
     const eventAsDelta = (event: Event, idMapping: IdMapping): IDelta | undefined => {
 
-        const deserializedNodeFrom = (chunk: LionWebJsonChunk): INodeBase => {
-            const { roots, idMapping: newIdMapping } = deserializeWithIdMapping(chunk, idMapping)    // (deserializer should take care of installing delta receiver)
-            if (roots.length !== 1) {
-                throw new Error(`expected exactly 1 root node in deserialization of chunk in event, but got ${roots.length}`)
+        /**
+         * @return the *anchor node* in the deserialization of the delta chunk that’s in the property of the `event` object with the passed `propertyName`.
+         * The deserialized nodes are also registered with (/ merged into) `idMapping`.
+         *
+         * It’s checked that there’s only a single anchor node *candidate*.
+         * If that’s the case, that candidate is returned as the anchor node, and otherwise an error is thrown.
+         *
+         * It’s *not* checked that:
+         *  * The anchor node MUST be complete.
+         *  * Any other node than the anchor node MUST be a descendant of that anchor node.
+         *  * All nodes MUST either be new nodes (for all `Added` events), or new or reused nodes (for all `Replaced` events).
+         */
+        const deserializeAsSingleDeltaChunk = <ET extends Event>(propertyName: keyof ET) => {
+            const chunk = (event as ET)[propertyName] as LionWebJsonDeltaChunk
+            const { nodes, idMapping: newIdMapping } = deserializer(chunk, idMapping)
+            // look up anchor node, and verify that the chunk is a single delta chunk:
+            const unclaimedNodes = nodes.filter(({parent}) => parent === undefined)
+            if (unclaimedNodes.length !== 1) {
+                throw new Error(`expected exactly 1 (candidate) anchor node in deserialization of ${propertyName.toString()} chunk in ${event.messageKind} event, but got ${unclaimedNodes.length}`)
             }
             idMapping.mergeIn(newIdMapping)
-            return roots[0]
+            return unclaimedNodes[0]
         }
-        const { resolvedPropertyFrom, resolvedContainmentFrom, resolvedReferenceFrom } = featureResolversFor(languageBases.map(({language}) => language));
+
+        const { resolvedPropertyFrom, resolvedContainmentFrom, resolvedReferenceFrom } = featureResolversFor(languageBases.map(({language}) => language))
+
         const resolvedRefTo = (ref: IdOrNull | undefined) =>
-            (ref === undefined || ref === null) ? referenceToSet() : idMapping.fromId(ref)
+            (ref === undefined || ref === null) ? referenceToSet : idMapping.fromId(ref)
 
         switch (event.messageKind) {
             /*
@@ -122,8 +138,9 @@ export const eventToDeltaTranslator = (
             // in order of the specification (§ 5.8):
 
             case "PartitionAdded": { // § 5.8.2.1
-                const { newPartition } = event as PartitionAddedEvent
-                return new PartitionAddedDelta(deserializedNodeFrom(newPartition))
+                // TODO  support newPartition being a shallow delta chunk
+                return new PartitionAddedDelta(deserializeAsSingleDeltaChunk<PartitionAddedEvent>("newPartition"))
+                // Note: it’s not checked whether the anchor node in newPartition actually has `parent` equal to null.
             }
             case "PartitionDeleted": { // § 5.8.2.2
                 const { deletedPartition } = event as PartitionDeletedEvent
@@ -151,33 +168,33 @@ export const eventToDeltaTranslator = (
                 return new PropertyChangedDelta(resolvedNode, resolvedProperty, propertyValueDeserializer.deserializeValue(oldValue, resolvedProperty), propertyValueDeserializer.deserializeValue(newValue, resolvedProperty))
             }
             case "ChildAdded": { // § 5.8.5.1
-                const { parent, newChild, containment, index } = event as ChildAddedEvent
-                const resolvedNode = idMapping.nodeBaseFromId(parent)
-                const resolvedContainment = resolvedContainmentFrom(containment, resolvedNode.classifier)
-                return new ChildAddedDelta(resolvedNode, resolvedContainment, index, deserializedNodeFrom(newChild))
+                const { parent, containment, index } = event as ChildAddedEvent
+                const resolvedParent = idMapping.nodeBaseFromId(parent)
+                const resolvedContainment = resolvedContainmentFrom(containment, resolvedParent.classifier)
+                return new ChildAddedDelta(resolvedParent, resolvedContainment, index, deserializeAsSingleDeltaChunk<ChildAddedEvent>("newChild"))
             }
             case "ChildDeleted": { // § 5.8.5.2
                 const { parent, deletedChild, containment, index } = event as ChildDeletedEvent
-                const resolvedNode = idMapping.nodeBaseFromId(parent)
-                const resolvedContainment = resolvedContainmentFrom(containment, resolvedNode.classifier)
+                const resolvedParent = idMapping.nodeBaseFromId(parent)
+                const resolvedContainment = resolvedContainmentFrom(containment, resolvedParent.classifier)
                 const resolvedDeletedChild = idMapping.nodeBaseFromId(deletedChild)
-                return new ChildDeletedDelta(resolvedNode, resolvedContainment, index, resolvedDeletedChild)
+                return new ChildDeletedDelta(resolvedParent, resolvedContainment, index, resolvedDeletedChild)
             }
             case "ChildReplaced": { // § 5.8.5.3
-                const { newChild, replacedChild, parent, containment, index } = event as ChildReplacedEvent
+                const { replacedChild, parent, containment, index } = event as ChildReplacedEvent
                 const resolvedParent = idMapping.nodeBaseFromId(parent)
                 const resolvedContainment = resolvedContainmentFrom(containment, resolvedParent.classifier)
                 const resolvedReplacedChild = idMapping.nodeBaseFromId(replacedChild)
-                return new ChildReplacedDelta(resolvedParent, resolvedContainment, index, resolvedReplacedChild, deserializedNodeFrom(newChild))
+                return new ChildReplacedDelta(resolvedParent, resolvedContainment, index, resolvedReplacedChild, deserializeAsSingleDeltaChunk<ChildReplacedEvent>("newChild"))
             }
-            case "ChildMovedFromOtherContainment": { // § 5.8.5.4
+            case "ChildMovedFromContainmentInOtherParent": { // § 5.8.5.4
                 const { newParent, newContainment, newIndex, movedChild, oldParent, oldContainment, oldIndex } = event as ChildMovedFromOtherContainmentEvent
                 const resolvedOldParent = idMapping.nodeBaseFromId(oldParent)
                 const resolvedOldContainment = resolvedContainmentFrom(oldContainment, resolvedOldParent.classifier)
                 const resolvedNewParent = idMapping.nodeBaseFromId(newParent)
                 const resolvedNewContainment = resolvedContainmentFrom(newContainment, resolvedOldParent.classifier)
                 const resolvedMovedChild = idMapping.nodeBaseFromId(movedChild)
-                return new ChildMovedFromOtherContainmentDelta(resolvedOldParent, resolvedOldContainment, oldIndex, resolvedNewParent, resolvedNewContainment, newIndex, resolvedMovedChild)
+                return new ChildMovedFromContainmentInOtherParentDelta(resolvedOldParent, resolvedOldContainment, oldIndex, resolvedNewParent, resolvedNewContainment, newIndex, resolvedMovedChild)
             }
             case "ChildMovedFromOtherContainmentInSameParent": { // § 5.8.5.5
                 const { parent, oldContainment, oldIndex, newContainment, newIndex, movedChild } = event as ChildMovedFromOtherContainmentInSameParentEvent
@@ -187,14 +204,14 @@ export const eventToDeltaTranslator = (
                 const resolvedMovedChild = idMapping.nodeBaseFromId(movedChild)
                 return new ChildMovedFromOtherContainmentInSameParentDelta(resolvedParent, resolvedOldContainment, oldIndex, resolvedMovedChild, resolvedNewContainment, newIndex)
             }
-            case "ChildMovedInSameContainment": { // § 5.8.5.6
-                const { parent, containment, oldIndex, newIndex, movedChild } = event as ChildMovedInSameContainmentEvent
+            case "ChildMovedInSameContainmentInSameParent": { // § 5.8.5.6
+                const { parent, containment, oldIndex, indexOffset, movedChild } = event as ChildMovedInSameContainmentEvent
                 const resolvedParent = idMapping.nodeBaseFromId(parent)
                 const resolvedContainment = resolvedContainmentFrom(containment, resolvedParent.classifier)
                 const resolvedMovedChild = idMapping.nodeBaseFromId(movedChild)
-                return new ChildMovedInSameContainmentDelta(resolvedParent, resolvedContainment, oldIndex, newIndex, resolvedMovedChild)
+                return new ChildMovedInSameContainmentInSameParentDelta(resolvedParent, resolvedContainment, oldIndex, indexOffset, resolvedMovedChild)
             }
-            case "ChildMovedAndReplacedFromOtherContainment": { // § 5.8.5.7
+            case "ChildMovedAndReplacedFromContainmentInOtherParent": { // § 5.8.5.7
                 const { newParent, newContainment, newIndex, movedChild, oldParent, oldContainment, oldIndex, replacedChild } = event as ChildMovedAndReplacedFromOtherContainmentEvent
                 const resolvedNewParent = idMapping.nodeBaseFromId(newParent)
                 const resolvedNewContainment = resolvedContainmentFrom(newContainment, resolvedNewParent.classifier)
@@ -202,7 +219,7 @@ export const eventToDeltaTranslator = (
                 const resolvedOldParent = idMapping.nodeBaseFromId(oldParent)
                 const resolvedOldContainment = resolvedContainmentFrom(oldContainment, resolvedOldParent.classifier)
                 const resolvedReplacedChild = idMapping.nodeBaseFromId(replacedChild)
-                return new ChildMovedAndReplacedFromOtherContainmentDelta(resolvedNewParent, resolvedNewContainment, newIndex, resolvedMovedChild, resolvedOldParent, resolvedOldContainment, oldIndex, resolvedReplacedChild)
+                return new ChildMovedAndReplacedFromContainmentInOtherParentDelta(resolvedNewParent, resolvedNewContainment, newIndex, resolvedMovedChild, resolvedOldParent, resolvedOldContainment, oldIndex, resolvedReplacedChild)
             }
             case "ChildMovedAndReplacedFromOtherContainmentInSameParent": { // § 5.8.5.8
                 const { parent, oldContainment, oldIndex, newContainment, newIndex, movedChild, replacedChild } = event as ChildMovedAndReplacedFromOtherContainmentInSameParentEvent
@@ -213,18 +230,18 @@ export const eventToDeltaTranslator = (
                 const resolvedReplacedChild = idMapping.nodeBaseFromId(replacedChild)
                 return new ChildMovedAndReplacedFromOtherContainmentInSameParentDelta(resolvedParent, resolvedOldContainment, oldIndex, resolvedNewContainment, newIndex, resolvedMovedChild, resolvedReplacedChild)
             }
-            case "ChildMovedAndReplacedInSameContainment": { // § 5.8.5.9
-                const { parent, containment, oldIndex, newIndex, movedChild, replacedChild } = event as ChildMovedAndReplacedInSameContainmentEvent
+            case "ChildMovedAndReplacedInSameContainmentInSameParent": { // § 5.8.5.9
+                const { parent, containment, oldIndex, indexOffset, movedChild, replacedChild } = event as ChildMovedAndReplacedInSameContainmentEvent
                 const resolvedParent = idMapping.nodeBaseFromId(parent)
                 const resolvedContainment = resolvedContainmentFrom(containment, resolvedParent.classifier)
                 const resolvedMovedChild = idMapping.nodeBaseFromId(movedChild)
                 const resolvedReplacedChild = idMapping.nodeBaseFromId(replacedChild)
-                return new ChildMovedAndReplacedInSameContainmentDelta(resolvedParent, resolvedContainment, oldIndex, newIndex, resolvedMovedChild, resolvedReplacedChild)
+                return new ChildMovedAndReplacedInSameContainmentInSameParentDelta(resolvedParent, resolvedContainment, oldIndex, indexOffset, resolvedMovedChild, resolvedReplacedChild)
             }
             case "AnnotationAdded": { // § 5.8.6.1
-                const { parent, index, newAnnotation } = event as AnnotationAddedEvent
+                const { parent, index } = event as AnnotationAddedEvent
                 const resolvedParent = idMapping.nodeBaseFromId(parent)
-                return new AnnotationAddedDelta(resolvedParent, index, deserializedNodeFrom(newAnnotation))
+                return new AnnotationAddedDelta(resolvedParent, index, deserializeAsSingleDeltaChunk<AnnotationAddedEvent>("newAnnotation"))
             }
             case "AnnotationDeleted": { // § 5.8.6.2
                 const { parent, index, deletedAnnotation } = event as AnnotationDeletedEvent
@@ -233,10 +250,10 @@ export const eventToDeltaTranslator = (
                 return new AnnotationDeletedDelta(resolvedParent, index, resolvedDeletedAnnotation)
             }
             case "AnnotationReplaced": { // § 5.8.6.3
-                const { newAnnotation, replacedAnnotation, parent, index } = event as AnnotationReplacedEvent
+                const { replacedAnnotation, parent, index } = event as AnnotationReplacedEvent
                 const resolvedParent = idMapping.nodeBaseFromId(parent)
                 const resolvedReplacedAnnotation = idMapping.nodeBaseFromId(replacedAnnotation)
-                return new AnnotationReplacedDelta(resolvedParent, index, resolvedReplacedAnnotation, deserializedNodeFrom(newAnnotation))
+                return new AnnotationReplacedDelta(resolvedParent, index, resolvedReplacedAnnotation, deserializeAsSingleDeltaChunk<AnnotationReplacedEvent>("newAnnotation"))
             }
             case "AnnotationMovedFromOtherParent": { // § 5.8.6.4
                 const { oldParent, oldIndex, newParent, newIndex, movedAnnotation } = event as AnnotationMovedFromOtherParentEvent
@@ -246,10 +263,10 @@ export const eventToDeltaTranslator = (
                 return new AnnotationMovedFromOtherParentDelta(resolvedOldParent, oldIndex, resolvedNewParent, newIndex, resolvedMovedAnnotation)
             }
             case "AnnotationMovedInSameParent": { // § 5.8.6.5
-                const { parent, oldIndex, newIndex, movedAnnotation } = event as AnnotationMovedInSameParentEvent
+                const { parent, oldIndex, indexOffset, movedAnnotation } = event as AnnotationMovedInSameParentEvent
                 const resolvedParent = idMapping.nodeBaseFromId(parent)
                 const resolvedMovedAnnotation = idMapping.nodeBaseFromId(movedAnnotation)
-                return new AnnotationMovedInSameParentDelta(resolvedParent, oldIndex, newIndex, resolvedMovedAnnotation)
+                return new AnnotationMovedInSameParentDelta(resolvedParent, oldIndex, indexOffset, resolvedMovedAnnotation)
             }
             case "AnnotationMovedAndReplacedFromOtherParent": { // § 5.8.6.6
                 const { oldParent, oldIndex, replacedAnnotation, newParent, newIndex, movedAnnotation } = event as AnnotationMovedAndReplacedFromOtherParentEvent
@@ -260,11 +277,11 @@ export const eventToDeltaTranslator = (
                 return new AnnotationMovedAndReplacedFromOtherParentDelta(resolvedOldParent, oldIndex, resolvedReplacedAnnotation, resolvedNewParent, newIndex, resolvedMovedAnnotation)
             }
             case "AnnotationMovedAndReplacedInSameParent": { // § 5.8.6.7
-                const { parent, oldIndex, newIndex, replacedAnnotation, movedAnnotation } = event as AnnotationMovedAndReplacedInSameParentEvent
+                const { parent, oldIndex, indexOffset, replacedAnnotation, movedAnnotation } = event as AnnotationMovedAndReplacedInSameParentEvent
                 const resolvedParent = idMapping.nodeBaseFromId(parent)
                 const resolvedReplacedAnnotation = idMapping.nodeBaseFromId(replacedAnnotation)
                 const resolvedMovedAnnotation = idMapping.nodeBaseFromId(movedAnnotation)
-                return new AnnotationMovedAndReplacedInSameParentDelta(resolvedParent, oldIndex, newIndex, resolvedReplacedAnnotation, resolvedMovedAnnotation)
+                return new AnnotationMovedAndReplacedInSameParentDelta(resolvedParent, oldIndex, indexOffset, resolvedReplacedAnnotation, resolvedMovedAnnotation)
             }
             case "ReferenceAdded": { // § 5.8.7.1
                 const { parent, reference, index, newReference } = event as ReferenceAddedEvent
@@ -296,7 +313,7 @@ export const eventToDeltaTranslator = (
                         .filter((deltaOrUndefined) => deltaOrUndefined !== undefined) as IDelta[]
                 )
             }
-            case "NoOp": { // § 5.8.8.1
+            case "NoOpEvent": { // § 5.8.8.1
                 return new NoOpDelta()
             }
             case "ErrorEvent": { // § 5.8.8.2

@@ -15,18 +15,17 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { asTreeTextWith, INodeBase } from "@lionweb/class-core"
-import { idOf } from "@lionweb/core"
-
-
 /**
- * Render the give `node` as a textual tree but skipping every feature value that's unset — hence “anemic”.
+ * Extracts the various message kinds from the type definitions of the **query** payloads.
  */
-export const asAnemicTextualTree = (node: INodeBase) =>
-    asTreeTextWith(idOf)([node])
-        .split("\n")
-        .filter((line) => !(
-            ["nothing", "none", "not set"].some((term) => line.endsWith(`<${term}>`))
-        ))
-        .join("\n");
+
+import { messageKindsExtractedFrom } from "./message-kinds-common.js"
+
+const postfix = "Response"
+messageKindsExtractedFrom("../delta-protocol-common/src/payload/query-types.ts")
+    .filter((messageKind) => messageKind.endsWith(postfix))
+    .map((messageKind) => messageKind.substring(0, messageKind.length - postfix.length))
+    .forEach((messageKind, index, messageKinds) => {
+        console.log(`    "${messageKind}"${index < messageKinds.length - 1 ? "," : ""}`)
+    })
 

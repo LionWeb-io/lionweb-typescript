@@ -23,7 +23,8 @@ import {
 import * as classes from "@lionweb/io-lionweb-mps-specific/dist/implementation.js"
 
 import { Classifier, LionWebVersions, M3Node, serializeLanguages } from "@lionweb/core"
-import { genericAsTreeText, writeJsonAsFile } from "@lionweb/utilities"
+import { writeJsonAsFileSync } from "@lionweb/node-utils"
+import { genericAsTreeText } from "@lionweb/utilities"
 import { join } from "path"
 import { writeFileSync } from "fs"
 import { deepEqual, isTrue } from "../test-utils/assertions.js"
@@ -33,7 +34,7 @@ describe(`io.lionweb.mps.specific language`, () => {
     it(`its definition can be persisted (as JSON and in the generic textual format)`, () => {
         const path = `artifacts/${ioLionWebMpsSpecificLanguage.name.replaceAll(".", "-")}`
         const serializationChunk = serializeLanguages(ioLionWebMpsSpecificLanguage)
-        writeJsonAsFile(join(path, `${ioLionWebMpsSpecificLanguage.name}-reserialized.json`), serializationChunk)
+        writeJsonAsFileSync(join(path, `${ioLionWebMpsSpecificLanguage.name}-reserialized.json`), serializationChunk)
         writeFileSync(join(path, `${ioLionWebMpsSpecificLanguage.name}.generic.txt`), genericAsTreeText(serializationChunk, [LionWebVersions.v2023_1.lioncoreFacade.language]))
     })
 

@@ -1,7 +1,8 @@
-import { LionWebId, LionWebJsonChunk, LionWebJsonNode } from "@lionweb/json"
+import { LionWebId, LionWebJsonChunk, LionWebJsonNode, LionWebJsonReferenceTarget } from "@lionweb/json"
 import { asArray, keepDefineds, lazyMapGet, Nested3Map, uniquesAmong } from "@lionweb/ts-utils"
-import { asIds, metaPointerFor } from "./functions.js"
+import { asIds, metaPointerForFeature } from "./functions.js"
 import { Reader } from "./reading.js"
+import { isReferenceToSet, isResolvedReference, SingleRef, UnresolvedReference } from "./references.js"
 import { Node } from "./types.js"
 import { inheritsDirectlyFrom } from "./m3/functions.js"
 import {
@@ -177,7 +178,7 @@ export const serializerWith = <NT extends Node, RT extends Node = NT>(configurat
                 const value = reader.getFeatureValue(node, feature)
                 const featureLanguage = feature.classifier.language
                 registerLanguageUsed(featureLanguage)
-                const featureMetaPointer = metaPointerFor(feature)
+                const featureMetaPointer = metaPointerForFeature(feature)
                 if (feature instanceof Property) {
                     if (value === undefined && !serializeEmptyFeatures) {
                         // for immediate backward compatibility: skip empty property values regardless of options?.skipEmptyValues
@@ -206,8 +207,7 @@ export const serializerWith = <NT extends Node, RT extends Node = NT>(configurat
                     }
                     serializedNode.containments.push({
                         containment: featureMetaPointer,
-                        children: keepDefineds(asIds(children))
-                            .map(childId => childId as string)
+                        children: asIds(keepDefineds(children))
                     })
                     children.forEach(childOrNull => {
                         if (childOrNull !== null) {
@@ -217,19 +217,34 @@ export const serializerWith = <NT extends Node, RT extends Node = NT>(configurat
                     return
                 }
                 if (feature instanceof Reference) {
-                    // Note: value can be null === typeof unresolved, e.g. on an unset (or previously unresolved) single-valued reference
-                    const targets = asArray(value) as (RT | null)[]
+                    const targets = (asArray(value) as SingleRef<RT>[]).filter((ref) => {
+                        if (isResolvedReference(ref)) {
+                            return true // (1) ref is a node, having an ID
+                        }
+                        if (isReferenceToSet(ref)) {
+                            return false
+                        }
+                        return ref.targetId !== undefined || ref.resolveInfo !== undefined  // (2) not both are undefined
+                    }) as (RT | UnresolvedReference)[]
                     if (targets.length === 0 && !serializeEmptyFeatures) {
                         return
                     }
                     serializedNode.references.push({
                         reference: featureMetaPointer,
-                        targets: keepDefineds(targets) // (skip "non-connected" targets)
-                            .map(t => ({
-                                resolveInfo:
-                                    (reader.resolveInfoFor ? reader.resolveInfoFor(t, feature) : simpleNameDeducer(t, feature)) ?? null,
-                                reference: t.id
-                            }))
+                        targets: targets
+                            .map((t) =>
+                                t instanceof UnresolvedReference
+                                    ? {
+                                        resolveInfo: t.resolveInfo ?? null,
+                                        reference: t.targetId ?? null
+                                        // at least one of these will be non-null <== (2)
+                                    } as LionWebJsonReferenceTarget
+                                    : {
+                                        resolveInfo: (reader.resolveInfoFor ? reader.resolveInfoFor(t, feature) : simpleNameDeducer(t, feature)) ?? null,
+                                        reference: t.id
+                                        // reference will be a non-null string (~(1))
+                                    }
+                            )
                     })
                     return
                 }
@@ -254,7 +269,8 @@ export const serializerWith = <NT extends Node, RT extends Node = NT>(configurat
 
 /**
  * @return a {@link LionWebJsonChunk} of the given model (i.e., an array of {@link Node nodes} - the first argument) to the LionWeb serialization JSON format.
- *  *Note:* this function will be deprecated and removed later — use {@link nodeSerializer} instead.
+ *
+ *  @deprecated Use {@link nodeSerializer} instead, which makes configuration easier through a Parameter Object.
  */
 export const serializeNodes = <NT extends Node, RT extends Node = NT>(
     nodes: NT[],

@@ -17,7 +17,7 @@
 
 import { expect } from "chai"
 
-import { waitUntil } from "@lionweb/delta-protocol-test-cli/dist/async.js"
+import { waitUntil } from "../../test-utils/async.js"
 
 
 describe("async", function() {

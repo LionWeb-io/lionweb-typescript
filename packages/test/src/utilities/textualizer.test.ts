@@ -1,4 +1,4 @@
-import { Classifier, LanguageFactory, serializerWith } from "@lionweb/core"
+import { Classifier, ConceptModifier, LanguageFactory, serializerWith } from "@lionweb/core"
 import { concatenator } from "@lionweb/ts-utils"
 import { genericAsTreeText, languageAsText } from "@lionweb/utilities"
 import { readFileSync, writeFileSync } from "fs"
@@ -20,7 +20,7 @@ describe("LionCore-specific textual syntax", () => {
     it("textualize a language with unset references", () => {
         const factory = new LanguageFactory("foo", "0", concatenator("-"), concatenator("-"))
         factory.annotation("Anno")   // no .annotates
-        const concept = factory.concept("Bar", false)
+        const concept = factory.concept("Bar", ConceptModifier.concrete)
         factory.property(concept, "tender") // no .type
         factory.reference(concept, "lizzard")   // no .type
         equal(

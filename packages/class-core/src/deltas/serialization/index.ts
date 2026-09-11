@@ -15,7 +15,8 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-export type {DeltaDeserializer} from "./base.js";
+export { serializeAsDeltaChunk } from "./base.js";
+export type { DeltaDeserializer } from "./base.js";
 export * from "./deserializer.g.js";
 export * from "./serializer.g.js";
 // skip serializer-helpers.js: none of its members need to be visible outside this package

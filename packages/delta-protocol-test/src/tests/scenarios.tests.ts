@@ -17,7 +17,6 @@
 
 import { expect } from "chai"
 
-
 import { LionWebClient } from "@lionweb/delta-protocol-client"
 import {
     ansi,
@@ -101,11 +100,6 @@ describe(`scenarios (${ansi.colorSchemeExplanationString})`, async function() {
         semanticLogItemsToConsole(actualLogItems)
 
         const serializationOfNewPartition = {
-            serializationFormatVersion: "2023.1",
-            languages: [
-                { key: "TestLanguage", version: "0" },
-                { key: "LionCore-builtins", version: "2023.1" }
-            ],
             nodes: [{
                 id: "partition-A",
                 classifier: { language: "TestLanguage", version: "0", key: "TestPartition" },
@@ -151,7 +145,7 @@ describe(`scenarios (${ansi.colorSchemeExplanationString})`, async function() {
                     messageKind: "PartitionAdded",
                     newPartition: serializationOfNewPartition,
                     originCommands: [{ participationId: "participation-a", commandId: "cmd-1" }],
-                    sequenceNumber: 0,
+                    sequenceNumber: 1,
                     additionalInfos: []
                 }
             ),

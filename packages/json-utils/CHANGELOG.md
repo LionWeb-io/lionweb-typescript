@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.10.0
+
+(No changes)
+
+
 ## 0.9.0
 
 * Add several methods to `LionWebJsonChunkWrapper`.

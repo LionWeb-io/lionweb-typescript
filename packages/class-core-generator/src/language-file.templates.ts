@@ -15,7 +15,7 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { Concept, isUnresolvedReference, Language } from "@lionweb/core"
+import { Concept, isResolvedReference, Language, LionWebVersion } from "@lionweb/core"
 import { indent } from "@lionweb/textgen-utils"
 import { dependencyOrderOf, sortedStringsByUppercase } from "@lionweb/ts-utils"
 import { asString, commaSeparated, when, withNewlineAppended } from "littoral-templates"
@@ -25,16 +25,16 @@ import { GeneratorOptions } from "./generator.js"
 import { Imports } from "./helpers/index.js"
 import { reflectiveClassFor } from "./reflective-layer.templates.js"
 
-export const languageFileFor = (language: Language, options: GeneratorOptions) => {
+export const languageFileFor = (language: Language, lionWebVersion: LionWebVersion, options: GeneratorOptions) => {
 
     const {name, version, key, id, entities} = language
 
-    const imports = new Imports(language)
+    const imports = new Imports(language, lionWebVersion.builtinsFacade)
 
     const orderedEntities = dependencyOrderOf(
         entities,
         (entity) =>
-            (entity instanceof Concept && entity.extends !== undefined && !isUnresolvedReference(entity.extends)) ? [entity.extends] : []
+            (entity instanceof Concept && isResolvedReference(entity.extends)) ? [entity.extends] : []
     )
     if (typeof orderedEntities === "boolean") {
         throw new Error(`language ${name} has a cycle among the graph of entities with edges formed by the inheritance dependency`)
@@ -42,7 +42,7 @@ export const languageFileFor = (language: Language, options: GeneratorOptions) =
 
     const postImportsPart = [
         ``,
-        reflectiveClassFor(imports)(language),
+        reflectiveClassFor(language, imports),
         ``,
         ``,
         orderedEntities
@@ -61,7 +61,7 @@ export const languageFileFor = (language: Language, options: GeneratorOptions) =
  */`,
         ``,
         ``,
-        `import * as ${Imports.importAlias("classCore")} from "${options.genericImportLocation}";`,
+        `import * as ${Imports.importAlias("class-core")} from "${options.genericImportLocation}";`,
         `import * as ${Imports.importAlias("core")} from "@lionweb/core";`,
         `import * as ${Imports.importAlias("json")} from "@lionweb/json";`,
         when(imports.languageImports.length > 0)(

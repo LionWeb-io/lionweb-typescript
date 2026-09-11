@@ -248,5 +248,17 @@ export const ChunksDefinitions: TypeGroup = {
                 },
             ],
         },
+        {
+            name: "IdList",
+            properties: [
+                {
+                    name: "ids",
+                    type: "LionWebId",
+                    isList: true,
+                    isOptional: false,
+                    mayBeNull: false,
+                },
+            ],
+        },
     ],
 };

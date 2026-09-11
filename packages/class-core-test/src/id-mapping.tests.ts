@@ -16,7 +16,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { IdMapping } from "@lionweb/class-core"
-import { isUnresolvedReference } from "@lionweb/core"
+import { isReferenceToSet } from "@lionweb/core"
 
 import { LinkTestConcept } from "@lionweb/class-core-test-language"
 import { equal, isTrue, throws } from "./assertions.js"
@@ -38,12 +38,12 @@ describe("ID mapping", () => {
 
     it("fromRefId", () => {
         const idMapping = new IdMapping({})
-        isTrue(isUnresolvedReference(idMapping.fromRefId(null)))
+        isTrue(isReferenceToSet(idMapping.fromRefId(null)))
 
         const node = LinkTestConcept.create("node")
         idMapping.updateWith(node)
         equal(idMapping.fromRefId("node"), node)
-        isTrue(isUnresolvedReference(idMapping.fromRefId("foo")))
+        isTrue(isReferenceToSet(idMapping.fromRefId("foo")))
     })
 
     it("fromId", () => {
