@@ -7,6 +7,7 @@
 * W.r.t. the `sortedSerializationChunk` function:
   * Give it an additional, optional flag argument `sortConnections` that determines whether containments, references, and annotations are sorted by ID.
   * It now sorts used languages and features by full meta-pointer, not just its key (language’s key for used language, feature’s key for feature).
+* Bump `nanoid` dependency to version 5.1.16 because version 5.1.6 was marked/deemed vulnerable.
 
 
 ## 0.9.0
