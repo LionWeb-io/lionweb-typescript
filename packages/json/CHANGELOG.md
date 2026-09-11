@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.10.0 — not yet released
+## 0.10.0
 
 * Add a `LionWebJsonDeltaChunk` type for the delta protocol.
     (Also add a `OnlyNodesOfLionWebJsonChunk` type to refactor to DRY.)

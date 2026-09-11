@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.10.0 — not yet released
+## 0.10.0
 
 * Implement a `TryToWriteProtocolLog` task that actively/forcefully tries to write the protocol log — this is for debugging convenience.
 * Move this implementation to the `lionweb-integration-testing` repository ([here](https://github.com/LionWeb-io/lionweb-integration-testing/tree/main/ts/client)).

@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.10.0 — not yet released
+## 0.10.0
 
 * Add support for offset-based move and move+replace actions:
   * Add `move[AndReplace]OffsetBased[Directly]` functions to value managers for (multi-valued) containments and annotations.

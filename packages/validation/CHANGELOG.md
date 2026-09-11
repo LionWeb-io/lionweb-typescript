@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.10.0 — not yet released
+## 0.10.0
 
 * Update all definitions to latest spec 
 * change all custom messages to start with `Custom_`.

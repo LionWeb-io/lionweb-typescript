@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.10.0 — not yet released
+## 0.10.0
 
 * Add a 3rd, optional argument to the `writeJsonAsFileSync` function: the number of spaces per indentation, defaulting to 4.
 * Add a `getFromHttps` function to retrieve the textual contents from a URL, also taking care of errors.

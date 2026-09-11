@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.10.0 — not yet released
+## 0.10.0
 
 * Refactor JSON diffing w.r.t. property changes:
   * Rename `Missing` to `FeatureMissing`.

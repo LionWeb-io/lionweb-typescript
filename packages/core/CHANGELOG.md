@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.10.0 — not yet released
+## 0.10.0
 
 * Introduce `metaPointerFor{Classifier|Feature|Language}` functions, and deprecate the `metaPointerFor` function taking a `Feature`.
   (This change has been propagated throughout the entire codebase.)
