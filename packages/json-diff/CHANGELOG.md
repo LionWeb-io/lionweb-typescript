@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.11.0 — not yet released
+
+
 ## 0.10.0
 
 * Refactor JSON diffing w.r.t. property changes:

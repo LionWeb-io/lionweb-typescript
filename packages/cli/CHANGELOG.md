@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.11.0 — not yet released
+
+
 ## 0.10.0
 
 * Add a `--sort-connections` flag to the `sort` command — see [`README.md`](README.md) for more information.

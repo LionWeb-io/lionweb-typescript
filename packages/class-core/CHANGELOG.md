@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.11.0 — not yet released
+
+
 ## 0.10.0
 
 * Add support for offset-based move and move+replace actions:

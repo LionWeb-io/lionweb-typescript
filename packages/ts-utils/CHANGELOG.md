@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.11.0 — not yet released
+
+
 ## 0.10.0
 
 * Implement a small library for lexicographically comparisons (of strings, mainly): `Comparer` type, `{regular|locale}StringComparer` constants, and `mappedComparer`, `lexiComparer`, and `mappedLexiComparer` functions.

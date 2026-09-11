@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.11.0 — not yet released
+
+
 ## 0.10.0
 
 * Deprecate the `readFileAsJson` and `writeJsonAsFile` functions in favor of the `readFileAsJsonSync` and `writeJsonAsFileSync` functions from `@lionweb/node-utils`.

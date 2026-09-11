@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.11.0 — not yet released
+
+
 ## 0.10.0
 
 * Add a 3rd, optional argument to the `writeJsonAsFileSync` function: the number of spaces per indentation, defaulting to 4.

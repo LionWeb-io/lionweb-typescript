@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.11.0 — not yet released
+
+
 ## 0.10.0
 
 * Bump `ws` dependency to version 8.21.0 because version 8.19.0 was marked/deemed vulnerable.
