@@ -18,7 +18,6 @@
 import { LionWebJsonChunk } from "@lionweb/json"
 import {
     consoleProblemReporter,
-    deserializeLanguagesFrom,
     deserializerWith,
     Language,
     lioncoreReaderFor,
@@ -68,14 +67,4 @@ export const deserializeLanguagesWithIoLionWebMpsSpecificFrom = ({serializationC
         serializationChunk,
         [lionWebVersion.lioncoreFacade.language, lionWebVersion.builtinsFacade.language].flatMap(nodesExtractorUsing(lioncoreReaderFor(lionWebVersion)))
     ).filter((node) => node instanceof Language)
-
-
-/**
- * Legacy version of {@link deserializeLanguagesWithIoLionWebMpsSpecificFrom} that’s not parametrized with a {@link LionWebVersion},
- * but uses the {@link LionWebVersions.v2023_1}.
- *
- * @deprecated Use {@link deserializeLanguagesWithIoLionWebMpsSpecificFrom} instead.
- */
-export const deserializeLanguagesWithIoLionWebMpsSpecific = (serializationChunk: LionWebJsonChunk, problemReporter: ProblemReporter = consoleProblemReporter) =>
-    deserializeLanguagesFrom({serializationChunk, problemReporter})
 

@@ -7,7 +7,6 @@ import {
     propertyValueDeserializerFrom,
     propertyValueSerializerFrom
 } from "../../builtins-common.js"
-import { isBuiltinNodeConcept } from "../../builtins-function.js"
 import { LanguageFactory } from "../../factory.js"
 import { ConceptModifier } from "../../types.js"
 
@@ -76,28 +75,4 @@ export const lioncoreBuiltinsFacade: LionCoreBuiltinsFacade = {
         jsonDatatype: jsonDataType
     }
 }
-
-
-/**
- * Definition of a LionCore language that serves as a standard library of built-in primitive types.
- *
- * @deprecated Use `<LionWebVersion>.builtinsFacade.isBuiltinNodeConcept` instead.
- */
-export const lioncoreBuiltins = factory.language
-/**
- * @deprecated Use `<LionWebVersion>.builtinsFacade.primitiveTypes` instead.
- */
-export const builtinPrimitives = lioncoreBuiltinsFacade.primitiveTypes
-/**
- * @deprecated Use `<LionWebVersion>.builtinsFacade.classifiers` instead.
- */
-export const builtinClassifiers = lioncoreBuiltinsFacade.classifiers
-/**
- * @deprecated Use `<LionWebVersion>.builtinsFacade.features` instead.
- */
-export const builtinFeatures = lioncoreBuiltinsFacade.features
-/**
- * @deprecated Use {@link isBuiltinNodeConcept} instead.
- */
-export const isBuiltinConcept = isBuiltinNodeConcept
 

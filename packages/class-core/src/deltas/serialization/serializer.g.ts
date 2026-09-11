@@ -370,10 +370,3 @@ export const deltaSerializer = (lionWebVersion = LionWebVersions.v2023_1) => {
     return serializeDelta;
 }
 
-
-/**
- * Legacy version of {@link deltaSerializer} for the default {@LionWebVersion LionWeb version} 2023.1.
- * @deprecated Use {@link deltaSerializer} instead.
- */
-export const serializeDelta = deltaSerializer(LionWebVersions.v2023_1);
-

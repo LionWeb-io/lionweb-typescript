@@ -2,6 +2,8 @@
 
 ## 0.11.0 — not yet released
 
+* **Breaking change!** Remove the deprecated `currentSerializationFormatVersion` constant — use the `serializationFormatVersion` from a `LionWebVersion` emitted from the `LionWebVersions` constant instead.
+
 
 ## 0.10.0
 

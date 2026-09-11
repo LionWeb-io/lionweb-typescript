@@ -6,11 +6,6 @@ export interface ProblemReporter {
     reportProblem: (message: string) => void
 }
 
-/**
- * Legacy alias for {@link ProblemReporter}, kept for backward compatibility, and to be deprecated and removed later.
- */
-export type SimplisticHandler = ProblemReporter
-
 
 /**
  * A default {@link ProblemReporter} that just outputs everything of the console.
@@ -20,11 +15,6 @@ export const consoleProblemReporter: ProblemReporter = {
         console.log(message)
     }
 }
-
-/**
- * Legacy alias for {@link consoleProblemReporter}, kept for backward compatibility, and to be deprecated and removed later.
- */
-export const defaultSimplisticHandler = consoleProblemReporter
 
 
 /**
@@ -39,11 +29,6 @@ export class AccumulatingProblemReporter implements ProblemReporter {
         return this._allProblems
     }
 }
-
-/**
- * Legacy alias for {@link AccumulatingProblemReporter}, kept for backward compatibility, and to be deprecated and removed later.
- */
-export const AccumulatingSimplisticHandler = AccumulatingProblemReporter
 
 
 /**
@@ -70,9 +55,4 @@ export class AggregatingProblemReporter implements ProblemReporter {
         return { ...this.messageByCount }
     }
 }
-
-/**
- * Legacy alias for {@link AggregatingProblemReporter}, kept for backward compatibility, and to be deprecated and removed later.
- */
-export type AggregatingSimplisticHandler = AggregatingProblemReporter
 

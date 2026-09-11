@@ -16,13 +16,6 @@ export interface PropertyValueDeserializer {
     deserializeValue(value: string | undefined, property: Property): unknown | undefined
 }
 
-/**
- * Misspelled alias of {@link PropertyValueDeserializer}, kept for backward compatibility, and to be deprecated and removed later.
- *
- * @deprecated Use {@link PropertyValueDeserializer} instead.
- */
-export interface PrimitiveTypeDeserializer extends PropertyValueDeserializer {}
-
 
 /**
  * Type definition for functions that deserialize a given {@link LionWebJsonChunk serialization chunk},
@@ -258,34 +251,4 @@ export const deserializerWith = <NT extends Node>(configuration: DeserializerCon
     }
 
 }
-
-
-/**
- * @return a deserialization of a {@link LionWebJsonChunk}.
- *
- * @param serializationChunk - a {@link SerializedModel model} from its LionWeb serialization JSON format
- * @param writer - a {@link Writer} that is used to instantiate nodes and set values on them
- * @param languages - {@link Language languages} that the serialized model is expected to conform to
- * @param dependentNodes - a collection of nodes from dependent models against which all references in the serialized model are supposed to resolve against
- * @param propertyValueDeserializer - a deserializer for values of properties (by default `LionWebVersions.v2023_1.builtinsFacade.propertyValueDeserializer`)
- * @param problemReporter - an object for reporting problems (by default a {@link consoleProblemReporter})
- *
- * @deprecated Use {@link deserializerWith} instead, which makes configuration easier through a Parameter Object.
- * This is a legacy variant of {@link deserializerWith}, kept (for now) for backward compatibility, and to be removed later.
- */
-export const deserializeSerializationChunk = <NT extends Node>(
-    serializationChunk: LionWebJsonChunk,
-    writer: Writer<NT>,
-    languages: Language[],
-    dependentNodes: Node[],
-    propertyValueDeserializer: PropertyValueDeserializer = LionWebVersions.v2023_1.builtinsFacade.propertyValueDeserializer,
-    problemReporter: ProblemReporter = consoleProblemReporter
-): NT[] => deserializerWith({ writer, languages, propertyValueDeserializer, problemReporter: problemReporter })(serializationChunk, dependentNodes)
-
-/**
- * Alias for {@link deserializeSerializationChunk}.
- *
- * @deprecated Use {@link deserializerWith} instead, which makes configuration easier through a Parameter Object.
- */
-export const deserializeChunk = deserializeSerializationChunk
 

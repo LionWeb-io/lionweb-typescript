@@ -33,18 +33,6 @@ export interface PropertyValueSerializer {
     serializeValue(value: unknown, property: Property): string | null
 }
 
-/**
- * Misspelled alias of {@link PropertyValueSerializer}, kept for backward compatibility, and to be deprecated and removed later.
- *
- * @deprecated Use {@link PropertyValueSerializer} instead.
- */
-export interface PrimitiveTypeSerializer extends PropertyValueSerializer {}
-
-
-const isPropertyValueSerializer = (value: unknown): value is PropertyValueSerializer =>
-    typeof value === "object" && value !== null && "serializeValue" in value && typeof value.serializeValue === "function"
-        // (we can't check the rest of the signature – i.e. arguments and their types – at runtime, because that's JavaScript)
-
 
 /**
  * Type to provide (non-required) options to the serializer.
@@ -65,21 +53,13 @@ export type SerializationOptions = Partial<{
      */
     propertyValueSerializer: PropertyValueSerializer
 
-    /**
-     * Misspelled alias of {@link #propertyValueSerializer}, kept for backward compatibility, and to be deprecated and removed later.
-     *
-     * @deprecated Use {@link propertyValueSerializer} instead.
-     */
-    primitiveTypeSerializer: PropertyValueSerializer
-
 }>
 
 
 /**
  * Type for objects to configure {@link Serializer node serializers} with.
  * The `reader` property is mandatory,
- * and the `serializeEmptyFeatures`, `propertyValueSerializer`,
- * and `primitiveTypeSerializer` (which is a legacy alias for `propertyValueSerializer`)
+ * and the `serializeEmptyFeatures`, and `propertyValueSerializer`.
  * properties are optional, with defined defaults.
  */
 export type SerializerConfiguration<NT extends Node, RT extends Node = NT> = {
@@ -98,24 +78,12 @@ export type SerializerConfiguration<NT extends Node, RT extends Node = NT> = {
 
 /**
  * @return a {@link Serializer} function that serializes the {@link Node nodes} passed to it,
- * configured through a `reader` {@link Reader} instance,
- * and (optionally) a `serializationOptions` {@link SerializationOptions} object.
- *
- * This is a legacy version of {@link serializerWith}, kept for backward compatibility, and to be deprecated and removed later.
- */
-export const nodeSerializer = <NT extends Node, RT extends Node = NT>(reader: Reader<NT, RT>, serializationOptions?: SerializationOptions): Serializer<NT> =>
-    serializerWith({ reader, ...serializationOptions })
-
-
-/**
- * @return a {@link Serializer} function that serializes the {@link Node nodes} passed to it,
  * configured through a `configuration` {@link SerializerConfiguration} object.
  */
 export const serializerWith = <NT extends Node, RT extends Node = NT>(configuration: SerializerConfiguration<NT, RT>): Serializer<NT> => {
     const { reader } = configuration
     const lionWebVersion = configuration?.lionWebVersion ?? LionWebVersions.v2023_1
-    const propertyValueSerializer =
-        configuration.propertyValueSerializer ?? configuration.primitiveTypeSerializer ?? lionWebVersion.builtinsFacade.propertyValueSerializer
+    const propertyValueSerializer = configuration.propertyValueSerializer ?? lionWebVersion.builtinsFacade.propertyValueSerializer
     const serializeEmptyFeatures = configuration.serializeEmptyFeatures ?? true
 
     const languageKey2version2classifierKey2allFeatures: Nested3Map<Feature[]> = {}
@@ -266,23 +234,4 @@ export const serializerWith = <NT extends Node, RT extends Node = NT>(configurat
         }
     }
 }
-
-/**
- * @return a {@link LionWebJsonChunk} of the given model (i.e., an array of {@link Node nodes} - the first argument) to the LionWeb serialization JSON format.
- *
- *  @deprecated Use {@link nodeSerializer} instead, which makes configuration easier through a Parameter Object.
- */
-export const serializeNodes = <NT extends Node, RT extends Node = NT>(
-    nodes: NT[],
-    reader: Reader<NT, RT>,
-    propertyValueSerializerOrOptions?: PropertyValueSerializer | SerializationOptions
-): LionWebJsonChunk =>
-    nodeSerializer<NT, RT>(
-        reader,
-        isPropertyValueSerializer(propertyValueSerializerOrOptions)
-            ? {
-                propertyValueSerializer: propertyValueSerializerOrOptions
-            }
-            : propertyValueSerializerOrOptions
-    )(nodes)
 
