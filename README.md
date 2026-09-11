@@ -243,7 +243,8 @@ Releasing all packages involves the following steps:
    2. Update the value of `lionweb.publish-version` in `versions.json`, and run `./scripts/update-package-versions.js`.
    3. Ensure that the `CHANGELOG.md` files of all packages have been updated properly and fully.
    4. Run `npm run initialize` to update `package-lock.json` and catch any (potential) problems.
-   5. Commit all changes from ii-iv with an appropriate message.
+   5. (Run `./rebuild.sh` just to be sure.)
+   6. Commit all changes from ii-iv with an appropriate message.
 
 2. Create a PR merging `release/<version>` into the `main` branch.
 
@@ -252,7 +253,7 @@ Releasing all packages involves the following steps:
     npm run release
     ```
     This requires access as a member of the `lionweb` organization on the npm registry — check whether you can access [the packages overview page](https://www.npmjs.com/settings/lionweb/packages).
-    This step also requires a means of authenticating with npm, e.g. using the Google Authenticator app.
+    This step also requires a means of authenticating with NPM — most likely using an authenticator app.
 
 4. Merge the PR with a merge commit.
 
