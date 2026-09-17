@@ -25,11 +25,6 @@ import { deltaSerializer } from "./serialization/index.js"
 export type DeltaReceiver = (delta: IDelta) => void;
 
 /**
- * Legacy alias for {@link DeltaReceiver}.
- */
-export type DeltaHandler = (delta: IDelta) => void;
-
-/**
  * @return a tuple consisting of a {@link DeltaReceiver} implementation (as 1st member) that pushes any received delta unto the tuple's 2nd member: an array of {@link IDelta deltas}.
  * @param printSerializations determines whether the deltas are serialized as JSON and printed to the JavaScript console.
  */
@@ -46,21 +41,11 @@ export const collectingDeltaReceiver = (printSerializations = false): [DeltaRece
 };
 
 /**
- * Legacy alias for {@link collectingDeltaReceiver}.
- */
-export const collectingDeltaHandler = collectingDeltaReceiver;
-
-/**
  * An interface for {@link DeltaReceiver delta receivers} that can be switched on and off — “latchingDeltaReceiverFrom”.
  */
 export interface LatchingDeltaReceiver extends DeltaReceiver {
     latch(emitDeltas: boolean): void;
 }
-
-/**
- * Legacy alias for {@link LatchingDeltaReceiver}.
- */
-export interface LatchingDeltaHandler extends LatchingDeltaReceiver {}
 
 /**
  * @return a latching version of the given {@link DeltaReceiver delta receiver}.

@@ -2,6 +2,8 @@
 
 ## 0.11.0 — not yet released
 
+* **Breaking change!** Remove the deprecated (and legacy) `deserializeLanguagesWithIoLionWebMpsSpecific` function — use `deserializeLanguagesWithIoLionWebMpsSpecificFrom` instead.
+
 
 ## 0.10.0
 

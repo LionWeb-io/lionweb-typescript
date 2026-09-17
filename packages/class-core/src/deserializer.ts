@@ -86,13 +86,6 @@ export type DetailedDeserialization = {
 
 };
 
-/**
- * Legacy alias for {@link DetailedDeserialization}, kept for backward compatibility, and to be removed later.
- *
- * @deprecated Use {@link DetailedDeserialization} instead.
- */
-export type RootsWithIdMapping = DetailedDeserialization;
-
 
 /**
  * Configuration parameters for a deserializer that are unchanging per invocation of the deserializer
@@ -105,8 +98,6 @@ export type DeserializerConfiguration = {
     propertyValueDeserializer?: PropertyValueDeserializer,
     /** Default: {@link consoleProblemReporter}. */
     problemReporter?: ProblemReporter
-    /** Legacy alias for {@link problemReporter}, kept for backward compatibility, and to be deprecated and removed later. */
-    problemsHandler?: ProblemReporter
 };
 
 
@@ -125,7 +116,7 @@ function nodeBaseDetailedDeserializer(languageBasesOrConfiguration: ILanguageBas
     const lionWebVersion = (Array.isArray(languageBasesOrConfiguration) ? undefined : languageBasesOrConfiguration.lionWebVersion) ?? LionWebVersions.v2023_1
     const [languageBases, receiveDelta, propertyValueDeserializer, problemReporter] = Array.isArray(languageBasesOrConfiguration)
         ? [languageBasesOrConfiguration, mayBeReceiveDelta, lionWebVersion.builtinsFacade.propertyValueDeserializer, consoleProblemReporter]
-        : [languageBasesOrConfiguration.languageBases, languageBasesOrConfiguration.receiveDelta, languageBasesOrConfiguration.propertyValueDeserializer ?? lionWebVersion.builtinsFacade.propertyValueDeserializer, languageBasesOrConfiguration.problemReporter ?? languageBasesOrConfiguration.problemsHandler ?? consoleProblemReporter];
+        : [languageBasesOrConfiguration.languageBases, languageBasesOrConfiguration.receiveDelta, languageBasesOrConfiguration.propertyValueDeserializer ?? lionWebVersion.builtinsFacade.propertyValueDeserializer, languageBasesOrConfiguration.problemReporter ?? consoleProblemReporter];
 
     const symbolTable = new MemoisingSymbolTable(languageBases.map(({language}) => language));
     const languageBaseFor = combinedLanguageBaseLookupFor(languageBases);
@@ -280,11 +271,6 @@ function nodeBaseDetailedDeserializer(languageBasesOrConfiguration: ILanguageBas
 
 
 /**
- * Legacy alias for {@link nodeBaseDetailedDeserializer}, kept for backward compatibility, and to be deprecated and removed later.
- */
-const nodeBaseDeserializerWithIdMapping = nodeBaseDetailedDeserializer;
-
-/**
  * @return a {@link Deserializer} function for the languages (given as {@link ILanguageBase}s) that returns the roots (of type {@link INodeBase}) of the deserialized model.
  * Deprecated:
  * @param languageBases the {@link ILanguageBase}s for (at least) all the languages used in the {@link LionWebJsonChunk} to deserialize, minus LionCore M3 and built-ins.
@@ -306,5 +292,5 @@ function nodeBaseDeserializer(languageBasesOrConfiguration: ILanguageBase[] | (F
 }
 
 
-export { nodeBaseDeserializer, nodeBaseDetailedDeserializer, nodeBaseDeserializerWithIdMapping };
+export { nodeBaseDeserializer, nodeBaseDetailedDeserializer };
 

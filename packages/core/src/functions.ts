@@ -40,13 +40,6 @@ export const metaPointerForFeature = (feature: Feature): LionWebJsonMetaPointer 
 }
 
 /**
- * Legacy version of {@link metaPointerForFeature} that wasn’t name-distinguished from other `metaPointerFor{Classifier|Feature|Language}` yet.
- *
- * @deprecated Use {@link metaPointerForFeature} instead.
- */
-export const metaPointerFor = metaPointerForFeature
-
-/**
  * @return the {@link LionWebJsonMetaPointer} for the given {@link Classifier}.
  */
 export const metaPointerForClassifier = (classifier: Classifier): LionWebJsonMetaPointer =>

@@ -6,16 +6,6 @@ import { INamed } from "./m3/index.js"
 
 
 /**
- * The `unresolved` “symbol” indicates a reference value which hasn't been resolved yet.
- * It differs from an unset (`undefined`) value.
- * This value shouldn’t be manipulated/compared to directly!
- *
- * @deprecated Use {@link referenceToSet} or {@link UnresolvedReference} instead.
- */
-export const unresolved = null
-
-
-/**
  * Representation of an unresolved reference.
  * At most one of `targetId` or `resolveInfo` can be `undefined`.
  *

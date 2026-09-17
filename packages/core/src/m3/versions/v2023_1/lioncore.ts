@@ -15,13 +15,6 @@ const factory = new LanguageFactory(
  * key: qualified name _without_ "LionCore_M3", dash-separated
  */
 
-/**
- * Definition of LionCore in terms of itself.
- *
- * @deprecated Use `lioncoreFacade.language` instead.
- */
-export const lioncore = factory.language.havingKey("LionCore-M3")
-
 const { inamed } = lioncoreBuiltinsFacade.classifiers
 const { booleanDataType, stringDataType } = lioncoreBuiltinsFacade.primitiveTypes
 
@@ -103,15 +96,4 @@ export const lioncoreFacade: LionCoreFacade = {
         language_version
     }
 }
-
-
-/**
- * @deprecated Use `<LionWeb version>.lioncoreFacade.metaConcepts` instead.
- */
-export const metaConcepts = lioncoreFacade.metaConcepts
-
-/**
- * @deprecated Use `<LionWeb version>.lioncoreFacade.metaFeatures` instead.
- */
-export const metaFeatures = lioncoreFacade.metaFeatures
 

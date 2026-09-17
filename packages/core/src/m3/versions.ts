@@ -3,14 +3,6 @@ import { LionWebVersion } from "./version.js"
 
 
 /**
- * The *current* release(d) version.
- *
- * @deprecated Use `LionWebVersions.v2023_1.serializationFormatVersion` instead.
- */
-export const currentReleaseVersion = "2023.1"
-
-
-/**
  * An enumeration (as const object) of all LionWeb versions currently supported by the WIP specification.
  */
 export const LionWebVersions = {

@@ -2,6 +2,12 @@
 
 ## 0.11.0 — not yet released
 
+* **Breaking changes!** Remove _all_ items marked as `@deprecated`.
+
+  This is documented in the following in the form “`<deprecated/legacy item>` &rarr; `<use instead>`”:
+    * `readFileAsJson` &rarr; `readFileAsJsonSync` in the `@lionweb/node-utils` package
+    * `writeJsonAsFile` &rarr; `writeJsonAsFileSync` in the `@lionweb/node-utils` package
+
 
 ## 0.10.0
 

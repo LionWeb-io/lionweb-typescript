@@ -93,11 +93,6 @@ export class Forest {
      */
     readonly deserialize: Deserializer<DetailedDeserialization>
 
-    /**
-     * Legacy alias for {@link deserialize}, kept for backward compatibility, and to be deprecated and removed later.
-     */
-    readonly deserializeWithIdMapping: Deserializer<DetailedDeserialization>
-
 
     constructor(configuration: FactoryConfiguration & DeserializerConfiguration) {
         const { languageBases, receiveDelta } = configuration
@@ -121,7 +116,6 @@ export class Forest {
                  */
         )
         this.deserialize = nodeBaseDetailedDeserializer(configuration)
-        this.deserializeWithIdMapping = this.deserialize
     }
 
 

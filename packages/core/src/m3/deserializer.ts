@@ -48,25 +48,3 @@ export const deserializeLanguagesFrom = ({serializationChunk, dependentLanguages
 export const deserializeLanguages = (serializationChunk: LionWebJsonChunk, ...dependentLanguages: Language[]): Language[] =>
     deserializeLanguagesFrom({ serializationChunk, dependentLanguages })
 
-
-/**
- * Deserializes languages that have been serialized into the LionWeb serialization JSON format
- * as an instance of the LionCore metametamodel, using {@link _M3Concept these type definitions}.
- * This function takes a {@link ProblemReporter} to be able to see what problems occurred.
- *
- * @deprecated Use {@link deserializeLanguagesFrom} instead.
- */
-export const deserializeLanguagesWithReporter = (
-    serializationChunk: LionWebJsonChunk,
-    problemReporter: ProblemReporter,
-    ...dependentLanguages: Language[]
-): Language[] =>
-    deserializeLanguagesFrom({ serializationChunk, problemReporter, dependentLanguages })
-
-/**
- * Legacy alias for {@link deserializeLanguagesWithReporter}, kept for backward compatibility, and to be deprecated and removed later.
- *
- * @deprecated Use {@link deserializeLanguagesFrom} instead.
- */
-export const deserializeLanguagesWithHandler = deserializeLanguagesWithReporter
-

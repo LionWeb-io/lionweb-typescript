@@ -35,13 +35,6 @@ export interface Writer<NT extends Node, PNT extends Node = NT> {
 
 }
 
-/**
- * Alias for {@link Writer}, kept for backward compatibility, and to be deprecated and removed later.
- *
- * @deprecated Use {@link Writer} instead.
- */
-export interface InstantiationFacade<NT extends Node, PNT extends Node = NT> extends Writer<NT, PNT> {}
-
 
 /**
  * Type def. for functions that update features’ values on a settings object.

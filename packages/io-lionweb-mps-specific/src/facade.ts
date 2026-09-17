@@ -21,7 +21,6 @@ import {
     Classifier,
     lioncoreWriterFor,
     LionWebVersion,
-    LionWebVersions,
     M3Concept,
     M3Node,
     Node,
@@ -101,11 +100,4 @@ export const combinedWriterFor = (lionWebVersion: LionWebVersion): Writer<M3Node
         updateSettingsNameBased(node as unknown as Record<string, unknown>, feature, value)
     }
 })
-
-/**
- * Legacy version of {@link combinedWriterFor} that’s not parametrized with a {@link LionWebVersion}.
- *
- * @deprecated Use {@code combinedWriterFor(<LionWeb version>)} instead.
- */
-export const combinedWriter: Writer<M3Node | IoLionWebMpsSpecificAnnotation, Node> = combinedWriterFor(LionWebVersions.v2023_1)
 
