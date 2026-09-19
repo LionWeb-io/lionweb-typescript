@@ -22,8 +22,11 @@ import {
     Classifier,
     Concept,
     Feature,
+    inheritsDirectlyFrom,
     Interface,
     isResolvedReference,
+    Language,
+    nameOf,
     SingleRef
 } from "@lionweb/core"
 import { uniquesAmong } from "@lionweb/ts-utils"
@@ -61,5 +64,45 @@ export const featuresToConcretelyImplementOf = (classifier: Classifier): Feature
     const implementedFeatures = uniquesAmong(allSuperTypesOf(classifier).flatMap(featuresToConcretelyImplementOf))
     return allFeaturesOf(classifier)
         .filter((feature) => implementedFeatures.indexOf(feature) === -1)
+}
+
+
+/**
+ * A type alias for a {@link Map} mapping {@link Classifier classifiers} to their specializations.
+ */
+export type DirectSpecializationsPerClassifier = Map<Classifier, Classifier[]>
+
+/**
+ * @return a {@link DirectSpecializationsPerClassifier} mapping {@link Classifier classifiers} in the given {@link Language `languages`} having one or more specializations,
+ * to those specializations.
+ */
+export const directSpecializationsPerClassifier = (languages: Language[]): DirectSpecializationsPerClassifier => {
+    const map: DirectSpecializationsPerClassifier = new Map()
+    const addLazily = (key: Classifier, valueToAdd: Classifier) => {
+        if (!map.has(key)) {
+            map.set(key, [])
+        }
+        map.get(key)!.push(valueToAdd)
+    }
+
+    for (const language of languages) {
+        for (const classifier of language.entities.filter((entity) => entity instanceof Classifier)) {
+            inheritsDirectlyFrom(classifier).forEach((superType) => {
+                addLazily(superType, classifier)
+            })
+        }
+    }
+
+    return map
+}
+
+
+export const displayDirectSpecializationsPerClassifierOnConsole = (map: DirectSpecializationsPerClassifier) => {
+    const displayMap: Record<string, string> = {}
+    const mapIterator = map.entries()
+    for (const [superType, specializations] of mapIterator) {
+        displayMap[superType.name] = specializations.map(nameOf).sort().join(" ")
+    }
+    console.table(displayMap)
 }
 
