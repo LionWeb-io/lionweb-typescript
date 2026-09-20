@@ -6,8 +6,7 @@ import {
     Feature,
     LanguageFactory,
     LionWebVersions,
-    newPropertyValueDeserializerRegistry,
-    propertyValueDeserializerFrom,
+    newPrimitiveValueDeserializerRegistry,
     UnresolvedReference,
     Writer
 } from "@lionweb/core"
@@ -17,7 +16,7 @@ import { expect } from "chai"
 import { BaseNode } from "../instances/base.js"
 import { libraryWriter } from "../instances/library.js"
 import { libraryLanguage } from "../languages/library.js"
-import { dateDataType, libraryWithDatesLanguage } from "../languages/libraryWithDates.js"
+import { datePrimitiveType, libraryWithDatesLanguage } from "../languages/libraryWithDates.js"
 import { deepEqual, equal, isTrue } from "../test-utils/assertions.js"
 import { StringsMapper } from "@lionweb/ts-utils"
 
@@ -151,18 +150,17 @@ describe("deserialization", () => {
                 }
             ]
         }
-        const propertyValueDeserializer = propertyValueDeserializerFrom(
-            newPropertyValueDeserializerRegistry()
-                .set(LionWebVersions.v2023_1.builtinsFacade.primitiveTypes.stringDataType, (value) => value)
-                .set(dateDataType, (value) => {
-                    const parts = value.split("-")
-                    return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]))
-                })
-        )
+        const primitiveTypeDeserializerRegistry = newPrimitiveValueDeserializerRegistry()
+            .register(LionWebVersions.v2023_1.builtinsFacade.primitiveTypes.stringDataType, (value) => value)
+            .register(datePrimitiveType, (value) => {
+                const parts = value.split("-")
+                return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]))
+            })
+            .seal()
         const deserialization = deserializerWith({
             writer: libraryWithDatesWriter,
             languages: [libraryWithDatesLanguage],
-            propertyValueDeserializer
+            primitiveTypeDeserializerRegistry
         })(serializationChunk)
 
         const node = deserialization[0] as NodeWithProperties

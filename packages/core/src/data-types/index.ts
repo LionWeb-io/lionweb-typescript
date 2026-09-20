@@ -16,5 +16,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 export type { ValueDeserializer, ValueSerializer} from "./base-types.js"
+export { newPrimitiveValueDeserializerRegistry, newPrimitiveValueSerializerRegistry, type PrimitiveValueDeserializerRegistry, type PrimitiveValueSerializerRegistry } from "./primitive-types.js"
+export type { PropertyValueDeserializer, PropertyValueDeserializerConfiguration, PropertyValueSerializer, PropertyValueSerializerConfiguration } from "./property-values.js"
+export { propertyValueDeserializerWith, propertyValueSerializerWith } from "./property-values.js"
 export { standardDeserializers, standardSerializers } from "./standard-primitive-types.js"
 

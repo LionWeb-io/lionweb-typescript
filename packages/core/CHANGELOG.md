@@ -29,13 +29,30 @@
     * The `primitiveTypeSerializer` property of the `SerializationOptions` type.
     * The `problemsHandler` property of the `DeserializerConfiguration` type.
 
-* **Breaking changes inside!** Restructure how property values get (de-)serialized:
-    * Expose a `EnumerationLiteralDecoder` type for functions that deduce an `EnumerationLiteral` of an `Enumeration` from a runtime encoding of the former.
-    * Expose a `EnumerationLiteralEncoder` type for functions that produce a runtime encoding of an `EnumerationLiteral` of an `Enumeration`.
-    * Expose `standard{Des|S}erializers` constants that are maps [name of standard primitive type] &rarr; [its corresponding (de-)serializing function], and use these in the implementation of the 2023.1 version.
-    * Add (generic) `Value{Des|S}erializer` types (and use them).
-
 * **Breaking change** (although this is effectively internal API): Replace the (use of the) `shouldBeIdentical` function with a `areSameEntities` function that checks for structural equality of two `LanguageEntity`-s.
+
+* **Breaking changes!** Restructure how property values get (de-)serialized — see separate section below.
+
+
+## Restructure how property values get (de-)serialized
+
+What used to be called a “property (de-)serializer” was a function/class that purported to know how to (de-)serialize the values of _any_ `Property`, but effectively only did so for properties which happened to be `PrimitiveType`-typed.
+This misnomer isn’t only confusing, but it also turned out to hinder the introduction of structured data types.
+To remedy that, the entire API/surface area of (de-)serialization has been restructured.
+In particular, the new `Property{Des|S}erializer` types now are function types instead of interfaces, and implementations handle any `DataType` – meaning: `PrimitiveType`, `Enumeration`, and in the future, `StructuredDataType` – that may be encountered in a given set of languages.
+The new `propertyValue{Des|S}erializerWith` functions construct implementations from corresponding, appropriate configuration objects, although in practice, it’s those configuration objects that get passed to e.g. the `[de]serializerWith` functions.
+
+This change consists of the following sub-changes (with the breaking ones indicated explicitly):
+
+* Expose a `EnumerationLiteralDecoder` type for functions that deduce an `EnumerationLiteral` of an `Enumeration` from a runtime encoding of the former.
+* Expose a `EnumerationLiteralEncoder` type for functions that produce a runtime encoding of an `EnumerationLiteral` of an `Enumeration`.
+* Expose `standard{Des|S}erializers` constants that are maps [name of standard primitive type] &rarr; [its corresponding (de-)serializing function], and use these in the implementation of the 2023.1 version.
+* Add (generic) `Value{Des|S}erializer` types (and use them).
+* Add `PrimitiveValue{Des|S}erializerRegistry` types, and corresponding `newPrimitiveValue{Des|s}erializerRegistry` convenience functions.
+* **Breaking change!** Replace the `propertyValue{Des|S}erializer` properties of the `LionCoreBuiltinsFacade` type with `primitiveValue{Des|s}erializerRegistry` properties of types `PrimitiveValue{Des|S}erializerRegistry` (resp.).
+* **Breaking change!** Remove the `PropertyValue{Des|S}erializer[Function]` types, and corresponding `newPropertyValue{Des|S}erializerRegistry` and `propertyValue{Des|S}erializerFrom` functions.
+* Add (new) `PropertyValue{Des|S}erializer[Configuration]` types, and corresponding `propertyValue{Des|S}erializerWith` functions that, given such a configuration, return (de-)serializers of those types.
+* **Breaking change!** Restructure the `{Des|S}erializerConfiguration` types to make use of the new `PropertyValue{Des|S}erializerConfiguration` types.
 
 
 ## 0.10.0

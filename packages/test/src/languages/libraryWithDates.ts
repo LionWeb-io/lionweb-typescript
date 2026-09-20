@@ -15,10 +15,10 @@ const specialistBookWriter = factory.concept("SpecialistBookWriter", ConceptModi
 const bookType = factory.enumeration("BookType")
 factory.enumerationLiteral(bookType, "Normal")
 factory.enumerationLiteral(bookType, "Special")
-export const dateDataType = factory.primitiveType("Date")
+export const datePrimitiveType = factory.primitiveType("Date")
 
 factory.property(libraryWithDates, "name").ofType(stringDataType).havingKey("library_Library_name")
-factory.property(libraryWithDates, "creationDate").ofType(dateDataType).havingKey("library_Library_creationDate")
+factory.property(libraryWithDates, "creationDate").ofType(datePrimitiveType).havingKey("library_Library_creationDate")
 factory.containment(libraryWithDates, "books").ofType(book).isMultiple()
 
 factory.property(book, "title").ofType(stringDataType)
