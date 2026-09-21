@@ -173,7 +173,7 @@ export class ConceptDescription extends $lwClassCore.NodeBase {
         this._helpUrl = new $lwClassCore.OptionalPropertyValueManager<string>(io_lionweb_mps_specificBase.INSTANCE.ConceptDescription_helpUrl, this);
     }
 
-    getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
+    override getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
         switch (property.key) {
             case io_lionweb_mps_specificBase.INSTANCE.ConceptDescription_conceptAlias.key: return this._conceptAlias;
             case io_lionweb_mps_specificBase.INSTANCE.ConceptDescription_conceptShortDescription.key: return this._conceptShortDescription;
@@ -210,7 +210,7 @@ export class Deprecated extends $lwClassCore.NodeBase {
         this._build = new $lwClassCore.OptionalPropertyValueManager<string>(io_lionweb_mps_specificBase.INSTANCE.Deprecated_build, this);
     }
 
-    getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
+    override getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
         switch (property.key) {
             case io_lionweb_mps_specificBase.INSTANCE.Deprecated_comment.key: return this._comment;
             case io_lionweb_mps_specificBase.INSTANCE.Deprecated_build.key: return this._build;
@@ -255,14 +255,14 @@ export class KeyedDescription extends $lwClassCore.NodeBase {
         this._seeAlso = new $lwClassCore.OptionalMultiReferenceValueManager<$lwCore.Node>(io_lionweb_mps_specificBase.INSTANCE.KeyedDescription_seeAlso, this);
     }
 
-    getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
+    override getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
         if (property.key === io_lionweb_mps_specificBase.INSTANCE.KeyedDescription_documentation.key) {
             return this._documentation;
         }
         return super.getPropertyValueManager(property);
     }
 
-    getReferenceValueManager(reference: $lwCore.Reference): $lwClassCore.ReferenceValueManager<$lwCore.Node> {
+    override getReferenceValueManager(reference: $lwCore.Reference): $lwClassCore.ReferenceValueManager<$lwCore.Node> {
         if (reference.key === io_lionweb_mps_specificBase.INSTANCE.KeyedDescription_seeAlso.key) {
             return this._seeAlso;
         }
@@ -288,7 +288,7 @@ export class ShortDescription extends $lwClassCore.NodeBase {
         this._description = new $lwClassCore.OptionalPropertyValueManager<string>(io_lionweb_mps_specificBase.INSTANCE.ShortDescription_description, this);
     }
 
-    getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
+    override getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
         if (property.key === io_lionweb_mps_specificBase.INSTANCE.ShortDescription_description.key) {
             return this._description;
         }
@@ -314,7 +314,7 @@ export class VirtualPackage extends $lwClassCore.NodeBase implements $lwClassCor
         this._name = new $lwClassCore.RequiredPropertyValueManager<string>($lwClassCore.LionCore_builtinsBase.INSTANCE.INamed_name, this);
     }
 
-    getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
+    override getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
         if (property.key === $lwClassCore.LionCore_builtinsBase.INSTANCE.INamed_name.key) {
             return this._name;
         }
