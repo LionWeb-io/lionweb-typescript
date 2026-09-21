@@ -13,6 +13,8 @@
   Also remove usages of these items:
     * The `deserializeWithIdMapping` property of the `Forest` class.
 
+* The `Forest.deserializeInto` method now accepts a `serializationChunk` argument of type `OnlyNodesOfLionWebJsonChunk`, so it can directly accept the response from e.g. `LionWebClient.subscribeToPartitionContents`.
+
 
 ## 0.10.0
 
