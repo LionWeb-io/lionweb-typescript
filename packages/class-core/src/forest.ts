@@ -16,7 +16,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { isPartition } from "@lionweb/core"
-import { LionWebJsonChunk } from "@lionweb/json"
+import { OnlyNodesOfLionWebJsonChunk } from "@lionweb/json"
 import { action, makeObservable, observable } from "mobx"
 
 import { FactoryConfiguration, ILanguageBase, INodeBase, NodeBaseFactory } from "./base-types.js"
@@ -161,10 +161,11 @@ export class Forest {
     }
 
     /**
-     * Deserializes the given `serializationChunk` and adds any partitions in it to the partitions of `this` forest,
+     * Deserializes the given `serializationChunk` and adds any partitions in it to the partitions of `this` forest.
      * It also updates the ID mapping, including with mappings for deserialized unattached nodes.
+     * The `serializationChunk` only needs to contain the `nodes` field, but not the `serializationFormationVersion` and `languages` fields.
      */
-    deserializeInto = (serializationChunk: LionWebJsonChunk): INodeBase[] => {
+    deserializeInto = (serializationChunk: OnlyNodesOfLionWebJsonChunk): INodeBase[] => {
         const { roots: newRoots, idMapping: newIdMapping } = this.deserialize(serializationChunk, this.idMapping)
         this.partitions.push(...newRoots.filter((newRoot) => isPartition(newRoot.classifier)))
         this.idMapping.mergeIn(newIdMapping)    // also merge in new unattached, non-partition roots

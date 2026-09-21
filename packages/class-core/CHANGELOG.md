@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.10.1
+
+* The `Forest.deserializeInto` method now accepts a `serializationChunk` argument of type `OnlyNodesOfLionWebJsonChunk`, so it can directly accept the response from e.g. `LionWebClient.subscribeToPartitionContents`.
+
+
 ## 0.10.0
 
 * Add support for offset-based move and move+replace actions:
