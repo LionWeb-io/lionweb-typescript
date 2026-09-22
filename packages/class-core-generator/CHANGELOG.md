@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.10.1
+
+* Put proper `override` markers on `get{Property|Containment|Reference}ValueManager` methods on classes generated for concrete classifiers.
+
+
 ## 0.10.0
 
 * Use a literal of `ConceptModifier` for the 5th of `new Concept(...)` in generated code.

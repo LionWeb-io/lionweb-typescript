@@ -102,14 +102,14 @@ export class Class extends $lwClassCore.NodeBase implements $lwClassCore.INamed 
         this._name = new $lwClassCore.RequiredPropertyValueManager<string>($lwClassCore.LionCore_builtinsBase.INSTANCE.INamed_name, this);
     }
 
-    getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
+    override getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
         if (property.key === $lwClassCore.LionCore_builtinsBase.INSTANCE.INamed_name.key) {
             return this._name;
         }
         return super.getPropertyValueManager(property);
     }
 
-    getContainmentValueManager(containment: $lwCore.Containment): $lwClassCore.ContainmentValueManager<$lwClassCore.INodeBase> {
+    override getContainmentValueManager(containment: $lwCore.Containment): $lwClassCore.ContainmentValueManager<$lwClassCore.INodeBase> {
         if (containment.key === Meta_testBase.INSTANCE.Class_property.key) {
             return this._property;
         }
@@ -135,7 +135,7 @@ export class Property extends $lwClassCore.NodeBase implements $lwClassCore.INam
         this._name = new $lwClassCore.RequiredPropertyValueManager<string>($lwClassCore.LionCore_builtinsBase.INSTANCE.INamed_name, this);
     }
 
-    getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
+    override getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
         if (property.key === $lwClassCore.LionCore_builtinsBase.INSTANCE.INamed_name.key) {
             return this._name;
         }

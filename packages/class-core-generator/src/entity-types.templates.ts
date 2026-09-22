@@ -172,7 +172,7 @@ export const typeForLanguageEntity = (imports: Imports) => {
             })()
             return [
                 ``,
-                `get${featureMetaType_}ValueManager(${argumentName}: ${imports.core(featureMetaType_)}): ${imports.generic(featureMetaType_ + "ValueManager")}<${typeParameter}> {`,
+                `override get${featureMetaType_}ValueManager(${argumentName}: ${imports.core(featureMetaType_)}): ${imports.generic(featureMetaType_ + "ValueManager")}<${typeParameter}> {`,
                 indent(
                     switchOrIf(
                         `${argumentName}.key`,
