@@ -2,6 +2,8 @@
 
 ## 0.11.0 — not yet released
 
+* Put proper `override` markers on `get{Property|Containment|Reference}ValueManager` methods on classes generated for concrete classifiers.
+
 
 ## 0.10.0
 

@@ -326,7 +326,7 @@ export abstract class Feature extends $lwClassCore.NodeBase implements IKeyed {
         this._name = new $lwClassCore.RequiredPropertyValueManager<string>($lwClassCore.LionCore_builtinsBase.INSTANCE.INamed_name, this);
     }
 
-    getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
+    override getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
         switch (property.key) {
             case LionCore_M3Base.INSTANCE.Feature_optional.key: return this._optional;
             case LionCore_M3Base.INSTANCE.IKeyed_key.key: return this._key;
@@ -354,7 +354,7 @@ export class Property extends Feature {
         this._type = new $lwClassCore.RequiredSingleReferenceValueManager<DataType>(LionCore_M3Base.INSTANCE.Property_type, this);
     }
 
-    getReferenceValueManager(reference: $lwCore.Reference): $lwClassCore.ReferenceValueManager<$lwCore.Node> {
+    override getReferenceValueManager(reference: $lwCore.Reference): $lwClassCore.ReferenceValueManager<$lwCore.Node> {
         if (reference.key === LionCore_M3Base.INSTANCE.Property_type.key) {
             return this._type;
         }
@@ -386,14 +386,14 @@ export abstract class Link extends Feature {
         this._type = new $lwClassCore.RequiredSingleReferenceValueManager<Classifier>(LionCore_M3Base.INSTANCE.Link_type, this);
     }
 
-    getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
+    override getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
         if (property.key === LionCore_M3Base.INSTANCE.Link_multiple.key) {
             return this._multiple;
         }
         return super.getPropertyValueManager(property);
     }
 
-    getReferenceValueManager(reference: $lwCore.Reference): $lwClassCore.ReferenceValueManager<$lwCore.Node> {
+    override getReferenceValueManager(reference: $lwCore.Reference): $lwClassCore.ReferenceValueManager<$lwCore.Node> {
         if (reference.key === LionCore_M3Base.INSTANCE.Link_type.key) {
             return this._type;
         }
@@ -437,7 +437,7 @@ export abstract class LanguageEntity extends $lwClassCore.NodeBase implements IK
         this._name = new $lwClassCore.RequiredPropertyValueManager<string>($lwClassCore.LionCore_builtinsBase.INSTANCE.INamed_name, this);
     }
 
-    getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
+    override getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
         switch (property.key) {
             case LionCore_M3Base.INSTANCE.IKeyed_key.key: return this._key;
             case $lwClassCore.LionCore_builtinsBase.INSTANCE.INamed_name.key: return this._name;
@@ -479,7 +479,7 @@ export abstract class Classifier extends LanguageEntity {
         this._features = new $lwClassCore.OptionalMultiContainmentValueManager<Feature>(LionCore_M3Base.INSTANCE.Classifier_features, this);
     }
 
-    getContainmentValueManager(containment: $lwCore.Containment): $lwClassCore.ContainmentValueManager<$lwClassCore.INodeBase> {
+    override getContainmentValueManager(containment: $lwCore.Containment): $lwClassCore.ContainmentValueManager<$lwClassCore.INodeBase> {
         if (containment.key === LionCore_M3Base.INSTANCE.Classifier_features.key) {
             return this._features;
         }
@@ -532,7 +532,7 @@ export class Annotation extends Classifier {
         this._implements = new $lwClassCore.OptionalMultiReferenceValueManager<Interface>(LionCore_M3Base.INSTANCE.Annotation_implements, this);
     }
 
-    getReferenceValueManager(reference: $lwCore.Reference): $lwClassCore.ReferenceValueManager<$lwCore.Node> {
+    override getReferenceValueManager(reference: $lwCore.Reference): $lwClassCore.ReferenceValueManager<$lwCore.Node> {
         switch (reference.key) {
             case LionCore_M3Base.INSTANCE.Annotation_annotates.key: return this._annotates;
             case LionCore_M3Base.INSTANCE.Annotation_extends.key: return this._extends;
@@ -596,7 +596,7 @@ export class Concept extends Classifier {
         this._implements = new $lwClassCore.OptionalMultiReferenceValueManager<Interface>(LionCore_M3Base.INSTANCE.Concept_implements, this);
     }
 
-    getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
+    override getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
         switch (property.key) {
             case LionCore_M3Base.INSTANCE.Concept_abstract.key: return this._abstract;
             case LionCore_M3Base.INSTANCE.Concept_partition.key: return this._partition;
@@ -604,7 +604,7 @@ export class Concept extends Classifier {
         }
     }
 
-    getReferenceValueManager(reference: $lwCore.Reference): $lwClassCore.ReferenceValueManager<$lwCore.Node> {
+    override getReferenceValueManager(reference: $lwCore.Reference): $lwClassCore.ReferenceValueManager<$lwCore.Node> {
         switch (reference.key) {
             case LionCore_M3Base.INSTANCE.Concept_extends.key: return this._extends;
             case LionCore_M3Base.INSTANCE.Concept_implements.key: return this._implements;
@@ -640,7 +640,7 @@ export class Interface extends Classifier {
         this._extends = new $lwClassCore.OptionalMultiReferenceValueManager<Interface>(LionCore_M3Base.INSTANCE.Interface_extends, this);
     }
 
-    getReferenceValueManager(reference: $lwCore.Reference): $lwClassCore.ReferenceValueManager<$lwCore.Node> {
+    override getReferenceValueManager(reference: $lwCore.Reference): $lwClassCore.ReferenceValueManager<$lwCore.Node> {
         if (reference.key === LionCore_M3Base.INSTANCE.Interface_extends.key) {
             return this._extends;
         }
@@ -693,7 +693,7 @@ export class Enumeration extends DataType {
         this._literals = new $lwClassCore.OptionalMultiContainmentValueManager<EnumerationLiteral>(LionCore_M3Base.INSTANCE.Enumeration_literals, this);
     }
 
-    getContainmentValueManager(containment: $lwCore.Containment): $lwClassCore.ContainmentValueManager<$lwClassCore.INodeBase> {
+    override getContainmentValueManager(containment: $lwCore.Containment): $lwClassCore.ContainmentValueManager<$lwClassCore.INodeBase> {
         if (containment.key === LionCore_M3Base.INSTANCE.Enumeration_literals.key) {
             return this._literals;
         }
@@ -728,7 +728,7 @@ export class EnumerationLiteral extends $lwClassCore.NodeBase implements IKeyed 
         this._name = new $lwClassCore.RequiredPropertyValueManager<string>($lwClassCore.LionCore_builtinsBase.INSTANCE.INamed_name, this);
     }
 
-    getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
+    override getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
         switch (property.key) {
             case LionCore_M3Base.INSTANCE.IKeyed_key.key: return this._key;
             case $lwClassCore.LionCore_builtinsBase.INSTANCE.INamed_name.key: return this._name;
@@ -818,7 +818,7 @@ export class Language extends $lwClassCore.NodeBase implements IKeyed {
         this._name = new $lwClassCore.RequiredPropertyValueManager<string>($lwClassCore.LionCore_builtinsBase.INSTANCE.INamed_name, this);
     }
 
-    getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
+    override getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
         switch (property.key) {
             case LionCore_M3Base.INSTANCE.Language_version.key: return this._version;
             case LionCore_M3Base.INSTANCE.IKeyed_key.key: return this._key;
@@ -827,14 +827,14 @@ export class Language extends $lwClassCore.NodeBase implements IKeyed {
         }
     }
 
-    getContainmentValueManager(containment: $lwCore.Containment): $lwClassCore.ContainmentValueManager<$lwClassCore.INodeBase> {
+    override getContainmentValueManager(containment: $lwCore.Containment): $lwClassCore.ContainmentValueManager<$lwClassCore.INodeBase> {
         if (containment.key === LionCore_M3Base.INSTANCE.Language_entities.key) {
             return this._entities;
         }
         return super.getContainmentValueManager(containment);
     }
 
-    getReferenceValueManager(reference: $lwCore.Reference): $lwClassCore.ReferenceValueManager<$lwCore.Node> {
+    override getReferenceValueManager(reference: $lwCore.Reference): $lwClassCore.ReferenceValueManager<$lwCore.Node> {
         if (reference.key === LionCore_M3Base.INSTANCE.Language_dependsOn.key) {
             return this._dependsOn;
         }

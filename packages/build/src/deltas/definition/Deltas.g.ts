@@ -308,7 +308,7 @@ export class Deltas extends $lwClassCore.NodeBase {
         this._deltas = new $lwClassCore.OptionalMultiContainmentValueManager<Delta>(DeltasBase.INSTANCE.Deltas_deltas, this);
     }
 
-    getContainmentValueManager(containment: $lwCore.Containment): $lwClassCore.ContainmentValueManager<$lwClassCore.INodeBase> {
+    override getContainmentValueManager(containment: $lwCore.Containment): $lwClassCore.ContainmentValueManager<$lwClassCore.INodeBase> {
         if (containment.key === DeltasBase.INSTANCE.Deltas_deltas.key) {
             return this._deltas;
         }
@@ -349,14 +349,14 @@ export class Field extends $lwClassCore.NodeBase implements $lwClassCore.INamed 
         this._name = new $lwClassCore.RequiredPropertyValueManager<string>($lwClassCore.LionCore_builtinsBase.INSTANCE.INamed_name, this);
     }
 
-    getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
+    override getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
         if (property.key === $lwClassCore.LionCore_builtinsBase.INSTANCE.INamed_name.key) {
             return this._name;
         }
         return super.getPropertyValueManager(property);
     }
 
-    getContainmentValueManager(containment: $lwCore.Containment): $lwClassCore.ContainmentValueManager<$lwClassCore.INodeBase> {
+    override getContainmentValueManager(containment: $lwCore.Containment): $lwClassCore.ContainmentValueManager<$lwClassCore.INodeBase> {
         if (containment.key === DeltasBase.INSTANCE.Field_type.key) {
             return this._type;
         }
@@ -397,14 +397,14 @@ export class FeatureType extends $lwClassCore.NodeBase implements Type {
         this._container = new $lwClassCore.OptionalSingleReferenceValueManager<Field>(DeltasBase.INSTANCE.FeatureType_container, this);
     }
 
-    getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
+    override getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
         if (property.key === DeltasBase.INSTANCE.FeatureType_kind.key) {
             return this._kind;
         }
         return super.getPropertyValueManager(property);
     }
 
-    getReferenceValueManager(reference: $lwCore.Reference): $lwClassCore.ReferenceValueManager<$lwCore.Node> {
+    override getReferenceValueManager(reference: $lwCore.Reference): $lwClassCore.ReferenceValueManager<$lwCore.Node> {
         if (reference.key === DeltasBase.INSTANCE.FeatureType_container.key) {
             return this._container;
         }
@@ -433,7 +433,7 @@ export class SerializeSubTree extends $lwClassCore.NodeBase implements NodeSeria
         this._fieldName = new $lwClassCore.RequiredPropertyValueManager<string>(DeltasBase.INSTANCE.SerializeSubTree_fieldName, this);
     }
 
-    getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
+    override getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
         if (property.key === DeltasBase.INSTANCE.SerializeSubTree_fieldName.key) {
             return this._fieldName;
         }
@@ -468,7 +468,7 @@ export class NodeType extends $lwClassCore.NodeBase implements Type {
         this._serialization = new $lwClassCore.OptionalSingleContainmentValueManager<NodeSerialization>(DeltasBase.INSTANCE.NodeType_serialization, this);
     }
 
-    getContainmentValueManager(containment: $lwCore.Containment): $lwClassCore.ContainmentValueManager<$lwClassCore.INodeBase> {
+    override getContainmentValueManager(containment: $lwCore.Containment): $lwClassCore.ContainmentValueManager<$lwClassCore.INodeBase> {
         if (containment.key === DeltasBase.INSTANCE.NodeType_serialization.key) {
             return this._serialization;
         }
@@ -539,7 +539,7 @@ export class CustomType extends $lwClassCore.NodeBase implements Type {
         this._deserializationExpr = new $lwClassCore.RequiredPropertyValueManager<string>(DeltasBase.INSTANCE.CustomType_deserializationExpr, this);
     }
 
-    getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
+    override getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
         switch (property.key) {
             case DeltasBase.INSTANCE.CustomType_type.key: return this._type;
             case DeltasBase.INSTANCE.CustomType_serializationType.key: return this._serializationType;
@@ -604,7 +604,7 @@ export class Delta extends $lwClassCore.NodeBase implements $lwClassCore.INamed 
         this._name = new $lwClassCore.RequiredPropertyValueManager<string>($lwClassCore.LionCore_builtinsBase.INSTANCE.INamed_name, this);
     }
 
-    getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
+    override getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
         switch (property.key) {
             case DeltasBase.INSTANCE.Delta_documentation.key: return this._documentation;
             case $lwClassCore.LionCore_builtinsBase.INSTANCE.INamed_name.key: return this._name;
@@ -612,7 +612,7 @@ export class Delta extends $lwClassCore.NodeBase implements $lwClassCore.INamed 
         }
     }
 
-    getContainmentValueManager(containment: $lwCore.Containment): $lwClassCore.ContainmentValueManager<$lwClassCore.INodeBase> {
+    override getContainmentValueManager(containment: $lwCore.Containment): $lwClassCore.ContainmentValueManager<$lwClassCore.INodeBase> {
         if (containment.key === DeltasBase.INSTANCE.Delta_fields.key) {
             return this._fields;
         }
