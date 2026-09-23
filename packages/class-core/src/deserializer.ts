@@ -19,25 +19,17 @@ import {
     Classifier,
     consoleProblemReporter,
     Containment,
-    Enumeration,
     LionWebVersion,
     LionWebVersions,
     MemoisingSymbolTable,
-    PrimitiveType,
+    PrimitiveValueDeserializerRegistry,
     ProblemReporter,
     Property,
-    PropertyValueDeserializer,
+    propertyValueDeserializerWith,
     Reference,
     UnresolvedReference
 } from "@lionweb/core"
-import {
-    LionWebId,
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-    LionWebJsonChunk,
-    LionWebJsonNode,
-    LionWebJsonReferenceTarget,
-    OnlyNodesOfLionWebJsonChunk
-} from "@lionweb/json"
+import { LionWebId, LionWebJsonNode, LionWebJsonReferenceTarget, OnlyNodesOfLionWebJsonChunk } from "@lionweb/json"
 import { byIdMap, keepDefineds } from "@lionweb/ts-utils"
 
 import { FactoryConfiguration, INodeBase } from "./base-types.js"
@@ -92,14 +84,14 @@ export type DetailedDeserialization = {
  * Configuration parameters for a deserializer that are unchanging per invocation of the deserializer
  * (and partially optional).
  */
-export type DeserializerConfiguration = {
+export type DeserializerConfiguration = Partial<{
     /** Default: `LionWebVersions.v2023_1`. */
-    lionWebVersion?: LionWebVersion
-    /** Default: `lioncoreBuiltinsFacade.propertyValueDeserializer`. */
-    propertyValueDeserializer?: PropertyValueDeserializer,
+    lionWebVersion: LionWebVersion
+    /** Default: `(lionWebVersion ?? LionWebVersions.v2023_1).builtinsFacade.primitiveValueDeserializerRegistry`. */
+    primitiveValueDeserializerRegistry: PrimitiveValueDeserializerRegistry
     /** Default: {@link consoleProblemReporter}. */
-    problemReporter?: ProblemReporter
-};
+    problemReporter: ProblemReporter
+}>;
 
 
 /**
@@ -109,16 +101,16 @@ export type DeserializerConfiguration = {
 export const nodeBaseDetailedDeserializerWith = (configuration: FactoryConfiguration & DeserializerConfiguration): Deserializer<DetailedDeserialization> => {
     const lionWebVersion = configuration.lionWebVersion ?? LionWebVersions.v2023_1;
     const { languageBases, receiveDelta } = configuration;
-    const propertyValueDeserializer = configuration.propertyValueDeserializer ?? lionWebVersion.builtinsFacade.propertyValueDeserializer;
+    const propertyValueDeserializer = propertyValueDeserializerWith({
+        lionWebVersion,
+        encodingOfEnumerationLiteral: (literal) => languageBaseFor(literal.enumeration.language).enumLiteralFrom(literal)
+    });
     const problemReporter = configuration.problemReporter ?? consoleProblemReporter;
 
     const symbolTable = new MemoisingSymbolTable(languageBases.map(({language}) => language));
     const languageBaseFor = combinedLanguageBaseLookupFor(languageBases);
 
-    return (
-        serializationChunk,
-        idMapping
-    ): DetailedDeserialization => {
+    return (serializationChunk, idMapping): DetailedDeserialization => {
 
         const nodesToInstall: NodesToInstall[] = [];
 
@@ -137,18 +129,7 @@ export const nodeBaseDetailedDeserializerWith = (configuration: FactoryConfigura
                 if (feature === undefined) {
                     problemReporter.reportProblem(`can't deserialize value for feature with key ${propertyMetaPointer.key} in ${languageMessage}: feature not found on classifier ${classifierMetaPointer.key} in language (${classifierMetaPointer.language}, ${classifierMetaPointer.version}) - skipping`);
                 } else if (feature instanceof Property) {
-                    if (feature.type instanceof PrimitiveType) {
-                        node.getPropertyValueManager(feature).setDirectly(value === null ? undefined : propertyValueDeserializer.deserializeValue(value, feature));
-                    } else if (feature.type instanceof Enumeration) {
-                        if (value !== undefined) {
-                            const literal = feature.type.literals.find((literal) => literal.key === value);
-                            if (literal === undefined) {
-                                problemReporter.reportProblem(`can't deserialize literal encoded as: ${value}`);
-                            } else {
-                                node.getPropertyValueManager(feature).setDirectly(languageBaseFor(feature.type.language).enumLiteralFrom(literal));
-                            }
-                        }
-                    }
+                    node.getPropertyValueManager(feature).setDirectly(value === null ? undefined : propertyValueDeserializer(feature, value))
                 } else {
                     problemReporter.reportProblem(`can't deserialize value for feature with key ${propertyMetaPointer.key} in ${languageMessage}: feature is not a property - skipping`);
                 }

@@ -19,17 +19,9 @@ import {
     allLionWebVersions,
     allSuperTypesOf,
     Containment,
-    Enumeration,
     Feature,
-    isReferenceToSet,
-    isResolvedReference,
-    isUnresolvedReference,
-    LionWebVersion,
-    LionWebVersions,
     Node,
-    PrimitiveType,
     Property,
-    PropertyValueSerializer,
     Reader,
     Reference,
     ResolveInfoDeducer,
@@ -99,50 +91,8 @@ export const nodeBaseReader: Reader<INodeBase, Node> = {
 };
 
 /**
- * @return a serialization of the given nodes (of type {@link INodeBase}) as a {@link LionWebJsonChunk}.
+ * @return a serialization of the given nodes (of type {@link INodeBase}) as a {@link LionWebJsonChunk},
+ * with empty features serialized (emptily).
  */
 export const serializeNodeBases = serializerWith({ reader: nodeBaseReader, serializeEmptyFeatures: false });
-
-
-/**
- * Type def. to capture the configuration to pass to {@link propertyValueSerializerWith}.
- */
-type PropertyValueSerializerConfiguration = Partial<{
-    lionWebVersion: LionWebVersion
-    primitiveValueSerializer: PropertyValueSerializer
-    reportIssue: (message: string) => void | never
-}>
-
-/**
- * @return a {@link PropertyValueSerializer} that uses the given {@link PropertyValueSerializer `primitiveValueSerializer`} *solely* for serializing values of primitively-typed properties,
- * and serializes properties whose types are enumerations or unresolved the same way as {@link serializeNodeBases}.
- * Unrecoverable issues are passed to the optional `reportIssue` argument, and
- */
-export const propertyValueSerializerWith = (configuration?: PropertyValueSerializerConfiguration) => {
-    const lionWebVersion = configuration?.lionWebVersion ?? LionWebVersions.v2023_1
-    const primitiveValueSerializer = configuration?.primitiveValueSerializer ?? lionWebVersion.builtinsFacade.propertyValueSerializer
-    const reportIssue = configuration?.reportIssue ?? ((message) => { throw new Error(message) })
-    return {
-        serializeValue: (value: unknown, property: Property) => {
-            const { type } = property
-            if (!isResolvedReference(type)) {
-                reportIssue(`can't serialize value of property "${property.name}" (on classifier "${property.classifier.name}" in language "${property.classifier.language.name}") having ${isReferenceToSet(type) ? `an unset type` : `unresolved type: ${value}${isUnresolvedReference(type) && type.resolveInfo !== undefined ? ` -> ${type.resolveInfo}` : ``}`}`)
-                return null
-            }
-            if (type instanceof PrimitiveType) {
-                return primitiveValueSerializer.serializeValue(value, property)
-            }
-            if (type instanceof Enumeration) {
-                const literal = type.literals.find((literal) => literal.key === value)
-                if (literal === undefined) {
-                    reportIssue(`value "${value}" is not the key of any of the literals of the enumeration "${type.name}" in language "${type.language.name}"`)
-                    return null
-                }
-                return literal.key
-            }
-            reportIssue(`can't serialize value of property "${property.name}" (on classifier "${property.classifier.name}" in language "${property.classifier.language.name}") of type "${type.name}": ${value}`)
-            return null
-        }
-    }
-}
 

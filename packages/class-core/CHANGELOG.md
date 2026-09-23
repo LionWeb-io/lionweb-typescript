@@ -18,6 +18,12 @@
 
 * Update version of `mobx` dependency from 6.15.0 &rarr; 6.16.1.
 
+* **Breaking changes!** Propagate the restructuring of (the API w.r.t.) how property values get (de-)serialized from the `core` package.
+    In particular, this means:
+
+    * Replace the `propertyValue{Des|S}erializer` properties of the `DeserializerConfiguration` types with `primitiveValue{Des|s}erializerRegistry` properties of types `PrimitiveValue{Des|S}erializerRegistry` (resp.). 
+    * Remove the `PropertyValueSerializerConfiguration` type, and corresponding `propertyValueSerializerWith` function.
+
 
 ## 0.10.0
 
