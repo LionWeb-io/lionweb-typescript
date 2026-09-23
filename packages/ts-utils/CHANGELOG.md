@@ -7,6 +7,8 @@
   * Replace usage of the `sortByStringKey` function with `<T>(ts: T[], stringFunction: (t: T) => string) => sorterWith(mappedComparer(stringFunction, regularStringComparer))(ts)`.
   * The `StringSorter` type is removed, without direct replacement, because that’s not really necessary.
 
+* Add a `Registry` class that provides a simple, general, _sealable_ registry.
+
 
 ## 0.10.0
 

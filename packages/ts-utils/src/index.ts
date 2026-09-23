@@ -9,6 +9,7 @@ export { invertedMoveWithOffset, invertedMoveAndReplaceWithOffset, moveAndReplac
 export * from "./nested-maps.js"
 export { stringifyPropertiesOf } from "./objects.js"
 export * from "./recursion.js"
+export { Registry } from "./registry.js"
 export { sorterWith } from "./sorting.js"
 export type { Sorter } from "./sorting.js"
 export * from "./string-sorting.js"
