@@ -25,8 +25,8 @@ import {
     deltaSerializer,
     IdMapping,
     INodeBase,
-    nodeBaseDeserializer,
-    nodeBaseDetailedDeserializer,
+    nodeBaseDeserializerWith,
+    nodeBaseDetailedDeserializerWith,
     SerializedDelta
 } from "@lionweb/class-core"
 import { LowLevelClient } from "@lionweb/delta-protocol-client"
@@ -126,7 +126,7 @@ describe("WebSocket-driven client and repository", async function() {
             }
         }
 
-        const model = nodeBaseDeserializer(languageBases, commandSender)(testModelChunk)
+        const model = nodeBaseDeserializerWith({ languageBases, receiveDelta: commandSender })(testModelChunk)
         const idMapping = new IdMapping(byIdMap(model.flatMap(allNodesFrom)))
         const deserializedDelta = deltaDeserializer(languageBases, idMapping)
         loading = false
@@ -208,9 +208,10 @@ describe("WebSocket-driven client and repository including translation, without 
                 }
             }
 
-            const model = nodeBaseDeserializer(languageBases, commandSender)(testModelChunk)
+            const deserializerConfiguration = { languageBases, receiveDelta: commandSender }
+            const model = nodeBaseDeserializerWith(deserializerConfiguration)(testModelChunk)
             const idMapping = new IdMapping(byIdMap(model.flatMap(allNodesFrom)))
-            const eventAsDelta = eventToDeltaTranslator(languageBases, nodeBaseDetailedDeserializer(languageBases, commandSender))
+            const eventAsDelta = eventToDeltaTranslator(languageBases, nodeBaseDetailedDeserializerWith(deserializerConfiguration))
             loading = false
 
             const receiveMessageOnClient = (event: Event) => {

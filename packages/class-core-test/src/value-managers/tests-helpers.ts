@@ -15,7 +15,7 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { DeltaReceiver, nodeBaseDeserializer } from "@lionweb/class-core"
+import { DeltaReceiver, nodeBaseDeserializerWith } from "@lionweb/class-core"
 import { TestLanguageBase } from "@lionweb/class-core-test-language"
 import { AccumulatingProblemReporter } from "@lionweb/core"
 import { LionWebJsonChunk } from "@lionweb/json"
@@ -25,7 +25,7 @@ import { equal } from "../assertions.js"
 
 export const deserializeNodesAssertingNoProblems = (serializationChunk: LionWebJsonChunk, receiveDelta?: DeltaReceiver) => {
     const problemReporter = new AccumulatingProblemReporter()
-    const deserialize = nodeBaseDeserializer({ languageBases: [TestLanguageBase.INSTANCE], receiveDelta, problemReporter })
+    const deserialize = nodeBaseDeserializerWith({ languageBases: [TestLanguageBase.INSTANCE], receiveDelta, problemReporter })
     const deserializedNodes = deserialize(serializationChunk)
     equal(problemReporter.allProblems.length, 0)
     return deserializedNodes
