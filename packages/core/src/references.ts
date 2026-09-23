@@ -51,14 +51,6 @@ export const isResolvedReference = <NT extends Node>(ref?: SingleRef<NT>): ref i
     ref !== undefined && !isReferenceToSet(ref) && !isUnresolvedReference(ref)
 
 /**
- * @return whether a given (at most) single-valued reference actually refers to something.
- *
- * This is the version of {@link isResolvedReference} with a too short name.
- * It will be deprecated and removed in later versions.
- */
-export const isRef = isResolvedReference;
-
-/**
  * @return either the referenced node’s name, or the `resolveInfo` if the reference is unresolved, or `undefined`.
  */
 export const tryToRenderAsText = <T extends Node & INamed>(ref?: SingleRef<T>): string | undefined => {

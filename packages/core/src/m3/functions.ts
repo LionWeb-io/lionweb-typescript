@@ -235,20 +235,10 @@ const inheritsDirectlyFrom = (classifier: Classifier): Classifier[] => {
 }
 
 /**
- * Alias for {@link inheritsDirectlyFrom}, kept for backward compatibility, and to be deprecated and removed later.
- */
-const inheritsFrom = inheritsDirectlyFrom;
-
-/**
  * @return an array that's either an inheritance cycle, or empty (meaning: no inheritance cycle).
  */
 const inheritanceCycleWith = (classifier: Classifier) =>
     cycleWith(classifier, inheritsDirectlyFrom)
-
-/**
- * Alias for {@link inheritanceCycleWith}, kept for backward compatibility, and to be deprecated and removed later.
- */
-const inheritedCycleWith = inheritanceCycleWith;
 
 /**
  * @return *all* super types (through `extends` or `implements`) of the given {@link Classifier classifier}.
@@ -356,8 +346,6 @@ export {
     flatMap,
     idBasedClassifierDeducerFor,
     inheritanceCycleWith,
-    inheritedCycleWith,
-    inheritsFrom,
     inheritsDirectlyFrom,
     instantiableClassifiersOf,
     isConcrete,

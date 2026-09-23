@@ -1,7 +1,7 @@
 import {
     Annotation,
     Concept,
-    Datatype,
+    DataType,
     Enumeration,
     Interface,
     isResolvedReference,
@@ -14,7 +14,7 @@ import {
 
 const { builtinsFacade } = LionWebVersions.v2023_1
 
-export const tsTypeFor = (datatype: SingleRef<Datatype>): string => {
+export const tsTypeFor = (datatype: SingleRef<DataType>): string => {
     if (datatype instanceof PrimitiveType) {
         switch (datatype.key) {
             case builtinsFacade.primitiveTypes.booleanDataType.key: return `boolean`

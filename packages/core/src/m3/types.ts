@@ -211,11 +211,6 @@ class Interface extends Classifier {
 
 abstract class DataType extends LanguageEntity {}
 
-/**
- * Misspelled alias of {@link DataType}, kept for backward compatibility, and to be deprecated and removed later.
- */
-abstract class Datatype extends DataType {}
-
 class PrimitiveType extends DataType {
     metaType(): string {
         return "PrimitiveType"
@@ -299,7 +294,6 @@ export {
     ConceptModifier,
     Containment,
     DataType,
-    Datatype,
     Enumeration,
     EnumerationLiteral,
     Feature,

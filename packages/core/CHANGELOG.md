@@ -2,10 +2,15 @@
 
 ## 0.11.0 — not yet released
 
-* **Breaking changes!** Remove _all_ items marked as `@deprecated` or as being “legacy” (but not necessarily/yet `@deprecated`) in their JSDocumentation.
+* **Breaking changes!** Remove _all_ items marked as `[@]deprecated` or as being “legacy” (but not necessarily/yet `@deprecated`) in their JSDocumentation.
   * The `BuiltinPropertyValue{Des|S}erializer` and `DefaultPrimitiveType{Des|S}erializer` classes, without direct replacements.
   * The `lioncoreBuiltins`, `builtinPrimitives`, `builtinClassifiers`, `builtinFeatures`, `isBuiltinConcept` concepts: instead, use the corresponding properties of a `<LionWeb version>.builtinFacade`, obtainable via `LionWebVersions`.
   * The `lioncore`, `metaConcepts`, and `metaFeatures` constants: instead, use the respective `language`, `metaConcepts`, `metaFeatures` properties of `<LionWeb version>.lioncoreFacade`.
+  * The `dynamicReader` function, and the `dynamicExtractionFacade` and `dynamicInstantiationFacade` aliases.
+  * The `inheritedCycleWith` and `inheritsFrom` aliases, for the `inheritanceCycleWith` and `inheritsFrom` functions, respectively.
+  * The `isRef` alias for the `isResolvedReference` function.
+  * The `Datatype` type — note the misspelling in the form of the lowercased “type” postfix.
+  * The `booleanDatatype`, `integerDatatype`, `jsonDatatype`, and `stringDatatype` aliases in `LionWebVersions.v2023_1.builtinsFacade.primitiveTypes` — note the misspellings in the form of the lowercased “type” postfixes.
 
   For convenience, in the following removals are given in the form “`<deprecated/legacy item>` &rarr; `<use instead>`”:
     * `deserializeLanguagesWithReporter`, `deserializeLanguagesWithHandler` &rarr; `deserializeLanguagesFrom`
