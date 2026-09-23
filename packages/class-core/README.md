@@ -37,9 +37,9 @@ The following top-level members of this package are suitable and intended to be 
 
 * `incomingReferences` — Finds all references coming into the given target node or any of the given target nodes, within the given search scope.
 
-* `nodeBaseDeserializerWithIdMapping` — Returns a `Deserializer` function for the given languages (given as `ILanguageBase`s) that, given a serialization chunk, returns an object with the `roots` of the model (as `INodeBase`s) and an instance `idMapping` of the `IdMapping` class (see below).
+* `nodeBaseDetailedDeserializerWith` — Returns a `DetailedDeserializer` function for the given configuration that, given a serialization chunk, returns an object with the `roots` of the model (as `INodeBase`s) and an instance `idMapping` of the `IdMapping` class (see below).
 
-* `nodeBaseDeserializer` — Returns a `Deserializer` function for the given languages (given as `ILanguageBase`s) that, given a serialization chunk, returns the roots of the model (as `INodeBase`s).
+* `nodeBaseDeserializerWith` — Returns a `Deserializer` function for the given configuration that, given a serialization chunk, returns the roots of the model (as `INodeBase`s).
 
 * `serializeNodeBases` — Returns a serialization of the given nodes (of type `INodeBase`) as a `LionWebJsonChunk`.
 
