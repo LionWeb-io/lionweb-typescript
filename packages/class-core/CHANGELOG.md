@@ -18,6 +18,16 @@
 
 * Update version of `mobx` dependency from 6.15.0 &rarr; 6.16.1.
 
+* **Breaking changes!** Propagate the restructuring of (the API w.r.t.) how property values get (de-)serialized from the `core` package.
+    In particular, this means:
+
+    * Remove the `PropertyValueSerializerConfiguration` type, and corresponding `propertyValueSerializerWith` function.
+    * The `deltaSerializer` function now just receives a `PropertyValueSerializer` instance.
+    * Add a `NodeBaseSerializationConfiguration` type that captures all variability of (de-)serialization of models based on `class-core`.
+    * Add two `nodeBasePropertyValue{Des|S}erializerWith` functions to instantiate `PropertyValue{Des|S}erializer` from (partial) instances of the `NodeBaseSerializationConfiguration` type.
+    * Change the `nodeBase[Detailed]DeserializerWith` functions to have a (partial) instance of the `NodeBaseSerializationConfiguration` type, and remove the `DeserializerConfiguration` type.
+    * Change the `Forest` constructor to take a (partial) instance of the `NodeBaseSerializationConfiguration` type.
+
 
 ## 0.10.0
 

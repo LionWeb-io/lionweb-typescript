@@ -41,7 +41,7 @@ describe("serialization", () => {
     })
 
     it("serializes node with custom primitive type, works when registering custom deserializer", () => {
-        const primitiveTypeSerializerRegistry = newPrimitiveValueSerializerRegistry()
+        const primitiveValueSerializerRegistry = newPrimitiveValueSerializerRegistry()
             .register(LionWebVersions.v2023_1.builtinsFacade.primitiveTypes.stringDataType, (value) => value as string)
             .register(datePrimitiveType, (value) => {
                 const d = value as Date
@@ -106,7 +106,7 @@ describe("serialization", () => {
             ]
         }
         expect(
-            serializerWith({ reader: new TestNodeReader([libraryWithDatesLanguage]), primitiveTypeSerializerRegistry })([myNode])
+            serializerWith({ reader: new TestNodeReader([libraryWithDatesLanguage]), primitiveValueSerializerRegistry })([myNode])
         )
             .to.eql(expectedSerializationChunk)
     })

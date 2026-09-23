@@ -1,6 +1,6 @@
 import { LionWebId, LionWebJsonChunk, LionWebJsonNode, LionWebJsonReferenceTarget } from "@lionweb/json"
 import { asArray, keepDefineds, lazyMapGet, Nested3Map, uniquesAmong } from "@lionweb/ts-utils"
-import { PropertyValueSerializerConfiguration, propertyValueSerializerWith } from "./data-types/property-values.js"
+import { completeSerializationConfigurationWithDefaults } from "./configuration.js"
 import { asIds, metaPointerForFeature } from "./functions.js"
 import {
     Classifier,
@@ -8,14 +8,14 @@ import {
     Feature,
     inheritsDirectlyFrom,
     Language,
-    LionWebVersions,
     Property,
     Reference,
     simpleNameDeducer
 } from "./m3/index.js"
+import { PropertyValueSerializerConfiguration, propertyValueSerializerWith } from "./data-types/property-values.js"
+import { Reader } from "./reading.js"
 import { isReferenceToSet, isResolvedReference, SingleRef, UnresolvedReference } from "./references.js"
 import { Node } from "./types.js"
-import { Reader } from "./reading.js"
 
 
 /**
@@ -52,13 +52,12 @@ export type SerializerConfiguration<NT extends Node, RT extends Node = NT> = {
  */
 export const serializerWith = <NT extends Node, RT extends Node = NT>(configuration: SerializerConfiguration<NT, RT>): Serializer<NT> => {
     const { reader } = configuration
-    const lionWebVersion = configuration.lionWebVersion ?? LionWebVersions.v2023_1
+    const completedConfiguration = completeSerializationConfigurationWithDefaults(configuration)
+    const { lionWebVersion } = completedConfiguration
     const serializeEmptyFeatures = configuration.serializeEmptyFeatures ?? true
     const propertyValueSerializer = propertyValueSerializerWith({
         enumerationLiteralFrom: reader.enumerationLiteralFrom,
-        lionWebVersion,
-        primitiveTypeSerializerRegistry: configuration.primitiveTypeSerializerRegistry,
-        problemReporter: configuration.problemReporter
+        ...completedConfiguration
     })
 
     const languageKey2version2classifierKey2allFeatures: Nested3Map<Feature[]> = {}

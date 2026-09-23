@@ -27,6 +27,7 @@ import {
 import { LionWebClient } from "@lionweb/delta-protocol-client"
 import { Message, semanticConsoleLogger, SignOnResponse } from "@lionweb/delta-protocol-common"
 import { TestLanguageBase } from "@lionweb/class-core-test-language"
+import { defaultTestClientParameters } from "../test-utils/client-parameters.js"
 
 
 describe("combining delta protocol and an “adjacent” delta receiver", () => {
@@ -39,10 +40,7 @@ describe("combining delta protocol and an “adjacent” delta receiver", () => 
 
         const messagesSent: Message[] = []
         const lionWebClient = await LionWebClient.create({
-            repositoryId: "myRepo",
-            clientId: "A",
-            url: "",
-            languageBases: [testLanguageBase],
+            ...defaultTestClientParameters,
             instantiateDeltaReceiverForwardingTo: (commandSender) => {
                 compositorToCreate = new DeltaCompositor(deltaReceiverForwardingTo(
                     (delta) => {

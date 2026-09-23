@@ -19,7 +19,7 @@ import { isPartition } from "@lionweb/core"
 import { OnlyNodesOfLionWebJsonChunk } from "@lionweb/json"
 import { action, makeObservable, observable } from "mobx"
 
-import { FactoryConfiguration, ILanguageBase, INodeBase, NodeBaseFactory } from "./base-types.js"
+import { ILanguageBase, INodeBase, NodeBaseFactory } from "./base-types.js"
 import {
     applyDeltaWithLookup,
     DeltaReceiver,
@@ -28,14 +28,10 @@ import {
     PartitionDeletedDelta,
     updateIdMappingWithDelta
 } from "./deltas/index.js"
-import {
-    Deserializer,
-    DeserializerConfiguration,
-    DetailedDeserialization,
-    nodeBaseDetailedDeserializerWith
-} from "./deserializer.js"
+import { Deserializer, DetailedDeserialization, nodeBaseDetailedDeserializerWith } from "./deserializer.js"
 import { combinedFactoryFor } from "./factory.js"
 import { IdMapping } from "./id-mapping.js"
+import { NodeBaseSerializationConfiguration } from "./configuration.js"
 
 
 const containingRoot = (node: INodeBase): INodeBase => {
@@ -94,7 +90,7 @@ export class Forest {
     readonly deserialize: Deserializer<DetailedDeserialization>
 
 
-    constructor(configuration: FactoryConfiguration & DeserializerConfiguration) {
+    constructor(configuration: Omit<NodeBaseSerializationConfiguration, "primitiveValueSerializerRegistry">) {
         const { languageBases, receiveDelta } = configuration
         this.languageBases = languageBases
         this.receiveDelta = receiveDelta
@@ -189,7 +185,7 @@ export class Forest {
  */
 export class ObservableForest extends Forest {
 
-    constructor(configuration: FactoryConfiguration & DeserializerConfiguration) {
+    constructor(configuration: Omit<NodeBaseSerializationConfiguration, "primitiveValueSerializerRegistry">) {
         super(configuration)
         makeObservable(
             this,

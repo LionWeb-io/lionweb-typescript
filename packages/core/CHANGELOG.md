@@ -52,7 +52,8 @@ This change consists of the following sub-changes (with the breaking ones indica
 * **Breaking change!** Replace the `propertyValue{Des|S}erializer` properties of the `LionCoreBuiltinsFacade` type with `primitiveValue{Des|s}erializerRegistry` properties of types `PrimitiveValue{Des|S}erializerRegistry` (resp.).
 * **Breaking change!** Remove the `PropertyValue{Des|S}erializer[Function]` types, and corresponding `newPropertyValue{Des|S}erializerRegistry` and `propertyValue{Des|S}erializerFrom` functions.
 * Add (new) `PropertyValue{Des|S}erializer[Configuration]` types, and corresponding `propertyValue{Des|S}erializerWith` functions that, given such a configuration, return (de-)serializers of those types.
-* **Breaking change!** Restructure the `{Des|S}erializerConfiguration` types to make use of the new `PropertyValue{Des|S}erializerConfiguration` types.
+* Add a `CompleteSerializationConfiguration` type that captures all variability of (de-)serialization, with defaults enforced through the new `completeSerializationConfigurationWithDefaults` function.
+* **Breaking change!** Restructure the `{Des|S}erializerConfiguration` types to make use of the new `PropertyValue{Des|S}erializerConfiguration` types, the new `CompleteSerializationConfiguration` type and its derivations.
 
 
 ## 0.10.0

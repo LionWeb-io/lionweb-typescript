@@ -17,6 +17,7 @@
 
 import { LionWebJsonChunk } from "@lionweb/json"
 import {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     consoleProblemReporter,
     deserializerWith,
     Language,
@@ -58,7 +59,7 @@ export type IoLionWebMpsSpecificDeserializationData = {
  * Deserialization happens according to the optionally given {@link LionWebVersion}, which defaults to {@link LionWebVersions.v2023_1}.
  * Problems are reported through the optionally given {@link ProblemReporter}, which defaults to {@link consoleProblemReporter}.
  */
-export const deserializeLanguagesWithIoLionWebMpsSpecificFrom = ({serializationChunk, lionWebVersion = LionWebVersions.v2023_1, problemReporter = consoleProblemReporter}: IoLionWebMpsSpecificDeserializationData) =>
+export const deserializeLanguagesWithIoLionWebMpsSpecificFrom = ({ serializationChunk, lionWebVersion = LionWebVersions.v2023_1, problemReporter }: IoLionWebMpsSpecificDeserializationData) =>
     deserializerWith({
         writer: combinedWriterFor(lionWebVersion),
         languages: [lionWebVersion.lioncoreFacade.language, ioLionWebMpsSpecificLanguage],

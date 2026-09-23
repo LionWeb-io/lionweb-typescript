@@ -43,13 +43,12 @@ import {
     PropertyAddedDelta,
     PropertyChangedDelta,
     PropertyDeletedDelta,
-    propertyValueSerializerWith,
     ReferenceAddedDelta,
     ReferenceChangedDelta,
     ReferenceDeletedDelta,
     serializeAsDeltaChunk
 } from "@lionweb/class-core"
-import { idOf, LionWebVersion, LionWebVersions, metaPointerForFeature, PropertyValueSerializer } from "@lionweb/core"
+import { idOf, metaPointerForFeature, PropertyValueSerializer } from "@lionweb/core"
 import {
     AdditionalInfo,
     AnnotationAddedEvent,
@@ -120,16 +119,12 @@ export type AdditionalInfosGenerator = (delta: IDelta, sequenceNumber: number) =
 /**
  * A type def. for the configuration of a {@link DeltaToEventTranslator}.
  */
-export type DeltaToEventTranslatorConfiguration = Partial<{
+export type DeltaToEventTranslatorConfiguration = {
     /**
-     * A {@link LionWebVersion} — defaults to `LionWebVersions.v2023_1`.
+     * A {@link PropertyValueSerializer} that's *only* used to serialize *properties’* values.
      */
-    lionWebVersion: LionWebVersion,
-    /**
-     * A {@link PropertyValueSerializer} that's *only* used to serialize *primitive* values.
-     * Defaults to the `lioncoreBuiltinsFacade.propertyValueSerializer`.
-     */
-    primitiveValueSerializer: PropertyValueSerializer,
+    propertyValueSerializer: PropertyValueSerializer,
+} & Partial<{
     /**
      * A {@link OriginCommandsGenerator} — defaults to producing `[]`.
      */
@@ -145,12 +140,8 @@ export type DeltaToEventTranslatorConfiguration = Partial<{
  * @return a {@link DeltaToEventTranslator} instance using the given {@link DeltaToEventTranslatorConfiguration}.
  */
 export const deltaToEventTranslator = (
-    { lionWebVersion: maybeLionWebVersion, primitiveValueSerializer, originCommandsGenerator, additionalInfosGenerator }: DeltaToEventTranslatorConfiguration
+    { propertyValueSerializer, originCommandsGenerator, additionalInfosGenerator }: DeltaToEventTranslatorConfiguration
 ): DeltaToEventTranslator => {
-    const lionWebVersion = maybeLionWebVersion ?? LionWebVersions.v2023_1
-    const propertyValueSerializer = primitiveValueSerializer === undefined
-        ? lionWebVersion.builtinsFacade.propertyValueSerializer
-        : propertyValueSerializerWith({ primitiveValueSerializer })
     return (delta, lastUsedSequenceNumber) => {
 
         let sequenceNumber = lastUsedSequenceNumber
@@ -184,22 +175,22 @@ export const deltaToEventTranslator = (
                 return completed<PropertyAddedEvent>("PropertyAdded", { // § 5.8.4.1
                     node: delta.node.id,
                     property: metaPointerForFeature(delta.property),
-                    newValue: propertyValueSerializer.serializeValue(delta.value, delta.property)!
+                    newValue: propertyValueSerializer(delta.property, delta.value)!
                 })
             }
             if (delta instanceof PropertyDeletedDelta) {
                 return completed<PropertyDeletedEvent>("PropertyDeleted", { // § 5.8.4.2
                     node: delta.node.id,
                     property: metaPointerForFeature(delta.property),
-                    oldValue: propertyValueSerializer.serializeValue(delta.oldValue, delta.property)!
+                    oldValue: propertyValueSerializer(delta.property, delta.oldValue)!
                 })
             }
             if (delta instanceof PropertyChangedDelta) {
                 return completed<PropertyChangedEvent>("PropertyChanged", { // § 5.8.4.3
                     node: delta.node.id,
                     property: metaPointerForFeature(delta.property),
-                    newValue: propertyValueSerializer.serializeValue(delta.newValue, delta.property)!,
-                    oldValue: propertyValueSerializer.serializeValue(delta.oldValue, delta.property)!
+                    newValue: propertyValueSerializer(delta.property, delta.newValue)!,
+                    oldValue: propertyValueSerializer(delta.property, delta.oldValue)!
                 })
             }
             if (delta instanceof ChildAddedDelta) {

@@ -1,3 +1,4 @@
+export { type CompleteSerializationConfiguration, completeSerializationConfigurationWithDefaults } from "./configuration.js"
 export * from "./deserializer.js"
 export * from "./dynamic-facade.js"
 export * from "./extraction.js"

@@ -18,7 +18,7 @@
 // Warning: this file is generated!
 // Modifying it by hand is useless at best, and sabotage at worst.
 
-import { LionWebVersions, metaPointerForFeature } from "@lionweb/core";
+import { metaPointerForFeature, PropertyValueSerializer } from "@lionweb/core";
 import { IDelta } from "../base.js";
 import {
     AnnotationAddedDelta,
@@ -78,12 +78,10 @@ import {
     SerializedDelta
 } from "./types.g.js";
 import { idFrom } from "../../references.js";
-import { propertyValueSerializerWith } from "../../serializer.js";
-import { serializeAsDeltaChunk } from "./base.js"
+import { serializeAsDeltaChunk } from "./base.js";
 
 
-export const deltaSerializer = (lionWebVersion = LionWebVersions.v2023_1) => {
-    const propertyValueSerializer = propertyValueSerializerWith({ primitiveValueSerializer: lionWebVersion.builtinsFacade.propertyValueSerializer });
+export const deltaSerializer = (propertyValueSerializer: PropertyValueSerializer) => {
 
     const serializeDelta = (delta: IDelta): SerializedDelta => {
         if (delta instanceof PartitionAddedDelta) {
@@ -106,7 +104,7 @@ export const deltaSerializer = (lionWebVersion = LionWebVersions.v2023_1) => {
                 kind: "PropertyAdded",
                 node: delta.node.id,
                 property: metaPointerForFeature(delta.property),
-                value: propertyValueSerializer.serializeValue(delta.value, delta.property)
+                value: propertyValueSerializer(delta.property, delta.value)
             } as PropertyAddedSerializedDelta;
         }
 
@@ -115,7 +113,7 @@ export const deltaSerializer = (lionWebVersion = LionWebVersions.v2023_1) => {
                 kind: "PropertyDeleted",
                 node: delta.node.id,
                 property: metaPointerForFeature(delta.property),
-                oldValue: propertyValueSerializer.serializeValue(delta.oldValue, delta.property)
+                oldValue: propertyValueSerializer(delta.property, delta.oldValue)
             } as PropertyDeletedSerializedDelta;
         }
 
@@ -124,8 +122,8 @@ export const deltaSerializer = (lionWebVersion = LionWebVersions.v2023_1) => {
                 kind: "PropertyChanged",
                 node: delta.node.id,
                 property: metaPointerForFeature(delta.property),
-                oldValue: propertyValueSerializer.serializeValue(delta.oldValue, delta.property),
-                newValue: propertyValueSerializer.serializeValue(delta.newValue, delta.property)
+                oldValue: propertyValueSerializer(delta.property, delta.oldValue),
+                newValue: propertyValueSerializer(delta.property, delta.newValue)
             } as PropertyChangedSerializedDelta;
         }
 

@@ -15,12 +15,11 @@
 // SPDX-FileCopyrightText: 2026 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { Enumeration, LionWebVersion, LionWebVersions, PrimitiveType, Property } from "../m3/index.js"
-import { PrimitiveValueDeserializerRegistry, PrimitiveValueSerializerRegistry } from "./primitive-types.js"
+import { Enumeration, PrimitiveType, Property } from "../m3/index.js"
+import { CompleteSerializationConfiguration, completeSerializationConfigurationWithDefaults } from "../configuration.js"
 import { EnumerationLiteralDecoder } from "../reading.js"
-import { consoleProblemReporter, ProblemReporter } from "../reporter.js"
-import { EnumerationLiteralEncoder } from "../writing.js"
 import { isReferenceToSet, isResolvedReference, isUnresolvedReference } from "../references.js"
+import { EnumerationLiteralEncoder } from "../writing.js"
 
 
 /**
@@ -36,44 +35,27 @@ export type PropertyValueDeserializerConfiguration = {
 
     encodingOfEnumerationLiteral: EnumerationLiteralEncoder<unknown>
 
-} & Partial<{
-
-    /**
-     * The version of the LionWeb serialization format to serialize in.
-     * Default = {@link LionWebVersions.v2023_1}.
-     */
-    lionWebVersion: LionWebVersion
-
-    /**
-     * Default = {@code lionWebVersion.builtinsFacade.primitiveValueDeserializerRegistry}.
-     */
-    primitiveTypeDeserializerRegistry: PrimitiveValueDeserializerRegistry
-
-    // TODO  add structuredDataTypeDeserializer (after that introduction)
-
-    problemReporter: ProblemReporter
-
-}>
+} & Partial<Omit<CompleteSerializationConfiguration, "primitiveValueSerializerRegistry">>
+// TODO  consider omitting the Partial<...> here
 
 /**
  * @return A {@link PropertyValueDeserializer} conforming to the given `configuration`.
  */
 export const propertyValueDeserializerWith = (configuration: PropertyValueDeserializerConfiguration): PropertyValueDeserializer => {
-    const lionWebVersion = configuration.lionWebVersion ?? LionWebVersions.v2023_1
-    const primitiveValueDeserializerByType = (configuration.primitiveTypeDeserializerRegistry ?? lionWebVersion.builtinsFacade.primitiveValueDeserializerRegistry).lookupByKey
+    const { primitiveValueDeserializerRegistry, problemReporter } = completeSerializationConfigurationWithDefaults(configuration)
+    const primitiveValueDeserializerByType = primitiveValueDeserializerRegistry.lookupByKey
     const { encodingOfEnumerationLiteral } = configuration
-    const { reportProblem } = configuration.problemReporter ?? consoleProblemReporter
 
     return (property, serialization) => {
         const { type } = property
         if (!isResolvedReference(type)) {
-            reportProblem(`can't deserialize value of property "${property.name}" (on classifier "${property.classifier.name}" in language "${property.classifier.language.name}") having ${isReferenceToSet(type) ? `an unset type` : `unresolved type ${isUnresolvedReference(type) && type.resolveInfo !== undefined ? ` -> ${type.resolveInfo}` : ``}`}: ${serialization}`)
+            problemReporter.reportProblem(`can't deserialize value of property "${property.name}" (on classifier "${property.classifier.name}" in language "${property.classifier.language.name}") having ${isReferenceToSet(type) ? `an unset type` : `unresolved type ${isUnresolvedReference(type) && type.resolveInfo !== undefined ? ` -> ${type.resolveInfo}` : ``}`}: ${serialization}`)
             return undefined
         }
         if (type instanceof PrimitiveType) {
             const primitiveValueDeserializer = primitiveValueDeserializerByType(type)
             if (primitiveValueDeserializer === undefined) {
-                reportProblem(`couldn’t find a deserializer for the primitive type ${type.name}`)
+                problemReporter.reportProblem(`couldn’t find a deserializer for the primitive type ${type.name}`)
                 return undefined
             }
             return primitiveValueDeserializer(serialization)
@@ -81,13 +63,13 @@ export const propertyValueDeserializerWith = (configuration: PropertyValueDeseri
         if (type instanceof Enumeration) {
             const literal = type.literals.find(literal => literal.key === serialization)
             if (literal === undefined) {
-                reportProblem(`"${serialization}" is not the key of any of the literals of the enumeration "${type.name}" in language "${type.language.name}"`)
+                problemReporter.reportProblem(`"${serialization}" is not the key of any of the literals of the enumeration "${type.name}" in language "${type.language.name}"`)
                 return undefined
             }
             return encodingOfEnumerationLiteral(literal)
         }
         // TODO  StructuredDataType
-        reportProblem(`property ${property.name} on classifier ${property.classifier.name} is not handled by this property value deserializer, because its type is neither a primitive type nor an enumeration`)
+        problemReporter.reportProblem(`property ${property.name} on classifier ${property.classifier.name} is not handled by this property value deserializer, because its type is neither a primitive type nor an enumeration`)
         return undefined
     }
 }
@@ -106,33 +88,16 @@ export type PropertyValueSerializerConfiguration = {
 
     enumerationLiteralFrom: EnumerationLiteralDecoder
 
-} & Partial<{
-
-    /**
-     * The version of the LionWeb serialization format to serialize in.
-     * Default = {@link LionWebVersions.v2023_1}.
-     */
-    lionWebVersion: LionWebVersion
-
-    /**
-     * Default = {@code lionWebVersion.builtinsFacade.primitiveValueSerializerRegistry}.
-     */
-    primitiveTypeSerializerRegistry: PrimitiveValueSerializerRegistry
-
-    // TODO  add structuredDataTypeSerializer (after that introduction)
-
-    problemReporter: ProblemReporter
-
-}>
+} & Partial<Omit<CompleteSerializationConfiguration, "primitiveValueDeserializerRegistry">>
+// TODO  consider omitting the Partial<...> here
 
 /**
  * @return A {@link PropertyValueSerializer} conforming to the given `configuration`.
  */
 export const propertyValueSerializerWith = (configuration: PropertyValueSerializerConfiguration): PropertyValueSerializer => {
-    const lionWebVersion = configuration.lionWebVersion ?? LionWebVersions.v2023_1
-    const primitiveValueSerializerByType = (configuration.primitiveTypeSerializerRegistry ?? lionWebVersion.builtinsFacade.primitiveValueSerializerRegistry).lookupByKey
+    const { primitiveValueSerializerRegistry, problemReporter } = completeSerializationConfigurationWithDefaults(configuration)
+    const primitiveValueSerializerByType = primitiveValueSerializerRegistry.lookupByKey
     const { enumerationLiteralFrom } = configuration
-    const problemReporter = configuration.problemReporter ?? consoleProblemReporter
 
     return (property, encoding) => {
         const { type } = property

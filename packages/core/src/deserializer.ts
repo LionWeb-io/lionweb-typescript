@@ -1,13 +1,12 @@
 import { LionWebId, LionWebJsonChunk, LionWebJsonNode, LionWebKey } from "@lionweb/json"
 import { byIdMap, groupBy, keepDefineds } from "@lionweb/ts-utils"
+import { completeSerializationConfigurationWithDefaults } from "./configuration.js"
 import { PropertyValueDeserializerConfiguration, propertyValueDeserializerWith } from "./data-types/property-values.js"
-import { Writer } from "./writing.js"
 import { UnresolvedReference } from "./references.js"
-import { consoleProblemReporter } from "./reporter.js"
 import { MemoisingSymbolTable } from "./m3/symbol-table.js"
 import { Classifier, Containment, Language, Property, Reference } from "./m3/types.js"
-import { LionWebVersions } from "./m3/versions.js"
 import { Node } from "./types.js"
+import { Writer } from "./writing.js"
 
 /**
  * Type definition for functions that deserialize a given {@link LionWebJsonChunk serialization chunk},
@@ -44,13 +43,11 @@ export const deserializerWith = <NT extends Node>(configuration: DeserializerCon
     const { writer } = configuration
     const symbolTable = new MemoisingSymbolTable(configuration.languages)
 
-    const lionWebVersion = configuration?.lionWebVersion ?? LionWebVersions.v2023_1
-    const problemReporter = configuration.problemReporter ?? consoleProblemReporter
+    const completedConfiguration = completeSerializationConfigurationWithDefaults(configuration)
+    const { lionWebVersion, problemReporter } = completedConfiguration
     const propertyValueDeserializer = propertyValueDeserializerWith({
         encodingOfEnumerationLiteral: configuration.writer.encodingOf,
-        lionWebVersion,
-        primitiveTypeDeserializerRegistry: configuration.primitiveTypeDeserializerRegistry,
-        problemReporter
+        ...completedConfiguration
     })
 
     return (serializationChunk, dependentNodes = []) => {

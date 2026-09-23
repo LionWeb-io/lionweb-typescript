@@ -26,9 +26,11 @@ import {
     IdMapping,
     INodeBase,
     nodeBaseDeserializerWith,
-    nodeBaseDetailedDeserializerWith,
+    nodeBasePropertyValueSerializerWith,
+    nodeBaseReader,
     SerializedDelta
 } from "@lionweb/class-core"
+import { propertyValueSerializerWith } from "@lionweb/core"
 import { LowLevelClient } from "@lionweb/delta-protocol-client"
 import {
     combine,
@@ -114,7 +116,9 @@ describe("WebSocket-driven client and repository", async function() {
             createWSLowLevelClient<Payload, Payload>({ url: wsLocalhostUrl(port), clientId, receiveMessageOnClient }, asLowLevelClientLogger(clientLogger))
         ])
 
-        const serializeDelta = deltaSerializer()
+        const serializeDelta = deltaSerializer(propertyValueSerializerWith({
+            enumerationLiteralFrom: nodeBaseReader.enumerationLiteralFrom
+        }))
 
         let loading = true
         let commandNumber = 0
@@ -192,7 +196,7 @@ describe("WebSocket-driven client and repository including translation, without 
         const lowLevelServer = createWebSocketServer<void, Command, void, Event>(port, (_) => undefined, receiveMessageOnServer)
 
         // create clients:
-        const deltaAsCommand = deltaToCommandTranslator()
+        const deltaAsCommand = deltaToCommandTranslator(nodeBasePropertyValueSerializerWith({}))
         const createClient = async (clientId: string): Promise<[client: LowLevelClient<Command>, model: INodeBase[]]> => {
             let loading = true
             let commandNumber = 0
@@ -211,7 +215,7 @@ describe("WebSocket-driven client and repository including translation, without 
             const deserializerConfiguration = { languageBases, receiveDelta: commandSender }
             const model = nodeBaseDeserializerWith(deserializerConfiguration)(testModelChunk)
             const idMapping = new IdMapping(byIdMap(model.flatMap(allNodesFrom)))
-            const eventAsDelta = eventToDeltaTranslator(languageBases, nodeBaseDetailedDeserializerWith(deserializerConfiguration))
+            const eventAsDelta = eventToDeltaTranslator({ languageBases })
             loading = false
 
             const receiveMessageOnClient = (event: Event) => {

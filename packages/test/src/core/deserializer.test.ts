@@ -150,7 +150,7 @@ describe("deserialization", () => {
                 }
             ]
         }
-        const primitiveTypeDeserializerRegistry = newPrimitiveValueDeserializerRegistry()
+        const primitiveValueDeserializerRegistry = newPrimitiveValueDeserializerRegistry()
             .register(LionWebVersions.v2023_1.builtinsFacade.primitiveTypes.stringDataType, (value) => value)
             .register(datePrimitiveType, (value) => {
                 const parts = value.split("-")
@@ -160,7 +160,7 @@ describe("deserialization", () => {
         const deserialization = deserializerWith({
             writer: libraryWithDatesWriter,
             languages: [libraryWithDatesLanguage],
-            primitiveTypeDeserializerRegistry
+            primitiveValueDeserializerRegistry
         })(serializationChunk)
 
         const node = deserialization[0] as NodeWithProperties
