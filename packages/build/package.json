@@ -32,6 +32,6 @@
         "littoral-templates": "0.5.1"
     },
     "devDependencies": {
-        "@types/node": "25.2.2"
+        "@types/node": "26.3.0"
     }
 }
