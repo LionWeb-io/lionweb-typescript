@@ -31,6 +31,6 @@
         "@lionweb/json": "0.11.0-beta.0",
         "@lionweb/ts-utils": "0.11.0-beta.0",
         "littoral-templates": "0.5.1",
-        "mobx": "6.15.0"
+        "mobx": "6.16.1"
     }
 }

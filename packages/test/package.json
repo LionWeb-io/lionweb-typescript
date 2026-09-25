@@ -26,8 +26,8 @@
         "@types/chai": "5.2.3",
         "@types/mocha": "10.0.10",
         "chai": "6.2.2",
-        "degit": "2.8.6",
-        "mocha": "11.7.5"
+        "degit": "3.8.0",
+        "mocha": "11.8.0"
     },
     "dependencies": {
         "@lionweb/class-core": "0.11.0-beta.0",

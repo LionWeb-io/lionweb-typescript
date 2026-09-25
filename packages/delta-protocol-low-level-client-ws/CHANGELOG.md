@@ -2,6 +2,8 @@
 
 ## 0.11.0 — not yet released
 
+* Update version of `ws` dependency from 8.21.0 &rarr; 8.21.3.
+
 
 ## 0.10.0
 

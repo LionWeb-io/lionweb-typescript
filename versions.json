@@ -12,14 +12,14 @@
     "external-deps": {
         "@types/chai": "5.2.3",
         "@types/mocha": "10.0.10",
-        "@types/node": "25.2.2",
+        "@types/node": "26.3.0",
         "@types/ws": "8.18.1",
         "chai": "6.2.2",
-        "degit": "2.8.6",
+        "degit": "3.8.0",
         "littoral-templates": "0.5.1",
-        "mobx": "6.15.0",
-        "mocha": "11.7.5",
-        "nanoid": "5.1.16",
-        "ws": "8.21.0"
+        "mobx": "6.16.1",
+        "mocha": "11.8.0",
+        "nanoid": "6.0.1",
+        "ws": "8.21.3"
     }
 }

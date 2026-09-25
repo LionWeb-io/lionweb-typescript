@@ -1,13 +1,12 @@
 #!/usr/bin/env node
 
 
-const { exec } = require("child_process")
-const { writeFileSync, readdirSync, readFileSync } = require("fs")
-const { join } = require("path")
-const { EOL } = require("os")
+import { exec } from "node:child_process"
+import { writeFileSync, readFileSync } from "node:fs"
+import { join } from "node:path"
+import { EOL } from "os"
 
-
-const versions = require("../versions.json")
+import versions from "../versions.json" with { type: "json" }
 
 const {
     "publish-version": publishVersion,
@@ -79,7 +78,7 @@ mainPackageJson
     })
 
 replaceVersionsIn(mainPackageJson.devDependencies, true)
-writeJsonAsFile("../package.json", mainPackageJson)
+writeJsonAsFile("package.json", mainPackageJson)
 
 console.log(`updating package-lock.json...`)
 exec("npm install")
