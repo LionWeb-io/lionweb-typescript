@@ -32,7 +32,7 @@ import {
     Deserializer,
     DeserializerConfiguration,
     DetailedDeserialization,
-    nodeBaseDetailedDeserializer
+    nodeBaseDetailedDeserializerWith
 } from "./deserializer.js"
 import { combinedFactoryFor } from "./factory.js"
 import { IdMapping } from "./id-mapping.js"
@@ -115,7 +115,7 @@ export class Forest {
                  * _at/before_ the time the delta was emitted.
                  */
         )
-        this.deserialize = nodeBaseDetailedDeserializer(configuration)
+        this.deserialize = nodeBaseDetailedDeserializerWith(configuration)
     }
 
 

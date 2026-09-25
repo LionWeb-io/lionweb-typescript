@@ -3,7 +3,7 @@ import {
     Concept,
     ConceptModifier,
     DynamicNode,
-    dynamicReader,
+    dynamicReaderFor,
     Enumeration,
     EnumerationLiteral,
     Language,
@@ -22,6 +22,8 @@ import { concatenator, lastOf } from "@lionweb/ts-utils"
 import { expect } from "chai"
 import { TestNode, TestNodeReader } from "../instances/test-node.js"
 import { dateDataType, libraryWithDatesLanguage } from "../languages/libraryWithDates.js"
+
+const dynamicReader = dynamicReaderFor(LionWebVersions.v2023_1)
 
 describe("serialization", () => {
 

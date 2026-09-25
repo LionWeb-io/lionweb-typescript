@@ -19,7 +19,7 @@ import {
     ChildAddedDelta,
     collectingDeltaReceiver,
     INodeBase,
-    nodeBaseDeserializer,
+    nodeBaseDeserializerWith,
     PropertyAddedDelta,
     PropertyChangedDelta,
     serializeNodeBases
@@ -151,7 +151,7 @@ describe(`(de-)serialization (also "vs." ∂s)`, () => {
             join(artifactsPath, "DataTypeTestConcept-value=bar-enumValue_1=literal3.expected.json")
         ) as LionWebJsonChunk
         const [receiveDelta, deltas] = collectingDeltaReceiver()
-        const deserialize = nodeBaseDeserializer([testLanguageBase], receiveDelta)
+        const deserialize = nodeBaseDeserializerWith({ languageBases: [testLanguageBase], receiveDelta })
         const nodes = deserialize(serializationChunk)
         equal(deltas.length, 0)
         equal(nodes.length, 1)

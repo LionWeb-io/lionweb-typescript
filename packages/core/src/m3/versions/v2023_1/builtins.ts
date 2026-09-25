@@ -56,23 +56,7 @@ export const lioncoreBuiltinsFacade: LionCoreBuiltinsFacade = {
         stringDataType,
         booleanDataType,
         integerDataType,
-        jsonDataType,
-        /**
-         * Misspelled alias of {@link stringDataType}, kept for backward compatibility, and to be deprecated and removed later.
-         */
-        stringDatatype: stringDataType,
-        /**
-         * Misspelled alias of {@link booleanDataType}, kept for backward compatibility, and to be deprecated and removed later.
-         */
-        booleanDatatype: booleanDataType,
-        /**
-         * Misspelled alias of {@link integerDataType}, kept for backward compatibility, and to be deprecated and removed later.
-         */
-        integerDatatype: integerDataType,
-        /**
-         * Misspelled alias of {@link jsonDataType}, kept for backward compatibility, and to be deprecated and removed later.
-         */
-        jsonDatatype: jsonDataType
+        jsonDataType
     }
 }
 

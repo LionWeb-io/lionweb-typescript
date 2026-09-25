@@ -40,7 +40,8 @@ import {
 } from "@lionweb/json"
 import { byIdMap, keepDefineds } from "@lionweb/ts-utils"
 
-import { DeltaReceiver, FactoryConfiguration, IdMapping, ILanguageBase, INodeBase } from "./index.js"
+import { FactoryConfiguration, INodeBase } from "./base-types.js"
+import { IdMapping } from "./id-mapping.js"
 import { combinedLanguageBaseLookupFor } from "./factory.js"
 import { NodesToInstall } from "./linking.js"
 
@@ -102,21 +103,14 @@ export type DeserializerConfiguration = {
 
 
 /**
- * @return a {@link Deserializer} function for the given languages (given as {@link ILanguageBase}s) that returns a {@link DetailedDeserialization}.
- * Deprecated:
- * @param languageBases the {@link ILanguageBase}s for (at least) all the languages used in the {@link LionWebJsonChunk} to deserialize, minus LionCore M3 and built-ins.
- * @param receiveDelta an optional {@link DeltaReceiver} that will be injected in all {@link INodeBase nodes} created.
- */
-function nodeBaseDetailedDeserializer(languageBases: ILanguageBase[], receiveDelta?: DeltaReceiver): Deserializer<DetailedDeserialization>;
-/**
+ * @return a {@link Deserializer} function that returns a {@link DetailedDeserialization}.
  * @param configuration a {@link DeserializerConfiguration configuration object} for the deserializer.
  */
-function nodeBaseDetailedDeserializer(configuration: FactoryConfiguration & DeserializerConfiguration): Deserializer<DetailedDeserialization>;
-function nodeBaseDetailedDeserializer(languageBasesOrConfiguration: ILanguageBase[] | (FactoryConfiguration & DeserializerConfiguration), mayBeReceiveDelta?: DeltaReceiver): Deserializer<DetailedDeserialization> {
-    const lionWebVersion = (Array.isArray(languageBasesOrConfiguration) ? undefined : languageBasesOrConfiguration.lionWebVersion) ?? LionWebVersions.v2023_1
-    const [languageBases, receiveDelta, propertyValueDeserializer, problemReporter] = Array.isArray(languageBasesOrConfiguration)
-        ? [languageBasesOrConfiguration, mayBeReceiveDelta, lionWebVersion.builtinsFacade.propertyValueDeserializer, consoleProblemReporter]
-        : [languageBasesOrConfiguration.languageBases, languageBasesOrConfiguration.receiveDelta, languageBasesOrConfiguration.propertyValueDeserializer ?? lionWebVersion.builtinsFacade.propertyValueDeserializer, languageBasesOrConfiguration.problemReporter ?? consoleProblemReporter];
+export const nodeBaseDetailedDeserializerWith = (configuration: FactoryConfiguration & DeserializerConfiguration): Deserializer<DetailedDeserialization> => {
+    const lionWebVersion = configuration.lionWebVersion ?? LionWebVersions.v2023_1;
+    const { languageBases, receiveDelta } = configuration;
+    const propertyValueDeserializer = configuration.propertyValueDeserializer ?? lionWebVersion.builtinsFacade.propertyValueDeserializer;
+    const problemReporter = configuration.problemReporter ?? consoleProblemReporter;
 
     const symbolTable = new MemoisingSymbolTable(languageBases.map(({language}) => language));
     const languageBaseFor = combinedLanguageBaseLookupFor(languageBases);
@@ -271,26 +265,10 @@ function nodeBaseDetailedDeserializer(languageBasesOrConfiguration: ILanguageBas
 
 
 /**
- * @return a {@link Deserializer} function for the languages (given as {@link ILanguageBase}s) that returns the roots (of type {@link INodeBase}) of the deserialized model.
- * Deprecated:
- * @param languageBases the {@link ILanguageBase}s for (at least) all the languages used in the {@link LionWebJsonChunk} to deserialize, minus LionCore M3 and built-ins.
- * @param receiveDelta an optional {@link DeltaReceiver} that will be injected in all {@link INodeBase nodes} created.
- */
-function nodeBaseDeserializer(languageBases: ILanguageBase[], receiveDelta?: DeltaReceiver): Deserializer<INodeBase[]>;
-/**
+ * @return a {@link Deserializer} function that returns the roots (of type {@link INodeBase}) of the deserialized model.
  * @param configuration a {@link DeserializerConfiguration configuration object} for the deserializer.
  */
-function nodeBaseDeserializer(configuration: FactoryConfiguration & DeserializerConfiguration): Deserializer<INodeBase[]>;
-function nodeBaseDeserializer(languageBasesOrConfiguration: ILanguageBase[] | (FactoryConfiguration & DeserializerConfiguration), receiveDelta?: DeltaReceiver): Deserializer<INodeBase[]> {
-    return (
-        serializationChunk,
-        idMapping
-    ): INodeBase[] =>
-        Array.isArray(languageBasesOrConfiguration)
-            ? nodeBaseDetailedDeserializer(languageBasesOrConfiguration, receiveDelta)(serializationChunk, idMapping).roots
-            : nodeBaseDetailedDeserializer(languageBasesOrConfiguration)(serializationChunk, idMapping).roots;
-}
-
-
-export { nodeBaseDeserializer, nodeBaseDetailedDeserializer };
+export const nodeBaseDeserializerWith = (configuration: FactoryConfiguration & DeserializerConfiguration): Deserializer<INodeBase[]> =>
+    (serializationChunk, idMapping): INodeBase[] =>
+        nodeBaseDetailedDeserializerWith(configuration)(serializationChunk, idMapping).roots;
 

@@ -31,7 +31,7 @@ type NodesById = { [id: LionWebId]: Node }
 /**
  * Maintains a mapping ID &rarr; node,
  * which is primarily used for efficiently applying {@link IDelta deltas}.
- * Instances are produced by the {@link nodeBaseDetailedDeserializer} function.
+ * Instances are produced by the {@link nodeBaseDetailedDeserializerWith} function.
  */
 export class IdMapping {
 

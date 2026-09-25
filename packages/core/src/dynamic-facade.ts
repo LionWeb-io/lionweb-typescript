@@ -1,5 +1,5 @@
 import { LionWebKey } from "@lionweb/json"
-import { Classifier, LionWebVersion, LionWebVersions } from "./m3/index.js"
+import { Classifier, LionWebVersion } from "./m3/index.js"
 import { Reader, ResolveInfoDeducer } from "./reading.js"
 import { Node } from "./types.js"
 import { updateSettingsKeyBased, Writer } from "./writing.js"
@@ -36,18 +36,6 @@ export const dynamicReaderFor = (lionWebVersion: LionWebVersion): Reader<Dynamic
 })
 
 /**
- * A {@link Reader} implementation for {@link DynamicNode dynamic nodes} for {@link LionWebVersion} 2023.1.
- * This constant is kept for backward compatibility, and is to be deprecated and removed later.
- */
-export const dynamicReader = dynamicReaderFor(LionWebVersions.v2023_1)
-
-
-/**
- * Alias for {@link Reader}, kept for backward compatibility, and to be deprecated and removed later.
- */
-export const dynamicExtractionFacade = dynamicReader
-
-/**
  * An implementation of {@link Writer} for {@link DynamicNode dynamic nodes}.
  */
 export const dynamicWriter: Writer<DynamicNode> = ({
@@ -61,9 +49,4 @@ export const dynamicWriter: Writer<DynamicNode> = ({
     },
     encodingOf: ({key}) => key
 })
-
-/**
- * Alias for {@link Reader}, kept for backward compatibility, and is to be deprecated and removed later.
- */
-export const dynamicInstantiationFacade = dynamicReader
 
