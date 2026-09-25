@@ -16,8 +16,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { DeltaReceiver, deltaSerializer, Forest, ILanguageBase, INodeBase } from "@lionweb/class-core"
-import { LionWebId, LionWebJsonChunk, LionWebJsonDeltaChunk } from "@lionweb/json"
-
+import { PropertyValueDeserializer, PropertyValueSerializer } from "@lionweb/core"
 import {
     ansi,
     ClientAppliedEvent,
@@ -61,6 +60,7 @@ import {
     SubscribeToPartitionContentsResponse,
     UnsubscribeFromPartitionContentsRequest
 } from "@lionweb/delta-protocol-common"
+import { LionWebId, LionWebJsonChunk, LionWebJsonDeltaChunk } from "@lionweb/json"
 import { ChunkingInfo } from "./chunking.js"
 import { LowLevelClient, LowLevelClientInstantiator } from "./low-level-client.js"
 import { priorityQueueAcceptor } from "./priority-queue.js"
@@ -75,16 +75,30 @@ export type LionWebDeltaProtocolLowLevelClientInstantiator = LowLevelClientInsta
 
 
 /**
- * Type def. for parameters – required and optional – for instantiating a {@link LionWebClient LionWeb delta protocol client}.
+ * Type def. for parameters – required and optional – for instantiating a {@link LionWebClient LionWeb delta protocol client}
+ *  — henceforth identified as “this client”.
  */
 export type LionWebClientParameters = {
-    repositoryId: LionWebId
-    clientId: LionWebId
+    /** URL of the repository server to connect to. */
     url: string
+    /** ID of the repository to connect to. */
+    repositoryId: LionWebId
+    /** ID to identify this client with, with the repository server. */
+    clientId: LionWebId
+    /** The {@link ILanguageBase bases} of the languages that the model – or actually: {@link Forest} – held by this client, conforms to. */
     languageBases: ILanguageBase[]
+    propertyValueDeserializer: PropertyValueDeserializer,
+    propertyValueSerializer: PropertyValueSerializer,
+    /** An instance of {@link LionWebDeltaProtocolLowLevelClientInstantiator} that instantiates a {@link LowLevelClient low-level client}. */
     lowLevelClientInstantiator: LionWebDeltaProtocolLowLevelClientInstantiator
+    /** Optionally-given {@link LionWebJsonChunk serialization chunk} to load into the – initially empty – {@link Forest} maintained by this client. */
     serializationChunk?: LionWebJsonChunk
+    /**
+     * Optionally-given function that maps a command-sending {@link DeltaReceiver} to another {@link DeltaReceiver}.
+     * This allows sent commands to be “intercepted”, e.g. for logging and/or testing purposes.
+     */
     instantiateDeltaReceiverForwardingTo?: (commandSender: DeltaReceiver) => DeltaReceiver
+    /** Optionally-given {@link SemanticLogger}, e.g. for testing or demonstration purposes. */
     semanticLogger?: SemanticLogger
 }
 
@@ -131,14 +145,16 @@ export class LionWebClient {
         clientId,
         url,
         languageBases,
-        instantiateDeltaReceiverForwardingTo,
+        propertyValueDeserializer,
+        propertyValueSerializer,
+        lowLevelClientInstantiator,
         serializationChunk,
-        semanticLogger,
-        lowLevelClientInstantiator
+        instantiateDeltaReceiverForwardingTo,
+        semanticLogger
     }: LionWebClientParameters): Promise<LionWebClient> {
         const log = semanticLoggerFunctionFrom(semanticLogger)
 
-        const deltaAsCommand = deltaToCommandTranslator()
+        const deltaAsCommand = deltaToCommandTranslator(propertyValueSerializer)
         const serializeDelta = deltaSerializer()
 
         let loading = true
@@ -167,7 +183,7 @@ export class LionWebClient {
         if (serializationChunk !== undefined) {
             forest.deserializeInto(serializationChunk)
         }
-        const eventAsDelta = eventToDeltaTranslator(languageBases, forest.deserialize)
+        const eventAsDelta = eventToDeltaTranslator(languageBases, forest.deserialize, propertyValueDeserializer)
         loading = false
 
         const processEvent = (event: Event) => {

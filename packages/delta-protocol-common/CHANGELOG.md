@@ -2,6 +2,8 @@
 
 ## 0.11.0 — not yet released
 
+* **Breaking changes!** Propagate restructuring of how property values get (de-)serialized, leading to modified signatures of the `deltaToCommandTranslator`, `deltaToEventTranslator` (through its accompanying `DeltaToEventTranslatorConfiguration` type), and `eventToDeltaTranslator` functions.
+
 
 ## 0.10.0
 

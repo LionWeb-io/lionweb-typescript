@@ -44,6 +44,7 @@ import { byIdMap } from "@lionweb/ts-utils"
 
 import { TestLanguageBase } from "@lionweb/class-core-test-language"
 import { delayed } from "../test-utils/async.js"
+import { defaultPropertyValueDeserializer, defaultPropertyValueSerializer } from "../test-utils/client-parameters.js"
 import { asLowLevelClientLogger } from "../test-utils/logging.js"
 import { nextPort } from "../test-utils/port.js"
 import { getTextFrom, setTextOn, testModelChunk } from "../test-utils/test-model.js"
@@ -192,7 +193,7 @@ describe("WebSocket-driven client and repository including translation, without 
         const lowLevelServer = createWebSocketServer<void, Command, void, Event>(port, (_) => undefined, receiveMessageOnServer)
 
         // create clients:
-        const deltaAsCommand = deltaToCommandTranslator()
+        const deltaAsCommand = deltaToCommandTranslator(defaultPropertyValueSerializer)
         const createClient = async (clientId: string): Promise<[client: LowLevelClient<Command>, model: INodeBase[]]> => {
             let loading = true
             let commandNumber = 0
@@ -211,7 +212,7 @@ describe("WebSocket-driven client and repository including translation, without 
             const deserializerConfiguration = { languageBases, receiveDelta: commandSender }
             const model = nodeBaseDeserializerWith(deserializerConfiguration)(testModelChunk)
             const idMapping = new IdMapping(byIdMap(model.flatMap(allNodesFrom)))
-            const eventAsDelta = eventToDeltaTranslator(languageBases, nodeBaseDetailedDeserializerWith(deserializerConfiguration))
+            const eventAsDelta = eventToDeltaTranslator(languageBases, nodeBaseDetailedDeserializerWith(deserializerConfiguration), defaultPropertyValueDeserializer)
             loading = false
 
             const receiveMessageOnClient = (event: Event) => {
