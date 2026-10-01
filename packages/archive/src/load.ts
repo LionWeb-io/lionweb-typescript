@@ -2,8 +2,8 @@ import type { LionWebJsonChunk } from "@lionweb/json"
 import JSZip from "jszip"
 
 import { decodeChunk } from "./protobuf.js"
-import { recordEntrySource, recordSnapshotZip } from "./sources.js"
-import type { LoadedSnapshot, LoadProgress, SnapshotDiagnostic, SnapshotEntry, SnapshotFormat } from "./types.js"
+import { recordEntrySource, recordArchiveZip } from "./sources.js"
+import type { LoadedArchive, LoadProgress, ArchiveDiagnostic, ArchiveEntry, ChunkFormat } from "./types.js"
 import { validateChunk } from "./validation.js"
 
 /** The path of the metadata of a LionWeb Archive, matched case-insensitively (as LionWeb Java does). */
@@ -17,8 +17,7 @@ export type LoadOptions = {
     validate?: boolean
 }
 
-const formatOf = (path: string): SnapshotFormat | undefined =>
-    /\.json$/i.test(path) ? "json" : /\.binpb$/i.test(path) ? "binpb" : undefined
+const formatOf = (path: string): ChunkFormat | undefined => (/\.json$/i.test(path) ? "json" : /\.binpb$/i.test(path) ? "binpb" : undefined)
 
 /** Parses the subset of the Java properties format used by LionWeb Java's metadata: `key=value` (or `key: value`) lines and comments. */
 export const parseProperties = (text: string): Map<string, string> => {
@@ -37,15 +36,15 @@ export const parseProperties = (text: string): Map<string, string> => {
 }
 
 /**
- * Loads an archive of LionWeb chunks: either a snapshot or a LionWeb Archive (see {@link ArchiveLayout}),
+ * Loads an archive of LionWeb chunks, in the `snapshot` layout or a LionWeb Archive (see {@link ArchiveLayout}),
  * recognized by the presence of the metadata of a LionWeb Archive.
  * Entries that cannot be read are skipped and reported in the diagnostics; an input that is not a ZIP is an error.
  */
-export async function loadSnapshot(data: ArrayBuffer | Uint8Array | Blob, options: LoadOptions = {}): Promise<LoadedSnapshot> {
+export async function loadArchive(data: ArrayBuffer | Uint8Array | Blob, options: LoadOptions = {}): Promise<LoadedArchive> {
     const validate = options.validate ?? true
     const zip = await JSZip.loadAsync(data)
     const files = Object.values(zip.files).filter(file => !file.dir)
-    const diagnostics: SnapshotDiagnostic[] = []
+    const diagnostics: ArchiveDiagnostic[] = []
 
     const metadataFile = files.find(file => file.name.toLowerCase() === lwaMetadataPath)
     const layout = metadataFile ? "lwa" : "snapshot"
@@ -73,8 +72,8 @@ export async function loadSnapshot(data: ArrayBuffer | Uint8Array | Blob, option
     const chunkFiles = files.filter(file => roleOf(file.name) !== undefined)
     const otherFiles = files.filter(file => file !== metadataFile && roleOf(file.name) === undefined).map(file => file.name)
 
-    const languages: SnapshotEntry[] = []
-    const entries: SnapshotEntry[] = []
+    const languages: ArchiveEntry[] = []
+    const partitions: ArchiveEntry[] = []
     let processed = 0
     options.onProgress?.({ processed, total: chunkFiles.length })
     for (const file of chunkFiles) {
@@ -84,9 +83,9 @@ export async function loadSnapshot(data: ArrayBuffer | Uint8Array | Blob, option
             if (validate) {
                 validateChunk(chunk)
             }
-            const entry: SnapshotEntry = { name: file.name, format, chunk: chunk as LionWebJsonChunk }
+            const entry: ArchiveEntry = { name: file.name, format, chunk: chunk as LionWebJsonChunk }
             recordEntrySource(entry, { zip, path: file.name })
-            ;(roleOf(file.name) === "language" ? languages : entries).push(entry)
+            ;(roleOf(file.name) === "language" ? languages : partitions).push(entry)
             if (lionWebVersion !== undefined && entry.chunk.serializationFormatVersion !== lionWebVersion) {
                 diagnostics.push({
                     severity: "warning",
@@ -101,14 +100,14 @@ export async function loadSnapshot(data: ArrayBuffer | Uint8Array | Blob, option
         options.onProgress?.({ processed, total: chunkFiles.length, currentEntry: file.name })
     }
 
-    const snapshot: LoadedSnapshot = {
+    const archive: LoadedArchive = {
         layout,
         ...(lionWebVersion !== undefined ? { lionWebVersion } : {}),
         languages,
-        entries,
+        partitions,
         otherFiles,
         diagnostics
     }
-    recordSnapshotZip(snapshot, zip)
-    return snapshot
+    recordArchiveZip(archive, zip)
+    return archive
 }

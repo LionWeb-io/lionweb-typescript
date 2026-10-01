@@ -1,6 +1,6 @@
 import type JSZip from "jszip"
 
-import type { LoadedSnapshot, SnapshotEntry } from "./types.js"
+import type { LoadedArchive, ArchiveEntry } from "./types.js"
 
 /** Where an entry was read from: lets saving copy it as stored, without encoding or compressing it again. */
 export type EntrySource = {
@@ -9,17 +9,17 @@ export type EntrySource = {
 }
 
 // Kept beside the loaded objects, which stay plain (cloneable, comparable) data.
-const entrySources = new WeakMap<SnapshotEntry, EntrySource>()
-const snapshotZips = new WeakMap<LoadedSnapshot, JSZip>()
+const entrySources = new WeakMap<ArchiveEntry, EntrySource>()
+const archiveZips = new WeakMap<LoadedArchive, JSZip>()
 
-export const recordEntrySource = (entry: SnapshotEntry, source: EntrySource) => {
+export const recordEntrySource = (entry: ArchiveEntry, source: EntrySource) => {
     entrySources.set(entry, source)
 }
 
-export const entrySourceOf = (entry: SnapshotEntry): EntrySource | undefined => entrySources.get(entry)
+export const entrySourceOf = (entry: ArchiveEntry): EntrySource | undefined => entrySources.get(entry)
 
-export const recordSnapshotZip = (snapshot: LoadedSnapshot, zip: JSZip) => {
-    snapshotZips.set(snapshot, zip)
+export const recordArchiveZip = (archive: LoadedArchive, zip: JSZip) => {
+    archiveZips.set(archive, zip)
 }
 
-export const snapshotZipOf = (snapshot: LoadedSnapshot): JSZip | undefined => snapshotZips.get(snapshot)
+export const archiveZipOf = (archive: LoadedArchive): JSZip | undefined => archiveZips.get(archive)
