@@ -10,12 +10,14 @@
         ]
     },
     "external-deps": {
+        "@bufbuild/protobuf": "2.16.0",
         "@types/chai": "5.2.3",
         "@types/mocha": "10.0.10",
         "@types/node": "25.2.2",
         "@types/ws": "8.18.1",
         "chai": "6.2.2",
         "degit": "2.8.6",
+        "jszip": "3.10.2",
         "littoral-templates": "0.5.1",
         "mobx": "6.15.0",
         "mocha": "11.7.5",

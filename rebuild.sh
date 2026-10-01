@@ -115,6 +115,10 @@ cd cli
 npm run build
 cd ..
 
+cd archive
+npm run build
+cd ..
+
 cd .. # (/<root>)
 
 # (doesn't bother with dependency order:)
