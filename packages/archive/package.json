@@ -18,13 +18,17 @@
         "clean": "npx rimraf dist node_modules -g lionweb-archive-*.tgz",
         "build": "npx rimraf dist && tsc",
         "lint": "eslint src",
+        "test": "mocha --recursive dist/test/",
         "prep:pre-release": "npm run clean && npm install && npm run build",
         "prerelease-alpha": "npm run prep:pre-release",
         "release-alpha": "npm publish --tag alpha",
         "prerelease-beta": "npm run prep:pre-release",
         "release-beta": "npm publish --tag beta",
         "prerelease": "npm run prep:pre-release",
-        "release": "npm publish"
+        "release": "npm publish",
+        "publish-local": "npm publish --registry http://localhost:4873 --tag local",
+        "unpublish-local": "npm unpublish --force --registry http://localhost:4873",
+        "republish-local": "npm unpublish-local && npm publish-local"
     },
     "dependencies": {
         "@bufbuild/protobuf": "2.16.0",

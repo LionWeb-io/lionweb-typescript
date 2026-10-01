@@ -18,3 +18,14 @@ npm add @lionweb/archive
 ```
 
 This adds this package as a dependency to your NPM-based project.
+
+## Development
+
+The TypeScript code in `src/proto/` is generated from the `.proto` files next to it, using [ts-proto](https://github.com/stephenh/ts-proto).
+To regenerate it, run the following command from this package's directory, with `protoc` installed:
+
+```shell
+protoc --plugin=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=. --ts_proto_opt=importSuffix=.js src/proto/Chunk.proto
+```
+
+(Make `protoc-gen-ts_proto` available by installing `ts-proto`, e.g. with `npm install --no-save ts-proto`.)
