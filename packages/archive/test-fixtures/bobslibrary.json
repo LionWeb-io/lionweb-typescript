@@ -1,0 +1,118 @@
+{
+  "serializationFormatVersion": "2023.1",
+  "languages": [
+    {
+      "key": "library",
+      "version": "1"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "bl",
+      "classifier": {
+        "language": "library",
+        "version": "1",
+        "key": "library-Library"
+      },
+      "properties": [
+        {
+          "property": {
+            "language": "library",
+            "version": "1",
+            "key": "library-Library-name"
+          },
+          "value": "Bob\u0027s Library"
+        }
+      ],
+      "containments": [
+        {
+          "containment": {
+            "language": "library",
+            "version": "1",
+            "key": "library-Library-books"
+          },
+          "children": [
+            "eb"
+          ]
+        }
+      ],
+      "references": [],
+      "annotations": [],
+      "parent": null
+    },
+    {
+      "id": "jl",
+      "classifier": {
+        "language": "library",
+        "version": "1",
+        "key": "library-GuideBookWriter"
+      },
+      "properties": [
+        {
+          "property": {
+            "language": "library",
+            "version": "1",
+            "key": "library-GuideBookWriter-countries"
+          },
+          "value": "Alaska"
+        },
+        {
+          "property": {
+            "language": "library",
+            "version": "1",
+            "key": "library-Writer-name"
+          },
+          "value": "Jack London"
+        }
+      ],
+      "containments": [],
+      "references": [],
+      "annotations": [],
+      "parent": null
+    },
+    {
+      "id": "eb",
+      "classifier": {
+        "language": "library",
+        "version": "1",
+        "key": "library-Book"
+      },
+      "properties": [
+        {
+          "property": {
+            "language": "library",
+            "version": "1",
+            "key": "library-Book-title"
+          },
+          "value": "Explorer Book"
+        },
+        {
+          "property": {
+            "language": "library",
+            "version": "1",
+            "key": "library-Book-pages"
+          },
+          "value": null
+        }
+      ],
+      "containments": [],
+      "references": [
+        {
+          "reference": {
+            "language": "library",
+            "version": "1",
+            "key": "library-Book-author"
+          },
+          "targets": [
+            {
+              "resolveInfo": "Jack London",
+              "reference": "jl"
+            }
+          ]
+        }
+      ],
+      "annotations": [],
+      "parent": "bl"
+    }
+  ]
+}
