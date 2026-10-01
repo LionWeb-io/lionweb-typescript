@@ -1,0 +1,75 @@
+syntax = "proto3";
+
+package io.lionweb.protobuf;
+
+option java_multiple_files = true;
+option java_package = "io.lionweb.protobuf";
+option java_outer_classname = "ChunkProtos";
+
+// We make use of interned strings, languages, and meta-pointers because this is leading to significant performance
+// benefits.
+// So many integer values are indexes into tables of interned values.
+// Values prefixed with "si_" are string indexes
+// Values prefixed with "li_" are language indexes
+// Values prefixed with "mpi_" are meta-pointer indexes
+//
+// Null values for strings and languages are encoded as 0, so indexes into these tables
+// are shifted by one. Specifically:
+// - During serialization: null → 0; value i → index (i + 1), where i is the position in the interned table.
+// - During deserialization: 0 → null; index i → element (i - 1) of the interned table.
+
+message PBChunk {
+  string serialization_format_version = 1;
+
+  // Interned strings
+  repeated string interned_strings = 2;
+  repeated PBMetaPointer interned_meta_pointers= 3;
+
+  // Interned languages
+  repeated PBLanguage interned_languages = 4;
+  repeated PBNode nodes = 5;
+}
+
+message PBLanguage {
+  optional uint32 si_key = 1;
+  optional uint32 si_version = 2;
+}
+
+message PBNode {
+  // Yes, we should _not_ have null IDs, but if necessary we can represent them
+  optional uint32 si_id = 1;
+  uint32 mpi_classifier = 2;
+  repeated PBProperty properties = 3;
+  repeated PBContainment containments = 4;
+  repeated PBReference references = 5;
+  /* This is a list of indexes representing the string values corresponding to the IDs of the annotations */
+  repeated uint32 si_annotations = 6 [packed = true];
+  optional uint32 si_parent = 7;
+}
+
+message PBMetaPointer {
+  // Instead of duplicating language+version as raw numbers everywhere,
+  // point to the languages table.
+  uint32 li_language = 1; // index into PBChunk.languages
+  optional uint32 si_key = 2; // concept/key within that language
+}
+
+message PBProperty {
+  uint32 mpi_meta_pointer = 1;
+  optional uint32 si_value = 2;
+}
+
+message PBContainment {
+  uint32 mpi_meta_pointer = 1;
+  repeated uint32 si_children = 2 [packed = true];
+}
+
+message PBReference {
+  uint32 mpi_meta_pointer = 1;
+  repeated PBReferenceValue values = 2;
+}
+
+message PBReferenceValue {
+  optional uint32 si_resolveInfo = 1;
+  optional uint32 si_referred = 2;
+}

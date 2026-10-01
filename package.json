@@ -45,6 +45,7 @@
         "./packages/ts-utils",
         "./packages/textgen-utils",
         "./packages/json",
+        "./packages/archive",
         "./packages/json-utils",
         "./packages/json-diff",
         "./packages/core",
