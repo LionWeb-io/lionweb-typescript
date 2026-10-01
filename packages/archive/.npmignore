@@ -1,2 +1,4 @@
 /tsconfig.json
 /lionweb-archive-*.tgz
+/dist/test
+/test-fixtures
