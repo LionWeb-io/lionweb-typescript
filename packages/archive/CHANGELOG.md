@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.10.0
+## 0.11.0 — not yet released
 
 * Initial implementation of the LionWeb Archive support:
   * Load archives (`loadArchive`), both LionWeb Archives (as also supported by LionWeb Java) and snapshots (ZIP files of chunks, previous version of the archives).
