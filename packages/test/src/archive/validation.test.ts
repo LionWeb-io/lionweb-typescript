@@ -1,7 +1,7 @@
 import { assert } from "chai"
 
-import { validateChunk } from "../index.js"
-import { bobsLibrary } from "./test-utils.js"
+import { validateChunk } from "@lionweb/archive"
+import { bobsLibrary } from "./helpers.js"
 
 const { doesNotThrow, throws } = assert
 

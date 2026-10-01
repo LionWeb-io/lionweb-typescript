@@ -18,8 +18,6 @@
         "clean": "npx rimraf dist node_modules -g lionweb-archive-*.tgz",
         "build": "tsc",
         "lint": "eslint src",
-        "pretest": "npm run build",
-        "test": "mocha --recursive dist/test/",
         "prep:pre-release": "npm run clean && npm install && npm run build",
         "prerelease-alpha": "npm run prep:pre-release",
         "release-alpha": "npm publish --tag alpha",
@@ -35,11 +33,5 @@
         "@bufbuild/protobuf": "2.16.0",
         "@lionweb/json": "0.11.0-beta.0",
         "jszip": "3.10.2"
-    },
-    "devDependencies": {
-        "@types/chai": "5.2.3",
-        "@types/mocha": "10.0.10",
-        "chai": "6.2.2",
-        "mocha": "11.7.5"
     }
 }

@@ -80,6 +80,10 @@ rm -rf dist/
 npm test
 cd ..
 
+cd archive
+npm run build
+cd ..
+
 cd test
 mkdir -p artifacts/metrics
 rm -rf dist/
@@ -112,10 +116,6 @@ npm test
 cd ..
 
 cd cli
-npm run build
-cd ..
-
-cd archive
 npm run build
 cd ..
 

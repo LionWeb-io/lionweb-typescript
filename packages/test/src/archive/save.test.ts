@@ -1,8 +1,7 @@
 import { assert } from "chai"
-import JSZip from "jszip"
 
-import { ArchiveEntry, encodeChunk, loadArchive, saveArchive } from "../index.js"
-import { bobsLibrary, fileNamesIn, libraryLanguage, readBytes, textOfFileIn, withoutEmptyFeatures, zipOf } from "./test-utils.js"
+import { ArchiveEntry, encodeChunk, loadArchive, saveArchive } from "@lionweb/archive"
+import { bobsLibrary, fileNamesIn, libraryLanguage, readBytes, textOfFileIn, withoutEmptyFeatures, zipOf } from "./helpers.js"
 
 const { deepEqual, equal } = assert
 
@@ -71,7 +70,7 @@ describe("saving of archives", () => {
         equal(await textOfFileIn(saved, "metadata/metadata.properties"), "LionWeb-Version=2023.1\n")
 
         const reloaded = await loadArchive(saved)
-        const byJava = await loadArchive(readBytes("test-fixtures/jvm/bobslibrary.lwa"))
+        const byJava = await loadArchive(readBytes("src/archive/fixtures/jvm/bobslibrary.lwa"))
         equal(reloaded.layout, "lwa")
         equal(reloaded.lionWebVersion, "2023.1")
         deepEqual(reloaded.partitions, byJava.partitions)
@@ -86,14 +85,13 @@ describe("saving of archives", () => {
             partitions: [{ name: "x.json", format: "json", chunk: bobsLibrary }],
             type: "uint8array"
         })
-        const file = (await JSZip.loadAsync(saved)).file("partitions/bl.binpb") as unknown as {
-            _data: { compressedSize: number; uncompressedSize: number }
-        }
-        equal(file._data.compressedSize, file._data.uncompressedSize)
+        // Only an uncompressed entry holds the encoded chunk verbatim:
+        const encoded = encodeChunk(bobsLibrary, { omitEmptyFeatures: true })
+        assert.isTrue(Buffer.from(saved).includes(Buffer.from(encoded)))
     })
 
     it("converts a LionWeb Archive to the snapshot layout and back", async () => {
-        const byJava = await loadArchive(readBytes("test-fixtures/jvm/bobslibrary.lwa"))
+        const byJava = await loadArchive(readBytes("src/archive/fixtures/jvm/bobslibrary.lwa"))
         const asSnapshot = await loadArchive(
             await saveArchive({
                 languages: byJava.languages.map(copy => ({ copy })),

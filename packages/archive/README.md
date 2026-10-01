@@ -72,11 +72,7 @@ Build it from source as follows:
 npm run build
 ```
 
-Run the tests (which builds first) as follows:
-
-```shell
-npm test
-```
+The tests for this package are located in the [`test` package](../test), in `src/archive/`.
 
 The TypeScript code in `src/proto/` is generated from the `.proto` file next to it, using [ts-proto](https://github.com/stephenh/ts-proto), and should not be edited by hand.
 To regenerate it, run the following command from this package's directory, with `protoc` installed, and `ts-proto` made available (e.g. with `npm install --no-save ts-proto`):

@@ -1,13 +1,13 @@
 import { assert } from "chai"
 
-import { decodeChunk, encodeChunk, loadArchive, LoadProgress } from "../index.js"
-import { bobsLibrary, libraryLanguage, readBytes, zipOf } from "./test-utils.js"
+import { decodeChunk, encodeChunk, loadArchive, LoadProgress } from "@lionweb/archive"
+import { bobsLibrary, libraryLanguage, readBytes, zipOf } from "./helpers.js"
 
 const { deepEqual, equal } = assert
 
 describe("loading of archives", () => {
     it("loads a LionWeb Archive written by LionWeb Java", async () => {
-        const archive = await loadArchive(readBytes("test-fixtures/jvm/bobslibrary.lwa"))
+        const archive = await loadArchive(readBytes("src/archive/fixtures/jvm/bobslibrary.lwa"))
         equal(archive.layout, "lwa")
         equal(archive.lionWebVersion, "2023.1")
         deepEqual(
@@ -18,7 +18,7 @@ describe("loading of archives", () => {
             archive.partitions.map(({ name, format }) => ({ name, format })),
             [{ name: "partitions/bl.binpb", format: "binpb" }]
         )
-        deepEqual(archive.partitions[0].chunk, decodeChunk(readBytes("test-fixtures/jvm/bobslibrary.binpb")))
+        deepEqual(archive.partitions[0].chunk, decodeChunk(readBytes("src/archive/fixtures/jvm/bobslibrary.binpb")))
         equal(archive.languages[0].chunk.nodes[0].id, libraryLanguage.nodes[0].id)
         deepEqual(archive.otherFiles, [])
         deepEqual(archive.diagnostics, [])

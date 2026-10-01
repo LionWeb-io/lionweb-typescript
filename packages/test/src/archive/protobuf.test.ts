@@ -1,8 +1,8 @@
 import { LionWebJsonChunk } from "@lionweb/json"
 import { assert } from "chai"
 
-import { convertJsonChunkToPBChunk, decodeChunk, encodeChunk } from "../index.js"
-import { bobsLibrary, libraryLanguage, readBytes, withoutEmptyFeatures } from "./test-utils.js"
+import { convertJsonChunkToPBChunk, decodeChunk, encodeChunk } from "@lionweb/archive"
+import { bobsLibrary, libraryLanguage, readBytes, withoutEmptyFeatures } from "./helpers.js"
 
 const { deepEqual, equal } = assert
 
@@ -71,7 +71,7 @@ const chunk2024: LionWebJsonChunk = {
 
 describe("protobuf encoding of chunks", () => {
     it("decodes a chunk encoded by LionWeb Java", () => {
-        deepEqual(decodeChunk(readBytes("test-fixtures/jvm/bobslibrary.binpb")), withoutEmptyFeatures(bobsLibrary))
+        deepEqual(decodeChunk(readBytes("src/archive/fixtures/jvm/bobslibrary.binpb")), withoutEmptyFeatures(bobsLibrary))
     })
 
     it("round-trips an instance chunk", () => {
@@ -92,7 +92,7 @@ describe("protobuf encoding of chunks", () => {
     })
 
     it("omits empty features when asked, as LionWeb Java does", () => {
-        const jvmDecoded = decodeChunk(readBytes("test-fixtures/jvm/bobslibrary.binpb"))
+        const jvmDecoded = decodeChunk(readBytes("src/archive/fixtures/jvm/bobslibrary.binpb"))
         deepEqual(decodeChunk(encodeChunk(bobsLibrary, { omitEmptyFeatures: true })), jvmDecoded)
         deepEqual(decodeChunk(encodeChunk(chunk2024, { omitEmptyFeatures: true })), withoutEmptyFeatures(chunk2024))
     })

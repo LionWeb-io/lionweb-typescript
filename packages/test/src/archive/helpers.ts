@@ -5,9 +5,9 @@ import JSZip from "jszip"
 export const readBytes = (path: string): Uint8Array => new Uint8Array(readFileSync(path))
 const readJson = (path: string): LionWebJsonChunk => JSON.parse(readFileSync(path).toString())
 
-// The fixtures copied from LionWeb Java -- see test-fixtures/README.md:
-export const bobsLibrary = readJson("test-fixtures/bobslibrary.json")
-export const libraryLanguage = readJson("test-fixtures/library-language.json")
+// The fixtures copied from LionWeb Java -- see fixtures/README.md:
+export const bobsLibrary = readJson("src/archive/fixtures/bobslibrary.json")
+export const libraryLanguage = readJson("src/archive/fixtures/library-language.json")
 
 /** What remains of a chunk once empty features are omitted, as LionWeb Java does in its archives. */
 export const withoutEmptyFeatures = (chunk: LionWebJsonChunk): LionWebJsonChunk => ({
