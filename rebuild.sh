@@ -21,10 +21,6 @@ cd json
 npm run build
 cd ..
 
-cd archive
-npm run build
-cd ..
-
 cd json-utils
 npm run build
 cd ..
@@ -116,6 +112,10 @@ npm test
 cd ..
 
 cd cli
+npm run build
+cd ..
+
+cd archive
 npm run build
 cd ..
 
