@@ -16,8 +16,9 @@
     },
     "scripts": {
         "clean": "npx rimraf dist node_modules -g lionweb-archive-*.tgz",
-        "build": "npx rimraf dist && tsc",
+        "build": "tsc",
         "lint": "eslint src",
+        "pretest": "npm run build",
         "test": "mocha --recursive dist/test/",
         "prep:pre-release": "npm run clean && npm install && npm run build",
         "prerelease-alpha": "npm run prep:pre-release",

@@ -28,7 +28,7 @@ export type ArchiveDiagnostic = {
 
 export type LoadedArchive = {
     layout: ArchiveLayout
-    /** The `LionWeb-Version` of a LionWeb Archive (`lwa`); absent for the `snapshot` layout. */
+    /** The `LionWeb-Version` of a LionWeb Archive (`lwa`); `undefined` for the `snapshot` layout. */
     lionWebVersion?: string
     /** The language chunks: those under `languages/` in a LionWeb Archive; always empty for the `snapshot` layout. */
     languages: ArchiveEntry[]

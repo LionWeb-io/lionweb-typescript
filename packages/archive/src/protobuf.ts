@@ -1,119 +1,52 @@
-import type {
-    LionWebJsonChunk,
-    LionWebJsonProperty,
-    LionWebJsonReference,
-    LionWebJsonReferenceTarget,
-    LionWebJsonContainment,
-    LionWebJsonMetaPointer,
-    LionWebJsonNode,
-    LionWebJsonUsedLanguage
-} from "@lionweb/json"
+import type { LionWebJsonChunk, LionWebJsonMetaPointer, LionWebJsonUsedLanguage } from "@lionweb/json"
+
 import { PBChunk, PBLanguage, PBMetaPointer, PBNode } from "./proto/Chunk.js"
 
 /** Converts a protobuf chunk (see `proto/Chunk.proto`) to the equivalent LionWeb JSON chunk. */
-export function convertPBChunkToJsonChunk(pbChunk: PBChunk): LionWebJsonChunk {
-    const { internedStrings: preInternedStrings, internedLanguages, internedMetaPointers, nodes } = pbChunk
-
-    const internedStrings: (string | null)[] = new Array(preInternedStrings.length + 1)
-    internedStrings[0] = null
-    for (let i = 0; i < preInternedStrings.length; i++) {
-        internedStrings[i + 1] = preInternedStrings[i]
-    }
-
-    // Pre-compute all language mappings
-    const languagesArray: (LionWebJsonUsedLanguage | null)[] = new Array(internedLanguages.length + 1)
-    languagesArray[0] = null
-    for (let i = 0; i < internedLanguages.length; i++) {
-        const pbLanguage = internedLanguages[i]
-        languagesArray[i + 1] = {
-            key: pbLanguage.siKey == undefined ? undefined : internedStrings[pbLanguage.siKey],
-            version: pbLanguage.siVersion == undefined ? undefined : internedStrings[pbLanguage.siVersion]
-        } as LionWebJsonUsedLanguage
-    }
-
-    // Pre-compute all metapointer mappings using arrays instead of Map
-    const metaPointersArray = new Array(internedMetaPointers.length)
-    for (let i = 0; i < internedMetaPointers.length; i++) {
-        const pbMetaPointer = internedMetaPointers[i]
-        const languageVersion = languagesArray[pbMetaPointer.liLanguage]
-        metaPointersArray[i] = {
-            language: languageVersion == undefined ? null : languageVersion.key,
-            version: languageVersion == undefined ? null : languageVersion.version,
-            key: pbMetaPointer.siKey == undefined ? undefined : internedStrings[pbMetaPointer.siKey]
-        }
-    }
-
-    // Convert nodes with pre-allocated array
-    const convertedNodes: LionWebJsonNode[] = new Array(nodes.length)
-    for (let i = 0; i < nodes.length; i++) {
-        const pbNode = nodes[i]
-        const { properties, containments, references } = pbNode
-
-        // Pre-allocate nested arrays
-        const convertedProperties: LionWebJsonProperty[] = new Array(properties.length)
-        const convertedContainments: LionWebJsonContainment[] = new Array(containments.length)
-        const convertedReferences: LionWebJsonReference[] = new Array(references.length)
-
-        // Convert properties
-        for (let j = 0; j < properties.length; j++) {
-            const p = properties[j]
-            convertedProperties[j] = {
-                property: metaPointersArray[p.mpiMetaPointer],
-                value: p.siValue == undefined ? null : internedStrings[p.siValue]
-            }
-        }
-
-        // Convert containments
-        for (let j = 0; j < containments.length; j++) {
-            const c = containments[j]
-            const convertedChildren = new Array(c.siChildren.length)
-            for (let k = 0; k < c.siChildren.length; k++) {
-                convertedChildren[k] = internedStrings[c.siChildren[k]]
-            }
-            convertedContainments[j] = {
-                containment: metaPointersArray[c.mpiMetaPointer],
-                children: convertedChildren
-            }
-        }
-
-        // Convert references
-        for (let j = 0; j < references.length; j++) {
-            const r = references[j]
-            const convertedTargets: LionWebJsonReferenceTarget[] = new Array(r.values.length)
-            for (let k = 0; k < r.values.length; k++) {
-                const rv = r.values[k]
-                const reference = rv.siReferred == undefined ? null : internedStrings[rv.siReferred]
-                const resolveInfo = rv.siResolveInfo == undefined ? null : internedStrings[rv.siResolveInfo]
-                convertedTargets[k] = reference == null ? { reference: null, resolveInfo: resolveInfo ?? "" } : { reference, resolveInfo }
-            }
-            convertedReferences[j] = {
-                reference: metaPointersArray[r.mpiMetaPointer],
-                targets: convertedTargets
-            }
-        }
-
-        const convertedAnnotations = new Array(pbNode.siAnnotations.length)
-        for (let j = 0; j < convertedAnnotations.length; j++) {
-            convertedAnnotations[j] = internedStrings[pbNode.siAnnotations[j]]
-        }
-
-        const id = pbNode.siId == undefined ? null : internedStrings[pbNode.siId]
-        if (!id) throw new Error("Protobuf node has no ID")
-        convertedNodes[i] = {
-            id,
-            parent: pbNode.siParent == undefined ? null : internedStrings[pbNode.siParent],
-            classifier: metaPointersArray[pbNode.mpiClassifier],
-            annotations: convertedAnnotations,
-            properties: convertedProperties,
-            containments: convertedContainments,
-            references: convertedReferences
-        }
-    }
+export const convertPBChunkToJsonChunk = (pbChunk: PBChunk): LionWebJsonChunk => {
+    // Interned strings and languages are indexed 1-based, with 0 (or an absent index) meaning null; meta-pointers 0-based.
+    const strings = [null, ...pbChunk.internedStrings]
+    const stringAt = (index: number | undefined): string | null => (index === undefined ? null : strings[index])
+    const idAt = (index: number): string => strings[index]! // IDs are never null in a valid chunk
+    const languages = pbChunk.internedLanguages.map(
+        ({ siKey, siVersion }) => ({ key: stringAt(siKey), version: stringAt(siVersion) }) as LionWebJsonUsedLanguage
+    )
+    const metaPointers = pbChunk.internedMetaPointers.map(({ liLanguage, siKey }): LionWebJsonMetaPointer => {
+        const language = liLanguage === 0 ? undefined : languages[liLanguage - 1]
+        return { language: language?.key ?? null, version: language?.version ?? null, key: stringAt(siKey) } as LionWebJsonMetaPointer
+    })
 
     return {
         serializationFormatVersion: pbChunk.serializationFormatVersion,
-        languages: languagesArray.filter(l => l != null) as LionWebJsonUsedLanguage[],
-        nodes: convertedNodes
+        languages,
+        nodes: pbChunk.nodes.map(node => {
+            const id = stringAt(node.siId)
+            if (id === null) {
+                throw new Error("Protobuf node has no ID")
+            }
+            return {
+                id,
+                parent: stringAt(node.siParent),
+                classifier: metaPointers[node.mpiClassifier],
+                annotations: node.siAnnotations.map(idAt),
+                properties: node.properties.map(({ mpiMetaPointer, siValue }) => ({
+                    property: metaPointers[mpiMetaPointer],
+                    value: stringAt(siValue)
+                })),
+                containments: node.containments.map(({ mpiMetaPointer, siChildren }) => ({
+                    containment: metaPointers[mpiMetaPointer],
+                    children: siChildren.map(idAt)
+                })),
+                references: node.references.map(({ mpiMetaPointer, values }) => ({
+                    reference: metaPointers[mpiMetaPointer],
+                    targets: values.map(({ siReferred, siResolveInfo }) => {
+                        const reference = stringAt(siReferred)
+                        const resolveInfo = stringAt(siResolveInfo)
+                        return reference === null ? { reference: null, resolveInfo: resolveInfo ?? "" } : { reference, resolveInfo }
+                    })
+                }))
+            }
+        })
     }
 }
 
@@ -130,54 +63,56 @@ export type EncodeOptions = {
  * Converts a LionWeb JSON chunk to the equivalent protobuf chunk: the inverse of {@link convertPBChunkToJsonChunk}.
  * Strings and languages are interned with index 0 meaning null; meta-pointers are interned 0-based.
  */
-export function convertJsonChunkToPBChunk(chunk: LionWebJsonChunk, options: EncodeOptions = {}): PBChunk {
+export const convertJsonChunkToPBChunk = (chunk: LionWebJsonChunk, options: EncodeOptions = {}): PBChunk => {
     const omitEmptyFeatures = options.omitEmptyFeatures ?? false
-    const strings: string[] = []
-    const stringIndices = new Map<string, number>()
-    const si = (value: string | null | undefined): number | undefined => {
-        if (value == null) {
-            return undefined
+
+    /**
+     * @return a function that interns values (identified by `keyOf`) in the `interned` array, as `intern` converts them,
+     * and returns their index — the first one being `firstIndex`.
+     */
+    const interner = <T, I>(interned: I[], keyOf: (value: T) => string, intern: (value: T) => I, firstIndex: number) => {
+        const indices = new Map<string, number>()
+        return (value: T): number => {
+            const key = keyOf(value)
+            let index = indices.get(key)
+            if (index === undefined) {
+                interned.push(intern(value))
+                index = interned.length - 1 + firstIndex
+                indices.set(key, index)
+            }
+            return index
         }
-        let index = stringIndices.get(value)
-        if (index === undefined) {
-            strings.push(value)
-            index = strings.length
-            stringIndices.set(value, index)
-        }
-        return index
     }
+
+    const strings: string[] = []
+    const internString = interner<string, string>(
+        strings,
+        value => value,
+        value => value,
+        1
+    )
+    const si = (value: string | null | undefined): number | undefined => (value == null ? undefined : internString(value))
 
     const languages: PBLanguage[] = []
-    const languageIndices = new Map<string, number>()
-    const li = (key: string | null | undefined, version: string | null | undefined): number => {
-        if (key == null && version == null) {
-            return 0
-        }
-        const id = JSON.stringify([key, version])
-        let index = languageIndices.get(id)
-        if (index === undefined) {
-            languages.push({ siKey: si(key), siVersion: si(version) })
-            index = languages.length
-            languageIndices.set(id, index)
-        }
-        return index
-    }
+    const internLanguage = interner<LionWebJsonUsedLanguage, PBLanguage>(
+        languages,
+        ({ key, version }) => JSON.stringify([key, version]),
+        ({ key, version }) => ({ siKey: si(key), siVersion: si(version) }),
+        1
+    )
+    const li = ({ key, version }: LionWebJsonUsedLanguage): number =>
+        key == null && version == null ? 0 : internLanguage({ key, version })
 
     const metaPointers: PBMetaPointer[] = []
-    const metaPointerIndices = new Map<string, number>()
-    const mpi = (metaPointer: LionWebJsonMetaPointer): number => {
-        const id = JSON.stringify([metaPointer.language, metaPointer.version, metaPointer.key])
-        let index = metaPointerIndices.get(id)
-        if (index === undefined) {
-            metaPointers.push({ liLanguage: li(metaPointer.language, metaPointer.version), siKey: si(metaPointer.key) })
-            index = metaPointers.length - 1
-            metaPointerIndices.set(id, index)
-        }
-        return index
-    }
+    const mpi = interner<LionWebJsonMetaPointer, PBMetaPointer>(
+        metaPointers,
+        ({ language, version, key }) => JSON.stringify([language, version, key]),
+        ({ language, version, key }) => ({ liLanguage: li({ key: language, version }), siKey: si(key) }),
+        0
+    )
 
     // Languages first, so that they keep the order of the chunk.
-    chunk.languages.forEach(language => li(language.key, language.version))
+    chunk.languages.forEach(li)
     const nodes = chunk.nodes.map(
         (node): PBNode => ({
             siId: si(node.id),
@@ -187,17 +122,14 @@ export function convertJsonChunkToPBChunk(chunk: LionWebJsonChunk, options: Enco
                 .map(property => ({ mpiMetaPointer: mpi(property.property), siValue: si(property.value) })),
             containments: node.containments
                 .filter(containment => !omitEmptyFeatures || containment.children.length > 0)
-                .map(containment => ({
-                    mpiMetaPointer: mpi(containment.containment),
-                    siChildren: containment.children.map(id => si(id)!)
-                })),
+                .map(containment => ({ mpiMetaPointer: mpi(containment.containment), siChildren: containment.children.map(internString) })),
             references: node.references
                 .filter(reference => !omitEmptyFeatures || reference.targets.length > 0)
                 .map(reference => ({
                     mpiMetaPointer: mpi(reference.reference),
                     values: reference.targets.map(target => ({ siReferred: si(target.reference), siResolveInfo: si(target.resolveInfo) }))
                 })),
-            siAnnotations: node.annotations.map(id => si(id)!),
+            siAnnotations: node.annotations.map(internString),
             siParent: si(node.parent)
         })
     )
@@ -212,11 +144,8 @@ export function convertJsonChunkToPBChunk(chunk: LionWebJsonChunk, options: Enco
 }
 
 /** Decodes the bytes of a `.binpb` file into a LionWeb JSON chunk. */
-export function decodeChunk(bytes: Uint8Array): LionWebJsonChunk {
-    return convertPBChunkToJsonChunk(PBChunk.decode(bytes))
-}
+export const decodeChunk = (bytes: Uint8Array): LionWebJsonChunk => convertPBChunkToJsonChunk(PBChunk.decode(bytes))
 
 /** Encodes a LionWeb JSON chunk into the bytes of a `.binpb` file. */
-export function encodeChunk(chunk: LionWebJsonChunk, options: EncodeOptions = {}): Uint8Array {
-    return PBChunk.encode(convertJsonChunkToPBChunk(chunk, options)).finish()
-}
+export const encodeChunk = (chunk: LionWebJsonChunk, options: EncodeOptions = {}): Uint8Array =>
+    PBChunk.encode(convertJsonChunkToPBChunk(chunk, options)).finish()

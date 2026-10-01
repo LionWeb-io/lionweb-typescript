@@ -1,20 +1,20 @@
-import { LionWebJsonChunk } from "@lionweb/json"
 import { assert } from "chai"
-import { readFileSync } from "fs"
 
 import { validateChunk } from "../index.js"
+import { bobsLibrary } from "./test-utils.js"
 
 const { doesNotThrow, throws } = assert
 
-const bobsLibrary = (): LionWebJsonChunk => JSON.parse(readFileSync("test-fixtures/bobslibrary.json").toString())
+/** @return a copy of the Bob's library chunk, to be changed freely. */
+const bobsLibraryCopy = () => structuredClone(bobsLibrary)
 
 describe("validation of chunks", () => {
     it("accepts a valid 2023.1 chunk", () => {
-        doesNotThrow(() => validateChunk(bobsLibrary()))
+        doesNotThrow(() => validateChunk(bobsLibrary))
     })
 
     it("accepts a valid 2024.1 chunk", () => {
-        doesNotThrow(() => validateChunk({ ...bobsLibrary(), serializationFormatVersion: "2024.1" }))
+        doesNotThrow(() => validateChunk({ ...bobsLibrary, serializationFormatVersion: "2024.1" }))
     })
 
     it("rejects values that are not chunks", () => {
@@ -25,27 +25,27 @@ describe("validation of chunks", () => {
 
     it("rejects an unsupported serialization format version", () => {
         throws(
-            () => validateChunk({ ...bobsLibrary(), serializationFormatVersion: "2022.1" }),
+            () => validateChunk({ ...bobsLibrary, serializationFormatVersion: "2022.1" }),
             "Unsupported LionWeb serialization format version: 2022.1"
         )
     })
 
     it("rejects duplicate node IDs", () => {
-        const chunk = bobsLibrary()
+        const chunk = bobsLibraryCopy()
         chunk.nodes.push(chunk.nodes[0])
         throws(() => validateChunk(chunk), "Duplicate node ID in chunk: bl")
     })
 
     it("rejects malformed nodes and features", () => {
-        const withoutId = bobsLibrary()
+        const withoutId = bobsLibraryCopy()
         delete (withoutId.nodes[0] as { id?: string }).id
         throws(() => validateChunk(withoutId), "Invalid LionWeb node")
 
-        const badProperty = bobsLibrary()
+        const badProperty = bobsLibraryCopy()
         ;(badProperty.nodes[0].properties[0] as { value: unknown }).value = 42
         throws(() => validateChunk(badProperty), "Invalid property on bl")
 
-        const badChildren = bobsLibrary()
+        const badChildren = bobsLibraryCopy()
         ;(badChildren.nodes[0].containments[0] as { children: unknown }).children = [1]
         throws(() => validateChunk(badChildren), "Invalid containment on bl")
     })

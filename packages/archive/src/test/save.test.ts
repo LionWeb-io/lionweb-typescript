@@ -1,36 +1,10 @@
-import { LionWebJsonChunk } from "@lionweb/json"
 import { assert } from "chai"
-import { readFileSync } from "fs"
 import JSZip from "jszip"
 
-import { encodeChunk, loadArchive, saveArchive } from "../index.js"
+import { ArchiveEntry, encodeChunk, loadArchive, saveArchive } from "../index.js"
+import { bobsLibrary, fileNamesIn, libraryLanguage, readBytes, textOfFileIn, withoutEmptyFeatures, zipOf } from "./test-utils.js"
 
 const { deepEqual, equal } = assert
-
-const readJson = (path: string): LionWebJsonChunk => JSON.parse(readFileSync(path).toString())
-const bobsLibrary = readJson("test-fixtures/bobslibrary.json")
-const libraryLanguage = readJson("test-fixtures/library-language.json")
-
-const withoutEmptyFeatures = (chunk: LionWebJsonChunk): LionWebJsonChunk => ({
-    ...chunk,
-    nodes: chunk.nodes.map(node => ({
-        ...node,
-        properties: node.properties.filter(property => property.value !== null),
-        containments: node.containments.filter(containment => containment.children.length > 0),
-        references: node.references.filter(reference => reference.targets.length > 0)
-    }))
-})
-
-const zipOf = async (files: Record<string, string | Uint8Array>): Promise<Uint8Array> => {
-    const zip = new JSZip()
-    Object.entries(files).forEach(([path, content]) => zip.file(path, content))
-    return zip.generateAsync({ type: "uint8array", compression: "DEFLATE" })
-}
-
-const fileNames = async (data: Uint8Array) =>
-    Object.values((await JSZip.loadAsync(data)).files)
-        .filter(file => !file.dir)
-        .map(file => file.name)
 
 describe("saving of archives", () => {
     it("saves an archive in the snapshot layout that loads back the same", async () => {
@@ -50,7 +24,7 @@ describe("saving of archives", () => {
         equal(reloaded.layout, "snapshot")
         deepEqual(reloaded.partitions, original.partitions)
         deepEqual(reloaded.otherFiles, ["README.md"])
-        equal(await (await JSZip.loadAsync(saved)).file("README.md")!.async("text"), "# Hi")
+        equal(await textOfFileIn(saved, "README.md"), "# Hi")
     })
 
     it("copies the stored bytes of copied partitions, and encodes the others", async () => {
@@ -64,23 +38,16 @@ describe("saving of archives", () => {
     })
 
     it("encodes new partitions in their format, keeping empty features by default", async () => {
-        const saved = await saveArchive({
-            partitions: [
-                { name: "library.binpb", format: "binpb", chunk: bobsLibrary },
-                { name: "language.json", format: "json", chunk: libraryLanguage }
-            ],
-            type: "uint8array"
-        })
-        const reloaded = await loadArchive(saved)
-        deepEqual(reloaded.partitions, [
+        const partitions: ArchiveEntry[] = [
             { name: "library.binpb", format: "binpb", chunk: bobsLibrary },
             { name: "language.json", format: "json", chunk: libraryLanguage }
-        ])
+        ]
+        const reloaded = await loadArchive(await saveArchive({ partitions, type: "uint8array" }))
+        deepEqual(reloaded.partitions, partitions)
     })
 
     it("makes names unique, and renames copied partitions when asked", async () => {
-        const original = await loadArchive(await zipOf({ "library.json": JSON.stringify(bobsLibrary) }))
-        const [library] = original.partitions
+        const [library] = (await loadArchive(await zipOf({ "library.json": JSON.stringify(bobsLibrary) }))).partitions
         const saved = await saveArchive({
             partitions: [
                 { copy: library },
@@ -90,7 +57,7 @@ describe("saving of archives", () => {
             ],
             type: "uint8array"
         })
-        deepEqual(await fileNames(saved), ["library.json", "library-2.json", "Library-3.json", "renamed.json"])
+        deepEqual(await fileNamesIn(saved), ["library.json", "library-2.json", "Library-3.json", "renamed.json"])
     })
 
     it("saves a LionWeb Archive equivalent to the one written by LionWeb Java", async () => {
@@ -100,22 +67,16 @@ describe("saving of archives", () => {
             partitions: [{ name: "bobslibrary.json", format: "json", chunk: bobsLibrary }],
             type: "uint8array"
         })
-        deepEqual(await fileNames(saved), ["metadata/metadata.properties", "languages/library.binpb", "partitions/bl.binpb"])
-        equal(await (await JSZip.loadAsync(saved)).file("metadata/metadata.properties")!.async("text"), "LionWeb-Version=2023.1\n")
+        deepEqual(await fileNamesIn(saved), ["metadata/metadata.properties", "languages/library.binpb", "partitions/bl.binpb"])
+        equal(await textOfFileIn(saved, "metadata/metadata.properties"), "LionWeb-Version=2023.1\n")
 
         const reloaded = await loadArchive(saved)
-        const byJava = await loadArchive(readFileSync("test-fixtures/jvm/bobslibrary.lwa"))
+        const byJava = await loadArchive(readBytes("test-fixtures/jvm/bobslibrary.lwa"))
         equal(reloaded.layout, "lwa")
         equal(reloaded.lionWebVersion, "2023.1")
-        deepEqual(
-            reloaded.partitions.map(({ name, format, chunk }) => ({ name, format, chunk })),
-            byJava.partitions.map(({ name, format, chunk }) => ({ name, format, chunk }))
-        )
+        deepEqual(reloaded.partitions, byJava.partitions)
         deepEqual(reloaded.partitions[0].chunk, withoutEmptyFeatures(bobsLibrary))
-        deepEqual(
-            reloaded.languages.map(({ name, chunk }) => ({ name, chunk })),
-            byJava.languages.map(({ name, chunk }) => ({ name, chunk }))
-        )
+        deepEqual(reloaded.languages, byJava.languages)
         deepEqual(reloaded.diagnostics, [])
     })
 
@@ -132,7 +93,7 @@ describe("saving of archives", () => {
     })
 
     it("converts a LionWeb Archive to the snapshot layout and back", async () => {
-        const byJava = await loadArchive(readFileSync("test-fixtures/jvm/bobslibrary.lwa"))
+        const byJava = await loadArchive(readBytes("test-fixtures/jvm/bobslibrary.lwa"))
         const asSnapshot = await loadArchive(
             await saveArchive({
                 languages: byJava.languages.map(copy => ({ copy })),
@@ -153,14 +114,8 @@ describe("saving of archives", () => {
                 type: "uint8array"
             })
         )
-        deepEqual(
-            backAsLwa.partitions.map(({ name, chunk }) => ({ name, chunk })),
-            byJava.partitions.map(({ name, chunk }) => ({ name, chunk }))
-        )
-        deepEqual(
-            backAsLwa.languages.map(({ name, chunk }) => ({ name, chunk })),
-            byJava.languages.map(({ name, chunk }) => ({ name, chunk }))
-        )
+        deepEqual(backAsLwa.partitions, byJava.partitions)
+        deepEqual(backAsLwa.languages, byJava.languages)
     })
 
     it("refuses a LionWeb Archive whose version cannot be determined", async () => {

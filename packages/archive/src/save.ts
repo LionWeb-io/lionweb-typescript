@@ -1,10 +1,10 @@
 import type { LionWebJsonChunk } from "@lionweb/json"
 import JSZip from "jszip"
 
-import { lwaMetadataPath, lwaVersionKey } from "./load.js"
+import { metadataFor, metadataPath } from "./metadata.js"
 import { encodeChunk } from "./protobuf.js"
-import { entrySourceOf, archiveZipOf } from "./sources.js"
-import type { ArchiveLayout, LoadedArchive, ArchiveEntry } from "./types.js"
+import { archiveZips, entrySources } from "./sources.js"
+import type { ArchiveEntry, ArchiveLayout, LoadedArchive } from "./types.js"
 
 /**
  * A chunk to save: either a new or changed entry, which is encoded, or an entry obtained from {@link loadArchive}
@@ -38,25 +38,25 @@ export type SaveOptions<T extends "uint8array" | "blob"> = {
     onProgress?: (percent: number) => void
 }
 
-type CompressedData = { compression: { magic: string } }
+/** The part of JSZip's internal `CompressedObject` (the `_data` of an entry read from a ZIP) that is relied on. */
+type CompressedObject = { compressedContent: unknown; compression: { magic: string } }
 
 /**
  * Copies a ZIP entry as stored: JSZip reuses the compressed bytes when the compression method stays the same.
- * This relies on JSZip's internal `_data` and falls back to decompressing the entry.
+ * This relies on JSZip's internal `_data`, and falls back to decompressing the entry.
  */
 const copyFile = (from: JSZip, path: string, to: JSZip, name: string) => {
     const file = from.files[path]
-    const data = (file as unknown as { _data?: CompressedData })._data
-    if (data && typeof data === "object" && "compressedContent" in data && data.compression) {
-        to.file(name, data as never, {
-            binary: true,
-            date: file.date,
-            compression: data.compression.magic === "\x00\x00" ? "STORE" : "DEFLATE"
-        })
+    const data = (file as unknown as { _data?: Partial<CompressedObject> })._data
+    if (data?.compressedContent !== undefined && data.compression !== undefined) {
+        const compression = data.compression.magic === "\x00\x00" ? "STORE" : "DEFLATE"
+        to.file(name, data as never, { binary: true, date: file.date, compression })
     } else {
         to.file(name, file.async("uint8array"), { binary: true, date: file.date })
     }
 }
+
+const sourceOf = (entry: ArchiveEntryToSave): ArchiveEntry => ("copy" in entry ? entry.copy : entry)
 
 const rootIdOf = (chunk: LionWebJsonChunk): string => {
     const root = chunk.nodes.find(node => node.parent === null)
@@ -70,10 +70,13 @@ const rootIdOf = (chunk: LionWebJsonChunk): string => {
  * Saves chunks as an archive, in the `snapshot` layout (by default) or as a LionWeb Archive (see {@link ArchiveLayout}).
  * In a LionWeb Archive, all chunks are stored as protobuf, named after their root node.
  */
-export async function saveArchive<T extends "uint8array" | "blob">(options: SaveOptions<T>): Promise<T extends "blob" ? Blob : Uint8Array> {
+export const saveArchive = async <T extends "uint8array" | "blob">(
+    options: SaveOptions<T>
+): Promise<T extends "blob" ? Blob : Uint8Array> => {
     const layout = options.layout ?? "snapshot"
     const lwa = layout === "lwa"
     const omitEmptyFeatures = options.omitEmptyFeatures ?? lwa
+    const languages = options.languages ?? []
     const out = new JSZip()
 
     const used = new Set<string>()
@@ -86,10 +89,8 @@ export async function saveArchive<T extends "uint8array" | "blob">(options: Save
         return candidate
     }
 
-    const languages = options.languages ?? []
-    const chunkOf = (entry: ArchiveEntryToSave) => ("copy" in entry ? entry.copy : entry).chunk
     if (lwa) {
-        const versions = new Set([...languages, ...options.partitions].map(entry => chunkOf(entry).serializationFormatVersion))
+        const versions = new Set([...languages, ...options.partitions].map(entry => sourceOf(entry).chunk.serializationFormatVersion))
         const lionWebVersion = options.lionWebVersion ?? (versions.size === 1 ? [...versions][0] : undefined)
         if (lionWebVersion === undefined) {
             throw new Error(
@@ -98,17 +99,14 @@ export async function saveArchive<T extends "uint8array" | "blob">(options: Save
                     : `Cannot store chunks of different serialization format versions (${[...versions].join(", ")}) in one LionWeb Archive`
             )
         }
-        used.add(lwaMetadataPath)
-        out.file(lwaMetadataPath, `${lwaVersionKey}=${lionWebVersion}\n`)
+        out.file(unique(metadataPath), metadataFor(lionWebVersion))
     }
 
     const write = (entry: ArchiveEntryToSave, directory: string) => {
-        const source = "copy" in entry ? entry.copy : entry
+        const source = sourceOf(entry)
         const format = lwa ? "binpb" : source.format
-        const name = unique(
-            lwa ? `${directory}/${rootIdOf(source.chunk)}.binpb` : "copy" in entry ? (entry.name ?? source.name) : source.name
-        )
-        const stored = "copy" in entry ? entrySourceOf(entry.copy) : undefined
+        const name = unique(lwa ? `${directory}/${rootIdOf(source.chunk)}.binpb` : (entry.name ?? source.name))
+        const stored = "copy" in entry ? entrySources.get(entry.copy) : undefined
         if (stored && format === source.format) {
             copyFile(stored.zip, stored.path, out, name)
         } else {
@@ -119,14 +117,9 @@ export async function saveArchive<T extends "uint8array" | "blob">(options: Save
     options.partitions.forEach(entry => write(entry, "partitions"))
 
     for (const archive of new Set(options.carryOtherFilesFrom ?? [])) {
-        const zip = archiveZipOf(archive)
-        if (zip === undefined) {
-            continue
-        }
-        for (const path of archive.otherFiles) {
-            if (!used.has(path.toLowerCase())) {
-                copyFile(zip, path, out, unique(path))
-            }
+        const zip = archiveZips.get(archive)
+        if (zip !== undefined) {
+            archive.otherFiles.filter(path => !used.has(path.toLowerCase())).forEach(path => copyFile(zip, path, out, unique(path)))
         }
     }
 

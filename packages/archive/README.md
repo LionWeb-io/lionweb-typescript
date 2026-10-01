@@ -1,4 +1,4 @@
-# README
+# The `archive` package
 
 [![license](https://img.shields.io/badge/License-Apache%202.0-green.svg?style=flat)
 ](./LICENSE)
@@ -7,21 +7,15 @@
 [![npm](https://img.shields.io/npm/v/%40lionweb%2Farchive?label=%40lionweb%2Farchive)
 ](https://www.npmjs.com/package/@lionweb/archive)
 
-This NPM package provides support for loading and storing LionWeb archives.
-
-An archive contains partitions and optionally languages and metadata. The format is intended to be efficient to load
-and save. It can be used to persist large repositories, save them and exchange them.
-
-
-## Installation
-
-Run the following command to add this package to an NPM-based project:
+This NPM package can be added to a TypeScript codebase as follows:
 
 ```shell
-npm add @lionweb/archive
+$ npm add @lionweb/archive
 ```
 
-This adds this package as a dependency to your NPM-based project.
+It provides support for loading and storing LionWeb archives.
+An archive contains partitions, and optionally languages and metadata.
+The format is intended to be efficient to load and save, so that large repositories can be persisted and exchanged.
 
 
 ## Archives
@@ -72,14 +66,21 @@ Both behaviors can be changed through the `compression` and `omitEmptyFeatures` 
 
 ## Development
 
-The TypeScript code in `src/proto/` is generated from the `.proto` files next to it, using
-[ts-proto](https://github.com/stephenh/ts-proto).
-To regenerate it, run the following command from this package's directory, with `protoc` installed:
+Build it from source as follows:
+
+```shell
+npm run build
+```
+
+Run the tests (which builds first) as follows:
+
+```shell
+npm test
+```
+
+The TypeScript code in `src/proto/` is generated from the `.proto` file next to it, using [ts-proto](https://github.com/stephenh/ts-proto), and should not be edited by hand.
+To regenerate it, run the following command from this package's directory, with `protoc` installed, and `ts-proto` made available (e.g. with `npm install --no-save ts-proto`):
 
 ```shell
 protoc --plugin=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=. --ts_proto_opt=importSuffix=.js src/proto/Chunk.proto
 ```
-
-(Make `protoc-gen-ts_proto` available by installing `ts-proto`, e.g. with `npm install --no-save ts-proto`.)
-
-Run the tests with `npm test`, after building this package.

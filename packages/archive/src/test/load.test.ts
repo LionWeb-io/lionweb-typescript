@@ -1,25 +1,13 @@
-import { LionWebJsonChunk } from "@lionweb/json"
 import { assert } from "chai"
-import { readFileSync } from "fs"
-import JSZip from "jszip"
 
 import { decodeChunk, encodeChunk, loadArchive, LoadProgress } from "../index.js"
+import { bobsLibrary, libraryLanguage, readBytes, zipOf } from "./test-utils.js"
 
 const { deepEqual, equal } = assert
 
-const readJson = (path: string): LionWebJsonChunk => JSON.parse(readFileSync(path).toString())
-const bobsLibrary = readJson("test-fixtures/bobslibrary.json")
-const libraryLanguage = readJson("test-fixtures/library-language.json")
-
-const zipOf = async (files: Record<string, string | Uint8Array>): Promise<Uint8Array> => {
-    const zip = new JSZip()
-    Object.entries(files).forEach(([path, content]) => zip.file(path, content))
-    return zip.generateAsync({ type: "uint8array" })
-}
-
 describe("loading of archives", () => {
     it("loads a LionWeb Archive written by LionWeb Java", async () => {
-        const archive = await loadArchive(readFileSync("test-fixtures/jvm/bobslibrary.lwa"))
+        const archive = await loadArchive(readBytes("test-fixtures/jvm/bobslibrary.lwa"))
         equal(archive.layout, "lwa")
         equal(archive.lionWebVersion, "2023.1")
         deepEqual(
@@ -30,7 +18,7 @@ describe("loading of archives", () => {
             archive.partitions.map(({ name, format }) => ({ name, format })),
             [{ name: "partitions/bl.binpb", format: "binpb" }]
         )
-        deepEqual(archive.partitions[0].chunk, decodeChunk(new Uint8Array(readFileSync("test-fixtures/jvm/bobslibrary.binpb"))))
+        deepEqual(archive.partitions[0].chunk, decodeChunk(readBytes("test-fixtures/jvm/bobslibrary.binpb")))
         equal(archive.languages[0].chunk.nodes[0].id, libraryLanguage.nodes[0].id)
         deepEqual(archive.otherFiles, [])
         deepEqual(archive.diagnostics, [])
