@@ -9,6 +9,9 @@
 
 This NPM package provides support for loading and storing LionWeb archives.
 
+The archives contains partitions and optionally languages and metadata. The format is intended to be efficient to load 
+and save. It can be used to persist large repositories, save them and exchange them.
+
 ## Installation
 
 Run the following command to add this package to an NPM-based project:
@@ -21,7 +24,8 @@ This adds this package as a dependency to your NPM-based project.
 
 ## Development
 
-The TypeScript code in `src/proto/` is generated from the `.proto` files next to it, using [ts-proto](https://github.com/stephenh/ts-proto).
+The TypeScript code in `src/proto/` is generated from the `.proto` files next to it, using 
+[ts-proto](https://github.com/stephenh/ts-proto).
 To regenerate it, run the following command from this package's directory, with `protoc` installed:
 
 ```shell
