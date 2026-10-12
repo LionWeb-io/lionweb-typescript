@@ -30,7 +30,7 @@
         "@lionweb/delta-protocol-common": "0.11.0-beta.0",
         "@lionweb/delta-protocol-client": "0.11.0-beta.0",
         "@lionweb/ts-utils": "0.11.0-beta.0",
-        "ws": "8.21.0"
+        "ws": "8.21.3"
     },
     "devDependencies": {
         "@types/ws": "8.18.1"
