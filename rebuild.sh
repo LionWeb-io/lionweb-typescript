@@ -80,7 +80,6 @@ rm -rf dist/
 npm test
 cd ..
 
-# Build archive before test, because the latter tests the former.
 cd archive
 npm run build
 cd ..
