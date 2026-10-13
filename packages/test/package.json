@@ -26,9 +26,9 @@
         "@types/chai": "5.2.3",
         "@types/mocha": "10.0.10",
         "chai": "6.2.2",
-        "degit": "2.8.6",
+        "degit": "3.8.0",
         "jszip": "3.10.2",
-        "mocha": "11.7.5"
+        "mocha": "11.8.0"
     },
     "dependencies": {
         "@lionweb/archive": "0.11.0-beta.0",

@@ -8,6 +8,8 @@
     * `readFileAsJson` &rarr; `readFileAsJsonSync` in the `@lionweb/node-utils` package
     * `writeJsonAsFile` &rarr; `writeJsonAsFileSync` in the `@lionweb/node-utils` package
 
+* Update version of `nanoid` dependency from 5.1.16 &rarr; 6.0.1.
+
 
 ## 0.10.0
 

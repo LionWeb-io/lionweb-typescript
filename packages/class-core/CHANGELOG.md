@@ -16,6 +16,8 @@
 
 * The `Forest.deserializeInto` method now accepts a `serializationChunk` argument of type `OnlyNodesOfLionWebJsonChunk`, so it can directly accept the response from e.g. `LionWebClient.subscribeToPartitionContents`.
 
+* Update version of `mobx` dependency from 6.15.0 &rarr; 6.16.1.
+
 
 ## 0.10.0
 

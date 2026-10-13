@@ -1,17 +1,20 @@
 #!/usr/bin/env node
 
 
-import { exec } from "child_process"
-import { argv } from "process"
-import { writeFileSync } from "fs"
-import { EOL } from "os"
+import { exec } from "node:child_process"
+import { readFile, writeFile } from "node:fs/promises"
+import { EOL } from "node:os"
+import { argv } from "node:process"
+import { compare as semverCompare } from "semver"
 
 
 import versions from "../versions.json" with { type: "json" }
-const {"external-deps": externalDeps} = versions
+const { "external-deps": externalDeps } = versions
 
 const updateExternalDepsVersionsFlag = "--update"
 const updateExternalDepsVersions = argv[2] === updateExternalDepsVersionsFlag
+
+const minReleaseAge = (await readFile(".npmrc", { encoding: "utf-8" })).match(/min-release-age=(\d+)/m)[1]
 
 const execAsPromise = async (command) =>
     new Promise((resolve, reject) => {
@@ -24,20 +27,34 @@ const execAsPromise = async (command) =>
         })
     })
 
+const lastOf = (ts) => ts[ts.length - 1]
+
 const processExternalDep = (dep, installedVersion) =>
-    execAsPromise(`npm view ${dep}`)
+    execAsPromise(`npm view ${dep} --json`)
         .then((stdout) => {
-            const latestFind = stdout.match(/^latest: (.+?)$/m)
-            if (!latestFind) {
+            const json = JSON.parse(stdout)
+            const versionsPerDate = json[0].time
+            const now = Date.now()
+            const latestAcceptableVersion = lastOf(
+                Object
+                    .entries(versionsPerDate)
+                    .map(([version, dateTimeAsString]) => [version, new Date(dateTimeAsString)])
+                    .filter(([version, dateTime]) =>
+                        (now - dateTime) >= minReleaseAge*24*60*60*1000     // [days]
+                        && version.match(/^\d+\.\d+\.\d+$/)                 // proper semver
+                    )
+                    .sort(([leftVersion, _leftDateTime], [rightVersion, _rightDateTime]) => semverCompare(leftVersion, rightVersion))
+            )[0]
+            if (!latestAcceptableVersion) {
                 console.warn(`Couldn’t retrieve latest version info for NPM package: ${dep}`)
                 return false
             }
-            const latestVersion = latestFind[1]
-            if (latestVersion !== installedVersion) {
+            if (latestAcceptableVersion !== installedVersion) {
                 if (updateExternalDepsVersions) {
-                    externalDeps[dep] = latestVersion
+                    externalDeps[dep] = latestAcceptableVersion
+                    console.info(`Updated NPM package ${dep} from version ${installedVersion} -> ${latestAcceptableVersion}`)
                 } else {
-                    console.info(`Newer(/other) version of NPM package ${dep} available: ${latestVersion} (<- ${installedVersion})`)
+                    console.info(`Newer(/other) version of NPM package ${dep} available: ${latestAcceptableVersion} (<- ${installedVersion})`)
                 }
                 return true
             }
@@ -59,7 +76,8 @@ const externalDepsHaveUpdates = await Promise.all(
 
 if (externalDepsHaveUpdates) {
     if (updateExternalDepsVersions) {
-        writeFileSync("../versions.json", JSON.stringify(versions, null, 4) + EOL)
+        await writeFile("versions.json", JSON.stringify(versions, null, 4) + EOL)
+        console.info("Updated version.json.")
     } else {
         console.info(`Some external dependencies have newer(/other) versions available: see above.
 Run this script with "${updateExternalDepsVersionsFlag}" as argument to update them automatically.
