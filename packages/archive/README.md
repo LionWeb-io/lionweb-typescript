@@ -29,7 +29,7 @@ This package supports two layouts of archives:
 * `snapshot` — this is the older version of the archive: every chunk in it, wherever it is, is a partition.
   It can hold other files as well, such as a README.
 
-Both LionWeb versions 2023.1 and 2024.1 are supported.
+LionWeb versions 2023.1, 2024.1, and 2026.1 are supported.
 
 
 ## Usage
@@ -74,9 +74,9 @@ npm run build
 
 The tests for this package are located in the [`test` package](../test), in `src/archive/`.
 
-The TypeScript code in `src/proto/` is generated from the `.proto` file next to it, using [ts-proto](https://github.com/stephenh/ts-proto), and should not be edited by hand.
+The TypeScript code in `src/proto/Chunk.g.ts` is generated from the `.proto` file next to it, using [ts-proto](https://github.com/stephenh/ts-proto), and should not be edited by hand.
 To regenerate it, run the following command from this package's directory, with `protoc` installed, and `ts-proto` made available (e.g. with `npm install --no-save ts-proto`):
 
 ```shell
-protoc --plugin=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=. --ts_proto_opt=importSuffix=.js src/proto/Chunk.proto
+protoc --plugin=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=. --ts_proto_opt=importSuffix=.js --ts_proto_opt=fileSuffix=.g src/proto/Chunk.proto
 ```

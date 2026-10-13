@@ -17,6 +17,10 @@ describe("validation of chunks", () => {
         doesNotThrow(() => validateChunk({ ...bobsLibrary, serializationFormatVersion: "2024.1" }))
     })
 
+    it("accepts a valid 2026.1 chunk", () => {
+        doesNotThrow(() => validateChunk({ ...bobsLibrary, serializationFormatVersion: "2026.1" }))
+    })
+
     it("rejects values that are not chunks", () => {
         throws(() => validateChunk(null), "Expected a LionWeb chunk")
         throws(() => validateChunk("chunk"), "Expected a LionWeb chunk")
@@ -38,15 +42,15 @@ describe("validation of chunks", () => {
 
     it("rejects malformed nodes and features", () => {
         const withoutId = bobsLibraryCopy()
-        delete (withoutId.nodes[0] as { id?: string }).id
+        Reflect.deleteProperty(withoutId.nodes[0], "id")
         throws(() => validateChunk(withoutId), "Invalid LionWeb node")
 
         const badProperty = bobsLibraryCopy()
-        ;(badProperty.nodes[0].properties[0] as { value: unknown }).value = 42
+        Object.assign(badProperty.nodes[0].properties[0], { value: 42 })
         throws(() => validateChunk(badProperty), "Invalid property on bl")
 
         const badChildren = bobsLibraryCopy()
-        ;(badChildren.nodes[0].containments[0] as { children: unknown }).children = [1]
+        Object.assign(badChildren.nodes[0].containments[0], { children: [1] })
         throws(() => validateChunk(badChildren), "Invalid containment on bl")
     })
 })

@@ -2,9 +2,9 @@ import type { LionWebJsonChunk } from "@lionweb/json"
 
 /**
  * The serialization format versions this package can read and write.
- * Both share the same JSON structure and the same protobuf encoding.
+ * All share the same JSON structure and the same protobuf encoding.
  */
-export const supportedSerializationFormatVersions: readonly string[] = ["2023.1", "2024.1"]
+export const supportedSerializationFormatVersions: readonly string[] = ["2023.1", "2024.1", "2026.1"]
 
 /**
  * Checks that the given value has the structure of a LionWeb chunk, throwing an error otherwise.

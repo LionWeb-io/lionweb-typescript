@@ -30,7 +30,7 @@
         "republish-local": "npm unpublish-local && npm publish-local"
     },
     "dependencies": {
-        "@bufbuild/protobuf": "2.16.0",
+        "@bufbuild/protobuf": "2.15.0",
         "@lionweb/json": "0.11.0-beta.0",
         "jszip": "3.10.2"
     }

@@ -2,7 +2,7 @@ import type JSZip from "jszip"
 
 import type { ArchiveEntry, LoadedArchive } from "./types.js"
 
-/** Where an entry was read from: lets saving copy it as stored, without encoding or compressing it again. */
+/** Where an entry was read from, so that saving can copy it as stored, without encoding or compressing it again. */
 export type EntrySource = {
     zip: JSZip
     path: string

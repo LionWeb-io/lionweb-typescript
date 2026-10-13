@@ -1,6 +1,6 @@
 import type { LionWebJsonChunk, LionWebJsonMetaPointer, LionWebJsonUsedLanguage } from "@lionweb/json"
 
-import { PBChunk, PBLanguage, PBMetaPointer, PBNode } from "./proto/Chunk.js"
+import { PBChunk, PBLanguage, PBMetaPointer, PBNode } from "./proto/Chunk.g.js"
 
 /** Converts a protobuf chunk (see `proto/Chunk.proto`) to the equivalent LionWeb JSON chunk. */
 export const convertPBChunkToJsonChunk = (pbChunk: PBChunk): LionWebJsonChunk => {
