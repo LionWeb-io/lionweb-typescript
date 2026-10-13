@@ -58,6 +58,7 @@
         "./packages/build",
         "./packages/class-core-test-language",
         "./packages/class-core-test",
+        "./packages/archive",
         "./packages/test",
         "./packages/delta-protocol-common",
         "./packages/delta-protocol-client",

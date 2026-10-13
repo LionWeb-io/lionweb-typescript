@@ -8,6 +8,8 @@
 
 (in alphabetical order of package name:)
 
+[![npm](https://img.shields.io/npm/v/%40lionweb%2Farchive?label=%40lionweb%2Farchive)
+](https://www.npmjs.com/package/@lionweb/archive)
 [![npm](https://img.shields.io/npm/v/%40lionweb%2Fclass-core?label=%40lionweb%2Fclass-core)
 ](https://www.npmjs.com/package/@lionweb/class-core)
 [![npm](https://img.shields.io/npm/v/%40lionweb%2Fclass-core-generator?label=%40lionweb%2Fclass-core-generator)
@@ -61,6 +63,9 @@ The [**delta protocol**](https://github.com/LionWeb-io/specification/blob/main/d
 ## Repo org
 
 The implementation is divided up in a number of NPM packages in the directory [`packages`](./packages) (in alphabetical order of package name) — see their READMEs for more details:
+
+- `archive`
+  Loading and saving of LionWeb archives: ZIP files of serialization chunks, in JSON or protobuf format, including the LionWeb Archive format of LionWeb Java.
 
 - `build`
   Builds part of the code in `class-core` — specifically the part related to the delta protocol.
