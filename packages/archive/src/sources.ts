@@ -8,6 +8,5 @@ export type EntrySource = {
     path: string
 }
 
-// Kept beside the loaded objects, which stay plain (cloneable, comparable) data.
 export const entrySources = new WeakMap<ArchiveEntry, EntrySource>()
 export const archiveZips = new WeakMap<LoadedArchive, JSZip>()
