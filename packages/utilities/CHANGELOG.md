@@ -10,6 +10,10 @@
 
 * Update version of `nanoid` dependency from 5.1.16 &rarr; 6.0.1.
 
+* Add a `languagesUsedIn` function, to compute which language versions are used by a serialization chunk’s nodes.
+
+* Add a `withUpdatedLanguageVersions` function, and a corresponding `VersionReplacementConfiguration` configuration type, to update stated versions of languages used in a serialization chunk.
+
 
 ## 0.10.0
 
