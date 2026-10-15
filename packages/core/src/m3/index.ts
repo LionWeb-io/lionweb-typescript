@@ -1,5 +1,4 @@
-export { newPropertyValueDeserializerRegistry, newPropertyValueSerializerRegistry, propertyValueDeserializerFrom, propertyValueSerializerFrom } from "./builtins-common.js"
-export type * from "./builtins-common.js"
+export { type LionCoreBuiltinsFacade } from "./builtins-common.js"
 export { isBuiltinNodeConcept } from "./builtins-function.js"
 export * from "./constraints.js"
 export * from "./deserializer.js"

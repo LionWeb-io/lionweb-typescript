@@ -1,21 +1,13 @@
 import { LionWebId, LionWebJsonChunk, LionWebJsonNode, LionWebKey } from "@lionweb/json"
 import { byIdMap, groupBy, keepDefineds } from "@lionweb/ts-utils"
+import { PropertyValueDeserializerConfiguration, propertyValueDeserializerWith } from "./data-types/property-values.js"
 import { Writer } from "./writing.js"
-import { consoleProblemReporter, ProblemReporter } from "./reporter.js"
-import { MemoisingSymbolTable } from "./m3/symbol-table.js"
-import { Classifier, Containment, Enumeration, Language, PrimitiveType, Property, Reference } from "./m3/types.js"
-import { LionWebVersion } from "./m3/version.js"
-import { LionWebVersions } from "./m3/versions.js"
 import { UnresolvedReference } from "./references.js"
+import { consoleProblemReporter } from "./reporter.js"
+import { MemoisingSymbolTable } from "./m3/symbol-table.js"
+import { Classifier, Containment, Language, Property, Reference } from "./m3/types.js"
+import { LionWebVersions } from "./m3/versions.js"
 import { Node } from "./types.js"
-
-/**
- * Interface for objects that expose a method to deserialize a property's value.
- */
-export interface PropertyValueDeserializer {
-    deserializeValue(value: string | undefined, property: Property): unknown | undefined
-}
-
 
 /**
  * Type definition for functions that deserialize a given {@link LionWebJsonChunk serialization chunk},
@@ -29,30 +21,18 @@ export type Deserializer<NT extends Node> = (serializationChunk: LionWebJsonChun
  * (and partially optional).
  */
 export type DeserializerConfiguration<NT extends Node> = {
-    /**
-     * A {@link Writer} that is used to instantiate nodes (with classifiers coming from the `languages` property) and set values on them.
-     */
-    writer: Writer<NT>,
-    /**
-     * The version of the LionWeb serialization format to deserialize from.
-     * Default = {@link LionWebVersions.v2023_1}.
-     */
-    lionWebVersion?: LionWebVersion
+
     /**
      * An array of {@link Language languages} that the serialization chunk is expected to conform to.
      */
-    languages: Language[],
+    languages: Language[]
+
     /**
-     * A deserializer for values of properties.
-     * Default: `(lionWebVersion ?? LionWebVersions.v2023_1).builtinsFacade.propertyValueDeserializer`.
+     * A {@link Writer} that is used to instantiate nodes (with classifiers coming from the `languages` property) and set values on them.
      */
-    propertyValueDeserializer?: PropertyValueDeserializer,
-    /**
-     * An object for reporting problems to.
-     * Default: {@link consoleProblemReporter}.
-     */
-    problemReporter?: ProblemReporter
-}
+    writer: Writer<NT>
+
+} & Omit<PropertyValueDeserializerConfiguration, "encodingOfEnumerationLiteral">
 
 
 /**
@@ -61,13 +41,17 @@ export type DeserializerConfiguration<NT extends Node> = {
  * @param configuration - a {@link DeserializerConfiguration} object to configure the deserializer to return with.
  */
 export const deserializerWith = <NT extends Node>(configuration: DeserializerConfiguration<NT>): Deserializer<NT> => {
-
-    const symbolTable = new MemoisingSymbolTable(configuration.languages)
     const { writer } = configuration
+    const symbolTable = new MemoisingSymbolTable(configuration.languages)
 
     const lionWebVersion = configuration?.lionWebVersion ?? LionWebVersions.v2023_1
-    const propertyValueDeserializer = configuration.propertyValueDeserializer ?? lionWebVersion.builtinsFacade.propertyValueDeserializer
     const problemReporter = configuration.problemReporter ?? consoleProblemReporter
+    const propertyValueDeserializer = propertyValueDeserializerWith({
+        encodingOfEnumerationLiteral: configuration.writer.encodingOf,
+        lionWebVersion,
+        primitiveTypeDeserializerRegistry: configuration.primitiveTypeDeserializerRegistry,
+        problemReporter
+    })
 
     return (serializationChunk, dependentNodes = []) => {
 
@@ -152,19 +136,7 @@ export const deserializerWith = <NT extends Node>(configuration: DeserializerCon
                     .forEach(property => {
                         if (property.key in serializedPropertiesPerKey) {
                             const value = serializedPropertiesPerKey[property.key][0].value
-                            if (property.type instanceof PrimitiveType) {
-                                propertySettings[property.key] =
-                                    value === null ? undefined : propertyValueDeserializer.deserializeValue(value, property as Property)
-                                return
-                            }
-                            if (property.type instanceof Enumeration) {
-                                const literal = property.type.literals.find(literal => literal.key === value)
-                                if (literal !== undefined) {
-                                    propertySettings[property.key] = writer.encodingOf(literal)
-                                }
-                                return
-                            }
-                            problemReporter.reportProblem(`property ${property.name} on classifier ${classifier.name} is not handled, because its type is neither a primitive type nor an enumeration`)
+                            propertySettings[property.key] = value === null ? undefined : propertyValueDeserializer(property, value)
                         }
                     })
             }

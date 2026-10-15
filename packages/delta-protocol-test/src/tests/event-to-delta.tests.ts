@@ -17,11 +17,17 @@
 
 import { expect } from "chai"
 
-import { IdMapping, nodeBaseDetailedDeserializerWith, PartitionAddedDelta, serializeNodeBases } from "@lionweb/class-core"
+import {
+    IdMapping,
+    nodeBaseDetailedDeserializerWith,
+    PartitionAddedDelta,
+    serializeNodeBases
+} from "@lionweb/class-core"
 import { metaPointerForFeature } from "@lionweb/core"
 import { DataTypeTestConcept, TestLanguageBase, TestPartition } from "@lionweb/class-core-test-language"
 import { ChildAddedEvent, eventToDeltaTranslator, PartitionAddedEvent } from "@lionweb/delta-protocol-common"
 import { LionWebId, LionWebJsonNode } from "@lionweb/json"
+import { defaultPropertyValueDeserializer } from "../test-utils/client-parameters.js"
 
 
 describe("event-to-delta translator", () => {
@@ -48,7 +54,7 @@ describe("event-to-delta translator", () => {
             additionalInfos: []
         }
 
-        const eventAsDelta = eventToDeltaTranslator(languageBases, nodeBaseDetailedDeserializerWith({ languageBases }))
+        const eventAsDelta = eventToDeltaTranslator(languageBases, nodeBaseDetailedDeserializerWith({ languageBases }), defaultPropertyValueDeserializer)
         const idMapping = new IdMapping({})
 
         const delta = eventAsDelta(event, idMapping)
@@ -64,7 +70,7 @@ describe("event-to-delta translator", () => {
 
         const parentId = "parent"
         const partition = factory(base.TestPartition, parentId) as TestPartition
-        const eventAsDelta = eventToDeltaTranslator(languageBases, nodeBaseDetailedDeserializerWith({ languageBases }))
+        const eventAsDelta = eventToDeltaTranslator(languageBases, nodeBaseDetailedDeserializerWith({ languageBases }), defaultPropertyValueDeserializer)
         const idMapping = new IdMapping({ [parentId]: partition })
 
         expect(() => {

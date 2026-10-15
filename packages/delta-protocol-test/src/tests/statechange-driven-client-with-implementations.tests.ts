@@ -23,6 +23,7 @@ import { LionWebRepository, wsLocalhostUrl } from "@lionweb/delta-protocol-repos
 import { LionWebId } from "@lionweb/json"
 import { TestLanguageBase } from "@lionweb/class-core-test-language"
 import { delayed } from "../test-utils/async.js"
+import { defaultPropertyValueDeserializer, defaultPropertyValueSerializer } from "../test-utils/client-parameters.js"
 import { nextPort } from "../test-utils/port.js"
 import { getTextFrom, setTextOn, testModelChunk } from "../test-utils/test-model.js"
 
@@ -37,7 +38,16 @@ describe("WebSocket-driven implementations of client and repository", async func
         const languageBases = [TestLanguageBase.INSTANCE]
 
         const createClient = (clientId: LionWebId) =>
-            LionWebClient.create({ repositoryId: "myRepo", clientId, url: wsLocalhostUrl(port), languageBases, serializationChunk: testModelChunk, lowLevelClientInstantiator: createWSLowLevelClient })
+            LionWebClient.create({
+                url: wsLocalhostUrl(port),
+                repositoryId: "myRepo",
+                clientId,
+                languageBases,
+                propertyValueDeserializer: defaultPropertyValueDeserializer,
+                propertyValueSerializer: defaultPropertyValueSerializer,
+                serializationChunk: testModelChunk,
+                lowLevelClientInstantiator: createWSLowLevelClient
+            })
         const clientA = await createClient("A")
         const clientB = await createClient("B")
         // end Arrange

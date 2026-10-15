@@ -2,6 +2,8 @@
 
 ## 0.11.0 — not yet released
 
+* **Breaking change!** Add `propertyValue{Des|S}erializer` properties of types `PropertyValue{Des|S}erializer` (resp.) to the `LionWebClientParameters` type.
+
 
 ## 0.10.0
 

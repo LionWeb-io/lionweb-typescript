@@ -49,7 +49,7 @@ import {
     ReferenceChangedDelta,
     ReferenceDeletedDelta
 } from "@lionweb/class-core"
-import { featureResolversFor, LionWebVersions, PropertyValueDeserializer, referenceToSet } from "@lionweb/core"
+import { featureResolversFor, PropertyValueDeserializer, referenceToSet } from "@lionweb/core"
 import { LionWebJsonDeltaChunk } from "@lionweb/json"
 import {
     AnnotationAddedEvent,
@@ -93,7 +93,7 @@ export type EventToDeltaTranslator = (event: Event, idMapping: IdMapping) => IDe
 export const eventToDeltaTranslator = (
     languageBases: ILanguageBase[],
     deserializer: Deserializer<DetailedDeserialization>,
-    propertyValueDeserializer: PropertyValueDeserializer = LionWebVersions.v2023_1.builtinsFacade.propertyValueDeserializer
+    propertyValueDeserializer: PropertyValueDeserializer
 ): EventToDeltaTranslator => {
 
     const eventAsDelta = (event: Event, idMapping: IdMapping): IDelta | undefined => {
@@ -153,19 +153,19 @@ export const eventToDeltaTranslator = (
                 const { node, property, newValue } = event as PropertyAddedEvent
                 const resolvedNode = idMapping.nodeBaseFromId(node)
                 const resolvedProperty = resolvedPropertyFrom(property, resolvedNode.classifier)
-                return new PropertyAddedDelta(resolvedNode, resolvedProperty, propertyValueDeserializer.deserializeValue(newValue, resolvedProperty))
+                return new PropertyAddedDelta(resolvedNode, resolvedProperty, propertyValueDeserializer(resolvedProperty, newValue))
             }
             case "PropertyDeleted": { // § 5.8.4.2
                 const { node, property, oldValue } = event as PropertyDeletedEvent
                 const resolvedNode = idMapping.nodeBaseFromId(node)
                 const resolvedProperty = resolvedPropertyFrom(property, resolvedNode.classifier)
-                return new PropertyDeletedDelta(resolvedNode, resolvedProperty, propertyValueDeserializer.deserializeValue(oldValue, resolvedProperty))
+                return new PropertyDeletedDelta(resolvedNode, resolvedProperty, propertyValueDeserializer(resolvedProperty, oldValue))
             }
             case "PropertyChanged": { // § 5.8.4.3
                 const { node, property, newValue, oldValue } = event as PropertyChangedEvent
                 const resolvedNode = idMapping.nodeBaseFromId(node)
                 const resolvedProperty = resolvedPropertyFrom(property, resolvedNode.classifier)
-                return new PropertyChangedDelta(resolvedNode, resolvedProperty, propertyValueDeserializer.deserializeValue(oldValue, resolvedProperty), propertyValueDeserializer.deserializeValue(newValue, resolvedProperty))
+                return new PropertyChangedDelta(resolvedNode, resolvedProperty, propertyValueDeserializer(resolvedProperty, oldValue), propertyValueDeserializer(resolvedProperty, newValue))
             }
             case "ChildAdded": { // § 5.8.5.1
                 const { parent, containment, index } = event as ChildAddedEvent

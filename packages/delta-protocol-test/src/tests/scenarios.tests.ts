@@ -35,6 +35,7 @@ import { TestLanguageBase } from "@lionweb/class-core-test-language"
 import { delayed } from "../test-utils/async.js"
 import { nextPort } from "../test-utils/port.js"
 import { createWSLowLevelClient } from "@lionweb/delta-protocol-low-level-client-ws"
+import { defaultPropertyValueDeserializer, defaultPropertyValueSerializer } from "../test-utils/client-parameters.js"
 
 
 describe(`scenarios (${ansi.colorSchemeExplanationString})`, async function() {
@@ -71,10 +72,12 @@ describe(`scenarios (${ansi.colorSchemeExplanationString})`, async function() {
         const clientId = "myClient" // but participation ID is handed out by the repository!
         const repositoryId = "myRepo"
         const lionWebClient = await LionWebClient.create({
+            url: wsLocalhostUrl(port),
             repositoryId: "myRepo",
             clientId,
-            url: wsLocalhostUrl(port),
             languageBases: [testLanguageBase],
+            propertyValueDeserializer: defaultPropertyValueDeserializer,
+            propertyValueSerializer: defaultPropertyValueSerializer,
             lowLevelClientInstantiator: createWSLowLevelClient,
             semanticLogger: log
         })

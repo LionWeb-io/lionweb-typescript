@@ -32,8 +32,9 @@ import {
     simpleConsoleLogger
 } from "@lionweb/delta-protocol-common"
 import { TestLanguageBase } from "@lionweb/class-core-test-language"
-import { mockLowLevelClientInstantiator } from "../test-utils/mock-low-level-client.js"
+import { defaultTestClientParameters } from "../test-utils/client-parameters.js"
 import { asLowLevelClientLogger } from "../test-utils/logging.js"
+import { mockLowLevelClientInstantiator } from "../test-utils/mock-low-level-client.js"
 
 
 describe("implementation of LionWeb client", async function() {
@@ -42,10 +43,7 @@ describe("implementation of LionWeb client", async function() {
 
     it("what happens when sending a message through an unwilling low-level client", async function() {
         const lionWebClient = await LionWebClient.create({
-            repositoryId: "myRepo",
-            clientId: "A",
-            url: "",
-            languageBases: [testLanguageBase],
+            ...defaultTestClientParameters,
             lowLevelClientInstantiator: (_) =>
                 Promise.resolve({
                     sendMessage: (_message) => Promise.reject(new Error(`I refuse to send messages`)),
@@ -57,10 +55,7 @@ describe("implementation of LionWeb client", async function() {
 
     it("can disconnect", async function() {
         const lionWebClient = await LionWebClient.create({
-            repositoryId: "myRepo",
-            clientId: "A",
-            url: "",
-            languageBases: [testLanguageBase],
+            ...defaultTestClientParameters,
             lowLevelClientInstantiator: mockLowLevelClientInstantiator({}, {})
         })
 
@@ -71,10 +66,7 @@ describe("implementation of LionWeb client", async function() {
 
     it("can sign on and off (and add a partition)", async function() {
         const lionWebClient = await LionWebClient.create({
-            repositoryId: "myRepo",
-            clientId: "A",
-            url: "",
-            languageBases: [testLanguageBase],
+            ...defaultTestClientParameters,
             lowLevelClientInstantiator: mockLowLevelClientInstantiator(
                 {},
                 {
@@ -127,10 +119,7 @@ describe("implementation of LionWeb client", async function() {
 
     it("can delete a partition", async function() {
         const lionWebClient = await LionWebClient.create({
-            repositoryId: "myRepo",
-            clientId: "A",
-            url: "",
-            languageBases: [testLanguageBase],
+            ...defaultTestClientParameters,
             lowLevelClientInstantiator: mockLowLevelClientInstantiator(
                 {
                     "cmd-1": {
@@ -220,10 +209,7 @@ describe("implementation of LionWeb client", async function() {
             })
         }
         const lionWebClient = await LionWebClient.create({
-            repositoryId: "myRepo",
-            clientId: "A",
-            url: "",
-            languageBases: [testLanguageBase],
+            ...defaultTestClientParameters,
             lowLevelClientInstantiator
         })
         expect(lionWebClient.forest.partitions.length).to.equal(0)

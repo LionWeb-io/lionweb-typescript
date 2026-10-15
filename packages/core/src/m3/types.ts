@@ -31,7 +31,7 @@ interface IKeyed extends INamed {
 
 
 /**
- * An interface with one method to return a meta type,
+ * An interface with one method to return a meta-type,
  * independent of the class's name obtained through `<node>.constructor.name`,
  * which may be brittle when using bundlers.
  */
