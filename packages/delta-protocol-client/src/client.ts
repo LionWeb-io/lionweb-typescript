@@ -168,24 +168,26 @@ export class LionWebClient {
 
         const processEvent = (event: Event) => {
             lionWebClient.lastReceivedSequenceNumber = event.sequenceNumber
+
             const commandOriginatingFromSelf = event.originCommands.find(({ commandId }) => issuedCommandIds.indexOf(commandId) > -1)
             // Note: we can't remove members from issuedCommandIds because there may be multiple events originating fom a single command.
-            if (commandOriginatingFromSelf === undefined) {
-                try {
-                    const delta = eventAsDelta(event, forest.idMapping)
-                    if (delta !== undefined) {
-                        try {
-                            forest.applyDelta(delta)
-                            clientItemLogger.clientAppliedEvent(event)
-                        } catch (e) {
-                            clientItemLogger.clientHadProblem(`couldn't apply delta of type ${delta.constructor.name} because of: ${(e as Error).message}`)
-                        }
-                    }
-                } catch (eventTranslationError) {
-                    clientItemLogger.clientHadProblem(`couldn't translate event to a delta because of: ${(eventTranslationError as Error).message}\n\tdelta = ${JSON.stringify(event)}`)
-                }
-            } else {
+            if (commandOriginatingFromSelf !== undefined) {
                 clientItemLogger.clientDidNotApplyEventFromOwnCommand(commandOriginatingFromSelf.commandId)
+                return
+            }
+
+            try {
+                const delta = eventAsDelta(event, forest.idMapping)
+                if (delta !== undefined) {
+                    try {
+                        forest.applyDelta(delta)
+                        clientItemLogger.clientAppliedEvent(event)
+                    } catch (e) {
+                        clientItemLogger.clientHadProblem(`couldn't apply delta of type ${delta.constructor.name} because of: ${(e as Error).message}`)
+                    }
+                }
+            } catch (eventTranslationError) {
+                clientItemLogger.clientHadProblem(`couldn't translate event to a delta because of: ${(eventTranslationError as Error).message}\n\tdelta = ${JSON.stringify(event)}`)
             }
         }
 
