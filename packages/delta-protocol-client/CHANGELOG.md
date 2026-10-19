@@ -2,6 +2,8 @@
 
 ## 0.11.0 — not yet released
 
+* Extracted message-related client state into a separate `MessageRelatedClientState` class.
+
 
 ## 0.10.0
 
