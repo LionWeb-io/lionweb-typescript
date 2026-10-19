@@ -237,7 +237,7 @@ export const typeForLanguageEntity = (imports: Imports) => {
         [
             `export enum ${enumeration.name} {`,
             indent(
-                commaSeparated(enumeration.literals.map(({name, key}) => `${name} = "${key}"`))
+                commaSeparated(enumeration.literals.map(({ name, key }) => `${name} = "${key}"`))
                     // Using TS string enums means that the key _is_ the literal's runtime TS representation.
             ),
             `}`

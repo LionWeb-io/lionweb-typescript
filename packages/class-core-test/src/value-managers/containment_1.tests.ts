@@ -261,7 +261,7 @@ describe("serialization and deserialization w.r.t. a [1] containment", () => {
         const serializationChunk = serializeNodeBases([node]);
         const {nodes} = serializationChunk;
         equal(nodes.length, 1);
-        const serContainment = nodes[0].containments.find(({containment}) => containment.key === metaPointer.key);
+        const serContainment = nodes[0].containments.find(({ containment }) => containment.key === metaPointer.key);
         isUndefined(serContainment);
 
         const deserializedNodes = deserializeNodesAssertingNoProblems(serializationChunk);
@@ -287,7 +287,7 @@ describe("serialization and deserialization w.r.t. a [1] containment", () => {
         const serializationChunk = serializeNodeBases([parent]);
         const {nodes} = serializationChunk;
         equal(nodes.length, 2);
-        const serContainment = nodes[0].containments.find(({containment}) => containment.key === metaPointer.key);
+        const serContainment = nodes[0].containments.find(({ containment }) => containment.key === metaPointer.key);
         deepEqual(serContainment, {
             containment: metaPointer,
             children: ["child"]

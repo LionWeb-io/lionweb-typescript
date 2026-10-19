@@ -171,7 +171,7 @@ export const tsTypeDefsForLanguage = (language: Language, ...generationOptions: 
             ...inheritsDirectlyFrom(classifier),
             ...allFeaturesOf(classifier)
                 .filter((feature) => feature instanceof Link)
-                .flatMap(({type}) => type)
+                .flatMap(({ type }) => type)
                 .filter((type) => type instanceof Classifier)
         ]
 
@@ -188,7 +188,7 @@ export const tsTypeDefsForLanguage = (language: Language, ...generationOptions: 
         .filter((classifier) => classifier.language !== language && classifier.language.key !== LionWebVersions.v2023_1.builtinsFacade.language.key)
     const importsPerPackage = groupBy(
         generatedDependencies,
-        ({language}) => language.name
+        ({ language }) => language.name
     )
 
     const concreteClassifiers = language.entities.filter(isConcrete)

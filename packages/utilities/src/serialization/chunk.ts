@@ -112,8 +112,8 @@ export const combinationOf = (serializationChunks: LionWebJsonChunk[], lionWebVe
         serializationFormatVersion:
             lionWebVersion?.serializationFormatVersion
                 ?? (serializationChunks.length > 0 ? serializationChunks[0] : LionWebVersions.v2023_1).serializationFormatVersion,
-        languages: flatMapDistinct(serializationChunks.map(({languages}) => languages), areEqual),
-        nodes: serializationChunks.flatMap(({nodes}) => nodes)
+        languages: flatMapDistinct(serializationChunks.map(({ languages }) => languages), areEqual),
+        nodes: serializationChunks.flatMap(({ nodes }) => nodes)
     })
 
 

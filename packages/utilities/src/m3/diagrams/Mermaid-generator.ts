@@ -49,7 +49,7 @@ export const generateMermaidForLanguage: DiagramRenderer = ({ entities }: Langua
     ])
 
 const generateForEnumeration = ({ name, literals }: Enumeration) =>
-    withNewLine(block(`class ${name}`, [`<<enumeration>>`, literals.map(({name}) => name)]))
+    withNewLine(block(`class ${name}`, [`<<enumeration>>`, literals.map(({ name }) => name)]))
 
 const generateForAnnotation = ({ name, features, extends: extends_, implements: implements_, annotates }: Annotation) => [
     block(

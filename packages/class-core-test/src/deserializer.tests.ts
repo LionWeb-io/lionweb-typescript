@@ -33,7 +33,7 @@ describe("deserializer", () => {
         partitionToRemove.addLinks(linkTestConcept2)
 
         const chunk = serializeNodeBases([partitionToKeep, partitionToRemove])
-        chunk.nodes = chunk.nodes.filter(({id}) => id !== "partitionToRemove")  // => linkTestConcept2 is now an orphan
+        chunk.nodes = chunk.nodes.filter(({ id }) => id !== "partitionToRemove")  // => linkTestConcept2 is now an orphan
 
         const aggregator = new AggregatingProblemReporter()
         const {roots, idMapping} = nodeBaseDetailedDeserializerWith({ languageBases: [TestLanguageBase.INSTANCE], problemReporter: aggregator })(chunk)

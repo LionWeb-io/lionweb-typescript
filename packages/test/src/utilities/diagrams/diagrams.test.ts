@@ -67,7 +67,7 @@ describe("focusing on specific entities", () => {
     })
 
     it("2 entities in non-alphanumeric order", () => {
-        const entity = (target: string) => testLanguage.entities.find(({name}) => name === target)!
+        const entity = (target: string) => testLanguage.entities.find(({ name }) => name === target)!
         const annotations = ["Annotation2", "Annotation1"].map(entity)
         rendersEqualToFileOrOverwrite(generatePlantUmlForLanguage, "annotations-diagram-expected.puml", annotations)
         rendersEqualToFileOrOverwrite(generateMermaidForLanguage, "annotations-diagram-expected.md", annotations)

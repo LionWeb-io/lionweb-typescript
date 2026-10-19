@@ -207,7 +207,7 @@ export const deserializerWith = <NT extends Node>(configuration: DeserializerCon
                     )
                     referencesToInstall.push(
                         ...(serRefs.map(
-                            ({reference, resolveInfo}) => [node, feature, reference, resolveInfo] as ReferenceToInstall
+                            ({ reference, resolveInfo }) => [node, feature, reference, resolveInfo] as ReferenceToInstall
                         ))
                     )
                 }
