@@ -2,6 +2,8 @@
 
 ## 0.11.0 — not yet released
 
+* Introduce a `ClientItemLogger` class to conveniently log `ISemanticLogItem`s pertaining to a specific client.
+
 
 ## 0.10.0
 

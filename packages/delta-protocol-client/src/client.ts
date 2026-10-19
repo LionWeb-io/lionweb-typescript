@@ -20,13 +20,8 @@ import { LionWebId, LionWebJsonChunk, LionWebJsonDeltaChunk } from "@lionweb/jso
 
 import {
     ansi,
-    ClientAppliedEvent,
-    ClientDidNotApplyEventFromOwnCommand,
-    ClientHadProblem,
-    ClientReceivedMessage,
-    ClientSentMessage,
+    ClientItemLogger,
     Command,
-    DeltaOccurredOnClient,
     deltaToCommandTranslator,
     ErrorResponse,
     Event,
@@ -137,6 +132,7 @@ export class LionWebClient {
         lowLevelClientInstantiator
     }: LionWebClientParameters): Promise<LionWebClient> {
         const log = semanticLoggerFunctionFrom(semanticLogger)
+        const clientItemLogger = new ClientItemLogger(clientId, log)
 
         const deltaAsCommand = deltaToCommandTranslator()
         const serializeDelta = deltaSerializer()
@@ -147,14 +143,14 @@ export class LionWebClient {
         const commandSender: DeltaReceiver = (delta) => {
             try {
                 const serializedDelta = serializeDelta(delta)
-                log(new DeltaOccurredOnClient(clientId, serializedDelta))
+                clientItemLogger.deltaOccurredOnClient(serializedDelta)
                 if (!loading) {
                     const commandId = `cmd-${++commandNumber}`
                     const command = deltaAsCommand(delta, commandId)
                     if (command !== undefined) {
                         issuedCommandIds.push(commandId)  // (register the ID before actually sending the command so that effectively-synchronous tests mimic the actual behavior more reliably)
                         lowLevelClient.sendMessage(command)
-                        log(new ClientSentMessage(clientId, command))
+                        clientItemLogger.clientSentMessage(command)
                     }
                 }
             } catch (e: unknown) {
@@ -180,16 +176,16 @@ export class LionWebClient {
                     if (delta !== undefined) {
                         try {
                             forest.applyDelta(delta)
-                            log(new ClientAppliedEvent(clientId, event))
+                            clientItemLogger.clientAppliedEvent(event)
                         } catch (e) {
-                            log(new ClientHadProblem(clientId, `couldn't apply delta of type ${delta.constructor.name} because of: ${(e as Error).message}`))
+                            clientItemLogger.clientHadProblem(`couldn't apply delta of type ${delta.constructor.name} because of: ${(e as Error).message}`)
                         }
                     }
                 } catch (eventTranslationError) {
-                    log(new ClientHadProblem(clientId, `couldn't translate event to a delta because of: ${(eventTranslationError as Error).message}\n\tdelta = ${JSON.stringify(event)}`))
+                    clientItemLogger.clientHadProblem(`couldn't translate event to a delta because of: ${(eventTranslationError as Error).message}\n\tdelta = ${JSON.stringify(event)}`)
                 }
             } else {
-                log(new ClientDidNotApplyEventFromOwnCommand(clientId, commandOriginatingFromSelf.commandId))
+                clientItemLogger.clientDidNotApplyEventFromOwnCommand(commandOriginatingFromSelf.commandId)
             }
         }
 
@@ -197,7 +193,7 @@ export class LionWebClient {
         // Note: sequenceNumber must be a POSITIVE integer according to the specification, so >= 1.
 
         const receiveMessageOnClient = (message: Event | QueryMessage) => {
-            log(new ClientReceivedMessage(clientId, message))
+            clientItemLogger.clientReceivedMessage(message)
             if (isQueryResponse(message)) {
                 const { queryId } = message
                 if (queryId in lionWebClient.messageReceiversByQueryId) {
@@ -210,7 +206,7 @@ export class LionWebClient {
                     if (isContinuedQueryResponse(message)) {
                         const chunkingInfo = lionWebClient.chunkingInfoByQueryId[queryId]
                         if (chunkingInfo === undefined) {
-                            log(new ClientHadProblem(clientId, `received a continued query response for a previous message that wasn’t [declared as] split — ignoring the continued chunk`))
+                            clientItemLogger.clientHadProblem(`received a continued query response for a previous message that wasn’t [declared as] split — ignoring the continued chunk`)
                             return  // ~void
                         }
                         const completedMessage = chunkingInfo.maybeCompletedMessage(message)
@@ -237,7 +233,7 @@ export class LionWebClient {
                     const { sequenceNumber } = message
                     const chunkingInfo = lionWebClient.chunkingInfoByEventSequenceNumber[sequenceNumber]
                     if (chunkingInfo === undefined) {
-                        log(new ClientHadProblem(clientId, `received a continued event for a previous message that wasn’t [declared as] split — ignoring the continued event`))
+                        clientItemLogger.clientHadProblem(`received a continued event for a previous message that wasn’t [declared as] split — ignoring the continued event`)
                         return  // ~void
                     }
                     const completedMessage = chunkingInfo.maybeCompletedMessage(message)

@@ -94,3 +94,23 @@ export const semanticLogItemStorer = (): [semanticLogger: SemanticLogger, semant
     ]
 }
 
+
+/**
+ * Convenience class to conveniently log semantic items from the same client.
+ */
+export class ClientItemLogger {
+    constructor(private clientId: LionWebId, private readonly semanticLogger: SemanticLogger) {}
+    deltaOccurredOnClient = (serializedDelta: SerializedDelta) =>
+        this.semanticLogger(new DeltaOccurredOnClient(this.clientId, serializedDelta))
+    clientSentMessage = <TMessageForRepository>(message: TMessageForRepository) =>
+        this.semanticLogger(new ClientSentMessage(this.clientId, message))
+    clientReceivedMessage = <TMessageForClient>(message: TMessageForClient) =>
+        this.semanticLogger(new ClientReceivedMessage(this.clientId, message))
+    clientAppliedEvent = (event: Event) =>
+        this.semanticLogger(new ClientAppliedEvent(this.clientId, event))
+    clientDidNotApplyEventFromOwnCommand = (originatingCommandId: LionWebId) =>
+        this.semanticLogger(new ClientDidNotApplyEventFromOwnCommand(this.clientId, originatingCommandId))
+    clientHadProblem = (message: string) =>
+        this.semanticLogger(new ClientHadProblem(this.clientId, message))
+}
+
