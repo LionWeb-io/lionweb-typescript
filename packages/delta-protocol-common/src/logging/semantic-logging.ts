@@ -20,7 +20,7 @@ import { LionWebId } from "@lionweb/json"
 import { asMinimalJsonString } from "@lionweb/ts-utils"
 
 import { ansi } from "./ansi.js"
-const { clientInfo, clientWarning, repositoryInfo, withColorAndStyleApplied } = ansi
+const { clientError, clientInfo, clientWarning, repositoryInfo, withColorAndStyleApplied } = ansi
 
 import { Event } from "../payload/event-types.js"
 
@@ -67,9 +67,14 @@ export class ClientDidNotApplyEventFromOwnCommand implements ISemanticLogItem {
     asText = () => clientWarning(`client "${this.clientId}" didn't apply (the delta from) an event because it's the result of a command (with ID="${this.originatingCommandId}") it sent itself`)
 }
 
-export class ClientHadProblem implements ISemanticLogItem {
+export class ClientIssuedError implements ISemanticLogItem {
     constructor(public readonly clientId: LionWebId, public readonly message: string) {}
-    asText = () => clientWarning(`client "${this.clientId}" had a problem: ${this.message}`)
+    asText = () => clientError(`client "${this.clientId}" had a problem: ${this.message}`)
+}
+
+export class ClientIssuedWarning implements ISemanticLogItem {
+    constructor(public readonly clientId: LionWebId, public readonly message: string) {}
+    asText = () => clientWarning(`client "${this.clientId}" issued a warning: ${this.message}`)
 }
 
 export class RepositoryReceivedMessage<TClientMetadata, TIncomingMessage> implements ISemanticLogItem {
@@ -100,17 +105,23 @@ export const semanticLogItemStorer = (): [semanticLogger: SemanticLogger, semant
  */
 export class ClientItemLogger {
     constructor(private clientId: LionWebId, private readonly semanticLogger: SemanticLogger) {}
-    deltaOccurredOnClient = (serializedDelta: SerializedDelta) =>
+    deltaOccurred = (serializedDelta: SerializedDelta) =>
         this.semanticLogger(new DeltaOccurredOnClient(this.clientId, serializedDelta))
-    clientSentMessage = <TMessageForRepository>(message: TMessageForRepository) =>
+    sentMessage = <TMessageForRepository>(message: TMessageForRepository) =>
         this.semanticLogger(new ClientSentMessage(this.clientId, message))
-    clientReceivedMessage = <TMessageForClient>(message: TMessageForClient) =>
+    receivedMessage = <TMessageForClient>(message: TMessageForClient) =>
         this.semanticLogger(new ClientReceivedMessage(this.clientId, message))
-    clientAppliedEvent = (event: Event) =>
+    appliedEvent = (event: Event) =>
         this.semanticLogger(new ClientAppliedEvent(this.clientId, event))
-    clientDidNotApplyEventFromOwnCommand = (originatingCommandId: LionWebId) =>
+    didNotApplyEventFromOwnCommand = (originatingCommandId: LionWebId) =>
         this.semanticLogger(new ClientDidNotApplyEventFromOwnCommand(this.clientId, originatingCommandId))
-    clientHadProblem = (message: string) =>
-        this.semanticLogger(new ClientHadProblem(this.clientId, message))
+    issuedError = (message: string) =>
+        this.semanticLogger(new ClientIssuedError(this.clientId, message))
+    issuedWarning = (message: string) =>
+        this.semanticLogger(new ClientIssuedWarning(this.clientId, message))
+    /*
+     * Using arrow functions here is a slight abuse.
+     * We get away with it because [this.]\ClientItemLogger.semanticLogger has return type `void`.
+     */
 }
 

@@ -105,19 +105,18 @@ export class LionWebClient {
         const commandSender: DeltaReceiver = (delta) => {
             try {
                 const serializedDelta = serializeDelta(delta)
-                clientItemLogger.deltaOccurredOnClient(serializedDelta)
+                clientItemLogger.deltaOccurred(serializedDelta)
                 if (!loading) {
                     const commandId = `cmd-${++commandNumber}`
                     const command = deltaAsCommand(delta, commandId)
                     if (command !== undefined) {
                         messageRelatedClientState.registerIssuedCommandId(commandId)  // (register the ID before actually sending the command so that effectively-synchronous tests mimic the actual behavior more reliably)
                         lowLevelClient.sendMessage(command)
-                        clientItemLogger.clientSentMessage(command)
+                        clientItemLogger.sentMessage(command)
                     }
                 }
             } catch (e: unknown) {
-                console.error(`error occurred during serialization of delta: ${(e as Error).message}`)
-                console.dir(delta)
+                clientItemLogger.issuedError(`error occurred during serialization of delta: ${(e as Error).message}`)
             }
         }
         const effectiveReceiveDelta = instantiateDeltaReceiverForwardingTo === undefined ? commandSender : instantiateDeltaReceiverForwardingTo(commandSender)
@@ -135,13 +134,13 @@ export class LionWebClient {
                     if (delta !== undefined) {
                         try {
                             forest.applyDelta(delta)
-                            clientItemLogger.clientAppliedEvent(event)
+                            clientItemLogger.appliedEvent(event)
                         } catch (e) {
-                            clientItemLogger.clientHadProblem(`couldn't apply delta of type ${delta.constructor.name} because of: ${(e as Error).message}`)
+                            clientItemLogger.issuedError(`couldn't apply delta of type ${delta.constructor.name} because of: ${(e as Error).message}`)
                         }
                     }
                 } catch (eventTranslationError) {
-                    clientItemLogger.clientHadProblem(`couldn't translate event to a delta because of: ${(eventTranslationError as Error).message}\n\tdelta = ${JSON.stringify(event)}`)
+                    clientItemLogger.issuedError(`couldn't translate event to a delta because of: ${(eventTranslationError as Error).message}\n\tdelta = ${JSON.stringify(event)}`)
                 }
             },
             clientItemLogger

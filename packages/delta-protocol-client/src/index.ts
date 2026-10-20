@@ -25,5 +25,5 @@ export type { MessageReceivedOnClient, MessageSentToServer, TextualLogItem, LowL
 
 export type { LowLevelClient, LowLevelClientInstantiator, LowLevelClientLoggingParameters, LowLevelClientParameters } from "./low-level-client.js"
 
-export { MessageRelatedClientState } from "./state.js"
+export { type MessageReceivers, MessageRelatedClientState } from "./state.js"
 

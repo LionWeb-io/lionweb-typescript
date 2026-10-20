@@ -16,7 +16,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import {
-    ansi,
     ClientItemLogger,
     ErrorResponse,
     Event,
@@ -37,16 +36,20 @@ import { ChunkingInfo } from "./chunking.js"
 import { priorityQueueAcceptor } from "./priority-queue.js"
 
 
-const { clientWarning } = ansi
-
-
 /**
- * Internal type def. to store the resolve and reject callbacks of a {@link Promise}.
+ * Type def. for objects that store the resolve and reject callbacks of a {@link Promise}
+ * instantiated in the context of receiving the response to a query.
  */
 export type MessageReceivers = {
     resolve: (value: Message) => void
     reject: (error: ErrorResponse | Error) => void
 }
+
+
+/**
+ * Internal constant to indicate no message have been received yet.
+ */
+const NO_MESSAGE_RECEIVED = -1
 
 
 /**
@@ -82,10 +85,10 @@ export class MessageRelatedClientState {
 
 
     /**
-     * *Note*: only modifu from the outside if you know what you’re doing.
+     * *Note*: only modify from the outside if you know what you’re doing.
      * (Newsflash: you probably don’t...)
      */
-    public lastReceivedSequenceNumber = -1
+    public lastReceivedSequenceNumber = NO_MESSAGE_RECEIVED
 
     private readonly issuedCommandIds: string[] = []
 
@@ -121,7 +124,7 @@ export class MessageRelatedClientState {
             // Note: we can't remove members from issuedCommandIds because there may be multiple events originating fom a single command.
             // So, issuedCommandIds will keep growing indefinitely.
             if (commandOriginatingFromSelf !== undefined) {
-                clientItemLogger.clientDidNotApplyEventFromOwnCommand(commandOriginatingFromSelf.commandId)
+                clientItemLogger.didNotApplyEventFromOwnCommand(commandOriginatingFromSelf.commandId)
                 return
             }
 
@@ -132,7 +135,7 @@ export class MessageRelatedClientState {
             // Note: sequenceNumber must be a POSITIVE integer according to the specification, so >= 1.
 
         this.receiveMessageOnClient = (message: Event | QueryMessage) => {
-            clientItemLogger.clientReceivedMessage(message)
+            clientItemLogger.receivedMessage(message)
             if (isQueryResponse(message)) {
                 const { queryId } = message
                 if (queryId in this.messageReceiversByQueryId) {
@@ -145,7 +148,7 @@ export class MessageRelatedClientState {
                     if (isContinuedQueryResponse(message)) {
                         const chunkingInfo = this.chunkingInfoByQueryId[queryId]
                         if (chunkingInfo === undefined) {
-                            clientItemLogger.clientHadProblem(`received a continued query response for a previous message that wasn’t [declared as] split — ignoring the continued chunk`)
+                            clientItemLogger.issuedWarning(`received a continued query response for a previous message that wasn’t [declared as] split — ignoring the continued chunk`)
                             return  // ~void
                         }
                         const completedMessage = chunkingInfo.maybeCompletedMessage(message)
@@ -164,7 +167,7 @@ export class MessageRelatedClientState {
                     }
                     return  // ~void
                 }
-                console.log(clientWarning(`client received response for a query with ID="${queryId} without having sent a corresponding request - ignoring`))
+                clientItemLogger.issuedWarning(`client received response for a query with ID="${queryId} without having sent a corresponding request - ignoring`)
                 return  // ~void
             }
             if (isEvent(message)) {
@@ -172,7 +175,7 @@ export class MessageRelatedClientState {
                     const { sequenceNumber } = message
                     const chunkingInfo = this.chunkingInfoByEventSequenceNumber[sequenceNumber]
                     if (chunkingInfo === undefined) {
-                        clientItemLogger.clientHadProblem(`received a continued event for a previous message that wasn’t [declared as] split — ignoring the continued event`)
+                        clientItemLogger.issuedWarning(`received a continued event for a previous message that wasn’t [declared as] split — ignoring the continued event`)
                         return  // ~void
                     }
                     const completedMessage = chunkingInfo.maybeCompletedMessage(message)

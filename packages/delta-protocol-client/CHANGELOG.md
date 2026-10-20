@@ -2,7 +2,10 @@
 
 ## 0.11.0 — not yet released
 
-* Extracted message-related client state into a separate `MessageRelatedClientState` class.
+* Extract message-related client state into a separate `MessageRelatedClientState` class.
+  * Fix bug that events from a different client (with a different participation ID) but same command ID were ignored.
+  * Expose `MessageReceivers` type.
+  * Replace or remove occurrences of logging directly to `console`.
 
 
 ## 0.10.0
