@@ -115,8 +115,8 @@ export class MessageRelatedClientState {
             this.lastReceivedSequenceNumber = event.sequenceNumber
 
             const commandOriginatingFromSelf = event.originCommands.find(
-                ({ commandId /*, participationId */ }) =>
-                    this.issuedCommandIds.indexOf(commandId) > -1 // && participationId === this.participationId  <== this is the fix!
+                ({ commandId, participationId }) =>
+                    this.issuedCommandIds.indexOf(commandId) > -1 && participationId === this.participationId
             )
             // Note: we can't remove members from issuedCommandIds because there may be multiple events originating fom a single command.
             // So, issuedCommandIds will keep growing indefinitely.

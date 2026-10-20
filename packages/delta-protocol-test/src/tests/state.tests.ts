@@ -18,7 +18,7 @@
 import { expect } from "chai"
 
 import { MessageRelatedClientState } from "@lionweb/delta-protocol-client"
-import { ClientItemLogger, NoOpEvent, semanticNoOpLogger } from "@lionweb/delta-protocol-common"
+import { ClientItemLogger, Event, NoOpEvent, semanticNoOpLogger } from "@lionweb/delta-protocol-common"
 
 
 describe("message-related client state", () => {
@@ -60,6 +60,69 @@ describe("message-related client state", () => {
 
         state.receiveMessageOnClient(noOpEvent(2))
         expect(state.lastReceivedSequenceNumber).to.equal(3)
+    })
+
+    it("doesn’t process an event it issued itself", () => {
+        const eventsToProcess: Event[] = []
+        const state = new MessageRelatedClientState(
+            (event) => {
+                eventsToProcess.push(event)
+            },
+            new ClientItemLogger("client-1", semanticNoOpLogger)
+        )
+
+        const participationA = "participation-A"
+        state.signOnWith(participationA)
+
+        const commandId = "cmd-alpha"
+        state.registerIssuedCommandId(commandId)
+
+        const event1: NoOpEvent = {
+            messageKind: "NoOpEvent",
+            sequenceNumber: 1,
+            originCommands: [
+                {
+                    commandId: commandId,
+                    participationId: participationA
+                }
+            ],
+            additionalInfos: []
+        }
+        state.receiveMessageOnClient(event1)
+        expect(eventsToProcess).to.deep.equal([])
+
+        const event2: NoOpEvent = {
+            messageKind: "NoOpEvent",
+            sequenceNumber: 2,
+            originCommands: [
+                {
+                    commandId: commandId,
+                    participationId: "participation-B"
+                }
+            ],
+            additionalInfos: []
+        }
+        state.receiveMessageOnClient(event2)
+        expect(eventsToProcess).to.deep.equal([event2])
+    })
+
+    it("processes events without being signed on", () => {
+        const eventsToProcess: Event[] = []
+        const state = new MessageRelatedClientState(
+            (event) => {
+                eventsToProcess.push(event)
+            },
+            new ClientItemLogger("client-1", semanticNoOpLogger)
+        )
+
+        const event: NoOpEvent = {
+            messageKind: "NoOpEvent",
+            sequenceNumber: 1,
+            originCommands: [],
+            additionalInfos: []
+        }
+        state.receiveMessageOnClient(event)
+        expect(eventsToProcess).to.deep.equal([event])
     })
 
 })
