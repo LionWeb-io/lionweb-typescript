@@ -2,6 +2,12 @@
 
 ## 0.11.0 — not yet released
 
+* Extract message-related client state into a separate `MessageRelatedClientState` class.
+  * Fix [bug #384](https://github.com/LionWeb-io/lionweb-typescript/issues/384): events from a different client instance (with a different participation ID) but a command ID registered with this client instance, were ignored.
+  * Issue a warning when an event is received that’s supposedly self-originating but for which a command ID wasn’t registered with this client instance.
+  * Expose `MessageReceivers` type.
+  * Replace or remove occurrences of logging directly to `console`.
+
 
 ## 0.10.0
 

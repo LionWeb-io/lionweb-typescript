@@ -112,7 +112,7 @@ export const nodeBaseDetailedDeserializerWith = (configuration: FactoryConfigura
     const propertyValueDeserializer = configuration.propertyValueDeserializer ?? lionWebVersion.builtinsFacade.propertyValueDeserializer;
     const problemReporter = configuration.problemReporter ?? consoleProblemReporter;
 
-    const symbolTable = new MemoisingSymbolTable(languageBases.map(({language}) => language));
+    const symbolTable = new MemoisingSymbolTable(languageBases.map(({ language }) => language));
     const languageBaseFor = combinedLanguageBaseLookupFor(languageBases);
 
     return (
@@ -245,10 +245,10 @@ export const nodeBaseDetailedDeserializerWith = (configuration: FactoryConfigura
 
         const orphanedNodes = serializationChunk
             .nodes
-            .filter(({id, parent}) => nodesById[id] !== undefined && parent !== null && lookupNodeById(parent) === undefined);
+            .filter(({ id, parent }) => nodesById[id] !== undefined && parent !== null && lookupNodeById(parent) === undefined);
         if (orphanedNodes.length > 0) {
             const multiple = orphanedNodes.length > 1;
-            problemReporter.reportProblem(`${multiple ? `${orphanedNodes.length} ` : ``}orphaned node${multiple ? "s" : ""} encountered, with ID${multiple ? "s" : ""}: ${orphanedNodes.map(({id}) => id).join(", ")}`);
+            problemReporter.reportProblem(`${multiple ? `${orphanedNodes.length} ` : ``}orphaned node${multiple ? "s" : ""} encountered, with ID${multiple ? "s" : ""}: ${orphanedNodes.map(({ id }) => id).join(", ")}`);
         }
 
         return {
@@ -256,7 +256,7 @@ export const nodeBaseDetailedDeserializerWith = (configuration: FactoryConfigura
             roots: serializationChunk
                 .nodes
                 .filter(({ parent }) => parent === null)
-                .map(({id}) => nodesById[id]),
+                .map(({ id }) => nodesById[id]),
             idMapping: new IdMapping(nodesById)
         };
 

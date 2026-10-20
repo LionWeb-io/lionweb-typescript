@@ -132,7 +132,7 @@ describe("serialization and deserialization w.r.t. a [1] reference", () => {
         const serializationChunk = serializeNodeBases([node]);
         const {nodes} = serializationChunk;
         equal(nodes.length, 1);
-        const serReference = nodes[0].references.find(({reference}) => reference.key === metaPointer.key);
+        const serReference = nodes[0].references.find(({ reference }) => reference.key === metaPointer.key);
         isUndefined(serReference);
 
         const deserializedNodes = deserializeNodesAssertingNoProblems(serializationChunk);
@@ -158,7 +158,7 @@ describe("serialization and deserialization w.r.t. a [1] reference", () => {
         const serializationChunk = serializeNodeBases([src, dst]);
         const {nodes} = serializationChunk;
         equal(nodes.length, 2);
-        const serReference = nodes[0].references.find(({reference}) => reference.key === metaPointer.key);
+        const serReference = nodes[0].references.find(({ reference }) => reference.key === metaPointer.key);
         deepEqual(serReference, {
             reference: metaPointer,
             targets: [{

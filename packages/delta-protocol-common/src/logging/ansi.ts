@@ -30,7 +30,8 @@ const colors = {
 const styles = {
     default: 0,
     bold: 1,
-    italic: 3
+    italic: 3,
+    underline: 4
 } as const
 
 
@@ -39,6 +40,7 @@ const withColorAndStyleApplied = (color: keyof typeof colors, style: keyof typeo
         `\x1b[${style === "default" ? "" : `${styles[style]}`}${color === "default" ? "" : `;${colors[color]}m`}${text}\x1b[0m`
 
 
+const clientError = withColorAndStyleApplied("magenta", "underline")
 const clientInfo = withColorAndStyleApplied("magenta", "bold")
 const clientWarning = withColorAndStyleApplied("magenta", "italic")
 const repositoryInfo = withColorAndStyleApplied("cyan", "bold")
@@ -52,6 +54,7 @@ export const ansi = {
     colors,
     styles,
     withColorAndStyleApplied,
+    clientError,
     clientInfo,
     clientWarning,
     repositoryInfo,

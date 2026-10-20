@@ -86,12 +86,12 @@ export const serializerForDeltas = (deltas: Delta[], header?: string) =>
         `import { IDelta } from "../base.js";`,
         `import {`,
         indent(
-            commaSeparated(sortedStrings(deltas.map(({name}) => `${name}Delta`)))
+            commaSeparated(sortedStrings(deltas.map(({ name }) => `${name}Delta`)))
         ),
         `} from "../types.g.js";`,
         `import {`,
         indent(
-            commaSeparated(sortedStrings([...(deltas.map(({name}) => `${name}SerializedDelta`)), `SerializedDelta`]))
+            commaSeparated(sortedStrings([...(deltas.map(({ name }) => `${name}SerializedDelta`)), `SerializedDelta`]))
         ),
         `} from "./types.g.js";`,
         `import { idFrom } from "../../references.js";`,

@@ -80,7 +80,7 @@ export const serializationTypesForDeltas = (deltas: Delta[], header?: string) =>
         ``,
         `export type SerializedDelta =`,
         indent([
-            deltas.map(({name}) => `| ${name}SerializedDelta`),
+            deltas.map(({ name }) => `| ${name}SerializedDelta`),
             `;`
         ]),
         ``,

@@ -19,32 +19,18 @@ import { DeltaReceiver, deltaSerializer, Forest, ILanguageBase, INodeBase } from
 import { LionWebId, LionWebJsonChunk, LionWebJsonDeltaChunk } from "@lionweb/json"
 
 import {
-    ansi,
-    ClientAppliedEvent,
-    ClientDidNotApplyEventFromOwnCommand,
-    ClientHadProblem,
-    ClientReceivedMessage,
-    ClientSentMessage,
+    ClientItemLogger,
     Command,
-    DeltaOccurredOnClient,
     deltaToCommandTranslator,
-    ErrorResponse,
     Event,
     eventToDeltaTranslator,
     GetAvailableIdsRequest,
     GetAvailableIdsResponse,
     InformAboutChangingPartitionsRequest,
-    isContinuedEvent,
-    isContinuedQueryResponse,
-    isErrorResponse,
-    isEvent,
-    isQueryResponse,
     ListAndSubscribePartitionsRequest,
     ListAndSubscribePartitionsResponse,
     ListPartitionsRequest,
     ListPartitionsResponse,
-    maybeChunkPropertyForSplittableEvent,
-    maybeChunkPropertyForSplittableQueryResponse,
     Message,
     QueryMessage,
     ReconnectRequest,
@@ -54,18 +40,14 @@ import {
     SignOffRequest,
     SignOnRequest,
     SignOnResponse,
-    SplittableMessage,
     SubscribeToChangingPartitionsRequest,
     SubscribeToPartitionChangesParameters,
     SubscribeToPartitionContentsRequest,
     SubscribeToPartitionContentsResponse,
     UnsubscribeFromPartitionContentsRequest
 } from "@lionweb/delta-protocol-common"
-import { ChunkingInfo } from "./chunking.js"
 import { LowLevelClient, LowLevelClientInstantiator } from "./low-level-client.js"
-import { priorityQueueAcceptor } from "./priority-queue.js"
-
-const { clientWarning } = ansi
+import { MessageRelatedClientState } from "./state.js"
 
 
 /**
@@ -90,41 +72,17 @@ export type LionWebClientParameters = {
 
 
 /**
- * Internal type def. to store the resolve and reject callbacks of a {@link Promise}.
- */
-type MessageReceivers = {
-    resolve: (value: Message) => void
-    reject: (error: ErrorResponse | Error) => void
-}
-
-
-/**
  * Implementation of a LionWeb delta protocol client.
  */
 export class LionWebClient {
 
-    private _participationId?: LionWebId // !== undefined => signed on
-
-    get participationId() {
-        return this._participationId
-    }
-
-    private signedOff = false
-
-    private lastReceivedSequenceNumber = -1
-    // TODO  could also get this from the priority queue (which would need to be adapted for that)
-
     private constructor(
         public readonly repositoryId: LionWebId,
         public readonly clientId: LionWebId,
-        public forest: Forest,
+        public readonly forest: Forest,
+        private readonly messageRelatedClientState: MessageRelatedClientState,
         private readonly lowLevelClient: LowLevelClient<Command | QueryMessage>
     ) {}
-
-    private readonly messageReceiversByQueryId: { [queryId: string]: MessageReceivers } = {}
-    private readonly chunkingInfoByQueryId: { [queryId: string]: ChunkingInfo } = {}
-
-    private readonly chunkingInfoByEventSequenceNumber: { [sequenceNumber: number]: ChunkingInfo } = {}
 
     static async create({
         repositoryId,
@@ -137,29 +95,28 @@ export class LionWebClient {
         lowLevelClientInstantiator
     }: LionWebClientParameters): Promise<LionWebClient> {
         const log = semanticLoggerFunctionFrom(semanticLogger)
+        const clientItemLogger = new ClientItemLogger(clientId, log)
 
         const deltaAsCommand = deltaToCommandTranslator()
         const serializeDelta = deltaSerializer()
 
         let loading = true
         let commandNumber = 0
-        const issuedCommandIds: string[] = []
         const commandSender: DeltaReceiver = (delta) => {
             try {
                 const serializedDelta = serializeDelta(delta)
-                log(new DeltaOccurredOnClient(clientId, serializedDelta))
+                clientItemLogger.deltaOccurred(serializedDelta)
                 if (!loading) {
                     const commandId = `cmd-${++commandNumber}`
                     const command = deltaAsCommand(delta, commandId)
                     if (command !== undefined) {
-                        issuedCommandIds.push(commandId)  // (register the ID before actually sending the command so that effectively-synchronous tests mimic the actual behavior more reliably)
+                        messageRelatedClientState.registerIssuedCommandId(commandId)  // (register the ID before actually sending the command so that effectively-synchronous tests mimic the actual behavior more reliably)
                         lowLevelClient.sendMessage(command)
-                        log(new ClientSentMessage(clientId, command))
+                        clientItemLogger.sentMessage(command)
                     }
                 }
             } catch (e: unknown) {
-                console.error(`error occurred during serialization of delta: ${(e as Error).message}`)
-                console.dir(delta)
+                clientItemLogger.issuedError(`error occurred during serialization of delta: ${(e as Error).message}`)
             }
         }
         const effectiveReceiveDelta = instantiateDeltaReceiverForwardingTo === undefined ? commandSender : instantiateDeltaReceiverForwardingTo(commandSender)
@@ -170,100 +127,38 @@ export class LionWebClient {
         const eventAsDelta = eventToDeltaTranslator(languageBases, forest.deserialize)
         loading = false
 
-        const processEvent = (event: Event) => {
-            lionWebClient.lastReceivedSequenceNumber = event.sequenceNumber
-            const commandOriginatingFromSelf = event.originCommands.find(({ commandId }) => issuedCommandIds.indexOf(commandId) > -1)
-            // Note: we can't remove members from issuedCommandIds because there may be multiple events originating fom a single command.
-            if (commandOriginatingFromSelf === undefined) {
+        const messageRelatedClientState = new MessageRelatedClientState(
+            (event) => {
                 try {
                     const delta = eventAsDelta(event, forest.idMapping)
                     if (delta !== undefined) {
                         try {
                             forest.applyDelta(delta)
-                            log(new ClientAppliedEvent(clientId, event))
+                            clientItemLogger.appliedEvent(event)
                         } catch (e) {
-                            log(new ClientHadProblem(clientId, `couldn't apply delta of type ${delta.constructor.name} because of: ${(e as Error).message}`))
+                            clientItemLogger.issuedError(`couldn't apply delta of type ${delta.constructor.name} because of: ${(e as Error).message}`)
                         }
                     }
                 } catch (eventTranslationError) {
-                    log(new ClientHadProblem(clientId, `couldn't translate event to a delta because of: ${(eventTranslationError as Error).message}\n\tdelta = ${JSON.stringify(event)}`))
+                    clientItemLogger.issuedError(`couldn't translate event to a delta because of: ${(eventTranslationError as Error).message}\n\tdelta = ${JSON.stringify(event)}`)
                 }
-            } else {
-                log(new ClientDidNotApplyEventFromOwnCommand(clientId, commandOriginatingFromSelf.commandId))
-            }
-        }
-
-        const acceptEvent = priorityQueueAcceptor<Event>(({sequenceNumber}) => sequenceNumber, 1, processEvent)
-        // Note: sequenceNumber must be a POSITIVE integer according to the specification, so >= 1.
-
-        const receiveMessageOnClient = (message: Event | QueryMessage) => {
-            log(new ClientReceivedMessage(clientId, message))
-            if (isQueryResponse(message)) {
-                const { queryId } = message
-                if (queryId in lionWebClient.messageReceiversByQueryId) {
-                    const messageReceivers = lionWebClient.messageReceiversByQueryId[queryId]
-                    if (isErrorResponse(message)) {
-                        messageReceivers.reject(message)
-                        delete lionWebClient.messageReceiversByQueryId[queryId]
-                        return  // ~void
-                    }
-                    if (isContinuedQueryResponse(message)) {
-                        const chunkingInfo = lionWebClient.chunkingInfoByQueryId[queryId]
-                        if (chunkingInfo === undefined) {
-                            log(new ClientHadProblem(clientId, `received a continued query response for a previous message that wasn’t [declared as] split — ignoring the continued chunk`))
-                            return  // ~void
-                        }
-                        const completedMessage = chunkingInfo.maybeCompletedMessage(message)
-                        if (completedMessage !== undefined) {
-                            messageReceivers.resolve(completedMessage)
-                            delete lionWebClient.messageReceiversByQueryId[queryId]
-                        }
-                        return  // ~void
-                    }
-                    const chunkProperty = maybeChunkPropertyForSplittableQueryResponse(message)
-                    if (chunkProperty !== undefined && (message as SplittableMessage).split) {  // chunkProperty is defined => message must be a SplittableMessage
-                        lionWebClient.chunkingInfoByQueryId[queryId] = new ChunkingInfo(message, chunkProperty)
-                    } else {
-                        messageReceivers.resolve(message)
-                        delete lionWebClient.messageReceiversByQueryId[queryId]
-                    }
-                    return  // ~void
-                }
-                console.log(clientWarning(`client received response for a query with ID="${queryId} without having sent a corresponding request - ignoring`))
-                return  // ~void
-            }
-            if (isEvent(message)) {
-                if (isContinuedEvent(message)) {
-                    const { sequenceNumber } = message
-                    const chunkingInfo = lionWebClient.chunkingInfoByEventSequenceNumber[sequenceNumber]
-                    if (chunkingInfo === undefined) {
-                        log(new ClientHadProblem(clientId, `received a continued event for a previous message that wasn’t [declared as] split — ignoring the continued event`))
-                        return  // ~void
-                    }
-                    const completedMessage = chunkingInfo.maybeCompletedMessage(message)
-                    if (completedMessage !== undefined) {
-                        acceptEvent(completedMessage as Event)
-                        delete lionWebClient.chunkingInfoByEventSequenceNumber[sequenceNumber]
-                    }
-                    return  // ~void
-                }
-                const chunkProperty = maybeChunkPropertyForSplittableEvent(message)
-                if (chunkProperty !== undefined && (message as SplittableMessage).split) {
-                    lionWebClient.chunkingInfoByEventSequenceNumber[message.sequenceNumber] = new ChunkingInfo(message, chunkProperty)
-                } else {
-                    acceptEvent(message)
-                }
-                return  // ~void
-            }
-        }
+            },
+            clientItemLogger
+        )
 
         const lowLevelClient = await
-            lowLevelClientInstantiator({ url, clientId, receiveMessageOnClient /* no logging parameter */ })
+            lowLevelClientInstantiator({
+                url,
+                clientId,
+                receiveMessageOnClient: messageRelatedClientState.receiveMessageOnClient.bind(messageRelatedClientState)
+                /* no logging parameter */
+            })
 
         const lionWebClient = new LionWebClient(
             repositoryId,
             clientId,
             forest,
+            messageRelatedClientState,
             lowLevelClient
         ) // Note: we need this `lionWebClient` constant non-inlined for access to various private fields from the functions implemented above.
         return lionWebClient
@@ -272,6 +167,15 @@ export class LionWebClient {
     async disconnect(): Promise<void> {
         // TODO  abort responses to all queries that the repository hasn't responded to?
         await this.lowLevelClient.disconnect()
+    }
+
+
+    /**
+     * The participation ID under which this client is connected,
+     * or `undefined` if it isn’t connected.
+     */
+    get participationId() {
+        return this.messageRelatedClientState.participationId
     }
 
 
@@ -284,10 +188,13 @@ export class LionWebClient {
      */
     private readonly makeQuery = (queryRequest: QueryMessage): Promise<QueryMessage> =>
         new Promise((resolveResponse: (value: QueryMessage) => void, rejectResponse) => {
-            this.messageReceiversByQueryId[queryRequest.queryId] = {
-                resolve: resolveResponse as (value: Message) => void,
-                reject: rejectResponse
-            }
+            this.messageRelatedClientState.registerMessageReceivers(
+                queryRequest.queryId,
+                {
+                    resolve: resolveResponse as (value: Message) => void,
+                    reject: rejectResponse
+                }
+            )
             this.lowLevelClient.sendMessage(queryRequest)
                 .catch(rejectResponse)
         })
@@ -336,7 +243,7 @@ export class LionWebClient {
 
     /** § 5.5.3.1 */
     async signOn(queryId: LionWebId, repositoryId: LionWebId): Promise<void> {
-        if (this.signedOff) {
+        if (this.messageRelatedClientState.signedOff) {
             return Promise.reject(new Error(`can't sign on after having signed off`))
         }
         const response = await this.makeQuery({
@@ -347,7 +254,7 @@ export class LionWebClient {
             clientId: this.clientId,
             additionalInfos: []
         } as SignOnRequest) as SignOnResponse
-        this._participationId = response.participationId
+        this.messageRelatedClientState.signOnWith(response.participationId)
     }
 
     /** § 5.5.3.2 */
@@ -357,23 +264,22 @@ export class LionWebClient {
             queryId,
             additionalInfos: []
         } as SignOffRequest)
-        this.signedOff = true
-        this._participationId = undefined
+        this.messageRelatedClientState.signOff()
     }
 
     /** § 5.5.3.3 */
-    async reconnect(queryId: LionWebId, lastReceivedSequenceNumber: number): Promise<void> {
+    async reconnect(queryId: LionWebId): Promise<void> {
         const response = await this.makeQuery({
             messageKind: "ReconnectRequest",
             queryId,
             deltaProtocolVersion: "2026.1",
             clientId: this.clientId,
             repositoryId: this.repositoryId,
-            participationId: this.participationId,
-            lastReceivedSequenceNumber,
+            participationId: this.messageRelatedClientState.participationId,
+            lastReceivedSequenceNumber: this.messageRelatedClientState.lastReceivedSequenceNumber,
             additionalInfos: []
         } as ReconnectRequest) as ReconnectResponse
-        this.lastReceivedSequenceNumber = response.lastSentSequenceNumber
+        this.messageRelatedClientState.lastReceivedSequenceNumber = response.lastSentSequenceNumber
     }
 
     /** § 5.5.4.1 */
@@ -412,7 +318,7 @@ export class LionWebClient {
     // commands, in order of the specification (§ 5.7):
 
     private checkSignedOn(): void {
-        if (this._participationId === undefined) {
+        if (!this.messageRelatedClientState.signedOn) {
             throw new Error(`client ${this.clientId} can't send a command without being signed on`)
         }
     }

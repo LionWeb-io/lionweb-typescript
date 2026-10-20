@@ -53,7 +53,7 @@ const deserializationExpressionForField = (name: string, type: Type) => {
 const deserializationBlockForDelta = ({name, fields}: Delta) =>
     [
         fields.map((field) => `const ${field.name} = ${deserializationExpressionForField(field.name, field.type)};`),
-        `return new ${name}Delta(${fields.map(({name}) => name).join(", ")});`
+        `return new ${name}Delta(${fields.map(({ name }) => name).join(", ")});`
     ]
 
 
@@ -67,13 +67,13 @@ export const deserializerForDeltas = (deltas: Delta[], header?: string) =>
         `import { SerializedDelta } from "./types.g.js";`,
         `import { DeltaDeserializer } from "./base.js";`,
         `import {`,
-        indent(commaSeparated(sortedStrings(deltas.map(({name}) => `${name}Delta`)))),
+        indent(commaSeparated(sortedStrings(deltas.map(({ name }) => `${name}Delta`)))),
         `} from "../types.g.js";`,
         ``,
         ``,
         `export const deltaDeserializer = (languageBases: ILanguageBase[], idMapping: IdMapping): DeltaDeserializer => {`,
         indent([
-            `const { resolvedPropertyFrom, resolvedContainmentFrom, resolvedReferenceFrom } = featureResolversFor(languageBases.map(({language}) => language));`,
+            `const { resolvedPropertyFrom, resolvedContainmentFrom, resolvedReferenceFrom } = featureResolversFor(languageBases.map(({ language }) => language));`,
             `const deserializedDelta = (delta: SerializedDelta): IDelta => {`,
             indent([
                 `switch (delta.kind) {`,

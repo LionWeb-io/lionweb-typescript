@@ -114,7 +114,7 @@ export const eventToDeltaTranslator = (
             const chunk = (event as ET)[propertyName] as LionWebJsonDeltaChunk
             const { nodes, idMapping: newIdMapping } = deserializer(chunk, idMapping)
             // look up anchor node, and verify that the chunk is a single delta chunk:
-            const unclaimedNodes = nodes.filter(({parent}) => parent === undefined)
+            const unclaimedNodes = nodes.filter(({ parent }) => parent === undefined)
             if (unclaimedNodes.length !== 1) {
                 throw new Error(`expected exactly 1 (candidate) anchor node in deserialization of ${propertyName.toString()} chunk in ${event.messageKind} event, but got ${unclaimedNodes.length}`)
             }
@@ -122,7 +122,7 @@ export const eventToDeltaTranslator = (
             return unclaimedNodes[0]
         }
 
-        const { resolvedPropertyFrom, resolvedContainmentFrom, resolvedReferenceFrom } = featureResolversFor(languageBases.map(({language}) => language))
+        const { resolvedPropertyFrom, resolvedContainmentFrom, resolvedReferenceFrom } = featureResolversFor(languageBases.map(({ language }) => language))
 
         const resolvedRefTo = (ref: IdOrNull | undefined) =>
             (ref === undefined || ref === null) ? referenceToSet : idMapping.fromId(ref)

@@ -40,11 +40,11 @@ describe(`io.lionweb.mps.specific language`, () => {
 
     it(`its classifiers dictionary matches its definition`, () => {
         ioLionWebMpsSpecificLanguage.entities
-            .forEach(({name}) => {
+            .forEach(({ name }) => {
                 isTrue(name in classes, `entity "${name}" not mapped to a class`)
             })
         Object.values(classes)
-            .forEach(({name}) => {
+            .forEach(({ name }) => {
                 if (name !== IoLionWebMpsSpecificAnnotation.name) {
                     const entity = (ioLionWebMpsSpecificClassifiers as Record<string, unknown>)[name]
                     isTrue(entity !== undefined, `class "${name}" doesn’t correspond to anything`)

@@ -2,6 +2,10 @@
 
 ## 0.11.0 — not yet released
 
+* Introduce a `ClientItemLogger` class to conveniently log `ISemanticLogItem`s pertaining to a specific client.
+  * Rename internal `ClientHadProblem` logging class to `ClientIssuedError`, and report <u>accordingly</u>:
+    * Expose an ANSI style `clientError`: underlined magenta.
+
 
 ## 0.10.0
 

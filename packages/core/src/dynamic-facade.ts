@@ -30,7 +30,7 @@ export const dynamicReaderFor = (lionWebVersion: LionWebVersion): Reader<Dynamic
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (node.settings as any)[feature.key],
     enumerationLiteralFrom: (value, enumeration) =>
-        enumeration.literals.find(({key}) => key === value)
+        enumeration.literals.find(({ key }) => key === value)
         ?? null,    // (undefined -> null)
     resolveInfoFor: propertyGetterFor(lionWebVersion.builtinsFacade.features.inamed_name.key)
 })
@@ -47,6 +47,6 @@ export const dynamicWriter: Writer<DynamicNode> = ({
     setFeatureValue: (node, feature, value) => {
         updateSettingsKeyBased(node.settings, feature, value)
     },
-    encodingOf: ({key}) => key
+    encodingOf: ({ key }) => key
 })
 

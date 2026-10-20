@@ -55,7 +55,7 @@ import {
 
 
 export const deltaDeserializer = (languageBases: ILanguageBase[], idMapping: IdMapping): DeltaDeserializer => {
-    const { resolvedPropertyFrom, resolvedContainmentFrom, resolvedReferenceFrom } = featureResolversFor(languageBases.map(({language}) => language));
+    const { resolvedPropertyFrom, resolvedContainmentFrom, resolvedReferenceFrom } = featureResolversFor(languageBases.map(({ language }) => language));
     const deserializedDelta = (delta: SerializedDelta): IDelta => {
         switch (delta.kind) {
             case "PartitionAdded": {

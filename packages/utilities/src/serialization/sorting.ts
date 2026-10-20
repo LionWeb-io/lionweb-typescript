@@ -12,13 +12,13 @@ import { mappedComparer, mappedLexiComparer, regularStringComparer, sorterWith }
 import { orderedMetaPointer, orderedSerializedLanguageReference, orderedSerializedReferenceTarget } from "./ordering.js"
 
 
-const sortedUsedLanguages = sorterWith<LionWebJsonUsedLanguage>(mappedLexiComparer([({key}) => key, ({version}) => version], regularStringComparer))
-const sortedNodes = sorterWith<LionWebJsonNode>(mappedComparer(({id}) => id, regularStringComparer))
-const metaPointerComparer = mappedLexiComparer<LionWebJsonMetaPointer, string>([({language}) => language, ({version}) => version, ({key}) => key], regularStringComparer)
-const sortedProperties = sorterWith<LionWebJsonProperty>(mappedComparer(({property}) => property, metaPointerComparer))
-const sortedContainments = sorterWith<LionWebJsonContainment>(mappedComparer(({containment}) => containment, metaPointerComparer))
-const sortedReferences = sorterWith<LionWebJsonReference>(mappedComparer(({reference}) => reference, metaPointerComparer))
-const sortedTargets = sorterWith<LionWebJsonReferenceTarget>(mappedComparer(({reference, resolveInfo}) => (reference ?? resolveInfo)!, regularStringComparer))
+const sortedUsedLanguages = sorterWith<LionWebJsonUsedLanguage>(mappedLexiComparer([({ key }) => key, ({ version }) => version], regularStringComparer))
+const sortedNodes = sorterWith<LionWebJsonNode>(mappedComparer(({ id }) => id, regularStringComparer))
+const metaPointerComparer = mappedLexiComparer<LionWebJsonMetaPointer, string>([({ language }) => language, ({ version }) => version, ({ key }) => key], regularStringComparer)
+const sortedProperties = sorterWith<LionWebJsonProperty>(mappedComparer(({ property }) => property, metaPointerComparer))
+const sortedContainments = sorterWith<LionWebJsonContainment>(mappedComparer(({ containment }) => containment, metaPointerComparer))
+const sortedReferences = sorterWith<LionWebJsonReference>(mappedComparer(({ reference }) => reference, metaPointerComparer))
+const sortedTargets = sorterWith<LionWebJsonReferenceTarget>(mappedComparer(({ reference, resolveInfo }) => (reference ?? resolveInfo)!, regularStringComparer))
 
 /**
  * @return A sorted version of a {@link LionWebJsonChunk serialization chunk}, meaning:
@@ -42,12 +42,12 @@ export const sortedSerializationChunk = ({serializationFormatVersion, languages,
                 classifier: orderedMetaPointer(node.classifier),
                 properties: sortedProperties(node.properties),
                 containments: sortedContainments(node.containments)
-                        .map(({containment, children}) => ({
+                        .map(({ containment, children }) => ({
                             containment: orderedMetaPointer(containment),
                             children: sortConnections ? children.sort() : children
                         })),
                 references: sortedReferences(node.references)
-                        .map(({reference, targets}) => ({
+                        .map(({ reference, targets }) => ({
                             reference: orderedMetaPointer(reference),
                             targets: sortConnections
                                 ? sortedTargets(targets).map(orderedSerializedReferenceTarget)

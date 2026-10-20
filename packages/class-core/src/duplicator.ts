@@ -117,7 +117,7 @@ export const deepDuplicateWith = (duplicateNode: NodeDuplicator): Duplicator =>
             }
         });
 
-        return nodes.map(({id}) => duplicatedNodesByOriginalId[id]);
+        return nodes.map(({ id }) => duplicatedNodesByOriginalId[id]);
 
     };
 
