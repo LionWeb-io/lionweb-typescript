@@ -18,13 +18,27 @@
 import { expect } from "chai"
 
 import { MessageRelatedClientState } from "@lionweb/delta-protocol-client"
-import { ClientItemLogger, Event, NoOpEvent, semanticNoOpLogger } from "@lionweb/delta-protocol-common"
+import {
+    ClientDidNotApplyEventFromOwnCommand,
+    ClientIssuedWarning,
+    ClientItemLogger,
+    Event,
+    ISemanticLogItem,
+    NoOpEvent,
+    semanticLogItemStorer,
+    semanticNoOpLogger
+} from "@lionweb/delta-protocol-common"
 
 
-describe("message-related client state", () => {
+describe.only("message-related client state", () => {
+
+    const clientId = "client-1"
 
     const newSimpleTestState = () =>
-        new MessageRelatedClientState((_) => {}, new ClientItemLogger("client-1", semanticNoOpLogger))
+        new MessageRelatedClientState(
+            (_) => {},
+            new ClientItemLogger(clientId, semanticNoOpLogger)
+        )
 
     it("handles sign in and sign off correctly", () => {
         const state = newSimpleTestState()
@@ -62,14 +76,22 @@ describe("message-related client state", () => {
         expect(state.lastReceivedSequenceNumber).to.equal(3)
     })
 
-    it("doesn’t process an event it issued itself", () => {
+
+
+    const newTestFixture = (): [state: MessageRelatedClientState, eventsToProcess: Event[], clientLogItems: ISemanticLogItem[]] => {
         const eventsToProcess: Event[] = []
+        const [semanticLogger, semanticLogItems] = semanticLogItemStorer()
         const state = new MessageRelatedClientState(
             (event) => {
                 eventsToProcess.push(event)
             },
-            new ClientItemLogger("client-1", semanticNoOpLogger)
+            new ClientItemLogger(clientId, semanticLogger)
         )
+        return [state, eventsToProcess, semanticLogItems]
+    }
+
+    it("doesn’t process an event it[’s supposed to have] originated itself", () => {
+        const [state, eventsToProcess, clientLogItems] = newTestFixture()
 
         const participationA = "participation-A"
         state.signOnWith(participationA)
@@ -90,6 +112,9 @@ describe("message-related client state", () => {
         }
         state.receiveMessageOnClient(event1)
         expect(eventsToProcess).to.deep.equal([])
+        expect(clientLogItems.length).to.equal(2)
+        expect(clientLogItems[1] instanceof ClientDidNotApplyEventFromOwnCommand).to.equal(true)
+        expect((clientLogItems[1] as ClientDidNotApplyEventFromOwnCommand).originatingCommandId).to.equal(commandId)
 
         const event2: NoOpEvent = {
             messageKind: "NoOpEvent",
@@ -104,16 +129,33 @@ describe("message-related client state", () => {
         }
         state.receiveMessageOnClient(event2)
         expect(eventsToProcess).to.deep.equal([event2])
+        expect(clientLogItems.length).to.equal(3)
+    })
+
+    it("warns about supposedly self-originating events with unregistered command IDs", () => {
+        const [state, _eventsToProcess, clientLogItems] = newTestFixture()
+
+        const participationId = "participation-A"
+        state.signOnWith(participationId)
+        const commandId = "command-alt-delete"
+        state.receiveMessageOnClient({
+            messageKind: "NoOpEvent",
+            sequenceNumber: 1,
+            originCommands: [
+                {
+                    commandId,
+                    participationId
+                }
+            ],
+            additionalInfos: []
+        })
+        expect(clientLogItems.length).to.equal(2)
+        expect(clientLogItems[1] instanceof ClientIssuedWarning).to.equal(true)
+        expect((clientLogItems[1] as ClientIssuedWarning).message).to.equal(`received an event stating to have this client as origin (through participation ID "participation-A") without a registration of one or more command IDs ("${commandId}")`)
     })
 
     it("processes events without being signed on", () => {
-        const eventsToProcess: Event[] = []
-        const state = new MessageRelatedClientState(
-            (event) => {
-                eventsToProcess.push(event)
-            },
-            new ClientItemLogger("client-1", semanticNoOpLogger)
-        )
+        const [state, eventsToProcess, _clientLogItems] = newTestFixture()
 
         const event: NoOpEvent = {
             messageKind: "NoOpEvent",

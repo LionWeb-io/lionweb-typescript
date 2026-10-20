@@ -117,15 +117,25 @@ export class MessageRelatedClientState {
         const _processEvent = (event: Event) => {
             this.lastReceivedSequenceNumber = event.sequenceNumber
 
-            const commandOriginatingFromSelf = event.originCommands.find(
-                ({ commandId, participationId }) =>
-                    this.issuedCommandIds.indexOf(commandId) > -1 && participationId === this.participationId
+            const selfOriginatedCommands = event.originCommands.filter(
+                ({ participationId }) => participationId === this.participationId
+            )
+            const commandOriginatingFromSelf = selfOriginatedCommands.find(
+                ({ commandId }) =>
+                    this.issuedCommandIds.indexOf(commandId) > -1
             )
             // Note: we can't remove members from issuedCommandIds because there may be multiple events originating fom a single command.
             // So, issuedCommandIds will keep growing indefinitely.
             if (commandOriginatingFromSelf !== undefined) {
                 clientItemLogger.didNotApplyEventFromOwnCommand(commandOriginatingFromSelf.commandId)
                 return
+            }
+            const unregisteredCommandIds = selfOriginatedCommands.filter(
+                ({ commandId }) =>
+                    this.issuedCommandIds.indexOf(commandId) === -1
+            )
+            if (unregisteredCommandIds.length > 0) {
+                clientItemLogger.issuedWarning(`received an event stating to have this client as origin (through participation ID "${this.participationId}") without a registration of one or more command IDs (${unregisteredCommandIds.map(({ commandId }) => `"${commandId}"`).join(", ")})`)
             }
 
             processEvent(event)
