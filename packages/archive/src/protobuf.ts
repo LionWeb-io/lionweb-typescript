@@ -76,7 +76,8 @@ export type EncodeOptions = {
     /**
      * Whether to omit properties whose value is null, containments without children and references without targets,
      * as LionWeb Java does with `serializeEmptyFeatures` set to false. Omitted features read back as absent, so the
-     * decoded chunk is equivalent to, but no longer equal to the encoded one. Default: false.
+     * decoded chunk is equivalent to, but no longer equal to the encoded one.
+     * Default: `false`.
      */
     omitEmptyFeatures?: boolean
 }

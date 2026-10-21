@@ -28,7 +28,7 @@ export type SaveOptions<T extends "uint8array" | "blob"> = {
     lionWebVersion?: string
     /** Archives whose other files (anything but chunks and metadata) are carried over, unless their names are already used. */
     carryOtherFilesFrom?: readonly LoadedArchive[]
-    /** See {@link EncodeOptions}. Default: true for a LionWeb Archive (as LionWeb Java does), false for the `snapshot` layout. */
+    /** See {@link EncodeOptions}. Default: `true` for a LionWeb Archive (as LionWeb Java does), false for the `snapshot` layout. */
     omitEmptyFeatures?: boolean
     /** Default: `STORE` (no compression, favoring speed, as LionWeb Java does) for a LionWeb Archive, `DEFLATE` for the `snapshot` layout. */
     compression?: "STORE" | "DEFLATE"

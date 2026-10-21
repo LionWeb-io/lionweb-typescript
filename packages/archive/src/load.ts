@@ -10,7 +10,7 @@ import { validateChunk } from "./validation.js"
 export type LoadOptions = {
     /** Called before the first chunk and after each chunk entry. */
     onProgress?: (progress: LoadProgress) => void
-    /** Whether to check the structure of each chunk, reporting invalid ones as errors. Default: true. */
+    /** Whether to check the structure of each chunk, reporting invalid ones as errors. Default: `true`. */
     validate?: boolean
 }
 

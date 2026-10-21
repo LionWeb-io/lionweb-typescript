@@ -39,7 +39,7 @@ export type SerializerConfiguration<NT extends Node, RT extends Node = NT> = {
     /**
      * Determines whether empty feature values are explicitly serialized or skipped during serialization.
      * (The specification states that empty feature values SHOULD be serialized, but not that they MUST be.)
-     * Default = true, meaning that empty feature values are *not* skipped.
+     * Default = `true`, meaning that empty feature values are *not* skipped.
      */
     serializeEmptyFeatures?: boolean
 

@@ -15,12 +15,13 @@ export type LanguageDeserializationData = {
     serializationChunk: LionWebJsonChunk
     /**
      * The version of the LionWeb serialization format to deserialize from.
-     * Default = {@link LionWebVersions.v2023_1}.
+     * Default: {@link LionWebVersions.v2023_1}.
      */
     lionWebVersion?: LionWebVersion
     dependentLanguages?: Language[]
     /**
-     * Default = {@link consoleProblemReporter}.
+     * A {@link ProblemReporter} to report problems with.
+     * Default: {@link consoleProblemReporter}.
      */
     problemReporter?: ProblemReporter
 }
