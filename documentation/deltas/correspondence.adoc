@@ -1,56 +1,67 @@
 = Correspondence between commands, events, and deltas
 
+This document describes the correspondence between commands, events, and deltas as implemented in the LionWeb TypeScript implementation.
+
+== Commands, Events, and Deltas Correspondence Table
+
+[cols="1,1,1,1,1"]
 |===
-| command (technical name)                            |spec. §   | event (technical name)                                | spec. §  | delta?
+| command (technical name)                            | spec. §   | event (technical name)                               | spec. §  | delta?
 
-| ContinuedCommand                                    | 5.6.1    | ContinuedEvent                                        | 5.7.1    | &cross;
-| AddPartition                                        | 5.6.2.1  | PartitionAdded                                        | 5.7.2.1  | &check;
-| DeletePartition                                     | 5.6.2.2  | PartitionDeleted                                      | 5.7.2.2  | &check;
-| ChangeClassifier                                    | 5.6.3.1  | ClassifierChanged                                     | 5.7.3.1  | &cross;
-| AddProperty                                         | 5.6.4.1  | PropertyAdded                                         | 5.7.4.1  | &check;
-| DeleteProperty                                      | 5.6.4.2  | PropertyDeleted                                       | 5.7.4.2  | &check;
-| ChangeProperty                                      | 5.6.4.3  | PropertyChanged                                       | 5.7.4.2  | &check;
-| AddChild                                            | 5.6.5.1  | ChildAdded                                            | 5.7.5.1  | &check;
-| DeleteChild                                         | 5.6.5.2  | ChildDeleted                                          | 5.7.5.2  | &check;
-| ReplaceChild                                        | 5.6.5.3  | ChildReplaced                                         | 5.7.5.3  | &check;
-| MoveChildFromContainmentInOtherParent               | 5.6.5.4  | ChildMovedFromContainmentInOtherParent                | 5.7.5.4  | &check;
-| MoveChildFromOtherContainmentInSameParent           | 5.6.5.5  | ChildMovedFromOtherContainmentInSameParent            | 5.7.5.5  | &check;
-| MoveChildInSameContainmentInSameParent              | 5.6.5.6  | ChildMovedInSameContainmentInSameParent               | 5.7.5.6  | &check;
-| MoveAndReplaceChildFromContainmentInOtherParent     | 5.6.5.7  | ChildMovedAndReplacedFromContainmentInOtherParent     | 5.7.5.7  | &check;
-| MoveAndReplaceChildFromOtherContainmentInSameParent | 5.6.5.8  | ChildMovedAndReplacedFromOtherContainmentInSameParent | 5.7.5.8  | &check;
-| MoveAndReplaceChildInSameContainmentInSameParent    | 5.6.5.9  | ChildMovedAndReplacedInSameContainmentInSameParent    | 5.7.5.9  | &check;
-| AddAnnotation                                       | 5.6.6.1  | AnnotationAdded                                       | 5.7.6.1  | &check;
-| DeleteAnnotation                                    | 5.6.6.2  | AnnotationDeleted                                     | 5.7.6.2  | &check;
-| ReplaceAnnotation                                   | 5.6.6.3  | AnnotationReplaced                                    | 5.7.6.3  | &check;
-| MoveAnnotationFromOtherParent                       | 5.6.6.4  | AnnotationMovedFromOtherParent                        | 5.7.6.4  | &check;
-| MoveAnnotationInSameParent                          | 5.6.6.5  | AnnotationMovedInSameParent                           | 5.7.6.5  | &check;
-| MoveAndReplaceAnnotationFromOtherParent             | 5.6.6.6  | AnnotationMovedAndReplacedFromOtherParent             | 5.7.6.6  | &check;
-| MoveAndReplaceAnnotationInSameParent                | 5.6.6.7  | AnnotationMovedAndReplacedInSameParent                | 5.7.6.7  | &check;
-| AddReference                                        | 5.6.7.1  | ReferenceAdded                                        | 5.7.7.1  | &check;
-| DeleteReference                                     | 5.6.7.2  | ReferenceDeleted                                      | 5.7.7.2  | &check;
-| ChangeReference                                     | 5.6.7.3  | ReferenceChanged                                      | 5.7.7.3  | &check;
-| CompositeCommand                                    | 5.6.8.1  | CompositeEvent                                        | 5.7.8.1  | &check;
-|  &cross;                                            | —        | NoOpEvent                                             | 5.7.8.2  | &check;
-|  &cross;                                            | —        | ErrorEvent                                            | 5.7.8.3  | &cross;
-|===
-
-If a delta corresponding to an event exists, it'll have an identifier of the format `<technical name of event>Delta` except when the technical already has postfix `Event`, in which case that postfix gets replaced with `Event`.
-
-|===
-| verbalization    | TS API call — singular                                                             | TS API call — plural
-
-| add partition    | `<client>.addPartition(newPartition)`                                              | —
-| delete partition | `<client>.deletePartition(deletedPartition)`                                       | —
-
-| add property     | `node.property = newValue` &lrarr; `<propertyValueManager>.set(newValue)`          | —
-| delete property  | `node.property = undefined` &lrarr; `<propertyValueManager>.set(undefined)`        | —
-| change property  | `node.property = newValue` &lrarr; `<propertyValueManager>.set(newValue)`          | —
-
-| add child        | `node.containment = newChild`                                                      | `<containmentValueManager>.add(newChild)`
-| delete child     | `node.containment = undefined` &lrarr; `<containmentValueManager>.set(undefined)`  | ???
-| replace child    | `node.containment = newValue` &lrarr; `<containmentValueManager>.set(newValue)`    | ???
-
+| ContinuedCommand                                    | 5.8.1    | ContinuedEvent                                        | 5.9.1    | &cross;
+| AddPartition                                        | 5.8.2.1  | PartitionAdded                                        | 5.9.2.1  | &check;
+| DeletePartition                                     | 5.8.2.2  | PartitionDeleted                                      | 5.9.2.2  | &check;
+| ChangeClassifier                                    | 5.8.3.1  | ClassifierChanged                                     | 5.9.3.1  | &cross;
+| AddProperty                                         | 5.8.4.1  | PropertyAdded                                         | 5.9.4.1  | &check;
+| DeleteProperty                                      | 5.8.4.2  | PropertyDeleted                                       | 5.9.4.2  | &check;
+| ChangeProperty                                      | 5.8.4.3  | PropertyChanged                                       | 5.9.4.3  | &check;
+| AddChild                                            | 5.8.5.1  | ChildAdded                                            | 5.9.5.1  | &check;
+| DeleteChild                                         | 5.8.5.2  | ChildDeleted                                          | 5.9.5.2  | &check;
+| ReplaceChild                                        | 5.8.5.3  | ChildReplaced                                         | 5.9.5.3  | &check;
+| MoveChildFromContainmentInOtherParent               | 5.8.5.4  | ChildMovedFromContainmentInOtherParent                | 5.9.5.4  | &check;
+| MoveChildFromOtherContainmentInSameParent           | 5.8.5.5  | ChildMovedFromOtherContainmentInSameParent            | 5.9.5.5  | &check;
+| MoveChildInSameContainmentInSameParent              | 5.8.5.6  | ChildMovedInSameContainmentInSameParent               | 5.9.5.6  | &check;
+| MoveAndReplaceChildFromContainmentInOtherParent     | 5.8.5.7  | ChildMovedAndReplacedFromContainmentInOtherParent     | 5.9.5.7  | &check;
+| MoveAndReplaceChildFromOtherContainmentInSameParent | 5.8.5.8  | ChildMovedAndReplacedFromOtherContainmentInSameParent | 5.9.5.8  | &check;
+| MoveAndReplaceChildInSameContainmentInSameParent    | 5.8.5.9  | ChildMovedAndReplacedInSameContainmentInSameParent    | 5.9.5.9  | &check;
+| AddAnnotation                                       | 5.8.6.1  | AnnotationAdded                                       | 5.9.6.1  | &check;
+| DeleteAnnotation                                    | 5.8.6.2  | AnnotationDeleted                                     | 5.9.6.2  | &check;
+| ReplaceAnnotation                                   | 5.8.6.3  | AnnotationReplaced                                    | 5.9.6.3  | &check;
+| MoveAnnotationFromOtherParent                       | 5.8.6.4  | AnnotationMovedFromOtherParent                        | 5.9.6.4  | &check;
+| MoveAnnotationInSameParent                          | 5.8.6.5  | AnnotationMovedInSameParent                           | 5.9.6.5  | &check;
+| MoveAndReplaceAnnotationFromOtherParent             | 5.8.6.6  | AnnotationMovedAndReplacedFromOtherParent             | 5.9.6.6  | &check;
+| MoveAndReplaceAnnotationInSameParent                | 5.8.6.7  | AnnotationMovedAndReplacedInSameParent                | 5.9.6.7  | &check;
+| AddReference                                        | 5.8.7.1  | ReferenceAdded                                        | 5.9.7.1  | &check;
+| DeleteReference                                     | 5.8.7.2  | ReferenceDeleted                                      | 5.9.7.2  | &check;
+| ChangeReference                                     | 5.8.7.3  | ReferenceChanged                                      | 5.9.7.3  | &check;
+| CompositeCommand                                    | 5.8.8.1  | CompositeEvent                                        | 5.9.8.1  | &check;
+|  &cross;                                            | —        | NoOpEvent                                             | 5.9.8.2  | &check;
+|  &cross;                                            | —        | ErrorEvent                                            | 5.9.8.3  | &cross;
 |===
 
-**TODO**  finish this table
+Each row states the technical names of a command and the corresponding event, and the section numbers (§) of their descriptions in the link:https://lionweb.io/specification/delta/delta-api.html[Delta API specification].
+The last “delta?” column states whether the stated event has a corresponding `IDelta` class in the `@lionweb/class-core` package.
+
+****
+* The `ContinuedCommand` and `ContinuedEvent` do not have corresponding delta types, as they are used for message splitting and continuation.
+* The `CompositeCommand` and `CompositeEvent` do have corresponding delta types (`CompositeDelta`).
+* The `NoOpEvent` has a corresponding `NoOpDelta`, but there is no `NoOpCommand`.
+This is a deliberate choice in the Delta API specification, as it’s nonsensical to have the _intention_ to have a `NoOpEvent` produced from a command.
+* The `ErrorEvent` does not have a corresponding delta type.
+****
+
+=== Delta Naming Convention
+
+If a delta corresponding to an event exists, it has an identifier of the format `<technical name of event>Delta` with the following exceptions:
+
+* For events with names ending in "Event", the "Event" suffix is replaced with "Delta"
+* For events with names ending in "Added", the "Added" suffix is replaced with "Delta" (resulting in e.g. PartitionAddedDelta)
+
+This means that all event technical names can be converted to their corresponding delta technical names by replacing "Event" with "Delta" at the end of the event name.
+
+For example:
+
+* `PartitionAddedEvent` &rarr; `PartitionAddedDelta`
+* `PropertyChangedEvent` &rarr; `PropertyChangedDelta`
+* `ChildMovedFromContainmentInOtherParentEvent` &rarr; `ChildMovedFromContainmentInOtherParentDelta`
 
