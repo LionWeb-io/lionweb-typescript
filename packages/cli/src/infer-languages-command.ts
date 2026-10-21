@@ -1,4 +1,4 @@
-import { serializeLanguages } from "@lionweb/core"
+import { serializeLanguagesFor } from "@lionweb/core"
 import { asPrettyJsonString } from "@lionweb/ts-utils"
 import { inferLanguagesFromSerializationChunk, readSerializationChunk } from "@lionweb/utilities"
 import { writeFile } from "fs/promises"
@@ -11,7 +11,7 @@ export const inferLanguages = async (filePath: string) => {
     const languages = inferLanguagesFromSerializationChunk(chunk)
     for (const language of languages) {
         const languageFile = path.join(dirName, `${language.name}.language.json`)
-        await writeFile(languageFile, asPrettyJsonString(serializeLanguages(language)))
+        await writeFile(languageFile, asPrettyJsonString(serializeLanguagesFor({ languages: [language] })))
         console.log(`Language ${language.name} has been generated: "${languageFile}"`)
     }
 }

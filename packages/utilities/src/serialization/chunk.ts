@@ -1,6 +1,6 @@
 import {
     allLionWebVersions,
-    deserializeLanguages,
+    deserializeLanguagesFrom,
     Language,
     lioncoreKey,
     LionWebVersion,
@@ -78,7 +78,7 @@ export const tryReadAsLanguages = async (path: string, lionWebVersion?: LionWebV
         return []
     }
     try {
-        return deserializeLanguages(serializationChunk)
+        return deserializeLanguagesFrom({ serializationChunk })
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (e: any) {
         console.error(`${path} is not a valid JSON serialization chunk of LionCore languages: ${e.message}`)
@@ -135,7 +135,7 @@ export const tryReadAllAsLanguages = async (paths: string[], lionWebVersion?: Li
             return ok
         })
     try {
-        return deserializeLanguages(combinationOf(serializationChunks, lionWebVersion))
+        return deserializeLanguagesFrom({ serializationChunk: combinationOf(serializationChunks, lionWebVersion), lionWebVersion })
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (e: any) {
         console.error(`couldn't deserialize combined JSON serialization chunk of LionCore languages: ${e.message}`)

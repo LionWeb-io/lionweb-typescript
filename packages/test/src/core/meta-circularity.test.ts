@@ -1,9 +1,9 @@
 import {
     checkReferences,
-    deserializeLanguages,
+    deserializeLanguagesFrom,
     issuesLanguage,
     LionWebVersions,
-    serializeLanguages
+    serializeLanguagesFor
 } from "@lionweb/core"
 import { languageAsText } from "@lionweb/utilities"
 
@@ -27,8 +27,8 @@ describe("meta-circularity (LionCore)", () => {
     })
 
     it("deserialize LionCore", async () => {
-        const serialization = serializeLanguages(lioncore)
-        const deserialization = deserializeLanguages(serialization)
+        const serializationChunk = serializeLanguagesFor({ languages: [lioncore] })
+        const deserialization = deserializeLanguagesFrom({ serializationChunk })
         deepEqual(deserialization.length, 1)
         const language = deserialization[0]
         deepEqual(languageAsText(language), languageAsText(lioncore))

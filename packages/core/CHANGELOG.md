@@ -33,6 +33,42 @@
 
 * **Breaking changes!** Restructure how property values get (de-)serialized — see separate section below.
 
+* **Breaking change** Remove the `[de]serializeLanguages` functions (without deprecating them first), and their uses throughout the entire codebase.
+
+    > [!TIP]
+    > ### Migration guide
+    >
+    > To migrate from the removed `serializeLanguages` and `deserializeLanguages` functions to their Parameter Object Pattern equivalents:
+    >
+    > **1. Serialization:**
+    > ```typescript
+    > // Old
+    > import { serializeLanguages } from "@lionweb/core"
+    > const chunk = serializeLanguages(language1, language2)
+    > 
+    > // New
+    > import { serializeLanguagesFor } from "@lionweb/core"
+    > const chunk = serializeLanguagesFor({ languages: [language1, language2] })
+    > ```
+    > 
+    > **2. Deserialization:**
+    > ```typescript
+    > // Old
+    > import { deserializeLanguages } from "@lionweb/core"
+    > const languages = deserializeLanguages(chunk, dependentLanguage)
+    > 
+    > // New
+    > import { deserializeLanguagesFrom } from "@lionweb/core"
+    > const languages = deserializeLanguagesFrom({ 
+    >     serializationChunk: chunk, 
+    >     dependentLanguages: [dependentLanguage] 
+    > })
+    > ```
+    > 
+    > **Note:** Both the `serializeLanguagesFor` function, and the `deserializeLanguagesFrom` function, also accept optional `lionWebVersion` and `problemReporter` parameters
+    > The `lionWebVersion` parameter specifies the LionWeb version to use for serialization, and, if not provided, it defaults to `LionWebVersions.v2023_1`.
+    > The ``problemReporter` parameter is used to report problems, and defaults to `consoleProblemReporter`.
+
 
 ## Restructure how property values get (de-)serialized
 

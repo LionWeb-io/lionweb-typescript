@@ -15,14 +15,10 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { deserializeLanguages, lionWebVersionFrom, LionWebVersions } from "@lionweb/core"
+import { deserializeLanguagesFrom, lionWebVersionFrom, LionWebVersions } from "@lionweb/core"
 import { LionWebJsonChunk } from "@lionweb/json"
 import { readFileAsJsonSync } from "@lionweb/node-utils"
-import {
-    generateMermaidForLanguage,
-    generatePlantUmlForLanguage,
-    languageAsText
-} from "@lionweb/utilities"
+import { generateMermaidForLanguage, generatePlantUmlForLanguage, languageAsText } from "@lionweb/utilities"
 import { writeFileSync } from "node:fs"
 import { join } from "node:path"
 import { exit } from "node:process"
@@ -33,14 +29,14 @@ const metaPath = join(packagePath, "meta")
 
 // read language definition from package:
 const chunkPath = join(metaPath, `${languageName}.json`)
-const chunk = readFileAsJsonSync(chunkPath) as LionWebJsonChunk
-const maybeLionWebVersion = lionWebVersionFrom(chunk.serializationFormatVersion)
+const serializationChunk = readFileAsJsonSync(chunkPath) as LionWebJsonChunk
+const maybeLionWebVersion = lionWebVersionFrom(serializationChunk.serializationFormatVersion)
 if (maybeLionWebVersion === undefined) {
     console.error(`Couldn’t determine known LionWeb version from serialization chunk with path = ${chunkPath}.`)
     console.log(`(Known LionWeb versions: ${Object.keys(LionWebVersions).join(", ")}.`)
     exit(2)
 }
-const language = deserializeLanguages(chunk, maybeLionWebVersion.lioncoreFacade.language)[0]
+const language = deserializeLanguagesFrom({ serializationChunk, dependentLanguages: [maybeLionWebVersion.lioncoreFacade.language] })[0]
 
 writeFileSync(join(metaPath, `${languageName}.txt`), languageAsText(language))
 writeFileSync(join(metaPath, `${languageName}.puml`), generatePlantUmlForLanguage(language))
