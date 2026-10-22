@@ -4,7 +4,8 @@ import {
     isUnresolvedReference,
     Language,
     MemoisingSymbolTable,
-    Property
+    Property,
+    StructuredDataType
 } from "@lionweb/core"
 import {
     LionWebId,
@@ -37,15 +38,21 @@ export const genericAsTreeText = ({ nodes }: LionWebJsonChunk, languages: Langua
     const nameOrKey = (classifier: LionWebJsonMetaPointer, feature: LionWebJsonMetaPointer): string =>
         symbolTable.featureMatching(classifier, feature)?.name ?? `[${feature.key}]`
 
-    const realPropertyAsText = ({type}: Property, value: string | null): string | null | undefined => {
-        if (type instanceof Enumeration) {
-            return type.literals.find(literal => literal.key === value)?.name ?? value
+    const realPropertyAsText = ({ type }: Property, value: string | null): string | null | undefined => {
+        if (value === null) {
+            return undefined
         }
         if (type === undefined || isReferenceToSet(type)) {
             return undefined
         }
         if (isUnresolvedReference(type)) {
             return type.resolveInfo
+        }
+        if (type instanceof Enumeration) {
+            return type.literals.find(literal => literal.key === value)?.name ?? value
+        }
+        if (type instanceof StructuredDataType) {
+            return value
         }
         switch (type.name) {
             case "String": return `'${value}'`
