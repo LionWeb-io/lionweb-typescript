@@ -16,6 +16,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 export * from "./base-types.js";
+export { type NodeBaseSerializationConfiguration, nodeBasePropertyValueDeserializerWith, nodeBasePropertyValueSerializerWith } from "./configuration.js"
 export * from "./convenience.js";
 export * from "./deltas/index.js";
 export * from "./deserializer.js";
@@ -27,7 +28,7 @@ export * from "./id-mapping.js";
 export * from "./LionCore_builtins.g.js";
 export type { IdOrNull } from "./references.js";
 export { idFrom } from "./references.js";
-export { nodeBaseReader, propertyValueSerializerWith, serializeNodeBases } from "./serializer.js";
+export { nodeBaseReader, serializeNodeBases } from "./serializer.js";
 export { asTreeTextWith } from "./textualizer.js";
 export * from "./value-managers/index.js";
 

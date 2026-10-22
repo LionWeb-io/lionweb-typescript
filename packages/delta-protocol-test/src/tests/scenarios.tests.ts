@@ -71,10 +71,12 @@ describe(`scenarios (${ansi.colorSchemeExplanationString})`, async function() {
         const clientId = "myClient" // but participation ID is handed out by the repository!
         const repositoryId = "myRepo"
         const lionWebClient = await LionWebClient.create({
+            url: wsLocalhostUrl(port),
             repositoryId: "myRepo",
             clientId,
-            url: wsLocalhostUrl(port),
-            languageBases: [testLanguageBase],
+            serializationConfiguration: {
+                languageBases: [testLanguageBase]
+            },
             lowLevelClientInstantiator: createWSLowLevelClient,
             semanticLogger: log
         })

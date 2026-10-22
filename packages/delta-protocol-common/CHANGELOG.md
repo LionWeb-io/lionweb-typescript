@@ -6,6 +6,11 @@
   * Rename internal `ClientHadProblem` logging class to `ClientIssuedError`, and report <u>accordingly</u>:
     * Expose an ANSI style `clientError`: underlined magenta.
 
+* **Breaking changes!** Propagate restructuring of how property values get (de-)serialized:
+  * The `deltaToCommandTranslator` function now has 1 mandatory argument of type `PropertyValueSerializer`.
+  * The `DeltaToEventTranslatorConfiguration` type – which is the type of the 1 mandatory argument of the `deltaToEventTranslator` function – lost its optional `lionWebVersion` property, which is now effectively encapsulated by the `propertyValueSerializer` property.
+  * The `eventToDeltaTranslator` function now has 1 mandatory argument which is the `NodeBaseSerializationConfiguration` type minus the `primitiveValueSerializerRegistry` property.
+
 
 ## 0.10.0
 

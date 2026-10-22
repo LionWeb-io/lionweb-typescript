@@ -1,4 +1,5 @@
 import {
+    AggregatingProblemReporter,
     Annotation,
     Concept,
     ConceptModifier,
@@ -9,8 +10,7 @@ import {
     Language,
     LanguageFactory,
     LionWebVersions,
-    newPropertyValueSerializerRegistry,
-    propertyValueSerializerFrom,
+    newPrimitiveValueSerializerRegistry,
     Reference,
     referenceToSet,
     serializeLanguages,
@@ -21,31 +21,35 @@ import { LionWebJsonChunk } from "@lionweb/json"
 import { concatenator, lastOf } from "@lionweb/ts-utils"
 import { expect } from "chai"
 import { TestNode, TestNodeReader } from "../instances/test-node.js"
-import { dateDataType, libraryWithDatesLanguage } from "../languages/libraryWithDates.js"
+import { datePrimitiveType, libraryWithDatesLanguage } from "../languages/libraryWithDates.js"
 
 const dynamicReader = dynamicReaderFor(LionWebVersions.v2023_1)
 
 describe("serialization", () => {
 
-    it("serializes node with custom primitive type, without registering custom deserializer", () => {
+    it("serializes node with custom primitive type, without registering custom serializer", () => {
+        const problemReporter = new AggregatingProblemReporter()
         const myNode = new TestNode("1", "LibraryWithDates")
         myNode.properties["name"] = "myLibrary"
         myNode.properties["creationDate"] = new Date(30, 4, 2024)
         myNode.containments["books"] = []
 
-        expect(() => serializerWith({ reader: new TestNodeReader([libraryWithDatesLanguage]) })([myNode])).to.throw()
+        serializerWith({ reader: new TestNodeReader([libraryWithDatesLanguage]), problemReporter })([myNode])
+        expect(problemReporter.allProblems()).to.eql({
+            "couldn’t find a serializer for the primitive type Date": 1
+        })
     })
 
     it("serializes node with custom primitive type, works when registering custom deserializer", () => {
-        const builtinsPropertyValueSerializer = propertyValueSerializerFrom(
-            newPropertyValueSerializerRegistry()
-                .set(LionWebVersions.v2023_1.builtinsFacade.primitiveTypes.stringDataType, (value) => value as string)
-                .set(dateDataType, (value) => {
-                    const d = value as Date
-                    return `${Number(d.getFullYear()).toString().padStart(4, "0")}-${Number(d.getMonth() + 1)
-                        .toString()
-                        .padStart(2, "0")}-${Number(d.getDate()).toString().padStart(2, "0")}`
-                }))
+        const primitiveValueSerializerRegistry = newPrimitiveValueSerializerRegistry()
+            .register(LionWebVersions.v2023_1.builtinsFacade.primitiveTypes.stringDataType, (value) => value as string)
+            .register(datePrimitiveType, (value) => {
+                const d = value as Date
+                return `${Number(d.getFullYear()).toString().padStart(4, "0")}-${Number(d.getMonth() + 1)
+                    .toString()
+                    .padStart(2, "0")}-${Number(d.getDate()).toString().padStart(2, "0")}`
+            })
+            .seal()
         const myNode = new TestNode("1", "LibraryWithDates")
         myNode.properties["name"] = "myLibrary"
         myNode.properties["creationDate"] = new Date(2024, 4, 28)
@@ -102,7 +106,7 @@ describe("serialization", () => {
             ]
         }
         expect(
-            serializerWith({ reader: new TestNodeReader([libraryWithDatesLanguage]), propertyValueSerializer: builtinsPropertyValueSerializer })([myNode])
+            serializerWith({ reader: new TestNodeReader([libraryWithDatesLanguage]), primitiveValueSerializerRegistry })([myNode])
         )
             .to.eql(expectedSerializationChunk)
     })

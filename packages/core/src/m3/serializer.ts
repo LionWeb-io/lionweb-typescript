@@ -11,8 +11,8 @@ import { LionWebVersions } from "./versions.js"
  */
 export type LanguageSerializationData = {
     /**
-     * The version of the LionWeb serialization format to serialize in.
-     * Default = {@link LionWebVersions.v2023_1}.
+     * The version of the LionWeb serialization format to serialize to.
+     * Default: {@link LionWebVersions.v2023_1}.
      */
     lionWebVersion?: LionWebVersion
     languages: Language[]

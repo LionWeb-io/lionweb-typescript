@@ -1,60 +1,27 @@
 import { LionWebId, LionWebJsonChunk, LionWebJsonNode, LionWebJsonReferenceTarget } from "@lionweb/json"
 import { asArray, keepDefineds, lazyMapGet, Nested3Map, uniquesAmong } from "@lionweb/ts-utils"
+import { completeSerializationConfigurationWithDefaults } from "./configuration.js"
 import { asIds, metaPointerForFeature } from "./functions.js"
-import { Reader } from "./reading.js"
-import { isReferenceToSet, isResolvedReference, SingleRef, UnresolvedReference } from "./references.js"
-import { Node } from "./types.js"
-import { inheritsDirectlyFrom } from "./m3/functions.js"
 import {
     Classifier,
     Containment,
-    Enumeration,
     Feature,
+    inheritsDirectlyFrom,
     Language,
-    PrimitiveType,
     Property,
     Reference,
     simpleNameDeducer
-} from "./m3/types.js"
-import { LionWebVersion } from "./m3/version.js"
-import { LionWebVersions } from "./m3/versions.js"
+} from "./m3/index.js"
+import { PropertyValueSerializerConfiguration, propertyValueSerializerWith } from "./data-types/property-values.js"
+import { Reader } from "./reading.js"
+import { isReferenceToSet, isResolvedReference, SingleRef, UnresolvedReference } from "./references.js"
+import { Node } from "./types.js"
 
 
 /**
  * Type definition for functions that serializes nodes as a {@link LionWebJsonChunk serialization chunk}.
  */
 export type Serializer<NT extends Node> = (nodes: NT[]) => LionWebJsonChunk
-
-
-/**
- * Interface for objects that expose a method to serialize a property's value.
- */
-export interface PropertyValueSerializer {
-    serializeValue(value: unknown, property: Property): string | null
-}
-
-
-/**
- * Type to provide (non-required) options to the serializer.
- */
-export type SerializationOptions = Partial<{
-
-    /**
-     * Determines whether empty feature values are explicitly serialized or skipped during serialization.
-     * (The specification states that empty feature values SHOULD be serialized, but not that they MUST be.)
-     * Default = true, meaning that empty feature values are *not* skipped.
-     */
-    serializeEmptyFeatures: boolean
-
-    /**
-     * A {@link PropertyValueSerializer} implementation.
-     * Default = the value of the `propertyValueSerializer` property of the {@link LionWebVersion version} of the LionWeb serialization format,
-     * configured through `SerializerConfiguration.lionWebVersion` (which itself defaults to `LionWebVersions.v2023_1`).
-     */
-    propertyValueSerializer: PropertyValueSerializer
-
-}>
-
 
 /**
  * Type for objects to configure {@link Serializer node serializers} with.
@@ -63,17 +30,20 @@ export type SerializationOptions = Partial<{
  * properties are optional, with defined defaults.
  */
 export type SerializerConfiguration<NT extends Node, RT extends Node = NT> = {
+
     /**
      * An interface with functions to “read” – i.e., introspect – nodes.
      */
     reader: Reader<NT, RT>
 
     /**
-     * The version of the LionWeb serialization format to serialize in.
-     * Default = {@link LionWebVersions.v2023_1}.
+     * Determines whether empty feature values are explicitly serialized or skipped during serialization.
+     * (The specification states that empty feature values SHOULD be serialized, but not that they MUST be.)
+     * Default = `true`, meaning that empty feature values are *not* skipped.
      */
-    lionWebVersion?: LionWebVersion
-} & SerializationOptions
+    serializeEmptyFeatures?: boolean
+
+} & Omit<PropertyValueSerializerConfiguration, "enumerationLiteralFrom">
 
 
 /**
@@ -82,9 +52,13 @@ export type SerializerConfiguration<NT extends Node, RT extends Node = NT> = {
  */
 export const serializerWith = <NT extends Node, RT extends Node = NT>(configuration: SerializerConfiguration<NT, RT>): Serializer<NT> => {
     const { reader } = configuration
-    const lionWebVersion = configuration?.lionWebVersion ?? LionWebVersions.v2023_1
-    const propertyValueSerializer = configuration.propertyValueSerializer ?? lionWebVersion.builtinsFacade.propertyValueSerializer
+    const completedConfiguration = completeSerializationConfigurationWithDefaults(configuration)
+    const { lionWebVersion } = completedConfiguration
     const serializeEmptyFeatures = configuration.serializeEmptyFeatures ?? true
+    const propertyValueSerializer = propertyValueSerializerWith({
+        enumerationLiteralFrom: reader.enumerationLiteralFrom,
+        ...completedConfiguration
+    })
 
     const languageKey2version2classifierKey2allFeatures: Nested3Map<Feature[]> = {}
     const memoisedAllFeaturesOf = (classifier: Classifier): Feature[] =>
@@ -152,19 +126,9 @@ export const serializerWith = <NT extends Node, RT extends Node = NT>(configurat
                         // for immediate backward compatibility: skip empty property values regardless of options?.skipEmptyValues
                         return
                     }
-                    const encodedValue = (() => {
-                        // (could also just inspect type of value:)
-                        if (feature.type instanceof PrimitiveType) {
-                            return propertyValueSerializer.serializeValue(value, feature)
-                        }
-                        if (feature.type instanceof Enumeration) {
-                            return reader.enumerationLiteralFrom(value, feature.type)?.key
-                        }
-                        return undefined
-                    })()
                     serializedNode.properties.push({
                         property: featureMetaPointer,
-                        value: (encodedValue as string) ?? null // (undefined -> null)
+                        value: value === undefined ? null : (propertyValueSerializer(feature, value) ?? null)   // (undefined -> null)
                     })
                     return
                 }

@@ -16,6 +16,12 @@ export type ClassifierDeducer<NT extends Node> = (node: NT) => Classifier
 export type ResolveInfoDeducer<NT extends Node> = (node: NT, reference: Reference) => string | undefined
 
 /**
+ * Type def. for functions that, given a runtime encoding of a {@link EnumerationLiteral} of the given {@link Enumeration},
+ * return that {@link EnumerationLiteral literal}, or `null` if no correspondence could be found.
+ */
+export type EnumerationLiteralDecoder = (encoding: unknown, enumeration: Enumeration) => EnumerationLiteral | null
+
+/**
  * An interface that's used to parametrize generic serialization of
  * (in-memory) nodes of the given type (parameter) `NT`.
  * Implementations of these interfaces {w|c}ould be:
@@ -40,8 +46,9 @@ export interface Reader<NT extends Node, RT extends Node = NT> {
     /**
      * @return The {@link EnumerationLiteral} corresponding to
      * the given {@link Enumeration} and the runtime encoding of a literal of it,
+     * or `null` if no correspondence could be found.
      */
-    enumerationLiteralFrom: (encoding: unknown, enumeration: Enumeration) => EnumerationLiteral | null
+    enumerationLiteralFrom: EnumerationLiteralDecoder
 
     /**
      * @return The string value of the `resolveInfo` field of a {@link LionWebJsonReferenceTarget serialized reference target},

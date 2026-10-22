@@ -8,6 +8,8 @@
   * Expose `MessageReceivers` type.
   * Replace or remove occurrences of logging directly to `console`.
 
+* **Breaking change!** Add a `serializationConfiguration` property of the `NodeBaseSerializationConfiguration` type to the `LionWebClientParameters` type, encapsulating the `languageBases` property in the process.
+
 
 ## 0.10.0
 

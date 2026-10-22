@@ -21,8 +21,9 @@ import { LionWebClient } from "@lionweb/delta-protocol-client"
 import { PartitionAddedEvent, SignOnResponse } from "@lionweb/delta-protocol-common"
 import { wsLocalhostUrl } from "@lionweb/delta-protocol-repository-ws"
 import { TestLanguageBase } from "@lionweb/class-core-test-language"
-import { nextPort } from "../test-utils/port.js"
+import { defaultTestClientParameters } from "../test-utils/client-parameters.js"
 import { mockLowLevelClientInstantiator } from "../test-utils/mock-low-level-client.js"
+import { nextPort } from "../test-utils/port.js"
 
 
 describe(`scenarios where TypeScript client is the only system under test (using a mock low-level client)`, async function() {
@@ -51,10 +52,10 @@ describe(`scenarios where TypeScript client is the only system under test (using
         const queryId = "query-1"
         const commandId = "command-1"
         const lionWebClient = await LionWebClient.create({
-            repositoryId: "myRepo",
+            ...defaultTestClientParameters,
+            // override part of defaultTestClientParameters:
             clientId,
             url: wsLocalhostUrl(nextPort()),
-            languageBases: [testLanguageBase],
             lowLevelClientInstantiator: mockLowLevelClientInstantiator({
                 [commandId]: {
                     messageKind: "PartitionAdded",

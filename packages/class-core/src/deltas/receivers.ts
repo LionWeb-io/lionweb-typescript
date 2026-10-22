@@ -18,6 +18,7 @@
 import { asPrettyJsonString } from "@lionweb/ts-utils"
 import { IDelta } from "./base.js"
 import { deltaSerializer } from "./serialization/index.js"
+import { nodeBasePropertyValueSerializerWith } from "../configuration.js"
 
 /**
  * A type for functions that receive deltas.
@@ -29,7 +30,7 @@ export type DeltaReceiver = (delta: IDelta) => void;
  * @param printSerializations determines whether the deltas are serialized as JSON and printed to the JavaScript console.
  */
 export const collectingDeltaReceiver = (printSerializations = false): [DeltaReceiver, IDelta[]] => {
-    const serializeDelta = deltaSerializer()
+    const serializeDelta = deltaSerializer(nodeBasePropertyValueSerializerWith({}));
     const deltas: IDelta[] = [];
     const receiveDelta: DeltaReceiver = (delta) => {
         deltas.push(delta);

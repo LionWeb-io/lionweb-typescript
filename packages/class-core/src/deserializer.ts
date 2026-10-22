@@ -17,33 +17,21 @@
 
 import {
     Classifier,
-    consoleProblemReporter,
+    completeSerializationConfigurationWithDefaults,
     Containment,
-    Enumeration,
-    LionWebVersion,
-    LionWebVersions,
     MemoisingSymbolTable,
-    PrimitiveType,
-    ProblemReporter,
     Property,
-    PropertyValueDeserializer,
     Reference,
     UnresolvedReference
 } from "@lionweb/core"
-import {
-    LionWebId,
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-    LionWebJsonChunk,
-    LionWebJsonNode,
-    LionWebJsonReferenceTarget,
-    OnlyNodesOfLionWebJsonChunk
-} from "@lionweb/json"
+import { LionWebId, LionWebJsonNode, LionWebJsonReferenceTarget, OnlyNodesOfLionWebJsonChunk } from "@lionweb/json"
 import { byIdMap, keepDefineds } from "@lionweb/ts-utils"
 
-import { FactoryConfiguration, INodeBase } from "./base-types.js"
+import { INodeBase } from "./base-types.js"
 import { IdMapping } from "./id-mapping.js"
 import { combinedLanguageBaseLookupFor } from "./factory.js"
 import { NodesToInstall } from "./linking.js"
+import { nodeBasePropertyValueDeserializerWith, NodeBaseSerializationConfiguration } from "./configuration.js"
 
 
 /**
@@ -89,36 +77,18 @@ export type DetailedDeserialization = {
 
 
 /**
- * Configuration parameters for a deserializer that are unchanging per invocation of the deserializer
- * (and partially optional).
- */
-export type DeserializerConfiguration = {
-    /** Default: `LionWebVersions.v2023_1`. */
-    lionWebVersion?: LionWebVersion
-    /** Default: `lioncoreBuiltinsFacade.propertyValueDeserializer`. */
-    propertyValueDeserializer?: PropertyValueDeserializer,
-    /** Default: {@link consoleProblemReporter}. */
-    problemReporter?: ProblemReporter
-};
-
-
-/**
  * @return a {@link Deserializer} function that returns a {@link DetailedDeserialization}.
  * @param configuration a {@link DeserializerConfiguration configuration object} for the deserializer.
  */
-export const nodeBaseDetailedDeserializerWith = (configuration: FactoryConfiguration & DeserializerConfiguration): Deserializer<DetailedDeserialization> => {
-    const lionWebVersion = configuration.lionWebVersion ?? LionWebVersions.v2023_1;
+export const nodeBaseDetailedDeserializerWith = (configuration: Omit<NodeBaseSerializationConfiguration, "primitiveValueSerializerRegistry">): Deserializer<DetailedDeserialization> => {
+    const propertyValueDeserializer = nodeBasePropertyValueDeserializerWith(configuration);
     const { languageBases, receiveDelta } = configuration;
-    const propertyValueDeserializer = configuration.propertyValueDeserializer ?? lionWebVersion.builtinsFacade.propertyValueDeserializer;
-    const problemReporter = configuration.problemReporter ?? consoleProblemReporter;
+    const languageBaseFor = combinedLanguageBaseLookupFor(configuration.languageBases);
+    const { problemReporter } = completeSerializationConfigurationWithDefaults(configuration);
 
     const symbolTable = new MemoisingSymbolTable(languageBases.map(({ language }) => language));
-    const languageBaseFor = combinedLanguageBaseLookupFor(languageBases);
 
-    return (
-        serializationChunk,
-        idMapping
-    ): DetailedDeserialization => {
+    return (serializationChunk, idMapping): DetailedDeserialization => {
 
         const nodesToInstall: NodesToInstall[] = [];
 
@@ -137,18 +107,7 @@ export const nodeBaseDetailedDeserializerWith = (configuration: FactoryConfigura
                 if (feature === undefined) {
                     problemReporter.reportProblem(`can't deserialize value for feature with key ${propertyMetaPointer.key} in ${languageMessage}: feature not found on classifier ${classifierMetaPointer.key} in language (${classifierMetaPointer.language}, ${classifierMetaPointer.version}) - skipping`);
                 } else if (feature instanceof Property) {
-                    if (feature.type instanceof PrimitiveType) {
-                        node.getPropertyValueManager(feature).setDirectly(value === null ? undefined : propertyValueDeserializer.deserializeValue(value, feature));
-                    } else if (feature.type instanceof Enumeration) {
-                        if (value !== undefined) {
-                            const literal = feature.type.literals.find((literal) => literal.key === value);
-                            if (literal === undefined) {
-                                problemReporter.reportProblem(`can't deserialize literal encoded as: ${value}`);
-                            } else {
-                                node.getPropertyValueManager(feature).setDirectly(languageBaseFor(feature.type.language).enumLiteralFrom(literal));
-                            }
-                        }
-                    }
+                    node.getPropertyValueManager(feature).setDirectly(value === null ? undefined : propertyValueDeserializer(feature, value))
                 } else {
                     problemReporter.reportProblem(`can't deserialize value for feature with key ${propertyMetaPointer.key} in ${languageMessage}: feature is not a property - skipping`);
                 }
@@ -268,7 +227,7 @@ export const nodeBaseDetailedDeserializerWith = (configuration: FactoryConfigura
  * @return a {@link Deserializer} function that returns the roots (of type {@link INodeBase}) of the deserialized model.
  * @param configuration a {@link DeserializerConfiguration configuration object} for the deserializer.
  */
-export const nodeBaseDeserializerWith = (configuration: FactoryConfiguration & DeserializerConfiguration): Deserializer<INodeBase[]> =>
+export const nodeBaseDeserializerWith = (configuration: Omit<NodeBaseSerializationConfiguration, "primitiveValueSerializerRegistry">): Deserializer<INodeBase[]> =>
     (serializationChunk, idMapping): INodeBase[] =>
         nodeBaseDetailedDeserializerWith(configuration)(serializationChunk, idMapping).roots;
 

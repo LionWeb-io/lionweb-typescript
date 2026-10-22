@@ -15,15 +15,11 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { collectingDeltaReceiver, PropertyAddedDelta } from "@lionweb/class-core"
+import { collectingDeltaReceiver, nodeBasePropertyValueSerializerWith, PropertyAddedDelta } from "@lionweb/class-core"
 import { AddPropertyCommand, deltaToCommandTranslator } from "@lionweb/delta-protocol-common"
 
 import { expect } from "chai"
-import {
-    attachedDataTypeTestConcept,
-    TestEnumeration,
-    TestLanguageBase
-} from "@lionweb/class-core-test-language"
+import { attachedDataTypeTestConcept, TestEnumeration, TestLanguageBase } from "@lionweb/class-core-test-language"
 
 const testLanguageBase = TestLanguageBase.INSTANCE
 
@@ -43,7 +39,7 @@ describe("delta-to-command translator", () => {
         expect(deltas.length).to.equal(2);
         expect(deltas[1]).to.deep.equal(new PropertyAddedDelta(dttc, testLanguageBase.DataTypeTestConcept_enumValue_0_1, TestEnumeration.literal1));
 
-        const deltaAsCommand = deltaToCommandTranslator();
+        const deltaAsCommand = deltaToCommandTranslator(nodeBasePropertyValueSerializerWith({}));
         const command = deltaAsCommand(deltas[1], "cmd-1");
         expect(command).to.deep.equal({
             messageKind: "AddProperty",

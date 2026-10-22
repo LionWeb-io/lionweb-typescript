@@ -41,13 +41,12 @@ import {
     PropertyAddedDelta,
     PropertyChangedDelta,
     PropertyDeletedDelta,
-    propertyValueSerializerWith,
     ReferenceAddedDelta,
     ReferenceChangedDelta,
     ReferenceDeletedDelta,
     serializeAsDeltaChunk
 } from "@lionweb/class-core"
-import { LionWebVersions, metaPointerForFeature, PropertyValueSerializer } from "@lionweb/core"
+import { metaPointerForFeature, PropertyValueSerializer } from "@lionweb/core"
 import { LionWebId } from "@lionweb/json"
 import {
     AddAnnotationCommand,
@@ -90,15 +89,11 @@ export type DeltaToCommandTranslator = (delta: IDelta, commandId: LionWebId) => 
 /**
  * @return a {@link DeltaToCommandTranslator} function instance
  * that translates a given {@link IDelta `delta`} into a {@link Command command} with the given `commandId`.
- * Serialization of primitively-typed values is governed by the given {@link PropertyValueSerializer `primitiveValueSerializer`},
- * which has a default `LionWebVersions.v2023_1.builtinsFacade.propertyValueSerializer`.
+ * Serialization of properties’ values is governed by the given {@link PropertyValueSerializer `propertyValueSerializer`}.
  */
 export const deltaToCommandTranslator = (
-    lionWebVersion = LionWebVersions.v2023_1,
-    primitiveValueSerializer: PropertyValueSerializer = lionWebVersion.builtinsFacade.propertyValueSerializer
+    propertyValueSerializer: PropertyValueSerializer
 ) => {
-    const propertyValueSerializer = propertyValueSerializerWith({ primitiveValueSerializer })
-
     const translated: DeltaToCommandTranslator = (delta, commandId) => {
         const completed = <CT extends Command>(
             commandName: CT["messageKind"],
@@ -126,7 +121,7 @@ export const deltaToCommandTranslator = (
             return completed<AddPropertyCommand>("AddProperty", { // § 5.7.4.1
                 node: delta.node.id,
                 property: metaPointerForFeature(delta.property),
-                newValue: propertyValueSerializer.serializeValue(delta.value, delta.property)!
+                newValue: propertyValueSerializer(delta.property, delta.value)!
             })
         }
         if (delta instanceof PropertyDeletedDelta) {
@@ -139,7 +134,7 @@ export const deltaToCommandTranslator = (
             return completed<ChangePropertyCommand>("ChangeProperty", { // § 5.7.4.3
                 node: delta.node.id,
                 property: metaPointerForFeature(delta.property),
-                newValue: propertyValueSerializer.serializeValue(delta.newValue, delta.property)!
+                newValue: propertyValueSerializer(delta.property, delta.newValue)!
             })
         }
         if (delta instanceof ChildAddedDelta) {

@@ -1,14 +1,12 @@
 import { asMinimalJsonString } from "@lionweb/ts-utils"
-import {
-    LionCoreBuiltinsFacade,
-    lioncoreBuiltinsIdAndKeyGenerator,
-    newPropertyValueDeserializerRegistry,
-    newPropertyValueSerializerRegistry,
-    propertyValueDeserializerFrom,
-    propertyValueSerializerFrom
-} from "../../builtins-common.js"
+import { LionCoreBuiltinsFacade, lioncoreBuiltinsIdAndKeyGenerator } from "../../builtins-common.js"
 import { LanguageFactory } from "../../factory.js"
 import { ConceptModifier } from "../../types.js"
+import { standardDeserializers, standardSerializers } from "../../../data-types/standard-primitive-types.js"
+import {
+    newPrimitiveValueDeserializerRegistry,
+    newPrimitiveValueSerializerRegistry
+} from "../../../data-types/primitive-types.js"
 
 
 const factory = new LanguageFactory(
@@ -36,20 +34,20 @@ const inamed_name = factory.property(inamed, "name").ofType(stringDataType)
 
 export const lioncoreBuiltinsFacade: LionCoreBuiltinsFacade = {
     language: factory.language,
-    propertyValueDeserializer: propertyValueDeserializerFrom(
-        newPropertyValueDeserializerRegistry()
-            .set(stringDataType, (value) => value)
-            .set(booleanDataType, (value) => JSON.parse(value))
-            .set(integerDataType, (value) => Number(value))
-            .set(jsonDataType, (value) => JSON.parse(value as string))
-    ),
-    propertyValueSerializer: propertyValueSerializerFrom(
-        newPropertyValueSerializerRegistry()
-            .set(stringDataType, (value) => value as string)
-            .set(booleanDataType, (value) => `${value as boolean}`)
-            .set(integerDataType, (value) => `${value as number}`)
-            .set(jsonDataType, (value) => asMinimalJsonString(value))
-    ),
+    primitiveValueDeserializerRegistry:
+        newPrimitiveValueDeserializerRegistry()
+            .register(stringDataType, standardDeserializers.string)
+            .register(booleanDataType, standardDeserializers.boolean)
+            .register(integerDataType, standardDeserializers.integer)
+            .register(jsonDataType, (value) => JSON.parse(value as string))
+            .seal(),
+    primitiveValueSerializerRegistry:
+        newPrimitiveValueSerializerRegistry()
+            .register(stringDataType, standardSerializers.string)
+            .register(booleanDataType, standardSerializers.boolean)
+            .register(integerDataType, standardSerializers.integer)
+            .register(jsonDataType, (value) => asMinimalJsonString(value))
+            .seal(),
     classifiers: { node, inamed },
     features: { inamed_name },
     primitiveTypes: {

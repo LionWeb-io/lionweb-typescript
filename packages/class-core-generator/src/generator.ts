@@ -42,7 +42,8 @@ export type GeneratorOptions = {
      */
     header?: string
     /**
-     * Whether to output logging on the `stdout`. Default: `true`.
+     * Whether to output logging on the `stdout`.
+     * Default: `true`.
      */
     verbose: boolean
 }

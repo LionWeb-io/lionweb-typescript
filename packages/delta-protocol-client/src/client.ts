@@ -15,9 +15,14 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { DeltaReceiver, deltaSerializer, Forest, ILanguageBase, INodeBase } from "@lionweb/class-core"
-import { LionWebId, LionWebJsonChunk, LionWebJsonDeltaChunk } from "@lionweb/json"
-
+import {
+    DeltaReceiver,
+    deltaSerializer,
+    Forest,
+    INodeBase,
+    nodeBasePropertyValueSerializerWith,
+    NodeBaseSerializationConfiguration
+} from "@lionweb/class-core"
 import {
     ClientItemLogger,
     Command,
@@ -46,6 +51,7 @@ import {
     SubscribeToPartitionContentsResponse,
     UnsubscribeFromPartitionContentsRequest
 } from "@lionweb/delta-protocol-common"
+import { LionWebId, LionWebJsonChunk, LionWebJsonDeltaChunk } from "@lionweb/json"
 import { LowLevelClient, LowLevelClientInstantiator } from "./low-level-client.js"
 import { MessageRelatedClientState } from "./state.js"
 
@@ -57,16 +63,27 @@ export type LionWebDeltaProtocolLowLevelClientInstantiator = LowLevelClientInsta
 
 
 /**
- * Type def. for parameters – required and optional – for instantiating a {@link LionWebClient LionWeb delta protocol client}.
+ * Type def. for parameters – required and optional – for instantiating a {@link LionWebClient LionWeb delta protocol client}
+ *  — henceforth identified as “this client”.
  */
 export type LionWebClientParameters = {
-    repositoryId: LionWebId
-    clientId: LionWebId
+    /** URL of the repository server to connect to. */
     url: string
-    languageBases: ILanguageBase[]
+    /** ID of the repository to connect to. */
+    repositoryId: LionWebId
+    /** ID to identify this client with, with the repository server. */
+    clientId: LionWebId
+    serializationConfiguration: NodeBaseSerializationConfiguration,
+    /** An instance of {@link LionWebDeltaProtocolLowLevelClientInstantiator} that instantiates a {@link LowLevelClient low-level client}. */
     lowLevelClientInstantiator: LionWebDeltaProtocolLowLevelClientInstantiator
+    /** Optionally-given {@link LionWebJsonChunk serialization chunk} to load into the – initially empty – {@link Forest} maintained by this client. */
     serializationChunk?: LionWebJsonChunk
+    /**
+     * Optionally-given function that maps a command-sending {@link DeltaReceiver} to another {@link DeltaReceiver}.
+     * This allows sent commands to be “intercepted”, e.g. for logging and/or testing purposes.
+     */
     instantiateDeltaReceiverForwardingTo?: (commandSender: DeltaReceiver) => DeltaReceiver
+    /** Optionally-given {@link SemanticLogger}, e.g. for testing or demonstration purposes. */
     semanticLogger?: SemanticLogger
 }
 
@@ -88,17 +105,21 @@ export class LionWebClient {
         repositoryId,
         clientId,
         url,
-        languageBases,
-        instantiateDeltaReceiverForwardingTo,
+        serializationConfiguration,
+        lowLevelClientInstantiator,
         serializationChunk,
-        semanticLogger,
-        lowLevelClientInstantiator
+        instantiateDeltaReceiverForwardingTo,
+        semanticLogger
     }: LionWebClientParameters): Promise<LionWebClient> {
         const log = semanticLoggerFunctionFrom(semanticLogger)
         const clientItemLogger = new ClientItemLogger(clientId, log)
 
-        const deltaAsCommand = deltaToCommandTranslator()
-        const serializeDelta = deltaSerializer()
+        const { languageBases } = serializationConfiguration
+
+        const propertyValueSerializer = nodeBasePropertyValueSerializerWith(serializationConfiguration)
+
+        const deltaAsCommand = deltaToCommandTranslator(propertyValueSerializer)
+        const serializeDelta = deltaSerializer(propertyValueSerializer)
 
         let loading = true
         let commandNumber = 0
@@ -124,7 +145,7 @@ export class LionWebClient {
         if (serializationChunk !== undefined) {
             forest.deserializeInto(serializationChunk)
         }
-        const eventAsDelta = eventToDeltaTranslator(languageBases, forest.deserialize)
+        const eventAsDelta = eventToDeltaTranslator(serializationConfiguration)
         loading = false
 
         const messageRelatedClientState = new MessageRelatedClientState(
