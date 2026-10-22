@@ -54,7 +54,7 @@ export const libraryReader: Reader<BaseNode> = {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const rtEnum = rtEnums[enumeration.key] as any
         const targetKey = rtEnum[value as number]
-        return enumeration.literals.find(({ key }) => key === targetKey) ?? null // (undefined -> null)
+        return enumeration.literals.find(({ key }) => key === targetKey)
     }
 }
 

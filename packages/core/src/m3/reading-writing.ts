@@ -27,7 +27,7 @@ export const lioncoreReaderFor = (version: LionWebVersion): Reader<M3Concept> =>
     getFeatureValue: (node, feature) =>
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (node as any)[feature.name], // (mirrors name-based update of settings)
-    enumerationLiteralFrom: (value, _) => value as EnumerationLiteral | null
+    enumerationLiteralFrom: (value, _) => value as (EnumerationLiteral | undefined)
 })
 
 

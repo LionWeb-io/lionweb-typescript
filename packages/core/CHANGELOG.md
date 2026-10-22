@@ -69,6 +69,9 @@
     > The `lionWebVersion` parameter specifies the LionWeb version to use for serialization, and, if not provided, it defaults to `LionWebVersions.v2023_1`.
     > The ``problemReporter` parameter is used to report problems, and defaults to `consoleProblemReporter`.
 
+* Change `null` summand of `EnumerationLiteralDecoder` type to `undefined`.
+  (This is technically a breaking change, but this type is effectively only part of the internal API.)
+
 
 ## Restructure how property values get (de-)serialized
 
@@ -80,7 +83,7 @@ The new `propertyValue{Des|S}erializerWith` functions construct implementations 
 
 This change consists of the following sub-changes (with the breaking ones indicated explicitly):
 
-* Expose a `EnumerationLiteralDecoder` type for functions that deduce an `EnumerationLiteral` of an `Enumeration` from a runtime encoding of the former.
+* Expose a `EnumerationLiteralDecoder` type for functions that decode an `EnumerationLiteral` of an `Enumeration` from a runtime encoding of the former.
 * Expose a `EnumerationLiteralEncoder` type for functions that produce a runtime encoding of an `EnumerationLiteral` of an `Enumeration`.
 * Expose `standard{Des|S}erializers` constants that are maps [name of standard primitive type] &rarr; [its corresponding (de-)serializing function], and use these in the implementation of the 2023.1 version.
 * Add (generic) `Value{Des|S}erializer` types (and use them).

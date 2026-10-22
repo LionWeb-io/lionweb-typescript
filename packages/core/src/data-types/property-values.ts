@@ -115,7 +115,7 @@ export const propertyValueSerializerWith = (configuration: PropertyValueSerializ
         }
         if (type instanceof Enumeration) {
             const enumerationLiteral = enumerationLiteralFrom(encoding, type)
-            if (enumerationLiteral === null) {
+            if (enumerationLiteral === undefined) {
                 problemReporter.reportProblem(`couldn’t deduce literal of enumeration ${type.name} from runtime encoding: ${encoding}`)
                 return undefined
             }
