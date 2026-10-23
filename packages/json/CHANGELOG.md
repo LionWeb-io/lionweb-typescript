@@ -3,6 +3,8 @@
 ## 0.11.0 — not yet released
 
 * **Breaking change!** Remove the deprecated `currentSerializationFormatVersion` constant — use the `serializationFormatVersion` from a `LionWebVersion` emitted from the `LionWebVersions` constant instead.
+* Add a `chunkTransformerWith` function that’s configured through the new `ChunkTransformerConfiguration` type.
+  The new `chunkTransformerWith` function returns a function of the new `LionWebJsonChunkTransformer` type, which transforms a chunk into another one.
 
 
 ## 0.10.0

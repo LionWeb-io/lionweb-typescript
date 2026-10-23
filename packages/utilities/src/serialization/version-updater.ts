@@ -15,17 +15,7 @@
 // SPDX-FileCopyrightText: 2026 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import {
-    LionWebJsonChunk,
-    LionWebJsonContainment,
-    LionWebJsonMetaPointer,
-    LionWebJsonNode,
-    LionWebJsonProperty,
-    LionWebJsonReference,
-    LionWebJsonUsedLanguage,
-    LionWebKey,
-    LionWebVersion
-} from "@lionweb/json"
+import { LionWebJsonChunk, LionWebJsonMetaPointer, LionWebKey, LionWebVersion, chunkTransformerWith } from "@lionweb/json"
 
 
 /**
@@ -55,42 +45,26 @@ export type VersionReplacementConfiguration = Partial<{
  * updated according to the given {@link VersionReplacementConfiguration}.
  */
 export const withUpdatedLanguageVersions = (
-    { serializationFormatVersion, languages, nodes }: LionWebJsonChunk,
+    chunk: LionWebJsonChunk,
     { versionMap, overallReplacementVersion }: VersionReplacementConfiguration
 ): LionWebJsonChunk => {
-    const updated = (languageKey: LionWebKey, currentVersion: LionWebVersion): LionWebVersion =>
+    const updatedLanguageTo = (languageKey: LionWebKey, currentVersion: LionWebVersion): LionWebVersion =>
         versionMap && languageKey in versionMap
             ? versionMap[languageKey]
             : (overallReplacementVersion ?? currentVersion)
     const updatedMetaPointer = ({ language, version, key }: LionWebJsonMetaPointer): LionWebJsonMetaPointer => ({
         language,
-        version: updated(language, version),
+        version: updatedLanguageTo(language, version),
         key
     })
-    return {
-        serializationFormatVersion,
-        languages: languages.map(({ key, version }) => ({
+
+    return chunkTransformerWith({
+        usedLanguage: ({ key, version }) => ({
             key,
-            version: updated(key, version)
-        }) satisfies LionWebJsonUsedLanguage),
-        nodes: nodes.map(({ id, classifier, properties, containments, references, annotations, parent }) => ({
-            id,
-            classifier: updatedMetaPointer(classifier),
-            properties: properties.map(({ property, value }) => ({
-                property: updatedMetaPointer(property),
-                value
-            }) satisfies LionWebJsonProperty),
-            containments: containments.map(({ containment, children }) => ({
-                containment: updatedMetaPointer(containment),
-                children
-            }) satisfies LionWebJsonContainment),
-            references: references.map(({ reference, targets }) => ({
-                reference: updatedMetaPointer(reference),
-                targets
-            }) satisfies LionWebJsonReference),
-            annotations,
-            parent
-        }) satisfies LionWebJsonNode)
-    } satisfies LionWebJsonChunk
+            version: updatedLanguageTo(key, version)
+        }),
+        classifierMetaPointer: updatedMetaPointer,
+        featureMetaPointer: updatedMetaPointer
+    })(chunk)
 }
 
