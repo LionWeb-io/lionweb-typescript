@@ -15,7 +15,7 @@
 // SPDX-FileCopyrightText: 2026 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { Annotation, deserializeLanguages, LionWebVersions } from "@lionweb/core"
+import { Annotation, deserializeLanguagesFrom, LionWebVersions } from "@lionweb/core"
 import { defaultTrumpfOriginatingApache2_0LicensedHeader, generateLanguage } from "@lionweb/class-core-generator"
 import { LionWebJsonChunk } from "@lionweb/json"
 import { getFromHttps, readFileAsJsonSync } from "@lionweb/node-utils"
@@ -59,7 +59,7 @@ if (argv.length > 2 && argv[2] === "--force-local") {
 console.log()
 
 
-const TestLanguage = deserializeLanguages(readFileAsJsonSync(languageJsonPath) as LionWebJsonChunk)[0]
+const TestLanguage = deserializeLanguagesFrom({ serializationChunk: readFileAsJsonSync(languageJsonPath) as LionWebJsonChunk })[0]
 
 // modify name of TestAnnotation.containment because of clash with NodeBase.containment:
 const TestAnnotation = TestLanguage.entities.find((entity) => entity.name === "TestAnnotation") as Annotation

@@ -1,7 +1,11 @@
 import { LionWebJsonChunk } from "@lionweb/json"
 import { deserializerWith } from "../deserializer.js"
 import { nodesExtractorUsing } from "../extraction.js"
-import { consoleProblemReporter, ProblemReporter } from "../reporter.js"
+import {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    consoleProblemReporter,
+    ProblemReporter
+} from "../reporter.js"
 import { lioncoreReaderFor, lioncoreWriterFor } from "./reading-writing.js"
 import { Language } from "./types.js"
 import { LionWebVersion } from "./version.js"
@@ -29,23 +33,16 @@ export type LanguageDeserializationData = {
 /**
  * @return languages serialized to the {@link LionWebJsonChunk serialization chunk} passed in the {@link LanguageDeserializationData data object}.
  */
-export const deserializeLanguagesFrom = ({serializationChunk, dependentLanguages, problemReporter, lionWebVersion = LionWebVersions.v2023_1}: LanguageDeserializationData): Language[] =>
+export const deserializeLanguagesFrom = ({ serializationChunk, dependentLanguages, problemReporter, lionWebVersion = LionWebVersions.v2023_1 }: LanguageDeserializationData): Language[] =>
     deserializerWith({
+        lionWebVersion,
         writer: lioncoreWriterFor(lionWebVersion),
         languages: [lionWebVersion.lioncoreFacade.language, ...(dependentLanguages ?? [])],
-        problemReporter: problemReporter ?? consoleProblemReporter
+        problemReporter
     })(
         serializationChunk,
         [lionWebVersion.builtinsFacade.language, ...(dependentLanguages ?? [])].flatMap(nodesExtractorUsing(lioncoreReaderFor(lionWebVersion))),
     )
         .filter((rootNode) => rootNode instanceof Language)
         .map((language) => (language as Language).dependingOn(...(dependentLanguages ?? [])))
-
-
-/**
- * Deserializes languages that have been serialized into the LionWeb serialization JSON format
- * as an instance of the LionCore metametamodel, using {@link _M3Concept these type definitions}.
- */
-export const deserializeLanguages = (serializationChunk: LionWebJsonChunk, ...dependentLanguages: Language[]): Language[] =>
-    deserializeLanguagesFrom({ serializationChunk, dependentLanguages })
 

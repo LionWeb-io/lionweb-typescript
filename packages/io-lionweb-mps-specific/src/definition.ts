@@ -15,14 +15,17 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { Classifier, deserializeLanguages, Language, LionWebVersions } from "@lionweb/core"
+import { Classifier, deserializeLanguagesFrom, Language, LionWebVersions } from "@lionweb/core"
 import { LionWebJsonChunk } from "@lionweb/json"
 
 import languageDefinitionJson from "../meta/io.lionweb.mps.specific.json" with { type: "json" }
 
 const { lioncoreFacade, builtinsFacade } = LionWebVersions.v2023_1
 
-export const ioLionWebMpsSpecificLanguage: Language = deserializeLanguages(languageDefinitionJson as LionWebJsonChunk, lioncoreFacade.language, builtinsFacade.language)[0]
+export const ioLionWebMpsSpecificLanguage: Language = deserializeLanguagesFrom({
+    serializationChunk: languageDefinitionJson as LionWebJsonChunk,
+    dependentLanguages: [lioncoreFacade.language, builtinsFacade.language]
+})[0]
 
 const classifierNamed = (name: string) =>
     ioLionWebMpsSpecificLanguage.entities

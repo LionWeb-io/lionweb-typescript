@@ -1,4 +1,4 @@
-import { Language, serializeLanguages, serializerWith } from "@lionweb/core"
+import { Language, serializeLanguagesFor, serializerWith } from "@lionweb/core"
 import {
     deriveLikelyPropertyName,
     inferLanguagesFromSerializationChunk,
@@ -14,7 +14,7 @@ import { deepEqual, equal } from "../test-utils/assertions.js"
 
 describe("inferLanguagesFromChunk", () => {
     const assertLanguagesAreEqual = (language1: Language, language2: Language) => {
-        const asSortedJson = (language: Language) => sortedSerializationChunk(serializeLanguages(language), true)
+        const asSortedJson = (language: Language) => sortedSerializationChunk(serializeLanguagesFor({ languages: [language] }), true)
         deepEqual(asSortedJson(language1), asSortedJson(language2))
     }
     it("should correctly infer the minimal library language from the instance", () => {

@@ -13,7 +13,7 @@ import {
     newPrimitiveValueSerializerRegistry,
     Reference,
     referenceToSet,
-    serializeLanguages,
+    serializeLanguagesFor,
     serializerWith,
     UnresolvedReference
 } from "@lionweb/core"
@@ -195,7 +195,7 @@ describe("serialization", () => {
         // don't set annotation.annotates!
         language.havingEntities(annotation)
 
-        const serializationChunk = serializeLanguages(language) // should not fail
+        const serializationChunk = serializeLanguagesFor({ languages: [language] }) // should not fail
         const annotationSerNode = serializationChunk.nodes.find(node => node.id === "Annotation")
         expect(annotationSerNode).to.not.be.null
         const referenceSer = annotationSerNode?.references.find(serRef => serRef.reference.key === "Annotation-annotates")
@@ -209,7 +209,7 @@ describe("serialization", () => {
         enumeration.havingLiterals(null as unknown as EnumerationLiteral) // some type-trickery
         language.havingEntities(enumeration)
 
-        const serializationChunk = serializeLanguages(language) // should not fail
+        const serializationChunk = serializeLanguagesFor({ languages: [language] }) // should not fail
         const enumerationSerNode = serializationChunk.nodes.find(node => node.id === "Enumeration")
         expect(enumerationSerNode).to.not.be.null
         const containmentSer = enumerationSerNode?.containments.find(
@@ -434,7 +434,7 @@ describe("serialization of a language", () => {
     it("doesn't fail when an annotation doesn't specify what it annotates", () => {
         const factory = new LanguageFactory("annotation-language", "0", concatenator("-"), lastOf)
         factory.annotation("annotation")
-        const serializationChunk = serializeLanguages(factory.language)
+        const serializationChunk = serializeLanguagesFor({ languages: [factory.language] })
         const annotationNode = serializationChunk.nodes.find(node => node.id === "annotation-language-annotation")
         expect(annotationNode).to.not.be.undefined
         const serializedReference = annotationNode!.references.find(serRef => serRef.reference.key === "Annotation-annotates")

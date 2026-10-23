@@ -15,7 +15,7 @@
 // SPDX-FileCopyrightText: 2026 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { Language, LionWebVersion, LionWebVersions, serializeLanguages } from "@lionweb/core"
+import { Language, LionWebVersion, LionWebVersions, serializeLanguagesFor } from "@lionweb/core"
 import { writeJsonAsFileSync } from "@lionweb/node-utils"
 import { generatePlantUmlForLanguage, languageAsText } from "@lionweb/utilities"
 import { writeFileSync } from "fs"
@@ -25,7 +25,7 @@ const generateArtifactsFor = (lionWebVersion: LionWebVersion) => {
     const versionId = Object.entries(LionWebVersions).find(([_, value]) => value === lionWebVersion)![0]
     const path = `artifacts/core/${versionId}`
     const writeArtifacts = (language: Language, name: string) => {
-        writeJsonAsFileSync(join(path, `${name}.json`), serializeLanguages(language))
+        writeJsonAsFileSync(join(path, `${name}.json`), serializeLanguagesFor({ languages: [language] }))
         writeFileSync(join(path, `${name}.txt`), languageAsText(language))
         writeFileSync(join(path, `${name}.puml`), generatePlantUmlForLanguage(language))
     }

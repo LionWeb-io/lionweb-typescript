@@ -1,11 +1,11 @@
 import {
-    deserializeLanguages,
+    deserializeLanguagesFrom,
     deserializerWith,
     DynamicNode,
     dynamicWriter,
     LionWebVersions,
     nameBasedClassifierDeducerFor,
-    serializeLanguages,
+    serializeLanguagesFor,
     serializerWith
 } from "@lionweb/core"
 
@@ -45,8 +45,8 @@ describe("Library test metamodel", () => {
     })
 
     it("serialize it", () => {
-        const serialization = serializeLanguages(libraryLanguage)
-        const deserialization = deserializeLanguages(serialization)
+        const serializationChunk = serializeLanguagesFor({ languages: [libraryLanguage] })
+        const deserialization = deserializeLanguagesFrom({ serializationChunk })
         deepEqual(deserialization.length, 1)
         deepEqual(deserialization[0], libraryLanguage)
     })

@@ -1,6 +1,7 @@
 import { LionWebJsonChunk } from "@lionweb/json"
 import { serializerWith } from "../serializer.js"
 import { lioncoreReaderFor } from "./reading-writing.js"
+import { ProblemReporter } from "../reporter.js"
 import { Language } from "./types.js"
 import { LionWebVersion } from "./version.js"
 import { LionWebVersions } from "./versions.js"
@@ -16,21 +17,21 @@ export type LanguageSerializationData = {
      */
     lionWebVersion?: LionWebVersion
     languages: Language[]
+    /**
+     * A {@link ProblemReporter} to report problems with.
+     * Default: {@link consoleProblemReporter}.
+     */
+    problemReporter?: ProblemReporter
 }
 
 /**
  * @return the {@link LionWebJsonChunk serialization chunk} serializing the given languages (M2s, as instances of the LionCore M3),
  * according to the configured {@link LionWebVersion} (which itself defaults to {@link LionWebVersions.v2023_1}).
  */
-export const serializeLanguagesFor = (data: LanguageSerializationData) => {
-    const lionwebVersion = data.lionWebVersion ?? LionWebVersions.v2023_1
-    return serializerWith({ reader: lioncoreReaderFor(lionwebVersion) })(data.languages)
-}
-
-/**
- * Serializes languages (i.e., instances of the LionCore metametamodel, using {@link M3Concept these type definitions})
- * into the LionWeb serialization JSON format.
- */
-export const serializeLanguages = (...languages: Language[]): LionWebJsonChunk =>
-    serializerWith({ reader: lioncoreReaderFor(LionWebVersions.v2023_1) })(languages)
+export const serializeLanguagesFor = ({ languages, problemReporter, lionWebVersion = LionWebVersions.v2023_1 }: LanguageSerializationData): LionWebJsonChunk =>
+    serializerWith({
+        reader: lioncoreReaderFor(lionWebVersion),
+        lionWebVersion,
+        problemReporter
+    })(languages)
 
