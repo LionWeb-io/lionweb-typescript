@@ -21,6 +21,8 @@
   * In the PlantUML and Mermaid diagram generation functions.
   * In the `tsTypeDefsForLanguage` TypeScript types generator function.
 
+* Implement a `migratedToLionWebVersion` function that migrates a serialization chunk to a specific LionWeb version, including correct references (in meta-pointers, and in reference targets) to the LionCore M3 and built-ins languages.
+
 
 ## 0.10.0
 
