@@ -27,6 +27,9 @@ export const getFromHttps = async (url: string): Promise<Buffer> =>
         try {
             https
                 .get(url, (response) => {
+                    if (response.statusCode !== 200) {
+                        reject(new Error(`not OK: status code = ${response.statusCode}`))
+                    }
                     response.on("data", (piece) => {
                         buffer = Buffer.concat([buffer, piece])
                     })

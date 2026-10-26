@@ -2,6 +2,8 @@
 
 ## 0.11.0 — not yet released
 
+* The `getFromHttps` function detects and fails on non-200 HTTP status codes.
+
 
 ## 0.10.0
 
