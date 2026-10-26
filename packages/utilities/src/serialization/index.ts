@@ -3,6 +3,7 @@ export {looksLikeSerializedLanguages, readSerializationChunk, tryReadAllAsLangua
 export {languagesUsedIn} from "./functions.js"
 export {aggregateMetrics, measure, mergeMetrics, zeroMetrics} from "./metrics/index.js"
 export type {ClassifierInstantiationMetric, ClassifierMetaTypes, ClassifierPointer, Metrics, LanguageMetric, LanguagePointer} from "./metrics/index.js"
+export {migratedToLionWebVersion} from "./migration.js"
 export {orderedSerializationChunk} from "./ordering.js"
 export {sortedSerializationChunk} from "./sorting.js"
 export {genericAsTreeText} from "./textualizer.js"
