@@ -3,7 +3,7 @@
  */
 
 
-import { LionWebId, LionWebKey } from "@lionweb/json"
+import { LionWebId, LionWebJsonUsedLanguage, LionWebKey } from "@lionweb/json"
 import {
     cycleWith,
     flatMapNonCyclingFollowing,
@@ -339,6 +339,15 @@ const areSameEntities = <T extends LanguageEntity>(left: T, right: T): boolean =
 const areSameClassifiers = areSameEntities<Classifier>
 
 
+/**
+ * @return Whether the given {@link LionWebJsonUsedLanguage} matches the given {@link Language},
+ * purely judging from their stated key and version properties — effectively their meta-pointers.
+ */
+const areSameLanguagesPerMetaPointer = (left: LionWebJsonUsedLanguage, right: Language) =>
+    left.key === right.key && left.version === right.version
+
+
+
 export {
     allContaineds,
     allFeaturesOf,
@@ -346,6 +355,7 @@ export {
     areSameClassifiers,
     areSameEntities,
     areSameLanguages,
+    areSameLanguagesPerMetaPointer,
     classBasedClassifierDeducerFor,
     concatenateNamesOf,
     conceptsOf,

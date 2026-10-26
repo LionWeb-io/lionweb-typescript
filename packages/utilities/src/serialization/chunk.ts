@@ -1,8 +1,8 @@
 import {
     allLionWebVersions,
+    areSameLanguagesPerMetaPointer,
     deserializeLanguagesFrom,
     Language,
-    lioncoreKey,
     LionWebVersion,
     LionWebVersions
 } from "@lionweb/core"
@@ -48,20 +48,34 @@ export const readSerializationChunk = async (path: string) => {
 const isRecord = (json: unknown): json is Record<string, unknown> =>
     typeof json === "object" && !Array.isArray(json)
 
+const isUsedLanguage = (json: unknown): json is LionWebJsonUsedLanguage => {
+    if (!isRecord(json)) {
+        return false
+    }
+    const hasStringProperty = (propertyName: string) =>
+        propertyName in json && typeof json[propertyName] === "string"
+    return hasStringProperty("key") && hasStringProperty("version")
+}
+
 /**
  * @return whether the given JSON looks like the serialization of languages.
  * @param lionWebVersion The LionWeb version that the given JSON should adhere to.
  * If not given, then the chunk should adhere to any of the {@link LionWebVersions specified LionWeb versions}.
  */
-export const looksLikeSerializedLanguages = (json: unknown, lionWebVersion?: LionWebVersion): boolean =>
-    isRecord(json)
-    && (
-        (lionWebVersion === undefined ? allLionWebVersions : [lionWebVersion])
-            .some((version) => json["serializationFormatVersion"] === version.serializationFormatVersion)
-    )
-    && "languages" in json
-    && Array.isArray(json["languages"])
-    && json["languages"].some((language) => isRecord(language) && language["key"] === lioncoreKey)
+export const looksLikeSerializedLanguages = (json: unknown, maybeLionWebVersion?: LionWebVersion): boolean => {
+    if (!(
+           isRecord(json)
+        && "languages" in json
+        && Array.isArray(json["languages"])
+    )) {
+        return false
+    }
+
+    const lionWebVersion = (maybeLionWebVersion === undefined ? allLionWebVersions : [maybeLionWebVersion])
+        .find((version) => json["serializationFormatVersion"] === version.serializationFormatVersion)
+    return lionWebVersion !== undefined
+        && json["languages"].some((language) => isUsedLanguage(language) && areSameLanguagesPerMetaPointer(language, lionWebVersion.lioncoreFacade.language))
+}
 
 
 /**

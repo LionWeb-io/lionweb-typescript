@@ -72,6 +72,8 @@
 * Change `null` summand of `EnumerationLiteralDecoder` type to `undefined`.
   (This is technically a breaking change, but this type is effectively only part of the internal API.)
 
+* Add a `areSameLanguagesPerMetaPointer` function, to compare the `key` and `version` meta-pointer properties of a `LionWebJsonUsedLanguage` instance with those of an in-memory `Language`.
+
 
 ## Restructure how property values get (de-)serialized
 
