@@ -3,6 +3,7 @@
 ## 0.11.0 — not yet released
 
 * The `getFromHttps` function detects and fails on non-200 HTTP status codes.
+* Add a `retrieval` function (with an accompanying `RetrievalParameters` type) to retrieve a file from a URL, or fall back to copying from a local source path.
 
 
 ## 0.10.0
