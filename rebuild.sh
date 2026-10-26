@@ -85,7 +85,6 @@ npm run build
 cd ..
 
 cd test
-mkdir -p artifacts/metrics
 rm -rf dist/
 npm test
 cd ..
