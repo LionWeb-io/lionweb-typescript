@@ -4,15 +4,31 @@ import { PrimitiveValueDeserializerRegistry, PrimitiveValueSerializerRegistry } 
 
 /**
  * The key of the LionCore language containing the built-ins.
+ * (See § 3.4.2 of the meta-metamodel specification.)
+ * *Note*: don’t expose from this package!
  */
 export const lioncoreBuiltinsKey = "LionCore-builtins"
 
 /**
- * A function that generates IDs and keys for entities in the LionCore built-ins language.
+ * The name of the LionCore language containing the built-ins.
+ * (See § 3.4.2 of the meta-metamodel specification.)
+ * *Note*: don’t expose from this package!
  */
-export const lioncoreBuiltinsIdAndKeyGenerator: StringsMapper = (...names) =>
+export const lioncoreBuiltinsName = "LionCore_builtins"
+
+/**
+ * A key generator for entities in the LionCore built-ins language.
+ * *Note*: don’t expose from this package!
+ */
+export const lioncoreBuiltinsKeyGenerator: StringsMapper = (...names) =>
     [lioncoreBuiltinsKey, ...names.slice(1)].join("-")
 
+/**
+ * A function that generates an ID generator for entities in the LionCore built-ins language, given a suitable postfix.
+ * *Note*: don’t expose from this package!
+ */
+export const lioncoreBuiltinsIdGeneratorWithPostfix = (postfix: string): StringsMapper =>
+    (...names) => lioncoreBuiltinsKeyGenerator(...names) + postfix
 
 /**
  * Type def. for objects that façade (a version of) the LionCore built-ins.

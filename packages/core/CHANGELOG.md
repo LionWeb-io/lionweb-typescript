@@ -74,6 +74,9 @@
 
 * Add a `areSameLanguagesPerMetaPointer` function, to compare the `key` and `version` meta-pointer properties of a `LionWebJsonUsedLanguage` instance with those of an in-memory `Language`.
 
+* *Breaking change!* Unexpose the – potentially confusing – `lioncoreKey` constant.
+  (Internal change: improve generation of IDs and keys for LionCore [built-ins] languages.)
+
 
 ## Restructure how property values get (de-)serialized
 

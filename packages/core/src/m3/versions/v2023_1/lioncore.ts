@@ -1,18 +1,18 @@
 import { lioncoreBuiltinsFacade } from "./builtins.js"
 import { LanguageFactory } from "../../factory.js"
-import { generatedLionCoreKeyFrom, LionCoreFacade } from "../../lioncore-common.js"
+import { LionCoreFacade, lioncoreIdGeneratorWithPostfix, localQualifiedName } from "../../lioncore-common.js"
 import { ConceptModifier } from "../../types.js"
 
 
 const factory = new LanguageFactory(
     "LionCore_M3",
     "2023.1",
-    (...names) => "-id-" + generatedLionCoreKeyFrom(...names),
-    generatedLionCoreKeyFrom
+    lioncoreIdGeneratorWithPostfix(""),
+    localQualifiedName
 )
 /*
- * ID: `-id-${key}`
- * key: qualified name _without_ "LionCore_M3", dash-separated
+ * ID: `-id-${key}` — e.g. "-id-Concept-abstract"
+ * key: qualified name _without_ "LionCore_M3", dash-separated — e.g. "Concept-abstract"
  */
 
 const { inamed } = lioncoreBuiltinsFacade.classifiers

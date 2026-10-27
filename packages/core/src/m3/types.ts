@@ -259,6 +259,7 @@ class Language extends M3Node {
     dependingOn(...languages: Language[]): Language {
         this.dependsOn.push(
             ...languages
+                // don’t depend on (any version of) the LionCore built-ins language:
                 .filter((language) => language.key !== lioncoreBuiltinsKey)
         )
         return this
@@ -306,7 +307,6 @@ export {
     Property,
     Reference,
     isINamed,
-    lioncoreBuiltinsKey,
     simpleNameDeducer
 }
 
