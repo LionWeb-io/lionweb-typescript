@@ -31,7 +31,7 @@ const sortedTargets = sorterWith<LionWebJsonReferenceTarget>(mappedComparer(({ r
  * Sorted serialization chunks lean themselves well to being compared as text files.
  * Setting `sortConnections` to `true` usually changes the meaning of the serialization chunk, but makes it easy to find out whether a list of items appearing in a containment, a reference, or the annotations of a node merely appear in a different order, or really differ.
  */
-export const sortedSerializationChunk = ({serializationFormatVersion, languages, nodes}: LionWebJsonChunk, sortConnections?: boolean): LionWebJsonChunk =>
+export const sortedSerializationChunk = ({ serializationFormatVersion, languages, nodes }: LionWebJsonChunk, sortConnections?: boolean): LionWebJsonChunk =>
     ({
         serializationFormatVersion,
         languages: sortedUsedLanguages(languages)

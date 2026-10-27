@@ -18,12 +18,11 @@
 import { Language, LionWebVersion, LionWebVersions, serializeLanguagesFor } from "@lionweb/core"
 import { writeJsonAsFileSync } from "@lionweb/node-utils"
 import { generatePlantUmlForLanguage, languageAsText } from "@lionweb/utilities"
-import { writeFileSync } from "fs"
-import { join } from "path"
+import { writeFileSync } from "node:fs"
+import { join } from "node:path"
 
 const generateArtifactsFor = (lionWebVersion: LionWebVersion) => {
-    const versionId = Object.entries(LionWebVersions).find(([_, value]) => value === lionWebVersion)![0]
-    const path = `artifacts/core/${versionId}`
+    const path = `artifacts/core/${lionWebVersion.serializationFormatVersion}`
     const writeArtifacts = (language: Language, name: string) => {
         writeJsonAsFileSync(join(path, `${name}.json`), serializeLanguagesFor({ languages: [language] }))
         writeFileSync(join(path, `${name}.txt`), languageAsText(language))
