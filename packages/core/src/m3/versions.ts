@@ -1,5 +1,6 @@
 import { v2023_1 } from "./versions/v2023_1/version.js"
 import { v2024_1 } from "./versions/v2024_1/version.js"
+import { v2026_1 } from "./versions/v2026_1/version.js"
 import { LionWebVersion } from "./version.js"
 
 
@@ -9,7 +10,8 @@ import { LionWebVersion } from "./version.js"
 export const LionWebVersions = {
     // LionWeb standard version 2023.1 — defined at https://lionweb.io/specification/2023.1
     v2023_1,
-    v2024_1
+    v2024_1,
+    v2026_1
 } as const
 
 /**

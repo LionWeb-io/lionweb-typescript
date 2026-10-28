@@ -91,6 +91,8 @@
     * `structuredData{Des|s}erializer` functions that, given an instance of `SimpleData{Des|S}erializer`, return an instance of `StructuredData{Des|s}erializer`.
     * Integrate the `structuredData{Des|s}erializer` functions into the `propertyValue{Des|S}erializerWith` functions.
 
+* Add LionWeb version **2026.1**.
+
 
 ## Restructure how property values get (de-)serialized
 

@@ -35,4 +35,5 @@ const generateArtifactsFor = (lionWebVersion: LionWebVersion) => {
 
 generateArtifactsFor(LionWebVersions.v2023_1)
 generateArtifactsFor(LionWebVersions.v2024_1)
+generateArtifactsFor(LionWebVersions.v2026_1)
 

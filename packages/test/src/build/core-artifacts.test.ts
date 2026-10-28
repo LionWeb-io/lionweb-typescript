@@ -91,5 +91,10 @@ describe("LionCore[-builtins] equivalence", () => {
         await checkEquivalence("2024.1", "builtins")
     })
 
+    it("2026.1", async () => {
+        await checkEquivalence("2026.1", "lioncore",)
+        await checkEquivalence("2026.1", "builtins")
+    })
+
 })
 
