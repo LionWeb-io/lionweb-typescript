@@ -16,9 +16,10 @@ import {
     nonRelationalFeatures,
     PrimitiveType,
     relationsOf,
+    StructuredDataType,
     type
 } from "@lionweb/core"
-import { asString, indentWith } from "littoral-templates"
+import { asString, indentWith, when } from "littoral-templates"
 
 import { DiagramRenderer } from "./type.js"
 
@@ -112,6 +113,15 @@ const generateForNonRelationalFeature = (feature: Feature) => {
 
 const generateForPrimitiveType = ({ name }: PrimitiveType) => `class "${name}" <<primitive type>>`
 
+const generateForStructuredDataType = ({ name, fields }: StructuredDataType) => [
+    `class ${name} <<structured data type>>${fields.length > 0 ? ` {` : ``}`,
+    indented(
+        fields.map(({name, type}) => `${name}: ${isResolvedReference(type) ? type.name : `???`}`)
+    ),
+    when(fields.length > 0)(`}`),
+    ``
+]
+
 const generateForEntity = (entity: LanguageEntity) => {
     if (entity instanceof Annotation) {
         return generateForAnnotation(entity)
@@ -127,6 +137,9 @@ const generateForEntity = (entity: LanguageEntity) => {
     }
     if (entity instanceof PrimitiveType) {
         return generateForPrimitiveType(entity)
+    }
+    if (entity instanceof StructuredDataType) {
+        return generateForStructuredDataType(entity)
     }
     return [
         `' unhandled language entity: <${entity.constructor.name}>${entity.name}`,

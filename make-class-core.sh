@@ -12,6 +12,10 @@ cd class-core-test-language
 npm run build
 cd ..
 
+cd class-core-generator
+npm run build
+cd ..
+
 cd class-core-test
 rm -rf dist/
 npm test    # also runs build

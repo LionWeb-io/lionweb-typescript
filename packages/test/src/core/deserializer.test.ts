@@ -241,7 +241,7 @@ describe("deserialization", () => {
         const model = deserializerWith({ writer: dynamicWriter, languages: [someLanguage], problemReporter })(serializationChunk)
         deepEqual(Object.entries(problemReporter.allProblems()), [
             [
-                `couldn't resolve the target with id=bar of a "aReference" reference on the node with id=foo`,
+                `couldn't resolve the target with id="bar" (and resolveInfo="unresolvable bar") of a "aReference" reference on the node with id=foo`,
                 1
             ]
         ])

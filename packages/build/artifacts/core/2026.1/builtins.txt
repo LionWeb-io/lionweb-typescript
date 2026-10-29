@@ -1,0 +1,17 @@
+language LionCore_builtins
+    version: 2026.1
+    entities (↓name):
+
+        primitive type Boolean
+
+        interface INamed
+            features (↓name):
+                name: String
+
+        primitive type Integer
+
+        abstract concept Node
+
+        primitive type String
+
+

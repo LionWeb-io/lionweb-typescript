@@ -1,0 +1,42 @@
+@startuml
+hide empty members
+
+' qualified name: "LanguageWithSDTs"
+
+
+class Amount <<structured data type>> {
+  value: Integer
+  currency: Currency
+  digital: Boolean
+}
+
+class ComplexNumber <<structured data type>> {
+  real: Decimal
+  imaginary: Decimal
+}
+
+enum Currency {
+  EUR
+  GBP
+}
+
+class Decimal <<structured data type>> {
+  int: Integer
+  frac: Integer
+}
+
+class FaultySDT <<structured data type>> {
+  typeless: ???
+}
+
+
+
+' relations:
+
+
+
+
+
+
+
+@enduml

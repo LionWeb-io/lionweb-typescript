@@ -29,7 +29,8 @@ import {
     Link,
     PrimitiveType,
     Property,
-    SingleRef
+    SingleRef,
+    StructuredDataType
 } from "@lionweb/core"
 import { Imports, tsTypeForPrimitiveType } from "./index.js"
 
@@ -53,6 +54,9 @@ export const tsTypeForDataType = (dataType: SingleRef<DataType>, imports: Import
         return tsTypeForPrimitiveType(dataType, imports.lioncoreBuiltinsFacade)
     }
     if (dataType instanceof Enumeration) {
+        return imports.entity(dataType)
+    }
+    if (dataType instanceof StructuredDataType) {
         return imports.entity(dataType)
     }
     return `unknown /* [ERROR] can't compute a TS type for data type ${dataType.name} that has an unhandled/-known meta-type ${dataType.constructor.name} */`
@@ -94,6 +98,9 @@ export const tsFieldTypeForFeature = (feature: Feature, imports: Imports): strin
             if (type instanceof Enumeration) {
                 return type.name
             }
+            if (type instanceof StructuredDataType) {
+                return type.name
+            }
             return `unknown /* [ERROR] can't compute a TS type for feature ${feature.name} on classifier ${feature.classifier.name} whose type has an unhandled/-known meta-type ${type.constructor.name} */`
         })()
         return `${typeId}${(optionalityPostfix(feature))}`
@@ -120,6 +127,9 @@ export const tsTypeForValueManager = (feature: Feature, imports: Imports): strin
                 return tsTypeForPrimitiveType(type, imports.lioncoreBuiltinsFacade)
             }
             if (type instanceof Enumeration) {
+                return type.name
+            }
+            if (type instanceof StructuredDataType) {
                 return type.name
             }
             return `unknown /* [ERROR] can't compute a TS type for feature ${feature.name} on classifier ${feature.classifier.name} whose type has an unhandled/-known meta-type ${type.constructor.name} */`

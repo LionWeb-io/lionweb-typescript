@@ -1,19 +1,24 @@
 import { asMinimalJsonString } from "@lionweb/ts-utils"
-import { LionCoreBuiltinsFacade, lioncoreBuiltinsIdAndKeyGenerator } from "../../builtins-common.js"
+import {
+    LionCoreBuiltinsFacade,
+    lioncoreBuiltinsIdGeneratorWithPostfix,
+    lioncoreBuiltinsKeyGenerator,
+    lioncoreBuiltinsName
+} from "../../builtins-common.js"
 import { LanguageFactory } from "../../factory.js"
 import { ConceptModifier } from "../../types.js"
-import { standardDeserializers, standardSerializers } from "../../../data-types/standard-primitive-types.js"
 import {
     newPrimitiveValueDeserializerRegistry,
     newPrimitiveValueSerializerRegistry
 } from "../../../data-types/primitive-types.js"
+import { standardDeserializers, standardSerializers } from "../../../data-types/standard-primitive-types.js"
 
 
 const factory = new LanguageFactory(
-    "LionCore_builtins",
+    lioncoreBuiltinsName,
     "2023.1",
-    lioncoreBuiltinsIdAndKeyGenerator,
-    lioncoreBuiltinsIdAndKeyGenerator
+    lioncoreBuiltinsIdGeneratorWithPostfix(""),
+    lioncoreBuiltinsKeyGenerator
 )
 /*
  * ID == key: `LionCore-builtins-${qualified name _without_ "LionCore-builtins", dash-separated}`

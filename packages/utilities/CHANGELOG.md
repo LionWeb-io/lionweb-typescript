@@ -14,6 +14,13 @@
 
 * Add a `withUpdatedLanguageVersions` function, and a corresponding `VersionReplacementConfiguration` configuration type, to update stated versions of languages used in a serialization chunk.
 
+* Improve `looksLikeSerializedLanguages` function to check (against the correct) key and version of a version of the LionCore language.
+
+* Support structured data types:
+  * In the `language[s]AsText` and `genericAsTreeText` textualizer functions.
+  * In the PlantUML and Mermaid diagram generation functions.
+  * In the `tsTypeDefsForLanguage` TypeScript types generator function.
+
 
 ## 0.10.0
 

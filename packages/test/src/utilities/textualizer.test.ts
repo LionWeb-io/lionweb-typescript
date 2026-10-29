@@ -1,4 +1,4 @@
-import { Classifier, ConceptModifier, LanguageFactory, serializerWith } from "@lionweb/core"
+import { Classifier, ConceptModifier, Language, LanguageFactory, serializerWith } from "@lionweb/core"
 import { concatenator } from "@lionweb/ts-utils"
 import { genericAsTreeText, languageAsText } from "@lionweb/utilities"
 import { readFileSync, writeFileSync } from "fs"
@@ -6,16 +6,23 @@ import { readFileSync, writeFileSync } from "fs"
 import { libraryModel, libraryReader } from "../instances/library.js"
 import { libraryLanguage } from "../languages/library.js"
 import { languageWithEnum } from "../languages/with-enum.js"
+import { languageWithSDTs } from "../languages/with-SDTs.js"
 import { equal } from "../test-utils/assertions.js"
 
 
 describe("LionCore-specific textual syntax", () => {
-    it("textualize language with an enum as text", () => {
-        const actual = languageAsText(languageWithEnum).replaceAll("\r\n", "\n") // normalize Windows EOLs
-        const thisPath = "src/utilities"
-        writeFileSync(`${thisPath}/languageWithEnum.actual.txt`, actual)
-        equal(actual, readFileSync(`${thisPath}/languageWithEnum.expected.txt`, { encoding: "utf8" }).replaceAll("\r\n", "\n"))
-    })
+
+    const textualizationTest = (language: Language) =>
+        () => {
+            const actual = languageAsText(language).replaceAll("\r\n", "\n") // normalize Windows EOLs
+            const thisPath = "src/utilities"
+            writeFileSync(`${thisPath}/${language.name}.actual.txt`, actual)
+            equal(actual, readFileSync(`${thisPath}/${language.name}.expected.txt`, { encoding: "utf8" }).replaceAll("\r\n", "\n"))
+        }
+
+    it("textualize language with an enum", textualizationTest(languageWithEnum))
+
+    it("textualize language with structured data types", textualizationTest(languageWithSDTs))
 
     it("textualize a language with unset references", () => {
         const factory = new LanguageFactory("foo", "0", concatenator("-"), concatenator("-"))
@@ -41,6 +48,7 @@ describe("LionCore-specific textual syntax", () => {
 `
         )
     })
+
 })
 
 describe("generic textual syntax", () => {

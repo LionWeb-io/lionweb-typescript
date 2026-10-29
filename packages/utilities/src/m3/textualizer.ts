@@ -7,6 +7,7 @@ import {
     EnumerationLiteral,
     INamed,
     Interface,
+    isINamed,
     isResolvedReference,
     Language,
     Link,
@@ -17,6 +18,7 @@ import {
     PrimitiveType,
     Property,
     SingleRef,
+    StructuredDataType,
     tryToRenderAsText
 } from "@lionweb/core"
 import { asString, indentWith, Template } from "littoral-templates"
@@ -76,7 +78,7 @@ const asText = (node: M3Node): Template => {
                     : [`dependsOn:`, indented(node.dependsOn.filter(isResolvedReference).map(language => `${language.name} (${language.version})`))],
                 `entities (↓name):`,
                 ``,
-                indented(nameSorted(node.entities).map(entity => [asText(entity), ``]))
+                indented(nameSorted(node.entities).map((entity) => [asText(entity), ``]))
             ]),
             ``
         ]
@@ -88,6 +90,16 @@ const asText = (node: M3Node): Template => {
 
     if (node instanceof Property) {
         return `${node.name}: ${refAsText(node.type)}${node.optional ? `?` : ``}`
+    }
+
+    if (node instanceof StructuredDataType) {
+        return [
+            `structured data type ${node.name}`,
+            indented([
+                `fields (↓name):`,
+                indented(nameSorted(node.fields).map((field) => `${field.name}: ${isResolvedReference(field.type) && isINamed(field.type!) ? field.type.name : `???`}`))
+            ])
+        ]
     }
 
     return `node (key=${node.key}, ID=${node.id}) of class ${node.constructor.name} not handled`

@@ -27,10 +27,14 @@ export const tsTypeForPrimitiveType = (primitiveType: PrimitiveType, lioncoreBui
             return `string`
         case primitiveTypes.integerDataType.key:
             return `number`
-        case primitiveTypes.jsonDataType.key:
-            return `unknown`
-        default:
+        default: {
+            if ("jsonDataType" in primitiveTypes) {
+                if (primitiveType.key === primitiveTypes.jsonDataType.key) {
+                    return `unknown`
+                }
+            }
             return `string`
+        }
     }
 }
 

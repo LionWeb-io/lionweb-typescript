@@ -8,6 +8,7 @@ import {
     Feature,
     inheritsDirectlyFrom,
     Language,
+    LionWebVersions,
     Property,
     Reference,
     simpleNameDeducer
@@ -83,6 +84,40 @@ export const serializerWith = <NT extends Node, RT extends Node = NT>(configurat
                  */
             )
         )
+
+    const serializeReferenceTarget = (reference: Reference, target: RT | UnresolvedReference) => {
+        if (target instanceof UnresolvedReference) {
+            return {
+                resolveInfo: target.resolveInfo ?? null,
+                reference: target.targetId ?? null
+                // at least one of these will be non-null <== (2)
+            } as LionWebJsonReferenceTarget
+        }
+        if (lionWebVersion !== LionWebVersions.v2023_1) {
+            // TODO  come up with a better way to match than on ID!
+            // if target is something in the LionCore[-builtins] languages of the current LionWeb version, then treat differently:
+            const lioncoreMatch = target.id.match(/^-id-([A-Za-z0-9_-]+)-(\d{4})-1$/)   // TODO  check version number?
+            if (lioncoreMatch) {
+                return {
+                    reference: null,
+                    resolveInfo: `LionWeb.LionCore_M3.${lioncoreMatch[1]}`
+                }
+            }
+            // do the same thing for built-ins:
+            const builtinsMatch = target.id.match(/^LionCore-builtins-([A-Za-z0-9_-]+)-(\d{4})-1$/)   // TODO  check version number?
+            if (builtinsMatch) {
+                return {
+                    reference: null,
+                    resolveInfo: `LionWeb.LionCore_builtins.${builtinsMatch[1]}`
+                }
+            }
+        }
+        return {
+            resolveInfo: (reader.resolveInfoFor ? reader.resolveInfoFor(target, reference) : simpleNameDeducer(target, reference)) ?? null,
+            reference: target.id
+            // reference will be a non-null string (~(1))
+        }
+    }
 
     return (nodes: NT[]): LionWebJsonChunk => {
         const serializedNodes: LionWebJsonNode[] = [] // keep nodes as much as possible "in order"
@@ -164,19 +199,7 @@ export const serializerWith = <NT extends Node, RT extends Node = NT>(configurat
                     serializedNode.references.push({
                         reference: featureMetaPointer,
                         targets: targets
-                            .map((t) =>
-                                t instanceof UnresolvedReference
-                                    ? {
-                                        resolveInfo: t.resolveInfo ?? null,
-                                        reference: t.targetId ?? null
-                                        // at least one of these will be non-null <== (2)
-                                    } as LionWebJsonReferenceTarget
-                                    : {
-                                        resolveInfo: (reader.resolveInfoFor ? reader.resolveInfoFor(t, feature) : simpleNameDeducer(t, feature)) ?? null,
-                                        reference: t.id
-                                        // reference will be a non-null string (~(1))
-                                    }
-                            )
+                            .map((target) => serializeReferenceTarget(feature, target))
                     })
                     return
                 }

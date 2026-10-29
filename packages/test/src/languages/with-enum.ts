@@ -2,10 +2,10 @@ import { ConceptModifier, LanguageFactory } from "@lionweb/core"
 import { chain, concatenator, lastOf } from "@lionweb/ts-utils"
 import { hasher } from "@lionweb/utilities"
 
-const factory = new LanguageFactory("WithEnum", "1", chain(concatenator("-"), hasher()), lastOf)
+const factory = new LanguageFactory("LanguageWithEnum", "1", chain(concatenator("-"), hasher()), lastOf)
 
 const myEnum = factory.enumeration("MyEnum")
-myEnum.havingLiterals(...[1, 2].map(i => factory.enumerationLiteral(myEnum, `literal${i}`).havingKey(`lit${i}`)))
+;[1, 2].map((i) => factory.enumerationLiteral(myEnum, `literal${i}`).havingKey(`lit${i}`))
 
 const enumHolder = factory.concept("EnumHolder", ConceptModifier.concrete)
 factory.property(enumHolder, "enumValue").ofType(myEnum)

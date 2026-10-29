@@ -1,8 +1,7 @@
 import {
     Classifier,
     Containment,
-    Enumeration,
-    EnumerationLiteral,
+    EnumerationLiteralDecoder,
     Feature,
     Language,
     Link,
@@ -46,7 +45,7 @@ export class TestNodeReader implements Reader<TestNode> {
         return classifier as Classifier
     }
 
-    enumerationLiteralFrom(_encoding: unknown, _enumeration: Enumeration): EnumerationLiteral | null {
+    enumerationLiteralFrom: EnumerationLiteralDecoder = (_encoding, _enumeration) => {
         throw new Error("Not supported")
     }
 

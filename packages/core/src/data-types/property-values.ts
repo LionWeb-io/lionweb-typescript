@@ -15,11 +15,19 @@
 // SPDX-FileCopyrightText: 2026 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { Enumeration, PrimitiveType, Property } from "../m3/index.js"
+import { Enumeration, PrimitiveType, Property, StructuredDataType } from "../m3/index.js"
 import { CompleteSerializationConfiguration, completeSerializationConfigurationWithDefaults } from "../configuration.js"
 import { EnumerationLiteralDecoder } from "../reading.js"
 import { isReferenceToSet, isResolvedReference, isUnresolvedReference } from "../references.js"
 import { EnumerationLiteralEncoder } from "../writing.js"
+import {
+    SimpleDataDeserializer,
+    SimpleDataSerializer,
+    StructuredData,
+    structuredDataDeserializer,
+    structuredDataSerializer
+} from "../structured-data-types.js"
+import { asMinimalJsonString } from "@lionweb/ts-utils"
 
 
 /**
@@ -46,12 +54,7 @@ export const propertyValueDeserializerWith = (configuration: PropertyValueDeseri
     const primitiveValueDeserializerByType = primitiveValueDeserializerRegistry.lookupByKey
     const { encodingOfEnumerationLiteral } = configuration
 
-    return (property, serialization) => {
-        const { type } = property
-        if (!isResolvedReference(type)) {
-            problemReporter.reportProblem(`can't deserialize value of property "${property.name}" (on classifier "${property.classifier.name}" in language "${property.classifier.language.name}") having ${isReferenceToSet(type) ? `an unset type` : `unresolved type ${isUnresolvedReference(type) && type.resolveInfo !== undefined ? ` -> ${type.resolveInfo}` : ``}`}: ${serialization}`)
-            return undefined
-        }
+    const simpleDataDeserializer: SimpleDataDeserializer = (type, serialization) => {
         if (type instanceof PrimitiveType) {
             const primitiveValueDeserializer = primitiveValueDeserializerByType(type)
             if (primitiveValueDeserializer === undefined) {
@@ -68,7 +71,22 @@ export const propertyValueDeserializerWith = (configuration: PropertyValueDeseri
             }
             return encodingOfEnumerationLiteral(literal)
         }
-        // TODO  StructuredDataType
+    }
+
+    const structuredDataDeserializer_ = structuredDataDeserializer(simpleDataDeserializer)
+
+    return (property, serialization) => {
+        const { type } = property
+        if (!isResolvedReference(type)) {
+            problemReporter.reportProblem(`can't deserialize value of property "${property.name}" (on classifier "${property.classifier.name}" in language "${property.classifier.language.name}") having ${isReferenceToSet(type) ? `an unset type` : `unresolved type ${isUnresolvedReference(type) && type.resolveInfo !== undefined ? ` -> ${type.resolveInfo}` : ``}`}: ${serialization}`)
+            return undefined
+        }
+        if (type instanceof Enumeration || type instanceof PrimitiveType) {
+            return simpleDataDeserializer(type, serialization)
+        }
+        if (type instanceof StructuredDataType) {
+            return structuredDataDeserializer_(type, JSON.parse(serialization), problemReporter)
+        }
         problemReporter.reportProblem(`property ${property.name} on classifier ${property.classifier.name} is not handled by this property value deserializer, because its type is neither a primitive type nor an enumeration`)
         return undefined
     }
@@ -99,12 +117,7 @@ export const propertyValueSerializerWith = (configuration: PropertyValueSerializ
     const primitiveValueSerializerByType = primitiveValueSerializerRegistry.lookupByKey
     const { enumerationLiteralFrom } = configuration
 
-    return (property, encoding) => {
-        const { type } = property
-        if (!isResolvedReference(type)) {
-            problemReporter.reportProblem(`can't serialize value of property "${property.name}" (on classifier "${property.classifier.name}" in language "${property.classifier.language.name}") having ${isReferenceToSet(type) ? `an unset type` : `unresolved type: ${isUnresolvedReference(type) && type.resolveInfo !== undefined ? ` -> ${type.resolveInfo}` : ``}`}: ${encoding}`)
-            return undefined
-        }
+    const simpleDataSerializer: SimpleDataSerializer = (type, encoding) => {
         if (type instanceof PrimitiveType) {
             const primitiveValueSerializer = primitiveValueSerializerByType(type)
             if (primitiveValueSerializer === undefined) {
@@ -115,13 +128,30 @@ export const propertyValueSerializerWith = (configuration: PropertyValueSerializ
         }
         if (type instanceof Enumeration) {
             const enumerationLiteral = enumerationLiteralFrom(encoding, type)
-            if (enumerationLiteral === null) {
+            if (enumerationLiteral === undefined) {
                 problemReporter.reportProblem(`couldn’t deduce literal of enumeration ${type.name} from runtime encoding: ${encoding}`)
                 return undefined
             }
             return enumerationLiteral.key
         }
-        // TODO  StructuredDataType
+        // never reached:
+        return undefined
+    }
+
+    const structuredDataSerializer_ = structuredDataSerializer(simpleDataSerializer)
+
+    return (property, encoding) => {
+        const { type } = property
+        if (!isResolvedReference(type)) {
+            problemReporter.reportProblem(`can't serialize value of property "${property.name}" (on classifier "${property.classifier.name}" in language "${property.classifier.language.name}") having ${isReferenceToSet(type) ? `an unset type` : `unresolved type: ${isUnresolvedReference(type) && type.resolveInfo !== undefined ? ` -> ${type.resolveInfo}` : ``}`}: ${encoding}`)
+            return undefined
+        }
+        if (type instanceof PrimitiveType || type instanceof Enumeration) {
+            return simpleDataSerializer(type, encoding)
+        }
+        if (type instanceof StructuredDataType) {
+            return asMinimalJsonString(structuredDataSerializer_(type, encoding as StructuredData, problemReporter))
+        }
         problemReporter.reportProblem(`property ${property.name} on classifier ${property.classifier.name} is not handled by this property value deserializer, because its type is neither a primitive type nor an enumeration`)
         return undefined
     }

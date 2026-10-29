@@ -70,5 +70,18 @@ describe(`class-core generator`, () => {
         generateLanguage(factory.language, "src/gen", lionWebVersion, { verbose: false })
     })
 
+    it(`generate code for language with a structured data type named "StructuredDataType"`, () => {
+        const factory = new LanguageFactory("SDT-test", "1", dashSeparator, dashSeparator)
+        const SDT0 = factory.structuredDataType("ThatSDT")
+        const SDT = factory.structuredDataType("StructuredDataType")
+        const {stringDataType} = LionWebVersions.v2024_1.builtinsFacade.primitiveTypes
+        factory.field(SDT, "stringField").ofType(stringDataType)
+        factory.field(SDT, "sdt1Field").ofType(SDT0)
+        const Container = factory.concept("Container", ConceptModifier.concrete)
+        factory.property(Container, "sdt").ofType(SDT)
+
+        generateLanguage(factory.language, "src/gen", LionWebVersions.v2024_1, { verbose: false })
+    })
+
 })
 

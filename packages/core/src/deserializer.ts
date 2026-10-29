@@ -79,7 +79,7 @@ export const deserializerWith = <NT extends Node>(configuration: DeserializerCon
             return node
         }
 
-        type ReferenceToInstall = [node: NT, feature: Reference, refId: LionWebId, resolveInfo?: string]
+        type ReferenceToInstall = [node: NT, feature: Reference, refId: LionWebId | null, resolveInfo: string | null]
         const referencesToInstall: ReferenceToInstall[] = []
 
         const tryInstantiate = (
@@ -202,18 +202,23 @@ export const deserializerWith = <NT extends Node>(configuration: DeserializerCon
         const dependentNodesById = byIdMap(dependentNodes)
 
         referencesToInstall.forEach(([node, reference, refId, resolveInfo]) => {
-            const target = deserializedNodeById[refId] ?? dependentNodesById[refId]
-            const value = (() => {
-                if (target !== undefined) {
-                    return target
+            const target = (() => {
+                if (refId === null) {
+                    return resolveInfo === null
+                        ? undefined
+                        : lionWebVersion.lookUpBuiltinLionCoreNodeBy(resolveInfo)
+                } else {
+                    return deserializedNodeById[refId] ?? dependentNodesById[refId]
                 }
+            })()
+            if (target === undefined) {
                 const metaTypeMessage = "concept" in node ? ` and (meta-)type ${node.concept}` : ""
                 problemReporter.reportProblem(
-                    `couldn't resolve the target with id=${refId} of a "${reference.name}" reference on the node with id=${node.id}${metaTypeMessage}`
+                    `couldn't resolve the target with id="${refId}" (and resolveInfo="${resolveInfo}") of a "${reference.name}" reference on the node with id=${node.id}${metaTypeMessage}`
                 )
-                return new UnresolvedReference(refId, resolveInfo)
-            })()
-            writer.setFeatureValue(node, reference, value)
+            }
+            writer.setFeatureValue(node, reference, target ?? new UnresolvedReference(refId ?? undefined, resolveInfo ?? undefined))
+                // (?? short-circuits, so no throw-away instances of UnresolvedReference are being created)
         })
 
         return rootLikeNodes

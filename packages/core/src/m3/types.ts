@@ -240,6 +240,40 @@ class EnumerationLiteral extends M3Node {
     }
 }
 
+/**
+ * Available only since LionWeb version 2024.1.
+ */
+class StructuredDataType extends DataType {
+    metaType(): string {
+        return "StructuredDataType"
+    }
+    readonly fields: Field[] = []    // (containment)
+    havingFields(...fields: Field[]) {
+        this.fields.push(...fields.filter((field) => this.fields.indexOf(field) < 0))
+        return this
+    }
+}
+
+/**
+ * Available only since LionWeb version 2024.1.
+ */
+class Field extends M3Node {
+    metaType(): string {
+        return "Field"
+    }
+    constructor(structuredDataType: StructuredDataType, name: string, key: LionWebKey, id: LionWebId) {
+        super(id, name, key, structuredDataType)
+    }
+    get structuredDataType(): StructuredDataType {
+        return this.parent! as StructuredDataType
+    }
+    type: SingleRef<DataType> = referenceToSet   // (reference)
+    ofType(type: DataType): Field {
+        this.type = type
+        return this
+    }
+}
+
 class Language extends M3Node {
     metaType(): string {
         return "Language"
@@ -259,6 +293,7 @@ class Language extends M3Node {
     dependingOn(...languages: Language[]): Language {
         this.dependsOn.push(
             ...languages
+                // don’t depend on (any version of) the LionCore built-ins language:
                 .filter((language) => language.key !== lioncoreBuiltinsKey)
         )
         return this
@@ -280,11 +315,13 @@ type M3Concept =
     | Containment
     | Enumeration
     | EnumerationLiteral
+    | Field
     | Interface
     | Language
     | PrimitiveType
     | Property
     | Reference
+    | StructuredDataType
 
 
 export {
@@ -297,6 +334,7 @@ export {
     Enumeration,
     EnumerationLiteral,
     Feature,
+    Field,
     Interface,
     M3Node,
     Language,
@@ -305,8 +343,8 @@ export {
     PrimitiveType,
     Property,
     Reference,
+    StructuredDataType,
     isINamed,
-    lioncoreBuiltinsKey,
     simpleNameDeducer
 }
 

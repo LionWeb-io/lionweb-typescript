@@ -69,6 +69,30 @@
     > The `lionWebVersion` parameter specifies the LionWeb version to use for serialization, and, if not provided, it defaults to `LionWebVersions.v2023_1`.
     > The ``problemReporter` parameter is used to report problems, and defaults to `consoleProblemReporter`.
 
+* Change `null` summand of `EnumerationLiteralDecoder` type to `undefined`.
+  (This is technically a breaking change, but this type is effectively only part of the internal API.)
+
+* Add a `areSameLanguagesPerMetaPointer` function, to compare the `key` and `version` meta-pointer properties of a `LionWebJsonUsedLanguage` instance with those of an in-memory `Language`.
+
+* *Breaking change!* Unexpose the – potentially confusing – `lioncoreKey` constant.
+  (Internal change: improve generation of IDs and keys for LionCore [built-ins] languages.)
+
+* Add LionWeb version **2024.1**, including:
+  * A `lookUpBuiltinLionCoreNodeBy` method on the `LionWebVersion` class to look up nodes of the LionCore M3 or built-ins languages by a given `resolveInfo`.
+  * The (de-)serializer conforms to § 3.4.2 of the meta-metamodel specification.
+  * No `JSON` data type.
+  * Implementation of structured data types, including:
+    * Meta-concepts for structured data type and their fields, both in the self-definition of 2024.1, as in the meta-types.
+    * Methods for `StructuredDataType` and `Field` in `LanguageFactory` class.
+    * Constraint on `StructuredDataType` that checks for cyclicity.
+    * An `isStructuredDataType` type predicate (function).
+    * An `identificationForField` function to conveniently verbose a `Field`’s identification.
+    * `StructuredData`, `SimpleData{Des|S}erializer`, and `StructuredData{Des|S}erializer` types.
+    * `structuredData{Des|s}erializer` functions that, given an instance of `SimpleData{Des|S}erializer`, return an instance of `StructuredData{Des|s}erializer`.
+    * Integrate the `structuredData{Des|s}erializer` functions into the `propertyValue{Des|S}erializerWith` functions.
+
+* Add LionWeb version **2026.1**.
+
 
 ## Restructure how property values get (de-)serialized
 
@@ -80,7 +104,7 @@ The new `propertyValue{Des|S}erializerWith` functions construct implementations 
 
 This change consists of the following sub-changes (with the breaking ones indicated explicitly):
 
-* Expose a `EnumerationLiteralDecoder` type for functions that deduce an `EnumerationLiteral` of an `Enumeration` from a runtime encoding of the former.
+* Expose a `EnumerationLiteralDecoder` type for functions that decode an `EnumerationLiteral` of an `Enumeration` from a runtime encoding of the former.
 * Expose a `EnumerationLiteralEncoder` type for functions that produce a runtime encoding of an `EnumerationLiteral` of an `Enumeration`.
 * Expose `standard{Des|S}erializers` constants that are maps [name of standard primitive type] &rarr; [its corresponding (de-)serializing function], and use these in the implementation of the 2023.1 version.
 * Add (generic) `Value{Des|S}erializer` types (and use them).

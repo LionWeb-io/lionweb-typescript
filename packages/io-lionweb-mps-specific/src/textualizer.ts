@@ -17,18 +17,24 @@
 
 import {
     Classifier,
+    Containment,
     Enumeration,
     EnumerationLiteral,
     Feature,
+    Field,
     Language,
     LanguageEntity,
     M3Concept,
     Node,
-    PrimitiveType
+    PrimitiveType,
+    Property,
+    Reference,
+    StructuredDataType
 } from "@lionweb/core"
 import { indent, withFirstLower } from "@lionweb/textgen-utils"
 import { keepDefineds } from "@lionweb/ts-utils"
 import { asString, Template, when } from "littoral-templates"
+import { ioLionWebMpsSpecificAnnotationsFrom } from "./annotations.js"
 import {
     ConceptDescription,
     Deprecated,
@@ -37,7 +43,6 @@ import {
     ShortDescription,
     VirtualPackage
 } from "./implementation.js"
-import { ioLionWebMpsSpecificAnnotationsFrom } from "./annotations.js"
 
 
 /**
@@ -154,8 +159,10 @@ const textualizationOfAnnotation = (annotation: IoLionWebMpsSpecificAnnotation):
 const textualizationOfAnnotationsInM3Concept = (node: M3Concept): Template => {
     const annotations = ioLionWebMpsSpecificAnnotationsFrom(node)
 
+    // TODO  (shold be able to do this generically)
+
     if (node instanceof Classifier) {
-        const annotatedFeatures = node.features.flatMap((feature) => textualizationOfAnnotationsInM3Concept(feature as M3Concept))
+        const annotatedFeatures = node.features.flatMap((feature) => textualizationOfAnnotationsInM3Concept(feature as (Property | Containment | Reference)))
         return (annotations.length > 0 || annotatedFeatures.length > 0)
             ? [
                 `${withFirstLower(node.metaType())} ${node.name}:`,
@@ -168,7 +175,7 @@ const textualizationOfAnnotationsInM3Concept = (node: M3Concept): Template => {
     }
 
     if (node instanceof Enumeration) {
-        const annotatedLiterals = node.literals.flatMap((literal) => textualizationOfAnnotationsInM3Concept(literal))
+        const annotatedLiterals = node.literals.flatMap(textualizationOfAnnotationsInM3Concept)
         return (annotations.length > 0 || annotatedLiterals.length > 0)
             ? [
                 `enumeration ${node.name}:`,
@@ -192,14 +199,23 @@ const textualizationOfAnnotationsInM3Concept = (node: M3Concept): Template => {
     if (node instanceof Feature) {
         return annotations.length > 0
             ? [
-                `${withFirstLower(node.metaType())} ${node.name}:`,
+                `feature ${withFirstLower(node.metaType())} ${node.name}:`,
+                indent(annotations.map(textualizationOfAnnotation))
+            ]
+            : []
+    }
+
+    if (node instanceof Field) {
+        return annotations.length > 0
+            ? [
+                `field ${withFirstLower(node.metaType())} ${node.name}:`,
                 indent(annotations.map(textualizationOfAnnotation))
             ]
             : []
     }
 
     if (node instanceof Language) {
-        const annotatedEntities = node.entities.flatMap((entity) => textualizationOfAnnotationsInM3Concept(entity))
+        const annotatedEntities = node.entities.flatMap(textualizationOfAnnotationsInM3Concept)
         return (annotations.length > 0 || annotatedEntities.length > 0)
             ? [
                 `language ${node.name}:`,
@@ -216,6 +232,19 @@ const textualizationOfAnnotationsInM3Concept = (node: M3Concept): Template => {
             ? [
                 `primitive type ${node.name}:`,
                 indent(annotations.map(textualizationOfAnnotation))
+            ]
+            : []
+    }
+
+    if (node instanceof StructuredDataType) {
+        const annotatedFields = node.fields.flatMap(textualizationOfAnnotationsInM3Concept)
+        return (annotations.length > 0 || annotatedFields.length > 0)
+            ? [
+                `structured data type ${node.name}`,
+                indent([
+                    annotations.map(textualizationOfAnnotation),
+                    annotatedFields
+                ])
             ]
             : []
     }

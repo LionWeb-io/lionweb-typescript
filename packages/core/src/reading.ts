@@ -19,7 +19,7 @@ export type ResolveInfoDeducer<NT extends Node> = (node: NT, reference: Referenc
  * Type def. for functions that, given a runtime encoding of a {@link EnumerationLiteral} of the given {@link Enumeration},
  * return that {@link EnumerationLiteral literal}, or `null` if no correspondence could be found.
  */
-export type EnumerationLiteralDecoder = (encoding: unknown, enumeration: Enumeration) => EnumerationLiteral | null
+export type EnumerationLiteralDecoder = (encoding: unknown, enumeration: Enumeration) => EnumerationLiteral | undefined
 
 /**
  * An interface that's used to parametrize generic serialization of

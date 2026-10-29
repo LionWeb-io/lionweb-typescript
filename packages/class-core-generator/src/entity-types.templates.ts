@@ -36,7 +36,8 @@ import {
     Node,
     PrimitiveType,
     Property,
-    Reference
+    Reference,
+    StructuredDataType
 } from "@lionweb/core"
 import {
     ConceptDescription,
@@ -257,6 +258,15 @@ export const typeForLanguageEntity = (imports: Imports) => {
     const typeForPrimitiveType = (primitiveType: PrimitiveType) =>
         `export type ${primitiveType.name} = ${tsTypeForPrimitiveType(primitiveType, imports.lioncoreBuiltinsFacade)};`
 
+    const typeForStructuredDataType = ({name, fields}: StructuredDataType) =>
+        [
+            `export type ${name} = {`,
+            indent(
+                fields.map(({name, type}) => `${name}: ${tsTypeForDataType(type, imports)};`)
+            ),
+            `}`
+        ]
+
     const jsDocFor = (entity: M3Concept) => {
         const annotations = ioLionWebMpsSpecificAnnotationsFrom(entity)
         const conceptDescription = annotations.find((annotation) => annotation instanceof ConceptDescription)
@@ -317,6 +327,9 @@ export const typeForLanguageEntity = (imports: Imports) => {
                 }
                 if (entity instanceof PrimitiveType) {
                     return typeForPrimitiveType(entity)
+                }
+                if (entity instanceof StructuredDataType) {
+                    return typeForStructuredDataType(entity)
                 }
                 return `// unhandled language entity <${entityMetaType(entity)}>"${entity.name}"`
             })()

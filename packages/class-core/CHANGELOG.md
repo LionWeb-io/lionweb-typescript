@@ -28,6 +28,8 @@
     * Change the `nodeBase[Detailed]DeserializerWith` functions to have a (partial) instance of the `NodeBaseSerializationConfiguration` type, and remove the `DeserializerConfiguration` type.
     * Change the `Forest` constructor to take a (partial) instance of the `NodeBaseSerializationConfiguration` type.
 
+* The (de-)serializer conforms to § 3.4.2 of the meta-metamodel specification, as part of the support for version 2024.1.
+
 
 ## 0.10.0
 

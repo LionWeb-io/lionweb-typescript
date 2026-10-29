@@ -20,6 +20,7 @@ import {
     nameSorted,
     PrimitiveType,
     Property,
+    StructuredDataType,
     tryToRenderAsText
 } from "@lionweb/core"
 import { indent } from "@lionweb/textgen-utils"
@@ -73,6 +74,15 @@ const typeForPrimitiveType = (datatype: PrimitiveType): Template =>
         `export type ${datatype.name} = ${tsTypeFor(datatype)};`,
         ``
     ]
+
+
+const typeForStructuredDataType = ({ name, fields }: StructuredDataType) => [
+    `export type ${name} = {`,
+    indent(
+        fields.map(({ name, type }) => `${name}: ${isResolvedReference(type) ? tsTypeFor(type) : `unknown & object`}`)
+    ),
+    `}`
+]
 
 
 export enum GenerationOptions {
@@ -159,6 +169,9 @@ export const tsTypeDefsForLanguage = (language: Language, ...generationOptions: 
         }
         if (entity instanceof PrimitiveType) {
             return typeForPrimitiveType(entity)
+        }
+        if (entity instanceof StructuredDataType) {
+            return typeForStructuredDataType(entity)
         }
         return [
             `// unhandled language entity <${entity.constructor.name}>"${entity.name}"`,
