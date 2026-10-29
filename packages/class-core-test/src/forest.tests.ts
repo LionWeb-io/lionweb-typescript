@@ -50,13 +50,13 @@ describe("Forest", () => {
         return [forest, deltas]
     }
 
-    it("creating an unattached node doesn’t change the forest’s state, and doesn’t emit deltas", () => {
+    it("creating an unattached node doesn’t add a partition, and doesn’t emit deltas, but registers the node in the ID mapping", () => {
         const [forest, deltas] = fixture()
 
-        forest.createNode(testLanguageBase.LinkTestConcept, "ltc")
+        const unattachedNode = forest.createNode(testLanguageBase.LinkTestConcept, "ltc")
 
         deepEqual(forest.partitions, [])
-        equal(forest.idMapping.tryFromId("ltc"), undefined)
+        equal(forest.idMapping.tryFromId("ltc"), unattachedNode)
         deepEqual(deltas, [])
     })
 
@@ -82,7 +82,7 @@ describe("Forest", () => {
             },
             "node with ID nptc is a LinkTestConcept which is not a <<partition>> concept"
         )
-        equal(forest.idMapping.tryFromId("nptc"), undefined)
+        equal(forest.idMapping.tryFromId("nptc"), nonPartition)
         deepEqual(deltas, [])
     })
 
@@ -125,7 +125,7 @@ describe("Forest", () => {
         )
 
         deepEqual(forest.partitions, [])
-        equal(forest.idMapping.tryFromId("ptc"), undefined)    // partition is still in the ID mapping!
+        equal(forest.idMapping.tryFromId("ptc"), partition)
         deepEqual(deltas, [])
     })
 
@@ -142,7 +142,7 @@ describe("Forest", () => {
         deepEqual(deltas, [])
     })
 
-    it("using deserializeWithIdMapping doesn’t change the forest’s state, and doesn’t emit deltas", () => {
+    it("using deserializeWithIdMapping doesn’t add partitions, and doesn’t emit deltas, but registers nodes in the ID mapping", () => {
         const [forest, deltas] = fixture()
         const partition = forest.createNode(testLanguageBase.TestPartition, "ptc")
         const nonPartition = forest.createNode(testLanguageBase.LinkTestConcept, "nptc")
@@ -151,8 +151,8 @@ describe("Forest", () => {
         const { roots } = forest.deserialize(serializationChunk)
         equal(roots.length, 2)
         deepEqual(forest.partitions, [])
-        equal(forest.idMapping.tryFromId("ptc"), undefined)
-        equal(forest.idMapping.tryFromId("nptc"), undefined)
+        isTrue(forest.idMapping.tryFromId("ptc") !== undefined)
+        isTrue(forest.idMapping.tryFromId("nptc") !== undefined)
         deepEqual(deltas, [])
     })
 

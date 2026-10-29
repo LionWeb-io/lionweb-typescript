@@ -14,7 +14,7 @@
   Also remove usages of these items:
     * The `deserializeWithIdMapping` property of the `Forest` class.
 
-* The `Forest.deserializeInto` method now accepts a `serializationChunk` argument of type `OnlyNodesOfLionWebJsonChunk`, so it can directly accept the response from e.g. `LionWebClient.subscribeToPartitionContents`.
+* The `deserializeInto` method of the `Forest` class now accepts a `serializationChunk` argument of type `OnlyNodesOfLionWebJsonChunk`, so it can directly accept the response from e.g. `LionWebClient.subscribeToPartitionContents`.
 
 * Update version of `mobx` dependency from 6.15.0 &rarr; 6.16.1.
 
@@ -29,6 +29,11 @@
     * Change the `Forest` constructor to take a (partial) instance of the `NodeBaseSerializationConfiguration` type.
 
 * The (de-)serializer conforms to § 3.4.2 of the meta-metamodel specification, as part of the support for version 2024.1.
+
+* Fix [issue #387](https://github.com/LionWeb-io/lionweb-typescript/issues/387):
+  * The `updateWith` method of the `IdMapping` class now checks whether the ID of the node to update the ID mapping with has already been registered.
+    If it has been, and the registered node isn’t the same as the node passed to `updateWith`, the method throws.
+  * The `createNode` method of the `Forest` class now also updates the forest’s ID mapping with the created node.
 
 
 ## 0.10.0

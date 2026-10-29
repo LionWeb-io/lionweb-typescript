@@ -15,8 +15,8 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { isPartition } from "@lionweb/core"
-import { OnlyNodesOfLionWebJsonChunk } from "@lionweb/json"
+import { Classifier, isPartition } from "@lionweb/core"
+import { LionWebId, OnlyNodesOfLionWebJsonChunk } from "@lionweb/json"
 import { action, makeObservable, observable } from "mobx"
 
 import { ILanguageBase, INodeBase, NodeBaseFactory } from "./base-types.js"
@@ -96,7 +96,7 @@ export class Forest {
         this.receiveDelta = receiveDelta
         this.partitions = []
         this.idMapping = new IdMapping({})
-        this.createNode = combinedFactoryFor(
+        const factory = combinedFactoryFor(
             this.languageBases,
             receiveDelta === undefined
                 ? undefined
@@ -111,6 +111,11 @@ export class Forest {
                  * _at/before_ the time the delta was emitted.
                  */
         )
+        this.createNode = (classifier: Classifier, id: LionWebId) => {
+            const node = factory(classifier, id)
+            this.idMapping.updateWith(node)
+            return node
+        }
         this.deserialize = nodeBaseDetailedDeserializerWith(configuration)
     }
 
