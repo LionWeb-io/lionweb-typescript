@@ -5,9 +5,8 @@ import { PrimitiveValueDeserializerRegistry, PrimitiveValueSerializerRegistry } 
 /**
  * The key of the LionCore language containing the built-ins.
  * (See § 3.4.2 of the meta-metamodel specification.)
- * *Note*: don’t expose from this package!
  */
-export const lioncoreBuiltinsKey = "LionCore-builtins"
+const lioncoreBuiltinsKey = "LionCore-builtins"
 
 /**
  * The name of the LionCore language containing the built-ins.
