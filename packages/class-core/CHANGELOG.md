@@ -4,6 +4,9 @@
 
 * The `Forest.deserializeInto` method now accepts a `serializationChunk` argument of type `OnlyNodesOfLionWebJsonChunk`, so it can directly accept the response from e.g. `LionWebClient.subscribeToPartitionContents`.
 
+* Fix [issue #400](https://github.com/LionWeb-io/lionweb-typescript/issues/400):
+  The `invertDelta` function now inverts all deltas inside a `CompositeDelta`, and *also reverses them*.
+
 
 ## 0.10.0
 

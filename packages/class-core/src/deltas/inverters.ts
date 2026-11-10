@@ -150,7 +150,7 @@ export const invertDelta = (delta: IDelta): IDelta => {
         return new ReferenceChangedDelta(delta.parent, delta.reference, delta.index, delta.oldReference, delta.newReference);
     }
     if (delta instanceof CompositeDelta) {
-        return new CompositeDelta(delta.parts.map(invertDelta));
+        return new CompositeDelta(delta.parts.map(invertDelta).reverse());
     }
     if (delta instanceof NoOpDelta) {
         return delta;
