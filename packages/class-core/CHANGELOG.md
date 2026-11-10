@@ -35,6 +35,9 @@
     If it has been, and the registered node isn’t the same as the node passed to `updateWith`, the method throws.
   * The `createNode` method of the `Forest` class now also updates the forest’s ID mapping with the created node.
 
+* Fix [issue #400](https://github.com/LionWeb-io/lionweb-typescript/issues/400):
+  The `invertDelta` function now inverts all deltas inside a `CompositeDelta`, and *also reverses them*.
+
 
 ## 0.10.0
 
