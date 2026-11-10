@@ -1,7 +1,7 @@
 import { ConceptModifier, LanguageFactory } from "@lionweb/core"
 import { concatenator, lastOf } from "@lionweb/ts-utils"
 
-import { equal } from "../test-utils/assertions.js"
+import { deepEqual, equal } from "../test-utils/assertions.js"
 
 describe("M3 types", () => {
     it("factory performs auto-containment, but also prevents duplication", () => {
@@ -23,5 +23,13 @@ describe("M3 types", () => {
         equal(enumeration.literals.length, 1)
         enumeration.havingLiterals(literal)
         equal(enumeration.literals.length, 1)
+
+        const baseLanguage = new LanguageFactory("BaseLanguage", "0", concatenator("-"), lastOf).language
+        deepEqual(language.dependsOn, [])
+        language.dependingOn(baseLanguage)
+        deepEqual(language.dependsOn, [baseLanguage])
+        language.dependingOn(baseLanguage)
+        deepEqual(language.dependsOn, [baseLanguage])
     })
 })
+

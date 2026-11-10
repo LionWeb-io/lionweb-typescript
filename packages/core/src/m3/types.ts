@@ -7,7 +7,6 @@ import { LionWebId, LionWebJsonMetaPointer, LionWebKey } from "@lionweb/json"
 import { ResolveInfoDeducer } from "../reading.js"
 import { MultiRef, referenceToSet, SingleRef } from "../references.js"
 import { Node } from "../types.js"
-import { lioncoreBuiltinsKey } from "./builtins-common.js"
 
 
 // Types appear roughly in the order of top-to-down+left-to-right in the diagram at:
@@ -287,15 +286,11 @@ class Language extends M3Node {
         this.version = version
     }
     havingEntities(...entities: LanguageEntity[]): Language {
-        this.entities.push(...entities.filter((entity) => this.entities.indexOf(entity) < 0))
+        this.entities.push(...entities.filter((entity) => this.entities.indexOf(entity) === -1))
         return this
     }
     dependingOn(...languages: Language[]): Language {
-        this.dependsOn.push(
-            ...languages
-                // don’t depend on (any version of) the LionCore built-ins language:
-                .filter((language) => language.key !== lioncoreBuiltinsKey)
-        )
+        this.dependsOn.push(...languages.filter((language) => this.dependsOn.indexOf(language) === -1))
         return this
     }
     equals(that: Language): boolean {

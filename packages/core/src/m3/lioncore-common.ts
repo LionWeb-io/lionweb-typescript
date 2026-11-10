@@ -3,9 +3,8 @@ import { StringsMapper } from "@lionweb/ts-utils"
 
 /**
  * The key for the LionCore language.
- * *Note*: don’t expose from this package!
  */
-export const lioncoreKey = "LionCore-M3"
+const lioncoreKey = "LionCore-M3"
 
 /**
  * A key generator for the LionCore language.

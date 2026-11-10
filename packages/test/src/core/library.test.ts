@@ -3,7 +3,6 @@ import {
     deserializerWith,
     DynamicNode,
     dynamicWriter,
-    LionWebVersions,
     nameBasedClassifierDeducerFor,
     serializeLanguagesFor,
     serializerWith
@@ -17,7 +16,7 @@ import { deepEqual } from "../test-utils/assertions.js"
 describe("Library test model", () => {
     it("[de-]serialize example library", () => {
         const serializationChunk = serializerWith({ reader: libraryReader })(libraryModel)
-        // FIXME  ensure that serialization does not produce key-value pairs with value === undefined
+        // TODO  ensure that serialization does not produce key-value pairs with value === undefined
         const deserialization = deserializerWith({ writer: libraryWriter, languages: [libraryLanguage] })(serializationChunk)
         deepEqual(deserialization, libraryModel)
     })
@@ -39,11 +38,6 @@ describe("Library test model", () => {
 })
 
 describe("Library test metamodel", () => {
-    it("LionCore built-in primitive types are implicit", () => {
-        libraryLanguage.dependingOn(LionWebVersions.v2023_1.builtinsFacade.language)
-        deepEqual(libraryLanguage.dependsOn, [])
-    })
-
     it("serialize it", () => {
         const serializationChunk = serializeLanguagesFor({ languages: [libraryLanguage] })
         const deserialization = deserializeLanguagesFrom({ serializationChunk })

@@ -41,8 +41,7 @@ export const deserializeLanguagesFrom = ({ serializationChunk, dependentLanguage
         problemReporter
     })(
         serializationChunk,
-        [lionWebVersion.builtinsFacade.language, ...(dependentLanguages ?? [])].flatMap(nodesExtractorUsing(lioncoreReaderFor(lionWebVersion))),
+        [lionWebVersion.builtinsFacade.language, ...(dependentLanguages ?? [])].flatMap(nodesExtractorUsing(lioncoreReaderFor(lionWebVersion)))
     )
         .filter((rootNode) => rootNode instanceof Language)
-        .map((language) => (language as Language).dependingOn(...(dependentLanguages ?? [])))
 

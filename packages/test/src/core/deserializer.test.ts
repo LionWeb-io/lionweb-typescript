@@ -1,12 +1,16 @@
 import {
     AggregatingProblemReporter,
     ConceptModifier,
+    deserializeLanguagesFrom,
     deserializerWith,
     dynamicWriter,
     Feature,
+    isResolvedReference,
     LanguageFactory,
     LionWebVersions,
+    nameOf,
     newPrimitiveValueDeserializerRegistry,
+    serializeLanguagesFor,
     UnresolvedReference,
     Writer
 } from "@lionweb/core"
@@ -18,7 +22,7 @@ import { libraryWriter } from "../instances/library.js"
 import { libraryLanguage } from "../languages/library.js"
 import { datePrimitiveType, libraryWithDatesLanguage } from "../languages/libraryWithDates.js"
 import { deepEqual, equal, isTrue } from "../test-utils/assertions.js"
-import { StringsMapper } from "@lionweb/ts-utils"
+import { concatenator, lastOf, StringsMapper } from "@lionweb/ts-utils"
 
 
 type NodeWithProperties = BaseNode & { properties: Record<string, unknown> }
@@ -319,6 +323,22 @@ describe("deserialization", () => {
             ]
         ])
         equal(model[0].settings[aContainment.key], undefined)
+    })
+
+    it("deserializeLanguagesFrom doesn’t clutter dependsOn", () => {
+        const createLanguage = (name: string) =>
+            new LanguageFactory(name, "1", concatenator("-"), lastOf)
+                .language
+
+        const base = createLanguage("Base")
+        const lang = createLanguage("Lang").dependingOn(base)
+
+        const [deserializedBase] = deserializeLanguagesFrom({ serializationChunk: serializeLanguagesFor({ languages: [base] }) })
+        const langChunk = serializeLanguagesFor({ languages: [lang] })
+        const [deserializedLang] = deserializeLanguagesFrom({ serializationChunk: langChunk, dependentLanguages: [deserializedBase] })
+
+        deepEqual(deserializedLang.dependsOn.filter(isResolvedReference).map(nameOf), ["Base"])
+        isTrue(JSON.stringify(serializeLanguagesFor({ languages: [deserializedLang] })) === JSON.stringify(langChunk))
     })
 
 })
