@@ -45,49 +45,60 @@ export const insertionIndex = <T>(ts: T[], valueFunc: (t: T) => number, tToInser
 
 
 /**
- * Type def. for a function that takes a `t` and either processes it directly if `t` has the next expected priority,
+ * A class that implements a “priority queue”.
+ * The {@link #accept} method takes a `t` and either processes it directly if `t` has the next expected priority,
  * or enqueues it for later processing.
  *
  * (Technically, this can be considered to be a modified {@link https://en.wikipedia.org/wiki/Priority_queue *“monotone priority queue”*}.)
  */
-export type PriorityQueueAcceptor<T> = (t: T) => void
+export class PriorityQueue<T> {
+    private readonly ts: T[] = []
+    private _nextExpectedPriority: number
 
-/**
- * @return a {@link PriorityQueueAcceptor} function that accepts instances of `T`,
- * passing them to the `process` function in (min-max) priority order,
- * as computed by the `priorityFunc`, starting with the `firstPriority`.
- * @throws an {@link Error error} when a `T` is passed with a priority that has already been processed.
- */
-export const priorityQueueAcceptor = <T>(priorityFunc: (t: T) => number, firstPriority: number, process: Procedure<T>): PriorityQueueAcceptor<T> => {
-    const ts: T[] = []
-    let nextPriority = firstPriority
-    return (t: T) => {
-        const priority = priorityFunc(t)
-        if (priority < nextPriority) {
-            throw new Error(`priority ${priority} has already been processed; (next expected priority: ${nextPriority})`)
+    constructor(
+        private readonly priorityFunc: (t: T) => number,
+        firstPriority: number,
+        private readonly process: Procedure<T>
+    ) {
+        this._nextExpectedPriority = firstPriority
+    }
+
+    get nextExpectedPriority(): number {
+        return this._nextExpectedPriority
+    }
+
+    /**
+     * Accepts an item and either processes it directly if it has the next expected priority,
+     * or enqueues it for later processing.
+     * @throws an Error when an item is passed with a priority that has already been processed.
+     */
+    accept(t: T): void {
+        const priority = this.priorityFunc(t)
+        if (priority < this._nextExpectedPriority) {
+            throw new Error(`priority ${priority} has already been processed; (next expected priority: ${this._nextExpectedPriority})`)
         }
-        const index0 = insertionIndex(ts, priorityFunc, t)
-        if (priority === nextPriority) {
-            nextPriority++
-            process(t)
+        const index0 = insertionIndex(this.ts, this.priorityFunc, t)
+        if (priority === this._nextExpectedPriority) {
+            this._nextExpectedPriority++
+            this.process(t)
             let index = index0
             let stop = false
-            while (index < ts.length && !stop) {
-                const currentT = ts[index]
-                const currentPriority = priorityFunc(currentT)
-                if (currentPriority === nextPriority) {
-                    nextPriority++
-                    process(currentT)
+            while (index < this.ts.length && !stop) {
+                const currentT = this.ts[index]
+                const currentPriority = this.priorityFunc(currentT)
+                if (currentPriority === this._nextExpectedPriority) {
+                    this._nextExpectedPriority++
+                    this.process(currentT)
                     index++
                 } else {
                     stop = true
                 }
             }
             if (index > index0) {
-                ts.splice(index0, index - index0)
+                this.ts.splice(index0, index - index0)
             }
         } else {
-            ts.splice(index0, 0, t)
+            this.ts.splice(index0, 0, t)
         }
     }
 }

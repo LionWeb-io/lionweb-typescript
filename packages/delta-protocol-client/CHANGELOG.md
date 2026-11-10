@@ -13,6 +13,9 @@
 * Fix [bug #399](https://github.com/LionWeb-io/lionweb-typescript/issues/399):
   Nodes created as a result of incoming events get a `DeltaReceiver` installed (again).
 
+* Fix [bug #390](https://github.com/LionWeb-io/lionweb-typescript/issues/390):
+  * (Turn the internal `PriorityQueueAcceptor` type into a `PriorityQueue` class.)
+
 
 ## 0.10.0
 
