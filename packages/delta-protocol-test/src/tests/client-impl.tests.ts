@@ -299,7 +299,6 @@ describe("implementation of LionWeb client", async function() {
             // Assert:
             expect(client.forest.idMapping.tryFromId("child")).to.equal(child)
             expect(child.stringValue_0_1).to.equal("approved")
-            expect(client.forest.idMapping.tryFromId("child")).to.equal(child)
         } finally {
             await client.disconnect()
         }
