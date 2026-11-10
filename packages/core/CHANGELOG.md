@@ -93,8 +93,9 @@
 
 * Add LionWeb version **2026.1**.
 
-* The `dependingOn` method of the `Language` class now filters out duplicates.
-  This method now also allows adding a LionCore built-in language — previously, it filtered these languages out.
+* Fix [issue #395](https://github.com/LionWeb-io/lionweb-typescript/issues/395):
+  * The `dependingOn` method of the `Language` class now filters out duplicates.
+    This method now also allows adding a LionCore built-in language — previously, it filtered these languages out.
 
 
 ## Restructure how property values get (de-)serialized

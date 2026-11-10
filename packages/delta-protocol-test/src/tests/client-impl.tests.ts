@@ -19,28 +19,29 @@ import { throws } from "assert"
 import { expect } from "chai"
 import { expectError } from "../test-utils/async.js"
 
-import { LionWebClient, LionWebDeltaProtocolLowLevelClientInstantiator } from "@lionweb/delta-protocol-client"
+import { LionWebClient } from "@lionweb/delta-protocol-client"
 import {
-    Command,
     Event,
     PartitionAddedEvent,
     PartitionDeletedEvent,
-    QueryMessage,
+    PropertyAddedEvent,
     semanticConsoleLogger,
     SignOffResponse,
     SignOnResponse,
     simpleConsoleLogger
 } from "@lionweb/delta-protocol-common"
 import { DataTypeTestConcept, TestLanguageBase, TestPartition } from "@lionweb/class-core-test-language"
-import { metaPointerForFeature } from "@lionweb/core"
+import { PropertyChangedDelta } from "@lionweb/class-core"
+import { LionWebVersions, metaPointerForFeature } from "@lionweb/core"
 import { defaultTestClientParameters } from "../test-utils/client-parameters.js"
 import { asLowLevelClientLogger } from "../test-utils/logging.js"
+import { mockLionWebClientTestFixture } from "../test-utils/mock-client.js"
 import { mockLowLevelClientInstantiator } from "../test-utils/mock-low-level-client.js"
 
 
-describe("implementation of LionWeb client", async function() {
+const testLanguageBase = TestLanguageBase.INSTANCE
 
-    const testLanguageBase = TestLanguageBase.INSTANCE
+describe("implementation of LionWeb client", async function() {
 
     it("what happens when sending a message through an unwilling low-level client", async function() {
         const lionWebClient = await LionWebClient.create({
@@ -201,22 +202,8 @@ describe("implementation of LionWeb client", async function() {
     })
 
     it("partition gets added to the client’s forest after receiving a PartitionAdded event", async function() {
-        let receiveMessageOnClientIntercepted: (message: Event | QueryMessage) => void
-        const lowLevelClientInstantiator: LionWebDeltaProtocolLowLevelClientInstantiator = ({ receiveMessageOnClient }) => {
-            receiveMessageOnClientIntercepted = receiveMessageOnClient
-            return Promise.resolve({
-                sendMessage: (_: Command | QueryMessage) => Promise.resolve(),
-                disconnect: () => Promise.resolve()
-            })
-        }
-        const lionWebClient = await LionWebClient.create({
-            ...defaultTestClientParameters,
-            lowLevelClientInstantiator
-        })
+        const { lionWebClient, receiveMessageOnClient } = await mockLionWebClientTestFixture(semanticConsoleLogger)
         expect(lionWebClient.forest.partitions.length).to.equal(0)
-
-        expect(receiveMessageOnClientIntercepted!).to.not.equal(undefined)
-        const receiveMessageOnClient = receiveMessageOnClientIntercepted!
 
         receiveMessageOnClient({
             messageKind: "PartitionAdded",
@@ -242,66 +229,80 @@ describe("implementation of LionWeb client", async function() {
     })
 
     it("applies a remote property update to a locally added child", async () => {
+        // Arrange:
+        const { lionWebClient, receiveMessageOnClient } = await mockLionWebClientTestFixture(semanticConsoleLogger)
+        const { forest } = lionWebClient
+        const partition = forest.createNode(testLanguageBase.TestPartition, "partition") as TestPartition
+        forest.addPartition(partition)
+        expect(forest.idMapping.tryFromId("partition")).to.equal(partition)
+        expect(partition.receiveDelta).to.not.be.null
+
+        // Act:
+        const child = forest.createNode(testLanguageBase.DataTypeTestConcept, "child") as DataTypeTestConcept
+        partition.data = child
+        receiveMessageOnClient({
+            messageKind: "PropertyAdded",
+            sequenceNumber: 1,
+            node: "child",
+            property: metaPointerForFeature(testLanguageBase.DataTypeTestConcept_stringValue_0_1),
+            newValue: "approved",
+            additionalInfos: [],
+            originCommands: [{ participationId: "participation-B", commandId: "remote-1" }]
+        } satisfies PropertyAddedEvent as Event)
+
+        // Assert:
+        expect(forest.idMapping.tryFromId("child")).to.equal(child)
+        expect(child.stringValue_0_1).to.equal("approved")
+    })
+
+    it("receives events, and then emits a command after a local change", async () => {
+        const { inamed_name } = LionWebVersions.v2023_1.builtinsFacade.features
 
         // Arrange:
+        const { lionWebClient, receiveMessageOnClient, deltasSent } = await mockLionWebClientTestFixture(semanticConsoleLogger)
+        const { forest } = lionWebClient
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        expect((forest as any).receiveDelta).to.not.be.undefined
 
-        const language = TestLanguageBase.INSTANCE
-
-        // the receiveMessageOnClient inside the client, to be captured so we can inject messages at will:
-        let deliver: (message: Event | QueryMessage) => void
-
-        const client = await LionWebClient.create({
-            repositoryId: "repo",
-            clientId: "A",
-            url: "unused",
-            serializationConfiguration: {
-                languageBases: [language],
-            },
-            lowLevelClientInstantiator: async ({ receiveMessageOnClient }) => {
-                deliver = receiveMessageOnClient
-                return {
-                    disconnect: async () => {},
-                    sendMessage: async message => {
-                        if (message.messageKind === "SignOnRequest") {
-                            const response: SignOnResponse = {
-                                messageKind: "SignOnResponse", queryId: (message as QueryMessage).queryId,
-                                participationId: "A", additionalInfos: []
+        // Act:
+        receiveMessageOnClient({
+            messageKind: "PartitionAdded",
+            newPartition: {
+                nodes: [
+                    {
+                        id: "partition",
+                        classifier: testLanguageBase.TestPartition.metaPointer(),
+                        properties: [
+                            {
+                                property: metaPointerForFeature(inamed_name),
+                                value: "my test partition"
                             }
-                            deliver(response)
-                        }
+                        ],
+                        containments: [],
+                        references: [],
+                        annotations: [],
+                        parent: null
                     }
-                }
+                ]
             },
-            semanticLogger: semanticConsoleLogger
-        })
+            sequenceNumber: 1,
+            originCommands: [{ participationId: "participation-B", commandId: "cmd-1" }],
+            additionalInfos: []
+        } satisfies PartitionAddedEvent as Event)
 
-        try {
-            await client.signOn("sign-on", "repo")
-            const partition = client.forest.createNode(language.TestPartition, "partition") as TestPartition
-            client.forest.addPartition(partition)
-            expect(client.forest.idMapping.tryFromId("partition")).to.equal(partition)
-            expect(partition.receiveDelta).to.not.be.null
+        // Assert:
+        expect(forest.partitions.length).to.equal(1)
+        expect(forest.partitions[0] instanceof TestPartition).to.be.true
+        const testPartition = forest.partitions[0] as TestPartition
+        expect(testPartition.receiveDelta).to.not.be.undefined
+        expect(testPartition.name).to.equal("my test partition")
+        expect(deltasSent).to.deep.equal([])
 
-            // Act:
-            const child = client.forest.createNode(language.DataTypeTestConcept, "child") as DataTypeTestConcept
-            partition.data = child
-            // (the fake transport delivers only this remote event:)
-            deliver!({
-                messageKind: "PropertyAdded",
-                sequenceNumber: 1,
-                node: "child",
-                property: metaPointerForFeature(language.DataTypeTestConcept_stringValue_0_1),
-                newValue: "approved",
-                additionalInfos: [],
-                originCommands: [{ participationId: "B", commandId: "remote-1" }]
-            } as Event)
+        // Act:
+        testPartition.name = "partition name"
 
-            // Assert:
-            expect(client.forest.idMapping.tryFromId("child")).to.equal(child)
-            expect(child.stringValue_0_1).to.equal("approved")
-        } finally {
-            await client.disconnect()
-        }
+        // Assert:
+        expect(deltasSent).to.deep.equal([ new PropertyChangedDelta(testPartition, inamed_name, "my test partition", "partition name") ])
     })
 
 })
