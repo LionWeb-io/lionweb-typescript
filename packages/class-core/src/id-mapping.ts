@@ -85,7 +85,14 @@ export class IdMapping {
      * Updates this {@link IdMapping} with the given `node` *and all its descendants* (recursively).
      */
     updateWith = (node: Node) => {
-        this.nodesById[node.id] = node;
+        const { id } = node;
+        if (id in this.nodesById) {
+            if (node !== this.nodesById[id]) {
+                throw new Error(`trying to register a node with the same ID="${id}" as an already-registered, different node`);
+            }
+        } else {
+            this.nodesById[node.id] = node;
+        }
         if (node instanceof NodeBase) {
             node.children   // recurse into all children
                 .forEach((child) => this.updateWith(child));

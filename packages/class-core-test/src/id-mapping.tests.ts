@@ -18,21 +18,9 @@
 import { IdMapping } from "@lionweb/class-core"
 import { isReferenceToSet } from "@lionweb/core"
 
-import { LinkTestConcept } from "@lionweb/class-core-test-language"
+import { DataTypeTestConcept, LinkTestConcept } from "@lionweb/class-core-test-language"
 import { equal, isTrue, throws } from "./assertions.js"
 
-
-describe("updating ID mapping", () => {
-    it("registers children as well", () => {
-        const idMapping = new IdMapping({})
-        const child = LinkTestConcept.create("child")
-        const parent = LinkTestConcept.create("parent")
-        parent.containment_1 = child
-        idMapping.updateWith(parent)
-        equal(idMapping.fromId("child"), child)
-        equal(idMapping.fromId("parent"), parent)
-    })
-})
 
 describe("ID mapping", () => {
 
@@ -77,6 +65,19 @@ describe("ID mapping", () => {
         idMapping.updateWith(parent)
         equal(idMapping.fromId("child"), child)
         equal(idMapping.fromId("parent"), parent)
+    })
+
+    it("updating ID mapping with duplicate ID throws", () => {
+        const idMapping = new IdMapping({})
+        const node1 = LinkTestConcept.create("aNode")
+        idMapping.updateWith(node1)
+        const node2 = DataTypeTestConcept.create("aNode")
+        throws(
+            () => {
+                idMapping.updateWith(node2)
+            },
+            `trying to register a node with the same ID="aNode" as an already-registered, different node`
+        )
     })
 
 })
