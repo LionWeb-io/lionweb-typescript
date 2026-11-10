@@ -1,7 +1,5 @@
 language io.lionweb.mps.specific
     version: 2024-01
-    dependsOn:
-        LionCore_M3 (2023.1)
     entities (↓name):
 
         annotation ConceptDescription

@@ -33,20 +33,15 @@ export type LanguageDeserializationData = {
 /**
  * @return languages serialized to the {@link LionWebJsonChunk serialization chunk} passed in the {@link LanguageDeserializationData data object}.
  */
-export const deserializeLanguagesFrom = ({ serializationChunk, dependentLanguages, problemReporter, lionWebVersion = LionWebVersions.v2023_1 }: LanguageDeserializationData): Language[] => {
-    const languages = deserializerWith({
+export const deserializeLanguagesFrom = ({ serializationChunk, dependentLanguages, problemReporter, lionWebVersion = LionWebVersions.v2023_1 }: LanguageDeserializationData): Language[] =>
+    deserializerWith({
         lionWebVersion,
         writer: lioncoreWriterFor(lionWebVersion),
         languages: [lionWebVersion.lioncoreFacade.language, ...(dependentLanguages ?? [])],
         problemReporter
     })(
         serializationChunk,
-        [lionWebVersion.builtinsFacade.language, ...(dependentLanguages ?? [])].flatMap(nodesExtractorUsing(lioncoreReaderFor(lionWebVersion))),
+        [lionWebVersion.builtinsFacade.language, ...(dependentLanguages ?? [])].flatMap(nodesExtractorUsing(lioncoreReaderFor(lionWebVersion)))
     )
         .filter((rootNode) => rootNode instanceof Language)
-    for (const language of languages) {
-        language.dependingOn(...(dependentLanguages ?? []))
-    }
-    return languages
-}
 
