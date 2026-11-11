@@ -14,6 +14,7 @@
   Nodes created as a result of incoming events get a `DeltaReceiver` installed (again).
 
 * Fix [bug #390](https://github.com/LionWeb-io/lionweb-typescript/issues/390):
+  * The client doesn’t stall anymore after receiving a `CompositeEvent`.
   * (Turn the internal `PriorityQueueAcceptor` type into a `PriorityQueue` class.)
 
 

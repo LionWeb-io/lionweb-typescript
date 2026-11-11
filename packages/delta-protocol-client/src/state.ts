@@ -17,6 +17,7 @@
 
 import {
     ClientItemLogger,
+    CompositeEvent,
     ErrorResponse,
     Event,
     isContinuedEvent,
@@ -115,7 +116,14 @@ export class MessageRelatedClientState {
     ) {
 
         const _processEvent = (event: Event) => {
-            this.lastReceivedSequenceNumber = event.sequenceNumber
+            if (event.messageKind === "CompositeEvent") {
+                // A CompositeEvent’s parts count as actual events, so have to update sequenceNumber accordingly.
+                const { parts } = event as CompositeEvent
+                this.lastReceivedSequenceNumber = parts[parts.length - 1].sequenceNumber    // (parts appear in order of sequence number)
+                priorityQueue.nextExpectedPriority = this.lastReceivedSequenceNumber + 1
+            } else {
+                this.lastReceivedSequenceNumber = event.sequenceNumber
+            }
 
             const selfOriginatedCommands = event.originCommands.filter(
                 ({ participationId }) => participationId === this.participationId

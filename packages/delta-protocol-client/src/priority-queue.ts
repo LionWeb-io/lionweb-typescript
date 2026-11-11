@@ -67,6 +67,13 @@ export class PriorityQueue<T> {
         return this._nextExpectedPriority
     }
 
+    set nextExpectedPriority(value: number) {
+        if (!Number.isInteger(value) || value <= this._nextExpectedPriority) {
+            throw new Error(`next expected priority should be an integer larger than ${this._nextExpectedPriority}`)
+        }
+        this._nextExpectedPriority = value
+    }
+
     /**
      * Accepts an item and either processes it directly if it has the next expected priority,
      * or enqueues it for later processing.
