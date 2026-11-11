@@ -24,10 +24,10 @@ import {
     ClientItemLogger,
     Event,
     ISemanticLogItem,
-    NoOpEvent,
     semanticLogItemStorer,
     semanticNoOpLogger
 } from "@lionweb/delta-protocol-common"
+import { noOpEvent } from "../test-utils/events.js"
 
 
 describe("message-related client state", () => {
@@ -60,12 +60,6 @@ describe("message-related client state", () => {
     it("updates the lastReceivedSequenceNumber", () => {
         const state = newSimpleTestState()
 
-        const noOpEvent = (sequenceNumber: number): NoOpEvent => ({
-            messageKind: "NoOpEvent",
-            sequenceNumber,
-            originCommands: [],
-            additionalInfos: []
-        })
         state.receiveMessageOnClient(noOpEvent(1))
         expect(state.lastReceivedSequenceNumber).to.equal(1)
 
@@ -99,34 +93,13 @@ describe("message-related client state", () => {
         const commandId = "cmd-alpha"
         state.registerIssuedCommandId(commandId)
 
-        const event1: NoOpEvent = {
-            messageKind: "NoOpEvent",
-            sequenceNumber: 1,
-            originCommands: [
-                {
-                    commandId: commandId,
-                    participationId: participationA
-                }
-            ],
-            additionalInfos: []
-        }
-        state.receiveMessageOnClient(event1)
+        state.receiveMessageOnClient(noOpEvent(1, { commandId, participationId: participationA }))
         expect(eventsToProcess).to.deep.equal([])
         expect(clientLogItems.length).to.equal(2)
         expect(clientLogItems[1] instanceof ClientDidNotApplyEventFromOwnCommand).to.equal(true)
         expect((clientLogItems[1] as ClientDidNotApplyEventFromOwnCommand).originatingCommandId).to.equal(commandId)
 
-        const event2: NoOpEvent = {
-            messageKind: "NoOpEvent",
-            sequenceNumber: 2,
-            originCommands: [
-                {
-                    commandId: commandId,
-                    participationId: "participation-B"
-                }
-            ],
-            additionalInfos: []
-        }
+        const event2 = noOpEvent(2, { commandId, participationId: "participation-B" })
         state.receiveMessageOnClient(event2)
         expect(eventsToProcess).to.deep.equal([event2])
         expect(clientLogItems.length).to.equal(3)
@@ -138,17 +111,7 @@ describe("message-related client state", () => {
         const participationId = "participation-A"
         state.signOnWith(participationId)
         const commandId = "command-alt-delete"
-        state.receiveMessageOnClient({
-            messageKind: "NoOpEvent",
-            sequenceNumber: 1,
-            originCommands: [
-                {
-                    commandId,
-                    participationId
-                }
-            ],
-            additionalInfos: []
-        })
+        state.receiveMessageOnClient(noOpEvent(1, { commandId, participationId }))
         expect(clientLogItems.length).to.equal(2)
         expect(clientLogItems[1] instanceof ClientIssuedWarning).to.equal(true)
         expect((clientLogItems[1] as ClientIssuedWarning).message).to.equal(`received an event stating to have this client as origin (through participation ID "participation-A") without a registration of one or more command IDs ("${commandId}")`)
@@ -157,12 +120,7 @@ describe("message-related client state", () => {
     it("processes events without being signed on", () => {
         const [state, eventsToProcess, _clientLogItems] = newTestFixture()
 
-        const event: NoOpEvent = {
-            messageKind: "NoOpEvent",
-            sequenceNumber: 1,
-            originCommands: [],
-            additionalInfos: []
-        }
+        const event = noOpEvent(1)
         state.receiveMessageOnClient(event)
         expect(eventsToProcess).to.deep.equal([event])
     })
