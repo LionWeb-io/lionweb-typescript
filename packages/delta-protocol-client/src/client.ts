@@ -145,7 +145,10 @@ export class LionWebClient {
         if (serializationChunk !== undefined) {
             forest.deserializeInto(serializationChunk)
         }
-        const eventAsDelta = eventToDeltaTranslator(serializationConfiguration)
+        const eventAsDelta = eventToDeltaTranslator({
+            ...serializationConfiguration,
+            receiveDelta: effectiveReceiveDelta
+        })
         loading = false
 
         const messageRelatedClientState = new MessageRelatedClientState(

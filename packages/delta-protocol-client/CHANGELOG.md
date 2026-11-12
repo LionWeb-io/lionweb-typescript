@@ -10,6 +10,9 @@
 
 * **Breaking change!** Add a `serializationConfiguration` property of the `NodeBaseSerializationConfiguration` type to the `LionWebClientParameters` type, encapsulating the `languageBases` property in the process.
 
+* Fix [bug #399](https://github.com/LionWeb-io/lionweb-typescript/issues/399):
+  Nodes created as a result of incoming events get a `DeltaReceiver` installed (again).
+
 
 ## 0.10.0
 
