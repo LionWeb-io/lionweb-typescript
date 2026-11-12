@@ -21,6 +21,7 @@ import { expectError } from "../test-utils/async.js"
 
 import { LionWebClient } from "@lionweb/delta-protocol-client"
 import {
+    CompositeEvent,
     Event,
     PartitionAddedEvent,
     PartitionDeletedEvent,
@@ -37,6 +38,7 @@ import { defaultTestClientParameters } from "../test-utils/client-parameters.js"
 import { asLowLevelClientLogger } from "../test-utils/logging.js"
 import { mockLionWebClientTestFixture } from "../test-utils/mock-client.js"
 import { mockLowLevelClientInstantiator } from "../test-utils/mock-low-level-client.js"
+import { noOpEvent } from "../test-utils/events.js"
 
 
 const testLanguageBase = TestLanguageBase.INSTANCE
@@ -303,6 +305,41 @@ describe("implementation of LionWeb client", async function() {
 
         // Assert:
         expect(deltasSent).to.deep.equal([ new PropertyChangedDelta(testPartition, inamed_name, "my test partition", "partition name") ])
+    })
+
+    it("CompositeEvent handling skips queued events (issue #390)", async function() {
+        const { lionWebClient, receiveMessageOnClient } = await mockLionWebClientTestFixture()
+        const peekLastReceivedSequenceNumber = () =>
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (lionWebClient as any).messageRelatedClientState.lastReceivedSequenceNumber
+
+        receiveMessageOnClient(noOpEvent(2))
+        expect(peekLastReceivedSequenceNumber()).to.equal(-1)
+
+        receiveMessageOnClient(noOpEvent(4))
+        expect(peekLastReceivedSequenceNumber()).to.equal(-1)
+
+        receiveMessageOnClient(noOpEvent(1))
+        expect(peekLastReceivedSequenceNumber()).to.equal(2)
+
+        receiveMessageOnClient(noOpEvent(9))
+        expect(peekLastReceivedSequenceNumber()).to.equal(2)
+
+        receiveMessageOnClient(noOpEvent(3))
+        expect(peekLastReceivedSequenceNumber()).to.equal(4)
+
+        receiveMessageOnClient({
+            messageKind: "CompositeEvent",
+            sequenceNumber: 5,
+            parts: [
+                noOpEvent(6),
+                noOpEvent(7),
+                noOpEvent(8),
+            ],
+            originCommands: [],
+            additionalInfos: []
+        } satisfies CompositeEvent as Event)
+        expect(peekLastReceivedSequenceNumber()).to.equal(9)
     })
 
 })

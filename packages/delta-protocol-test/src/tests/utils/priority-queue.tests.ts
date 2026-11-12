@@ -18,7 +18,7 @@
 import { expect } from "chai"
 
 import { integerRange } from "@lionweb/class-core-test-language"
-import { insertionIndex, priorityQueueAcceptor } from "@lionweb/delta-protocol-client/dist/priority-queue.js"
+import { insertionIndex, PriorityQueue } from "@lionweb/delta-protocol-client/dist/priority-queue.js"
 
 
 describe("insertionIndex", () => {
@@ -51,40 +51,41 @@ describe("priority queue", () => {
 
     const priorityEnqueueFixture = () => {
         const processed: number[] = []
-        const accept = priorityQueueAcceptor<number>((num) => num, 1, (num) => {
+        const priorityQueue = new PriorityQueue<number>((num) => num, 1, (num) => {
             processed.push(num)
         })
         return {
-            accept,
+            accept: priorityQueue.accept.bind(priorityQueue),
+            priorityQueue,
             get processed() {
                 return processed
             },
             offerAndAssert: (num: number, expectedProcessed: number[]) => {
-                accept(num)
+                priorityQueue.accept(num)
                 expect(processed).to.deep.equal(expectedProcessed)
             }
         }
     }
 
     it("throws on invalid sequence numbers", () => {
-        const {accept} = priorityEnqueueFixture()
+        const { accept } = priorityEnqueueFixture()
         accept(1)
         expect(() => accept(1)).to.throw("priority 1 has already been processed; (next expected priority: 2)")
     })
 
     it("processes 1 item with next expected sequence number directly", () => {
-        const {offerAndAssert} = priorityEnqueueFixture()
+        const { offerAndAssert } = priorityEnqueueFixture()
         offerAndAssert(1, [1])
     })
 
     it("processes 2 out-of-order items correctly", () => {
-        const {offerAndAssert} = priorityEnqueueFixture()
+        const { offerAndAssert } = priorityEnqueueFixture()
         offerAndAssert(2, [])   // (1 not processed yet)
         offerAndAssert(1, [1, 2])
     })
 
     it("processes a “follow-up” of length 1 of a previous “run” directly", () => {
-        const {offerAndAssert} = priorityEnqueueFixture()
+        const { offerAndAssert } = priorityEnqueueFixture()
         offerAndAssert(3, [])
         offerAndAssert(2, [])
         offerAndAssert(1, [1,2,3])
@@ -92,7 +93,7 @@ describe("priority queue", () => {
     })
 
     it("processes a “follow-up” of length 2 of a previous “run” directly", () => {
-        const {offerAndAssert} = priorityEnqueueFixture()
+        const { offerAndAssert } = priorityEnqueueFixture()
         offerAndAssert(3, [])
         offerAndAssert(5, [])
         offerAndAssert(2, [])
@@ -121,7 +122,7 @@ describe("priority queue", () => {
 
 
     const fuzzOnce = (nOffered: number, max: number) => {
-        const {accept, processed} = priorityEnqueueFixture()
+        const { accept, processed } = priorityEnqueueFixture()
 
         const offered: number[] = []
 

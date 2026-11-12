@@ -19,7 +19,7 @@ import { NodeBaseSerializationConfiguration } from "@lionweb/class-core"
 import { TestLanguageBase } from "@lionweb/class-core-test-language"
 
 /**
- * Default parameters for a client that partially fullful {@link LionWebClientParameters}.
+ * Default parameters for a client that partially fulfill {@link LionWebClientParameters}.
  */
 export const defaultTestClientParameters = {
     url: "",

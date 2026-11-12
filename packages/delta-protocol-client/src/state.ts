@@ -17,6 +17,7 @@
 
 import {
     ClientItemLogger,
+    CompositeEvent,
     ErrorResponse,
     Event,
     isContinuedEvent,
@@ -33,7 +34,7 @@ import {
 import { LionWebId } from "@lionweb/json"
 
 import { ChunkingInfo } from "./chunking.js"
-import { priorityQueueAcceptor } from "./priority-queue.js"
+import { PriorityQueue } from "./priority-queue.js"
 
 
 /**
@@ -115,7 +116,14 @@ export class MessageRelatedClientState {
     ) {
 
         const _processEvent = (event: Event) => {
-            this.lastReceivedSequenceNumber = event.sequenceNumber
+            if (event.messageKind === "CompositeEvent") {
+                // A CompositeEvent’s parts count as actual events, so have to update sequenceNumber accordingly.
+                const { parts } = event as CompositeEvent
+                this.lastReceivedSequenceNumber = parts[parts.length - 1].sequenceNumber    // (parts appear in order of sequence number)
+                priorityQueue.nextExpectedPriority = this.lastReceivedSequenceNumber + 1
+            } else {
+                this.lastReceivedSequenceNumber = event.sequenceNumber
+            }
 
             const selfOriginatedCommands = event.originCommands.filter(
                 ({ participationId }) => participationId === this.participationId
@@ -141,7 +149,7 @@ export class MessageRelatedClientState {
             processEvent(event)
         }
 
-        const _acceptEvent = priorityQueueAcceptor<Event>(({ sequenceNumber }) => sequenceNumber, 1, _processEvent)
+        const priorityQueue = new PriorityQueue<Event>(({ sequenceNumber }) => sequenceNumber, 1, _processEvent)
             // Note: sequenceNumber must be a POSITIVE integer according to the specification, so >= 1.
 
         this.receiveMessageOnClient = (message: Event | QueryMessage) => {
@@ -190,7 +198,7 @@ export class MessageRelatedClientState {
                     }
                     const completedMessage = chunkingInfo.maybeCompletedMessage(message)
                     if (completedMessage !== undefined) {
-                        _acceptEvent(completedMessage as Event)
+                        priorityQueue.accept(completedMessage as Event)
                         delete this.chunkingInfoByEventSequenceNumber[sequenceNumber]
                     }
                     return  // ~void
@@ -199,7 +207,7 @@ export class MessageRelatedClientState {
                 if (chunkProperty !== undefined && (message as SplittableMessage).split) {
                     this.chunkingInfoByEventSequenceNumber[message.sequenceNumber] = new ChunkingInfo(message, chunkProperty)
                 } else {
-                    _acceptEvent(message)
+                    priorityQueue.accept(message)
                 }
                 return  // ~void
             }
