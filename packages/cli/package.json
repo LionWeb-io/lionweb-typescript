@@ -3,7 +3,7 @@
     "version": "0.11.0-beta.0",
     "description": "LionWeb CLI for {Java|Type}Script",
     "bin": {
-        "lionweb-cli": "./dist/lionweb-cli.js"
+        "lionweb-cli": "dist/lionweb-cli.js"
     },
     "main": "dist/lionweb-cli.js",
     "type": "module",
