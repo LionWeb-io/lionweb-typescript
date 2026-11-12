@@ -17,7 +17,6 @@
 
 import {
     Classifier,
-    Containment,
     Enumeration,
     EnumerationLiteral,
     Feature,
@@ -25,13 +24,12 @@ import {
     Language,
     LanguageEntity,
     M3Concept,
+    M3Node,
     Node,
     PrimitiveType,
-    Property,
-    Reference,
     StructuredDataType
 } from "@lionweb/core"
-import { indent, withFirstLower } from "@lionweb/textgen-utils"
+import { deCamelCase, indent, withFirstLower } from "@lionweb/textgen-utils"
 import { keepDefineds } from "@lionweb/ts-utils"
 import { asString, Template, when } from "littoral-templates"
 import { ioLionWebMpsSpecificAnnotationsFrom } from "./annotations.js"
@@ -45,19 +43,22 @@ import {
 } from "./implementation.js"
 
 
+const displayMetaTypeOf = (node: M3Node) =>
+    withFirstLower(deCamelCase(node.metaType()))
+
 /**
  * @return human-readable text of the location/“path to” the given {@link Node `node`},
  * which is *assumed* to be a language element – i.e., a {@link M3Concept}.
  */
 const pathTo = (node: Node): string => {
     if (node instanceof LanguageEntity) {
-        return `${withFirstLower(node.metaType())} ${node.name} in ${pathTo(node.language)}`
+        return `${displayMetaTypeOf(node)} ${node.name} in ${pathTo(node.language)}`
     }
     if (node instanceof EnumerationLiteral) {
         return `literal ${node.name} of ${pathTo(node.enumeration)}`
     }
     if (node instanceof Feature) {
-        return `${withFirstLower(node.metaType())} ${node.name} of ${pathTo(node.classifier)}`
+        return `${displayMetaTypeOf(node)} ${node.name} of ${pathTo(node.classifier)}`
     }
     if (node instanceof Language) {
         return `language ${node.name}`
@@ -159,94 +160,47 @@ const textualizationOfAnnotation = (annotation: IoLionWebMpsSpecificAnnotation):
 const textualizationOfAnnotationsInM3Concept = (node: M3Concept): Template => {
     const annotations = ioLionWebMpsSpecificAnnotationsFrom(node)
 
-    // TODO  (shold be able to do this generically)
-
-    if (node instanceof Classifier) {
-        const annotatedFeatures = node.features.flatMap((feature) => textualizationOfAnnotationsInM3Concept(feature as (Property | Containment | Reference)))
-        return (annotations.length > 0 || annotatedFeatures.length > 0)
+    if (
+        node instanceof EnumerationLiteral
+        || node instanceof Feature
+        || node instanceof Field
+        || node instanceof PrimitiveType
+    ) {
+        return annotations.length > 0
             ? [
-                `${withFirstLower(node.metaType())} ${node.name}:`,
+                `${displayMetaTypeOf(node)} ${node.name}:`,
+                indent(annotations.map(textualizationOfAnnotation))
+            ]
+            : []
+    }
+
+    const textualizeWithChildren = <NT extends M3Concept, FK extends keyof NT>(propertyName: FK): Template => {
+        const annotatedChildren = ((node as NT)[propertyName] as M3Concept[]).flatMap(textualizationOfAnnotationsInM3Concept)
+        return (annotations.length > 0 || annotatedChildren.length > 0)
+            ? [
+                `${displayMetaTypeOf(node)} ${node.name}:`,
                 indent([
                     annotations.map(textualizationOfAnnotation),
-                    annotatedFeatures
+                    annotatedChildren
                 ])
             ]
             : []
+    }
+
+    if (node instanceof Classifier) {
+        return textualizeWithChildren<Classifier, "features">("features")
     }
 
     if (node instanceof Enumeration) {
-        const annotatedLiterals = node.literals.flatMap(textualizationOfAnnotationsInM3Concept)
-        return (annotations.length > 0 || annotatedLiterals.length > 0)
-            ? [
-                `enumeration ${node.name}:`,
-                indent([
-                    annotations.map(textualizationOfAnnotation),
-                    annotatedLiterals
-                ])
-            ]
-            : []
-    }
-
-    if (node instanceof EnumerationLiteral) {
-        return annotations.length > 0
-            ? [
-                `enumeration literal ${node.name}:`,
-                indent(annotations.map(textualizationOfAnnotation))
-            ]
-            : []
-    }
-
-    if (node instanceof Feature) {
-        return annotations.length > 0
-            ? [
-                `feature ${withFirstLower(node.metaType())} ${node.name}:`,
-                indent(annotations.map(textualizationOfAnnotation))
-            ]
-            : []
-    }
-
-    if (node instanceof Field) {
-        return annotations.length > 0
-            ? [
-                `field ${withFirstLower(node.metaType())} ${node.name}:`,
-                indent(annotations.map(textualizationOfAnnotation))
-            ]
-            : []
+        return textualizeWithChildren<Enumeration, "literals">("literals")
     }
 
     if (node instanceof Language) {
-        const annotatedEntities = node.entities.flatMap(textualizationOfAnnotationsInM3Concept)
-        return (annotations.length > 0 || annotatedEntities.length > 0)
-            ? [
-                `language ${node.name}:`,
-                indent([
-                    annotations.map(textualizationOfAnnotation),
-                    annotatedEntities
-                ])
-            ]
-            : []
-    }
-
-    if (node instanceof PrimitiveType) {
-        return annotations.length > 0
-            ? [
-                `primitive type ${node.name}:`,
-                indent(annotations.map(textualizationOfAnnotation))
-            ]
-            : []
+        return textualizeWithChildren<Language, "entities">("entities")
     }
 
     if (node instanceof StructuredDataType) {
-        const annotatedFields = node.fields.flatMap(textualizationOfAnnotationsInM3Concept)
-        return (annotations.length > 0 || annotatedFields.length > 0)
-            ? [
-                `structured data type ${node.name}`,
-                indent([
-                    annotations.map(textualizationOfAnnotation),
-                    annotatedFields
-                ])
-            ]
-            : []
+        return textualizeWithChildren<StructuredDataType, "fields">("fields")
     }
 
     // can't happen as node has type 'never' at this point, because of type exhaustion,

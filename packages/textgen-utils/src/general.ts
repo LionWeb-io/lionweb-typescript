@@ -55,3 +55,9 @@ export const wrapInIf = (condition: boolean, left: () => string, right: string):
         : (text) => text
 
 
+/**
+ * @return the “de-camel-cased” version of the given string.
+ */
+export const deCamelCase = (str: string) =>
+    str.replaceAll(/([a-z])([A-Z])/g, (match) => `${match[0]} ${match[1].toLowerCase()}`)
+
