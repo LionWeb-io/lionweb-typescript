@@ -15,7 +15,7 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { Concept, isResolvedReference, Language, LionWebVersion } from "@lionweb/core"
+import { Concept, isResolvedReference, Language, LionWebVersion, nameSorted } from "@lionweb/core"
 import { indent } from "@lionweb/textgen-utils"
 import { dependencyOrderOf, sortedStringsByUppercase } from "@lionweb/ts-utils"
 import { asString, commaSeparated, when, withNewlineAppended } from "littoral-templates"
@@ -27,27 +27,27 @@ import { reflectiveClassFor } from "./reflective-layer.templates.js"
 
 export const languageFileFor = (language: Language, lionWebVersion: LionWebVersion, options: GeneratorOptions) => {
 
-    const {name, version, key, id, entities} = language
+    const { name, version, key, id, entities } = language
 
     const imports = new Imports(language, lionWebVersion.builtinsFacade)
 
     const orderedEntities = dependencyOrderOf(
-        entities,
+        options.sortByName ? nameSorted(entities) : entities,   // sort alphabetically 1st (if requested), then topologically, to stabilize generated code as much as possible
         (entity) =>
             (entity instanceof Concept && isResolvedReference(entity.extends)) ? [entity.extends] : []
     )
-    if (typeof orderedEntities === "boolean") {
+    if (orderedEntities === false) {
         throw new Error(`language ${name} has a cycle among the graph of entities with edges formed by the inheritance dependency`)
     }
 
     const postImportsPart = [
         ``,
-        reflectiveClassFor(language, imports),
+        reflectiveClassFor(language, imports, options.sortByName),
         ``,
         ``,
         orderedEntities
             .filter((entity) => entity.language === language)
-            .map(withNewlineAppended(typeForLanguageEntity(imports)))
+            .map(withNewlineAppended(typeForLanguageEntity(imports, options.sortByName)))
     ]
 
     return asString([

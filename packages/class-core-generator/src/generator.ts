@@ -32,27 +32,41 @@ const properGenericImportLocation = "@lionweb/class-core"
  * A type def. for options objects configuring code generation.
  */
 export type GeneratorOptions = {
+
     /**
      * The `from`-part of the `import`-statement that imports the `class-core` package.
      * Default (which should always be used!): `@lionweb/class-core`.
      */
     genericImportLocation: string
+
     /**
      * The optional header for generated files.
      */
     header?: string
+
     /**
      * Whether to output logging on the `stdout`.
      * Default: `true`.
      */
     verbose: boolean
+
+    /**
+     * Whether to sort entities and features in generated code by their names,
+     * to stabilize generated code as much as possible.
+     * Note that some things in the generated code need to be in dependency order,
+     * which takes priority over alphabetical order.
+     * Default: `false`.
+     */
+    sortByName: boolean
+
 }
 
 
 const withDefaults = (options?: Partial<GeneratorOptions>): GeneratorOptions => ({
     genericImportLocation: options?.genericImportLocation ?? properGenericImportLocation,
     header: options?.header,
-    verbose: options?.verbose ?? true
+    verbose: options?.verbose ?? true,
+    sortByName: options?.sortByName ?? false
 })
 
 

@@ -77,7 +77,7 @@ const cardinalityPrefix = (feature: Feature) => {
 const valueManagerFor = (feature: Feature) =>
     `${cardinalityPrefix(feature)}${featureMetaType(feature)}ValueManager`
 
-export const typeForLanguageEntity = (imports: Imports) => {
+export const typeForLanguageEntity = (imports: Imports, sortByName: boolean) => {
 
     const classMembersForProperty = (property: Property) => {
         const {name, type} = property
@@ -155,7 +155,8 @@ export const typeForLanguageEntity = (imports: Imports) => {
     }
 
     const classForConcreteClassifier = (classifier: Classifier) => {
-        const features = featuresToConcretelyImplementOf(classifier)
+        const featuresToConcretelyImplement = featuresToConcretelyImplementOf(classifier)
+        const features = sortByName ? nameSorted(featuresToConcretelyImplement) : featuresToConcretelyImplement
 
         const getValueManagers = <FT extends Feature>(features: FT[]) => {
             if (features.length === 0) {
@@ -249,7 +250,7 @@ export const typeForLanguageEntity = (imports: Imports) => {
         [
             `export interface ${interface_.name} extends ${interface_.extends.length > 0 ? interface_.extends.filter(isResolvedReference).map((superInterface) => imports.entity(superInterface)).join(", ") : imports.generic("INodeBase")} {`,
             indent(
-                interface_.features.map((feature) => `${feature.name}: ${tsFieldTypeForFeature(feature, imports)};`)
+                nameSorted(interface_.features).map((feature) => `${feature.name}: ${tsFieldTypeForFeature(feature, imports)};`)
             ),
             `}`
         ]
