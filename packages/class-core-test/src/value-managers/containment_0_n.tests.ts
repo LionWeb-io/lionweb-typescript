@@ -21,11 +21,12 @@ import {
     ChildMovedFromContainmentInOtherParentDelta,
     ChildMovedFromOtherContainmentInSameParentDelta,
     ChildMovedInSameContainmentInSameParentDelta,
+    ChildReplacedDelta,
     collectingDeltaReceiver
 } from "@lionweb/class-core"
 
 import { attachedLinkTestConcept, LinkTestConcept, TestLanguageBase } from "@lionweb/class-core-test-language"
-import { deepEqual, equal, emittedDeltaAsserter, throws } from "../assertions.js"
+import { deepEqual, emittedDeltaAsserter, equal, isTrue, throws } from "../assertions.js"
 
 const testLanguageBase = TestLanguageBase.INSTANCE
 
@@ -257,6 +258,25 @@ describe("[0..n] containment", () => {
         equal(child1.containment, testLanguageBase.LinkTestConcept_containment_1_n);
         assertDeltaEmitted(new ChildMovedFromContainmentInOtherParentDelta(parent1, testLanguageBase.LinkTestConcept_containment_0_n, 0, parent2, testLanguageBase.LinkTestConcept_containment_1_n, 0, child1));
     });
+
+    it("replaces a contained child with a fresh node", () => {
+        const [receiveDelta, deltas] = collectingDeltaReceiver()
+        const parent = attachedLinkTestConcept("parent", receiveDelta)
+        const oldChild = LinkTestConcept.create("old", receiveDelta)
+        const newChild = LinkTestConcept.create("new", receiveDelta)
+        parent.addContainment_0_n(oldChild)
+        deltas.length = 0   // clear deltas array
+        parent.replaceContainment_0_nAtIndex(newChild, 0)
+
+        deepEqual(parent.containment_0_n, [newChild])
+        equal(newChild.parent, parent)
+        equal(oldChild.parent, undefined)
+        equal(deltas.length, 1)
+        isTrue(deltas[0] instanceof ChildReplacedDelta)
+        const crd = deltas[0] as ChildReplacedDelta
+        equal(crd.replacedChild, oldChild)
+        equal(crd.newChild, newChild)
+    })
 
 });
 

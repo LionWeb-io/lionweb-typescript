@@ -327,16 +327,16 @@ export abstract class MultiContainmentValueManager<T extends INodeBase> extends 
 
     @action replaceAtIndex(movedChild: T, newIndex: number) {
         checkIndex(newIndex, this.children.length, false);
-        if (movedChild.parent === undefined) {
-            throw new Error(`a child-to-move (id=${movedChild.id}) must already be contained`);
-        }
         const replacedChild = this.children[newIndex];
         if (replacedChild === movedChild) {
             // do nothing: nothing's changed
         } else {
             this.children.splice(newIndex, 1, movedChild);
-            if (replacedChild.parent !== undefined) {
-                const oldValueManager = replacedChild.parent.getContainmentValueManager(replacedChild.containment!);
+            if (movedChild.parent === undefined) {
+                // not a move+replace, but a regular replace:
+                this.emitDelta(() => new ChildReplacedDelta(this.container, this.containment, newIndex, replacedChild, movedChild));
+            } else {
+                const oldValueManager = replacedChild.parent!.getContainmentValueManager(replacedChild.containment!);
                 const oldIndex = oldValueManager instanceof SingleContainmentValueManager
                     ? 0
                     : (oldValueManager as MultiContainmentValueManager<INodeBase>).children.indexOf(replacedChild);
@@ -349,11 +349,8 @@ export abstract class MultiContainmentValueManager<T extends INodeBase> extends 
                 } else {
                     this.emitDelta(() => new ChildMovedAndReplacedFromContainmentInOtherParentDelta(this.container, this.containment, newIndex, movedChild, movedChild.parent!, movedChild.containment!, oldIndex, replacedChild));
                 }
-                replacedChild.detach();
-            } else {
-                // not a move+replace, but a regular replace instead:
-                this.emitDelta(() => new ChildReplacedDelta(this.container, this.containment, newIndex, replacedChild, movedChild));
             }
+            replacedChild.detach();
             movedChild.attachTo(this.container, this.containment);
         }
     }
