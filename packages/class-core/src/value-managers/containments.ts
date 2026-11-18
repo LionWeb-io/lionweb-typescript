@@ -327,27 +327,34 @@ export abstract class MultiContainmentValueManager<T extends INodeBase> extends 
 
     @action replaceAtIndex(movedChild: T, newIndex: number) {
         checkIndex(newIndex, this.children.length, false);
-        const replacedChild = this.children[newIndex];
+        const replacedChild = this.children[newIndex];  // ==> replacedChild.parent !== undefined
         if (replacedChild === movedChild) {
             // do nothing: nothing's changed
         } else {
-            this.children.splice(newIndex, 1, movedChild);
             if (movedChild.parent === undefined) {
                 // not a move+replace, but a regular replace:
                 this.emitDelta(() => new ChildReplacedDelta(this.container, this.containment, newIndex, replacedChild, movedChild));
+                this.children.splice(newIndex, 1, movedChild);
             } else {
-                const oldValueManager = replacedChild.parent!.getContainmentValueManager(replacedChild.containment!);
+                const oldValueManager = movedChild.parent.getContainmentValueManager(movedChild.containment!);  // i.e.: value manager of moved child
                 const oldIndex = oldValueManager instanceof SingleContainmentValueManager
                     ? 0
-                    : (oldValueManager as MultiContainmentValueManager<INodeBase>).children.indexOf(replacedChild);
+                    : (oldValueManager as MultiContainmentValueManager<INodeBase>).children.indexOf(movedChild);
                 if (replacedChild.parent === movedChild.parent) {
                     if (replacedChild.containment === movedChild.containment) {
                         this.emitDelta(() => new ChildMovedAndReplacedInSameContainmentInSameParentDelta(this.container, this.containment, oldIndex, newIndex, movedChild, replacedChild));
                     } else {
                         this.emitDelta(() => new ChildMovedAndReplacedFromOtherContainmentInSameParentDelta(this.container, replacedChild.containment!, oldIndex, this.containment, newIndex, movedChild, replacedChild));
                     }
-                } else {
+                } else {    // replacedChild.parent !== movedChild.parent:
                     this.emitDelta(() => new ChildMovedAndReplacedFromContainmentInOtherParentDelta(this.container, this.containment, newIndex, movedChild, movedChild.parent!, movedChild.containment!, oldIndex, replacedChild));
+                }
+                this.children.splice(newIndex, 1, movedChild);
+                    // now, movedChild *may* appear twice in this.children in the ChildMovedAndReplacedInSameContainmentInSameParentDelta case => only remove replacedChild afterwards
+                if (oldValueManager instanceof SingleContainmentValueManager) {
+                    oldValueManager.setDirectly(undefined);
+                } else {
+                    (oldValueManager as MultiContainmentValueManager<INodeBase>).children.splice(oldIndex, 1);
                 }
             }
             replacedChild.detach();
