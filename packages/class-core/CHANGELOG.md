@@ -38,6 +38,9 @@
 * Fix [issue #400](https://github.com/LionWeb-io/lionweb-typescript/issues/400):
   The `invertDelta` function now inverts all deltas inside a `CompositeDelta`, and *also reverses them*.
 
+* Fix [issue #388](https://github.com/LionWeb-io/lionweb-typescript/issues/388):
+  Replacing a child of a multi-valued containment with an uncontained node now produces a `ChildReplacedDelta`, instead of throwing an `Error`.
+
 
 ## 0.10.0
 

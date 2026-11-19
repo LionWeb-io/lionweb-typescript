@@ -18,12 +18,16 @@
 import {
     ChildAddedDelta,
     ChildDeletedDelta,
+    ChildMovedAndReplacedFromContainmentInOtherParentDelta,
+    ChildMovedAndReplacedFromOtherContainmentInSameParentDelta,
+    ChildMovedAndReplacedInSameContainmentInSameParentDelta,
     ChildMovedFromContainmentInOtherParentDelta,
+    ChildReplacedDelta,
     collectingDeltaReceiver
 } from "@lionweb/class-core"
 
 import { attachedLinkTestConcept, LinkTestConcept, TestLanguageBase } from "@lionweb/class-core-test-language"
-import { deepEqual, equal, throws } from "../assertions.js"
+import { deepEqual, equal, isTrue, throws } from "../assertions.js"
 
 const testLanguageBase = TestLanguageBase.INSTANCE
 
@@ -253,6 +257,118 @@ describe("[1..n] containment", () => {
         equal(deltas.length, 4);
         deepEqual(deltas[3], new ChildMovedFromContainmentInOtherParentDelta(srcParent, testLanguageBase.LinkTestConcept_containment_1_n, 0, dstParent, testLanguageBase.LinkTestConcept_containment_1_n, 0, child));
     });
+
+    it("replaces a contained child with a fresh node", () => {
+        const [receiveDelta, deltas] = collectingDeltaReceiver()
+        const parent = attachedLinkTestConcept("parent", receiveDelta)
+        const oldChild = LinkTestConcept.create("old", receiveDelta)
+        const newChild = LinkTestConcept.create("new", receiveDelta)
+        parent.addContainment_1_n(oldChild)
+        deltas.length = 0   // cheap way to clear the deltas array
+
+        parent.replaceContainment_1_nAtIndex(newChild, 0)
+
+        deepEqual(parent.containment_1_n, [newChild])
+        equal(newChild.parent, parent)
+        equal(oldChild.parent, undefined)
+        equal(deltas.length, 1)
+        isTrue(deltas[0] instanceof ChildReplacedDelta)
+        const delta = deltas[0] as ChildReplacedDelta
+        equal(delta.replacedChild, oldChild)
+        equal(delta.newChild, newChild)
+    })
+
+    it("replaceAtIndex - no-op when replacing a child with itself", () => {
+        const [receiveDelta, deltas] = collectingDeltaReceiver()
+        const parent = attachedLinkTestConcept("parent", receiveDelta)
+        const child = LinkTestConcept.create("child", receiveDelta)
+        parent.addContainment_1_n(child)
+        deltas.length = 0
+
+        parent.replaceContainment_1_nAtIndex(child, 0)
+
+        equal(parent.containment_1_n.length, 1)
+        equal(parent.containment_1_n[0], child)
+        equal(child.parent, parent)
+        equal(deltas.length, 0)
+    })
+
+    it("replaceAtIndex - same parent, same containment", () => {
+        const [receiveDelta, deltas] = collectingDeltaReceiver()
+        const parent = attachedLinkTestConcept("parent", receiveDelta)
+        const child1 = LinkTestConcept.create("child1", receiveDelta)
+        const child2 = LinkTestConcept.create("child2", receiveDelta)
+        const child3 = LinkTestConcept.create("child3", receiveDelta)
+        parent.addContainment_1_n(child1)
+        parent.addContainment_1_n(child2)
+        parent.addContainment_1_n(child3)
+        deltas.length = 0
+
+        parent.replaceContainment_1_nAtIndex(child2, 0)
+
+        equal(parent.containment_1_n.length, 2)
+        equal(parent.containment_1_n[0].id, child2.id)
+        equal(parent.containment_1_n[1].id, child3.id)
+        equal(child1.parent, undefined)
+        equal(child2.parent, parent)
+        equal(child3.parent, parent)
+        equal(deltas.length, 1)
+        isTrue(deltas[0] instanceof ChildMovedAndReplacedInSameContainmentInSameParentDelta)
+        const delta = deltas[0] as ChildMovedAndReplacedInSameContainmentInSameParentDelta
+        equal(delta.movedChild.id, child2.id)
+        equal(delta.replacedChild.id, child1.id)
+    })
+
+    it("replaceAtIndex - same parent, different containment", () => {
+        const [receiveDelta, deltas] = collectingDeltaReceiver()
+        const parent = attachedLinkTestConcept("parent", receiveDelta)
+        const child1 = LinkTestConcept.create("child1", receiveDelta)
+        const child2 = LinkTestConcept.create("child2", receiveDelta)
+        parent.addContainment_1_n(child1)
+        parent.addContainment_0_n(child2)
+        deltas.length = 0
+
+        parent.replaceContainment_1_nAtIndex(child2, 0)
+
+        equal(parent.containment_1_n.length, 1)
+        equal(parent.containment_1_n[0].id, child2.id)
+        equal(parent.containment_0_n.length, 0)
+        equal(child2.parent, parent)
+        equal(child2.containment, testLanguageBase.LinkTestConcept_containment_1_n)
+        equal(child1.parent, undefined)
+        equal(deltas.length, 1)
+        isTrue(deltas[0] instanceof ChildMovedAndReplacedFromOtherContainmentInSameParentDelta)
+        const delta = deltas[0] as ChildMovedAndReplacedFromOtherContainmentInSameParentDelta
+        equal(delta.movedChild.id, child2.id)
+        equal(delta.replacedChild.id, child1.id)
+    })
+
+    it("replaceAtIndex - different parent", () => {
+        const [receiveDelta, deltas] = collectingDeltaReceiver()
+        const parent1 = attachedLinkTestConcept("parent1", receiveDelta)
+        const parent2 = attachedLinkTestConcept("parent2", receiveDelta)
+        const child1 = LinkTestConcept.create("child1", receiveDelta)
+        const child2 = LinkTestConcept.create("child2", receiveDelta)
+        parent1.addContainment_1_n(child1)
+        parent2.addContainment_1_n(child2)
+        deltas.length = 0
+
+        parent1.replaceContainment_1_nAtIndex(child2, 0)
+
+        equal(parent1.containment_1_n.length, 1)
+        equal(parent1.containment_1_n[0].id, child2.id)
+        throws(
+            () => parent2.containment_1_n.length,
+            `can't read required containment "containment_1_n" that's unset on instance of TestLanguage.LinkTestConcept with id=parent2`
+        )
+        equal(child2.parent, parent1)
+        equal(child1.parent, undefined)
+        equal(deltas.length, 1)
+        isTrue(deltas[0] instanceof ChildMovedAndReplacedFromContainmentInOtherParentDelta)
+        const delta = deltas[0] as ChildMovedAndReplacedFromContainmentInOtherParentDelta
+        equal(delta.movedChild.id, child2.id)
+        equal(delta.replacedChild.id, child1.id)
+    })
 
 });
 
