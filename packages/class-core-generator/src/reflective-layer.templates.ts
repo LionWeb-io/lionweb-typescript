@@ -34,6 +34,7 @@ import {
     LanguageEntity,
     Link,
     nameOf,
+    nameSorted,
     PrimitiveType,
     Property,
     SingleRef,
@@ -45,7 +46,7 @@ import { when, withNewlineAppended } from "littoral-templates"
 
 import { entityMetaType, extendsFrom, Imports, nameOfBaseClassForLanguage } from "./helpers/index.js"
 
-export const reflectiveClassFor = (language: Language, imports: Imports) => {
+export const reflectiveClassFor = (language: Language, imports: Imports, sortByName: boolean) => {
 
     // classifier:
 
@@ -62,7 +63,8 @@ export const reflectiveClassFor = (language: Language, imports: Imports) => {
     }
 
     const reflectiveMembersForClassifier = (classifier: Classifier) => {
-        const { name, key, id, features } = classifier
+        const { name, key, id } = classifier
+        const features = sortByName ? nameSorted(classifier.features) : classifier.features
         const metaType = entityMetaType(classifier)
         return [
             `public readonly _${name} = new ${imports.core(metaType)}(this._language, "${name}", "${key}", "${id}"${classifier instanceof Concept ? ", " + imports.core("ConceptModifier") + "." + (classifier.abstract ? "abstract" : "concrete") : ""})${isPartition(classifier) ? ".isPartition()" : ""};`,
@@ -175,6 +177,7 @@ export const reflectiveClassFor = (language: Language, imports: Imports) => {
         const thisLocalName = (localName: string) => `this._${name}_${localName}`
         if (entity instanceof Classifier) {
             const extends_ = extendsFrom(entity)
+            const features = sortByName ? nameSorted(entity.features) : entity.features
             return [
                 extends_ instanceof Classifier ? `this._${name}.extends = ${refForType(extends_)};` : [],
                 when(entity instanceof Interface && entity.extends.length > 0)(
@@ -186,10 +189,10 @@ export const reflectiveClassFor = (language: Language, imports: Imports) => {
                             .map(interface_ => refForType(interface_))
                             .join(", ")});`
                 ),
-                when(entity.features.length > 0)(
-                    `this._${name}.havingFeatures(${entity.features.map(nameOf).map(thisLocalName).join(", ")});`
+                when(features.length > 0)(
+                    `this._${name}.havingFeatures(${features.map(nameOf).map(thisLocalName).join(", ")});`
                 ),
-                entity.features.map(wireUpStatementsForFeature)
+                features.map(wireUpStatementsForFeature)
             ]
         }
         if (entity instanceof Enumeration) {
@@ -204,7 +207,8 @@ export const reflectiveClassFor = (language: Language, imports: Imports) => {
         return `// unhandled language entity <${entityMetaType(entity)}>"${name}"`
     }
 
-    const { version, id, key, entities } = language
+    const { version, id, key } = language
+    const entities = sortByName ? nameSorted(language.entities) : language.entities   // sort alphabetically 1st (if requested), then topologically, to stabilize generated code as much as possible
     const enumerations = entities.filter(isEnumeration)
     const concreteClassifiers = entities.filter(isConcrete)
     const parameterPrefix = concreteClassifiers.length === 0 ? "_" : ""

@@ -96,10 +96,6 @@ describe("io.lionweb.mps.specific textualizer (textualizationOfAnnotationsIn)", 
             equal(
                 textualizationOfAnnotationsIn([testLanguage]),
 `language TestLanguage:
-    enumeration TestEnumeration:
-        enumeration literal literal1:
-            @ShortDescription:
-                description: First literal
     concept DataTypeTestConcept:
         @ConceptDescription:
             short description: short desc
@@ -115,6 +111,10 @@ describe("io.lionweb.mps.specific textualizer (textualizationOfAnnotationsIn)", 
         @Deprecated:
             comment: Use NewConcept instead
             build: 1.2.3
+    enumeration TestEnumeration:
+        enumeration literal literal1:
+            @ShortDescription:
+                description: First literal
     concept TestPartition:
         @ShortDescription:
             description: A short description
@@ -173,14 +173,14 @@ describe("io.lionweb.mps.specific textualizer (textualizationOfAnnotationsIn)", 
             equal(
                 textualizationOfAnnotationsIn([testLanguage]),
 `language TestLanguage:
-    enumeration TestEnumeration:
-        enumeration literal literal1:
-            @ShortDescription:
-                description: literal description
     concept DataTypeTestConcept:
         property stringValue_1:
             @Deprecated:
                 comment: property deprecated
+    enumeration TestEnumeration:
+        enumeration literal literal1:
+            @ShortDescription:
+                description: literal description
 `
             )
         } finally {

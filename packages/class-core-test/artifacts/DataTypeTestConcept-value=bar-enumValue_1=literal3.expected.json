@@ -19,17 +19,17 @@
           "property": {
             "language": "TestLanguage",
             "version": "0",
-            "key": "DataTypeTestConcept-stringValue_1"
+            "key": "DataTypeTestConcept-enumValue_1"
           },
-          "value": "bar"
+          "value": "TestEnumeration-literal3"
         },
         {
           "property": {
             "language": "TestLanguage",
             "version": "0",
-            "key": "DataTypeTestConcept-enumValue_1"
+            "key": "DataTypeTestConcept-stringValue_1"
           },
-          "value": "TestEnumeration-literal3"
+          "value": "bar"
         }
       ],
       "containments": [],

@@ -32,8 +32,8 @@ import {
     simpleConsoleLogger
 } from "@lionweb/delta-protocol-common"
 import { DataTypeTestConcept, TestLanguageBase, TestPartition } from "@lionweb/class-core-test-language"
-import { PropertyChangedDelta } from "@lionweb/class-core"
-import { LionWebVersions, metaPointerForFeature } from "@lionweb/core"
+import { LionCore_builtinsBase, PropertyChangedDelta } from "@lionweb/class-core"
+import { metaPointerForFeature } from "@lionweb/core"
 import { defaultTestClientParameters } from "../test-utils/client-parameters.js"
 import { asLowLevelClientLogger } from "../test-utils/logging.js"
 import { mockLionWebClientTestFixture } from "../test-utils/mock-client.js"
@@ -258,7 +258,7 @@ describe("implementation of LionWeb client", async function() {
     })
 
     it("receives events, and then emits a command after a local change", async () => {
-        const { inamed_name } = LionWebVersions.v2023_1.builtinsFacade.features
+        const { INamed_name } = LionCore_builtinsBase.INSTANCE
 
         // Arrange:
         const { lionWebClient, receiveMessageOnClient, deltasSent } = await mockLionWebClientTestFixture(semanticConsoleLogger)
@@ -276,7 +276,7 @@ describe("implementation of LionWeb client", async function() {
                         classifier: testLanguageBase.TestPartition.metaPointer(),
                         properties: [
                             {
-                                property: metaPointerForFeature(inamed_name),
+                                property: metaPointerForFeature(INamed_name),
                                 value: "my test partition"
                             }
                         ],
@@ -304,7 +304,15 @@ describe("implementation of LionWeb client", async function() {
         testPartition.name = "partition name"
 
         // Assert:
-        expect(deltasSent).to.deep.equal([ new PropertyChangedDelta(testPartition, inamed_name, "my test partition", "partition name") ])
+        expect(deltasSent).to.deep.equal([
+            new PropertyChangedDelta(
+                testPartition,  // (also need object equality, not just deep-equality — see next expect-ation)
+                INamed_name,
+                "my test partition",
+                "partition name"
+            )
+        ])
+        expect((deltasSent[0] as PropertyChangedDelta<unknown>).node).to.equal(testPartition)
     })
 
     it("CompositeEvent handling skips queued events (issue #390)", async function() {

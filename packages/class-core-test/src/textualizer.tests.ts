@@ -39,14 +39,14 @@ describe("textualizer", () => {
         )([node])
         equal(text, `LinkTestConcept (id: node)
     containment_0_1: <not set>
-    containment_1: <not set>
     containment_0_n: <none>
+    containment_1: <not set>
     containment_1_n: <none>
-    reference_0_1 -> <not set>
-    reference_1 -> unresolved reference to target: targetId=foo, resolveInfo=bar  // = unresolvedNode
-    reference_0_n -> <none>
-    reference_1_n -> "the other", <not set>, "the other"   // = 2x other, with a smuggled-in referenceToSet in between
     otherContainment_0_1: <not set>
+    reference_0_1 -> <not set>
+    reference_0_n -> <none>
+    reference_1 -> unresolved reference to target: targetId=foo, resolveInfo=bar  // = unresolvedNode
+    reference_1_n -> "the other", <not set>, "the other"   // = 2x other, with a smuggled-in referenceToSet in between
     name = <not set>
 `.replaceAll(/\s*\/\/.+$/mg, ""))
     })
