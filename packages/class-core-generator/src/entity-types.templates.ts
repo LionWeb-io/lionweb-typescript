@@ -126,9 +126,11 @@ export const typeForLanguageEntity = (imports: Imports, sortByName: boolean) => 
                 `add${nameWithFirstUpper}AtIndex(newValue: ${tsTypeForClassifier_}, index: number) {`,
                 indent(`this._${name}.insertAtIndex(newValue, index);`),
                 `}`,
-                `move${nameWithFirstUpper}(oldIndex: number, newIndex: number) {`,
-                indent(`this._${name}.move(oldIndex, newIndex);`),
-                `}`,
+                when(link instanceof Reference)([
+                    `move${nameWithFirstUpper}(oldIndex: number, newIndex: number) {`,
+                    indent(`this._${name}.move(oldIndex, newIndex);`),
+                    `}`
+                ]),
                 when(link instanceof Containment)([
                     `replace${nameWithFirstUpper}AtIndex(movedChild: ${tsTypeForClassifier_}, newIndex: number) {`,
                     indent(`this._${name}.replaceAtIndex(movedChild, newIndex);`),

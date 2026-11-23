@@ -137,11 +137,6 @@ export interface INodeBase extends Node {
     insertAnnotationAtIndex(annotation: INodeBase, index: number): void;
 
     /**
-     * Moves the annotation at the given `oldIndex` to the `newIndex` position.
-     */
-    moveAnnotation(oldIndex: number, newIndex: number): void;
-
-    /**
      * Replaces the existing annotation at the given index, with the given annotation (as an instance of {@link INodeBase}).
      */
     replaceAnnotationAtIndex(annotation: INodeBase, index: number): void;
@@ -331,10 +326,6 @@ export abstract class NodeBase implements INodeBase {
 
     insertAnnotationAtIndex(annotation: INodeBase, index: number) {
         this.annotationsValueManager.insertAtIndex(annotation, index);
-    }
-
-    moveAnnotation(oldIndex: number, newIndex: number) {
-        this.annotationsValueManager.move(oldIndex, newIndex);
     }
 
     replaceAnnotationAtIndex(annotation: INodeBase, index: number) {

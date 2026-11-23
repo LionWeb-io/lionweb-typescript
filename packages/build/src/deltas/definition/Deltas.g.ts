@@ -290,9 +290,6 @@ export class Deltas extends $lwClassCore.NodeBase {
     addDeltasAtIndex(newValue: Delta, index: number) {
         this._deltas.insertAtIndex(newValue, index);
     }
-    moveDeltas(oldIndex: number, newIndex: number) {
-        this._deltas.move(oldIndex, newIndex);
-    }
     replaceDeltasAtIndex(movedChild: Delta, newIndex: number) {
         this._deltas.replaceAtIndex(movedChild, newIndex);
     }
@@ -575,9 +572,6 @@ export class Delta extends $lwClassCore.NodeBase implements $lwClassCore.INamed 
     }
     addFieldsAtIndex(newValue: Field, index: number) {
         this._fields.insertAtIndex(newValue, index);
-    }
-    moveFields(oldIndex: number, newIndex: number) {
-        this._fields.move(oldIndex, newIndex);
     }
     replaceFieldsAtIndex(movedChild: Field, newIndex: number) {
         this._fields.replaceAtIndex(movedChild, newIndex);

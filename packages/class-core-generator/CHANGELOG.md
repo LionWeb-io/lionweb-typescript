@@ -5,6 +5,7 @@
 * Put proper `override` markers on `get{Property|Containment|Reference}ValueManager` methods on classes generated for concrete classifiers.
 * Support structured data types.
 * Provide a new `sortByName` property of the `GeneratorOptions` type, with default `false`, that determines whether to sort language entities and classifier features alphabetically first and then topologically, to stabilize generated code as much possible.
+* Don’t generate the non-offset-based `move` methods.
 
 
 ## 0.10.0

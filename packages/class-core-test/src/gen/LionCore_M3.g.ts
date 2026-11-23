@@ -461,9 +461,6 @@ export abstract class Classifier extends LanguageEntity {
     addFeaturesAtIndex(newValue: Feature, index: number) {
         this._features.insertAtIndex(newValue, index);
     }
-    moveFeatures(oldIndex: number, newIndex: number) {
-        this._features.move(oldIndex, newIndex);
-    }
     replaceFeaturesAtIndex(movedChild: Feature, newIndex: number) {
         this._features.replaceAtIndex(movedChild, newIndex);
     }
@@ -675,9 +672,6 @@ export class Enumeration extends DataType {
     addLiteralsAtIndex(newValue: EnumerationLiteral, index: number) {
         this._literals.insertAtIndex(newValue, index);
     }
-    moveLiterals(oldIndex: number, newIndex: number) {
-        this._literals.move(oldIndex, newIndex);
-    }
     replaceLiteralsAtIndex(movedChild: EnumerationLiteral, newIndex: number) {
         this._literals.replaceAtIndex(movedChild, newIndex);
     }
@@ -762,9 +756,6 @@ export class Language extends $lwClassCore.NodeBase implements IKeyed {
     }
     addEntitiesAtIndex(newValue: LanguageEntity, index: number) {
         this._entities.insertAtIndex(newValue, index);
-    }
-    moveEntities(oldIndex: number, newIndex: number) {
-        this._entities.move(oldIndex, newIndex);
     }
     replaceEntitiesAtIndex(movedChild: LanguageEntity, newIndex: number) {
         this._entities.replaceAtIndex(movedChild, newIndex);

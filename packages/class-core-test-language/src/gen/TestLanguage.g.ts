@@ -413,9 +413,6 @@ export class LinkTestConcept extends $lwClassCore.NodeBase implements $lwClassCo
     addContainment_0_nAtIndex(newValue: LinkTestConcept, index: number) {
         this._containment_0_n.insertAtIndex(newValue, index);
     }
-    moveContainment_0_n(oldIndex: number, newIndex: number) {
-        this._containment_0_n.move(oldIndex, newIndex);
-    }
     replaceContainment_0_nAtIndex(movedChild: LinkTestConcept, newIndex: number) {
         this._containment_0_n.replaceAtIndex(movedChild, newIndex);
     }
@@ -449,9 +446,6 @@ export class LinkTestConcept extends $lwClassCore.NodeBase implements $lwClassCo
     }
     addContainment_1_nAtIndex(newValue: LinkTestConcept, index: number) {
         this._containment_1_n.insertAtIndex(newValue, index);
-    }
-    moveContainment_1_n(oldIndex: number, newIndex: number) {
-        this._containment_1_n.move(oldIndex, newIndex);
     }
     replaceContainment_1_nAtIndex(movedChild: LinkTestConcept, newIndex: number) {
         this._containment_1_n.replaceAtIndex(movedChild, newIndex);
@@ -702,9 +696,6 @@ export class TestPartition extends $lwClassCore.NodeBase implements $lwClassCore
     }
     addLinksAtIndex(newValue: LinkTestConcept, index: number) {
         this._links.insertAtIndex(newValue, index);
-    }
-    moveLinks(oldIndex: number, newIndex: number) {
-        this._links.move(oldIndex, newIndex);
     }
     replaceLinksAtIndex(movedChild: LinkTestConcept, newIndex: number) {
         this._links.replaceAtIndex(movedChild, newIndex);
