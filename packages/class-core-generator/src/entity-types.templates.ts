@@ -135,11 +135,11 @@ export const typeForLanguageEntity = (imports: Imports, sortByName: boolean) => 
                     `replace${nameWithFirstUpper}AtIndex(movedChild: ${tsTypeForClassifier_}, newIndex: number) {`,
                     indent(`this._${name}.replaceAtIndex(movedChild, newIndex);`),
                     `}`,
-                    `move${nameWithFirstUpper}OffsetBased(oldIndex: number, indexOffset: number) {`,
-                    indent(`this._${name}.moveOffsetBased(oldIndex, indexOffset);`),
+                    `move${nameWithFirstUpper}(oldIndex: number, indexOffset: number) {`,
+                    indent(`this._${name}.move(oldIndex, indexOffset);`),
                     `}`,
-                    `moveAndReplace${nameWithFirstUpper}OffsetBased(oldIndex: number, indexOffset: number) {`,
-                    indent(`this._${name}.moveAndReplaceOffsetBased(oldIndex, indexOffset);`),
+                    `moveAndReplace${nameWithFirstUpper}(oldIndex: number, indexOffset: number) {`,
+                    indent(`this._${name}.moveAndReplace(oldIndex, indexOffset);`),
                     `}`
                 ])
             ])

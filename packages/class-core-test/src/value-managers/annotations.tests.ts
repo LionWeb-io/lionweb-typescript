@@ -209,7 +209,7 @@ describe("annotations", () => {
         equal(deltas.length, nAnnotations + 1)
 
         // action:
-        ltc.moveAnnotationOffsetBased(3, 2)
+        ltc.moveAnnotation(3, 2)
 
         deepEqual(ltc.annotations, [
             annotations[0],

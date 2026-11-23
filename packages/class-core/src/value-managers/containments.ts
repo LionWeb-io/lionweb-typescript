@@ -274,7 +274,7 @@ export abstract class MultiContainmentValueManager<T extends INodeBase> extends 
             if (newChild.parent === this.container) {
                 if (newChild.containment === this.containment) {
                     const oldIndex = this.children.indexOf(newChild);
-                    this.moveOffsetBasedDirectly(oldIndex, newIndex - oldIndex);
+                    this.moveDirectly(oldIndex, newIndex - oldIndex);
                     this.emitDelta(() => new ChildMovedInSameContainmentInSameParentDelta(this.container, this.containment, oldIndex, newIndex - oldIndex, newChild));
                 } else {
                     const oldIndex = removeFromContainment(newChild);
@@ -348,7 +348,7 @@ export abstract class MultiContainmentValueManager<T extends INodeBase> extends 
     /**
      * @return the moved child, or `undefined` if `indexOffset` = 0.
      */
-    @action moveOffsetBasedDirectly(oldIndex: number, indexOffset: number): INodeBase | undefined {
+    @action moveDirectly(oldIndex: number, indexOffset: number): INodeBase | undefined {
         if (indexOffset === 0) {
             return undefined;
         }
@@ -356,8 +356,8 @@ export abstract class MultiContainmentValueManager<T extends INodeBase> extends 
         return movedChild;
     }
 
-    @action moveOffsetBased(oldIndex: number, indexOffset: number) {
-        const child = this.moveOffsetBasedDirectly(oldIndex, indexOffset);
+    @action move(oldIndex: number, indexOffset: number) {
+        const child = this.moveDirectly(oldIndex, indexOffset);
         if (child !== undefined) {
             this.emitDelta(() => new ChildMovedInSameContainmentInSameParentDelta(this.container, this.containment, oldIndex, indexOffset, child));
         }
@@ -367,7 +367,7 @@ export abstract class MultiContainmentValueManager<T extends INodeBase> extends 
     /**
      * @return a tuple with the (moved, replaced) children, or `undefined` if `indexOffset` = 0.
      */
-    @action moveAndReplaceOffsetBasedDirectly(oldIndex: number, indexOffset: number): [movedChild: INodeBase, replacedChild: INodeBase] | undefined {
+    @action moveAndReplaceDirectly(oldIndex: number, indexOffset: number): [movedChild: INodeBase, replacedChild: INodeBase] | undefined {
         if (indexOffset === 0) {
             return undefined;
         }
@@ -376,8 +376,8 @@ export abstract class MultiContainmentValueManager<T extends INodeBase> extends 
         return [movedChild, replacedChild];
     }
 
-    @action moveAndReplaceOffsetBased(oldIndex: number, indexOffset: number) {
-        const participants = this.moveAndReplaceOffsetBasedDirectly(oldIndex, indexOffset);
+    @action moveAndReplace(oldIndex: number, indexOffset: number) {
+        const participants = this.moveAndReplaceDirectly(oldIndex, indexOffset);
         if (participants !== undefined) {
             const [movedChild, replacedChild] = participants;
             this.emitDelta(() => new ChildMovedAndReplacedInSameContainmentInSameParentDelta(this.container, this.containment, oldIndex, indexOffset, movedChild, replacedChild));

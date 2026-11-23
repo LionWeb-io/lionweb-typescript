@@ -128,7 +128,7 @@ export class AnnotationsValueManager extends ValueManager {
     /**
      * @return the moved annotation, or `undefined` if `indexOffset` = 0.
      */
-    @action moveOffsetBasedDirectly(oldIndex: number, indexOffset: number): INodeBase | undefined {
+    @action moveDirectly(oldIndex: number, indexOffset: number): INodeBase | undefined {
         if (indexOffset === 0) {
             return undefined;
         }
@@ -136,8 +136,8 @@ export class AnnotationsValueManager extends ValueManager {
         return movedAnnotation;
     }
 
-    @action moveOffsetBased(oldIndex: number, indexOffset: number) {
-        const annotation = this.moveOffsetBasedDirectly(oldIndex, indexOffset);
+    @action move(oldIndex: number, indexOffset: number) {
+        const annotation = this.moveDirectly(oldIndex, indexOffset);
         if (annotation !== undefined) {
             this.emitDelta(() => new AnnotationMovedInSameParentDelta(this.container, oldIndex, indexOffset, annotation));
         }
@@ -147,7 +147,7 @@ export class AnnotationsValueManager extends ValueManager {
     /**
      * @return a tuple with the (moved, replaced) annotations, or `undefined` if `indexOffset` = 0.
      */
-    @action moveAndReplaceOffsetBasedDirectly(oldIndex: number, indexOffset: number): [movedAnnotation: INodeBase, replacedAnnotation: INodeBase] | undefined {
+    @action moveAndReplaceDirectly(oldIndex: number, indexOffset: number): [movedAnnotation: INodeBase, replacedAnnotation: INodeBase] | undefined {
         if (indexOffset === 0) {
             return undefined;
         }
@@ -156,8 +156,8 @@ export class AnnotationsValueManager extends ValueManager {
         return [movedAnnotation, replacedAnnotation];
     }
 
-    @action moveAndReplaceOffsetBased(oldIndex: number, indexOffset: number) {
-        const participants = this.moveAndReplaceOffsetBasedDirectly(oldIndex, indexOffset);
+    @action moveAndReplace(oldIndex: number, indexOffset: number) {
+        const participants = this.moveAndReplaceDirectly(oldIndex, indexOffset);
         if (participants !== undefined) {
             const [movedAnnotation, replacedAnnotation] = participants;
             this.emitDelta(() => new AnnotationMovedAndReplacedInSameParentDelta(this.container, oldIndex, indexOffset, replacedAnnotation, movedAnnotation));

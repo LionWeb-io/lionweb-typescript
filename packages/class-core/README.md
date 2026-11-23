@@ -149,9 +149,9 @@ All multi-valued link value managers also expose the following methods:
 * `move[Directly]` — Moves the node at the given old index to the new index, shifting any remaining nodes accordingly.
 * `replaceAtIndex[Directly]` — Replaces the child at the specified index with the given child.
   (It throws if the specified index is invalid.)
-* `moveOffsetBased[Directly]` — Moves the child at the given “old” index over the given relative index offset.
+* `move[Directly]` — Moves the child at the given “old” index over the given relative index offset.
   (It throws if the specified index or index offset is invalid.)
-* `moveAndReplaceOffsetBased[Directly]` — Moves the child at the given “old” index to replace the child at the relative index offset.
+* `moveAndReplace[Directly]` — Moves the child at the given “old” index to replace the child at the relative index offset.
   (It throws if the specified index or index offset is invalid.)
 
 There's only one class for annotation: `AnnotationsValueManager`.
@@ -171,8 +171,8 @@ It exposes the following API:
 * `remove[Directly]` — Removes the given annotation from the managed annotations.
   If the given annotation is not present, nothing happens.
   If the given annotation is present more than once, only the first one gets removed.
-* `moveOffsetBased[Directly]` — Moves the annotation at the given “old” index over the given relative index offset.
+* `move[Directly]` — Moves the annotation at the given “old” index over the given relative index offset.
   (It throws if the specified index or index offset is invalid.)
-* `moveAndReplaceOffsetBased[Directly]` — Moves the annotation at the given “old” index to replace the annotation at the relative index offset.
+* `moveAndReplace[Directly]` — Moves the annotation at the given “old” index to replace the annotation at the relative index offset.
   (It throws if the specified index or index offset is invalid.)
 

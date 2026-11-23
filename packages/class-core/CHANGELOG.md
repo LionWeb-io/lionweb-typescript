@@ -41,10 +41,10 @@
 * Fix [issue #388](https://github.com/LionWeb-io/lionweb-typescript/issues/388):
   Replacing a child of a multi-valued containment with an uncontained node now produces a `ChildReplacedDelta`, instead of throwing an `Error`.
 
-* Clean up the generated APIs w.r.t. move methods:
-  * Remove the non-offset-based `moveAnnotation` methods from the `INodeBase` interface and `NodeBase` class.
-  * Remove the non-offset-based `move[Directly]` methods from the `MultiContainmentValueManager` class.
-  * Remove the non-offset-based `move[AndReplaceAt][Directly]` methods from the `AnnotationsValueManager` class.
+* **Breaking change!** Clean up the generated APIs w.r.t. move methods — this is [issue #343](https://github.com/LionWeb-io/lionweb-typescript/issues/343):
+  * Remove the non-offset-based `moveAnnotation` methods from the `INodeBase` interface and `NodeBase` class, and rename the offset-based move methods to drop the `OffsetBased` infix.
+  * Remove the non-offset-based `move[Directly]` methods from the `MultiContainmentValueManager` class, and rename the offset-based move methods to drop the `OffsetBased` infix.
+  * Remove the non-offset-based `move[AndReplaceAt][Directly]` methods from the `AnnotationsValueManager` class, and rename the offset-based move methods to drop the `OffsetBased` infix.
 
 
 ## 0.10.0
