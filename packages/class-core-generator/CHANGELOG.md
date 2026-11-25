@@ -7,6 +7,7 @@
 * Provide a new `sortByName` property of the `GeneratorOptions` type, with default `false`, that determines whether to sort language entities and classifier features alphabetically first and then topologically, to stabilize generated code as much possible.
 * **Breaking change!** Clean up the generated APIs w.r.t. move methods — this is [issue #343](https://github.com/LionWeb-io/lionweb-typescript/issues/343):
   * Don’t generate the non-offset-based `move` methods, and generate the offset-based move methods without the `OffsetBased` infix.
+* Add a `semicolons` flag to the `GeneratorOptions` type that determines whether to generate semicolons or not — with default `true`.
 
 
 ## 0.10.0

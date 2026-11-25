@@ -39,12 +39,12 @@ export type MatchCase = [caseExpression: string, returnValue: string]
  * @param cases `cases` of the `switch` statement, encoded using {@link MatchCase}
  * @param defaultBlock template with a valid `default` block – assumed to be a single-line string if it's a string
  */
-export const switchOrIf = (expression: string, cases: MatchCase[], defaultBlock: Template) =>
+export const switchOrIf = (expression: string, cases: MatchCase[], defaultBlock: Template, statementPostfix = ";") =>
     cases.length > 1
         ? [
             `switch (${expression}) {`,
             indent([
-                cases.map(([caseExpression, returnValue]) => `case ${caseExpression}: return ${returnValue};`),
+                cases.map(([caseExpression, returnValue]) => `case ${caseExpression}: return ${returnValue}${statementPostfix}`),
                 typeof defaultBlock === "string"
                     ? `default: ${defaultBlock}`
                     : [
@@ -58,7 +58,7 @@ export const switchOrIf = (expression: string, cases: MatchCase[], defaultBlock:
         : [
             cases.map(([caseExpression, returnValue]) => [
                 `if (${expression} === ${caseExpression}) {`,
-                indent(`return ${returnValue};`),
+                indent(`return ${returnValue}${statementPostfix}`),
                 `}`
             ]),
             defaultBlock

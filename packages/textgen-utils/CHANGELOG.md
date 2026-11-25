@@ -3,6 +3,7 @@
 ## 0.11.0 — not yet released
 
 * Add a `deCamelCase` function that “de-camel-cases” strings.
+* Add a fourth argument to the `switchOrIf` function, with name `statementPostfix`, type string, and default `";"`.
 
 
 ## 0.10.0, 0.9.0, 0.8.0, 0.7.2

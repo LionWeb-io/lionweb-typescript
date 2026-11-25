@@ -58,6 +58,7 @@ import {
     Imports,
     isAbstract,
     optionalityPostfix,
+    statementPostfix,
     tsFieldTypeForFeature,
     tsTypeForClassifier,
     tsTypeForDataType,
@@ -77,18 +78,20 @@ const cardinalityPrefix = (feature: Feature) => {
 const valueManagerFor = (feature: Feature) =>
     `${cardinalityPrefix(feature)}${featureMetaType(feature)}ValueManager`
 
-export const typeForLanguageEntity = (imports: Imports, sortByName: boolean) => {
+export const typeForLanguageEntity = (imports: Imports, sortByName: boolean, semicolons: boolean) => {
+
+    const sp = statementPostfix(semicolons)    // (abbrev. of “statement postfix”)
 
     const classMembersForProperty = (property: Property) => {
         const {name, type} = property
         return [
-            `private readonly _${name}: ${imports.generic(valueManagerFor(property))}<${tsTypeForDataType(type, imports)}>;`,
+            `private readonly _${name}: ${imports.generic(valueManagerFor(property))}<${tsTypeForDataType(type, imports)}>${sp}`,
             jsDocFor(property),
             `get ${name}(): ${tsTypeForDataType(type, imports)}${optionalityPostfix(property)} {`,
-            indent(`return this._${name}.get();`),
+            indent(`return this._${name}.get()${sp}`),
             `}`,
             `set ${name}(newValue: ${tsTypeForDataType(type, imports)}${optionalityPostfix(property)}) {`,
-            indent(`this._${name}.set(newValue);`),
+            indent(`this._${name}.set(newValue)${sp}`),
             `}`
         ]
     }
@@ -101,45 +104,45 @@ export const typeForLanguageEntity = (imports: Imports, sortByName: boolean) => 
             ? `${imports.core(multiple ? "MultiRef" : "SingleRef")}<${tsTypeForClassifier_}>${multiple ? "" : optionalityPostfix(link)}`
             : `${tsTypeForClassifier_}${multiple ? "[]" : optionalityPostfix(link)}`
         return [
-            `private readonly _${name}: ${imports.generic(valueManagerFor(link))}<${tsTypeForClassifier_}>;`,
+            `private readonly _${name}: ${imports.generic(valueManagerFor(link))}<${tsTypeForClassifier_}>${sp}`,
             jsDocFor(link),
             `get ${name}(): ${tsTypeForLink_} {`,
-            indent(`return this._${name}.get();`),
+            indent(`return this._${name}.get()${sp}`),
             `}`,
             when(!multiple)([
                 `set ${name}(newValue: ${tsTypeForLink_}) {`,
-                indent(`this._${name}.set(newValue);`),
+                indent(`this._${name}.set(newValue)${sp}`),
                 `}`,
                 when(link instanceof Containment)([
                     `replace${nameWithFirstUpper}With(newValue: ${tsTypeForClassifier_}) {`,
-                    indent(`this._${name}.replaceWith(newValue);`),
+                    indent(`this._${name}.replaceWith(newValue)${sp}`),
                     `}`
                 ])
             ]),
             when(multiple)([
                 `add${nameWithFirstUpper}(newValue: ${tsTypeForClassifier_}) {`,
-                indent(`this._${name}.add(newValue);`),
+                indent(`this._${name}.add(newValue)${sp}`),
                 `}`,
                 `remove${nameWithFirstUpper}(valueToRemove: ${tsTypeForClassifier_}) {`,
-                indent(`this._${name}.remove(valueToRemove);`),
+                indent(`this._${name}.remove(valueToRemove)${sp}`),
                 `}`,
                 `add${nameWithFirstUpper}AtIndex(newValue: ${tsTypeForClassifier_}, index: number) {`,
-                indent(`this._${name}.insertAtIndex(newValue, index);`),
+                indent(`this._${name}.insertAtIndex(newValue, index)${sp}`),
                 `}`,
                 when(link instanceof Reference)([
                     `move${nameWithFirstUpper}(oldIndex: number, newIndex: number) {`,
-                    indent(`this._${name}.move(oldIndex, newIndex);`),
+                    indent(`this._${name}.move(oldIndex, newIndex)${sp}`),
                     `}`
                 ]),
                 when(link instanceof Containment)([
                     `replace${nameWithFirstUpper}AtIndex(movedChild: ${tsTypeForClassifier_}, newIndex: number) {`,
-                    indent(`this._${name}.replaceAtIndex(movedChild, newIndex);`),
+                    indent(`this._${name}.replaceAtIndex(movedChild, newIndex)${sp}`),
                     `}`,
                     `move${nameWithFirstUpper}(oldIndex: number, indexOffset: number) {`,
-                    indent(`this._${name}.move(oldIndex, indexOffset);`),
+                    indent(`this._${name}.move(oldIndex, indexOffset)${sp}`),
                     `}`,
                     `moveAndReplace${nameWithFirstUpper}(oldIndex: number, indexOffset: number) {`,
-                    indent(`this._${name}.moveAndReplace(oldIndex, indexOffset);`),
+                    indent(`this._${name}.moveAndReplace(oldIndex, indexOffset)${sp}`),
                     `}`
                 ])
             ])
@@ -181,7 +184,8 @@ export const typeForLanguageEntity = (imports: Imports, sortByName: boolean) => 
                     switchOrIf(
                         `${argumentName}.key`,
                         features.map((feature) => [`${imports.language(feature.classifier.language)}.INSTANCE.${feature.classifier.name}_${feature.name}.key`, `this._${feature.name}`]),
-                        `return super.get${featureMetaType_}ValueManager(${argumentName});`
+                        `return super.get${featureMetaType_}ValueManager(${argumentName})${sp}`,
+                        sp
                     )
                 ),
                 `}`
@@ -210,7 +214,7 @@ export const typeForLanguageEntity = (imports: Imports, sortByName: boolean) => 
                         [
                             `static create(id: ${imports.json("LionWebId")}, receiveDelta?: ${imports.generic("DeltaReceiver")}, parentInfo?: ${imports.generic("Parentage")}): ${classifier.name} {`,
                             indent([
-                                `return new ${classifier.name}(${imports.language(classifier.language)}.INSTANCE.${classifier.name}, id, receiveDelta, parentInfo);`
+                                `return new ${classifier.name}(${imports.language(classifier.language)}.INSTANCE.${classifier.name}, id, receiveDelta, parentInfo)${sp}`
                             ]),
                             `}`,
                         ]
@@ -222,8 +226,8 @@ export const typeForLanguageEntity = (imports: Imports, sortByName: boolean) => 
                             features.map(withNewlineAppended(classMembersForFeature)),
                             `${isAbstract(classifier) ? "protected" : "public"} constructor(classifier: ${imports.core("Classifier")}, id: ${imports.json("LionWebId")}, receiveDelta?: ${imports.generic("DeltaReceiver")}, parentInfo?: ${imports.generic("Parentage")}) {`,
                             indent([
-                                `super(classifier, id, receiveDelta, parentInfo);`,
-                                features.map((feature) => `this._${feature.name} = new ${imports.generic(valueManagerFor(feature))}<${tsTypeForValueManager(feature, imports)}>(${imports.language(feature.classifier.language)}.INSTANCE.${feature.classifier.name}_${feature.name}, this);`)
+                                `super(classifier, id, receiveDelta, parentInfo)${sp}`,
+                                features.map((feature) => `this._${feature.name} = new ${imports.generic(valueManagerFor(feature))}<${tsTypeForValueManager(feature, imports)}>(${imports.language(feature.classifier.language)}.INSTANCE.${feature.classifier.name}_${feature.name}, this)${sp}`)
                             ]),
                             `}`,
                             getValueManagers(features.filter(isProperty)),
@@ -252,20 +256,20 @@ export const typeForLanguageEntity = (imports: Imports, sortByName: boolean) => 
         [
             `export interface ${interface_.name} extends ${interface_.extends.length > 0 ? interface_.extends.filter(isResolvedReference).map((superInterface) => imports.entity(superInterface)).join(", ") : imports.generic("INodeBase")} {`,
             indent(
-                nameSorted(interface_.features).map((feature) => `${feature.name}: ${tsFieldTypeForFeature(feature, imports)};`)
+                nameSorted(interface_.features).map((feature) => `${feature.name}: ${tsFieldTypeForFeature(feature, imports)}${sp}`)
             ),
             `}`
         ]
 
 
     const typeForPrimitiveType = (primitiveType: PrimitiveType) =>
-        `export type ${primitiveType.name} = ${tsTypeForPrimitiveType(primitiveType, imports.lioncoreBuiltinsFacade)};`
+        `export type ${primitiveType.name} = ${tsTypeForPrimitiveType(primitiveType, imports.lioncoreBuiltinsFacade)}${sp}`
 
     const typeForStructuredDataType = ({name, fields}: StructuredDataType) =>
         [
             `export type ${name} = {`,
             indent(
-                fields.map(({name, type}) => `${name}: ${tsTypeForDataType(type, imports)};`)
+                fields.map(({name, type}) => `${name}: ${tsTypeForDataType(type, imports)}${sp}`)
             ),
             `}`
         ]
