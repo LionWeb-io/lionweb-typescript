@@ -35,9 +35,9 @@ type NodesById = { [id: LionWebId]: Node }
  */
 export class IdMapping {
 
-    private nodesById: NodesById;
+    private nodesById: NodesById
     constructor(nodesById: NodesById) {
-        this.nodesById = {...nodesById};
+        this.nodesById = {...nodesById}
     }
     // TODO  consider using an instance of Map<Id, Node> instead
 
@@ -47,9 +47,9 @@ export class IdMapping {
      */
     fromId = (id: LionWebId): Node => {
         if (!(id in this.nodesById)) {
-            throw new Error(`node with id=${id} not in ID mapping`);
+            throw new Error(`node with id=${id} not in ID mapping`)
         }
-        return this.nodesById[id];
+        return this.nodesById[id]
     }
 
     /**
@@ -58,9 +58,9 @@ export class IdMapping {
      * if the node is not a {@link INodeBase}.
      */
     nodeBaseFromId = (id: LionWebId): INodeBase => {
-        const node = this.fromId(id);
+        const node = this.fromId(id)
         if (node instanceof NodeBase) {
-            return node;
+            return node
         }
         throw new Error(`node with id=${id} is not a[n I]NodeBase`)
     }
@@ -70,7 +70,7 @@ export class IdMapping {
      * or `undefined` if no node with the given ID was registered.
      */
     tryFromId = (id: LionWebId): (Node | undefined) =>
-        this.nodesById[id];
+        this.nodesById[id]
 
     /**
      * @return the {@link Node node} referenced from the given {@link LionWebId ID},
@@ -79,23 +79,23 @@ export class IdMapping {
     fromRefId = (idOrNull: IdOrNull): SingleRef<Node> =>
         idOrNull === null
             ? referenceToSet
-            : (this.nodesById[idOrNull] ?? referenceToSet);
+            : (this.nodesById[idOrNull] ?? referenceToSet)
 
     /**
      * Updates this {@link IdMapping} with the given `node` *and all its descendants* (recursively).
      */
     updateWith = (node: Node) => {
-        const { id } = node;
+        const { id } = node
         if (id in this.nodesById) {
             if (node !== this.nodesById[id]) {
-                throw new Error(`trying to register a node with the same ID="${id}" as an already-registered, different node`);
+                throw new Error(`trying to register a node with the same ID="${id}" as an already-registered, different node`)
             }
         } else {
-            this.nodesById[node.id] = node;
+            this.nodesById[node.id] = node
         }
         if (node instanceof NodeBase) {
             node.children   // recurse into all children
-                .forEach((child) => this.updateWith(child));
+                .forEach((child) => this.updateWith(child))
         }
         // TODO  figure out when it's really necessary to call this, as it's potentially *very* expensive
     }
@@ -106,7 +106,7 @@ export class IdMapping {
      * and should only be used by components which are in complete control of the nodes being passed to this method.
      */
     reinitializeWith = (nodesById: NodesById) => {
-        this.nodesById = nodesById;
+        this.nodesById = nodesById
     }
 
     /**
@@ -115,7 +115,7 @@ export class IdMapping {
      */
     mergeIn = (that: IdMapping) => {
         for (const id in that.nodesById) {
-            this.nodesById[id] = that.nodesById[id];
+            this.nodesById[id] = that.nodesById[id]
         }
     }
 

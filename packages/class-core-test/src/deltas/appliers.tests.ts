@@ -43,108 +43,108 @@ describe("delta application sets parentage correctly", () => {
             testLanguageBase.LinkTestConcept_containment_0_n,
             testLanguageBase.LinkTestConcept_containment_1_n
         ].forEach((containment) => {
-            const parent = LinkTestConcept.create("parent");
-            const child = LinkTestConcept.create("child");
-            const delta = new ChildAddedDelta(parent, containment, 0, child);
+            const parent = LinkTestConcept.create("parent")
+            const child = LinkTestConcept.create("child")
+            const delta = new ChildAddedDelta(parent, containment, 0, child)
 
-            applyDelta(delta);
+            applyDelta(delta)
 
-            equal(child.parent, parent);
-        });
-    });
+            equal(child.parent, parent)
+        })
+    })
 
     it("child moved", () => {
-        const parent = LinkTestConcept.create("parent");
-        const child = LinkTestConcept.create("child");
-        parent.containment_0_1 = child;
-        const dstLtc = LinkTestConcept.create("dstLtc");
-        const delta = new ChildMovedFromContainmentInOtherParentDelta(parent, testLanguageBase.LinkTestConcept_containment_0_1, 0, dstLtc, testLanguageBase.LinkTestConcept_containment_0_1, 0, child);
+        const parent = LinkTestConcept.create("parent")
+        const child = LinkTestConcept.create("child")
+        parent.containment_0_1 = child
+        const dstLtc = LinkTestConcept.create("dstLtc")
+        const delta = new ChildMovedFromContainmentInOtherParentDelta(parent, testLanguageBase.LinkTestConcept_containment_0_1, 0, dstLtc, testLanguageBase.LinkTestConcept_containment_0_1, 0, child)
 
-        applyDelta(delta);
+        applyDelta(delta)
 
-        equal(child.parent, dstLtc);
-        isUndefined(parent.containment_0_1);
-    });
+        equal(child.parent, dstLtc)
+        isUndefined(parent.containment_0_1)
+    })
 
     it("child replaced", () => {
-        const srcParent = LinkTestConcept.create("srcParent");
-        const child1 = LinkTestConcept.create("child1");
-        srcParent.containment_0_1 = child1;
-        const dstParent = LinkTestConcept.create("dstParent");
-        const child2 = LinkTestConcept.create("child2");
-        dstParent.containment_0_1 = child2;
-        const delta = new ChildReplacedDelta(dstParent, testLanguageBase.LinkTestConcept_containment_0_1, 0, child2, child1);
+        const srcParent = LinkTestConcept.create("srcParent")
+        const child1 = LinkTestConcept.create("child1")
+        srcParent.containment_0_1 = child1
+        const dstParent = LinkTestConcept.create("dstParent")
+        const child2 = LinkTestConcept.create("child2")
+        dstParent.containment_0_1 = child2
+        const delta = new ChildReplacedDelta(dstParent, testLanguageBase.LinkTestConcept_containment_0_1, 0, child2, child1)
 
-        applyDelta(delta);
+        applyDelta(delta)
 
-        equal(child1.parent, dstParent);
-        isUndefined(child2.parent);
-    });
+        equal(child1.parent, dstParent)
+        isUndefined(child2.parent)
+    })
 
     it("child deleted", () => {
-        const parent = LinkTestConcept.create("parent");
-        const child = LinkTestConcept.create("child");
-        parent.containment_0_1 = child;
-        const delta = new ChildDeletedDelta(parent, testLanguageBase.LinkTestConcept_containment_0_1, 0, child);
+        const parent = LinkTestConcept.create("parent")
+        const child = LinkTestConcept.create("child")
+        parent.containment_0_1 = child
+        const delta = new ChildDeletedDelta(parent, testLanguageBase.LinkTestConcept_containment_0_1, 0, child)
 
-        applyDelta(delta);
+        applyDelta(delta)
 
-        isUndefined(child.parent);
-        isUndefined(parent.containment_0_1);
-    });
+        isUndefined(child.parent)
+        isUndefined(parent.containment_0_1)
+    })
 
     it("annotation added", () => {
-        const node = LinkTestConcept.create("node");
-        const annotation = TestAnnotation.create("anno");
-        const delta = new AnnotationAddedDelta(node, 0, annotation);
+        const node = LinkTestConcept.create("node")
+        const annotation = TestAnnotation.create("anno")
+        const delta = new AnnotationAddedDelta(node, 0, annotation)
 
-        applyDelta(delta);
+        applyDelta(delta)
 
-        equal(annotation.parent, node);
-        deepEqual(node.annotations, [annotation]);
-    });
+        equal(annotation.parent, node)
+        deepEqual(node.annotations, [annotation])
+    })
 
     it("annotation deleted", () => {
-        const node = LinkTestConcept.create("node");
-        const annotation = TestAnnotation.create("anno");
-        node.addAnnotation(annotation);
-        const delta = new AnnotationDeletedDelta(node, 0, annotation);
+        const node = LinkTestConcept.create("node")
+        const annotation = TestAnnotation.create("anno")
+        node.addAnnotation(annotation)
+        const delta = new AnnotationDeletedDelta(node, 0, annotation)
 
-        applyDelta(delta);
+        applyDelta(delta)
 
-        isUndefined(annotation.parent);
-        deepEqual(node.annotations, []);
-    });
+        isUndefined(annotation.parent)
+        deepEqual(node.annotations, [])
+    })
 
     it("reference deleted from wrong index throws", () => {
-        const srcNode = LinkTestConcept.create("srcNode");
-        const targetNode1 = LinkTestConcept.create("targetNode1");
-        const targetNode2 = LinkTestConcept.create("targetNode2");
-        srcNode.addReference_0_n(targetNode1);
-        srcNode.addReference_0_n(targetNode1);
-        srcNode.addReference_0_n(targetNode2);
+        const srcNode = LinkTestConcept.create("srcNode")
+        const targetNode1 = LinkTestConcept.create("targetNode1")
+        const targetNode2 = LinkTestConcept.create("targetNode2")
+        srcNode.addReference_0_n(targetNode1)
+        srcNode.addReference_0_n(targetNode1)
+        srcNode.addReference_0_n(targetNode2)
 
         throws(() => {
-            applyDelta(new ReferenceDeletedDelta(srcNode, testLanguageBase.LinkTestConcept_reference_0_n, 0, targetNode2));
-        }, "index 0 doesn’t match deleted reference");
+            applyDelta(new ReferenceDeletedDelta(srcNode, testLanguageBase.LinkTestConcept_reference_0_n, 0, targetNode2))
+        }, "index 0 doesn’t match deleted reference")
 
         throws(() => {
-            applyDelta(new ReferenceDeletedDelta(srcNode, testLanguageBase.LinkTestConcept_reference_0_n, 3, targetNode2));
-        }, "index 3 doesn’t match deleted reference");
+            applyDelta(new ReferenceDeletedDelta(srcNode, testLanguageBase.LinkTestConcept_reference_0_n, 3, targetNode2))
+        }, "index 3 doesn’t match deleted reference")
 
-        applyDelta(new ReferenceDeletedDelta(srcNode, testLanguageBase.LinkTestConcept_reference_0_n, 0, targetNode1));
-        deepEqual(srcNode.reference_0_n, [targetNode1, targetNode2]);
-    });
+        applyDelta(new ReferenceDeletedDelta(srcNode, testLanguageBase.LinkTestConcept_reference_0_n, 0, targetNode1))
+        deepEqual(srcNode.reference_0_n, [targetNode1, targetNode2])
+    })
 
-});
+})
 
 
 describe("application of composite deltas", () => {
 
     it("works (and doesn’t throw) in a trivial case", () => {
-        const composite = new CompositeDelta([new NoOpDelta()]);
-        applyDelta(composite);  // shouldn’t throw (but also shouldn’t do anything else)
-    });
+        const composite = new CompositeDelta([new NoOpDelta()])
+        applyDelta(composite)  // shouldn’t throw (but also shouldn’t do anything else)
+    })
 
-});
+})
 

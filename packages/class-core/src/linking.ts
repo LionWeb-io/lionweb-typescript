@@ -36,5 +36,5 @@ import { INodeBase } from "./index.js"
  * Note: **DON'T** export this types from the package,
  * as these are only used to align the deserializer and deep-duplicator.
  */
-export type NodesToInstall = [ container: INodeBase, feature: Link | null, nodesIds: LionWebId[] | LionWebJsonReferenceTarget[], originalReferenceTargets?: INodeBase[] ];
+export type NodesToInstall = [ container: INodeBase, feature: Link | null, nodesIds: LionWebId[] | LionWebJsonReferenceTarget[], originalReferenceTargets?: INodeBase[] ]
 

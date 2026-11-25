@@ -53,109 +53,109 @@ import { IDelta } from "./base.js"
  */
 export const invertDelta = (delta: IDelta): IDelta => {
     if (delta instanceof PartitionAddedDelta) {
-        return new PartitionDeletedDelta(delta.newPartition);
+        return new PartitionDeletedDelta(delta.newPartition)
     }
     if (delta instanceof PartitionDeletedDelta) {
-        return new PartitionAddedDelta(delta.deletedPartition);
+        return new PartitionAddedDelta(delta.deletedPartition)
     }
     if (delta instanceof PropertyAddedDelta) {
-        return new PropertyDeletedDelta(delta.node, delta.property, delta.value);
+        return new PropertyDeletedDelta(delta.node, delta.property, delta.value)
     }
     if (delta instanceof PropertyDeletedDelta) {
-        return new PropertyAddedDelta(delta.node, delta.property, delta.oldValue);
+        return new PropertyAddedDelta(delta.node, delta.property, delta.oldValue)
     }
     if (delta instanceof PropertyChangedDelta) {
-        return new PropertyChangedDelta(delta.node, delta.property, delta.newValue, delta.oldValue);
+        return new PropertyChangedDelta(delta.node, delta.property, delta.newValue, delta.oldValue)
     }
     if (delta instanceof ChildAddedDelta) {
-        return new ChildDeletedDelta(delta.parent, delta.containment, delta.index, delta.newChild);
+        return new ChildDeletedDelta(delta.parent, delta.containment, delta.index, delta.newChild)
     }
     if (delta instanceof ChildDeletedDelta) {
-        return new ChildAddedDelta(delta.parent, delta.containment, delta.index, delta.deletedChild);
+        return new ChildAddedDelta(delta.parent, delta.containment, delta.index, delta.deletedChild)
     }
     if (delta instanceof ChildReplacedDelta) {
-        return new ChildReplacedDelta(delta.parent, delta.containment, delta.index, delta.newChild, delta.replacedChild);
+        return new ChildReplacedDelta(delta.parent, delta.containment, delta.index, delta.newChild, delta.replacedChild)
     }
     if (delta instanceof ChildMovedFromContainmentInOtherParentDelta) {
-        return new ChildMovedFromContainmentInOtherParentDelta(delta.newParent, delta.newContainment, delta.newIndex, delta.oldParent, delta.oldContainment, delta.oldIndex, delta.movedChild);
+        return new ChildMovedFromContainmentInOtherParentDelta(delta.newParent, delta.newContainment, delta.newIndex, delta.oldParent, delta.oldContainment, delta.oldIndex, delta.movedChild)
     }
     if (delta instanceof ChildMovedFromOtherContainmentInSameParentDelta) {
-        return new ChildMovedFromOtherContainmentInSameParentDelta(delta.parent, delta.newContainment, delta.newIndex, delta.movedChild, delta.oldContainment, delta.oldIndex);
+        return new ChildMovedFromOtherContainmentInSameParentDelta(delta.parent, delta.newContainment, delta.newIndex, delta.movedChild, delta.oldContainment, delta.oldIndex)
     }
     if (delta instanceof ChildMovedInSameContainmentInSameParentDelta) {
-        const [invertedOldIndex, invertedIndexOffset] = invertedMoveWithOffset(delta.oldIndex, delta.indexOffset);
-        return new ChildMovedInSameContainmentInSameParentDelta(delta.parent, delta.containment, invertedOldIndex, invertedIndexOffset, delta.movedChild);
+        const [invertedOldIndex, invertedIndexOffset] = invertedMoveWithOffset(delta.oldIndex, delta.indexOffset)
+        return new ChildMovedInSameContainmentInSameParentDelta(delta.parent, delta.containment, invertedOldIndex, invertedIndexOffset, delta.movedChild)
     }
     if (delta instanceof ChildMovedAndReplacedFromContainmentInOtherParentDelta) {
         return new CompositeDelta([
             new ChildMovedFromContainmentInOtherParentDelta(delta.newParent, delta.newContainment, delta.newIndex, delta.oldParent, delta.oldContainment, delta.oldIndex, delta.movedChild),
             new ChildAddedDelta(delta.newParent, delta.newContainment, delta.newIndex, delta.replacedChild)
-        ]);
+        ])
     }
     if (delta instanceof ChildMovedAndReplacedFromOtherContainmentInSameParentDelta) {
         return new CompositeDelta([
             new ChildMovedFromOtherContainmentInSameParentDelta(delta.parent, delta.newContainment, delta.newIndex, delta.movedChild, delta.oldContainment, delta.oldIndex),
             new ChildAddedDelta(delta.parent, delta.newContainment, delta.newIndex, delta.replacedChild)
-        ]);
+        ])
     }
     if (delta instanceof ChildMovedAndReplacedInSameContainmentInSameParentDelta) {
-        const [insertionIndex, invertedOldIndex, invertedIndexOffset] = invertedMoveAndReplaceWithOffset(delta.oldIndex, delta.indexOffset);
+        const [insertionIndex, invertedOldIndex, invertedIndexOffset] = invertedMoveAndReplaceWithOffset(delta.oldIndex, delta.indexOffset)
         if (invertedIndexOffset === 0) {
-            return new ChildAddedDelta(delta.parent, delta.containment, insertionIndex, delta.replacedChild);
+            return new ChildAddedDelta(delta.parent, delta.containment, insertionIndex, delta.replacedChild)
         }
         return new CompositeDelta([
             new ChildAddedDelta(delta.parent, delta.containment, insertionIndex, delta.replacedChild),
             new ChildMovedInSameContainmentInSameParentDelta(delta.parent, delta.containment, invertedOldIndex, invertedIndexOffset, delta.movedChild)
-        ]);
+        ])
     }
     if (delta instanceof AnnotationAddedDelta) {
-        return new AnnotationDeletedDelta(delta.parent, delta.index, delta.newAnnotation);
+        return new AnnotationDeletedDelta(delta.parent, delta.index, delta.newAnnotation)
     }
     if (delta instanceof AnnotationDeletedDelta) {
-        return new AnnotationAddedDelta(delta.parent, delta.index, delta.deletedAnnotation);
+        return new AnnotationAddedDelta(delta.parent, delta.index, delta.deletedAnnotation)
     }
     if (delta instanceof AnnotationReplacedDelta) {
-        return new AnnotationReplacedDelta(delta.parent, delta.index, delta.newAnnotation, delta.replacedAnnotation);
+        return new AnnotationReplacedDelta(delta.parent, delta.index, delta.newAnnotation, delta.replacedAnnotation)
     }
     if (delta instanceof AnnotationMovedFromOtherParentDelta) {
-        return new AnnotationMovedFromOtherParentDelta(delta.newParent, delta.newIndex, delta.oldParent, delta.oldIndex, delta.movedAnnotation);
+        return new AnnotationMovedFromOtherParentDelta(delta.newParent, delta.newIndex, delta.oldParent, delta.oldIndex, delta.movedAnnotation)
     }
     if (delta instanceof AnnotationMovedInSameParentDelta) {
-        const [invertedOldIndex, invertedIndexOffset] = invertedMoveWithOffset(delta.oldIndex, delta.indexOffset);
-        return new AnnotationMovedInSameParentDelta(delta.parent, invertedOldIndex, invertedIndexOffset, delta.movedAnnotation);
+        const [invertedOldIndex, invertedIndexOffset] = invertedMoveWithOffset(delta.oldIndex, delta.indexOffset)
+        return new AnnotationMovedInSameParentDelta(delta.parent, invertedOldIndex, invertedIndexOffset, delta.movedAnnotation)
     }
     if (delta instanceof AnnotationMovedAndReplacedFromOtherParentDelta) {
         return new CompositeDelta([
             new AnnotationMovedFromOtherParentDelta(delta.newParent, delta.newIndex, delta.oldParent, delta.oldIndex, delta.movedAnnotation),
             new AnnotationAddedDelta(delta.newParent, delta.newIndex, delta.replacedAnnotation)
-        ]);
+        ])
     }
     if (delta instanceof AnnotationMovedAndReplacedInSameParentDelta) {
-        const [insertionIndex, invertedOldIndex, invertedIndexOffset] = invertedMoveAndReplaceWithOffset(delta.oldIndex, delta.indexOffset);
+        const [insertionIndex, invertedOldIndex, invertedIndexOffset] = invertedMoveAndReplaceWithOffset(delta.oldIndex, delta.indexOffset)
         if (invertedIndexOffset === 0) {
-            return new AnnotationAddedDelta(delta.parent, insertionIndex, delta.replacedAnnotation);
+            return new AnnotationAddedDelta(delta.parent, insertionIndex, delta.replacedAnnotation)
         }
         return new CompositeDelta([
             new AnnotationAddedDelta(delta.parent, insertionIndex, delta.replacedAnnotation),
             new AnnotationMovedInSameParentDelta(delta.parent, invertedOldIndex, invertedIndexOffset, delta.movedAnnotation)
-        ]);
+        ])
     }
     if (delta instanceof ReferenceAddedDelta) {
-        return new ReferenceDeletedDelta(delta.parent, delta.reference, delta.index, delta.newReference);
+        return new ReferenceDeletedDelta(delta.parent, delta.reference, delta.index, delta.newReference)
     }
     if (delta instanceof ReferenceDeletedDelta) {
-        return new ReferenceAddedDelta(delta.parent, delta.reference, delta.index, delta.deletedReference);
+        return new ReferenceAddedDelta(delta.parent, delta.reference, delta.index, delta.deletedReference)
     }
     if (delta instanceof ReferenceChangedDelta) {
-        return new ReferenceChangedDelta(delta.parent, delta.reference, delta.index, delta.oldReference, delta.newReference);
+        return new ReferenceChangedDelta(delta.parent, delta.reference, delta.index, delta.oldReference, delta.newReference)
     }
     if (delta instanceof CompositeDelta) {
-        return new CompositeDelta(delta.parts.map(invertDelta).reverse());
+        return new CompositeDelta(delta.parts.map(invertDelta).reverse())
     }
     if (delta instanceof NoOpDelta) {
-        return delta;
+        return delta
     }
 
-    throw new Error(`inversion of delta of class ${delta.constructor.name} not implemented`);
+    throw new Error(`inversion of delta of class ${delta.constructor.name} not implemented`)
 }
 

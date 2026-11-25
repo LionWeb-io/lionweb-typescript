@@ -33,134 +33,134 @@ const testLanguageBase = TestLanguageBase.INSTANCE
 describe("[1] string property", () => {
 
     it("getting an unset [1] string property", () => {
-        const [receiveDelta, deltas] = collectingDeltaReceiver();
-        const node = DataTypeTestConcept.create("node", receiveDelta);
+        const [receiveDelta, deltas] = collectingDeltaReceiver()
+        const node = DataTypeTestConcept.create("node", receiveDelta)
 
         // pre-check:
-        equal(deltas.length, 0);
+        equal(deltas.length, 0)
 
         // action+check:
         throws(
             () => {
-                equal(node.stringValue_1, undefined);
+                equal(node.stringValue_1, undefined)
             },
             `can't read required property "stringValue_1" that's unset on instance of TestLanguage.DataTypeTestConcept with id=node`
         )
-        equal(deltas.length, 0);
-    });
+        equal(deltas.length, 0)
+    })
 
     const metaPointer: LionWebJsonMetaPointer = {
         language: "TestLanguage",
         version: "0",
         key: "DataTypeTestConcept-stringValue_1"
-    };
+    }
 
     it("serializing and deserializing an unset [1] string property", () => {
-        const node = DataTypeTestConcept.create("node");
-        const serializationChunk = serializeNodeBases([node]);
-        const {nodes} = serializationChunk;
-        equal(nodes.length, 1);
-        equal(nodes[0].properties.length, 0);
+        const node = DataTypeTestConcept.create("node")
+        const serializationChunk = serializeNodeBases([node])
+        const {nodes} = serializationChunk
+        equal(nodes.length, 1)
+        equal(nodes[0].properties.length, 0)
 
-        const [receiveDelta, deltas] = collectingDeltaReceiver();
-        const deserializedNodes = deserializeNodesAssertingNoProblems(serializationChunk, receiveDelta);
-        equal(deserializedNodes.length, 1);
-        const root = deserializedNodes[0];
-        isTrue(root instanceof DataTypeTestConcept);
-        const deserializedNode = root as DataTypeTestConcept;
-        equal(deserializedNode.id, "node");
-        equal(deserializedNode.classifier, testLanguageBase.DataTypeTestConcept);
-        equal(deserializedNode.parent, undefined);
+        const [receiveDelta, deltas] = collectingDeltaReceiver()
+        const deserializedNodes = deserializeNodesAssertingNoProblems(serializationChunk, receiveDelta)
+        equal(deserializedNodes.length, 1)
+        const root = deserializedNodes[0]
+        isTrue(root instanceof DataTypeTestConcept)
+        const deserializedNode = root as DataTypeTestConcept
+        equal(deserializedNode.id, "node")
+        equal(deserializedNode.classifier, testLanguageBase.DataTypeTestConcept)
+        equal(deserializedNode.parent, undefined)
         throws(
             () => {
-                equal(node.stringValue_1, undefined);
+                equal(node.stringValue_1, undefined)
             },
             `can't read required property "stringValue_1" that's unset on instance of TestLanguage.DataTypeTestConcept with id=node`
         )
-        equal(deltas.length, 0);
-    });
+        equal(deltas.length, 0)
+    })
 
     it("setting a [1] string property", () => {
-        const [receiveDelta, deltas] = collectingDeltaReceiver();
-        const node = attachedDataTypeTestConcept("node", receiveDelta);
+        const [receiveDelta, deltas] = collectingDeltaReceiver()
+        const node = attachedDataTypeTestConcept("node", receiveDelta)
 
         // pre-check:
-        equal(deltas.length, 1);
+        equal(deltas.length, 1)
 
         // action+check:
-        node.stringValue_1 = "foo";
-        equal(node.stringValue_1, "foo");
-        equal(deltas.length, 2);
+        node.stringValue_1 = "foo"
+        equal(node.stringValue_1, "foo")
+        equal(deltas.length, 2)
         deepEqual(
             deltas[1],
             new PropertyAddedDelta(node, testLanguageBase.DataTypeTestConcept_stringValue_1, "foo")
-        );
-    });
+        )
+    })
 
     it("serializing and deserializing a set [1] string property", () => {
-        const node = DataTypeTestConcept.create("node");
-        node.stringValue_1 = "foo";
-        const serializationChunk = serializeNodeBases([node]);
-        const {nodes} = serializationChunk;
-        equal(nodes.length, 1);
-        equal(nodes[0].properties.length, 1);
+        const node = DataTypeTestConcept.create("node")
+        node.stringValue_1 = "foo"
+        const serializationChunk = serializeNodeBases([node])
+        const {nodes} = serializationChunk
+        equal(nodes.length, 1)
+        equal(nodes[0].properties.length, 1)
         deepEqual(
             nodes[0].properties[0],
             {
                 property: metaPointer,
                 value: "foo"
             }
-        );
+        )
 
-        const [receiveDelta, deltas] = collectingDeltaReceiver();
-        const deserializedNodes = deserializeNodesAssertingNoProblems(serializationChunk, receiveDelta);
-        equal(deserializedNodes.length, 1);
-        const root = deserializedNodes[0];
-        isTrue(root instanceof DataTypeTestConcept);
-        const deserializedNode = root as DataTypeTestConcept;
-        equal(deserializedNode.id, "node");
-        equal(deserializedNode.classifier, testLanguageBase.DataTypeTestConcept);
-        equal(deserializedNode.parent, undefined);
-        equal(deserializedNode.stringValue_1, "foo");
-        equal(deltas.length, 0);
-    });
+        const [receiveDelta, deltas] = collectingDeltaReceiver()
+        const deserializedNodes = deserializeNodesAssertingNoProblems(serializationChunk, receiveDelta)
+        equal(deserializedNodes.length, 1)
+        const root = deserializedNodes[0]
+        isTrue(root instanceof DataTypeTestConcept)
+        const deserializedNode = root as DataTypeTestConcept
+        equal(deserializedNode.id, "node")
+        equal(deserializedNode.classifier, testLanguageBase.DataTypeTestConcept)
+        equal(deserializedNode.parent, undefined)
+        equal(deserializedNode.stringValue_1, "foo")
+        equal(deltas.length, 0)
+    })
 
     it("unsetting a [1] string property", () => {
-        const [receiveDelta, deltas] = collectingDeltaReceiver();
-        const node = attachedDataTypeTestConcept("node", receiveDelta);
+        const [receiveDelta, deltas] = collectingDeltaReceiver()
+        const node = attachedDataTypeTestConcept("node", receiveDelta)
 
         // pre-check:
-        node.stringValue_1 = "foo";
-        equal(deltas.length, 2);
+        node.stringValue_1 = "foo"
+        equal(deltas.length, 2)
 
         // action+check:
         throws(
             () => {
                 // @ts-expect-error Doesn't compile, but we want to test the behavior anyway.
-                node.stringValue_1 = undefined;
+                node.stringValue_1 = undefined
             },
             `can't unset required property "stringValue_1" on instance of TestLanguage.DataTypeTestConcept with id=node`
         )
-        equal(deltas.length, 2);
-    });
+        equal(deltas.length, 2)
+    })
 
     it("changing a [1] string property", () => {
-        const [receiveDelta, deltas] = collectingDeltaReceiver();
-        const node = attachedDataTypeTestConcept("node", receiveDelta);
+        const [receiveDelta, deltas] = collectingDeltaReceiver()
+        const node = attachedDataTypeTestConcept("node", receiveDelta)
 
         // pre-check:
-        node.stringValue_1 = "foo";
-        equal(deltas.length, 2);
+        node.stringValue_1 = "foo"
+        equal(deltas.length, 2)
 
         // action+check:
-        node.stringValue_1 = "bar";
-        equal(node.stringValue_1, "bar");
-        equal(deltas.length, 3);
+        node.stringValue_1 = "bar"
+        equal(node.stringValue_1, "bar")
+        equal(deltas.length, 3)
         deepEqual(
             deltas[2],
             new PropertyChangedDelta(node, testLanguageBase.DataTypeTestConcept_stringValue_1, "foo", "bar")
-        );
-    });
+        )
+    })
 
-});
+})
 

@@ -15,11 +15,11 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-export * from "./appliers.js";
-export * from "./base.js";
-export * from "./compositor.js";
-export * from "./inverters.js";
-export * from "./receivers.js";
-export * from "./types.g.js";
-export * from "./serialization/index.js";
+export * from "./appliers.js"
+export * from "./base.js"
+export * from "./compositor.js"
+export * from "./inverters.js"
+export * from "./receivers.js"
+export * from "./types.g.js"
+export * from "./serialization/index.js"
 

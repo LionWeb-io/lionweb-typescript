@@ -7,5 +7,5 @@ import { INodeBase } from "./base-types.js"
  */
 export const isContainedByAPartition = ({ classifier, parent }: INodeBase): boolean =>
        (classifier instanceof Concept && classifier.partition)
-    || (parent !== undefined && isContainedByAPartition(parent));
+    || (parent !== undefined && isContainedByAPartition(parent))
 

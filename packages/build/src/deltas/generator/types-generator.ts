@@ -85,10 +85,10 @@ export const typesForDeltas = (deltas: Delta[], header?: string) => {
     Property,
     Reference,
     SingleRef
-} from "@lionweb/core";
+} from "@lionweb/core"
 
-import { INodeBase } from "../base-types.js";
-import { IDelta } from "./base.js";`,
+import { INodeBase } from "../base-types.js"
+import { IDelta } from "./base.js"`,
         ``,
         ``,
         deltas.map(typeForDelta)

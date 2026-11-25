@@ -39,22 +39,22 @@ import {
 export class AnnotationsValueManager extends ValueManager {
 
     constructor(container: INodeBase) {
-        super(container);
+        super(container)
     }
 
-    private readonly annotations = observable.array<INodeBase>([], {deep: false});
+    private readonly annotations = observable.array<INodeBase>([], {deep: false})
 
     get(): INodeBase[] {
-        return this.annotations.slice();
+        return this.annotations.slice()
     }
 
     @action addDirectly(newAnnotation: INodeBase) {
-        this.annotations.push(newAnnotation);
-        newAnnotation.attachTo(this.container, null);
+        this.annotations.push(newAnnotation)
+        newAnnotation.attachTo(this.container, null)
     }
 
     @action add(newAnnotation: INodeBase) {
-        this.insertAtIndex(newAnnotation, this.annotations.length);
+        this.insertAtIndex(newAnnotation, this.annotations.length)
     }
 
     /**
@@ -62,25 +62,25 @@ export class AnnotationsValueManager extends ValueManager {
      *  otherwise an array tuple with the old – i.e.: previous – parent of the inserted annotation, and the index it was contained at.
      */
     @action insertAtIndexDirectly(newAnnotation: INodeBase, index: number): false | [oldParent: INodeBase, oldIndex: number] {
-        checkIndex(index, this.annotations.length, true);
-        this.annotations.splice(index, 0, newAnnotation);
-        const oldParent = newAnnotation.parent;
+        checkIndex(index, this.annotations.length, true)
+        this.annotations.splice(index, 0, newAnnotation)
+        const oldParent = newAnnotation.parent
         if (oldParent === undefined) {
-            newAnnotation.attachTo(this.container, null);
-            return false;
+            newAnnotation.attachTo(this.container, null)
+            return false
         } else {
-            const oldIndex = oldParent.annotationsValueManager.removeDirectly(newAnnotation);
-            newAnnotation.attachTo(this.container, null);
-            return [oldParent, oldIndex];
+            const oldIndex = oldParent.annotationsValueManager.removeDirectly(newAnnotation)
+            newAnnotation.attachTo(this.container, null)
+            return [oldParent, oldIndex]
         }
     }
 
     @action insertAtIndex(newAnnotation: INodeBase, index: number) {
-        const oldParentage = this.insertAtIndexDirectly(newAnnotation, index);
+        const oldParentage = this.insertAtIndexDirectly(newAnnotation, index)
         if (oldParentage === false) {
-            this.emitDelta(() => new AnnotationAddedDelta(this.container, index, newAnnotation));
+            this.emitDelta(() => new AnnotationAddedDelta(this.container, index, newAnnotation))
         } else {
-            this.emitDelta(() => new AnnotationMovedFromOtherParentDelta(oldParentage[0], oldParentage[1], this.container, index, newAnnotation));
+            this.emitDelta(() => new AnnotationMovedFromOtherParentDelta(oldParentage[0], oldParentage[1], this.container, index, newAnnotation))
         }
     }
 
@@ -88,39 +88,39 @@ export class AnnotationsValueManager extends ValueManager {
      * @return the replaced annotation.
      */
     @action replaceAtIndexDirectly(movedAnnotation: INodeBase, index: number): INodeBase {
-        checkIndex(index, this.annotations.length, false);
-        const replacedAnnotation = this.annotations[index];
-        this.annotations.splice(index, 1, movedAnnotation);
-        replacedAnnotation.detach();
-        movedAnnotation.attachTo(this.container, null);
-        return replacedAnnotation;
+        checkIndex(index, this.annotations.length, false)
+        const replacedAnnotation = this.annotations[index]
+        this.annotations.splice(index, 1, movedAnnotation)
+        replacedAnnotation.detach()
+        movedAnnotation.attachTo(this.container, null)
+        return replacedAnnotation
     }
 
     @action replaceAtIndex(movedAnnotation: INodeBase, index: number) {
         if (movedAnnotation.parent === undefined) {
-            const replacedAnnotation = this.replaceAtIndexDirectly(movedAnnotation, index);
-            this.emitDelta(() => new AnnotationReplacedDelta(this.container, index, replacedAnnotation, movedAnnotation));
+            const replacedAnnotation = this.replaceAtIndexDirectly(movedAnnotation, index)
+            this.emitDelta(() => new AnnotationReplacedDelta(this.container, index, replacedAnnotation, movedAnnotation))
         } else {
             const oldParent = movedAnnotation.parent
-            const oldIndex = oldParent.annotationsValueManager.get().indexOf(movedAnnotation);
-            const replacedAnnotation = this.replaceAtIndexDirectly(movedAnnotation, index);
-            this.emitDelta(() => new AnnotationMovedAndReplacedFromOtherParentDelta(oldParent, oldIndex, replacedAnnotation, this.container, index, movedAnnotation));
+            const oldIndex = oldParent.annotationsValueManager.get().indexOf(movedAnnotation)
+            const replacedAnnotation = this.replaceAtIndexDirectly(movedAnnotation, index)
+            this.emitDelta(() => new AnnotationMovedAndReplacedFromOtherParentDelta(oldParent, oldIndex, replacedAnnotation, this.container, index, movedAnnotation))
         }
     }
 
     @action removeDirectly(annotationToRemove: INodeBase): number {
-        const index = this.annotations.indexOf(annotationToRemove);
+        const index = this.annotations.indexOf(annotationToRemove)
         if (index > -1) {
-            this.annotations.splice(index, 1);
-            annotationToRemove.detach();
+            this.annotations.splice(index, 1)
+            annotationToRemove.detach()
         }
-        return index;
+        return index
     }
 
     @action remove(annotationToRemove: INodeBase) {
-        const removeIndex = this.removeDirectly(annotationToRemove);
+        const removeIndex = this.removeDirectly(annotationToRemove)
         if (removeIndex > -1) {
-            this.emitDelta(() => new AnnotationDeletedDelta(this.container, removeIndex, annotationToRemove));
+            this.emitDelta(() => new AnnotationDeletedDelta(this.container, removeIndex, annotationToRemove))
         }
     }
 
@@ -130,16 +130,16 @@ export class AnnotationsValueManager extends ValueManager {
      */
     @action moveDirectly(oldIndex: number, indexOffset: number): INodeBase | undefined {
         if (indexOffset === 0) {
-            return undefined;
+            return undefined
         }
-        const [_newIndex, movedAnnotation] = moveWithOffset(this.annotations, oldIndex, indexOffset);
-        return movedAnnotation;
+        const [_newIndex, movedAnnotation] = moveWithOffset(this.annotations, oldIndex, indexOffset)
+        return movedAnnotation
     }
 
     @action move(oldIndex: number, indexOffset: number) {
-        const annotation = this.moveDirectly(oldIndex, indexOffset);
+        const annotation = this.moveDirectly(oldIndex, indexOffset)
         if (annotation !== undefined) {
-            this.emitDelta(() => new AnnotationMovedInSameParentDelta(this.container, oldIndex, indexOffset, annotation));
+            this.emitDelta(() => new AnnotationMovedInSameParentDelta(this.container, oldIndex, indexOffset, annotation))
         }
     }
 
@@ -149,18 +149,18 @@ export class AnnotationsValueManager extends ValueManager {
      */
     @action moveAndReplaceDirectly(oldIndex: number, indexOffset: number): [movedAnnotation: INodeBase, replacedAnnotation: INodeBase] | undefined {
         if (indexOffset === 0) {
-            return undefined;
+            return undefined
         }
-        const [_newIndex, movedAnnotation, replacedAnnotation] = moveAndReplaceWithOffset(this.annotations, oldIndex, indexOffset);
-        replacedAnnotation.detach();
-        return [movedAnnotation, replacedAnnotation];
+        const [_newIndex, movedAnnotation, replacedAnnotation] = moveAndReplaceWithOffset(this.annotations, oldIndex, indexOffset)
+        replacedAnnotation.detach()
+        return [movedAnnotation, replacedAnnotation]
     }
 
     @action moveAndReplace(oldIndex: number, indexOffset: number) {
-        const participants = this.moveAndReplaceDirectly(oldIndex, indexOffset);
+        const participants = this.moveAndReplaceDirectly(oldIndex, indexOffset)
         if (participants !== undefined) {
-            const [movedAnnotation, replacedAnnotation] = participants;
-            this.emitDelta(() => new AnnotationMovedAndReplacedInSameParentDelta(this.container, oldIndex, indexOffset, replacedAnnotation, movedAnnotation));
+            const [movedAnnotation, replacedAnnotation] = participants
+            this.emitDelta(() => new AnnotationMovedAndReplacedInSameParentDelta(this.container, oldIndex, indexOffset, replacedAnnotation, movedAnnotation))
         }
     }
 

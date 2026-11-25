@@ -15,8 +15,8 @@
 // SPDX-FileCopyrightText: 2025 TRUMPF Laser SE and other contributors
 // SPDX-License-Identifier: Apache-2.0
 
-export * from "./annotations.js";
-export * from "./base.js";
-export * from "./properties.js";
-export * from "./containments.js";
-export * from "./references.js";
+export * from "./annotations.js"
+export * from "./base.js"
+export * from "./properties.js"
+export * from "./containments.js"
+export * from "./references.js"

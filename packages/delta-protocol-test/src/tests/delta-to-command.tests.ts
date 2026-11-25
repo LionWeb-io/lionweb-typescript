@@ -27,20 +27,20 @@ const testLanguageBase = TestLanguageBase.INSTANCE
 describe("delta-to-command translator", () => {
 
     it("works for changing an enumeration-typed property", () => {
-        const [receiveDelta, deltas] = collectingDeltaReceiver();
-        const dttc = attachedDataTypeTestConcept("mg", receiveDelta);
+        const [receiveDelta, deltas] = collectingDeltaReceiver()
+        const dttc = attachedDataTypeTestConcept("mg", receiveDelta)
 
         // pre-check:
-        expect(dttc.enumValue_0_1).to.equal(undefined);
-        expect(deltas.length).to.equal(1);
+        expect(dttc.enumValue_0_1).to.equal(undefined)
+        expect(deltas.length).to.equal(1)
 
         // action+check:
-        dttc.enumValue_0_1 = TestEnumeration.literal1;
-        expect(deltas.length).to.equal(2);
-        expect(deltas[1]).to.deep.equal(new PropertyAddedDelta(dttc, testLanguageBase.DataTypeTestConcept_enumValue_0_1, TestEnumeration.literal1));
+        dttc.enumValue_0_1 = TestEnumeration.literal1
+        expect(deltas.length).to.equal(2)
+        expect(deltas[1]).to.deep.equal(new PropertyAddedDelta(dttc, testLanguageBase.DataTypeTestConcept_enumValue_0_1, TestEnumeration.literal1))
 
-        const deltaAsCommand = deltaToCommandTranslator(nodeBasePropertyValueSerializerWith({}));
-        const command = deltaAsCommand(deltas[1], "cmd-1");
+        const deltaAsCommand = deltaToCommandTranslator(nodeBasePropertyValueSerializerWith({}))
+        const command = deltaAsCommand(deltas[1], "cmd-1")
         expect(command).to.deep.equal({
             messageKind: "AddProperty",
             node: "mg",
@@ -48,8 +48,8 @@ describe("delta-to-command translator", () => {
             newValue: testLanguageBase.TestEnumeration_literal1.key,
             commandId: "cmd-1",
             additionalInfos: []
-        } as AddPropertyCommand);
-    });
+        } as AddPropertyCommand)
+    })
 
-});
+})
 

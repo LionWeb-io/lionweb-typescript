@@ -29,17 +29,17 @@ import { checkIndex, FeatureValueManager } from "./base.js"
 export abstract class ReferenceValueManager<T extends Node> extends FeatureValueManager<Reference> {
 
     get reference(): Reference {
-        return this.feature;
+        return this.feature
     }
 
-    abstract getDirectly(): (SingleRef<T> | undefined) | (MultiRef<T> | undefined);
+    abstract getDirectly(): (SingleRef<T> | undefined) | (MultiRef<T> | undefined)
 
     /**
      * Adds the given target to the reference.
      * For a single-valued reference, this replaces an already-present target.
      * **Note**: this method predominantly exists for the benefit of the deserializer and duplicator!
      */
-    abstract addDirectly(newTarget: SingleRef<T> | undefined): void;
+    abstract addDirectly(newTarget: SingleRef<T> | undefined): void
 
 }
 
@@ -47,26 +47,26 @@ export abstract class ReferenceValueManager<T extends Node> extends FeatureValue
 export abstract class SingleReferenceValueManager<T extends Node> extends ReferenceValueManager<T> {
 
     protected constructor(reference: Reference, container: INodeBase) {
-        super(reference, container);
-        this.checkMultiple(false);
+        super(reference, container)
+        this.checkMultiple(false)
     }
 
-    private readonly target = observable.box<SingleRef<T> | undefined>(undefined, {deep: false});
+    private readonly target = observable.box<SingleRef<T> | undefined>(undefined, {deep: false})
 
     getDirectly(): SingleRef<T> | undefined {
-        return this.target.get();
+        return this.target.get()
     }
 
     isSet(): boolean {
-        return this.target.get() !== undefined;
+        return this.target.get() !== undefined
     }
 
     @action setDirectly(newTarget: SingleRef<T> | undefined) {
-        this.target.set(newTarget); // (this _replaces_ an already-set target value)
+        this.target.set(newTarget) // (this _replaces_ an already-set target value)
     }
 
     @action addDirectly(newTarget: SingleRef<T> | undefined) {
-        this.setDirectly(newTarget);
+        this.setDirectly(newTarget)
     }
 
 }
@@ -75,33 +75,33 @@ export abstract class SingleReferenceValueManager<T extends Node> extends Refere
 export class OptionalSingleReferenceValueManager<T extends Node> extends SingleReferenceValueManager<T> {
 
     constructor(reference: Reference, container: INodeBase) {
-        super(reference, container);
-        this.checkRequired(false);
+        super(reference, container)
+        this.checkRequired(false)
     }
 
     get(): SingleRef<T> | undefined {
-        return this.getDirectly();
+        return this.getDirectly()
     }
 
     @action set(newTarget: SingleRef<T> | undefined) {
-        const oldTarget = this.getDirectly();
+        const oldTarget = this.getDirectly()
         if (oldTarget === newTarget) {
             // do nothing as nothing changes
             return
         }
         if (newTarget === undefined) {
-            this.setDirectly(undefined);
+            this.setDirectly(undefined)
             if (oldTarget === undefined) {
                 // (nothing)
             } else {
-                this.emitDelta(() => new ReferenceDeletedDelta(this.container, this.reference, 0, oldTarget));
+                this.emitDelta(() => new ReferenceDeletedDelta(this.container, this.reference, 0, oldTarget))
             }
         } else {
-            this.setDirectly(newTarget);
+            this.setDirectly(newTarget)
             if (oldTarget === undefined) {
-                this.emitDelta(() => new ReferenceAddedDelta(this.container, this.reference, 0, newTarget));
+                this.emitDelta(() => new ReferenceAddedDelta(this.container, this.reference, 0, newTarget))
             } else {
-                this.emitDelta(() => new ReferenceChangedDelta(this.container, this.reference, 0, newTarget, oldTarget));
+                this.emitDelta(() => new ReferenceChangedDelta(this.container, this.reference, 0, newTarget, oldTarget))
             }
         }
     }
@@ -112,32 +112,32 @@ export class OptionalSingleReferenceValueManager<T extends Node> extends SingleR
 export class RequiredSingleReferenceValueManager<T extends Node> extends SingleReferenceValueManager<T> {
 
     constructor(reference: Reference, container: INodeBase) {
-        super(reference, container);
-        this.checkRequired(true);
+        super(reference, container)
+        this.checkRequired(true)
     }
 
     get(): SingleRef<T> {
-        const target = this.getDirectly();
+        const target = this.getDirectly()
         if (target === undefined) {
-            this.throwOnReadOfUnset();
+            this.throwOnReadOfUnset()
         }
-        return target;
+        return target
     }
 
     @action set(newTarget: SingleRef<T> | undefined) {
-        const oldTarget = this.getDirectly();
+        const oldTarget = this.getDirectly()
         if (oldTarget === newTarget) {
             // do nothing as nothing changes
             return
         }
         if (newTarget === undefined) {
-            this.throwOnUnset();
+            this.throwOnUnset()
         } else {
-            this.setDirectly(newTarget);
+            this.setDirectly(newTarget)
             if (oldTarget === undefined) {
-                this.emitDelta(() => new ReferenceAddedDelta(this.container, this.reference, 0, newTarget));
+                this.emitDelta(() => new ReferenceAddedDelta(this.container, this.reference, 0, newTarget))
             } else {
-                this.emitDelta(() => new ReferenceChangedDelta(this.container, this.reference, 0, newTarget, oldTarget));
+                this.emitDelta(() => new ReferenceChangedDelta(this.container, this.reference, 0, newTarget, oldTarget))
             }
         }
     }
@@ -148,85 +148,85 @@ export class RequiredSingleReferenceValueManager<T extends Node> extends SingleR
 export abstract class MultiReferenceValueManager<T extends Node> extends ReferenceValueManager<T> {
 
     protected constructor(reference: Reference, container: INodeBase) {
-        super(reference, container);
-        this.checkMultiple(true);
+        super(reference, container)
+        this.checkMultiple(true)
     }
 
-    private readonly targets = observable.array<SingleRef<T>>([], {deep: false});
+    private readonly targets = observable.array<SingleRef<T>>([], {deep: false})
 
     getDirectly(): MultiRef<T> {
-        return this.targets;
+        return this.targets
     }
 
     get(): MultiRef<T> {
-        return this.getDirectly().slice();  // make defensive copy
+        return this.getDirectly().slice()  // make defensive copy
     }
 
     isSet(): boolean {
-        return this.targets.length > 0;
+        return this.targets.length > 0
     }
 
     @action addDirectly(newTarget: SingleRef<T>) {
-        this.targets.push(newTarget);
+        this.targets.push(newTarget)
     }
 
     @action add(newTarget: SingleRef<T>) {
-        this.insertAtIndex(newTarget, this.getDirectly().length);
+        this.insertAtIndex(newTarget, this.getDirectly().length)
     }
 
     @action insertAtIndexDirectly(newTarget: SingleRef<T>, index: number) {
-        checkIndex(index, this.targets.length, true);
-        this.targets.splice(index, 0, newTarget);
+        checkIndex(index, this.targets.length, true)
+        this.targets.splice(index, 0, newTarget)
     }
 
     @action insertAtIndex(newTarget: SingleRef<T>, index: number) {
-        this.insertAtIndexDirectly(newTarget, index);
-        this.emitDelta(() => new ReferenceAddedDelta(this.container, this.reference, index, newTarget));
+        this.insertAtIndexDirectly(newTarget, index)
+        this.emitDelta(() => new ReferenceAddedDelta(this.container, this.reference, index, newTarget))
     }
 
     @action removeDirectly(targetToRemove: SingleRef<T>): number {
-        const targets = this.getDirectly();
-        const index = targets.findIndex((target) => target === targetToRemove);
+        const targets = this.getDirectly()
+        const index = targets.findIndex((target) => target === targetToRemove)
         if (index > -1) {
-            targets.splice(index, 1);
+            targets.splice(index, 1)
         }
-        return index;
+        return index
     }
 
-    abstract remove(targetToRemove: SingleRef<T>): void;
+    abstract remove(targetToRemove: SingleRef<T>): void
 
     @action removeAtIndexDirectly(index: number): SingleRef<T> {
-        checkIndex(index, this.targets.length, false);
-        return this.targets.splice(index, 1)[0];
+        checkIndex(index, this.targets.length, false)
+        return this.targets.splice(index, 1)[0]
     }
 
     @action moveDirectly(oldIndex: number, newIndex: number): SingleRef<T> | undefined {
-        checkIndex(oldIndex, this.targets.length, false);
-        checkIndex(newIndex, this.targets.length, false);
+        checkIndex(oldIndex, this.targets.length, false)
+        checkIndex(newIndex, this.targets.length, false)
         if (oldIndex !== newIndex) {
-            const [target] = this.targets.splice(oldIndex, 1);
-            this.targets.splice(newIndex, 0, target);
-            return target;
+            const [target] = this.targets.splice(oldIndex, 1)
+            this.targets.splice(newIndex, 0, target)
+            return target
         }
-        return undefined;
+        return undefined
     }
 
     @action move(oldIndex: number, newIndex: number) {
-        const target = this.moveDirectly(oldIndex, newIndex);
+        const target = this.moveDirectly(oldIndex, newIndex)
         if (target !== undefined) {
             this.emitDelta(() => new CompositeDelta([
                 new ReferenceDeletedDelta(this.container, this.reference, oldIndex, target),
                 new ReferenceAddedDelta(this.container, this.reference, newIndex < oldIndex ? newIndex : newIndex - 1, target)
-            ]));
+            ]))
         }
     }
 
     @action moveAndReplaceDirectly(oldIndex: number, newIndex: number) {
-        checkIndex(oldIndex, this.targets.length, false);
-        checkIndex(newIndex, this.targets.length, false);
+        checkIndex(oldIndex, this.targets.length, false)
+        checkIndex(newIndex, this.targets.length, false)
         if (oldIndex !== newIndex) {
-            this.targets.splice(newIndex, 1, this.targets[oldIndex]);
-            this.targets.splice(oldIndex, 1);
+            this.targets.splice(newIndex, 1, this.targets[oldIndex])
+            this.targets.splice(oldIndex, 1)
         }
     }
 
@@ -236,14 +236,14 @@ export abstract class MultiReferenceValueManager<T extends Node> extends Referen
 export class OptionalMultiReferenceValueManager<T extends Node> extends MultiReferenceValueManager<T> {
 
     constructor(reference: Reference, container: INodeBase) {
-        super(reference, container);
-        this.checkRequired(false);
+        super(reference, container)
+        this.checkRequired(false)
     }
 
     @action remove(targetToRemove: SingleRef<T>) {
-        const index = this.removeDirectly(targetToRemove);
+        const index = this.removeDirectly(targetToRemove)
         if (index > -1) {
-            this.emitDelta(() => new ReferenceDeletedDelta(this.container, this.reference, index, targetToRemove));
+            this.emitDelta(() => new ReferenceDeletedDelta(this.container, this.reference, index, targetToRemove))
         }
     }
 
@@ -253,27 +253,27 @@ export class OptionalMultiReferenceValueManager<T extends Node> extends MultiRef
 export class RequiredMultiReferenceValueManager<T extends Node> extends MultiReferenceValueManager<T> {
 
     constructor(reference: Reference, container: INodeBase) {
-        super(reference, container);
-        this.checkRequired(true);
+        super(reference, container)
+        this.checkRequired(true)
     }
 
     get(): MultiRef<T> {
-        const targets = this.getDirectly();
+        const targets = this.getDirectly()
         if (targets.length === 0) {
-            this.throwOnReadOfUnset();
+            this.throwOnReadOfUnset()
         }
-        return targets;
+        return targets
     }
 
     @action remove(targetToRemove: SingleRef<T>) {
-        const targets = this.getDirectly();
-        const index = targets.findIndex((target) => target === targetToRemove);
+        const targets = this.getDirectly()
+        const index = targets.findIndex((target) => target === targetToRemove)
         if (index > -1) {
             if (targets.length === 1) {
-                this.throwOnUnset();
+                this.throwOnUnset()
             }
-            targets.splice(index, 1);
-            this.emitDelta(() => new ReferenceDeletedDelta(this.container, this.reference, index, targetToRemove));
+            targets.splice(index, 1)
+            this.emitDelta(() => new ReferenceDeletedDelta(this.container, this.reference, index, targetToRemove))
         }
     }
 
