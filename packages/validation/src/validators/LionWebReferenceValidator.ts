@@ -32,7 +32,7 @@ export class LionWebReferenceValidator {
     validateNodeIds(chunk: LionWebJsonChunk, ctx: JsonContext): void {
         // put all nodes in a map, validate that there are no two nodes with the same id.
         chunk.nodes.forEach((node, index) => {
-            // this.validationResult.check(this.nodesIdMap.get(node.id) === undefined, `Node number ${index} has duplicate id "${node.id}"`);
+            // this.validationResult.check(this.nodesIdMap.get(node.id) === undefined, `Node number ${index} has duplicate id "${node.id}"`)
             if (!(this.nodesIdMap.get(node.id) === undefined)) {
                 this.validationResult.issue(new Reference_DuplicateNodeId_Issue(ctx.concat("nodes", index), node.id))
             }
@@ -68,10 +68,10 @@ export class LionWebReferenceValidator {
                     if (childNode !== undefined) {
                         if (childNode.parent !== null && childNode.parent !== undefined && childNode.parent !== node.id) {
                             this.validationResult.issue(new Reference_ParentMissingInChild_Issue(context, node, childNode))
-                            // TODO this.validationResult.error(`Child "${childId}" with parent "${childNode.parent}" is defined as child in node "${node.id}"`);
+                            // TODO this.validationResult.error(`Child "${childId}" with parent "${childNode.parent}" is defined as child in node "${node.id}"`)
                         }
                         if (childNode.parent === null || childNode.parent === undefined) {
-                            // TODO this.validationResult.error(`Child "${childId}" of node "${node.id}" has different parent "${childNode.parent}"`);
+                            // TODO this.validationResult.error(`Child "${childId}" of node "${node.id}" has different parent "${childNode.parent}"`)
                         }
                     } else if (this.mustBeProperTree) {
                         this.validationResult.issue(new GenericIssue(context, `child '${childId}' of ${node.id} is missing.`))
@@ -83,10 +83,10 @@ export class LionWebReferenceValidator {
                 if (annotation !== undefined) {
                     if (annotation.parent !== null && annotation.parent !== undefined && annotation.parent !== node.id) {
                         this.validationResult.issue(new Reference_ParentMissingInChild_Issue(context, node, annotation))
-                        // TODO this.validationResult.error(`Child "${annotationId}" with parent "${childNode.parent}" is defined as child in node "${node.id}"`);
+                        // TODO this.validationResult.error(`Child "${annotationId}" with parent "${childNode.parent}" is defined as child in node "${node.id}"`)
                     }
                     if (annotation.parent === null || annotation.parent === undefined) {
-                        // TODO this.validationResult.error(`Child "${annotationId}" of node "${node.id}" has different parent "${childNode.parent}"`);
+                        // TODO this.validationResult.error(`Child "${annotationId}" of node "${node.id}" has different parent "${childNode.parent}"`)
                     }
                 }
             })
@@ -251,10 +251,10 @@ export class LionWebReferenceValidator {
             }
         })
         // for (const childId of NodeUtils.allChildren(node)) {
-        //     const childNode = this.nodesIdMap.get(childId);
+        //     const childNode = this.nodesIdMap.get(childId)
         //     if (childNode !== undefined) {
         //         if (childNode.parent !== node.id) {
-        //             this.validationResult.error(`QQ Parent of child "${childId}" is "${childNode.parent}", but should be "${node.id}" in ${context}`);
+        //             this.validationResult.error(`QQ Parent of child "${childId}" is "${childNode.parent}", but should be "${node.id}" in ${context}`)
         //         }
         //     }
         // }

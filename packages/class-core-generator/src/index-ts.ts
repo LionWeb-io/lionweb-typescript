@@ -22,9 +22,10 @@ import { dependenciesThroughDirectInheritanceOf } from "@lionweb/utilities"
 import { asString, commaSeparated } from "littoral-templates"
 
 import { GeneratorOptions } from "./generator.js"
-import { importRenamingForLanguage, nameOfBaseClassForLanguage } from "./helpers/index.js"
+import { importRenamingForLanguage, nameOfBaseClassForLanguage, statementPostfix } from "./helpers/index.js"
 
 export const indexTsFor = (languages: Language[], options: GeneratorOptions) => {
+    const sp = statementPostfix(options)    // (abbrev. of “statement postfix”)
     const dependenciesInOrderOfDirectInheritance = dependencyOrderOf(languages, dependenciesThroughDirectInheritanceOf)
     if (dependenciesInOrderOfDirectInheritance === false) {
         console.error(
@@ -38,17 +39,17 @@ export const indexTsFor = (languages: Language[], options: GeneratorOptions) => 
 
     return asString([
         options.header === undefined ? [] : [options.header, ``],
-        `import {ILanguageBase, LionCore_builtinsBase} from "${options.genericImportLocation}";`,
+        `import {ILanguageBase, LionCore_builtinsBase} from "${options.genericImportLocation}"${sp}`,
         ``,
-        languagesForImports.map(language => `import * as ${importRenamingForLanguage(language)} from "./${language.name}.g.js";`),
+        languagesForImports.map(language => `import * as ${importRenamingForLanguage(language)} from "./${language.name}.g.js"${sp}`),
         ``,
         `// ensure that all languages get wired up by triggering that through their first entity:`,
-        `LionCore_builtinsBase.INSTANCE.String;`,
+        `LionCore_builtinsBase.INSTANCE.String${sp}`,
         languages
             .filter(({ entities }) => entities.length > 0)
             .map(
                 language =>
-                    `${importRenamingForLanguage(language)}.${nameOfBaseClassForLanguage(language)}.INSTANCE.${language.entities[0].name};`
+                    `${importRenamingForLanguage(language)}.${nameOfBaseClassForLanguage(language)}.INSTANCE.${language.entities[0].name}${sp}`
             ),
         ``,
         `export const allLanguageBases: ILanguageBase[] = [`,
@@ -59,11 +60,11 @@ export const indexTsFor = (languages: Language[], options: GeneratorOptions) => 
                 )
             )
         ),
-        `];`,
+        `]${sp}`,
         ``,
         `export {`,
         indent(commaSeparated(languages.map(importRenamingForLanguage))),
-        `};`,
+        `}${sp}`,
         ``
     ])
 }

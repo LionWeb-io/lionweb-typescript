@@ -26,25 +26,25 @@ const testLanguageBase = TestLanguageBase.INSTANCE
 describe(`unattached nodes`, () => {
 
     it(`only 1 "child added" event should be sent`, () => {
-        isTrue(testLanguageBase.TestPartition.partition);
-        isFalse(testLanguageBase.DataTypeTestConcept.partition);
+        isTrue(testLanguageBase.TestPartition.partition)
+        isFalse(testLanguageBase.DataTypeTestConcept.partition)
 
-        const [receiveDelta, deltas] = collectingDeltaReceiver();
-        const parent = TestPartition.create("parent", receiveDelta);
-        equal(deltas.length, 0);
+        const [receiveDelta, deltas] = collectingDeltaReceiver()
+        const parent = TestPartition.create("parent", receiveDelta)
+        equal(deltas.length, 0)
         // Note: no delta sent, because only an explicit client call will generate a PartitionAdded event.
 
-        const child1 = LinkTestConcept.create("child_1", receiveDelta);
-        child1.name = "child 1";
-        const child2 = LinkTestConcept.create("child_2", receiveDelta);
-        child2.name = "child 2";
-        child1.containment_0_1 = child2;
-        deepEqual(deltas.map((delta) => delta.constructor.name), []);
+        const child1 = LinkTestConcept.create("child_1", receiveDelta)
+        child1.name = "child 1"
+        const child2 = LinkTestConcept.create("child_2", receiveDelta)
+        child2.name = "child 2"
+        child1.containment_0_1 = child2
+        deepEqual(deltas.map((delta) => delta.constructor.name), [])
 
-        parent.addLinks(child1);
-        equal(deltas.length, 1);
-        deepEqual(deltas[0], new ChildAddedDelta(parent, testLanguageBase.TestPartition_links, 0, child1));
-    });
+        parent.addLinks(child1)
+        equal(deltas.length, 1)
+        deepEqual(deltas[0], new ChildAddedDelta(parent, testLanguageBase.TestPartition_links, 0, child1))
+    })
 
-});
+})
 

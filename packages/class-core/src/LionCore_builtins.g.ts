@@ -27,99 +27,99 @@
  */
 
 
-import * as $lwClassCore from "./index.js";
-import * as $lwCore from "@lionweb/core";
-import * as $lwJson from "@lionweb/json";
+import * as $lwClassCore from "./index.js"
+import * as $lwCore from "@lionweb/core"
+import * as $lwJson from "@lionweb/json"
 
 export class LionCore_builtinsBase implements $lwClassCore.ILanguageBase {
 
-    private readonly _language: $lwCore.Language = new $lwCore.Language("LionCore_builtins", "2023.1", "LionCore-builtins", "LionCore-builtins");
+    private readonly _language: $lwCore.Language = new $lwCore.Language("LionCore_builtins", "2023.1", "LionCore-builtins", "LionCore-builtins")
     get language(): $lwCore.Language {
-        this.ensureWiredUp();
-        return this._language;
+        this.ensureWiredUp()
+        return this._language
     }
 
-    public readonly _String = new $lwCore.PrimitiveType(this._language, "String", "LionCore-builtins-String", "LionCore-builtins-String");
+    public readonly _String = new $lwCore.PrimitiveType(this._language, "String", "LionCore-builtins-String", "LionCore-builtins-String")
     get String(): $lwCore.PrimitiveType {
-        this.ensureWiredUp();
-        return this._String;
+        this.ensureWiredUp()
+        return this._String
     }
 
-    public readonly _Boolean = new $lwCore.PrimitiveType(this._language, "Boolean", "LionCore-builtins-Boolean", "LionCore-builtins-Boolean");
+    public readonly _Boolean = new $lwCore.PrimitiveType(this._language, "Boolean", "LionCore-builtins-Boolean", "LionCore-builtins-Boolean")
     get Boolean(): $lwCore.PrimitiveType {
-        this.ensureWiredUp();
-        return this._Boolean;
+        this.ensureWiredUp()
+        return this._Boolean
     }
 
-    public readonly _Integer = new $lwCore.PrimitiveType(this._language, "Integer", "LionCore-builtins-Integer", "LionCore-builtins-Integer");
+    public readonly _Integer = new $lwCore.PrimitiveType(this._language, "Integer", "LionCore-builtins-Integer", "LionCore-builtins-Integer")
     get Integer(): $lwCore.PrimitiveType {
-        this.ensureWiredUp();
-        return this._Integer;
+        this.ensureWiredUp()
+        return this._Integer
     }
 
-    public readonly _JSON = new $lwCore.PrimitiveType(this._language, "JSON", "LionCore-builtins-JSON", "LionCore-builtins-JSON");
+    public readonly _JSON = new $lwCore.PrimitiveType(this._language, "JSON", "LionCore-builtins-JSON", "LionCore-builtins-JSON")
     get JSON(): $lwCore.PrimitiveType {
-        this.ensureWiredUp();
-        return this._JSON;
+        this.ensureWiredUp()
+        return this._JSON
     }
 
-    public readonly _Node = new $lwCore.Concept(this._language, "Node", "LionCore-builtins-Node", "LionCore-builtins-Node", $lwCore.ConceptModifier.abstract);
+    public readonly _Node = new $lwCore.Concept(this._language, "Node", "LionCore-builtins-Node", "LionCore-builtins-Node", $lwCore.ConceptModifier.abstract)
     get Node(): $lwCore.Concept {
-        this.ensureWiredUp();
-        return this._Node;
+        this.ensureWiredUp()
+        return this._Node
     }
 
-    public readonly _INamed = new $lwCore.Interface(this._language, "INamed", "LionCore-builtins-INamed", "LionCore-builtins-INamed");
+    public readonly _INamed = new $lwCore.Interface(this._language, "INamed", "LionCore-builtins-INamed", "LionCore-builtins-INamed")
     get INamed(): $lwCore.Interface {
-        this.ensureWiredUp();
-        return this._INamed;
+        this.ensureWiredUp()
+        return this._INamed
     }
-    private readonly _INamed_name = new $lwCore.Property(this._INamed, "name", "LionCore-builtins-INamed-name", "LionCore-builtins-INamed-name");
+    private readonly _INamed_name = new $lwCore.Property(this._INamed, "name", "LionCore-builtins-INamed-name", "LionCore-builtins-INamed-name")
     get INamed_name(): $lwCore.Property {
-        this.ensureWiredUp();
-        return this._INamed_name;
+        this.ensureWiredUp()
+        return this._INamed_name
     }
 
-    private _wiredUp: boolean = false;
+    private _wiredUp: boolean = false
     private ensureWiredUp() {
         if (this._wiredUp) {
-            return;
+            return
         }
-        this._language.havingEntities(this._String, this._Boolean, this._Integer, this._JSON, this._Node, this._INamed);
-        this._INamed.havingFeatures(this._INamed_name);
-        this._INamed_name.ofType(this._String);
-        this._wiredUp = true;
+        this._language.havingEntities(this._String, this._Boolean, this._Integer, this._JSON, this._Node, this._INamed)
+        this._INamed.havingFeatures(this._INamed_name)
+        this._INamed_name.ofType(this._String)
+        this._wiredUp = true
     }
 
     factory(_receiveDelta?: $lwClassCore.DeltaReceiver): $lwClassCore.NodeBaseFactory {
         return (classifier: $lwCore.Classifier, _id: $lwJson.LionWebId) => {
-            const {language} = classifier;
-            throw new Error(`can't instantiate ${classifier.name} (key=${classifier.key}): classifier is not known in language ${language.name} (key=${language.key}, version=${language.version})`);
+            const {language} = classifier
+            throw new Error(`can't instantiate ${classifier.name} (key=${classifier.key}): classifier is not known in language ${language.name} (key=${language.key}, version=${language.version})`)
         }
     }
 
     enumLiteralFrom<EnumType>(enumerationLiteral: $lwCore.EnumerationLiteral): EnumType {
-        const {enumeration} = enumerationLiteral;
-        const {language} = enumeration;
-        throw new Error(`enumeration with key ${enumeration.key} is not known in language ${language.name} (key=${language.key}, version=${language.version})`);
+        const {enumeration} = enumerationLiteral
+        const {language} = enumeration
+        throw new Error(`enumeration with key ${enumeration.key} is not known in language ${language.name} (key=${language.key}, version=${language.version})`)
     }
 
-    public static readonly INSTANCE = new LionCore_builtinsBase();
+    public static readonly INSTANCE = new LionCore_builtinsBase()
 }
 
 
-export type String = string;
+export type String = string
 
-export type Boolean = boolean;
+export type Boolean = boolean
 
-export type Integer = number;
+export type Integer = number
 
-export type JSON = unknown;
+export type JSON = unknown
 
 export abstract class Node extends $lwClassCore.NodeBase {
 }
 
 export interface INamed extends $lwClassCore.INodeBase {
-    name: string;
+    name: string
 }
 

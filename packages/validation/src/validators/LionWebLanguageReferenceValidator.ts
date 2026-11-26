@@ -42,7 +42,7 @@ export class LionWebLanguageReferenceValidator {
     }
 
     // reset() {
-    //     this.validationResult.reset();
+    //     this.validationResult.reset()
     // }
 
     // TODO test reference and children implementation
@@ -137,7 +137,7 @@ export class LionWebLanguageReferenceValidator {
         const refType = NodeUtils.findReference(propertyDefinition, MetaPointers.PropertyType)
         // const refType = propertyDefinition.references.find(ref => isEqualMetaPointer(ref.reference, MetaPointers.PropertyType))
         const propertyName = propertyDefinition.properties.find(p => p.property.key === LION_CORE_BUILTINS_INAMED_NAME)?.value
-        // console.log("Found type should be " + refType.targets[0].reference);
+        // console.log("Found type should be " + refType.targets[0].reference)
         if (propertyName !== null && propertyName !== undefined) {
             if (refType !== null && refType !== undefined) {
                 const typeReferenceId = refType.targets[0].reference
@@ -172,7 +172,7 @@ export class LionWebLanguageReferenceValidator {
                             const literalsContainment = NodeUtils.findContainment(propType, MetaPointers.EnumerationLiterals)
                             if (literalsContainment === undefined) {
                                 // console.log("validateProperty: 2")
-                                break;
+                                break
                             }
                             const literals = literalsContainment.children.map(child => this.registry.findNode(child))
                             match = literals.some(lit => {

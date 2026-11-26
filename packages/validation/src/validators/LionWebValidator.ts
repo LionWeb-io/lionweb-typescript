@@ -66,6 +66,6 @@ export class LionWebValidator {
     }
 
     // setLanguage(json: LionwebLanguageDefinition) {
-    //     this.language = json;
+    //     this.language = json
     // }
 }

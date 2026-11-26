@@ -165,7 +165,7 @@ export const taskExecutor = (lionWebClient: LionWebClient, semanticLogItems: ISe
                 return waitForReceivedMessages(1)
 
             case "AddAnnotations":
-                thePartition().addAnnotation(annotation("annotation0"));   // (keep ;!)
+                thePartition().addAnnotation(annotation("annotation0"))   // (keep ;!)
                 thePartition().addAnnotation(annotation("annotation1"))
                 return waitForReceivedMessages(2)
 
@@ -233,7 +233,7 @@ export const taskExecutor = (lionWebClient: LionWebClient, semanticLogItems: ISe
                 return waitForReceivedMessages(1)
 
             case "AddContainment_0_n":
-                linkTestConcept().addContainment_0_n(linkTestConcept("containment_0_n_child0"));   // (keep ;!)
+                linkTestConcept().addContainment_0_n(linkTestConcept("containment_0_n_child0"))   // (keep ;!)
                 linkTestConcept().addContainment_0_n(linkTestConcept("containment_0_n_child1"))
                 return waitForReceivedMessages(2)
 
@@ -245,7 +245,7 @@ export const taskExecutor = (lionWebClient: LionWebClient, semanticLogItems: ISe
             }
 
             case "AddContainment_1_n":
-                linkTestConcept().addContainment_1_n(linkTestConcept("containment_1_n_child0"));   // (keep ;!)
+                linkTestConcept().addContainment_1_n(linkTestConcept("containment_1_n_child0"))   // (keep ;!)
                 linkTestConcept().addContainment_1_n(linkTestConcept("containment_1_n_child1"))
                 return waitForReceivedMessages(2)
 

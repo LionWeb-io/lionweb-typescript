@@ -28,23 +28,23 @@ import { FeatureValueManager } from "./base.js"
  */
 export abstract class PropertyValueManager<T> extends FeatureValueManager<Property> {
 
-    private readonly observableValue: IObservableValue<T | undefined> = observable.box<T | undefined>(undefined, {deep: false});
+    private readonly observableValue: IObservableValue<T | undefined> = observable.box<T | undefined>(undefined, {deep: false})
         // TODO  could replace T with a sum types of the exact types we know a property's value can have
 
     get property(): Property {
-        return this.feature;
+        return this.feature
     }
 
     getDirectly(): T | undefined {
-        return this.observableValue.get();
+        return this.observableValue.get()
     }
 
     @action setDirectly(newValue: T | undefined) {
-        this.observableValue.set(newValue);
+        this.observableValue.set(newValue)
     }
 
     isSet(): boolean {
-        return this.observableValue.get() !== undefined;
+        return this.observableValue.get() !== undefined
     }
 
 }
@@ -53,35 +53,35 @@ export abstract class PropertyValueManager<T> extends FeatureValueManager<Proper
 export class RequiredPropertyValueManager<T> extends PropertyValueManager<T> {
 
     constructor(property: Property, container: INodeBase) {
-        super(property, container);
-        this.checkRequired(true);
+        super(property, container)
+        this.checkRequired(true)
     }
 
     get(): T {
-        const value = this.getDirectly();
+        const value = this.getDirectly()
         if (value === undefined) {
-            this.throwOnReadOfUnset();
+            this.throwOnReadOfUnset()
         }
-        return value;
+        return value
     }
 
     @action set(newValue: T) {
-        const oldValue = this.getDirectly();
+        const oldValue = this.getDirectly()
         if (oldValue === newValue) {
             return
         }
-        this.setDirectly(newValue);
+        this.setDirectly(newValue)
         if (oldValue === undefined) {
             if (newValue === undefined) {
                 // (doesn't happen)
             } else {
-                this.emitDelta(() => new PropertyAddedDelta(this.container, this.property, newValue));
+                this.emitDelta(() => new PropertyAddedDelta(this.container, this.property, newValue))
             }
         } else {
             if (newValue === undefined) {
-                this.throwOnUnset();
+                this.throwOnUnset()
             } else {
-                this.emitDelta(() => new PropertyChangedDelta(this.container, this.property, oldValue, newValue));
+                this.emitDelta(() => new PropertyChangedDelta(this.container, this.property, oldValue, newValue))
             }
         }
     }
@@ -92,31 +92,31 @@ export class RequiredPropertyValueManager<T> extends PropertyValueManager<T> {
 export class OptionalPropertyValueManager<T> extends PropertyValueManager<T> {
 
     constructor(property: Property, container: INodeBase) {
-        super(property, container);
-        this.checkRequired(false);
+        super(property, container)
+        this.checkRequired(false)
     }
 
     get(): T | undefined {
-        return this.getDirectly();
+        return this.getDirectly()
     }
 
     @action set(newValue: T | undefined) {
-        const oldValue = this.getDirectly();
+        const oldValue = this.getDirectly()
         if (oldValue === undefined) {
             if (newValue === undefined) {
                 // do nothing
             } else {
-                this.setDirectly(newValue);
-                this.emitDelta(() => new PropertyAddedDelta(this.container, this.property, newValue));
+                this.setDirectly(newValue)
+                this.emitDelta(() => new PropertyAddedDelta(this.container, this.property, newValue))
             }
         } else {
             if (newValue === undefined) {
-                this.setDirectly(undefined);
-                this.emitDelta(() => new PropertyDeletedDelta(this.container, this.property, oldValue));
+                this.setDirectly(undefined)
+                this.emitDelta(() => new PropertyDeletedDelta(this.container, this.property, oldValue))
             } else {
                 if (oldValue !== newValue) {
-                    this.setDirectly(newValue);
-                    this.emitDelta(() => new PropertyChangedDelta(this.container, this.property, oldValue, newValue));
+                    this.setDirectly(newValue)
+                    this.emitDelta(() => new PropertyChangedDelta(this.container, this.property, oldValue, newValue))
                 } else {
                     // do nothing
                 }

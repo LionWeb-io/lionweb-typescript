@@ -5,35 +5,35 @@
 // source: src/proto/Chunk.proto
 
 /* eslint-disable */
-import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
+import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire"
 
-export const protobufPackage = "io.lionweb.protobuf";
+export const protobufPackage = "io.lionweb.protobuf"
 
 export interface PBChunk {
-  serializationFormatVersion: string;
+  serializationFormatVersion: string
   /** Interned strings */
-  internedStrings: string[];
-  internedMetaPointers: PBMetaPointer[];
+  internedStrings: string[]
+  internedMetaPointers: PBMetaPointer[]
   /** Interned languages */
-  internedLanguages: PBLanguage[];
-  nodes: PBNode[];
+  internedLanguages: PBLanguage[]
+  nodes: PBNode[]
 }
 
 export interface PBLanguage {
-  siKey?: number | undefined;
-  siVersion?: number | undefined;
+  siKey?: number | undefined
+  siVersion?: number | undefined
 }
 
 export interface PBNode {
   /** Yes, we should _not_ have null IDs, but if necessary we can represent them */
-  siId?: number | undefined;
-  mpiClassifier: number;
-  properties: PBProperty[];
-  containments: PBContainment[];
-  references: PBReference[];
+  siId?: number | undefined
+  mpiClassifier: number
+  properties: PBProperty[]
+  containments: PBContainment[]
+  references: PBReference[]
   /** This is a list of indexes representing the string values corresponding to the IDs of the annotations */
-  siAnnotations: number[];
-  siParent?: number | undefined;
+  siAnnotations: number[]
+  siParent?: number | undefined
 }
 
 export interface PBMetaPointer {
@@ -41,29 +41,29 @@ export interface PBMetaPointer {
    * Instead of duplicating language+version as raw numbers everywhere,
    * point to the languages table.
    */
-  liLanguage: number;
+  liLanguage: number
   /** concept/key within that language */
-  siKey?: number | undefined;
+  siKey?: number | undefined
 }
 
 export interface PBProperty {
-  mpiMetaPointer: number;
-  siValue?: number | undefined;
+  mpiMetaPointer: number
+  siValue?: number | undefined
 }
 
 export interface PBContainment {
-  mpiMetaPointer: number;
-  siChildren: number[];
+  mpiMetaPointer: number
+  siChildren: number[]
 }
 
 export interface PBReference {
-  mpiMetaPointer: number;
-  values: PBReferenceValue[];
+  mpiMetaPointer: number
+  values: PBReferenceValue[]
 }
 
 export interface PBReferenceValue {
-  siResolveInfo?: number | undefined;
-  siReferred?: number | undefined;
+  siResolveInfo?: number | undefined
+  siReferred?: number | undefined
 }
 
 function createBasePBChunk(): PBChunk {
@@ -73,91 +73,91 @@ function createBasePBChunk(): PBChunk {
     internedMetaPointers: [],
     internedLanguages: [],
     nodes: [],
-  };
+  }
 }
 
 export const PBChunk: MessageFns<PBChunk> = {
   encode(message: PBChunk, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.serializationFormatVersion !== "") {
-      writer.uint32(10).string(message.serializationFormatVersion);
+      writer.uint32(10).string(message.serializationFormatVersion)
     }
     for (const v of message.internedStrings) {
-      writer.uint32(18).string(v!);
+      writer.uint32(18).string(v!)
     }
     for (const v of message.internedMetaPointers) {
-      PBMetaPointer.encode(v!, writer.uint32(26).fork()).join();
+      PBMetaPointer.encode(v!, writer.uint32(26).fork()).join()
     }
     for (const v of message.internedLanguages) {
-      PBLanguage.encode(v!, writer.uint32(34).fork()).join();
+      PBLanguage.encode(v!, writer.uint32(34).fork()).join()
     }
     for (const v of message.nodes) {
-      PBNode.encode(v!, writer.uint32(42).fork()).join();
+      PBNode.encode(v!, writer.uint32(42).fork()).join()
     }
-    return writer;
+    return writer
   },
 
   decode(input: BinaryReader | Uint8Array, length?: number): PBChunk {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    const previousRecursionDepth = (reader as any).__tsProtoDecodeDepth ?? 0;
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input)
+    const previousRecursionDepth = (reader as any).__tsProtoDecodeDepth ?? 0
     if (previousRecursionDepth >= 100) {
-      throw new globalThis.Error("protobuf decode recursion limit exceeded");
+      throw new globalThis.Error("protobuf decode recursion limit exceeded")
     }
-    (reader as any).__tsProtoDecodeDepth = previousRecursionDepth + 1;
+    (reader as any).__tsProtoDecodeDepth = previousRecursionDepth + 1
     try {
-      const end = length === undefined ? reader.len : reader.pos + length;
-      const message = createBasePBChunk();
+      const end = length === undefined ? reader.len : reader.pos + length
+      const message = createBasePBChunk()
       while (reader.pos < end) {
-        const tag = reader.uint32();
+        const tag = reader.uint32()
         switch (tag >>> 3) {
           case 1: {
             if (tag !== 10) {
-              break;
+              break
             }
 
-            message.serializationFormatVersion = reader.string();
-            continue;
+            message.serializationFormatVersion = reader.string()
+            continue
           }
           case 2: {
             if (tag !== 18) {
-              break;
+              break
             }
 
-            message.internedStrings.push(reader.string());
-            continue;
+            message.internedStrings.push(reader.string())
+            continue
           }
           case 3: {
             if (tag !== 26) {
-              break;
+              break
             }
 
-            message.internedMetaPointers.push(PBMetaPointer.decode(reader, reader.uint32()));
-            continue;
+            message.internedMetaPointers.push(PBMetaPointer.decode(reader, reader.uint32()))
+            continue
           }
           case 4: {
             if (tag !== 34) {
-              break;
+              break
             }
 
-            message.internedLanguages.push(PBLanguage.decode(reader, reader.uint32()));
-            continue;
+            message.internedLanguages.push(PBLanguage.decode(reader, reader.uint32()))
+            continue
           }
           case 5: {
             if (tag !== 42) {
-              break;
+              break
             }
 
-            message.nodes.push(PBNode.decode(reader, reader.uint32()));
-            continue;
+            message.nodes.push(PBNode.decode(reader, reader.uint32()))
+            continue
           }
         }
         if ((tag & 7) === 4 || tag === 0) {
-          break;
+          break
         }
-        reader.skip(tag & 7);
+        reader.skip(tag & 7)
       }
-      return message;
+      return message
     } finally {
-      (reader as any).__tsProtoDecodeDepth = previousRecursionDepth;
+      (reader as any).__tsProtoDecodeDepth = previousRecursionDepth
     }
   },
 
@@ -186,96 +186,96 @@ export const PBChunk: MessageFns<PBChunk> = {
       nodes: globalThis.Array.isArray(object?.nodes)
         ? object.nodes.map((e: any) => PBNode.fromJSON(e))
         : [],
-    };
+    }
   },
 
   toJSON(message: PBChunk): unknown {
-    const obj: any = {};
+    const obj: any = {}
     if (message.serializationFormatVersion !== "") {
-      obj.serializationFormatVersion = message.serializationFormatVersion;
+      obj.serializationFormatVersion = message.serializationFormatVersion
     }
     if (message.internedStrings?.length) {
-      obj.internedStrings = message.internedStrings;
+      obj.internedStrings = message.internedStrings
     }
     if (message.internedMetaPointers?.length) {
-      obj.internedMetaPointers = message.internedMetaPointers.map((e) => PBMetaPointer.toJSON(e));
+      obj.internedMetaPointers = message.internedMetaPointers.map((e) => PBMetaPointer.toJSON(e))
     }
     if (message.internedLanguages?.length) {
-      obj.internedLanguages = message.internedLanguages.map((e) => PBLanguage.toJSON(e));
+      obj.internedLanguages = message.internedLanguages.map((e) => PBLanguage.toJSON(e))
     }
     if (message.nodes?.length) {
-      obj.nodes = message.nodes.map((e) => PBNode.toJSON(e));
+      obj.nodes = message.nodes.map((e) => PBNode.toJSON(e))
     }
-    return obj;
+    return obj
   },
 
   create<I extends Exact<DeepPartial<PBChunk>, I>>(base?: I): PBChunk {
-    return PBChunk.fromPartial(base ?? ({} as any));
+    return PBChunk.fromPartial(base ?? ({} as any))
   },
   fromPartial<I extends Exact<DeepPartial<PBChunk>, I>>(object: I): PBChunk {
-    const message = createBasePBChunk();
-    message.serializationFormatVersion = object.serializationFormatVersion ?? "";
-    message.internedStrings = object.internedStrings?.map((e) => e) || [];
-    message.internedMetaPointers = object.internedMetaPointers?.map((e) => PBMetaPointer.fromPartial(e)) || [];
-    message.internedLanguages = object.internedLanguages?.map((e) => PBLanguage.fromPartial(e)) || [];
-    message.nodes = object.nodes?.map((e) => PBNode.fromPartial(e)) || [];
-    return message;
+    const message = createBasePBChunk()
+    message.serializationFormatVersion = object.serializationFormatVersion ?? ""
+    message.internedStrings = object.internedStrings?.map((e) => e) || []
+    message.internedMetaPointers = object.internedMetaPointers?.map((e) => PBMetaPointer.fromPartial(e)) || []
+    message.internedLanguages = object.internedLanguages?.map((e) => PBLanguage.fromPartial(e)) || []
+    message.nodes = object.nodes?.map((e) => PBNode.fromPartial(e)) || []
+    return message
   },
-};
+}
 
 function createBasePBLanguage(): PBLanguage {
-  return { siKey: undefined, siVersion: undefined };
+  return { siKey: undefined, siVersion: undefined }
 }
 
 export const PBLanguage: MessageFns<PBLanguage> = {
   encode(message: PBLanguage, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.siKey !== undefined) {
-      writer.uint32(8).uint32(message.siKey);
+      writer.uint32(8).uint32(message.siKey)
     }
     if (message.siVersion !== undefined) {
-      writer.uint32(16).uint32(message.siVersion);
+      writer.uint32(16).uint32(message.siVersion)
     }
-    return writer;
+    return writer
   },
 
   decode(input: BinaryReader | Uint8Array, length?: number): PBLanguage {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    const previousRecursionDepth = (reader as any).__tsProtoDecodeDepth ?? 0;
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input)
+    const previousRecursionDepth = (reader as any).__tsProtoDecodeDepth ?? 0
     if (previousRecursionDepth >= 100) {
-      throw new globalThis.Error("protobuf decode recursion limit exceeded");
+      throw new globalThis.Error("protobuf decode recursion limit exceeded")
     }
-    (reader as any).__tsProtoDecodeDepth = previousRecursionDepth + 1;
+    (reader as any).__tsProtoDecodeDepth = previousRecursionDepth + 1
     try {
-      const end = length === undefined ? reader.len : reader.pos + length;
-      const message = createBasePBLanguage();
+      const end = length === undefined ? reader.len : reader.pos + length
+      const message = createBasePBLanguage()
       while (reader.pos < end) {
-        const tag = reader.uint32();
+        const tag = reader.uint32()
         switch (tag >>> 3) {
           case 1: {
             if (tag !== 8) {
-              break;
+              break
             }
 
-            message.siKey = reader.uint32();
-            continue;
+            message.siKey = reader.uint32()
+            continue
           }
           case 2: {
             if (tag !== 16) {
-              break;
+              break
             }
 
-            message.siVersion = reader.uint32();
-            continue;
+            message.siVersion = reader.uint32()
+            continue
           }
         }
         if ((tag & 7) === 4 || tag === 0) {
-          break;
+          break
         }
-        reader.skip(tag & 7);
+        reader.skip(tag & 7)
       }
-      return message;
+      return message
     } finally {
-      (reader as any).__tsProtoDecodeDepth = previousRecursionDepth;
+      (reader as any).__tsProtoDecodeDepth = previousRecursionDepth
     }
   },
 
@@ -291,30 +291,30 @@ export const PBLanguage: MessageFns<PBLanguage> = {
         : isSet(object.si_version)
         ? globalThis.Number(object.si_version)
         : undefined,
-    };
+    }
   },
 
   toJSON(message: PBLanguage): unknown {
-    const obj: any = {};
+    const obj: any = {}
     if (message.siKey !== undefined) {
-      obj.siKey = Math.round(message.siKey);
+      obj.siKey = Math.round(message.siKey)
     }
     if (message.siVersion !== undefined) {
-      obj.siVersion = Math.round(message.siVersion);
+      obj.siVersion = Math.round(message.siVersion)
     }
-    return obj;
+    return obj
   },
 
   create<I extends Exact<DeepPartial<PBLanguage>, I>>(base?: I): PBLanguage {
-    return PBLanguage.fromPartial(base ?? ({} as any));
+    return PBLanguage.fromPartial(base ?? ({} as any))
   },
   fromPartial<I extends Exact<DeepPartial<PBLanguage>, I>>(object: I): PBLanguage {
-    const message = createBasePBLanguage();
-    message.siKey = object.siKey ?? undefined;
-    message.siVersion = object.siVersion ?? undefined;
-    return message;
+    const message = createBasePBLanguage()
+    message.siKey = object.siKey ?? undefined
+    message.siVersion = object.siVersion ?? undefined
+    return message
   },
-};
+}
 
 function createBasePBNode(): PBNode {
   return {
@@ -325,125 +325,125 @@ function createBasePBNode(): PBNode {
     references: [],
     siAnnotations: [],
     siParent: undefined,
-  };
+  }
 }
 
 export const PBNode: MessageFns<PBNode> = {
   encode(message: PBNode, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.siId !== undefined) {
-      writer.uint32(8).uint32(message.siId);
+      writer.uint32(8).uint32(message.siId)
     }
     if (message.mpiClassifier !== 0) {
-      writer.uint32(16).uint32(message.mpiClassifier);
+      writer.uint32(16).uint32(message.mpiClassifier)
     }
     for (const v of message.properties) {
-      PBProperty.encode(v!, writer.uint32(26).fork()).join();
+      PBProperty.encode(v!, writer.uint32(26).fork()).join()
     }
     for (const v of message.containments) {
-      PBContainment.encode(v!, writer.uint32(34).fork()).join();
+      PBContainment.encode(v!, writer.uint32(34).fork()).join()
     }
     for (const v of message.references) {
-      PBReference.encode(v!, writer.uint32(42).fork()).join();
+      PBReference.encode(v!, writer.uint32(42).fork()).join()
     }
-    writer.uint32(50).fork();
+    writer.uint32(50).fork()
     for (const v of message.siAnnotations) {
-      writer.uint32(v);
+      writer.uint32(v)
     }
-    writer.join();
+    writer.join()
     if (message.siParent !== undefined) {
-      writer.uint32(56).uint32(message.siParent);
+      writer.uint32(56).uint32(message.siParent)
     }
-    return writer;
+    return writer
   },
 
   decode(input: BinaryReader | Uint8Array, length?: number): PBNode {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    const previousRecursionDepth = (reader as any).__tsProtoDecodeDepth ?? 0;
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input)
+    const previousRecursionDepth = (reader as any).__tsProtoDecodeDepth ?? 0
     if (previousRecursionDepth >= 100) {
-      throw new globalThis.Error("protobuf decode recursion limit exceeded");
+      throw new globalThis.Error("protobuf decode recursion limit exceeded")
     }
-    (reader as any).__tsProtoDecodeDepth = previousRecursionDepth + 1;
+    (reader as any).__tsProtoDecodeDepth = previousRecursionDepth + 1
     try {
-      const end = length === undefined ? reader.len : reader.pos + length;
-      const message = createBasePBNode();
+      const end = length === undefined ? reader.len : reader.pos + length
+      const message = createBasePBNode()
       while (reader.pos < end) {
-        const tag = reader.uint32();
+        const tag = reader.uint32()
         switch (tag >>> 3) {
           case 1: {
             if (tag !== 8) {
-              break;
+              break
             }
 
-            message.siId = reader.uint32();
-            continue;
+            message.siId = reader.uint32()
+            continue
           }
           case 2: {
             if (tag !== 16) {
-              break;
+              break
             }
 
-            message.mpiClassifier = reader.uint32();
-            continue;
+            message.mpiClassifier = reader.uint32()
+            continue
           }
           case 3: {
             if (tag !== 26) {
-              break;
+              break
             }
 
-            message.properties.push(PBProperty.decode(reader, reader.uint32()));
-            continue;
+            message.properties.push(PBProperty.decode(reader, reader.uint32()))
+            continue
           }
           case 4: {
             if (tag !== 34) {
-              break;
+              break
             }
 
-            message.containments.push(PBContainment.decode(reader, reader.uint32()));
-            continue;
+            message.containments.push(PBContainment.decode(reader, reader.uint32()))
+            continue
           }
           case 5: {
             if (tag !== 42) {
-              break;
+              break
             }
 
-            message.references.push(PBReference.decode(reader, reader.uint32()));
-            continue;
+            message.references.push(PBReference.decode(reader, reader.uint32()))
+            continue
           }
           case 6: {
             if (tag === 48) {
-              message.siAnnotations.push(reader.uint32());
+              message.siAnnotations.push(reader.uint32())
 
-              continue;
+              continue
             }
 
             if (tag === 50) {
-              const end2 = reader.uint32() + reader.pos;
+              const end2 = reader.uint32() + reader.pos
               while (reader.pos < end2) {
-                message.siAnnotations.push(reader.uint32());
+                message.siAnnotations.push(reader.uint32())
               }
 
-              continue;
+              continue
             }
 
-            break;
+            break
           }
           case 7: {
             if (tag !== 56) {
-              break;
+              break
             }
 
-            message.siParent = reader.uint32();
-            continue;
+            message.siParent = reader.uint32()
+            continue
           }
         }
         if ((tag & 7) === 4 || tag === 0) {
-          break;
+          break
         }
-        reader.skip(tag & 7);
+        reader.skip(tag & 7)
       }
-      return message;
+      return message
     } finally {
-      (reader as any).__tsProtoDecodeDepth = previousRecursionDepth;
+      (reader as any).__tsProtoDecodeDepth = previousRecursionDepth
     }
   },
 
@@ -478,104 +478,104 @@ export const PBNode: MessageFns<PBNode> = {
         : isSet(object.si_parent)
         ? globalThis.Number(object.si_parent)
         : undefined,
-    };
+    }
   },
 
   toJSON(message: PBNode): unknown {
-    const obj: any = {};
+    const obj: any = {}
     if (message.siId !== undefined) {
-      obj.siId = Math.round(message.siId);
+      obj.siId = Math.round(message.siId)
     }
     if (message.mpiClassifier !== 0) {
-      obj.mpiClassifier = Math.round(message.mpiClassifier);
+      obj.mpiClassifier = Math.round(message.mpiClassifier)
     }
     if (message.properties?.length) {
-      obj.properties = message.properties.map((e) => PBProperty.toJSON(e));
+      obj.properties = message.properties.map((e) => PBProperty.toJSON(e))
     }
     if (message.containments?.length) {
-      obj.containments = message.containments.map((e) => PBContainment.toJSON(e));
+      obj.containments = message.containments.map((e) => PBContainment.toJSON(e))
     }
     if (message.references?.length) {
-      obj.references = message.references.map((e) => PBReference.toJSON(e));
+      obj.references = message.references.map((e) => PBReference.toJSON(e))
     }
     if (message.siAnnotations?.length) {
-      obj.siAnnotations = message.siAnnotations.map((e) => Math.round(e));
+      obj.siAnnotations = message.siAnnotations.map((e) => Math.round(e))
     }
     if (message.siParent !== undefined) {
-      obj.siParent = Math.round(message.siParent);
+      obj.siParent = Math.round(message.siParent)
     }
-    return obj;
+    return obj
   },
 
   create<I extends Exact<DeepPartial<PBNode>, I>>(base?: I): PBNode {
-    return PBNode.fromPartial(base ?? ({} as any));
+    return PBNode.fromPartial(base ?? ({} as any))
   },
   fromPartial<I extends Exact<DeepPartial<PBNode>, I>>(object: I): PBNode {
-    const message = createBasePBNode();
-    message.siId = object.siId ?? undefined;
-    message.mpiClassifier = object.mpiClassifier ?? 0;
-    message.properties = object.properties?.map((e) => PBProperty.fromPartial(e)) || [];
-    message.containments = object.containments?.map((e) => PBContainment.fromPartial(e)) || [];
-    message.references = object.references?.map((e) => PBReference.fromPartial(e)) || [];
-    message.siAnnotations = object.siAnnotations?.map((e) => e) || [];
-    message.siParent = object.siParent ?? undefined;
-    return message;
+    const message = createBasePBNode()
+    message.siId = object.siId ?? undefined
+    message.mpiClassifier = object.mpiClassifier ?? 0
+    message.properties = object.properties?.map((e) => PBProperty.fromPartial(e)) || []
+    message.containments = object.containments?.map((e) => PBContainment.fromPartial(e)) || []
+    message.references = object.references?.map((e) => PBReference.fromPartial(e)) || []
+    message.siAnnotations = object.siAnnotations?.map((e) => e) || []
+    message.siParent = object.siParent ?? undefined
+    return message
   },
-};
+}
 
 function createBasePBMetaPointer(): PBMetaPointer {
-  return { liLanguage: 0, siKey: undefined };
+  return { liLanguage: 0, siKey: undefined }
 }
 
 export const PBMetaPointer: MessageFns<PBMetaPointer> = {
   encode(message: PBMetaPointer, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.liLanguage !== 0) {
-      writer.uint32(8).uint32(message.liLanguage);
+      writer.uint32(8).uint32(message.liLanguage)
     }
     if (message.siKey !== undefined) {
-      writer.uint32(16).uint32(message.siKey);
+      writer.uint32(16).uint32(message.siKey)
     }
-    return writer;
+    return writer
   },
 
   decode(input: BinaryReader | Uint8Array, length?: number): PBMetaPointer {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    const previousRecursionDepth = (reader as any).__tsProtoDecodeDepth ?? 0;
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input)
+    const previousRecursionDepth = (reader as any).__tsProtoDecodeDepth ?? 0
     if (previousRecursionDepth >= 100) {
-      throw new globalThis.Error("protobuf decode recursion limit exceeded");
+      throw new globalThis.Error("protobuf decode recursion limit exceeded")
     }
-    (reader as any).__tsProtoDecodeDepth = previousRecursionDepth + 1;
+    (reader as any).__tsProtoDecodeDepth = previousRecursionDepth + 1
     try {
-      const end = length === undefined ? reader.len : reader.pos + length;
-      const message = createBasePBMetaPointer();
+      const end = length === undefined ? reader.len : reader.pos + length
+      const message = createBasePBMetaPointer()
       while (reader.pos < end) {
-        const tag = reader.uint32();
+        const tag = reader.uint32()
         switch (tag >>> 3) {
           case 1: {
             if (tag !== 8) {
-              break;
+              break
             }
 
-            message.liLanguage = reader.uint32();
-            continue;
+            message.liLanguage = reader.uint32()
+            continue
           }
           case 2: {
             if (tag !== 16) {
-              break;
+              break
             }
 
-            message.siKey = reader.uint32();
-            continue;
+            message.siKey = reader.uint32()
+            continue
           }
         }
         if ((tag & 7) === 4 || tag === 0) {
-          break;
+          break
         }
-        reader.skip(tag & 7);
+        reader.skip(tag & 7)
       }
-      return message;
+      return message
     } finally {
-      (reader as any).__tsProtoDecodeDepth = previousRecursionDepth;
+      (reader as any).__tsProtoDecodeDepth = previousRecursionDepth
     }
   },
 
@@ -591,84 +591,84 @@ export const PBMetaPointer: MessageFns<PBMetaPointer> = {
         : isSet(object.si_key)
         ? globalThis.Number(object.si_key)
         : undefined,
-    };
+    }
   },
 
   toJSON(message: PBMetaPointer): unknown {
-    const obj: any = {};
+    const obj: any = {}
     if (message.liLanguage !== 0) {
-      obj.liLanguage = Math.round(message.liLanguage);
+      obj.liLanguage = Math.round(message.liLanguage)
     }
     if (message.siKey !== undefined) {
-      obj.siKey = Math.round(message.siKey);
+      obj.siKey = Math.round(message.siKey)
     }
-    return obj;
+    return obj
   },
 
   create<I extends Exact<DeepPartial<PBMetaPointer>, I>>(base?: I): PBMetaPointer {
-    return PBMetaPointer.fromPartial(base ?? ({} as any));
+    return PBMetaPointer.fromPartial(base ?? ({} as any))
   },
   fromPartial<I extends Exact<DeepPartial<PBMetaPointer>, I>>(object: I): PBMetaPointer {
-    const message = createBasePBMetaPointer();
-    message.liLanguage = object.liLanguage ?? 0;
-    message.siKey = object.siKey ?? undefined;
-    return message;
+    const message = createBasePBMetaPointer()
+    message.liLanguage = object.liLanguage ?? 0
+    message.siKey = object.siKey ?? undefined
+    return message
   },
-};
+}
 
 function createBasePBProperty(): PBProperty {
-  return { mpiMetaPointer: 0, siValue: undefined };
+  return { mpiMetaPointer: 0, siValue: undefined }
 }
 
 export const PBProperty: MessageFns<PBProperty> = {
   encode(message: PBProperty, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.mpiMetaPointer !== 0) {
-      writer.uint32(8).uint32(message.mpiMetaPointer);
+      writer.uint32(8).uint32(message.mpiMetaPointer)
     }
     if (message.siValue !== undefined) {
-      writer.uint32(16).uint32(message.siValue);
+      writer.uint32(16).uint32(message.siValue)
     }
-    return writer;
+    return writer
   },
 
   decode(input: BinaryReader | Uint8Array, length?: number): PBProperty {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    const previousRecursionDepth = (reader as any).__tsProtoDecodeDepth ?? 0;
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input)
+    const previousRecursionDepth = (reader as any).__tsProtoDecodeDepth ?? 0
     if (previousRecursionDepth >= 100) {
-      throw new globalThis.Error("protobuf decode recursion limit exceeded");
+      throw new globalThis.Error("protobuf decode recursion limit exceeded")
     }
-    (reader as any).__tsProtoDecodeDepth = previousRecursionDepth + 1;
+    (reader as any).__tsProtoDecodeDepth = previousRecursionDepth + 1
     try {
-      const end = length === undefined ? reader.len : reader.pos + length;
-      const message = createBasePBProperty();
+      const end = length === undefined ? reader.len : reader.pos + length
+      const message = createBasePBProperty()
       while (reader.pos < end) {
-        const tag = reader.uint32();
+        const tag = reader.uint32()
         switch (tag >>> 3) {
           case 1: {
             if (tag !== 8) {
-              break;
+              break
             }
 
-            message.mpiMetaPointer = reader.uint32();
-            continue;
+            message.mpiMetaPointer = reader.uint32()
+            continue
           }
           case 2: {
             if (tag !== 16) {
-              break;
+              break
             }
 
-            message.siValue = reader.uint32();
-            continue;
+            message.siValue = reader.uint32()
+            continue
           }
         }
         if ((tag & 7) === 4 || tag === 0) {
-          break;
+          break
         }
-        reader.skip(tag & 7);
+        reader.skip(tag & 7)
       }
-      return message;
+      return message
     } finally {
-      (reader as any).__tsProtoDecodeDepth = previousRecursionDepth;
+      (reader as any).__tsProtoDecodeDepth = previousRecursionDepth
     }
   },
 
@@ -684,96 +684,96 @@ export const PBProperty: MessageFns<PBProperty> = {
         : isSet(object.si_value)
         ? globalThis.Number(object.si_value)
         : undefined,
-    };
+    }
   },
 
   toJSON(message: PBProperty): unknown {
-    const obj: any = {};
+    const obj: any = {}
     if (message.mpiMetaPointer !== 0) {
-      obj.mpiMetaPointer = Math.round(message.mpiMetaPointer);
+      obj.mpiMetaPointer = Math.round(message.mpiMetaPointer)
     }
     if (message.siValue !== undefined) {
-      obj.siValue = Math.round(message.siValue);
+      obj.siValue = Math.round(message.siValue)
     }
-    return obj;
+    return obj
   },
 
   create<I extends Exact<DeepPartial<PBProperty>, I>>(base?: I): PBProperty {
-    return PBProperty.fromPartial(base ?? ({} as any));
+    return PBProperty.fromPartial(base ?? ({} as any))
   },
   fromPartial<I extends Exact<DeepPartial<PBProperty>, I>>(object: I): PBProperty {
-    const message = createBasePBProperty();
-    message.mpiMetaPointer = object.mpiMetaPointer ?? 0;
-    message.siValue = object.siValue ?? undefined;
-    return message;
+    const message = createBasePBProperty()
+    message.mpiMetaPointer = object.mpiMetaPointer ?? 0
+    message.siValue = object.siValue ?? undefined
+    return message
   },
-};
+}
 
 function createBasePBContainment(): PBContainment {
-  return { mpiMetaPointer: 0, siChildren: [] };
+  return { mpiMetaPointer: 0, siChildren: [] }
 }
 
 export const PBContainment: MessageFns<PBContainment> = {
   encode(message: PBContainment, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.mpiMetaPointer !== 0) {
-      writer.uint32(8).uint32(message.mpiMetaPointer);
+      writer.uint32(8).uint32(message.mpiMetaPointer)
     }
-    writer.uint32(18).fork();
+    writer.uint32(18).fork()
     for (const v of message.siChildren) {
-      writer.uint32(v);
+      writer.uint32(v)
     }
-    writer.join();
-    return writer;
+    writer.join()
+    return writer
   },
 
   decode(input: BinaryReader | Uint8Array, length?: number): PBContainment {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    const previousRecursionDepth = (reader as any).__tsProtoDecodeDepth ?? 0;
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input)
+    const previousRecursionDepth = (reader as any).__tsProtoDecodeDepth ?? 0
     if (previousRecursionDepth >= 100) {
-      throw new globalThis.Error("protobuf decode recursion limit exceeded");
+      throw new globalThis.Error("protobuf decode recursion limit exceeded")
     }
-    (reader as any).__tsProtoDecodeDepth = previousRecursionDepth + 1;
+    (reader as any).__tsProtoDecodeDepth = previousRecursionDepth + 1
     try {
-      const end = length === undefined ? reader.len : reader.pos + length;
-      const message = createBasePBContainment();
+      const end = length === undefined ? reader.len : reader.pos + length
+      const message = createBasePBContainment()
       while (reader.pos < end) {
-        const tag = reader.uint32();
+        const tag = reader.uint32()
         switch (tag >>> 3) {
           case 1: {
             if (tag !== 8) {
-              break;
+              break
             }
 
-            message.mpiMetaPointer = reader.uint32();
-            continue;
+            message.mpiMetaPointer = reader.uint32()
+            continue
           }
           case 2: {
             if (tag === 16) {
-              message.siChildren.push(reader.uint32());
+              message.siChildren.push(reader.uint32())
 
-              continue;
+              continue
             }
 
             if (tag === 18) {
-              const end2 = reader.uint32() + reader.pos;
+              const end2 = reader.uint32() + reader.pos
               while (reader.pos < end2) {
-                message.siChildren.push(reader.uint32());
+                message.siChildren.push(reader.uint32())
               }
 
-              continue;
+              continue
             }
 
-            break;
+            break
           }
         }
         if ((tag & 7) === 4 || tag === 0) {
-          break;
+          break
         }
-        reader.skip(tag & 7);
+        reader.skip(tag & 7)
       }
-      return message;
+      return message
     } finally {
-      (reader as any).__tsProtoDecodeDepth = previousRecursionDepth;
+      (reader as any).__tsProtoDecodeDepth = previousRecursionDepth
     }
   },
 
@@ -789,84 +789,84 @@ export const PBContainment: MessageFns<PBContainment> = {
         : globalThis.Array.isArray(object?.si_children)
         ? object.si_children.map((e: any) => globalThis.Number(e))
         : [],
-    };
+    }
   },
 
   toJSON(message: PBContainment): unknown {
-    const obj: any = {};
+    const obj: any = {}
     if (message.mpiMetaPointer !== 0) {
-      obj.mpiMetaPointer = Math.round(message.mpiMetaPointer);
+      obj.mpiMetaPointer = Math.round(message.mpiMetaPointer)
     }
     if (message.siChildren?.length) {
-      obj.siChildren = message.siChildren.map((e) => Math.round(e));
+      obj.siChildren = message.siChildren.map((e) => Math.round(e))
     }
-    return obj;
+    return obj
   },
 
   create<I extends Exact<DeepPartial<PBContainment>, I>>(base?: I): PBContainment {
-    return PBContainment.fromPartial(base ?? ({} as any));
+    return PBContainment.fromPartial(base ?? ({} as any))
   },
   fromPartial<I extends Exact<DeepPartial<PBContainment>, I>>(object: I): PBContainment {
-    const message = createBasePBContainment();
-    message.mpiMetaPointer = object.mpiMetaPointer ?? 0;
-    message.siChildren = object.siChildren?.map((e) => e) || [];
-    return message;
+    const message = createBasePBContainment()
+    message.mpiMetaPointer = object.mpiMetaPointer ?? 0
+    message.siChildren = object.siChildren?.map((e) => e) || []
+    return message
   },
-};
+}
 
 function createBasePBReference(): PBReference {
-  return { mpiMetaPointer: 0, values: [] };
+  return { mpiMetaPointer: 0, values: [] }
 }
 
 export const PBReference: MessageFns<PBReference> = {
   encode(message: PBReference, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.mpiMetaPointer !== 0) {
-      writer.uint32(8).uint32(message.mpiMetaPointer);
+      writer.uint32(8).uint32(message.mpiMetaPointer)
     }
     for (const v of message.values) {
-      PBReferenceValue.encode(v!, writer.uint32(18).fork()).join();
+      PBReferenceValue.encode(v!, writer.uint32(18).fork()).join()
     }
-    return writer;
+    return writer
   },
 
   decode(input: BinaryReader | Uint8Array, length?: number): PBReference {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    const previousRecursionDepth = (reader as any).__tsProtoDecodeDepth ?? 0;
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input)
+    const previousRecursionDepth = (reader as any).__tsProtoDecodeDepth ?? 0
     if (previousRecursionDepth >= 100) {
-      throw new globalThis.Error("protobuf decode recursion limit exceeded");
+      throw new globalThis.Error("protobuf decode recursion limit exceeded")
     }
-    (reader as any).__tsProtoDecodeDepth = previousRecursionDepth + 1;
+    (reader as any).__tsProtoDecodeDepth = previousRecursionDepth + 1
     try {
-      const end = length === undefined ? reader.len : reader.pos + length;
-      const message = createBasePBReference();
+      const end = length === undefined ? reader.len : reader.pos + length
+      const message = createBasePBReference()
       while (reader.pos < end) {
-        const tag = reader.uint32();
+        const tag = reader.uint32()
         switch (tag >>> 3) {
           case 1: {
             if (tag !== 8) {
-              break;
+              break
             }
 
-            message.mpiMetaPointer = reader.uint32();
-            continue;
+            message.mpiMetaPointer = reader.uint32()
+            continue
           }
           case 2: {
             if (tag !== 18) {
-              break;
+              break
             }
 
-            message.values.push(PBReferenceValue.decode(reader, reader.uint32()));
-            continue;
+            message.values.push(PBReferenceValue.decode(reader, reader.uint32()))
+            continue
           }
         }
         if ((tag & 7) === 4 || tag === 0) {
-          break;
+          break
         }
-        reader.skip(tag & 7);
+        reader.skip(tag & 7)
       }
-      return message;
+      return message
     } finally {
-      (reader as any).__tsProtoDecodeDepth = previousRecursionDepth;
+      (reader as any).__tsProtoDecodeDepth = previousRecursionDepth
     }
   },
 
@@ -880,84 +880,84 @@ export const PBReference: MessageFns<PBReference> = {
       values: globalThis.Array.isArray(object?.values)
         ? object.values.map((e: any) => PBReferenceValue.fromJSON(e))
         : [],
-    };
+    }
   },
 
   toJSON(message: PBReference): unknown {
-    const obj: any = {};
+    const obj: any = {}
     if (message.mpiMetaPointer !== 0) {
-      obj.mpiMetaPointer = Math.round(message.mpiMetaPointer);
+      obj.mpiMetaPointer = Math.round(message.mpiMetaPointer)
     }
     if (message.values?.length) {
-      obj.values = message.values.map((e) => PBReferenceValue.toJSON(e));
+      obj.values = message.values.map((e) => PBReferenceValue.toJSON(e))
     }
-    return obj;
+    return obj
   },
 
   create<I extends Exact<DeepPartial<PBReference>, I>>(base?: I): PBReference {
-    return PBReference.fromPartial(base ?? ({} as any));
+    return PBReference.fromPartial(base ?? ({} as any))
   },
   fromPartial<I extends Exact<DeepPartial<PBReference>, I>>(object: I): PBReference {
-    const message = createBasePBReference();
-    message.mpiMetaPointer = object.mpiMetaPointer ?? 0;
-    message.values = object.values?.map((e) => PBReferenceValue.fromPartial(e)) || [];
-    return message;
+    const message = createBasePBReference()
+    message.mpiMetaPointer = object.mpiMetaPointer ?? 0
+    message.values = object.values?.map((e) => PBReferenceValue.fromPartial(e)) || []
+    return message
   },
-};
+}
 
 function createBasePBReferenceValue(): PBReferenceValue {
-  return { siResolveInfo: undefined, siReferred: undefined };
+  return { siResolveInfo: undefined, siReferred: undefined }
 }
 
 export const PBReferenceValue: MessageFns<PBReferenceValue> = {
   encode(message: PBReferenceValue, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.siResolveInfo !== undefined) {
-      writer.uint32(8).uint32(message.siResolveInfo);
+      writer.uint32(8).uint32(message.siResolveInfo)
     }
     if (message.siReferred !== undefined) {
-      writer.uint32(16).uint32(message.siReferred);
+      writer.uint32(16).uint32(message.siReferred)
     }
-    return writer;
+    return writer
   },
 
   decode(input: BinaryReader | Uint8Array, length?: number): PBReferenceValue {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    const previousRecursionDepth = (reader as any).__tsProtoDecodeDepth ?? 0;
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input)
+    const previousRecursionDepth = (reader as any).__tsProtoDecodeDepth ?? 0
     if (previousRecursionDepth >= 100) {
-      throw new globalThis.Error("protobuf decode recursion limit exceeded");
+      throw new globalThis.Error("protobuf decode recursion limit exceeded")
     }
-    (reader as any).__tsProtoDecodeDepth = previousRecursionDepth + 1;
+    (reader as any).__tsProtoDecodeDepth = previousRecursionDepth + 1
     try {
-      const end = length === undefined ? reader.len : reader.pos + length;
-      const message = createBasePBReferenceValue();
+      const end = length === undefined ? reader.len : reader.pos + length
+      const message = createBasePBReferenceValue()
       while (reader.pos < end) {
-        const tag = reader.uint32();
+        const tag = reader.uint32()
         switch (tag >>> 3) {
           case 1: {
             if (tag !== 8) {
-              break;
+              break
             }
 
-            message.siResolveInfo = reader.uint32();
-            continue;
+            message.siResolveInfo = reader.uint32()
+            continue
           }
           case 2: {
             if (tag !== 16) {
-              break;
+              break
             }
 
-            message.siReferred = reader.uint32();
-            continue;
+            message.siReferred = reader.uint32()
+            continue
           }
         }
         if ((tag & 7) === 4 || tag === 0) {
-          break;
+          break
         }
-        reader.skip(tag & 7);
+        reader.skip(tag & 7)
       }
-      return message;
+      return message
     } finally {
-      (reader as any).__tsProtoDecodeDepth = previousRecursionDepth;
+      (reader as any).__tsProtoDecodeDepth = previousRecursionDepth
     }
   },
 
@@ -973,52 +973,52 @@ export const PBReferenceValue: MessageFns<PBReferenceValue> = {
         : isSet(object.si_referred)
         ? globalThis.Number(object.si_referred)
         : undefined,
-    };
+    }
   },
 
   toJSON(message: PBReferenceValue): unknown {
-    const obj: any = {};
+    const obj: any = {}
     if (message.siResolveInfo !== undefined) {
-      obj.siResolveInfo = Math.round(message.siResolveInfo);
+      obj.siResolveInfo = Math.round(message.siResolveInfo)
     }
     if (message.siReferred !== undefined) {
-      obj.siReferred = Math.round(message.siReferred);
+      obj.siReferred = Math.round(message.siReferred)
     }
-    return obj;
+    return obj
   },
 
   create<I extends Exact<DeepPartial<PBReferenceValue>, I>>(base?: I): PBReferenceValue {
-    return PBReferenceValue.fromPartial(base ?? ({} as any));
+    return PBReferenceValue.fromPartial(base ?? ({} as any))
   },
   fromPartial<I extends Exact<DeepPartial<PBReferenceValue>, I>>(object: I): PBReferenceValue {
-    const message = createBasePBReferenceValue();
-    message.siResolveInfo = object.siResolveInfo ?? undefined;
-    message.siReferred = object.siReferred ?? undefined;
-    return message;
+    const message = createBasePBReferenceValue()
+    message.siResolveInfo = object.siResolveInfo ?? undefined
+    message.siReferred = object.siReferred ?? undefined
+    return message
   },
-};
+}
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined
 
 export type DeepPartial<T> = T extends Builtin ? T
   : T extends globalThis.Array<infer U> ? globalThis.Array<DeepPartial<U>>
   : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
   : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
-  : Partial<T>;
+  : Partial<T>
 
-type KeysOfUnion<T> = T extends T ? keyof T : never;
+type KeysOfUnion<T> = T extends T ? keyof T : never
 export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never }
 
 function isSet(value: any): boolean {
-  return value !== null && value !== undefined;
+  return value !== null && value !== undefined
 }
 
 export interface MessageFns<T> {
-  encode(message: T, writer?: BinaryWriter): BinaryWriter;
-  decode(input: BinaryReader | Uint8Array, length?: number): T;
-  fromJSON(object: any): T;
-  toJSON(message: T): unknown;
-  create<I extends Exact<DeepPartial<T>, I>>(base?: I): T;
-  fromPartial<I extends Exact<DeepPartial<T>, I>>(object: I): T;
+  encode(message: T, writer?: BinaryWriter): BinaryWriter
+  decode(input: BinaryReader | Uint8Array, length?: number): T
+  fromJSON(object: any): T
+  toJSON(message: T): unknown
+  create<I extends Exact<DeepPartial<T>, I>>(base?: I): T
+  fromPartial<I extends Exact<DeepPartial<T>, I>>(object: I): T
 }

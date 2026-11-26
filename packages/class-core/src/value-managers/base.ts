@@ -35,7 +35,7 @@ export abstract class ValueManager {
      */
     emitDelta(deltaThunk: () => IDelta) {
         if (this.container.receiveDelta && isContainedByAPartition(this.container)) {
-            this.container.receiveDelta(deltaThunk());
+            this.container.receiveDelta(deltaThunk())
         }
     }
 
@@ -51,7 +51,7 @@ export abstract class ValueManager {
 export abstract class FeatureValueManager<FT extends Feature> extends ValueManager {
 
     protected constructor(protected readonly feature: FT, container: INodeBase) {
-        super(container);
+        super(container)
     }
 
 
@@ -60,7 +60,7 @@ export abstract class FeatureValueManager<FT extends Feature> extends ValueManag
      */
     checkRequired(expectRequired: boolean) {
         if (this.feature.optional === expectRequired) { // (double negation)
-            throw new Error(`${featureMetaType(this.feature).toLowerCase()} "${this.feature.name}" (with key="${this.feature.key}") should be ${expectRequired ? "required" : "optional"}`);
+            throw new Error(`${featureMetaType(this.feature).toLowerCase()} "${this.feature.name}" (with key="${this.feature.key}") should be ${expectRequired ? "required" : "optional"}`)
         }
     }
 
@@ -69,7 +69,7 @@ export abstract class FeatureValueManager<FT extends Feature> extends ValueManag
      */
     checkMultiple(expectMultiple: boolean) {
         if ((this.feature as unknown as Link).multiple !== expectMultiple) {
-            throw new Error(`${featureMetaType(this.feature).toLowerCase()} "${this.feature.name}" (with key="${this.feature.key}") should be ${expectMultiple ? "multi" : "single"}-valued`);
+            throw new Error(`${featureMetaType(this.feature).toLowerCase()} "${this.feature.name}" (with key="${this.feature.key}") should be ${expectMultiple ? "multi" : "single"}-valued`)
         }
     }
 
@@ -77,20 +77,20 @@ export abstract class FeatureValueManager<FT extends Feature> extends ValueManag
     /**
      * @return whether the feature's value is (has been) set.
      */
-    abstract isSet(): boolean;
+    abstract isSet(): boolean
 
     /**
      * @throws when the feature's value is unset, but has been attempted to read.
      */
     throwOnReadOfUnset(): never {
-        throw new Error(`can't read required ${featureMetaType(this.feature).toLowerCase()} "${this.feature.name}" that's unset on instance of ${this.container.classifier.language.name}.${this.container.classifier.name} with id=${this.container.id}`);
+        throw new Error(`can't read required ${featureMetaType(this.feature).toLowerCase()} "${this.feature.name}" that's unset on instance of ${this.container.classifier.language.name}.${this.container.classifier.name} with id=${this.container.id}`)
     }
 
     /**
      * @throws when the feature's value has been attempted to unset, but the feature is required.
      */
     throwOnUnset(): never {
-        throw new Error(`can't unset required ${featureMetaType(this.feature).toLowerCase()} "${this.feature.name}" on instance of ${this.container.classifier.language.name}.${this.container.classifier.name} with id=${this.container.id}`);
+        throw new Error(`can't unset required ${featureMetaType(this.feature).toLowerCase()} "${this.feature.name}" on instance of ${this.container.classifier.language.name}.${this.container.classifier.name} with id=${this.container.id}`)
     }
 
 }
@@ -104,20 +104,20 @@ export abstract class FeatureValueManager<FT extends Feature> extends ValueManag
  */
 export const checkIndex = (index: number, nElements: number, inserting: boolean) => {
     if (!Number.isInteger(index)) {
-        throw new Error(`an array index must be an integer, but got: ${index}`);
+        throw new Error(`an array index must be an integer, but got: ${index}`)
     }
     if (index < 0) {
-        throw new Error(`an array index must be a non-negative integer, but got: ${index}`);
+        throw new Error(`an array index must be a non-negative integer, but got: ${index}`)
     }
     if (inserting) {
         if (index > nElements) {
-            throw new Error(`the largest valid insert index for an array with ${nElements} element${nElements === 1 ? "": "s"} is ${nElements}, but got: ${index}`);
+            throw new Error(`the largest valid insert index for an array with ${nElements} element${nElements === 1 ? "": "s"} is ${nElements}, but got: ${index}`)
         }
     } else {
         if (nElements === 0) {
-            throw new Error(`an empty array has no valid indices (got: ${index})`);
+            throw new Error(`an empty array has no valid indices (got: ${index})`)
         } else if (index + 1 > nElements) {
-            throw new Error(`the largest valid index for an array with ${nElements} element${nElements === 1 ? "": "s"} is ${nElements - 1}, but got: ${index}`);
+            throw new Error(`the largest valid index for an array with ${nElements} element${nElements === 1 ? "": "s"} is ${nElements - 1}, but got: ${index}`)
         }
     }
 }

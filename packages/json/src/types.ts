@@ -17,12 +17,12 @@ export type LionWebKey = string
 /**
  * Serialization version of a chunk
  */
-export type LionWebSerializationFormatVersion = string;
+export type LionWebSerializationFormatVersion = string
 
 /**
  * The version of LionWeb
  */
-export type LionWebVersion = string;
+export type LionWebVersion = string
 
 /**
  * Pointer to a classifier or feature in a version of a language.

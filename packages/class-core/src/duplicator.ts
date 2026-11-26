@@ -38,12 +38,12 @@ import { getFeatureValue } from "./serializer.js"
 /**
  * Type definition for functions that duplicate a node.
  */
-export type NodeDuplicator = (originalNode: INodeBase) => [duplicatedNode: INodeBase, featuresToDuplicate: Feature[]];
+export type NodeDuplicator = (originalNode: INodeBase) => [duplicatedNode: INodeBase, featuresToDuplicate: Feature[]]
 
 /**
  * Type definition for functions that duplicate the (variadically) given nodes.
  */
-export type Duplicator = (...nodes: INodeBase[]) => INodeBase[];
+export type Duplicator = (...nodes: INodeBase[]) => INodeBase[]
 
 /**
  * @return a function that deep-duplicates a given forest of {@link INodeBase nodes}.
@@ -55,17 +55,17 @@ export type Duplicator = (...nodes: INodeBase[]) => INodeBase[];
 export const deepDuplicateWith = (duplicateNode: NodeDuplicator): Duplicator =>
     (...nodes) => {
 
-        const nodesToInstall: NodesToInstall[] = [];
+        const nodesToInstall: NodesToInstall[] = []
 
         const visit = (node: INodeBase): [id: LionWebId, duplicatedNode: INodeBase] => {
-            const [duplicatedNode, featuresToDuplicate] = duplicateNode(node);
+            const [duplicatedNode, featuresToDuplicate] = duplicateNode(node)
             const duplicateFeatureValue = (feature: Feature) => {
-                const value = getFeatureValue(node, feature);
+                const value = getFeatureValue(node, feature)
                 if (feature instanceof Property) {
-                    duplicatedNode.getPropertyValueManager(feature).setDirectly(value);
+                    duplicatedNode.getPropertyValueManager(feature).setDirectly(value)
                 } else if (feature instanceof Link) {
-                    const values = asArray(value as (MultiRef<INodeBase> | SingleRef<INodeBase>));
-                    const resolvedValues = values.filter((value) => !isUnresolvedReference(value)) as INodeBase[];
+                    const values = asArray(value as (MultiRef<INodeBase> | SingleRef<INodeBase>))
+                    const resolvedValues = values.filter((value) => !isUnresolvedReference(value)) as INodeBase[]
                     if (resolvedValues.length > 0) {
                         nodesToInstall.push([
                             duplicatedNode,
@@ -74,50 +74,50 @@ export const deepDuplicateWith = (duplicateNode: NodeDuplicator): Duplicator =>
                             feature instanceof Reference
                                 ? resolvedValues
                                 : undefined
-                        ]);
+                        ])
                     }
                 }
-            };
-            featuresToDuplicate.forEach(duplicateFeatureValue);
-            if (node.annotations.length > 0) {
-                nodesToInstall.push([duplicatedNode, null, node.annotations.map(idOf)]);
             }
-            return [node.id, duplicatedNode];
+            featuresToDuplicate.forEach(duplicateFeatureValue)
+            if (node.annotations.length > 0) {
+                nodesToInstall.push([duplicatedNode, null, node.annotations.map(idOf)])
+            }
+            return [node.id, duplicatedNode]
         }
 
         const duplicatedNodesByOriginalId = Object.fromEntries(
             nodes.flatMap(allNodesFrom).map(visit)
-        );
+        )
 
         nodesToInstall.forEach(([copiedNode, feature, targetIds, originalReferenceTargets]) => {
             if (feature instanceof Containment) {
-                const valueManager = copiedNode.getContainmentValueManager(feature);
-                (targetIds as LionWebId[]).forEach((id) => {
-                    const nodeToInstall = duplicatedNodesByOriginalId[id];
-                    valueManager.addDirectly(nodeToInstall);
-                    nodeToInstall.attachTo(copiedNode, feature);
-                });
-                return;
+                const valueManager = copiedNode.getContainmentValueManager(feature)
+                ;(targetIds as LionWebId[]).forEach((id) => {
+                    const nodeToInstall = duplicatedNodesByOriginalId[id]
+                    valueManager.addDirectly(nodeToInstall)
+                    nodeToInstall.attachTo(copiedNode, feature)
+                })
+                return
             }
             if (feature instanceof Reference) {
-                const valueManager = copiedNode.getReferenceValueManager(feature);
-                (targetIds as LionWebId[]).forEach((id, index) => {
-                    const nodeToInstall = duplicatedNodesByOriginalId[id] ?? originalReferenceTargets![index];
-                    valueManager.addDirectly(nodeToInstall);
-                });
-                return;
+                const valueManager = copiedNode.getReferenceValueManager(feature)
+                ;(targetIds as LionWebId[]).forEach((id, index) => {
+                    const nodeToInstall = duplicatedNodesByOriginalId[id] ?? originalReferenceTargets![index]
+                    valueManager.addDirectly(nodeToInstall)
+                })
+                return
             }
             if (feature === null) {
-                const valueManager = copiedNode.annotationsValueManager;
-                (targetIds as LionWebId[]).forEach((id) => {
-                    const nodeToInstall = duplicatedNodesByOriginalId[id];
-                    valueManager.addDirectly(nodeToInstall);
+                const valueManager = copiedNode.annotationsValueManager
+                ;(targetIds as LionWebId[]).forEach((id) => {
+                    const nodeToInstall = duplicatedNodesByOriginalId[id]
+                    valueManager.addDirectly(nodeToInstall)
                 })
-                return;
+                return
             }
-        });
+        })
 
-        return nodes.map(({ id }) => duplicatedNodesByOriginalId[id]);
+        return nodes.map(({ id }) => duplicatedNodesByOriginalId[id])
 
-    };
+    }
 

@@ -73,7 +73,7 @@ const serializationOf = ({name, fields}: Delta) =>
                     ...fields.flatMap(serializationsForField)
                 ])
             ),
-            `} as ${name}SerializedDelta;`
+            `} as ${name}SerializedDelta`
         ]),
         `}`,
         ``
@@ -82,20 +82,20 @@ const serializationOf = ({name, fields}: Delta) =>
 export const serializerForDeltas = (deltas: Delta[], header?: string) =>
     asString([
         header ?? [],
-        `import { metaPointerForFeature, PropertyValueSerializer } from "@lionweb/core";`,
-        `import { IDelta } from "../base.js";`,
+        `import { metaPointerForFeature, PropertyValueSerializer } from "@lionweb/core"`,
+        `import { IDelta } from "../base.js"`,
         `import {`,
         indent(
             commaSeparated(sortedStrings(deltas.map(({ name }) => `${name}Delta`)))
         ),
-        `} from "../types.g.js";`,
+        `} from "../types.g.js"`,
         `import {`,
         indent(
             commaSeparated(sortedStrings([...(deltas.map(({ name }) => `${name}SerializedDelta`)), `SerializedDelta`]))
         ),
-        `} from "./types.g.js";`,
-        `import { idFrom } from "../../references.js";`,
-        `import { serializeAsDeltaChunk } from "./base.js";`,
+        `} from "./types.g.js"`,
+        `import { idFrom } from "../../references.js"`,
+        `import { serializeAsDeltaChunk } from "./base.js"`,
         ``,
         ``,
         `export const deltaSerializer = (propertyValueSerializer: PropertyValueSerializer) => {`,
@@ -104,11 +104,11 @@ export const serializerForDeltas = (deltas: Delta[], header?: string) =>
             `const serializeDelta = (delta: IDelta): SerializedDelta => {`,
             indent([
                 deltas.map(serializationOf),
-                "throw new Error(`serialization of delta of class ${delta.constructor.name} not implemented`);"
+                "throw new Error(`serialization of delta of class ${delta.constructor.name} not implemented`)"
             ]),
             `}`,
             ``,
-            `return serializeDelta;`
+            `return serializeDelta`
         ]),
         `}`,
         ``

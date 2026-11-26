@@ -277,7 +277,7 @@ export class LionWebJsonDiff {
             console.error("diffContainment: MetaPointers of references should be identical")
             this.diff(ctx, `Reference has concept ${asMinimalJsonString(beforeRef.reference)} vs ${asMinimalJsonString(afterRef.reference)}`)
         }
-        let diffFound = false;
+        let diffFound = false
         beforeRef.targets.forEach((beforeTarget: LionWebJsonReferenceTarget, index: number) => {
             const afterTarget = NodeUtils.findReferenceTarget(afterRef.targets, beforeTarget)
             if (afterTarget === undefined) {

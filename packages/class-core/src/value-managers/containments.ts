@@ -40,17 +40,17 @@ import { checkIndex, FeatureValueManager } from "./base.js"
 export abstract class ContainmentValueManager<T extends INodeBase> extends FeatureValueManager<Containment> {
 
     get containment(): Containment {
-        return this.feature;
+        return this.feature
     }
 
-    abstract getDirectly(): T | undefined | (T | undefined)[];
+    abstract getDirectly(): T | undefined | (T | undefined)[]
 
     /**
      * Adds the given child to the containment.
      * For a single-valued containment, this assumes that it contained no child before,
      * or else it throws.
      */
-    abstract addDirectly(newChild: T): void;
+    abstract addDirectly(newChild: T): void
 
 }
 
@@ -58,94 +58,94 @@ export abstract class ContainmentValueManager<T extends INodeBase> extends Featu
 export abstract class SingleContainmentValueManager<T extends INodeBase> extends ContainmentValueManager<T> {
 
     protected constructor(containment: Containment, container: INodeBase) {
-        super(containment, container);
-        this.checkMultiple(false);
+        super(containment, container)
+        this.checkMultiple(false)
     }
 
-    private readonly child = observable.box<T | undefined>(undefined, {deep: false});
+    private readonly child = observable.box<T | undefined>(undefined, {deep: false})
 
     getDirectly(): T | undefined {
-        return this.child.get();
+        return this.child.get()
     }
 
     isSet(): boolean {
-        return this.child.get() !== undefined;
+        return this.child.get() !== undefined
     }
 
     @action setDirectly(newChild: T | undefined) {
-        this.child.set(newChild);
+        this.child.set(newChild)
     }
 
     @action addDirectly(newChild: T) {
-        const oldChild = this.getDirectly();
+        const oldChild = this.getDirectly()
         if (oldChild !== undefined) {
             if (oldChild !== newChild) {
-                throw new Error(`replacing a child using addDirectly on a value manager for a single-valued containment isn't allowed`);
+                throw new Error(`replacing a child using addDirectly on a value manager for a single-valued containment isn't allowed`)
             }
             // Note: adding the same child again (idempotently) is OK, regardless of whether the serialization format specification allows this at all.
-            return;
+            return
         }
-        this.child.set(newChild);
+        this.child.set(newChild)
     }
 
     protected setInternal(newChild: T | undefined) {
-        const oldChild = this.getDirectly();    // (oldChild is contained by this.container through this.containment)
+        const oldChild = this.getDirectly()    // (oldChild is contained by this.container through this.containment)
         if (oldChild === undefined) {
             if (newChild === undefined) {
                 // do nothing: nothing's changed
             } else {
                 if (newChild.parent === undefined) {
-                    this.emitDelta(() => new ChildAddedDelta(this.container, this.feature, 0, newChild));
+                    this.emitDelta(() => new ChildAddedDelta(this.container, this.feature, 0, newChild))
                 } else {
-                    const oldParent = newChild.parent;
-                    const oldContainment = newChild.containment!;
-                    const oldIndex = removeFromContainment(newChild);
+                    const oldParent = newChild.parent
+                    const oldContainment = newChild.containment!
+                    const oldIndex = removeFromContainment(newChild)
                     if (oldParent === this.container) {
                         if (oldContainment === this.containment) {
-                            this.emitDelta(() => new ChildMovedInSameContainmentInSameParentDelta(this.container, this.containment, oldIndex, 0, newChild));
+                            this.emitDelta(() => new ChildMovedInSameContainmentInSameParentDelta(this.container, this.containment, oldIndex, 0, newChild))
                         } else {
-                            this.emitDelta(() => new ChildMovedFromOtherContainmentInSameParentDelta(this.container, oldContainment, oldIndex, newChild, this.containment, 0));
+                            this.emitDelta(() => new ChildMovedFromOtherContainmentInSameParentDelta(this.container, oldContainment, oldIndex, newChild, this.containment, 0))
                         }
                     } else {
-                        this.emitDelta(() => new ChildMovedFromContainmentInOtherParentDelta(oldParent, oldContainment, oldIndex, this.container, this.containment, 0, newChild));
+                        this.emitDelta(() => new ChildMovedFromContainmentInOtherParentDelta(oldParent, oldContainment, oldIndex, this.container, this.containment, 0, newChild))
                     }
                 }
-                this.setDirectly(newChild);
-                newChild.attachTo(this.container, this.feature);
+                this.setDirectly(newChild)
+                newChild.attachTo(this.container, this.feature)
             }
         } else {
             if (newChild === undefined) {
                 if (this.containment.optional) {
-                    oldChild.detach();
-                    this.setDirectly(undefined);
-                    this.emitDelta(() => new ChildDeletedDelta(this.container, this.containment, 0, oldChild));
+                    oldChild.detach()
+                    this.setDirectly(undefined)
+                    this.emitDelta(() => new ChildDeletedDelta(this.container, this.containment, 0, oldChild))
                 } else {
-                    this.throwOnUnset();
+                    this.throwOnUnset()
                 }
             } else {
                 if (oldChild === newChild) {
                     // do nothing: nothing's changed
                 } else {
-                    oldChild.detach();
-                    this.setDirectly(newChild);
+                    oldChild.detach()
+                    this.setDirectly(newChild)
                     if (newChild.parent === undefined) {
                         // newChild is unattached:
-                        newChild.attachTo(this.container, this.feature);
-                        this.emitDelta(() => new ChildReplacedDelta(this.container, this.feature, 0, oldChild, newChild));
+                        newChild.attachTo(this.container, this.feature)
+                        this.emitDelta(() => new ChildReplacedDelta(this.container, this.feature, 0, oldChild, newChild))
                     } else {
-                        const oldParent = newChild.parent;
-                        const oldContainment = newChild.containment!;
-                        const oldIndex = removeFromContainment(newChild);
+                        const oldParent = newChild.parent
+                        const oldContainment = newChild.containment!
+                        const oldIndex = removeFromContainment(newChild)
                         if (oldParent === this.container) {
                             if (oldContainment === this.containment) {
-                                this.emitDelta(() => new ChildMovedAndReplacedInSameContainmentInSameParentDelta(this.container, this.containment, 0, 0, newChild, oldChild));
+                                this.emitDelta(() => new ChildMovedAndReplacedInSameContainmentInSameParentDelta(this.container, this.containment, 0, 0, newChild, oldChild))
                             } else {
-                                this.emitDelta(() => new ChildMovedAndReplacedFromOtherContainmentInSameParentDelta(this.container, oldContainment, oldIndex, this.containment, 0, newChild, oldChild));
+                                this.emitDelta(() => new ChildMovedAndReplacedFromOtherContainmentInSameParentDelta(this.container, oldContainment, oldIndex, this.containment, 0, newChild, oldChild))
                             }
                         } else {
-                            this.emitDelta(() => new ChildMovedAndReplacedFromContainmentInOtherParentDelta(this.container, this.containment, 0, newChild, oldParent, oldContainment, oldIndex, oldChild));
+                            this.emitDelta(() => new ChildMovedAndReplacedFromContainmentInOtherParentDelta(this.container, this.containment, 0, newChild, oldParent, oldContainment, oldIndex, oldChild))
                         }
-                        newChild.attachTo(this.container, this.feature);
+                        newChild.attachTo(this.container, this.feature)
                     }
                 }
             }
@@ -153,37 +153,37 @@ export abstract class SingleContainmentValueManager<T extends INodeBase> extends
     }
 
     @action replaceWith(movedChild: T) {
-        const replacedChild = this.getDirectly();
+        const replacedChild = this.getDirectly()
         if (replacedChild === undefined) {
             // not a proper replace, but an add-set => delegate to regular setter (— unfortunately, through necessarily “unfolding the hierarchy”):
             if (this instanceof OptionalSingleContainmentValueManager) {
-                this.set(movedChild);
+                this.set(movedChild)
             }
             if (this instanceof RequiredSingleContainmentValueManager) {
-                this.set(movedChild);
+                this.set(movedChild)
             }
         } else {
             if (replacedChild === movedChild) {
                 // do nothing: nothing's changed
             } else {
                 if (movedChild.parent === undefined) {
-                    this.emitDelta(() => new ChildReplacedDelta(this.container, this.feature, 0, replacedChild, movedChild));
+                    this.emitDelta(() => new ChildReplacedDelta(this.container, this.feature, 0, replacedChild, movedChild))
                 } else {
                     if (movedChild.parent === this.container) {
                         if (movedChild.containment === this.containment) {
-                            this.emitDelta(() => new ChildMovedAndReplacedInSameContainmentInSameParentDelta(this.container, this.containment, 0, 0, movedChild, replacedChild));
+                            this.emitDelta(() => new ChildMovedAndReplacedInSameContainmentInSameParentDelta(this.container, this.containment, 0, 0, movedChild, replacedChild))
                         } else {
-                            const oldIndex = removeFromContainment(replacedChild);
-                            this.emitDelta(() => new ChildMovedAndReplacedFromOtherContainmentInSameParentDelta(this.container, movedChild.containment!, oldIndex, this.containment, 0, movedChild, replacedChild));
+                            const oldIndex = removeFromContainment(replacedChild)
+                            this.emitDelta(() => new ChildMovedAndReplacedFromOtherContainmentInSameParentDelta(this.container, movedChild.containment!, oldIndex, this.containment, 0, movedChild, replacedChild))
                         }
                     } else {
-                        const oldIndex = removeFromContainment(replacedChild);
-                        this.emitDelta(() => new ChildMovedAndReplacedFromContainmentInOtherParentDelta(this.container, this.containment, 0, movedChild, movedChild.parent!, movedChild.containment!, oldIndex, replacedChild));
+                        const oldIndex = removeFromContainment(replacedChild)
+                        this.emitDelta(() => new ChildMovedAndReplacedFromContainmentInOtherParentDelta(this.container, this.containment, 0, movedChild, movedChild.parent!, movedChild.containment!, oldIndex, replacedChild))
                     }
                 }
-                this.setDirectly(movedChild);
-                movedChild.attachTo(this.container, this.containment);
-                replacedChild.detach();
+                this.setDirectly(movedChild)
+                movedChild.attachTo(this.container, this.containment)
+                replacedChild.detach()
             }
         }
     }
@@ -194,16 +194,16 @@ export abstract class SingleContainmentValueManager<T extends INodeBase> extends
 export class OptionalSingleContainmentValueManager<T extends INodeBase> extends SingleContainmentValueManager<T> {
 
     constructor(containment: Containment, container: INodeBase) {
-        super(containment, container);
-        this.checkRequired(false);
+        super(containment, container)
+        this.checkRequired(false)
     }
 
     get(): T | undefined {
-        return this.getDirectly();
+        return this.getDirectly()
     }
 
     @action set(newChild: T | undefined) {
-        this.setInternal(newChild);
+        this.setInternal(newChild)
     }
 
 }
@@ -212,20 +212,20 @@ export class OptionalSingleContainmentValueManager<T extends INodeBase> extends 
 export class RequiredSingleContainmentValueManager<T extends INodeBase> extends SingleContainmentValueManager<T> {
 
     constructor(containment: Containment, container: INodeBase) {
-        super(containment, container);
-        this.checkRequired(true);
+        super(containment, container)
+        this.checkRequired(true)
     }
 
     get(): T {
-        const child = this.getDirectly();
+        const child = this.getDirectly()
         if (child === undefined) {
-            this.throwOnReadOfUnset();
+            this.throwOnReadOfUnset()
         }
-        return child;
+        return child
     }
 
     @action set(newChild: T) {
-        this.setInternal(newChild);
+        this.setInternal(newChild)
     }
 
 }
@@ -234,113 +234,113 @@ export class RequiredSingleContainmentValueManager<T extends INodeBase> extends 
 export abstract class MultiContainmentValueManager<T extends INodeBase> extends ContainmentValueManager<T> {
 
     protected constructor(containment: Containment, container: INodeBase) {
-        super(containment, container);
-        this.checkMultiple(true);
+        super(containment, container)
+        this.checkMultiple(true)
     }
 
-    private readonly children = observable.array<T>([], {deep: false});
+    private readonly children = observable.array<T>([], {deep: false})
 
     getDirectly(): T[] {
-        return this.children;
+        return this.children
     }
 
     get(): T[] {
-        return this.getDirectly().slice();
+        return this.getDirectly().slice()
     }
 
     isSet(): boolean {
-        return this.children.length > 0;
+        return this.children.length > 0
     }
 
     @action addDirectly(newChild: T) {
-        this.children.push(newChild);
+        this.children.push(newChild)
     }
 
     @action add(newChild: T): void {
-        this.insertAtIndex(newChild, this.getDirectly().length);
+        this.insertAtIndex(newChild, this.getDirectly().length)
     }
 
     @action insertAtIndexDirectly(newChild: T, index: number) {
-        checkIndex(index, this.children.length, true);
-        this.children.splice(index, 0, newChild);
+        checkIndex(index, this.children.length, true)
+        this.children.splice(index, 0, newChild)
     }
 
     @action insertAtIndex(newChild: T, newIndex: number) {
         if (newChild.parent === undefined) {
-            this.insertAtIndexDirectly(newChild, newIndex);
-            newChild.attachTo(this.container, this.containment);
-            this.emitDelta(() => new ChildAddedDelta(this.container, this.containment, newIndex, newChild));
+            this.insertAtIndexDirectly(newChild, newIndex)
+            newChild.attachTo(this.container, this.containment)
+            this.emitDelta(() => new ChildAddedDelta(this.container, this.containment, newIndex, newChild))
         } else {
             if (newChild.parent === this.container) {
                 if (newChild.containment === this.containment) {
-                    const oldIndex = this.children.indexOf(newChild);
-                    this.moveDirectly(oldIndex, newIndex - oldIndex);
-                    this.emitDelta(() => new ChildMovedInSameContainmentInSameParentDelta(this.container, this.containment, oldIndex, newIndex - oldIndex, newChild));
+                    const oldIndex = this.children.indexOf(newChild)
+                    this.moveDirectly(oldIndex, newIndex - oldIndex)
+                    this.emitDelta(() => new ChildMovedInSameContainmentInSameParentDelta(this.container, this.containment, oldIndex, newIndex - oldIndex, newChild))
                 } else {
-                    const oldIndex = removeFromContainment(newChild);
-                    checkIndex(newIndex, this.children.length, true);
-                    this.insertAtIndexDirectly(newChild, newIndex);
-                    this.emitDelta(() => new ChildMovedFromOtherContainmentInSameParentDelta(this.container, newChild.containment!, oldIndex, newChild, this.containment, newIndex));
-                    newChild.attachTo(this.container, this.containment);
+                    const oldIndex = removeFromContainment(newChild)
+                    checkIndex(newIndex, this.children.length, true)
+                    this.insertAtIndexDirectly(newChild, newIndex)
+                    this.emitDelta(() => new ChildMovedFromOtherContainmentInSameParentDelta(this.container, newChild.containment!, oldIndex, newChild, this.containment, newIndex))
+                    newChild.attachTo(this.container, this.containment)
                 }
             } else {
-                const oldIndex = removeFromContainment(newChild);
-                this.insertAtIndexDirectly(newChild, newIndex);
-                this.emitDelta(() => new ChildMovedFromContainmentInOtherParentDelta(newChild.parent!, newChild.containment!, oldIndex, this.container, this.containment, newIndex, newChild));
-                newChild.attachTo(this.container, this.containment);
+                const oldIndex = removeFromContainment(newChild)
+                this.insertAtIndexDirectly(newChild, newIndex)
+                this.emitDelta(() => new ChildMovedFromContainmentInOtherParentDelta(newChild.parent!, newChild.containment!, oldIndex, this.container, this.containment, newIndex, newChild))
+                newChild.attachTo(this.container, this.containment)
             }
         }
     }
 
     @action removeDirectly(childToRemove: T): number {
-        const children = this.getDirectly();
-        const index = children.indexOf(childToRemove);
+        const children = this.getDirectly()
+        const index = children.indexOf(childToRemove)
         if (index > -1) {
-            children.splice(index, 1);
-            return index;
+            children.splice(index, 1)
+            return index
         }
-        return -1;
+        return -1
     }
 
     @action removeAtIndexDirectly(index: number) {
-        checkIndex(index, this.children.length, false);
-        this.getDirectly().splice(index, 1);
+        checkIndex(index, this.children.length, false)
+        this.getDirectly().splice(index, 1)
     }
 
     @action replaceAtIndex(movedChild: T, newIndex: number) {
-        checkIndex(newIndex, this.children.length, false);
-        const replacedChild = this.children[newIndex];  // ==> replacedChild.parent !== undefined
+        checkIndex(newIndex, this.children.length, false)
+        const replacedChild = this.children[newIndex]  // ==> replacedChild.parent !== undefined
         if (replacedChild === movedChild) {
             // do nothing: nothing's changed
         } else {
             if (movedChild.parent === undefined) {
                 // not a move+replace, but a regular replace:
-                this.emitDelta(() => new ChildReplacedDelta(this.container, this.containment, newIndex, replacedChild, movedChild));
-                this.children.splice(newIndex, 1, movedChild);
+                this.emitDelta(() => new ChildReplacedDelta(this.container, this.containment, newIndex, replacedChild, movedChild))
+                this.children.splice(newIndex, 1, movedChild)
             } else {
-                const oldValueManager = movedChild.parent.getContainmentValueManager(movedChild.containment!);  // i.e.: value manager of moved child
+                const oldValueManager = movedChild.parent.getContainmentValueManager(movedChild.containment!)  // i.e.: value manager of moved child
                 const oldIndex = oldValueManager instanceof SingleContainmentValueManager
                     ? 0
-                    : (oldValueManager as MultiContainmentValueManager<INodeBase>).children.indexOf(movedChild);
+                    : (oldValueManager as MultiContainmentValueManager<INodeBase>).children.indexOf(movedChild)
                 if (replacedChild.parent === movedChild.parent) {
                     if (replacedChild.containment === movedChild.containment) {
-                        this.emitDelta(() => new ChildMovedAndReplacedInSameContainmentInSameParentDelta(this.container, this.containment, oldIndex, newIndex, movedChild, replacedChild));
+                        this.emitDelta(() => new ChildMovedAndReplacedInSameContainmentInSameParentDelta(this.container, this.containment, oldIndex, newIndex, movedChild, replacedChild))
                     } else {
-                        this.emitDelta(() => new ChildMovedAndReplacedFromOtherContainmentInSameParentDelta(this.container, replacedChild.containment!, oldIndex, this.containment, newIndex, movedChild, replacedChild));
+                        this.emitDelta(() => new ChildMovedAndReplacedFromOtherContainmentInSameParentDelta(this.container, replacedChild.containment!, oldIndex, this.containment, newIndex, movedChild, replacedChild))
                     }
                 } else {    // replacedChild.parent !== movedChild.parent:
-                    this.emitDelta(() => new ChildMovedAndReplacedFromContainmentInOtherParentDelta(this.container, this.containment, newIndex, movedChild, movedChild.parent!, movedChild.containment!, oldIndex, replacedChild));
+                    this.emitDelta(() => new ChildMovedAndReplacedFromContainmentInOtherParentDelta(this.container, this.containment, newIndex, movedChild, movedChild.parent!, movedChild.containment!, oldIndex, replacedChild))
                 }
-                this.children.splice(newIndex, 1, movedChild);
+                this.children.splice(newIndex, 1, movedChild)
                     // now, movedChild *may* appear twice in this.children in the ChildMovedAndReplacedInSameContainmentInSameParentDelta case => only remove replacedChild afterwards
                 if (oldValueManager instanceof SingleContainmentValueManager) {
-                    oldValueManager.setDirectly(undefined);
+                    oldValueManager.setDirectly(undefined)
                 } else {
-                    (oldValueManager as MultiContainmentValueManager<INodeBase>).children.splice(oldIndex, 1);
+                    (oldValueManager as MultiContainmentValueManager<INodeBase>).children.splice(oldIndex, 1)
                 }
             }
-            replacedChild.detach();
-            movedChild.attachTo(this.container, this.containment);
+            replacedChild.detach()
+            movedChild.attachTo(this.container, this.containment)
         }
     }
 
@@ -350,16 +350,16 @@ export abstract class MultiContainmentValueManager<T extends INodeBase> extends 
      */
     @action moveDirectly(oldIndex: number, indexOffset: number): INodeBase | undefined {
         if (indexOffset === 0) {
-            return undefined;
+            return undefined
         }
-        const [_newIndex, movedChild] = moveWithOffset(this.children, oldIndex, indexOffset);
-        return movedChild;
+        const [_newIndex, movedChild] = moveWithOffset(this.children, oldIndex, indexOffset)
+        return movedChild
     }
 
     @action move(oldIndex: number, indexOffset: number) {
-        const child = this.moveDirectly(oldIndex, indexOffset);
+        const child = this.moveDirectly(oldIndex, indexOffset)
         if (child !== undefined) {
-            this.emitDelta(() => new ChildMovedInSameContainmentInSameParentDelta(this.container, this.containment, oldIndex, indexOffset, child));
+            this.emitDelta(() => new ChildMovedInSameContainmentInSameParentDelta(this.container, this.containment, oldIndex, indexOffset, child))
         }
     }
 
@@ -369,18 +369,18 @@ export abstract class MultiContainmentValueManager<T extends INodeBase> extends 
      */
     @action moveAndReplaceDirectly(oldIndex: number, indexOffset: number): [movedChild: INodeBase, replacedChild: INodeBase] | undefined {
         if (indexOffset === 0) {
-            return undefined;
+            return undefined
         }
-        const [_newIndex, movedChild, replacedChild] = moveAndReplaceWithOffset(this.children, oldIndex, indexOffset);
-        replacedChild.detach();
-        return [movedChild, replacedChild];
+        const [_newIndex, movedChild, replacedChild] = moveAndReplaceWithOffset(this.children, oldIndex, indexOffset)
+        replacedChild.detach()
+        return [movedChild, replacedChild]
     }
 
     @action moveAndReplace(oldIndex: number, indexOffset: number) {
-        const participants = this.moveAndReplaceDirectly(oldIndex, indexOffset);
+        const participants = this.moveAndReplaceDirectly(oldIndex, indexOffset)
         if (participants !== undefined) {
-            const [movedChild, replacedChild] = participants;
-            this.emitDelta(() => new ChildMovedAndReplacedInSameContainmentInSameParentDelta(this.container, this.containment, oldIndex, indexOffset, movedChild, replacedChild));
+            const [movedChild, replacedChild] = participants
+            this.emitDelta(() => new ChildMovedAndReplacedInSameContainmentInSameParentDelta(this.container, this.containment, oldIndex, indexOffset, movedChild, replacedChild))
         }
     }
 
@@ -390,17 +390,17 @@ export abstract class MultiContainmentValueManager<T extends INodeBase> extends 
 export class OptionalMultiContainmentValueManager<T extends INodeBase> extends MultiContainmentValueManager<T> {
 
     constructor(containment: Containment, container: INodeBase) {
-        super(containment, container);
-        this.checkRequired(false);
+        super(containment, container)
+        this.checkRequired(false)
     }
 
     @action remove(childToRemove: T) {
-        const children = this.getDirectly();
-        const index = children.indexOf(childToRemove);
+        const children = this.getDirectly()
+        const index = children.indexOf(childToRemove)
         if (index > -1) {
-            children.splice(index, 1);
-            childToRemove.detach();
-            this.emitDelta(() => new ChildDeletedDelta(this.container, this.containment, index, childToRemove));
+            children.splice(index, 1)
+            childToRemove.detach()
+            this.emitDelta(() => new ChildDeletedDelta(this.container, this.containment, index, childToRemove))
         }
     }
 
@@ -410,28 +410,28 @@ export class OptionalMultiContainmentValueManager<T extends INodeBase> extends M
 export class RequiredMultiContainmentValueManager<T extends INodeBase> extends MultiContainmentValueManager<T> {
 
     constructor(containment: Containment, container: INodeBase) {
-        super(containment, container);
-        this.checkRequired(true);
+        super(containment, container)
+        this.checkRequired(true)
     }
 
     get(): T[] {
-        const children = this.getDirectly();
+        const children = this.getDirectly()
         if (children.length === 0) {
-            this.throwOnReadOfUnset();
+            this.throwOnReadOfUnset()
         }
-        return children;
+        return children
     }
 
     @action remove(childToRemove: T) {
-        const children = this.getDirectly();
-        const index = children.indexOf(childToRemove);
+        const children = this.getDirectly()
+        const index = children.indexOf(childToRemove)
         if (index > -1) {
             if (children.length === 1) {
-                this.throwOnUnset();
+                this.throwOnUnset()
             }
-            children.splice(index, 1);
-            childToRemove.detach();
-            this.emitDelta(() => new ChildDeletedDelta(this.container, this.containment, index, childToRemove));
+            children.splice(index, 1)
+            childToRemove.detach()
+            this.emitDelta(() => new ChildDeletedDelta(this.container, this.containment, index, childToRemove))
         }
     }
 

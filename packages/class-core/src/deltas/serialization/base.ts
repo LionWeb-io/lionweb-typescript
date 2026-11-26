@@ -25,7 +25,7 @@ import { serializeNodeBases } from "../../serializer.js"
 /**
  * A type for functions that deserialize {@link SerializedDelta serialized deltas} into “proper” {@link IDelta deltas}.
  */
-export type DeltaDeserializer = (delta: SerializedDelta) => IDelta;
+export type DeltaDeserializer = (delta: SerializedDelta) => IDelta
 
 
 /**

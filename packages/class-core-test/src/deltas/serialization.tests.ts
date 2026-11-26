@@ -30,31 +30,31 @@ import { deepEqual, equal } from "../assertions.js"
 const testLanguageBase = TestLanguageBase.INSTANCE
 const serializeDelta = deltaSerializer(propertyValueSerializerWith({
     enumerationLiteralFrom: nodeBaseReader.enumerationLiteralFrom
-}));
+}))
 
 
 describe("serializing a delta", () => {
 
     it("works for changing an enumeration-typed property", () => {
-        const [receiveDelta, deltas] = collectingDeltaReceiver();
-        const dttc = attachedDataTypeTestConcept("dttc", receiveDelta);
+        const [receiveDelta, deltas] = collectingDeltaReceiver()
+        const dttc = attachedDataTypeTestConcept("dttc", receiveDelta)
 
         // pre-check:
-        equal(dttc.enumValue_0_1, undefined);
-        equal(deltas.length, 1);
+        equal(dttc.enumValue_0_1, undefined)
+        equal(deltas.length, 1)
 
         // action+check:
-        dttc.enumValue_0_1 = TestEnumeration.literal1;
-        equal(deltas.length, 2);
-        deepEqual(deltas[1], new PropertyAddedDelta(dttc, testLanguageBase.DataTypeTestConcept_enumValue_0_1, TestEnumeration.literal1));
-        const serializedDelta = serializeDelta(deltas[1]);
+        dttc.enumValue_0_1 = TestEnumeration.literal1
+        equal(deltas.length, 2)
+        deepEqual(deltas[1], new PropertyAddedDelta(dttc, testLanguageBase.DataTypeTestConcept_enumValue_0_1, TestEnumeration.literal1))
+        const serializedDelta = serializeDelta(deltas[1])
         deepEqual(serializedDelta, {
             kind: "PropertyAdded",
             node: "dttc",
             property: { language: testLanguageBase.language.key, version: testLanguageBase.language.version, key: testLanguageBase.DataTypeTestConcept_enumValue_0_1.key },
             value: "TestEnumeration-literal1"
-        } as PropertyAddedSerializedDelta);
-    });
+        } as PropertyAddedSerializedDelta)
+    })
 
-});
+})
 

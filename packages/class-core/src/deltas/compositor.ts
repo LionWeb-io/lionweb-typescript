@@ -23,12 +23,12 @@ import { CompositeDelta, DeltaReceiver, IDelta } from "../index.js"
  *
  * Usage:
  * ```typescript
- * const compositor = new Compositor(downstreamReceiveDelta);
- * compositor.openComposite();
+ * const compositor = new Compositor(downstreamReceiveDelta)
+ * compositor.openComposite()
  * // ...
- * compositor.upstreamReceiveDelta(<delta>);
+ * compositor.upstreamReceiveDelta(<delta>)
  * // ...
- * compositor.closeComposite();
+ * compositor.closeComposite()
  * ```
  */
 export class DeltaCompositor {
@@ -37,7 +37,7 @@ export class DeltaCompositor {
      * The {@link DeltaReceiver} implementation that either forwards to the given downstream delta handle
      * or gathers deltas into composite deltas to forward to the downstream delta receiver later.
      */
-    readonly upstreamReceiveDelta: DeltaReceiver;
+    readonly upstreamReceiveDelta: DeltaReceiver
 
     /**
      * An array of arrays of {@link IDelta deltas}, comprising a “stack”.
@@ -46,7 +46,7 @@ export class DeltaCompositor {
      *  - (I1) composite has been opened &hArr; `this.deltasInComposite !== undefined` / `Array.isArray(this.deltasInComposite)`
      *  - (I2) this.deltasStack is either undefined or an array containing at least one array
      */
-    private deltasStack: IDelta[][] | undefined = undefined;
+    private deltasStack: IDelta[][] | undefined = undefined
 
     /**
      * @param downstreamReceiveDelta the {@link DeltaReceiver} that deltas get passed to.
@@ -55,17 +55,17 @@ export class DeltaCompositor {
      */
     constructor(private readonly downstreamReceiveDelta: DeltaReceiver, private readonly maximumNestingDepth: number = Infinity) {
         if (maximumNestingDepth !== Infinity && (!Number.isInteger(maximumNestingDepth) || maximumNestingDepth < 0)) {
-            throw new Error(`maximum nesting depth must be a non-negative integer`);
+            throw new Error(`maximum nesting depth must be a non-negative integer`)
         }
         this.upstreamReceiveDelta = (delta) => {
             if (this.deltasStack === undefined) {
                 // pass on immediately:
-                this.downstreamReceiveDelta(delta);
+                this.downstreamReceiveDelta(delta)
             } else {
                 // store for later:
-                this.deltasStack[this.deltasStack.length - 1].push(delta);  // (I2)
+                this.deltasStack[this.deltasStack.length - 1].push(delta)  // (I2)
             }
-        };
+        }
     }
 
     /**
@@ -77,12 +77,12 @@ export class DeltaCompositor {
      */
     openComposite = (): void => {
         if (this.deltasStack === undefined) {
-            this.deltasStack = [];  // ==> (I1) + 1st half of (I2)
+            this.deltasStack = []  // ==> (I1) + 1st half of (I2)
         }
         if (this.deltasStack.length >= this.maximumNestingDepth) {
             throw new Error(`attempt occurred to start a nested composition exceeding the maximum nesting depth`)
         }
-        this.deltasStack.push([]);  // ==> 2nd half of (I2)
+        this.deltasStack.push([])  // ==> 2nd half of (I2)
     }
 
     /**
@@ -91,15 +91,15 @@ export class DeltaCompositor {
      */
     closeComposite = (): void => {
         if (this.deltasStack === undefined) {
-            throw new Error(`attempt occurred to finish a composite without one being started`);
+            throw new Error(`attempt occurred to finish a composite without one being started`)
         }
 
-        const parts = this.deltasStack.pop()!;  // is an array because of (I2)
+        const parts = this.deltasStack.pop()!  // is an array because of (I2)
         if (this.deltasStack.length === 0) {    // last array popped from stack
-            this.deltasStack = undefined;   // maintain (I2)
+            this.deltasStack = undefined   // maintain (I2)
         }
         if (parts.length > 0) {
-            this.upstreamReceiveDelta(new CompositeDelta(parts));
+            this.upstreamReceiveDelta(new CompositeDelta(parts))
         }
     }
 

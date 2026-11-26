@@ -51,7 +51,7 @@ import {
  * If the `containingFeature` is `null`, the {@link INodeBase} is an annotation
  * and effectively contained by the {@link INodeBase.annotations} property.
  */
-export type Parentage = [ parent: INodeBase, containingFeature: Containment | null ];
+export type Parentage = [ parent: INodeBase, containingFeature: Containment | null ]
 
 
 /**
@@ -62,96 +62,96 @@ export type Parentage = [ parent: INodeBase, containingFeature: Containment | nu
  */
 export interface INodeBase extends Node {
 
-    classifier: Classifier;
+    classifier: Classifier
 
     /**
      * The parent of this node object,
      * or `undefined` if it's either a root (in which case it `this.classifier` should be a {@link Concept} which is a partition)
      *  or (currently/temporarily) an orphan.
      */
-    parent: INodeBase | undefined;
+    parent: INodeBase | undefined
 
     /**
      * The {@link Containment containment feature} through which this node is contained by its parent,
      * or `null` if it's an annotation,
      * or `undefined` exactly when `parent` is also `undefined`.
      */
-    containment: Containment | null | undefined;
+    containment: Containment | null | undefined
 
     /**
      * Attach this node to the given `parent` {@link INodeBase}, through the given `containment` {@link Containment}.
      *Note* that this is **for internal use only**!
      */
-    attachTo(parent: INodeBase, containment: Containment | null): void;
+    attachTo(parent: INodeBase, containment: Containment | null): void
 
     /**
      * Detach this node from its stated parent(age).
      * *Note* that this is **for internal use only**!
      */
-    detach(): void;
+    detach(): void
 
 
     /**
      * @return the value manager for the given {@link Property property} feature.
      * @throws if this node('s {@link Classifier classifier}) doesn't have that property.
      */
-    getPropertyValueManager(property: Property): PropertyValueManager<unknown>;
+    getPropertyValueManager(property: Property): PropertyValueManager<unknown>
 
     /**
      * @return the value manager for the given {@link Containment containment} feature.
      * @throws if this node('s {@link Classifier classifier}) doesn't have that containment.
      */
-    getContainmentValueManager(containment: Containment): ContainmentValueManager<INodeBase>;
+    getContainmentValueManager(containment: Containment): ContainmentValueManager<INodeBase>
 
     /**
      * @return the value manager for the given {@link Reference reference} feature.
      * @throws if this node('s {@link Classifier classifier}) doesn't have that reference.
      */
-    getReferenceValueManager(reference: Reference): ReferenceValueManager<Node>;
+    getReferenceValueManager(reference: Reference): ReferenceValueManager<Node>
 
     /**
      * @return the value manager for the given {@link Feature feature}.
      * @throws if this node('s {@link Classifier classifier}) doesn't have that feature.
      */
-    getFeatureValueManager(feature: Feature): FeatureValueManager<Feature>;
+    getFeatureValueManager(feature: Feature): FeatureValueManager<Feature>
 
     /**
      * @return the value manager for the annotations.
      */
-    annotationsValueManager: AnnotationsValueManager;
+    annotationsValueManager: AnnotationsValueManager
 
     /**
      * The annotations annotating this node.
      */
-    annotations: INodeBase[];
+    annotations: INodeBase[]
 
     /**
      * Adds the given annotation (as an instance of {@link INodeBase}) to the annotations of this node.
      */
-    addAnnotation(annotation: INodeBase): void;
+    addAnnotation(annotation: INodeBase): void
 
     /**
      * Inserts the given annotation (as an instance of {@link INodeBase}) among the annotations of this node,
      * displacing all existing annotations with index &geq; the given one “to the right”.
      */
-    insertAnnotationAtIndex(annotation: INodeBase, index: number): void;
+    insertAnnotationAtIndex(annotation: INodeBase, index: number): void
 
     /**
      * Replaces the existing annotation at the given index, with the given annotation (as an instance of {@link INodeBase}).
      */
-    replaceAnnotationAtIndex(annotation: INodeBase, index: number): void;
+    replaceAnnotationAtIndex(annotation: INodeBase, index: number): void
 
     /**
      * Removes the given annotation (as an instance of {@link INodeBase}) from the annotations of this node.
      * (In the case of duplicates, only the first occurrence is removed.)
      */
-    removeAnnotation(annotation: INodeBase): void;
+    removeAnnotation(annotation: INodeBase): void
 
     /**
      * Moves the annotation that’s initially at index `oldIndex` by `indexOffset` positions
      * to index `oldIndex + indexOffset`, shifting the other annotations as necessary.
      */
-    moveAnnotation(oldIndex: number, indexOffset: number): void;
+    moveAnnotation(oldIndex: number, indexOffset: number): void
 
     /**
      * Moves the annotation that’s initially at index `oldIndex` by `indexOffset` positions
@@ -160,7 +160,7 @@ export interface INodeBase extends Node {
      * This deletes the replaced annotation, including all its descendants,
      * but does NOT change references to any of the deleted nodes.
      */
-    moveAndReplaceAnnotation(oldIndex: number, indexOffset: number): void;
+    moveAndReplaceAnnotation(oldIndex: number, indexOffset: number): void
 
 
     /**
@@ -171,32 +171,32 @@ export interface INodeBase extends Node {
      *
      * Note* that this is (in principle) **for internal use only**!
      */
-    get setFeatures(): Feature[];
+    get setFeatures(): Feature[]
 
     /**
      * @return all children – not all descendants! – of this node, including directly-contained annotations.
      * Children appear uniquely, but their order is *not* guaranteed.
      * *Note* that this is (in principle) **for internal use only**!
      */
-    get children(): INodeBase[];
+    get children(): INodeBase[]
 
     /**
      * @return all nodes targeted by reference values on this node.
      * Reference targets appear uniquely, but their order is *not* guaranteed.
      * *Note* that this is (in principle) **for internal use only**!
      */
-    get referenceTargets(): INodeBase[];
+    get referenceTargets(): INodeBase[]
 
     /**
      * An optionally-installed {@link DeltaReceiver}.
      */
-    receiveDelta?: DeltaReceiver;
+    receiveDelta?: DeltaReceiver
 
 
     /**
      * A message to indicate this node's meta-type (including originating language) and its ID.
      */
-    locationMessage: string;
+    locationMessage: string
 
 }
 
@@ -213,13 +213,13 @@ export interface INodeBase extends Node {
  */
 export abstract class NodeBase implements INodeBase {
 
-    private _parentage?: Parentage;
+    private _parentage?: Parentage
     get parent(): INodeBase | undefined {
-        return this._parentage?.[0];
+        return this._parentage?.[0]
     }
 
     get containment(): Containment | null | undefined {
-        return this._parentage?.[1];
+        return this._parentage?.[1]
     }
 
     /*
@@ -227,49 +227,49 @@ export abstract class NodeBase implements INodeBase {
      */
 
     attachTo(parent: INodeBase, containingFeature: Containment | null) {
-        this._parentage = [parent, containingFeature];
+        this._parentage = [parent, containingFeature]
     }
 
     detach() {
-        this._parentage = undefined;
+        this._parentage = undefined
     }
 
 
     protected constructor(readonly classifier: Classifier, readonly id: LionWebId, readonly receiveDelta?: DeltaReceiver, parentage?: Parentage) {
-        this.classifier = classifier;
-        this.id = id;
+        this.classifier = classifier
+        this.id = id
         if (parentage) {
-            this.attachTo(parentage[0], parentage[1]);
+            this.attachTo(parentage[0], parentage[1])
         }
-        makeObservable(this);
+        makeObservable(this)
     }
 
     get locationMessage(): string {
-        return `instance of ${this.classifier.language.name}.${this.classifier.name} with id=${this.id}`;
+        return `instance of ${this.classifier.language.name}.${this.classifier.name} with id=${this.id}`
     }
 
 
     getPropertyValueManager(property: Property): PropertyValueManager<unknown> {
-        throw new Error(`property (feature) "${property.name}" (with key=${property.key}) doesn't exist on ${this.locationMessage}`);
+        throw new Error(`property (feature) "${property.name}" (with key=${property.key}) doesn't exist on ${this.locationMessage}`)
     }
 
     getContainmentValueManager(containment: Containment): ContainmentValueManager<INodeBase> {
-        throw new Error(`containment (feature) "${containment.name}" (with key=${containment.key}) doesn't exist on ${this.locationMessage}`);
+        throw new Error(`containment (feature) "${containment.name}" (with key=${containment.key}) doesn't exist on ${this.locationMessage}`)
     }
 
     getReferenceValueManager(reference: Reference): ReferenceValueManager<Node> {
-        throw new Error(`reference (feature) "${reference.name}" (with key=${reference.key}) doesn't exist on ${this.locationMessage}`);
+        throw new Error(`reference (feature) "${reference.name}" (with key=${reference.key}) doesn't exist on ${this.locationMessage}`)
     }
 
     getFeatureValueManager(feature: Feature): FeatureValueManager<Feature> {
         if (feature instanceof Property) {
-            return this.getPropertyValueManager(feature);
+            return this.getPropertyValueManager(feature)
         }
         if (feature instanceof Containment) {
-            return this.getContainmentValueManager(feature);
+            return this.getContainmentValueManager(feature)
         }
         if (feature instanceof Reference) {
-            return this.getReferenceValueManager(feature);
+            return this.getReferenceValueManager(feature)
         }
         throw new Error(`unhandled Feature sub type ${feature.constructor.name}`)
     }
@@ -277,7 +277,7 @@ export abstract class NodeBase implements INodeBase {
 
     get setFeatures(): Feature[] {
         return allFeaturesOf(this.classifier)
-            .filter((feature) => this.getFeatureValueManager(feature).isSet());
+            .filter((feature) => this.getFeatureValueManager(feature).isSet())
     }
 
     get children(): INodeBase[] {
@@ -285,17 +285,17 @@ export abstract class NodeBase implements INodeBase {
             ...(this.setFeatures
                 .filter((feature) => feature instanceof Containment)
                 .flatMap((feature) => {
-                    const valueManager = this.getContainmentValueManager(feature as Containment);
+                    const valueManager = this.getContainmentValueManager(feature as Containment)
                     if (valueManager instanceof SingleContainmentValueManager) {
-                        return valueManager.isSet() ? [valueManager.getDirectly()] : [];
+                        return valueManager.isSet() ? [valueManager.getDirectly()] : []
                     }
                     if (valueManager instanceof MultiContainmentValueManager) {
-                        return valueManager.get();
+                        return valueManager.get()
                     }
-                    throw new Error(`don't know how to obtain value of feature ${feature.name} of classifier ${this.classifier.name} in language ${this.classifier.language.name}`);
+                    throw new Error(`don't know how to obtain value of feature ${feature.name} of classifier ${this.classifier.name} in language ${this.classifier.language.name}`)
                 })),
             ...this.annotations
-        ]);
+        ])
     }
 
     get referenceTargets(): INodeBase[] {
@@ -303,45 +303,45 @@ export abstract class NodeBase implements INodeBase {
             this.setFeatures
                 .filter((feature) => feature instanceof Reference)
                 .flatMap((feature) => {
-                    const valueManager = this.getReferenceValueManager(feature as Reference);
+                    const valueManager = this.getReferenceValueManager(feature as Reference)
                     if (valueManager instanceof SingleReferenceValueManager) {
-                        return valueManager.isSet() ? [valueManager.getDirectly()] : [];
+                        return valueManager.isSet() ? [valueManager.getDirectly()] : []
                     }
                     if (valueManager instanceof MultiReferenceValueManager) {
-                        return valueManager.get();
+                        return valueManager.get()
                     }
-                    throw new Error(`don't know how to obtain value of feature ${feature.name} of classifier ${this.classifier.name} in language ${this.classifier.language.name}`);
+                    throw new Error(`don't know how to obtain value of feature ${feature.name} of classifier ${this.classifier.name} in language ${this.classifier.language.name}`)
                 })
-        );
+        )
     }
 
-    readonly annotationsValueManager: AnnotationsValueManager = new AnnotationsValueManager(this);
+    readonly annotationsValueManager: AnnotationsValueManager = new AnnotationsValueManager(this)
     get annotations(): INodeBase[] {
-        return this.annotationsValueManager.get();
+        return this.annotationsValueManager.get()
     }
 
     addAnnotation(annotation: INodeBase) {
-        this.annotationsValueManager.add(annotation);
+        this.annotationsValueManager.add(annotation)
     }
 
     insertAnnotationAtIndex(annotation: INodeBase, index: number) {
-        this.annotationsValueManager.insertAtIndex(annotation, index);
+        this.annotationsValueManager.insertAtIndex(annotation, index)
     }
 
     replaceAnnotationAtIndex(annotation: INodeBase, index: number) {
-        this.annotationsValueManager.replaceAtIndex(annotation, index);
+        this.annotationsValueManager.replaceAtIndex(annotation, index)
     }
 
     removeAnnotation(annotation: INodeBase) {
-        this.annotationsValueManager.remove(annotation);
+        this.annotationsValueManager.remove(annotation)
     }
 
     moveAnnotation(oldIndex: number, indexOffset: number) {
-        this.annotationsValueManager.move(oldIndex, indexOffset);
+        this.annotationsValueManager.move(oldIndex, indexOffset)
     }
 
     moveAndReplaceAnnotation(oldIndex: number, indexOffset: number) {
-        this.annotationsValueManager.moveAndReplace(oldIndex, indexOffset);
+        this.annotationsValueManager.moveAndReplace(oldIndex, indexOffset)
     }
 
 }
@@ -351,7 +351,7 @@ export abstract class NodeBase implements INodeBase {
  * A type for functions that acts as factories, creating an instance of {@link INodeBase}
  * matching the given {@link Classifier classifier} and the given ID (of type {@link LionWebId}).
  */
-export type NodeBaseFactory = (classifier: Classifier, id: LionWebId) => INodeBase;
+export type NodeBaseFactory = (classifier: Classifier, id: LionWebId) => INodeBase
 
 /**
  * A type that captures three base aspects of a language:
@@ -360,9 +360,9 @@ export type NodeBaseFactory = (classifier: Classifier, id: LionWebId) => INodeBa
  * and a method to produce a runtime representation of a given {@link EnumerationLiteral}.
  */
 export interface ILanguageBase {
-    language: Language;
-    factory(receiveDelta?: DeltaReceiver): NodeBaseFactory;
-    enumLiteralFrom<T>(enumerationLiteral: EnumerationLiteral): T;
+    language: Language
+    factory(receiveDelta?: DeltaReceiver): NodeBaseFactory
+    enumLiteralFrom<T>(enumerationLiteral: EnumerationLiteral): T
 }
 
 
@@ -374,5 +374,5 @@ export type FactoryConfiguration = {
     languageBases: ILanguageBase[],
     /** An optional {@link DeltaReceiver} that will be injected in all {@link INodeBase nodes} created. */
     receiveDelta?: DeltaReceiver
-};
+}
 

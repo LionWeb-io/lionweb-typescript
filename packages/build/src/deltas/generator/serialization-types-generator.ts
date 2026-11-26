@@ -74,14 +74,13 @@ const typeForDelta = ({name, fields}: Delta) =>
 export const serializationTypesForDeltas = (deltas: Delta[], header?: string) =>
     asString([
         header ?? [],
-        `import { LionWebId, LionWebJsonMetaPointer, LionWebJsonDeltaChunk } from "@lionweb/json";`,
-        `import { IdOrNull } from "../../references.js";`,
+        `import { LionWebId, LionWebJsonMetaPointer, LionWebJsonDeltaChunk } from "@lionweb/json"`,
+        `import { IdOrNull } from "../../references.js"`,
         ``,
         ``,
         `export type SerializedDelta =`,
         indent([
-            deltas.map(({ name }) => `| ${name}SerializedDelta`),
-            `;`
+            deltas.map(({ name }) => `| ${name}SerializedDelta`)
         ]),
         ``,
         ``,

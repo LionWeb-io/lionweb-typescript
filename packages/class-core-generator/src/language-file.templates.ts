@@ -22,7 +22,7 @@ import { asString, commaSeparated, when, withNewlineAppended } from "littoral-te
 
 import { typeForLanguageEntity } from "./entity-types.templates.js"
 import { GeneratorOptions } from "./generator.js"
-import { Imports } from "./helpers/index.js"
+import { Imports, statementPostfix } from "./helpers/index.js"
 import { reflectiveClassFor } from "./reflective-layer.templates.js"
 
 export const languageFileFor = (language: Language, lionWebVersion: LionWebVersion, options: GeneratorOptions) => {
@@ -30,6 +30,8 @@ export const languageFileFor = (language: Language, lionWebVersion: LionWebVersi
     const { name, version, key, id, entities } = language
 
     const imports = new Imports(language, lionWebVersion.builtinsFacade)
+
+    const sp = statementPostfix(options)    // (abbrev. of “statement postfix”)
 
     const orderedEntities = dependencyOrderOf(
         options.sortByName ? nameSorted(entities) : entities,   // sort alphabetically 1st (if requested), then topologically, to stabilize generated code as much as possible
@@ -42,12 +44,12 @@ export const languageFileFor = (language: Language, lionWebVersion: LionWebVersi
 
     const postImportsPart = [
         ``,
-        reflectiveClassFor(language, imports, options.sortByName),
+        reflectiveClassFor(language, imports, options.sortByName, options.semicolons),
         ``,
         ``,
         orderedEntities
             .filter((entity) => entity.language === language)
-            .map(withNewlineAppended(typeForLanguageEntity(imports, options.sortByName)))
+            .map(withNewlineAppended(typeForLanguageEntity(imports, options.sortByName, options.semicolons)))
     ]
 
     return asString([
@@ -61,11 +63,11 @@ export const languageFileFor = (language: Language, lionWebVersion: LionWebVersi
  */`,
         ``,
         ``,
-        `import * as ${Imports.importAlias("class-core")} from "${options.genericImportLocation}";`,
-        `import * as ${Imports.importAlias("core")} from "@lionweb/core";`,
-        `import * as ${Imports.importAlias("json")} from "@lionweb/json";`,
+        `import * as ${Imports.importAlias("class-core")} from "${options.genericImportLocation}"${sp}`,
+        `import * as ${Imports.importAlias("core")} from "@lionweb/core"${sp}`,
+        `import * as ${Imports.importAlias("json")} from "@lionweb/json"${sp}`,
         when(imports.languageImports.length > 0)(
-            `import {`, indent(commaSeparated(sortedStringsByUppercase(imports.languageImports))), `} from "${`./index.g.js`}";`
+            `import {`, indent(commaSeparated(sortedStringsByUppercase(imports.languageImports))), `} from "${`./index.g.js`}"${sp}`
         ),
         postImportsPart
     ])

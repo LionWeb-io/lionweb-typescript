@@ -62,7 +62,7 @@ export class TestNodeReader implements Reader<TestNode> {
                     return node.references
                 }
                 throw new Error(`Not supported: feature ${feature.name}`)
-            })()[feature.name];
+            })()[feature.name]
             return feature.multiple
                 ? (
                     value === undefined

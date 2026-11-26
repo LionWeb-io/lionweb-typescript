@@ -22,13 +22,13 @@ export const { deepEqual, equal, fail, notEqual, sameMembers, throws } = assert
 
 
 export const isFalse = (value: unknown, message?: string): void =>
-    assert.isFalse(value, message);
+    assert.isFalse(value, message)
 
 export const isTrue = (value: unknown, message?: string): void =>
-    assert.isTrue(value, message);
+    assert.isTrue(value, message)
 
 export const isUndefined = (value: unknown, message?: string): void =>
-    assert.isUndefined(value, message);
+    assert.isUndefined(value, message)
 
 
 /**
@@ -36,10 +36,10 @@ export const isUndefined = (value: unknown, message?: string): void =>
  * or since the call to `emittedDeltaAsserter` if there’s no previous call, and that it deep-equals the given `expectedDelta`.
  */
 export const emittedDeltaAsserter = (deltas: IDelta[]) => {
-    let numberOfExpectedDeltas = deltas.length;
+    let numberOfExpectedDeltas = deltas.length
     return (expectedDelta: IDelta) => {
-        equal(deltas.length, ++numberOfExpectedDeltas, `number of expected deltas`);
-        deepEqual(deltas[numberOfExpectedDeltas - 1], expectedDelta);
+        equal(deltas.length, ++numberOfExpectedDeltas, `number of expected deltas`)
+        deepEqual(deltas[numberOfExpectedDeltas - 1], expectedDelta)
     }
 }
 

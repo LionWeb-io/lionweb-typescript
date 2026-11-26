@@ -37,16 +37,16 @@ import { INodeBase, LionCore_builtinsBase, NodeBase } from "./index.js"
  */
 export const getFeatureValue = (node: INodeBase, feature: Feature) => {
     if (feature instanceof Property) {
-        return node.getPropertyValueManager(feature).getDirectly();
+        return node.getPropertyValueManager(feature).getDirectly()
     }
     if (feature instanceof Containment) {
-        return node.getContainmentValueManager(feature).getDirectly();
+        return node.getContainmentValueManager(feature).getDirectly()
     }
     if (feature instanceof Reference) {
-        return node.getReferenceValueManager(feature).getDirectly();
+        return node.getReferenceValueManager(feature).getDirectly()
     }
     throw new Error(`unhandled Feature sub type ${feature.constructor.name}`)
-};
+}
 
 /**
  * A {@link ResolveInfoDeducer} that works on {@link INodeBase}s.
@@ -57,25 +57,25 @@ const nodeBaseResolveInfoDeducer: ResolveInfoDeducer<Node> = (node, _reference) 
     if ("name" in node) {
         // evaluating `node.name` might cause an error through FeatureValueManager.throwOnReadOfUnset:
         try {
-            const value = node.name;
-            return typeof value === "string" ? value : undefined;
+            const value = node.name
+            return typeof value === "string" ? value : undefined
         } catch (_) {
-            return undefined;
+            return undefined
         }
     }
     if (node instanceof NodeBase) {
-        const allSupertypes = allSuperTypesOf(node.classifier);
+        const allSupertypes = allSuperTypesOf(node.classifier)
         allLionWebVersions.forEach((lionWebVersion) => {
             if (allSupertypes.indexOf(lionWebVersion.builtinsFacade.classifiers.inamed) > -1) {
-                return node.getPropertyValueManager(lionWebVersion.builtinsFacade.features.inamed_name).getDirectly() as (string | undefined);
+                return node.getPropertyValueManager(lionWebVersion.builtinsFacade.features.inamed_name).getDirectly() as (string | undefined)
             }
         })
         if (allSupertypes.indexOf(LionCore_builtinsBase.INSTANCE.INamed) > -1) {
-            return node.getPropertyValueManager(LionCore_builtinsBase.INSTANCE.INamed_name).getDirectly() as (string | undefined);
+            return node.getPropertyValueManager(LionCore_builtinsBase.INSTANCE.INamed_name).getDirectly() as (string | undefined)
         }
     }
-    return undefined;
-};
+    return undefined
+}
 
 /**
  * A {@link Reader} that works on/for {@link INodeBase}s specifically.
@@ -85,14 +85,14 @@ export const nodeBaseReader: Reader<INodeBase, Node> = {
     classifierOf: (node) => node.classifier,
     getFeatureValue,
     enumerationLiteralFrom: (encoding, enumeration) => {
-        return enumeration.literals.find((literal) => literal.key === encoding)!;
+        return enumeration.literals.find((literal) => literal.key === encoding)!
     },
     resolveInfoFor: nodeBaseResolveInfoDeducer
-};
+}
 
 /**
  * @return a serialization of the given nodes (of type {@link INodeBase}) as a {@link LionWebJsonChunk},
  * with empty features serialized (emptily).
  */
-export const serializeNodeBases = serializerWith({ reader: nodeBaseReader, serializeEmptyFeatures: false });
+export const serializeNodeBases = serializerWith({ reader: nodeBaseReader, serializeEmptyFeatures: false })
 

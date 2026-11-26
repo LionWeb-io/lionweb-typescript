@@ -18,8 +18,8 @@
 // Warning: this file is generated!
 // Modifying it by hand is useless at best, and sabotage at worst.
 
-import { metaPointerForFeature, PropertyValueSerializer } from "@lionweb/core";
-import { IDelta } from "../base.js";
+import { metaPointerForFeature, PropertyValueSerializer } from "@lionweb/core"
+import { IDelta } from "../base.js"
 import {
     AnnotationAddedDelta,
     AnnotationDeletedDelta,
@@ -47,7 +47,7 @@ import {
     ReferenceAddedDelta,
     ReferenceChangedDelta,
     ReferenceDeletedDelta
-} from "../types.g.js";
+} from "../types.g.js"
 import {
     AnnotationAddedSerializedDelta,
     AnnotationDeletedSerializedDelta,
@@ -76,9 +76,9 @@ import {
     ReferenceChangedSerializedDelta,
     ReferenceDeletedSerializedDelta,
     SerializedDelta
-} from "./types.g.js";
-import { idFrom } from "../../references.js";
-import { serializeAsDeltaChunk } from "./base.js";
+} from "./types.g.js"
+import { idFrom } from "../../references.js"
+import { serializeAsDeltaChunk } from "./base.js"
 
 
 export const deltaSerializer = (propertyValueSerializer: PropertyValueSerializer) => {
@@ -89,14 +89,14 @@ export const deltaSerializer = (propertyValueSerializer: PropertyValueSerializer
                 kind: "PartitionAdded",
                 newPartition: delta.newPartition.id,
                 newNodes: serializeAsDeltaChunk(delta.newPartition)
-            } as PartitionAddedSerializedDelta;
+            } as PartitionAddedSerializedDelta
         }
 
         if (delta instanceof PartitionDeletedDelta) {
             return {
                 kind: "PartitionDeleted",
                 deletedPartition: delta.deletedPartition.id
-            } as PartitionDeletedSerializedDelta;
+            } as PartitionDeletedSerializedDelta
         }
 
         if (delta instanceof PropertyAddedDelta) {
@@ -105,7 +105,7 @@ export const deltaSerializer = (propertyValueSerializer: PropertyValueSerializer
                 node: delta.node.id,
                 property: metaPointerForFeature(delta.property),
                 value: propertyValueSerializer(delta.property, delta.value)
-            } as PropertyAddedSerializedDelta;
+            } as PropertyAddedSerializedDelta
         }
 
         if (delta instanceof PropertyDeletedDelta) {
@@ -114,7 +114,7 @@ export const deltaSerializer = (propertyValueSerializer: PropertyValueSerializer
                 node: delta.node.id,
                 property: metaPointerForFeature(delta.property),
                 oldValue: propertyValueSerializer(delta.property, delta.oldValue)
-            } as PropertyDeletedSerializedDelta;
+            } as PropertyDeletedSerializedDelta
         }
 
         if (delta instanceof PropertyChangedDelta) {
@@ -124,7 +124,7 @@ export const deltaSerializer = (propertyValueSerializer: PropertyValueSerializer
                 property: metaPointerForFeature(delta.property),
                 oldValue: propertyValueSerializer(delta.property, delta.oldValue),
                 newValue: propertyValueSerializer(delta.property, delta.newValue)
-            } as PropertyChangedSerializedDelta;
+            } as PropertyChangedSerializedDelta
         }
 
         if (delta instanceof ChildAddedDelta) {
@@ -135,7 +135,7 @@ export const deltaSerializer = (propertyValueSerializer: PropertyValueSerializer
                 index: delta.index,
                 newChild: delta.newChild.id,
                 newNodes: serializeAsDeltaChunk(delta.newChild)
-            } as ChildAddedSerializedDelta;
+            } as ChildAddedSerializedDelta
         }
 
         if (delta instanceof ChildDeletedDelta) {
@@ -146,7 +146,7 @@ export const deltaSerializer = (propertyValueSerializer: PropertyValueSerializer
                 index: delta.index,
                 deletedChild: delta.deletedChild.id,
                 deletedNodes: serializeAsDeltaChunk(delta.deletedChild)
-            } as ChildDeletedSerializedDelta;
+            } as ChildDeletedSerializedDelta
         }
 
         if (delta instanceof ChildReplacedDelta) {
@@ -159,7 +159,7 @@ export const deltaSerializer = (propertyValueSerializer: PropertyValueSerializer
                 replacedNodes: serializeAsDeltaChunk(delta.replacedChild),
                 newChild: delta.newChild.id,
                 newNodes: serializeAsDeltaChunk(delta.newChild)
-            } as ChildReplacedSerializedDelta;
+            } as ChildReplacedSerializedDelta
         }
 
         if (delta instanceof ChildMovedFromContainmentInOtherParentDelta) {
@@ -172,7 +172,7 @@ export const deltaSerializer = (propertyValueSerializer: PropertyValueSerializer
                 newContainment: metaPointerForFeature(delta.newContainment),
                 newIndex: delta.newIndex,
                 movedChild: delta.movedChild.id
-            } as ChildMovedFromContainmentInOtherParentSerializedDelta;
+            } as ChildMovedFromContainmentInOtherParentSerializedDelta
         }
 
         if (delta instanceof ChildMovedFromOtherContainmentInSameParentDelta) {
@@ -184,7 +184,7 @@ export const deltaSerializer = (propertyValueSerializer: PropertyValueSerializer
                 movedChild: delta.movedChild.id,
                 newContainment: metaPointerForFeature(delta.newContainment),
                 newIndex: delta.newIndex
-            } as ChildMovedFromOtherContainmentInSameParentSerializedDelta;
+            } as ChildMovedFromOtherContainmentInSameParentSerializedDelta
         }
 
         if (delta instanceof ChildMovedInSameContainmentInSameParentDelta) {
@@ -195,7 +195,7 @@ export const deltaSerializer = (propertyValueSerializer: PropertyValueSerializer
                 oldIndex: delta.oldIndex,
                 indexOffset: delta.indexOffset,
                 movedChild: delta.movedChild.id
-            } as ChildMovedInSameContainmentInSameParentSerializedDelta;
+            } as ChildMovedInSameContainmentInSameParentSerializedDelta
         }
 
         if (delta instanceof ChildMovedAndReplacedFromContainmentInOtherParentDelta) {
@@ -210,7 +210,7 @@ export const deltaSerializer = (propertyValueSerializer: PropertyValueSerializer
                 oldIndex: delta.oldIndex,
                 replacedChild: delta.replacedChild.id,
                 replacedChildAsNodes: serializeAsDeltaChunk(delta.replacedChild)
-            } as ChildMovedAndReplacedFromContainmentInOtherParentSerializedDelta;
+            } as ChildMovedAndReplacedFromContainmentInOtherParentSerializedDelta
         }
 
         if (delta instanceof ChildMovedAndReplacedFromOtherContainmentInSameParentDelta) {
@@ -224,7 +224,7 @@ export const deltaSerializer = (propertyValueSerializer: PropertyValueSerializer
                 movedChild: delta.movedChild.id,
                 replacedChild: delta.replacedChild.id,
                 replacedChildAsNodes: serializeAsDeltaChunk(delta.replacedChild)
-            } as ChildMovedAndReplacedFromOtherContainmentInSameParentSerializedDelta;
+            } as ChildMovedAndReplacedFromOtherContainmentInSameParentSerializedDelta
         }
 
         if (delta instanceof ChildMovedAndReplacedInSameContainmentInSameParentDelta) {
@@ -237,7 +237,7 @@ export const deltaSerializer = (propertyValueSerializer: PropertyValueSerializer
                 movedChild: delta.movedChild.id,
                 replacedChild: delta.replacedChild.id,
                 replacedChildAsNodes: serializeAsDeltaChunk(delta.replacedChild)
-            } as ChildMovedAndReplacedInSameContainmentInSameParentSerializedDelta;
+            } as ChildMovedAndReplacedInSameContainmentInSameParentSerializedDelta
         }
 
         if (delta instanceof AnnotationAddedDelta) {
@@ -247,7 +247,7 @@ export const deltaSerializer = (propertyValueSerializer: PropertyValueSerializer
                 index: delta.index,
                 newAnnotation: delta.newAnnotation.id,
                 newAnnotationNodes: serializeAsDeltaChunk(delta.newAnnotation)
-            } as AnnotationAddedSerializedDelta;
+            } as AnnotationAddedSerializedDelta
         }
 
         if (delta instanceof AnnotationDeletedDelta) {
@@ -257,7 +257,7 @@ export const deltaSerializer = (propertyValueSerializer: PropertyValueSerializer
                 index: delta.index,
                 deletedAnnotation: delta.deletedAnnotation.id,
                 deletedAnnotationNodes: serializeAsDeltaChunk(delta.deletedAnnotation)
-            } as AnnotationDeletedSerializedDelta;
+            } as AnnotationDeletedSerializedDelta
         }
 
         if (delta instanceof AnnotationReplacedDelta) {
@@ -269,7 +269,7 @@ export const deltaSerializer = (propertyValueSerializer: PropertyValueSerializer
                 replacedAnnotationNodes: serializeAsDeltaChunk(delta.replacedAnnotation),
                 newAnnotation: delta.newAnnotation.id,
                 newAnnotationNodes: serializeAsDeltaChunk(delta.newAnnotation)
-            } as AnnotationReplacedSerializedDelta;
+            } as AnnotationReplacedSerializedDelta
         }
 
         if (delta instanceof AnnotationMovedFromOtherParentDelta) {
@@ -280,7 +280,7 @@ export const deltaSerializer = (propertyValueSerializer: PropertyValueSerializer
                 newParent: delta.newParent.id,
                 newIndex: delta.newIndex,
                 movedAnnotation: delta.movedAnnotation.id
-            } as AnnotationMovedFromOtherParentSerializedDelta;
+            } as AnnotationMovedFromOtherParentSerializedDelta
         }
 
         if (delta instanceof AnnotationMovedInSameParentDelta) {
@@ -290,7 +290,7 @@ export const deltaSerializer = (propertyValueSerializer: PropertyValueSerializer
                 oldIndex: delta.oldIndex,
                 indexOffset: delta.indexOffset,
                 movedAnnotation: delta.movedAnnotation.id
-            } as AnnotationMovedInSameParentSerializedDelta;
+            } as AnnotationMovedInSameParentSerializedDelta
         }
 
         if (delta instanceof AnnotationMovedAndReplacedFromOtherParentDelta) {
@@ -303,7 +303,7 @@ export const deltaSerializer = (propertyValueSerializer: PropertyValueSerializer
                 newParent: delta.newParent.id,
                 newIndex: delta.newIndex,
                 movedAnnotation: delta.movedAnnotation.id
-            } as AnnotationMovedAndReplacedFromOtherParentSerializedDelta;
+            } as AnnotationMovedAndReplacedFromOtherParentSerializedDelta
         }
 
         if (delta instanceof AnnotationMovedAndReplacedInSameParentDelta) {
@@ -315,7 +315,7 @@ export const deltaSerializer = (propertyValueSerializer: PropertyValueSerializer
                 replacedAnnotation: delta.replacedAnnotation.id,
                 replacedAnnotationNodes: serializeAsDeltaChunk(delta.replacedAnnotation),
                 movedAnnotation: delta.movedAnnotation.id
-            } as AnnotationMovedAndReplacedInSameParentSerializedDelta;
+            } as AnnotationMovedAndReplacedInSameParentSerializedDelta
         }
 
         if (delta instanceof ReferenceAddedDelta) {
@@ -325,7 +325,7 @@ export const deltaSerializer = (propertyValueSerializer: PropertyValueSerializer
                 reference: metaPointerForFeature(delta.reference),
                 index: delta.index,
                 newReference: idFrom(delta.newReference)
-            } as ReferenceAddedSerializedDelta;
+            } as ReferenceAddedSerializedDelta
         }
 
         if (delta instanceof ReferenceDeletedDelta) {
@@ -335,7 +335,7 @@ export const deltaSerializer = (propertyValueSerializer: PropertyValueSerializer
                 reference: metaPointerForFeature(delta.reference),
                 index: delta.index,
                 deletedReference: idFrom(delta.deletedReference)
-            } as ReferenceDeletedSerializedDelta;
+            } as ReferenceDeletedSerializedDelta
         }
 
         if (delta instanceof ReferenceChangedDelta) {
@@ -346,25 +346,25 @@ export const deltaSerializer = (propertyValueSerializer: PropertyValueSerializer
                 index: delta.index,
                 newReference: idFrom(delta.newReference),
                 oldReference: idFrom(delta.oldReference)
-            } as ReferenceChangedSerializedDelta;
+            } as ReferenceChangedSerializedDelta
         }
 
         if (delta instanceof CompositeDelta) {
             return {
                 kind: "Composite",
                 parts: delta.parts.map(serializeDelta)
-            } as CompositeSerializedDelta;
+            } as CompositeSerializedDelta
         }
 
         if (delta instanceof NoOpDelta) {
             return {
                 kind: "NoOp"
-            } as NoOpSerializedDelta;
+            } as NoOpSerializedDelta
         }
 
-        throw new Error(`serialization of delta of class ${delta.constructor.name} not implemented`);
+        throw new Error(`serialization of delta of class ${delta.constructor.name} not implemented`)
     }
 
-    return serializeDelta;
+    return serializeDelta
 }
 

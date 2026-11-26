@@ -23,49 +23,49 @@ import { nodeBasePropertyValueSerializerWith } from "../configuration.js"
 /**
  * A type for functions that receive deltas.
  */
-export type DeltaReceiver = (delta: IDelta) => void;
+export type DeltaReceiver = (delta: IDelta) => void
 
 /**
  * @return a tuple consisting of a {@link DeltaReceiver} implementation (as 1st member) that pushes any received delta unto the tuple's 2nd member: an array of {@link IDelta deltas}.
  * @param printSerializations determines whether the deltas are serialized as JSON and printed to the JavaScript console.
  */
 export const collectingDeltaReceiver = (printSerializations = false): [DeltaReceiver, IDelta[]] => {
-    const serializeDelta = deltaSerializer(nodeBasePropertyValueSerializerWith({}));
-    const deltas: IDelta[] = [];
+    const serializeDelta = deltaSerializer(nodeBasePropertyValueSerializerWith({}))
+    const deltas: IDelta[] = []
     const receiveDelta: DeltaReceiver = (delta) => {
-        deltas.push(delta);
+        deltas.push(delta)
         if (printSerializations) {
-            console.log(asPrettyJsonString(serializeDelta(delta)));
+            console.log(asPrettyJsonString(serializeDelta(delta)))
         }
-    };
-    return [receiveDelta, deltas];
-};
+    }
+    return [receiveDelta, deltas]
+}
 
 /**
  * An interface for {@link DeltaReceiver delta receivers} that can be switched on and off — “latchingDeltaReceiverFrom”.
  */
 export interface LatchingDeltaReceiver extends DeltaReceiver {
-    latch(emitDeltas: boolean): void;
+    latch(emitDeltas: boolean): void
 }
 
 /**
  * @return a latching version of the given {@link DeltaReceiver delta receiver}.
  */
 export const latchingDeltaReceiverFrom = (receiveDelta: DeltaReceiver): LatchingDeltaReceiver => {
-    let emitDeltas = false;
+    let emitDeltas = false
     return Object.assign(
         (delta: IDelta) => {
             if (emitDeltas) {
-                receiveDelta(delta);
+                receiveDelta(delta)
             }
         },
         {
             latch(emitDeltas_: boolean) {
-                emitDeltas = emitDeltas_;
+                emitDeltas = emitDeltas_
             },
         },
-    );
-};
+    )
+}
 
 
 /**
@@ -74,6 +74,6 @@ export const latchingDeltaReceiverFrom = (receiveDelta: DeltaReceiver): Latching
  */
 export const deltaReceiverForwardingTo = (...deltaReceivers: DeltaReceiver[]): DeltaReceiver =>
     (delta) => {
-        deltaReceivers.forEach((receiveDelta) => receiveDelta(delta));
-    };
+        deltaReceivers.forEach((receiveDelta) => receiveDelta(delta))
+    }
 

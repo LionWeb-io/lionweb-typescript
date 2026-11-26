@@ -35,7 +35,7 @@ describe(`class-core generator`, () => {
         factory.concept("ConceptExtendingNode", ConceptModifier.concrete, node)
         factory.concept("ConceptExtendingNothing", ConceptModifier.concrete)
 
-        const languageFile = languageFileFor(factory.language, lionWebVersion, { verbose: false, genericImportLocation: "@lionweb/class-core", sortByName: false })
+        const languageFile = languageFileFor(factory.language, lionWebVersion, { verbose: false, genericImportLocation: "@lionweb/class-core", sortByName: false, semicolons: false })
         const matchExtendsNode = languageFile.match(/export class ConceptExtendingNode extends ([A-Za-z.$]+) \{/)
         isTrue(matchExtendsNode !== null && matchExtendsNode[1] === "$lwClassCore.NodeBase")
         const matchExtendsNothing = languageFile.match(/export class ConceptExtendingNothing extends ([A-Za-z.$]+) \{/)
@@ -51,13 +51,18 @@ describe(`class-core generator`, () => {
         const AnInterface = factory.interface("AnInterface")
         factory.reference(AnInterface, "ref").ofType(node)
 
-        const languageFile = languageFileFor(factory.language, lionWebVersion, { verbose: false, genericImportLocation: "@lionweb/class-core", sortByName: false })
+        const languageFile = languageFileFor(factory.language, lionWebVersion, { verbose: false, genericImportLocation: "@lionweb/class-core", sortByName: false, semicolons: false })
         isTrue(languageFile.match(/<\$lwClassCore\.INodeBase>/) === null, "found <INodeBase>")
         isTrue(languageFile.match(/<\$lwCore\.Node>/) !== null, "didn’t find <Node>")
     })
 
     it(`generate API for: LionCore, LionCore-builtins, and io.lionweb.mps.specific`, () => {
-        generateApiFromLanguages([lionWebVersion.builtinsFacade.language, lionWebVersion.lioncoreFacade.language, ioLionWebMpsSpecificLanguage], "src/gen", lionWebVersion)
+        generateApiFromLanguages(
+            [lionWebVersion.builtinsFacade.language, lionWebVersion.lioncoreFacade.language, ioLionWebMpsSpecificLanguage],
+            "src/gen",
+            lionWebVersion,
+            { semicolons: false }
+        )
     })
 
     it(`generate code for language with concept named "Class"`, () => {
@@ -67,7 +72,7 @@ describe(`class-core generator`, () => {
         const Property = factory.concept("Property", ConceptModifier.concrete).implementing(inamed)
         factory.containment(Class, "property").ofType(Property)
 
-        generateLanguage(factory.language, "src/gen", lionWebVersion, { verbose: false })
+        generateLanguage(factory.language, "src/gen", lionWebVersion, { verbose: false, semicolons: false })
     })
 
     it(`generate code for language with a structured data type named "StructuredDataType"`, () => {
@@ -80,7 +85,7 @@ describe(`class-core generator`, () => {
         const Container = factory.concept("Container", ConceptModifier.concrete)
         factory.property(Container, "sdt").ofType(SDT)
 
-        generateLanguage(factory.language, "src/gen", LionWebVersions.v2024_1, { verbose: false })
+        generateLanguage(factory.language, "src/gen", LionWebVersions.v2024_1, { verbose: false, semicolons: false })
     })
 
 })

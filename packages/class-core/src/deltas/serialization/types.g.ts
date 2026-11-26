@@ -18,8 +18,8 @@
 // Warning: this file is generated!
 // Modifying it by hand is useless at best, and sabotage at worst.
 
-import { LionWebId, LionWebJsonMetaPointer, LionWebJsonDeltaChunk } from "@lionweb/json";
-import { IdOrNull } from "../../references.js";
+import { LionWebId, LionWebJsonMetaPointer, LionWebJsonDeltaChunk } from "@lionweb/json"
+import { IdOrNull } from "../../references.js"
 
 
 export type SerializedDelta =
@@ -49,7 +49,6 @@ export type SerializedDelta =
     | ReferenceChangedSerializedDelta
     | CompositeSerializedDelta
     | NoOpSerializedDelta
-    ;
 
 
 export type PartitionAddedSerializedDelta = {

@@ -27,571 +27,571 @@
  */
 
 
-import * as $lwClassCore from "@lionweb/class-core";
-import * as $lwCore from "@lionweb/core";
-import * as $lwJson from "@lionweb/json";
+import * as $lwClassCore from "@lionweb/class-core"
+import * as $lwCore from "@lionweb/core"
+import * as $lwJson from "@lionweb/json"
 
 export class TestLanguageBase implements $lwClassCore.ILanguageBase {
 
-    private readonly _language: $lwCore.Language = new $lwCore.Language("TestLanguage", "0", "TestLanguage", "TestLanguage");
+    private readonly _language: $lwCore.Language = new $lwCore.Language("TestLanguage", "0", "TestLanguage", "TestLanguage")
     get language(): $lwCore.Language {
-        this.ensureWiredUp();
-        return this._language;
+        this.ensureWiredUp()
+        return this._language
     }
 
-    public readonly _DataTypeTestConcept = new $lwCore.Concept(this._language, "DataTypeTestConcept", "DataTypeTestConcept", "DataTypeTestConcept", $lwCore.ConceptModifier.concrete);
+    public readonly _DataTypeTestConcept = new $lwCore.Concept(this._language, "DataTypeTestConcept", "DataTypeTestConcept", "DataTypeTestConcept", $lwCore.ConceptModifier.concrete)
     get DataTypeTestConcept(): $lwCore.Concept {
-        this.ensureWiredUp();
-        return this._DataTypeTestConcept;
+        this.ensureWiredUp()
+        return this._DataTypeTestConcept
     }
-    private readonly _DataTypeTestConcept_booleanValue_0_1 = new $lwCore.Property(this._DataTypeTestConcept, "booleanValue_0_1", "DataTypeTestConcept-booleanValue_0_1", "DataTypeTestConcept-booleanValue_0_1").isOptional();
+    private readonly _DataTypeTestConcept_booleanValue_0_1 = new $lwCore.Property(this._DataTypeTestConcept, "booleanValue_0_1", "DataTypeTestConcept-booleanValue_0_1", "DataTypeTestConcept-booleanValue_0_1").isOptional()
     get DataTypeTestConcept_booleanValue_0_1(): $lwCore.Property {
-        this.ensureWiredUp();
-        return this._DataTypeTestConcept_booleanValue_0_1;
+        this.ensureWiredUp()
+        return this._DataTypeTestConcept_booleanValue_0_1
     }
-    private readonly _DataTypeTestConcept_booleanValue_1 = new $lwCore.Property(this._DataTypeTestConcept, "booleanValue_1", "DataTypeTestConcept-booleanValue_1", "DataTypeTestConcept-booleanValue_1");
+    private readonly _DataTypeTestConcept_booleanValue_1 = new $lwCore.Property(this._DataTypeTestConcept, "booleanValue_1", "DataTypeTestConcept-booleanValue_1", "DataTypeTestConcept-booleanValue_1")
     get DataTypeTestConcept_booleanValue_1(): $lwCore.Property {
-        this.ensureWiredUp();
-        return this._DataTypeTestConcept_booleanValue_1;
+        this.ensureWiredUp()
+        return this._DataTypeTestConcept_booleanValue_1
     }
-    private readonly _DataTypeTestConcept_enumValue_0_1 = new $lwCore.Property(this._DataTypeTestConcept, "enumValue_0_1", "DataTypeTestConcept-enumValue_0_1", "DataTypeTestConcept-enumValue_0_1").isOptional();
+    private readonly _DataTypeTestConcept_enumValue_0_1 = new $lwCore.Property(this._DataTypeTestConcept, "enumValue_0_1", "DataTypeTestConcept-enumValue_0_1", "DataTypeTestConcept-enumValue_0_1").isOptional()
     get DataTypeTestConcept_enumValue_0_1(): $lwCore.Property {
-        this.ensureWiredUp();
-        return this._DataTypeTestConcept_enumValue_0_1;
+        this.ensureWiredUp()
+        return this._DataTypeTestConcept_enumValue_0_1
     }
-    private readonly _DataTypeTestConcept_enumValue_1 = new $lwCore.Property(this._DataTypeTestConcept, "enumValue_1", "DataTypeTestConcept-enumValue_1", "DataTypeTestConcept-enumValue_1");
+    private readonly _DataTypeTestConcept_enumValue_1 = new $lwCore.Property(this._DataTypeTestConcept, "enumValue_1", "DataTypeTestConcept-enumValue_1", "DataTypeTestConcept-enumValue_1")
     get DataTypeTestConcept_enumValue_1(): $lwCore.Property {
-        this.ensureWiredUp();
-        return this._DataTypeTestConcept_enumValue_1;
+        this.ensureWiredUp()
+        return this._DataTypeTestConcept_enumValue_1
     }
-    private readonly _DataTypeTestConcept_integerValue_0_1 = new $lwCore.Property(this._DataTypeTestConcept, "integerValue_0_1", "DataTypeTestConcept-integerValue_0_1", "DataTypeTestConcept-integerValue_0_1").isOptional();
+    private readonly _DataTypeTestConcept_integerValue_0_1 = new $lwCore.Property(this._DataTypeTestConcept, "integerValue_0_1", "DataTypeTestConcept-integerValue_0_1", "DataTypeTestConcept-integerValue_0_1").isOptional()
     get DataTypeTestConcept_integerValue_0_1(): $lwCore.Property {
-        this.ensureWiredUp();
-        return this._DataTypeTestConcept_integerValue_0_1;
+        this.ensureWiredUp()
+        return this._DataTypeTestConcept_integerValue_0_1
     }
-    private readonly _DataTypeTestConcept_integerValue_1 = new $lwCore.Property(this._DataTypeTestConcept, "integerValue_1", "DataTypeTestConcept-integerValue_1", "DataTypeTestConcept-integerValue_1");
+    private readonly _DataTypeTestConcept_integerValue_1 = new $lwCore.Property(this._DataTypeTestConcept, "integerValue_1", "DataTypeTestConcept-integerValue_1", "DataTypeTestConcept-integerValue_1")
     get DataTypeTestConcept_integerValue_1(): $lwCore.Property {
-        this.ensureWiredUp();
-        return this._DataTypeTestConcept_integerValue_1;
+        this.ensureWiredUp()
+        return this._DataTypeTestConcept_integerValue_1
     }
-    private readonly _DataTypeTestConcept_stringValue_0_1 = new $lwCore.Property(this._DataTypeTestConcept, "stringValue_0_1", "DataTypeTestConcept-stringValue_0_1", "DataTypeTestConcept-stringValue_0_1").isOptional();
+    private readonly _DataTypeTestConcept_stringValue_0_1 = new $lwCore.Property(this._DataTypeTestConcept, "stringValue_0_1", "DataTypeTestConcept-stringValue_0_1", "DataTypeTestConcept-stringValue_0_1").isOptional()
     get DataTypeTestConcept_stringValue_0_1(): $lwCore.Property {
-        this.ensureWiredUp();
-        return this._DataTypeTestConcept_stringValue_0_1;
+        this.ensureWiredUp()
+        return this._DataTypeTestConcept_stringValue_0_1
     }
-    private readonly _DataTypeTestConcept_stringValue_1 = new $lwCore.Property(this._DataTypeTestConcept, "stringValue_1", "DataTypeTestConcept-stringValue_1", "DataTypeTestConcept-stringValue_1");
+    private readonly _DataTypeTestConcept_stringValue_1 = new $lwCore.Property(this._DataTypeTestConcept, "stringValue_1", "DataTypeTestConcept-stringValue_1", "DataTypeTestConcept-stringValue_1")
     get DataTypeTestConcept_stringValue_1(): $lwCore.Property {
-        this.ensureWiredUp();
-        return this._DataTypeTestConcept_stringValue_1;
+        this.ensureWiredUp()
+        return this._DataTypeTestConcept_stringValue_1
     }
 
-    public readonly _LinkTestConcept = new $lwCore.Concept(this._language, "LinkTestConcept", "LinkTestConcept", "LinkTestConcept", $lwCore.ConceptModifier.concrete);
+    public readonly _LinkTestConcept = new $lwCore.Concept(this._language, "LinkTestConcept", "LinkTestConcept", "LinkTestConcept", $lwCore.ConceptModifier.concrete)
     get LinkTestConcept(): $lwCore.Concept {
-        this.ensureWiredUp();
-        return this._LinkTestConcept;
+        this.ensureWiredUp()
+        return this._LinkTestConcept
     }
-    private readonly _LinkTestConcept_containment_0_1 = new $lwCore.Containment(this._LinkTestConcept, "containment_0_1", "LinkTestConcept-containment_0_1", "LinkTestConcept-containment_0_1").isOptional();
+    private readonly _LinkTestConcept_containment_0_1 = new $lwCore.Containment(this._LinkTestConcept, "containment_0_1", "LinkTestConcept-containment_0_1", "LinkTestConcept-containment_0_1").isOptional()
     get LinkTestConcept_containment_0_1(): $lwCore.Containment {
-        this.ensureWiredUp();
-        return this._LinkTestConcept_containment_0_1;
+        this.ensureWiredUp()
+        return this._LinkTestConcept_containment_0_1
     }
-    private readonly _LinkTestConcept_containment_0_n = new $lwCore.Containment(this._LinkTestConcept, "containment_0_n", "LinkTestConcept-containment_0_n", "LinkTestConcept-containment_0_n").isOptional().isMultiple();
+    private readonly _LinkTestConcept_containment_0_n = new $lwCore.Containment(this._LinkTestConcept, "containment_0_n", "LinkTestConcept-containment_0_n", "LinkTestConcept-containment_0_n").isOptional().isMultiple()
     get LinkTestConcept_containment_0_n(): $lwCore.Containment {
-        this.ensureWiredUp();
-        return this._LinkTestConcept_containment_0_n;
+        this.ensureWiredUp()
+        return this._LinkTestConcept_containment_0_n
     }
-    private readonly _LinkTestConcept_containment_1 = new $lwCore.Containment(this._LinkTestConcept, "containment_1", "LinkTestConcept-containment_1", "LinkTestConcept-containment_1");
+    private readonly _LinkTestConcept_containment_1 = new $lwCore.Containment(this._LinkTestConcept, "containment_1", "LinkTestConcept-containment_1", "LinkTestConcept-containment_1")
     get LinkTestConcept_containment_1(): $lwCore.Containment {
-        this.ensureWiredUp();
-        return this._LinkTestConcept_containment_1;
+        this.ensureWiredUp()
+        return this._LinkTestConcept_containment_1
     }
-    private readonly _LinkTestConcept_containment_1_n = new $lwCore.Containment(this._LinkTestConcept, "containment_1_n", "LinkTestConcept-containment_1_n", "LinkTestConcept-containment_1_n").isMultiple();
+    private readonly _LinkTestConcept_containment_1_n = new $lwCore.Containment(this._LinkTestConcept, "containment_1_n", "LinkTestConcept-containment_1_n", "LinkTestConcept-containment_1_n").isMultiple()
     get LinkTestConcept_containment_1_n(): $lwCore.Containment {
-        this.ensureWiredUp();
-        return this._LinkTestConcept_containment_1_n;
+        this.ensureWiredUp()
+        return this._LinkTestConcept_containment_1_n
     }
-    private readonly _LinkTestConcept_otherContainment_0_1 = new $lwCore.Containment(this._LinkTestConcept, "otherContainment_0_1", "LinkTestConcept-otherContainment_0_1", "LinkTestConcept-otherContainment_0_1").isOptional();
+    private readonly _LinkTestConcept_otherContainment_0_1 = new $lwCore.Containment(this._LinkTestConcept, "otherContainment_0_1", "LinkTestConcept-otherContainment_0_1", "LinkTestConcept-otherContainment_0_1").isOptional()
     get LinkTestConcept_otherContainment_0_1(): $lwCore.Containment {
-        this.ensureWiredUp();
-        return this._LinkTestConcept_otherContainment_0_1;
+        this.ensureWiredUp()
+        return this._LinkTestConcept_otherContainment_0_1
     }
-    private readonly _LinkTestConcept_reference_0_1 = new $lwCore.Reference(this._LinkTestConcept, "reference_0_1", "LinkTestConcept-reference_0_1", "LinkTestConcept-reference_0_1").isOptional();
+    private readonly _LinkTestConcept_reference_0_1 = new $lwCore.Reference(this._LinkTestConcept, "reference_0_1", "LinkTestConcept-reference_0_1", "LinkTestConcept-reference_0_1").isOptional()
     get LinkTestConcept_reference_0_1(): $lwCore.Reference {
-        this.ensureWiredUp();
-        return this._LinkTestConcept_reference_0_1;
+        this.ensureWiredUp()
+        return this._LinkTestConcept_reference_0_1
     }
-    private readonly _LinkTestConcept_reference_0_n = new $lwCore.Reference(this._LinkTestConcept, "reference_0_n", "LinkTestConcept-reference_0_n", "LinkTestConcept-reference_0_n").isOptional().isMultiple();
+    private readonly _LinkTestConcept_reference_0_n = new $lwCore.Reference(this._LinkTestConcept, "reference_0_n", "LinkTestConcept-reference_0_n", "LinkTestConcept-reference_0_n").isOptional().isMultiple()
     get LinkTestConcept_reference_0_n(): $lwCore.Reference {
-        this.ensureWiredUp();
-        return this._LinkTestConcept_reference_0_n;
+        this.ensureWiredUp()
+        return this._LinkTestConcept_reference_0_n
     }
-    private readonly _LinkTestConcept_reference_1 = new $lwCore.Reference(this._LinkTestConcept, "reference_1", "LinkTestConcept-reference_1", "LinkTestConcept-reference_1");
+    private readonly _LinkTestConcept_reference_1 = new $lwCore.Reference(this._LinkTestConcept, "reference_1", "LinkTestConcept-reference_1", "LinkTestConcept-reference_1")
     get LinkTestConcept_reference_1(): $lwCore.Reference {
-        this.ensureWiredUp();
-        return this._LinkTestConcept_reference_1;
+        this.ensureWiredUp()
+        return this._LinkTestConcept_reference_1
     }
-    private readonly _LinkTestConcept_reference_1_n = new $lwCore.Reference(this._LinkTestConcept, "reference_1_n", "LinkTestConcept-reference_1_n", "LinkTestConcept-reference_1_n").isMultiple();
+    private readonly _LinkTestConcept_reference_1_n = new $lwCore.Reference(this._LinkTestConcept, "reference_1_n", "LinkTestConcept-reference_1_n", "LinkTestConcept-reference_1_n").isMultiple()
     get LinkTestConcept_reference_1_n(): $lwCore.Reference {
-        this.ensureWiredUp();
-        return this._LinkTestConcept_reference_1_n;
+        this.ensureWiredUp()
+        return this._LinkTestConcept_reference_1_n
     }
 
-    public readonly _RestrictedTestAnnotation = new $lwCore.Annotation(this._language, "RestrictedTestAnnotation", "RestrictedTestAnnotation", "RestrictedTestAnnotation");
+    public readonly _RestrictedTestAnnotation = new $lwCore.Annotation(this._language, "RestrictedTestAnnotation", "RestrictedTestAnnotation", "RestrictedTestAnnotation")
     get RestrictedTestAnnotation(): $lwCore.Annotation {
-        this.ensureWiredUp();
-        return this._RestrictedTestAnnotation;
+        this.ensureWiredUp()
+        return this._RestrictedTestAnnotation
     }
 
-    public readonly _SecondTestEnumeration = new $lwCore.Enumeration(this._language, "SecondTestEnumeration", "SecondTestEnumeration", "SecondTestEnumeration");
+    public readonly _SecondTestEnumeration = new $lwCore.Enumeration(this._language, "SecondTestEnumeration", "SecondTestEnumeration", "SecondTestEnumeration")
     get SecondTestEnumeration(): $lwCore.Enumeration {
-        this.ensureWiredUp();
-        return this._SecondTestEnumeration;
+        this.ensureWiredUp()
+        return this._SecondTestEnumeration
     }
-    private readonly _SecondTestEnumeration_literal1 = new $lwCore.EnumerationLiteral(this._SecondTestEnumeration, "literal1", "SecondTestEnumeration-literal1", "SecondTestEnumeration-literal1");
+    private readonly _SecondTestEnumeration_literal1 = new $lwCore.EnumerationLiteral(this._SecondTestEnumeration, "literal1", "SecondTestEnumeration-literal1", "SecondTestEnumeration-literal1")
     get SecondTestEnumeration_literal1(): $lwCore.EnumerationLiteral {
-        this.ensureWiredUp();
-        return this._SecondTestEnumeration_literal1;
+        this.ensureWiredUp()
+        return this._SecondTestEnumeration_literal1
     }
-    private readonly _SecondTestEnumeration_literal2 = new $lwCore.EnumerationLiteral(this._SecondTestEnumeration, "literal2", "SecondTestEnumeration-literal2", "SecondTestEnumeration-literal2");
+    private readonly _SecondTestEnumeration_literal2 = new $lwCore.EnumerationLiteral(this._SecondTestEnumeration, "literal2", "SecondTestEnumeration-literal2", "SecondTestEnumeration-literal2")
     get SecondTestEnumeration_literal2(): $lwCore.EnumerationLiteral {
-        this.ensureWiredUp();
-        return this._SecondTestEnumeration_literal2;
+        this.ensureWiredUp()
+        return this._SecondTestEnumeration_literal2
     }
-    private readonly _SecondTestEnumeration_literal3 = new $lwCore.EnumerationLiteral(this._SecondTestEnumeration, "literal3", "SecondTestEnumeration-literal3", "SecondTestEnumeration-literal3");
+    private readonly _SecondTestEnumeration_literal3 = new $lwCore.EnumerationLiteral(this._SecondTestEnumeration, "literal3", "SecondTestEnumeration-literal3", "SecondTestEnumeration-literal3")
     get SecondTestEnumeration_literal3(): $lwCore.EnumerationLiteral {
-        this.ensureWiredUp();
-        return this._SecondTestEnumeration_literal3;
+        this.ensureWiredUp()
+        return this._SecondTestEnumeration_literal3
     }
 
-    public readonly _TestAnnotation = new $lwCore.Annotation(this._language, "TestAnnotation", "TestAnnotation", "TestAnnotation");
+    public readonly _TestAnnotation = new $lwCore.Annotation(this._language, "TestAnnotation", "TestAnnotation", "TestAnnotation")
     get TestAnnotation(): $lwCore.Annotation {
-        this.ensureWiredUp();
-        return this._TestAnnotation;
+        this.ensureWiredUp()
+        return this._TestAnnotation
     }
-    private readonly _TestAnnotation_containedNode = new $lwCore.Containment(this._TestAnnotation, "containedNode", "TestAnnotation-containment", "TestAnnotation-containment").isOptional();
+    private readonly _TestAnnotation_containedNode = new $lwCore.Containment(this._TestAnnotation, "containedNode", "TestAnnotation-containment", "TestAnnotation-containment").isOptional()
     get TestAnnotation_containedNode(): $lwCore.Containment {
-        this.ensureWiredUp();
-        return this._TestAnnotation_containedNode;
+        this.ensureWiredUp()
+        return this._TestAnnotation_containedNode
     }
-    private readonly _TestAnnotation_ref = new $lwCore.Reference(this._TestAnnotation, "ref", "TestAnnotation-ref", "TestAnnotation-ref");
+    private readonly _TestAnnotation_ref = new $lwCore.Reference(this._TestAnnotation, "ref", "TestAnnotation-ref", "TestAnnotation-ref")
     get TestAnnotation_ref(): $lwCore.Reference {
-        this.ensureWiredUp();
-        return this._TestAnnotation_ref;
+        this.ensureWiredUp()
+        return this._TestAnnotation_ref
     }
 
-    public readonly _TestEnumeration = new $lwCore.Enumeration(this._language, "TestEnumeration", "TestEnumeration", "TestEnumeration");
+    public readonly _TestEnumeration = new $lwCore.Enumeration(this._language, "TestEnumeration", "TestEnumeration", "TestEnumeration")
     get TestEnumeration(): $lwCore.Enumeration {
-        this.ensureWiredUp();
-        return this._TestEnumeration;
+        this.ensureWiredUp()
+        return this._TestEnumeration
     }
-    private readonly _TestEnumeration_literal1 = new $lwCore.EnumerationLiteral(this._TestEnumeration, "literal1", "TestEnumeration-literal1", "TestEnumeration-literal1");
+    private readonly _TestEnumeration_literal1 = new $lwCore.EnumerationLiteral(this._TestEnumeration, "literal1", "TestEnumeration-literal1", "TestEnumeration-literal1")
     get TestEnumeration_literal1(): $lwCore.EnumerationLiteral {
-        this.ensureWiredUp();
-        return this._TestEnumeration_literal1;
+        this.ensureWiredUp()
+        return this._TestEnumeration_literal1
     }
-    private readonly _TestEnumeration_literal2 = new $lwCore.EnumerationLiteral(this._TestEnumeration, "literal2", "TestEnumeration-literal2", "TestEnumeration-literal2");
+    private readonly _TestEnumeration_literal2 = new $lwCore.EnumerationLiteral(this._TestEnumeration, "literal2", "TestEnumeration-literal2", "TestEnumeration-literal2")
     get TestEnumeration_literal2(): $lwCore.EnumerationLiteral {
-        this.ensureWiredUp();
-        return this._TestEnumeration_literal2;
+        this.ensureWiredUp()
+        return this._TestEnumeration_literal2
     }
-    private readonly _TestEnumeration_literal3 = new $lwCore.EnumerationLiteral(this._TestEnumeration, "literal3", "TestEnumeration-literal3", "TestEnumeration-literal3");
+    private readonly _TestEnumeration_literal3 = new $lwCore.EnumerationLiteral(this._TestEnumeration, "literal3", "TestEnumeration-literal3", "TestEnumeration-literal3")
     get TestEnumeration_literal3(): $lwCore.EnumerationLiteral {
-        this.ensureWiredUp();
-        return this._TestEnumeration_literal3;
+        this.ensureWiredUp()
+        return this._TestEnumeration_literal3
     }
 
-    public readonly _TestPartition = new $lwCore.Concept(this._language, "TestPartition", "TestPartition", "TestPartition", $lwCore.ConceptModifier.concrete).isPartition();
+    public readonly _TestPartition = new $lwCore.Concept(this._language, "TestPartition", "TestPartition", "TestPartition", $lwCore.ConceptModifier.concrete).isPartition()
     get TestPartition(): $lwCore.Concept {
-        this.ensureWiredUp();
-        return this._TestPartition;
+        this.ensureWiredUp()
+        return this._TestPartition
     }
-    private readonly _TestPartition_data = new $lwCore.Containment(this._TestPartition, "data", "TestPartition-data", "TestPartition-data").isOptional();
+    private readonly _TestPartition_data = new $lwCore.Containment(this._TestPartition, "data", "TestPartition-data", "TestPartition-data").isOptional()
     get TestPartition_data(): $lwCore.Containment {
-        this.ensureWiredUp();
-        return this._TestPartition_data;
+        this.ensureWiredUp()
+        return this._TestPartition_data
     }
-    private readonly _TestPartition_links = new $lwCore.Containment(this._TestPartition, "links", "TestPartition-links", "TestPartition-links").isOptional().isMultiple();
+    private readonly _TestPartition_links = new $lwCore.Containment(this._TestPartition, "links", "TestPartition-links", "TestPartition-links").isOptional().isMultiple()
     get TestPartition_links(): $lwCore.Containment {
-        this.ensureWiredUp();
-        return this._TestPartition_links;
+        this.ensureWiredUp()
+        return this._TestPartition_links
     }
 
-    private _wiredUp: boolean = false;
+    private _wiredUp: boolean = false
     private ensureWiredUp() {
         if (this._wiredUp) {
-            return;
+            return
         }
-        this._language.havingEntities(this._DataTypeTestConcept, this._LinkTestConcept, this._RestrictedTestAnnotation, this._SecondTestEnumeration, this._TestAnnotation, this._TestEnumeration, this._TestPartition);
-        this._DataTypeTestConcept.havingFeatures(this._DataTypeTestConcept_booleanValue_0_1, this._DataTypeTestConcept_booleanValue_1, this._DataTypeTestConcept_enumValue_0_1, this._DataTypeTestConcept_enumValue_1, this._DataTypeTestConcept_integerValue_0_1, this._DataTypeTestConcept_integerValue_1, this._DataTypeTestConcept_stringValue_0_1, this._DataTypeTestConcept_stringValue_1);
-        this._DataTypeTestConcept_booleanValue_0_1.ofType($lwClassCore.LionCore_builtinsBase.INSTANCE._Boolean).isOptional();
-        this._DataTypeTestConcept_booleanValue_1.ofType($lwClassCore.LionCore_builtinsBase.INSTANCE._Boolean);
-        this._DataTypeTestConcept_enumValue_0_1.ofType(this._TestEnumeration).isOptional();
-        this._DataTypeTestConcept_enumValue_1.ofType(this._TestEnumeration);
-        this._DataTypeTestConcept_integerValue_0_1.ofType($lwClassCore.LionCore_builtinsBase.INSTANCE._Integer).isOptional();
-        this._DataTypeTestConcept_integerValue_1.ofType($lwClassCore.LionCore_builtinsBase.INSTANCE._Integer);
-        this._DataTypeTestConcept_stringValue_0_1.ofType($lwClassCore.LionCore_builtinsBase.INSTANCE._String).isOptional();
-        this._DataTypeTestConcept_stringValue_1.ofType($lwClassCore.LionCore_builtinsBase.INSTANCE._String);
-        this._LinkTestConcept.implementing($lwClassCore.LionCore_builtinsBase.INSTANCE._INamed);
-        this._LinkTestConcept.havingFeatures(this._LinkTestConcept_containment_0_1, this._LinkTestConcept_containment_0_n, this._LinkTestConcept_containment_1, this._LinkTestConcept_containment_1_n, this._LinkTestConcept_otherContainment_0_1, this._LinkTestConcept_reference_0_1, this._LinkTestConcept_reference_0_n, this._LinkTestConcept_reference_1, this._LinkTestConcept_reference_1_n);
-        this._LinkTestConcept_containment_0_1.ofType(this._LinkTestConcept);
-        this._LinkTestConcept_containment_0_n.ofType(this._LinkTestConcept);
-        this._LinkTestConcept_containment_1.ofType(this._LinkTestConcept);
-        this._LinkTestConcept_containment_1_n.ofType(this._LinkTestConcept);
-        this._LinkTestConcept_otherContainment_0_1.ofType(this._LinkTestConcept);
-        this._LinkTestConcept_reference_0_1.ofType(this._LinkTestConcept);
-        this._LinkTestConcept_reference_0_n.ofType(this._LinkTestConcept);
-        this._LinkTestConcept_reference_1.ofType(this._LinkTestConcept);
-        this._LinkTestConcept_reference_1_n.ofType(this._LinkTestConcept);
-        this._RestrictedTestAnnotation.implementing($lwClassCore.LionCore_builtinsBase.INSTANCE._INamed);
-        this._SecondTestEnumeration.havingLiterals(this._SecondTestEnumeration_literal1, this._SecondTestEnumeration_literal2, this._SecondTestEnumeration_literal3);
-        this._TestAnnotation.implementing($lwClassCore.LionCore_builtinsBase.INSTANCE._INamed);
-        this._TestAnnotation.havingFeatures(this._TestAnnotation_containedNode, this._TestAnnotation_ref);
-        this._TestAnnotation_containedNode.ofType($lwClassCore.LionCore_builtinsBase.INSTANCE._Node);
-        this._TestAnnotation_ref.ofType($lwClassCore.LionCore_builtinsBase.INSTANCE._Node);
-        this._TestEnumeration.havingLiterals(this._TestEnumeration_literal1, this._TestEnumeration_literal2, this._TestEnumeration_literal3);
-        this._TestPartition.implementing($lwClassCore.LionCore_builtinsBase.INSTANCE._INamed);
-        this._TestPartition.havingFeatures(this._TestPartition_data, this._TestPartition_links);
-        this._TestPartition_data.ofType(this._DataTypeTestConcept);
-        this._TestPartition_links.ofType(this._LinkTestConcept);
-        this._wiredUp = true;
+        this._language.havingEntities(this._DataTypeTestConcept, this._LinkTestConcept, this._RestrictedTestAnnotation, this._SecondTestEnumeration, this._TestAnnotation, this._TestEnumeration, this._TestPartition)
+        this._DataTypeTestConcept.havingFeatures(this._DataTypeTestConcept_booleanValue_0_1, this._DataTypeTestConcept_booleanValue_1, this._DataTypeTestConcept_enumValue_0_1, this._DataTypeTestConcept_enumValue_1, this._DataTypeTestConcept_integerValue_0_1, this._DataTypeTestConcept_integerValue_1, this._DataTypeTestConcept_stringValue_0_1, this._DataTypeTestConcept_stringValue_1)
+        this._DataTypeTestConcept_booleanValue_0_1.ofType($lwClassCore.LionCore_builtinsBase.INSTANCE._Boolean).isOptional()
+        this._DataTypeTestConcept_booleanValue_1.ofType($lwClassCore.LionCore_builtinsBase.INSTANCE._Boolean)
+        this._DataTypeTestConcept_enumValue_0_1.ofType(this._TestEnumeration).isOptional()
+        this._DataTypeTestConcept_enumValue_1.ofType(this._TestEnumeration)
+        this._DataTypeTestConcept_integerValue_0_1.ofType($lwClassCore.LionCore_builtinsBase.INSTANCE._Integer).isOptional()
+        this._DataTypeTestConcept_integerValue_1.ofType($lwClassCore.LionCore_builtinsBase.INSTANCE._Integer)
+        this._DataTypeTestConcept_stringValue_0_1.ofType($lwClassCore.LionCore_builtinsBase.INSTANCE._String).isOptional()
+        this._DataTypeTestConcept_stringValue_1.ofType($lwClassCore.LionCore_builtinsBase.INSTANCE._String)
+        this._LinkTestConcept.implementing($lwClassCore.LionCore_builtinsBase.INSTANCE._INamed)
+        this._LinkTestConcept.havingFeatures(this._LinkTestConcept_containment_0_1, this._LinkTestConcept_containment_0_n, this._LinkTestConcept_containment_1, this._LinkTestConcept_containment_1_n, this._LinkTestConcept_otherContainment_0_1, this._LinkTestConcept_reference_0_1, this._LinkTestConcept_reference_0_n, this._LinkTestConcept_reference_1, this._LinkTestConcept_reference_1_n)
+        this._LinkTestConcept_containment_0_1.ofType(this._LinkTestConcept)
+        this._LinkTestConcept_containment_0_n.ofType(this._LinkTestConcept)
+        this._LinkTestConcept_containment_1.ofType(this._LinkTestConcept)
+        this._LinkTestConcept_containment_1_n.ofType(this._LinkTestConcept)
+        this._LinkTestConcept_otherContainment_0_1.ofType(this._LinkTestConcept)
+        this._LinkTestConcept_reference_0_1.ofType(this._LinkTestConcept)
+        this._LinkTestConcept_reference_0_n.ofType(this._LinkTestConcept)
+        this._LinkTestConcept_reference_1.ofType(this._LinkTestConcept)
+        this._LinkTestConcept_reference_1_n.ofType(this._LinkTestConcept)
+        this._RestrictedTestAnnotation.implementing($lwClassCore.LionCore_builtinsBase.INSTANCE._INamed)
+        this._SecondTestEnumeration.havingLiterals(this._SecondTestEnumeration_literal1, this._SecondTestEnumeration_literal2, this._SecondTestEnumeration_literal3)
+        this._TestAnnotation.implementing($lwClassCore.LionCore_builtinsBase.INSTANCE._INamed)
+        this._TestAnnotation.havingFeatures(this._TestAnnotation_containedNode, this._TestAnnotation_ref)
+        this._TestAnnotation_containedNode.ofType($lwClassCore.LionCore_builtinsBase.INSTANCE._Node)
+        this._TestAnnotation_ref.ofType($lwClassCore.LionCore_builtinsBase.INSTANCE._Node)
+        this._TestEnumeration.havingLiterals(this._TestEnumeration_literal1, this._TestEnumeration_literal2, this._TestEnumeration_literal3)
+        this._TestPartition.implementing($lwClassCore.LionCore_builtinsBase.INSTANCE._INamed)
+        this._TestPartition.havingFeatures(this._TestPartition_data, this._TestPartition_links)
+        this._TestPartition_data.ofType(this._DataTypeTestConcept)
+        this._TestPartition_links.ofType(this._LinkTestConcept)
+        this._wiredUp = true
     }
 
     factory(receiveDelta?: $lwClassCore.DeltaReceiver): $lwClassCore.NodeBaseFactory {
         return (classifier: $lwCore.Classifier, id: $lwJson.LionWebId) => {
             switch (classifier.key) {
-                case this._DataTypeTestConcept.key: return DataTypeTestConcept.create(id, receiveDelta);
-                case this._LinkTestConcept.key: return LinkTestConcept.create(id, receiveDelta);
-                case this._RestrictedTestAnnotation.key: return RestrictedTestAnnotation.create(id, receiveDelta);
-                case this._TestAnnotation.key: return TestAnnotation.create(id, receiveDelta);
-                case this._TestPartition.key: return TestPartition.create(id, receiveDelta);
+                case this._DataTypeTestConcept.key: return DataTypeTestConcept.create(id, receiveDelta)
+                case this._LinkTestConcept.key: return LinkTestConcept.create(id, receiveDelta)
+                case this._RestrictedTestAnnotation.key: return RestrictedTestAnnotation.create(id, receiveDelta)
+                case this._TestAnnotation.key: return TestAnnotation.create(id, receiveDelta)
+                case this._TestPartition.key: return TestPartition.create(id, receiveDelta)
                 default: {
-                    const {language} = classifier;
-                    throw new Error(`can't instantiate ${classifier.name} (key=${classifier.key}): classifier is not known in language ${language.name} (key=${language.key}, version=${language.version})`);
+                    const {language} = classifier
+                    throw new Error(`can't instantiate ${classifier.name} (key=${classifier.key}): classifier is not known in language ${language.name} (key=${language.key}, version=${language.version})`)
                 }
             }
         }
     }
 
     enumLiteralFrom<EnumType>(enumerationLiteral: $lwCore.EnumerationLiteral): EnumType {
-        const {enumeration} = enumerationLiteral;
+        const {enumeration} = enumerationLiteral
         switch (enumeration.key) {
-            case this._SecondTestEnumeration.key: return enumerationLiteral.key as EnumType;
-            case this._TestEnumeration.key: return enumerationLiteral.key as EnumType;
+            case this._SecondTestEnumeration.key: return enumerationLiteral.key as EnumType
+            case this._TestEnumeration.key: return enumerationLiteral.key as EnumType
             default: {
-                const {language} = enumeration;
-                throw new Error(`enumeration with key ${enumeration.key} is not known in language ${language.name} (key=${language.key}, version=${language.version})`);
+                const {language} = enumeration
+                throw new Error(`enumeration with key ${enumeration.key} is not known in language ${language.name} (key=${language.key}, version=${language.version})`)
             }
         }
     }
 
-    public static readonly INSTANCE = new TestLanguageBase();
+    public static readonly INSTANCE = new TestLanguageBase()
 }
 
 
 export class DataTypeTestConcept extends $lwClassCore.NodeBase {
     static create(id: $lwJson.LionWebId, receiveDelta?: $lwClassCore.DeltaReceiver, parentInfo?: $lwClassCore.Parentage): DataTypeTestConcept {
-        return new DataTypeTestConcept(TestLanguageBase.INSTANCE.DataTypeTestConcept, id, receiveDelta, parentInfo);
+        return new DataTypeTestConcept(TestLanguageBase.INSTANCE.DataTypeTestConcept, id, receiveDelta, parentInfo)
     }
 
-    private readonly _booleanValue_0_1: $lwClassCore.OptionalPropertyValueManager<boolean>;
+    private readonly _booleanValue_0_1: $lwClassCore.OptionalPropertyValueManager<boolean>
     get booleanValue_0_1(): boolean | undefined {
-        return this._booleanValue_0_1.get();
+        return this._booleanValue_0_1.get()
     }
     set booleanValue_0_1(newValue: boolean | undefined) {
-        this._booleanValue_0_1.set(newValue);
+        this._booleanValue_0_1.set(newValue)
     }
 
-    private readonly _booleanValue_1: $lwClassCore.RequiredPropertyValueManager<boolean>;
+    private readonly _booleanValue_1: $lwClassCore.RequiredPropertyValueManager<boolean>
     get booleanValue_1(): boolean {
-        return this._booleanValue_1.get();
+        return this._booleanValue_1.get()
     }
     set booleanValue_1(newValue: boolean) {
-        this._booleanValue_1.set(newValue);
+        this._booleanValue_1.set(newValue)
     }
 
-    private readonly _enumValue_0_1: $lwClassCore.OptionalPropertyValueManager<TestEnumeration>;
+    private readonly _enumValue_0_1: $lwClassCore.OptionalPropertyValueManager<TestEnumeration>
     get enumValue_0_1(): TestEnumeration | undefined {
-        return this._enumValue_0_1.get();
+        return this._enumValue_0_1.get()
     }
     set enumValue_0_1(newValue: TestEnumeration | undefined) {
-        this._enumValue_0_1.set(newValue);
+        this._enumValue_0_1.set(newValue)
     }
 
-    private readonly _enumValue_1: $lwClassCore.RequiredPropertyValueManager<TestEnumeration>;
+    private readonly _enumValue_1: $lwClassCore.RequiredPropertyValueManager<TestEnumeration>
     get enumValue_1(): TestEnumeration {
-        return this._enumValue_1.get();
+        return this._enumValue_1.get()
     }
     set enumValue_1(newValue: TestEnumeration) {
-        this._enumValue_1.set(newValue);
+        this._enumValue_1.set(newValue)
     }
 
-    private readonly _integerValue_0_1: $lwClassCore.OptionalPropertyValueManager<number>;
+    private readonly _integerValue_0_1: $lwClassCore.OptionalPropertyValueManager<number>
     get integerValue_0_1(): number | undefined {
-        return this._integerValue_0_1.get();
+        return this._integerValue_0_1.get()
     }
     set integerValue_0_1(newValue: number | undefined) {
-        this._integerValue_0_1.set(newValue);
+        this._integerValue_0_1.set(newValue)
     }
 
-    private readonly _integerValue_1: $lwClassCore.RequiredPropertyValueManager<number>;
+    private readonly _integerValue_1: $lwClassCore.RequiredPropertyValueManager<number>
     get integerValue_1(): number {
-        return this._integerValue_1.get();
+        return this._integerValue_1.get()
     }
     set integerValue_1(newValue: number) {
-        this._integerValue_1.set(newValue);
+        this._integerValue_1.set(newValue)
     }
 
-    private readonly _stringValue_0_1: $lwClassCore.OptionalPropertyValueManager<string>;
+    private readonly _stringValue_0_1: $lwClassCore.OptionalPropertyValueManager<string>
     get stringValue_0_1(): string | undefined {
-        return this._stringValue_0_1.get();
+        return this._stringValue_0_1.get()
     }
     set stringValue_0_1(newValue: string | undefined) {
-        this._stringValue_0_1.set(newValue);
+        this._stringValue_0_1.set(newValue)
     }
 
-    private readonly _stringValue_1: $lwClassCore.RequiredPropertyValueManager<string>;
+    private readonly _stringValue_1: $lwClassCore.RequiredPropertyValueManager<string>
     get stringValue_1(): string {
-        return this._stringValue_1.get();
+        return this._stringValue_1.get()
     }
     set stringValue_1(newValue: string) {
-        this._stringValue_1.set(newValue);
+        this._stringValue_1.set(newValue)
     }
 
     public constructor(classifier: $lwCore.Classifier, id: $lwJson.LionWebId, receiveDelta?: $lwClassCore.DeltaReceiver, parentInfo?: $lwClassCore.Parentage) {
-        super(classifier, id, receiveDelta, parentInfo);
-        this._booleanValue_0_1 = new $lwClassCore.OptionalPropertyValueManager<boolean>(TestLanguageBase.INSTANCE.DataTypeTestConcept_booleanValue_0_1, this);
-        this._booleanValue_1 = new $lwClassCore.RequiredPropertyValueManager<boolean>(TestLanguageBase.INSTANCE.DataTypeTestConcept_booleanValue_1, this);
-        this._enumValue_0_1 = new $lwClassCore.OptionalPropertyValueManager<TestEnumeration>(TestLanguageBase.INSTANCE.DataTypeTestConcept_enumValue_0_1, this);
-        this._enumValue_1 = new $lwClassCore.RequiredPropertyValueManager<TestEnumeration>(TestLanguageBase.INSTANCE.DataTypeTestConcept_enumValue_1, this);
-        this._integerValue_0_1 = new $lwClassCore.OptionalPropertyValueManager<number>(TestLanguageBase.INSTANCE.DataTypeTestConcept_integerValue_0_1, this);
-        this._integerValue_1 = new $lwClassCore.RequiredPropertyValueManager<number>(TestLanguageBase.INSTANCE.DataTypeTestConcept_integerValue_1, this);
-        this._stringValue_0_1 = new $lwClassCore.OptionalPropertyValueManager<string>(TestLanguageBase.INSTANCE.DataTypeTestConcept_stringValue_0_1, this);
-        this._stringValue_1 = new $lwClassCore.RequiredPropertyValueManager<string>(TestLanguageBase.INSTANCE.DataTypeTestConcept_stringValue_1, this);
+        super(classifier, id, receiveDelta, parentInfo)
+        this._booleanValue_0_1 = new $lwClassCore.OptionalPropertyValueManager<boolean>(TestLanguageBase.INSTANCE.DataTypeTestConcept_booleanValue_0_1, this)
+        this._booleanValue_1 = new $lwClassCore.RequiredPropertyValueManager<boolean>(TestLanguageBase.INSTANCE.DataTypeTestConcept_booleanValue_1, this)
+        this._enumValue_0_1 = new $lwClassCore.OptionalPropertyValueManager<TestEnumeration>(TestLanguageBase.INSTANCE.DataTypeTestConcept_enumValue_0_1, this)
+        this._enumValue_1 = new $lwClassCore.RequiredPropertyValueManager<TestEnumeration>(TestLanguageBase.INSTANCE.DataTypeTestConcept_enumValue_1, this)
+        this._integerValue_0_1 = new $lwClassCore.OptionalPropertyValueManager<number>(TestLanguageBase.INSTANCE.DataTypeTestConcept_integerValue_0_1, this)
+        this._integerValue_1 = new $lwClassCore.RequiredPropertyValueManager<number>(TestLanguageBase.INSTANCE.DataTypeTestConcept_integerValue_1, this)
+        this._stringValue_0_1 = new $lwClassCore.OptionalPropertyValueManager<string>(TestLanguageBase.INSTANCE.DataTypeTestConcept_stringValue_0_1, this)
+        this._stringValue_1 = new $lwClassCore.RequiredPropertyValueManager<string>(TestLanguageBase.INSTANCE.DataTypeTestConcept_stringValue_1, this)
     }
 
     override getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
         switch (property.key) {
-            case TestLanguageBase.INSTANCE.DataTypeTestConcept_booleanValue_0_1.key: return this._booleanValue_0_1;
-            case TestLanguageBase.INSTANCE.DataTypeTestConcept_booleanValue_1.key: return this._booleanValue_1;
-            case TestLanguageBase.INSTANCE.DataTypeTestConcept_enumValue_0_1.key: return this._enumValue_0_1;
-            case TestLanguageBase.INSTANCE.DataTypeTestConcept_enumValue_1.key: return this._enumValue_1;
-            case TestLanguageBase.INSTANCE.DataTypeTestConcept_integerValue_0_1.key: return this._integerValue_0_1;
-            case TestLanguageBase.INSTANCE.DataTypeTestConcept_integerValue_1.key: return this._integerValue_1;
-            case TestLanguageBase.INSTANCE.DataTypeTestConcept_stringValue_0_1.key: return this._stringValue_0_1;
-            case TestLanguageBase.INSTANCE.DataTypeTestConcept_stringValue_1.key: return this._stringValue_1;
-            default: return super.getPropertyValueManager(property);
+            case TestLanguageBase.INSTANCE.DataTypeTestConcept_booleanValue_0_1.key: return this._booleanValue_0_1
+            case TestLanguageBase.INSTANCE.DataTypeTestConcept_booleanValue_1.key: return this._booleanValue_1
+            case TestLanguageBase.INSTANCE.DataTypeTestConcept_enumValue_0_1.key: return this._enumValue_0_1
+            case TestLanguageBase.INSTANCE.DataTypeTestConcept_enumValue_1.key: return this._enumValue_1
+            case TestLanguageBase.INSTANCE.DataTypeTestConcept_integerValue_0_1.key: return this._integerValue_0_1
+            case TestLanguageBase.INSTANCE.DataTypeTestConcept_integerValue_1.key: return this._integerValue_1
+            case TestLanguageBase.INSTANCE.DataTypeTestConcept_stringValue_0_1.key: return this._stringValue_0_1
+            case TestLanguageBase.INSTANCE.DataTypeTestConcept_stringValue_1.key: return this._stringValue_1
+            default: return super.getPropertyValueManager(property)
         }
     }
 }
 
 export class LinkTestConcept extends $lwClassCore.NodeBase implements $lwClassCore.INamed {
     static create(id: $lwJson.LionWebId, receiveDelta?: $lwClassCore.DeltaReceiver, parentInfo?: $lwClassCore.Parentage): LinkTestConcept {
-        return new LinkTestConcept(TestLanguageBase.INSTANCE.LinkTestConcept, id, receiveDelta, parentInfo);
+        return new LinkTestConcept(TestLanguageBase.INSTANCE.LinkTestConcept, id, receiveDelta, parentInfo)
     }
 
-    private readonly _containment_0_1: $lwClassCore.OptionalSingleContainmentValueManager<LinkTestConcept>;
+    private readonly _containment_0_1: $lwClassCore.OptionalSingleContainmentValueManager<LinkTestConcept>
     get containment_0_1(): LinkTestConcept | undefined {
-        return this._containment_0_1.get();
+        return this._containment_0_1.get()
     }
     set containment_0_1(newValue: LinkTestConcept | undefined) {
-        this._containment_0_1.set(newValue);
+        this._containment_0_1.set(newValue)
     }
     replaceContainment_0_1With(newValue: LinkTestConcept) {
-        this._containment_0_1.replaceWith(newValue);
+        this._containment_0_1.replaceWith(newValue)
     }
 
-    private readonly _containment_0_n: $lwClassCore.OptionalMultiContainmentValueManager<LinkTestConcept>;
+    private readonly _containment_0_n: $lwClassCore.OptionalMultiContainmentValueManager<LinkTestConcept>
     get containment_0_n(): LinkTestConcept[] {
-        return this._containment_0_n.get();
+        return this._containment_0_n.get()
     }
     addContainment_0_n(newValue: LinkTestConcept) {
-        this._containment_0_n.add(newValue);
+        this._containment_0_n.add(newValue)
     }
     removeContainment_0_n(valueToRemove: LinkTestConcept) {
-        this._containment_0_n.remove(valueToRemove);
+        this._containment_0_n.remove(valueToRemove)
     }
     addContainment_0_nAtIndex(newValue: LinkTestConcept, index: number) {
-        this._containment_0_n.insertAtIndex(newValue, index);
+        this._containment_0_n.insertAtIndex(newValue, index)
     }
     replaceContainment_0_nAtIndex(movedChild: LinkTestConcept, newIndex: number) {
-        this._containment_0_n.replaceAtIndex(movedChild, newIndex);
+        this._containment_0_n.replaceAtIndex(movedChild, newIndex)
     }
     moveContainment_0_n(oldIndex: number, indexOffset: number) {
-        this._containment_0_n.move(oldIndex, indexOffset);
+        this._containment_0_n.move(oldIndex, indexOffset)
     }
     moveAndReplaceContainment_0_n(oldIndex: number, indexOffset: number) {
-        this._containment_0_n.moveAndReplace(oldIndex, indexOffset);
+        this._containment_0_n.moveAndReplace(oldIndex, indexOffset)
     }
 
-    private readonly _containment_1: $lwClassCore.RequiredSingleContainmentValueManager<LinkTestConcept>;
+    private readonly _containment_1: $lwClassCore.RequiredSingleContainmentValueManager<LinkTestConcept>
     get containment_1(): LinkTestConcept {
-        return this._containment_1.get();
+        return this._containment_1.get()
     }
     set containment_1(newValue: LinkTestConcept) {
-        this._containment_1.set(newValue);
+        this._containment_1.set(newValue)
     }
     replaceContainment_1With(newValue: LinkTestConcept) {
-        this._containment_1.replaceWith(newValue);
+        this._containment_1.replaceWith(newValue)
     }
 
-    private readonly _containment_1_n: $lwClassCore.RequiredMultiContainmentValueManager<LinkTestConcept>;
+    private readonly _containment_1_n: $lwClassCore.RequiredMultiContainmentValueManager<LinkTestConcept>
     get containment_1_n(): LinkTestConcept[] {
-        return this._containment_1_n.get();
+        return this._containment_1_n.get()
     }
     addContainment_1_n(newValue: LinkTestConcept) {
-        this._containment_1_n.add(newValue);
+        this._containment_1_n.add(newValue)
     }
     removeContainment_1_n(valueToRemove: LinkTestConcept) {
-        this._containment_1_n.remove(valueToRemove);
+        this._containment_1_n.remove(valueToRemove)
     }
     addContainment_1_nAtIndex(newValue: LinkTestConcept, index: number) {
-        this._containment_1_n.insertAtIndex(newValue, index);
+        this._containment_1_n.insertAtIndex(newValue, index)
     }
     replaceContainment_1_nAtIndex(movedChild: LinkTestConcept, newIndex: number) {
-        this._containment_1_n.replaceAtIndex(movedChild, newIndex);
+        this._containment_1_n.replaceAtIndex(movedChild, newIndex)
     }
     moveContainment_1_n(oldIndex: number, indexOffset: number) {
-        this._containment_1_n.move(oldIndex, indexOffset);
+        this._containment_1_n.move(oldIndex, indexOffset)
     }
     moveAndReplaceContainment_1_n(oldIndex: number, indexOffset: number) {
-        this._containment_1_n.moveAndReplace(oldIndex, indexOffset);
+        this._containment_1_n.moveAndReplace(oldIndex, indexOffset)
     }
 
-    private readonly _name: $lwClassCore.RequiredPropertyValueManager<string>;
+    private readonly _name: $lwClassCore.RequiredPropertyValueManager<string>
     get name(): string {
-        return this._name.get();
+        return this._name.get()
     }
     set name(newValue: string) {
-        this._name.set(newValue);
+        this._name.set(newValue)
     }
 
-    private readonly _otherContainment_0_1: $lwClassCore.OptionalSingleContainmentValueManager<LinkTestConcept>;
+    private readonly _otherContainment_0_1: $lwClassCore.OptionalSingleContainmentValueManager<LinkTestConcept>
     get otherContainment_0_1(): LinkTestConcept | undefined {
-        return this._otherContainment_0_1.get();
+        return this._otherContainment_0_1.get()
     }
     set otherContainment_0_1(newValue: LinkTestConcept | undefined) {
-        this._otherContainment_0_1.set(newValue);
+        this._otherContainment_0_1.set(newValue)
     }
     replaceOtherContainment_0_1With(newValue: LinkTestConcept) {
-        this._otherContainment_0_1.replaceWith(newValue);
+        this._otherContainment_0_1.replaceWith(newValue)
     }
 
-    private readonly _reference_0_1: $lwClassCore.OptionalSingleReferenceValueManager<LinkTestConcept>;
+    private readonly _reference_0_1: $lwClassCore.OptionalSingleReferenceValueManager<LinkTestConcept>
     get reference_0_1(): $lwCore.SingleRef<LinkTestConcept> | undefined {
-        return this._reference_0_1.get();
+        return this._reference_0_1.get()
     }
     set reference_0_1(newValue: $lwCore.SingleRef<LinkTestConcept> | undefined) {
-        this._reference_0_1.set(newValue);
+        this._reference_0_1.set(newValue)
     }
 
-    private readonly _reference_0_n: $lwClassCore.OptionalMultiReferenceValueManager<LinkTestConcept>;
+    private readonly _reference_0_n: $lwClassCore.OptionalMultiReferenceValueManager<LinkTestConcept>
     get reference_0_n(): $lwCore.MultiRef<LinkTestConcept> {
-        return this._reference_0_n.get();
+        return this._reference_0_n.get()
     }
     addReference_0_n(newValue: LinkTestConcept) {
-        this._reference_0_n.add(newValue);
+        this._reference_0_n.add(newValue)
     }
     removeReference_0_n(valueToRemove: LinkTestConcept) {
-        this._reference_0_n.remove(valueToRemove);
+        this._reference_0_n.remove(valueToRemove)
     }
     addReference_0_nAtIndex(newValue: LinkTestConcept, index: number) {
-        this._reference_0_n.insertAtIndex(newValue, index);
+        this._reference_0_n.insertAtIndex(newValue, index)
     }
     moveReference_0_n(oldIndex: number, newIndex: number) {
-        this._reference_0_n.move(oldIndex, newIndex);
+        this._reference_0_n.move(oldIndex, newIndex)
     }
 
-    private readonly _reference_1: $lwClassCore.RequiredSingleReferenceValueManager<LinkTestConcept>;
+    private readonly _reference_1: $lwClassCore.RequiredSingleReferenceValueManager<LinkTestConcept>
     get reference_1(): $lwCore.SingleRef<LinkTestConcept> {
-        return this._reference_1.get();
+        return this._reference_1.get()
     }
     set reference_1(newValue: $lwCore.SingleRef<LinkTestConcept>) {
-        this._reference_1.set(newValue);
+        this._reference_1.set(newValue)
     }
 
-    private readonly _reference_1_n: $lwClassCore.RequiredMultiReferenceValueManager<LinkTestConcept>;
+    private readonly _reference_1_n: $lwClassCore.RequiredMultiReferenceValueManager<LinkTestConcept>
     get reference_1_n(): $lwCore.MultiRef<LinkTestConcept> {
-        return this._reference_1_n.get();
+        return this._reference_1_n.get()
     }
     addReference_1_n(newValue: LinkTestConcept) {
-        this._reference_1_n.add(newValue);
+        this._reference_1_n.add(newValue)
     }
     removeReference_1_n(valueToRemove: LinkTestConcept) {
-        this._reference_1_n.remove(valueToRemove);
+        this._reference_1_n.remove(valueToRemove)
     }
     addReference_1_nAtIndex(newValue: LinkTestConcept, index: number) {
-        this._reference_1_n.insertAtIndex(newValue, index);
+        this._reference_1_n.insertAtIndex(newValue, index)
     }
     moveReference_1_n(oldIndex: number, newIndex: number) {
-        this._reference_1_n.move(oldIndex, newIndex);
+        this._reference_1_n.move(oldIndex, newIndex)
     }
 
     public constructor(classifier: $lwCore.Classifier, id: $lwJson.LionWebId, receiveDelta?: $lwClassCore.DeltaReceiver, parentInfo?: $lwClassCore.Parentage) {
-        super(classifier, id, receiveDelta, parentInfo);
-        this._containment_0_1 = new $lwClassCore.OptionalSingleContainmentValueManager<LinkTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_containment_0_1, this);
-        this._containment_0_n = new $lwClassCore.OptionalMultiContainmentValueManager<LinkTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_containment_0_n, this);
-        this._containment_1 = new $lwClassCore.RequiredSingleContainmentValueManager<LinkTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_containment_1, this);
-        this._containment_1_n = new $lwClassCore.RequiredMultiContainmentValueManager<LinkTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_containment_1_n, this);
-        this._name = new $lwClassCore.RequiredPropertyValueManager<string>($lwClassCore.LionCore_builtinsBase.INSTANCE.INamed_name, this);
-        this._otherContainment_0_1 = new $lwClassCore.OptionalSingleContainmentValueManager<LinkTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_otherContainment_0_1, this);
-        this._reference_0_1 = new $lwClassCore.OptionalSingleReferenceValueManager<LinkTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_reference_0_1, this);
-        this._reference_0_n = new $lwClassCore.OptionalMultiReferenceValueManager<LinkTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_reference_0_n, this);
-        this._reference_1 = new $lwClassCore.RequiredSingleReferenceValueManager<LinkTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_reference_1, this);
-        this._reference_1_n = new $lwClassCore.RequiredMultiReferenceValueManager<LinkTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_reference_1_n, this);
+        super(classifier, id, receiveDelta, parentInfo)
+        this._containment_0_1 = new $lwClassCore.OptionalSingleContainmentValueManager<LinkTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_containment_0_1, this)
+        this._containment_0_n = new $lwClassCore.OptionalMultiContainmentValueManager<LinkTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_containment_0_n, this)
+        this._containment_1 = new $lwClassCore.RequiredSingleContainmentValueManager<LinkTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_containment_1, this)
+        this._containment_1_n = new $lwClassCore.RequiredMultiContainmentValueManager<LinkTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_containment_1_n, this)
+        this._name = new $lwClassCore.RequiredPropertyValueManager<string>($lwClassCore.LionCore_builtinsBase.INSTANCE.INamed_name, this)
+        this._otherContainment_0_1 = new $lwClassCore.OptionalSingleContainmentValueManager<LinkTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_otherContainment_0_1, this)
+        this._reference_0_1 = new $lwClassCore.OptionalSingleReferenceValueManager<LinkTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_reference_0_1, this)
+        this._reference_0_n = new $lwClassCore.OptionalMultiReferenceValueManager<LinkTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_reference_0_n, this)
+        this._reference_1 = new $lwClassCore.RequiredSingleReferenceValueManager<LinkTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_reference_1, this)
+        this._reference_1_n = new $lwClassCore.RequiredMultiReferenceValueManager<LinkTestConcept>(TestLanguageBase.INSTANCE.LinkTestConcept_reference_1_n, this)
     }
 
     override getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
         if (property.key === $lwClassCore.LionCore_builtinsBase.INSTANCE.INamed_name.key) {
-            return this._name;
+            return this._name
         }
-        return super.getPropertyValueManager(property);
+        return super.getPropertyValueManager(property)
     }
 
     override getContainmentValueManager(containment: $lwCore.Containment): $lwClassCore.ContainmentValueManager<$lwClassCore.INodeBase> {
         switch (containment.key) {
-            case TestLanguageBase.INSTANCE.LinkTestConcept_containment_0_1.key: return this._containment_0_1;
-            case TestLanguageBase.INSTANCE.LinkTestConcept_containment_0_n.key: return this._containment_0_n;
-            case TestLanguageBase.INSTANCE.LinkTestConcept_containment_1.key: return this._containment_1;
-            case TestLanguageBase.INSTANCE.LinkTestConcept_containment_1_n.key: return this._containment_1_n;
-            case TestLanguageBase.INSTANCE.LinkTestConcept_otherContainment_0_1.key: return this._otherContainment_0_1;
-            default: return super.getContainmentValueManager(containment);
+            case TestLanguageBase.INSTANCE.LinkTestConcept_containment_0_1.key: return this._containment_0_1
+            case TestLanguageBase.INSTANCE.LinkTestConcept_containment_0_n.key: return this._containment_0_n
+            case TestLanguageBase.INSTANCE.LinkTestConcept_containment_1.key: return this._containment_1
+            case TestLanguageBase.INSTANCE.LinkTestConcept_containment_1_n.key: return this._containment_1_n
+            case TestLanguageBase.INSTANCE.LinkTestConcept_otherContainment_0_1.key: return this._otherContainment_0_1
+            default: return super.getContainmentValueManager(containment)
         }
     }
 
     override getReferenceValueManager(reference: $lwCore.Reference): $lwClassCore.ReferenceValueManager<$lwCore.Node> {
         switch (reference.key) {
-            case TestLanguageBase.INSTANCE.LinkTestConcept_reference_0_1.key: return this._reference_0_1;
-            case TestLanguageBase.INSTANCE.LinkTestConcept_reference_0_n.key: return this._reference_0_n;
-            case TestLanguageBase.INSTANCE.LinkTestConcept_reference_1.key: return this._reference_1;
-            case TestLanguageBase.INSTANCE.LinkTestConcept_reference_1_n.key: return this._reference_1_n;
-            default: return super.getReferenceValueManager(reference);
+            case TestLanguageBase.INSTANCE.LinkTestConcept_reference_0_1.key: return this._reference_0_1
+            case TestLanguageBase.INSTANCE.LinkTestConcept_reference_0_n.key: return this._reference_0_n
+            case TestLanguageBase.INSTANCE.LinkTestConcept_reference_1.key: return this._reference_1
+            case TestLanguageBase.INSTANCE.LinkTestConcept_reference_1_n.key: return this._reference_1_n
+            default: return super.getReferenceValueManager(reference)
         }
     }
 }
 
 export class RestrictedTestAnnotation extends $lwClassCore.NodeBase implements $lwClassCore.INamed {
     static create(id: $lwJson.LionWebId, receiveDelta?: $lwClassCore.DeltaReceiver, parentInfo?: $lwClassCore.Parentage): RestrictedTestAnnotation {
-        return new RestrictedTestAnnotation(TestLanguageBase.INSTANCE.RestrictedTestAnnotation, id, receiveDelta, parentInfo);
+        return new RestrictedTestAnnotation(TestLanguageBase.INSTANCE.RestrictedTestAnnotation, id, receiveDelta, parentInfo)
     }
 
-    private readonly _name: $lwClassCore.RequiredPropertyValueManager<string>;
+    private readonly _name: $lwClassCore.RequiredPropertyValueManager<string>
     get name(): string {
-        return this._name.get();
+        return this._name.get()
     }
     set name(newValue: string) {
-        this._name.set(newValue);
+        this._name.set(newValue)
     }
 
     public constructor(classifier: $lwCore.Classifier, id: $lwJson.LionWebId, receiveDelta?: $lwClassCore.DeltaReceiver, parentInfo?: $lwClassCore.Parentage) {
-        super(classifier, id, receiveDelta, parentInfo);
-        this._name = new $lwClassCore.RequiredPropertyValueManager<string>($lwClassCore.LionCore_builtinsBase.INSTANCE.INamed_name, this);
+        super(classifier, id, receiveDelta, parentInfo)
+        this._name = new $lwClassCore.RequiredPropertyValueManager<string>($lwClassCore.LionCore_builtinsBase.INSTANCE.INamed_name, this)
     }
 
     override getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
         if (property.key === $lwClassCore.LionCore_builtinsBase.INSTANCE.INamed_name.key) {
-            return this._name;
+            return this._name
         }
-        return super.getPropertyValueManager(property);
+        return super.getPropertyValueManager(property)
     }
 }
 
@@ -603,62 +603,62 @@ export enum SecondTestEnumeration {
 
 export class TestAnnotation extends $lwClassCore.NodeBase implements $lwClassCore.INamed {
     static create(id: $lwJson.LionWebId, receiveDelta?: $lwClassCore.DeltaReceiver, parentInfo?: $lwClassCore.Parentage): TestAnnotation {
-        return new TestAnnotation(TestLanguageBase.INSTANCE.TestAnnotation, id, receiveDelta, parentInfo);
+        return new TestAnnotation(TestLanguageBase.INSTANCE.TestAnnotation, id, receiveDelta, parentInfo)
     }
 
-    private readonly _containedNode: $lwClassCore.OptionalSingleContainmentValueManager<$lwClassCore.INodeBase>;
+    private readonly _containedNode: $lwClassCore.OptionalSingleContainmentValueManager<$lwClassCore.INodeBase>
     get containedNode(): $lwClassCore.INodeBase | undefined {
-        return this._containedNode.get();
+        return this._containedNode.get()
     }
     set containedNode(newValue: $lwClassCore.INodeBase | undefined) {
-        this._containedNode.set(newValue);
+        this._containedNode.set(newValue)
     }
     replaceContainedNodeWith(newValue: $lwClassCore.INodeBase) {
-        this._containedNode.replaceWith(newValue);
+        this._containedNode.replaceWith(newValue)
     }
 
-    private readonly _name: $lwClassCore.RequiredPropertyValueManager<string>;
+    private readonly _name: $lwClassCore.RequiredPropertyValueManager<string>
     get name(): string {
-        return this._name.get();
+        return this._name.get()
     }
     set name(newValue: string) {
-        this._name.set(newValue);
+        this._name.set(newValue)
     }
 
-    private readonly _ref: $lwClassCore.RequiredSingleReferenceValueManager<$lwCore.Node>;
+    private readonly _ref: $lwClassCore.RequiredSingleReferenceValueManager<$lwCore.Node>
     get ref(): $lwCore.SingleRef<$lwCore.Node> {
-        return this._ref.get();
+        return this._ref.get()
     }
     set ref(newValue: $lwCore.SingleRef<$lwCore.Node>) {
-        this._ref.set(newValue);
+        this._ref.set(newValue)
     }
 
     public constructor(classifier: $lwCore.Classifier, id: $lwJson.LionWebId, receiveDelta?: $lwClassCore.DeltaReceiver, parentInfo?: $lwClassCore.Parentage) {
-        super(classifier, id, receiveDelta, parentInfo);
-        this._containedNode = new $lwClassCore.OptionalSingleContainmentValueManager<$lwClassCore.INodeBase>(TestLanguageBase.INSTANCE.TestAnnotation_containedNode, this);
-        this._name = new $lwClassCore.RequiredPropertyValueManager<string>($lwClassCore.LionCore_builtinsBase.INSTANCE.INamed_name, this);
-        this._ref = new $lwClassCore.RequiredSingleReferenceValueManager<$lwCore.Node>(TestLanguageBase.INSTANCE.TestAnnotation_ref, this);
+        super(classifier, id, receiveDelta, parentInfo)
+        this._containedNode = new $lwClassCore.OptionalSingleContainmentValueManager<$lwClassCore.INodeBase>(TestLanguageBase.INSTANCE.TestAnnotation_containedNode, this)
+        this._name = new $lwClassCore.RequiredPropertyValueManager<string>($lwClassCore.LionCore_builtinsBase.INSTANCE.INamed_name, this)
+        this._ref = new $lwClassCore.RequiredSingleReferenceValueManager<$lwCore.Node>(TestLanguageBase.INSTANCE.TestAnnotation_ref, this)
     }
 
     override getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
         if (property.key === $lwClassCore.LionCore_builtinsBase.INSTANCE.INamed_name.key) {
-            return this._name;
+            return this._name
         }
-        return super.getPropertyValueManager(property);
+        return super.getPropertyValueManager(property)
     }
 
     override getContainmentValueManager(containment: $lwCore.Containment): $lwClassCore.ContainmentValueManager<$lwClassCore.INodeBase> {
         if (containment.key === TestLanguageBase.INSTANCE.TestAnnotation_containedNode.key) {
-            return this._containedNode;
+            return this._containedNode
         }
-        return super.getContainmentValueManager(containment);
+        return super.getContainmentValueManager(containment)
     }
 
     override getReferenceValueManager(reference: $lwCore.Reference): $lwClassCore.ReferenceValueManager<$lwCore.Node> {
         if (reference.key === TestLanguageBase.INSTANCE.TestAnnotation_ref.key) {
-            return this._ref;
+            return this._ref
         }
-        return super.getReferenceValueManager(reference);
+        return super.getReferenceValueManager(reference)
     }
 }
 
@@ -670,70 +670,70 @@ export enum TestEnumeration {
 
 export class TestPartition extends $lwClassCore.NodeBase implements $lwClassCore.INamed {
     static create(id: $lwJson.LionWebId, receiveDelta?: $lwClassCore.DeltaReceiver, parentInfo?: $lwClassCore.Parentage): TestPartition {
-        return new TestPartition(TestLanguageBase.INSTANCE.TestPartition, id, receiveDelta, parentInfo);
+        return new TestPartition(TestLanguageBase.INSTANCE.TestPartition, id, receiveDelta, parentInfo)
     }
 
-    private readonly _data: $lwClassCore.OptionalSingleContainmentValueManager<DataTypeTestConcept>;
+    private readonly _data: $lwClassCore.OptionalSingleContainmentValueManager<DataTypeTestConcept>
     get data(): DataTypeTestConcept | undefined {
-        return this._data.get();
+        return this._data.get()
     }
     set data(newValue: DataTypeTestConcept | undefined) {
-        this._data.set(newValue);
+        this._data.set(newValue)
     }
     replaceDataWith(newValue: DataTypeTestConcept) {
-        this._data.replaceWith(newValue);
+        this._data.replaceWith(newValue)
     }
 
-    private readonly _links: $lwClassCore.OptionalMultiContainmentValueManager<LinkTestConcept>;
+    private readonly _links: $lwClassCore.OptionalMultiContainmentValueManager<LinkTestConcept>
     get links(): LinkTestConcept[] {
-        return this._links.get();
+        return this._links.get()
     }
     addLinks(newValue: LinkTestConcept) {
-        this._links.add(newValue);
+        this._links.add(newValue)
     }
     removeLinks(valueToRemove: LinkTestConcept) {
-        this._links.remove(valueToRemove);
+        this._links.remove(valueToRemove)
     }
     addLinksAtIndex(newValue: LinkTestConcept, index: number) {
-        this._links.insertAtIndex(newValue, index);
+        this._links.insertAtIndex(newValue, index)
     }
     replaceLinksAtIndex(movedChild: LinkTestConcept, newIndex: number) {
-        this._links.replaceAtIndex(movedChild, newIndex);
+        this._links.replaceAtIndex(movedChild, newIndex)
     }
     moveLinks(oldIndex: number, indexOffset: number) {
-        this._links.move(oldIndex, indexOffset);
+        this._links.move(oldIndex, indexOffset)
     }
     moveAndReplaceLinks(oldIndex: number, indexOffset: number) {
-        this._links.moveAndReplace(oldIndex, indexOffset);
+        this._links.moveAndReplace(oldIndex, indexOffset)
     }
 
-    private readonly _name: $lwClassCore.RequiredPropertyValueManager<string>;
+    private readonly _name: $lwClassCore.RequiredPropertyValueManager<string>
     get name(): string {
-        return this._name.get();
+        return this._name.get()
     }
     set name(newValue: string) {
-        this._name.set(newValue);
+        this._name.set(newValue)
     }
 
     public constructor(classifier: $lwCore.Classifier, id: $lwJson.LionWebId, receiveDelta?: $lwClassCore.DeltaReceiver, parentInfo?: $lwClassCore.Parentage) {
-        super(classifier, id, receiveDelta, parentInfo);
-        this._data = new $lwClassCore.OptionalSingleContainmentValueManager<DataTypeTestConcept>(TestLanguageBase.INSTANCE.TestPartition_data, this);
-        this._links = new $lwClassCore.OptionalMultiContainmentValueManager<LinkTestConcept>(TestLanguageBase.INSTANCE.TestPartition_links, this);
-        this._name = new $lwClassCore.RequiredPropertyValueManager<string>($lwClassCore.LionCore_builtinsBase.INSTANCE.INamed_name, this);
+        super(classifier, id, receiveDelta, parentInfo)
+        this._data = new $lwClassCore.OptionalSingleContainmentValueManager<DataTypeTestConcept>(TestLanguageBase.INSTANCE.TestPartition_data, this)
+        this._links = new $lwClassCore.OptionalMultiContainmentValueManager<LinkTestConcept>(TestLanguageBase.INSTANCE.TestPartition_links, this)
+        this._name = new $lwClassCore.RequiredPropertyValueManager<string>($lwClassCore.LionCore_builtinsBase.INSTANCE.INamed_name, this)
     }
 
     override getPropertyValueManager(property: $lwCore.Property): $lwClassCore.PropertyValueManager<unknown> {
         if (property.key === $lwClassCore.LionCore_builtinsBase.INSTANCE.INamed_name.key) {
-            return this._name;
+            return this._name
         }
-        return super.getPropertyValueManager(property);
+        return super.getPropertyValueManager(property)
     }
 
     override getContainmentValueManager(containment: $lwCore.Containment): $lwClassCore.ContainmentValueManager<$lwClassCore.INodeBase> {
         switch (containment.key) {
-            case TestLanguageBase.INSTANCE.TestPartition_data.key: return this._data;
-            case TestLanguageBase.INSTANCE.TestPartition_links.key: return this._links;
-            default: return super.getContainmentValueManager(containment);
+            case TestLanguageBase.INSTANCE.TestPartition_data.key: return this._data
+            case TestLanguageBase.INSTANCE.TestPartition_links.key: return this._links
+            default: return super.getContainmentValueManager(containment)
         }
     }
 }

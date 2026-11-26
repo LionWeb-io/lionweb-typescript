@@ -59,6 +59,13 @@ export type GeneratorOptions = {
      */
     sortByName: boolean
 
+    /**
+     * Whether to generate statements with a semicolon at the end
+     * (as statement-“separating” character).
+     * Default: `true`.
+     */
+    semicolons: boolean
+
 }
 
 
@@ -66,7 +73,8 @@ const withDefaults = (options?: Partial<GeneratorOptions>): GeneratorOptions => 
     genericImportLocation: options?.genericImportLocation ?? properGenericImportLocation,
     header: options?.header,
     verbose: options?.verbose ?? true,
-    sortByName: options?.sortByName ?? false
+    sortByName: options?.sortByName ?? false,
+    semicolons: options?.semicolons ?? true
 })
 
 

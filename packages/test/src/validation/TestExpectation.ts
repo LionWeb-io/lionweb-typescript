@@ -4,9 +4,9 @@
  */
 export type TestExpectation = {
     /** A file to validate. */
-    file: string;
+    file: string
     /** The expected error *type*. */
-    error: string;
+    error: string
 }
 
 export type ExpectationList = TestExpectation[]; 

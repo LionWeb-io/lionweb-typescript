@@ -19,6 +19,7 @@ import { isConcrete, Language, LanguageEntity } from "@lionweb/core"
 import { Deprecated, ioLionWebMpsSpecificAnnotationsFrom } from "@lionweb/io-lionweb-mps-specific"
 import { asJSIdentifier, indent } from "@lionweb/textgen-utils"
 import { asString, commaSeparated } from "littoral-templates"
+import { statementPostfix } from "./helpers/index.js"
 
 /**
  * @return The contents of a file implementing a “mega-factory” class for a collection of {@link Language LionWeb languages}.
@@ -27,7 +28,7 @@ import { asString, commaSeparated } from "littoral-templates"
  * @param languages A collection of {@link Language LionWeb languages}.
  * @param header An optional file header for the file (contents).
  */
-export const megaFactoryFor = (megaFactoryName: string, languages: Language[], header?: string) => {
+export const megaFactoryFor = (megaFactoryName: string, languages: Language[], semicolons: boolean, header?: string) => {
     const isNotDeprecated = (entity: LanguageEntity) =>
         !ioLionWebMpsSpecificAnnotationsFrom(entity).some((annotation) => annotation instanceof Deprecated)
 
@@ -51,15 +52,17 @@ export const megaFactoryFor = (megaFactoryName: string, languages: Language[], h
 
     const languagesWithFactoryMethods = languages.filter(language => language.entities.some(requiresFactoryMethod))
 
+    const sp = statementPostfix(semicolons)    // (abbrev. of “statement postfix”)
+
     return asString([
         header ?? [],
-        `import {DeltaReceiver} from "@lionweb/class-core";`,
+        `import {DeltaReceiver} from "@lionweb/class-core"${sp}`,
         ``,
         `import {`,
         indent(commaSeparated(languagesWithFactoryMethods.map(({ name }) => asJSIdentifier(name)))),
-        `} from "./index.g.js";`,
+        `} from "./index.g.js"${sp}`,
         ``,
-        `import {newId} from "../index.js";`,
+        `import {newId} from "../index.js"${sp}`,
         ``,
         ``,
         `export class ${megaFactoryName} {`,
