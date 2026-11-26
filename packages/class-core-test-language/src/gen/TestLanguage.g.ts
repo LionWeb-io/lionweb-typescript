@@ -413,17 +413,14 @@ export class LinkTestConcept extends $lwClassCore.NodeBase implements $lwClassCo
     addContainment_0_nAtIndex(newValue: LinkTestConcept, index: number) {
         this._containment_0_n.insertAtIndex(newValue, index);
     }
-    moveContainment_0_n(oldIndex: number, newIndex: number) {
-        this._containment_0_n.move(oldIndex, newIndex);
-    }
     replaceContainment_0_nAtIndex(movedChild: LinkTestConcept, newIndex: number) {
         this._containment_0_n.replaceAtIndex(movedChild, newIndex);
     }
-    moveContainment_0_nOffsetBased(oldIndex: number, indexOffset: number) {
-        this._containment_0_n.moveOffsetBased(oldIndex, indexOffset);
+    moveContainment_0_n(oldIndex: number, indexOffset: number) {
+        this._containment_0_n.move(oldIndex, indexOffset);
     }
-    moveAndReplaceContainment_0_nOffsetBased(oldIndex: number, indexOffset: number) {
-        this._containment_0_n.moveAndReplaceOffsetBased(oldIndex, indexOffset);
+    moveAndReplaceContainment_0_n(oldIndex: number, indexOffset: number) {
+        this._containment_0_n.moveAndReplace(oldIndex, indexOffset);
     }
 
     private readonly _containment_1: $lwClassCore.RequiredSingleContainmentValueManager<LinkTestConcept>;
@@ -450,17 +447,14 @@ export class LinkTestConcept extends $lwClassCore.NodeBase implements $lwClassCo
     addContainment_1_nAtIndex(newValue: LinkTestConcept, index: number) {
         this._containment_1_n.insertAtIndex(newValue, index);
     }
-    moveContainment_1_n(oldIndex: number, newIndex: number) {
-        this._containment_1_n.move(oldIndex, newIndex);
-    }
     replaceContainment_1_nAtIndex(movedChild: LinkTestConcept, newIndex: number) {
         this._containment_1_n.replaceAtIndex(movedChild, newIndex);
     }
-    moveContainment_1_nOffsetBased(oldIndex: number, indexOffset: number) {
-        this._containment_1_n.moveOffsetBased(oldIndex, indexOffset);
+    moveContainment_1_n(oldIndex: number, indexOffset: number) {
+        this._containment_1_n.move(oldIndex, indexOffset);
     }
-    moveAndReplaceContainment_1_nOffsetBased(oldIndex: number, indexOffset: number) {
-        this._containment_1_n.moveAndReplaceOffsetBased(oldIndex, indexOffset);
+    moveAndReplaceContainment_1_n(oldIndex: number, indexOffset: number) {
+        this._containment_1_n.moveAndReplace(oldIndex, indexOffset);
     }
 
     private readonly _name: $lwClassCore.RequiredPropertyValueManager<string>;
@@ -703,17 +697,14 @@ export class TestPartition extends $lwClassCore.NodeBase implements $lwClassCore
     addLinksAtIndex(newValue: LinkTestConcept, index: number) {
         this._links.insertAtIndex(newValue, index);
     }
-    moveLinks(oldIndex: number, newIndex: number) {
-        this._links.move(oldIndex, newIndex);
-    }
     replaceLinksAtIndex(movedChild: LinkTestConcept, newIndex: number) {
         this._links.replaceAtIndex(movedChild, newIndex);
     }
-    moveLinksOffsetBased(oldIndex: number, indexOffset: number) {
-        this._links.moveOffsetBased(oldIndex, indexOffset);
+    moveLinks(oldIndex: number, indexOffset: number) {
+        this._links.move(oldIndex, indexOffset);
     }
-    moveAndReplaceLinksOffsetBased(oldIndex: number, indexOffset: number) {
-        this._links.moveAndReplaceOffsetBased(oldIndex, indexOffset);
+    moveAndReplaceLinks(oldIndex: number, indexOffset: number) {
+        this._links.moveAndReplace(oldIndex, indexOffset);
     }
 
     private readonly _name: $lwClassCore.RequiredPropertyValueManager<string>;

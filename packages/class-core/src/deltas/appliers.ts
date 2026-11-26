@@ -199,7 +199,7 @@ const deltaApplier = (idMapping?: IdMapping, updatablePartitions?: () => INodeBa
             }
             if (delta instanceof ChildMovedInSameContainmentInSameParentDelta) {
                 const valueManager = lookupNodeFrom(delta.parent).getContainmentValueManager(delta.containment) as MultiContainmentValueManager<INodeBase>;
-                valueManager.moveOffsetBasedDirectly(delta.oldIndex, delta.indexOffset);
+                valueManager.moveDirectly(delta.oldIndex, delta.indexOffset);
                 return;
             }
             if (delta instanceof ChildMovedAndReplacedFromContainmentInOtherParentDelta) {
@@ -246,7 +246,7 @@ const deltaApplier = (idMapping?: IdMapping, updatablePartitions?: () => INodeBa
             if (delta instanceof ChildMovedAndReplacedInSameContainmentInSameParentDelta) {
                 const valueManager = delta.parent.getContainmentValueManager(delta.containment);
                 if (delta.containment.multiple) {
-                    (valueManager as MultiContainmentValueManager<INodeBase>).moveAndReplaceOffsetBasedDirectly(delta.oldIndex, delta.indexOffset);
+                    (valueManager as MultiContainmentValueManager<INodeBase>).moveAndReplaceDirectly(delta.oldIndex, delta.indexOffset);
                 } else {
                     // shouldn’t happen: can’t move+replace with <= 1 children
                 }
@@ -283,7 +283,7 @@ const deltaApplier = (idMapping?: IdMapping, updatablePartitions?: () => INodeBa
             }
             if (delta instanceof AnnotationMovedInSameParentDelta) {
                 const valueManager = lookupNodeFrom(delta.parent).annotationsValueManager;
-                valueManager.moveOffsetBasedDirectly(delta.oldIndex, delta.indexOffset);
+                valueManager.moveDirectly(delta.oldIndex, delta.indexOffset);
                 return;
             }
             if (delta instanceof AnnotationMovedAndReplacedFromOtherParentDelta) {
@@ -300,7 +300,7 @@ const deltaApplier = (idMapping?: IdMapping, updatablePartitions?: () => INodeBa
             }
             if (delta instanceof AnnotationMovedAndReplacedInSameParentDelta) {
                 const valueManager = lookupNodeFrom(delta.parent).annotationsValueManager;
-                valueManager.moveAndReplaceOffsetBasedDirectly(delta.oldIndex, delta.indexOffset);
+                valueManager.moveAndReplaceDirectly(delta.oldIndex, delta.indexOffset);
                 return;
             }
             if (delta instanceof ReferenceAddedDelta) {

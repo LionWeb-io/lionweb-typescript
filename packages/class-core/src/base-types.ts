@@ -137,11 +137,6 @@ export interface INodeBase extends Node {
     insertAnnotationAtIndex(annotation: INodeBase, index: number): void;
 
     /**
-     * Moves the annotation at the given `oldIndex` to the `newIndex` position.
-     */
-    moveAnnotation(oldIndex: number, newIndex: number): void;
-
-    /**
      * Replaces the existing annotation at the given index, with the given annotation (as an instance of {@link INodeBase}).
      */
     replaceAnnotationAtIndex(annotation: INodeBase, index: number): void;
@@ -156,7 +151,7 @@ export interface INodeBase extends Node {
      * Moves the annotation that’s initially at index `oldIndex` by `indexOffset` positions
      * to index `oldIndex + indexOffset`, shifting the other annotations as necessary.
      */
-    moveAnnotationOffsetBased(oldIndex: number, indexOffset: number): void;
+    moveAnnotation(oldIndex: number, indexOffset: number): void;
 
     /**
      * Moves the annotation that’s initially at index `oldIndex` by `indexOffset` positions
@@ -165,7 +160,7 @@ export interface INodeBase extends Node {
      * This deletes the replaced annotation, including all its descendants,
      * but does NOT change references to any of the deleted nodes.
      */
-    moveAndReplaceAnnotationOffsetBased(oldIndex: number, indexOffset: number): void;
+    moveAndReplaceAnnotation(oldIndex: number, indexOffset: number): void;
 
 
     /**
@@ -333,10 +328,6 @@ export abstract class NodeBase implements INodeBase {
         this.annotationsValueManager.insertAtIndex(annotation, index);
     }
 
-    moveAnnotation(oldIndex: number, newIndex: number) {
-        this.annotationsValueManager.move(oldIndex, newIndex);
-    }
-
     replaceAnnotationAtIndex(annotation: INodeBase, index: number) {
         this.annotationsValueManager.replaceAtIndex(annotation, index);
     }
@@ -345,12 +336,12 @@ export abstract class NodeBase implements INodeBase {
         this.annotationsValueManager.remove(annotation);
     }
 
-    moveAnnotationOffsetBased(oldIndex: number, indexOffset: number) {
-        this.annotationsValueManager.moveOffsetBased(oldIndex, indexOffset);
+    moveAnnotation(oldIndex: number, indexOffset: number) {
+        this.annotationsValueManager.move(oldIndex, indexOffset);
     }
 
-    moveAndReplaceAnnotationOffsetBased(oldIndex: number, indexOffset: number) {
-        this.annotationsValueManager.moveAndReplaceOffsetBased(oldIndex, indexOffset);
+    moveAndReplaceAnnotation(oldIndex: number, indexOffset: number) {
+        this.annotationsValueManager.moveAndReplace(oldIndex, indexOffset);
     }
 
 }

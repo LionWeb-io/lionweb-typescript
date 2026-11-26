@@ -461,17 +461,14 @@ export abstract class Classifier extends LanguageEntity {
     addFeaturesAtIndex(newValue: Feature, index: number) {
         this._features.insertAtIndex(newValue, index);
     }
-    moveFeatures(oldIndex: number, newIndex: number) {
-        this._features.move(oldIndex, newIndex);
-    }
     replaceFeaturesAtIndex(movedChild: Feature, newIndex: number) {
         this._features.replaceAtIndex(movedChild, newIndex);
     }
-    moveFeaturesOffsetBased(oldIndex: number, indexOffset: number) {
-        this._features.moveOffsetBased(oldIndex, indexOffset);
+    moveFeatures(oldIndex: number, indexOffset: number) {
+        this._features.move(oldIndex, indexOffset);
     }
-    moveAndReplaceFeaturesOffsetBased(oldIndex: number, indexOffset: number) {
-        this._features.moveAndReplaceOffsetBased(oldIndex, indexOffset);
+    moveAndReplaceFeatures(oldIndex: number, indexOffset: number) {
+        this._features.moveAndReplace(oldIndex, indexOffset);
     }
 
     protected constructor(classifier: $lwCore.Classifier, id: $lwJson.LionWebId, receiveDelta?: $lwClassCore.DeltaReceiver, parentInfo?: $lwClassCore.Parentage) {
@@ -675,17 +672,14 @@ export class Enumeration extends DataType {
     addLiteralsAtIndex(newValue: EnumerationLiteral, index: number) {
         this._literals.insertAtIndex(newValue, index);
     }
-    moveLiterals(oldIndex: number, newIndex: number) {
-        this._literals.move(oldIndex, newIndex);
-    }
     replaceLiteralsAtIndex(movedChild: EnumerationLiteral, newIndex: number) {
         this._literals.replaceAtIndex(movedChild, newIndex);
     }
-    moveLiteralsOffsetBased(oldIndex: number, indexOffset: number) {
-        this._literals.moveOffsetBased(oldIndex, indexOffset);
+    moveLiterals(oldIndex: number, indexOffset: number) {
+        this._literals.move(oldIndex, indexOffset);
     }
-    moveAndReplaceLiteralsOffsetBased(oldIndex: number, indexOffset: number) {
-        this._literals.moveAndReplaceOffsetBased(oldIndex, indexOffset);
+    moveAndReplaceLiterals(oldIndex: number, indexOffset: number) {
+        this._literals.moveAndReplace(oldIndex, indexOffset);
     }
 
     public constructor(classifier: $lwCore.Classifier, id: $lwJson.LionWebId, receiveDelta?: $lwClassCore.DeltaReceiver, parentInfo?: $lwClassCore.Parentage) {
@@ -763,17 +757,14 @@ export class Language extends $lwClassCore.NodeBase implements IKeyed {
     addEntitiesAtIndex(newValue: LanguageEntity, index: number) {
         this._entities.insertAtIndex(newValue, index);
     }
-    moveEntities(oldIndex: number, newIndex: number) {
-        this._entities.move(oldIndex, newIndex);
-    }
     replaceEntitiesAtIndex(movedChild: LanguageEntity, newIndex: number) {
         this._entities.replaceAtIndex(movedChild, newIndex);
     }
-    moveEntitiesOffsetBased(oldIndex: number, indexOffset: number) {
-        this._entities.moveOffsetBased(oldIndex, indexOffset);
+    moveEntities(oldIndex: number, indexOffset: number) {
+        this._entities.move(oldIndex, indexOffset);
     }
-    moveAndReplaceEntitiesOffsetBased(oldIndex: number, indexOffset: number) {
-        this._entities.moveAndReplaceOffsetBased(oldIndex, indexOffset);
+    moveAndReplaceEntities(oldIndex: number, indexOffset: number) {
+        this._entities.moveAndReplace(oldIndex, indexOffset);
     }
 
     private readonly _dependsOn: $lwClassCore.OptionalMultiReferenceValueManager<Language>;

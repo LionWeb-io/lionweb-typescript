@@ -290,17 +290,14 @@ export class Deltas extends $lwClassCore.NodeBase {
     addDeltasAtIndex(newValue: Delta, index: number) {
         this._deltas.insertAtIndex(newValue, index);
     }
-    moveDeltas(oldIndex: number, newIndex: number) {
-        this._deltas.move(oldIndex, newIndex);
-    }
     replaceDeltasAtIndex(movedChild: Delta, newIndex: number) {
         this._deltas.replaceAtIndex(movedChild, newIndex);
     }
-    moveDeltasOffsetBased(oldIndex: number, indexOffset: number) {
-        this._deltas.moveOffsetBased(oldIndex, indexOffset);
+    moveDeltas(oldIndex: number, indexOffset: number) {
+        this._deltas.move(oldIndex, indexOffset);
     }
-    moveAndReplaceDeltasOffsetBased(oldIndex: number, indexOffset: number) {
-        this._deltas.moveAndReplaceOffsetBased(oldIndex, indexOffset);
+    moveAndReplaceDeltas(oldIndex: number, indexOffset: number) {
+        this._deltas.moveAndReplace(oldIndex, indexOffset);
     }
 
     public constructor(classifier: $lwCore.Classifier, id: $lwJson.LionWebId, receiveDelta?: $lwClassCore.DeltaReceiver, parentInfo?: $lwClassCore.Parentage) {
@@ -576,17 +573,14 @@ export class Delta extends $lwClassCore.NodeBase implements $lwClassCore.INamed 
     addFieldsAtIndex(newValue: Field, index: number) {
         this._fields.insertAtIndex(newValue, index);
     }
-    moveFields(oldIndex: number, newIndex: number) {
-        this._fields.move(oldIndex, newIndex);
-    }
     replaceFieldsAtIndex(movedChild: Field, newIndex: number) {
         this._fields.replaceAtIndex(movedChild, newIndex);
     }
-    moveFieldsOffsetBased(oldIndex: number, indexOffset: number) {
-        this._fields.moveOffsetBased(oldIndex, indexOffset);
+    moveFields(oldIndex: number, indexOffset: number) {
+        this._fields.move(oldIndex, indexOffset);
     }
-    moveAndReplaceFieldsOffsetBased(oldIndex: number, indexOffset: number) {
-        this._fields.moveAndReplaceOffsetBased(oldIndex, indexOffset);
+    moveAndReplaceFields(oldIndex: number, indexOffset: number) {
+        this._fields.moveAndReplace(oldIndex, indexOffset);
     }
 
     private readonly _name: $lwClassCore.RequiredPropertyValueManager<string>;

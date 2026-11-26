@@ -126,18 +126,20 @@ export const typeForLanguageEntity = (imports: Imports, sortByName: boolean) => 
                 `add${nameWithFirstUpper}AtIndex(newValue: ${tsTypeForClassifier_}, index: number) {`,
                 indent(`this._${name}.insertAtIndex(newValue, index);`),
                 `}`,
-                `move${nameWithFirstUpper}(oldIndex: number, newIndex: number) {`,
-                indent(`this._${name}.move(oldIndex, newIndex);`),
-                `}`,
+                when(link instanceof Reference)([
+                    `move${nameWithFirstUpper}(oldIndex: number, newIndex: number) {`,
+                    indent(`this._${name}.move(oldIndex, newIndex);`),
+                    `}`
+                ]),
                 when(link instanceof Containment)([
                     `replace${nameWithFirstUpper}AtIndex(movedChild: ${tsTypeForClassifier_}, newIndex: number) {`,
                     indent(`this._${name}.replaceAtIndex(movedChild, newIndex);`),
                     `}`,
-                    `move${nameWithFirstUpper}OffsetBased(oldIndex: number, indexOffset: number) {`,
-                    indent(`this._${name}.moveOffsetBased(oldIndex, indexOffset);`),
+                    `move${nameWithFirstUpper}(oldIndex: number, indexOffset: number) {`,
+                    indent(`this._${name}.move(oldIndex, indexOffset);`),
                     `}`,
-                    `moveAndReplace${nameWithFirstUpper}OffsetBased(oldIndex: number, indexOffset: number) {`,
-                    indent(`this._${name}.moveAndReplaceOffsetBased(oldIndex, indexOffset);`),
+                    `moveAndReplace${nameWithFirstUpper}(oldIndex: number, indexOffset: number) {`,
+                    indent(`this._${name}.moveAndReplace(oldIndex, indexOffset);`),
                     `}`
                 ])
             ])
